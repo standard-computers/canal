@@ -5,7 +5,7 @@ import org.Canal.Models.BusinessUnits.PurchaseOrder;
 import org.Canal.Models.SupplyChainUnits.*;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.Labels;
-import org.Canal.UI.Views.New.CreateFlex;
+import org.Canal.UI.Views.New.CreateArea;
 import org.Canal.UI.Views.Transactions.AcceptPayment;
 import org.Canal.UI.Views.Transactions.Distribution.ReceiveOrder;
 import org.Canal.Utils.Canal;
@@ -26,19 +26,19 @@ import java.util.ArrayList;
 
 public class WarehouseView extends JInternalFrame implements RefreshListener {
 
-    private Warehouse location;
+    private Warehouse warehouse;
     private JTree dataTree;
     private DesktopState desktop;
 
     public WarehouseView(Warehouse loc, DesktopState desktop) {
-        this.location = loc;
+        this.warehouse = loc;
         this.desktop = desktop;
         setTitle("Warehouse / " + loc.getId() + " - " + loc.getName());
         setLayout(new BorderLayout());
         JPanel tb = createToolBar();
         add(tb, BorderLayout.NORTH);
         JPanel dataView = new JPanel(new BorderLayout());
-        JTextField cmd = new JTextField("/WHS/" + location.getId());
+        JTextField cmd = new JTextField("/WHS/" + warehouse.getId());
         dataView.add(cmd, BorderLayout.NORTH);
         JScrollPane tableScrollPane = new JScrollPane(makeOverview());
         dataView.add(tableScrollPane, BorderLayout.CENTER);
@@ -71,7 +71,7 @@ public class WarehouseView extends JInternalFrame implements RefreshListener {
         JPanel kanbanBoard = new JPanel();
         kanbanBoard.setLayout(new GridLayout(1, 3, 10, 10));
         ArrayList<String[]> ibd = new ArrayList<>();
-        for(PurchaseOrder ibdo : Engine.getOrders(location.getId())){
+        for(PurchaseOrder ibdo : Engine.getOrders(warehouse.getId())){
             double c = 0;
             for(OrderLineItem oli : ibdo.getItems()){
                 c += oli.getQuantity();
@@ -145,7 +145,7 @@ public class WarehouseView extends JInternalFrame implements RefreshListener {
         });
         receive.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new ReceiveOrder(location.getId(), desktop));
+                desktop.put(new ReceiveOrder(warehouse.getId(), desktop));
             }
         });
         refresh.addMouseListener(new MouseAdapter() {
@@ -162,7 +162,9 @@ public class WarehouseView extends JInternalFrame implements RefreshListener {
         });
         areas.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                new CreateFlex(new Flex("", location.getId()), "Area", "/AREAS");
+                Location whs = new Location();
+                whs.setId(warehouse.getId());
+                new CreateArea(desktop, whs);
             }
         });
         tb.add(Box.createHorizontalStrut(5));
@@ -196,30 +198,30 @@ public class WarehouseView extends JInternalFrame implements RefreshListener {
 
     private Canal createRootNode() {
 
-        Canal[] customers = new Canal[Engine.getCustomers(location.getOrg()).size()];
-        for (int i = 0; i < Engine.getCustomers(location.getOrg()).size(); i++) {
-            Location l = Engine.getCustomers(location.getOrg()).get(i);
+        Canal[] customers = new Canal[Engine.getCustomers(warehouse.getOrg()).size()];
+        for (int i = 0; i < Engine.getCustomers(warehouse.getOrg()).size(); i++) {
+            Location l = Engine.getCustomers(warehouse.getOrg()).get(i);
             customers[i] = new Canal(l.getId() + " - " + l.getName(), false, "/CSTS/" + l.getId(), Color.PINK, null);
         }
 
-        Canal[] vendors = new Canal[Engine.getVendors(location.getOrg()).size()];
-        for (int i = 0; i < Engine.getVendors(location.getOrg()).size(); i++) {
-            Location l = Engine.getVendors(location.getOrg()).get(i);
+        Canal[] vendors = new Canal[Engine.getVendors(warehouse.getOrg()).size()];
+        for (int i = 0; i < Engine.getVendors(warehouse.getOrg()).size(); i++) {
+            Location l = Engine.getVendors(warehouse.getOrg()).get(i);
             vendors[i] = new Canal(l.getId() + " - " + l.getName(), false, "/VEND/" + l.getId(), Color.CYAN, null);
         }
 
-        Canal[] items = new Canal[Engine.getItems(location.getOrg()).size()];
-        for (int i = 0; i < Engine.getItems(location.getOrg()).size(); i++) {
-            Item l = Engine.getItems(location.getOrg()).get(i);
+        Canal[] items = new Canal[Engine.getItems(warehouse.getOrg()).size()];
+        for (int i = 0; i < Engine.getItems(warehouse.getOrg()).size(); i++) {
+            Item l = Engine.getItems(warehouse.getOrg()).get(i);
             items[i] = new Canal(l.getId() + " - " + l.getName(), false, "/ITS/" + l.getId(), new Color(147, 70, 3), null);
         }
-        Canal[] areas = new Canal[Engine.getAreas(location.getId()).size()];
-        for (int i = 0; i < Engine.getAreas(location.getId()).size(); i++) {
-            Area l = Engine.getAreas(location.getId()).get(i);
+        Canal[] areas = new Canal[Engine.getAreas(warehouse.getId()).size()];
+        for (int i = 0; i < Engine.getAreas(warehouse.getId()).size(); i++) {
+            Area l = Engine.getAreas(warehouse.getId()).get(i);
             areas[i] = new Canal(l.getId() + " - " + l.getValue("name"), false, "/ITS/" + l.getId(), new Color(147, 70, 3), null);
         }
 
-        return new Canal(location.getId() + " - " + location.getName(), true, "/ORGS", new Canal[]{
+        return new Canal(warehouse.getId() + " - " + warehouse.getName(), true, "/ORGS", new Canal[]{
                 new Canal("Areas", true, "/AREAS", areas),
                 new Canal("Bins", true, "/BNS", null),
                 new Canal("Items", true, "/ITS", items),

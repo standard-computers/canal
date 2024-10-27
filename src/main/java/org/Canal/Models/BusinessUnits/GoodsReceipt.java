@@ -5,7 +5,11 @@ import java.util.ArrayList;
 
 public class GoodsReceipt {
 
-    public String id, purchaseOrder, received, receiver, location;
+    public String id;
+    public String purchaseOrder;
+    public String received;
+    public String receiver;
+    public String location;
     public ArrayList<OrderLineItem> items;
     private LockeType status;
 

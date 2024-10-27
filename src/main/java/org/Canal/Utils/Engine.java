@@ -9,6 +9,7 @@ import org.Canal.Models.HumanResources.User;
 import org.Canal.Models.SupplyChainUnits.*;
 import org.Canal.UI.Views.Find.*;
 import org.Canal.UI.Views.Lists.*;
+import org.Canal.UI.Views.Modifiers.*;
 import org.Canal.UI.Views.New.*;
 import org.Canal.UI.Views.Singleton.*;
 import org.Canal.UI.Views.Singleton.Orders.AutoMakePurchaseRequisitions;
@@ -37,7 +38,6 @@ public class Engine {
     private static Configuration configuration;
     public static Organization organization;
     public static User client;
-    public static ArrayList<Organization> organizations = new ArrayList<>();
     public static ArrayList<Location> costCenters = new ArrayList<>();
     public static ArrayList<Location> distributionCenters = new ArrayList<>();
     public static ArrayList<Warehouse> warehouses = new ArrayList<>();
@@ -53,15 +53,6 @@ public class Engine {
     public static ArrayList<Ledger> ledgers = new ArrayList<>();
 
     public static void load(){
-        organizations.clear();
-        File[] orgsDir = Pipe.list("ORGS");
-        for (File file : orgsDir) {
-            if (!file.isDirectory()) {
-                Organization l = Json.load(file.getPath(), Organization.class);
-                organizations.add(l);
-            }
-        }
-        organizations.sort(Comparator.comparing(Organization::getId));
         costCenters.clear();
         File[] ccsDir = Pipe.list("CCS");
         for (File file : ccsDir) {
@@ -198,6 +189,15 @@ public class Engine {
     }
 
     public static ArrayList<Organization> getOrganizations() {
+        ArrayList<Organization> organizations = new ArrayList<>();
+        File[] orgsDir = Pipe.list("ORGS");
+        for (File file : orgsDir) {
+            if (!file.isDirectory()) {
+                Organization l = Json.load(file.getPath(), Organization.class);
+                organizations.add(l);
+            }
+        }
+        organizations.sort(Comparator.comparing(Organization::getId));
         return organizations;
     }
 
@@ -292,7 +292,7 @@ public class Engine {
     }
 
     public static Organization getOrganization(String orgId) {
-        for(Organization o : organizations){
+        for(Organization o : getOrganizations()){
             if (o.getId().equals(orgId)) {
                 return o;
             }
@@ -344,6 +344,9 @@ public class Engine {
             case "/ORGS/NEW" -> {
                 return new CreateOrganization(desktop);
             }
+            case "/ORGS/MOD" -> {
+                return new CreateOrganization(desktop);
+            }
             case "/CCS" -> {
                 return new CostCenters(desktop);
             }
@@ -353,11 +356,17 @@ public class Engine {
             case "/CCS/NEW" -> {
                 return new CreateCostCenter();
             }
+            case "/CCS/MOD" -> {
+                return new ModifyCostCenter(null);
+            }
             case "/AREAS" -> {
                 return new Areas(desktop);
             }
             case "/AREAS/NEW" -> {
                 return new CreateArea(desktop, null);
+            }
+            case "/AREAS/MOD" -> {
+                return new ModifyArea();
             }
             case "/CSTS" -> {
                 return new Customers(desktop);
@@ -368,6 +377,9 @@ public class Engine {
             case "/CSTS/NEW" -> {
                 return new CreateCustomer(desktop);
             }
+            case "/CSTS/MOD" -> {
+                return new ModifyCustomer();
+            }
             case "/DCSS" -> {
                 return new DistributionCenters(desktop);
             }
@@ -377,6 +389,9 @@ public class Engine {
             case "/DCSS/NEW" -> {
                 return new CreateDistributionCenter(desktop);
             }
+            case "/DCSS/MOD" -> {
+                return new ModifyDistributionCenter(null);
+            }
             case "/WHS" -> {
                 return new Warehouses(desktop);
             }
@@ -385,6 +400,9 @@ public class Engine {
             }
             case "/WHS/F" -> {
                 return new FindWarehouse(desktop);
+            }
+            case "/WHS/MOD" -> {
+                return new ModifyWarehouse(null);
             }
             case "/VEND" -> {
                 return new Vendors("Vendors", "/VEND", desktop);
@@ -401,6 +419,9 @@ public class Engine {
             case "/MTS/NEW" -> {
                 return new CreateMaterial();
             }
+            case "/MTS/MOD" -> {
+                return new ModifyMaterial();
+            }
             case "/LGS" -> {
                 return new Ledgers(desktop);
             }
@@ -413,6 +434,18 @@ public class Engine {
             case "/EMPS/NEW" -> {
                 return new CreateEmployee(desktop);
             }
+            case "/EMPS/MOD" -> {
+                return new ModifyEmployee(null); //TODO
+            }
+            case "/DPTS/F" -> {
+                return new FindDepartment(desktop);
+            }
+            case "/DPTS/NEW" -> {
+                return new CreateDepartment(desktop);
+            }
+            case "/DPTS/MOD" -> {
+                return new ModifyDepartment();
+            }
             case "/USRS" -> {
                 return new Users(desktop);
             }
@@ -421,6 +454,9 @@ public class Engine {
             }
             case "/USRS/NEW" -> {
                 return new CreateUser();
+            }
+            case "/USRS/MOD" -> {
+                return new ModifyUser(null);
             }
             case "/INV" -> {
                 return new Inventory();
@@ -437,6 +473,9 @@ public class Engine {
             case "/CATS/NEW" -> {
                 return new CreateCatalog(null);
             }
+            case "/CATS/MOD" -> {
+                return new ModifyCatalog();
+            }
             case "/ITS" -> {
                 return new Items(desktop);
             }
@@ -445,6 +484,9 @@ public class Engine {
             }
             case "/ITS/F" -> {
                 return new FindItem(desktop);
+            }
+            case "/ITS/MOD" -> {
+                return new ModifyItem();
             }
             case "/ORDS", "/ORDS/PO" -> {
                 return new PurchaseOrders(desktop);

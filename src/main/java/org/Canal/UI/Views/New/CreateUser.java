@@ -8,12 +8,15 @@ import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CreateUser extends JInternalFrame {
 
     private JPanel tCodeAccesses;
+    private ArrayList<JCheckBox> checkboxes;
 
     public CreateUser(){
         setTitle("Create User");
@@ -41,7 +44,7 @@ public class CreateUser extends JInternalFrame {
         again.add(scrollPane, BorderLayout.CENTER);
         JPanel ctrls = new JPanel(new GridLayout(1, 2));
         JButton sa = new JButton("Select All");
-        JButton dsa = new JButton("Deelect All");
+        JButton dsa = new JButton("Deselect All");
         ctrls.add(sa);
         ctrls.add(dsa);
         again.add(ctrls, BorderLayout.SOUTH);
@@ -51,10 +54,22 @@ public class CreateUser extends JInternalFrame {
         setResizable(false);
         setIconifiable(true);
         setClosable(true);
+        sa.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                checkboxes.forEach(cb -> cb.setSelected(true));
+                revalidate();
+            }
+        });
+        dsa.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                checkboxes.forEach(cb -> cb.setSelected(false));
+                revalidate();
+            }
+        });
     }
 
     private JPanel prepareAccesses() {
-        ArrayList<JCheckBox> checkboxes = new ArrayList<>();
+        checkboxes = new ArrayList<>();
         ArrayList<String> allTransactions = Constants.getAllTransactions();
         for (String transaction : allTransactions) {
             JCheckBox checkbox = new JCheckBox(transaction);

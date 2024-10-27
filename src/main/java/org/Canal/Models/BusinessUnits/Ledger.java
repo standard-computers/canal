@@ -2,14 +2,16 @@ package org.Canal.Models.BusinessUnits;
 
 import org.Canal.Models.SupplyChainUnits.Transaction;
 import org.Canal.Utils.Engine;
-
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 
 public class Ledger {
 
-    private String id, name, org, period;
+    private String id;
+    public String name;
+    public String org;
+    public String period;
     private long starts, ends;
     private int created, closed;
     private ArrayList<Transaction> transactions = new ArrayList<>();

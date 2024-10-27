@@ -1,5 +1,7 @@
 package org.Canal.Models.HumanResources;
 
+import org.Canal.Utils.LockeType;
+
 public class Employee {
 
     private String id;
@@ -10,13 +12,7 @@ public class Employee {
     private String startDate; //Employee employment date
     private String endDate; //Employee termination date
     private String createDate;
-
-    public Employee(String id, String org, String location, String name) {
-        this.id = id;
-        this.org = org;
-        this.location = location;
-        this.name = name;
-    }
+    private LockeType status;
 
     public String getId() {
         return id;
@@ -66,11 +62,27 @@ public class Employee {
         this.startDate = startDate;
     }
 
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
     public String getCreateDate() {
         return createDate;
     }
 
     public void setCreateDate(String createDate) {
         this.createDate = createDate;
+    }
+
+    public LockeType getStatus() {
+        return status;
+    }
+
+    public void setStatus(LockeType status) {
+        this.status = status;
     }
 }

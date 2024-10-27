@@ -1,5 +1,9 @@
 package org.Canal.Models.BusinessUnits;
 
+import org.Canal.Models.HumanResources.Department;
+
+import java.util.ArrayList;
+
 public class Organization {
 
     private String id;
@@ -12,6 +16,7 @@ public class Organization {
     private String country;
     private String ein;
     private boolean taxExempt;
+    private ArrayList<Department> departments = new ArrayList<>();
 
     public Organization() {}
 
@@ -105,6 +110,27 @@ public class Organization {
 
     public void setTaxExempt(boolean taxExempt) {
         this.taxExempt = taxExempt;
+    }
+
+    public ArrayList<Department> getDepartments() {
+        return departments;
+    }
+
+    public void setDepartments(ArrayList<Department> departments) {
+        this.departments = departments;
+    }
+
+    public void addDepartment(Department department) {
+        this.departments.add(department);
+    }
+
+    public Department getDepartment(String id) {
+        for (Department department : departments) {
+            if (department.getId().equals(id)) {
+                return department;
+            }
+        }
+        return null;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package org.Canal.UI.Elements;
 
+import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.Models.SupplyChainUnits.Warehouse;
 import org.Canal.Utils.Engine;
@@ -19,6 +20,14 @@ public class Selectables {
             availableLocations.put(whs.getId() + " – " + whs.getName(), whs.getId());
         }
         return new Selectable(availableLocations);
+    }
+
+    public static Selectable allEmployees(){
+        HashMap<String, String> availableEmps = new HashMap<>();
+        for(Employee emp : Engine.getEmployees()){
+            availableEmps.put(emp.getId() + " – " + emp.getName(), emp.getId());
+        }
+        return new Selectable(availableEmps);
     }
 
     public static Selectable statusTypes(){

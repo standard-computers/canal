@@ -126,12 +126,8 @@ public class DatePicker extends JPanel {
         selectDate(calendar.get(Calendar.DAY_OF_MONTH));
     }
 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Custom Date Picker");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(300, 200);
-        DatePicker datePicker = new DatePicker();
-        frame.add(datePicker);
-        frame.setVisible(true);
+    public String getSelectedDateString(){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return dateFormat.format(selectedDate);
     }
 }

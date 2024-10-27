@@ -73,6 +73,12 @@ public class Constants {
                         new Canal("Find Organization", false, "/ORGS/F", null),
                         new Canal("Create an Organization", false, "/ORGS/NEW", null),
                         new Canal("Modify an Organization", false, "/ORGS/MOD", null),
+                        new Canal("Departments", true, "/DPTS/MOD",  new Canal[]{
+                                new Canal("Find with ID", false, "/DPTS/F", null),
+                                new Canal("Create a Department", false, "/DPTS/NEW", null),
+                                new Canal("Modify", false, "/DPTS/MOD", null),
+                                new Canal("Remove", false, "/DPTS/DEL", null),
+                        }),
                 }),
                 new Canal("Cost Centers", true, "/CCS", new Canal[]{
                         new Canal("Find with ID", false, "/CCS/F", null),
