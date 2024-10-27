@@ -1,2 +1,0 @@
-# Canal
-Open-Source ERP
