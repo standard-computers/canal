@@ -38,4 +38,12 @@ public class Selectables {
         statusTypes.put("SUSPENDED", "SUSPENDED");
         return new Selectable(statusTypes);
     }
+
+    public static Selectable countries(){
+        HashMap<String, String> statusTypes = new HashMap<>();
+        statusTypes.put("United States", "US");
+        statusTypes.put("Great Britain", "GB");
+        statusTypes.put("United Kingdom", "UK");
+        return new Selectable(statusTypes);
+    }
 }

@@ -1,6 +1,7 @@
 package org.Canal.UI.Views.Singleton;
 
 import org.Canal.Models.BusinessUnits.Ledger;
+import org.Canal.Models.BusinessUnits.Organization;
 import org.Canal.Models.BusinessUnits.PurchaseOrder;
 import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.SupplyChainUnits.*;

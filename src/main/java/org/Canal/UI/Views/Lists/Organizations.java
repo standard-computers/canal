@@ -1,6 +1,6 @@
 package org.Canal.UI.Views.Lists;
 
-import org.Canal.Models.SupplyChainUnits.Organization;
+import org.Canal.Models.BusinessUnits.Organization;
 import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Views.New.*;
 import org.Canal.UI.Views.Singleton.OrgView;
@@ -41,7 +41,7 @@ public class Organizations extends JInternalFrame {
         JTextField direct = new JTextField();
         direct.addActionListener(e -> openOrgViewById(direct.getText()));
         Button nla = new Button("Create");
-        nla.addActionListener(e -> desktop.put(new CreateOrganization()));
+        nla.addActionListener(e -> desktop.put(new CreateOrganization(desktop)));
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
         mainPanel.add(direct, BorderLayout.NORTH);

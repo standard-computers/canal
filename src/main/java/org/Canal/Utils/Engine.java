@@ -1,6 +1,7 @@
 package org.Canal.Utils;
 
 import org.Canal.Models.BusinessUnits.Ledger;
+import org.Canal.Models.BusinessUnits.Organization;
 import org.Canal.Models.BusinessUnits.PurchaseOrder;
 import org.Canal.Models.BusinessUnits.PurchaseRequisition;
 import org.Canal.Models.HumanResources.Employee;
@@ -341,7 +342,7 @@ public class Engine {
                 return new Organizations(desktop);
             }
             case "/ORGS/NEW" -> {
-                return new CreateOrganization();
+                return new CreateOrganization(desktop);
             }
             case "/CCS" -> {
                 return new CostCenters(desktop);
@@ -445,13 +446,13 @@ public class Engine {
             case "/ITS/F" -> {
                 return new FindItem(desktop);
             }
-            case "/ORDS" -> {
+            case "/ORDS", "/ORDS/PO" -> {
                 return new PurchaseOrders(desktop);
             }
-            case "/ORDS/F" -> {
-                return new FindOrder(desktop);
+            case "/ORDS/F", "/ORDS/PO/F" -> {
+                return new FindPurchaseOrder(desktop);
             }
-            case "/ORDS/NEW" -> {
+            case "/ORDS/NEW", "/ORDS/PO/NEW" -> {
                 return new CreatePurchaseOrder();
             }
             case "/ORDS/PR", "/ORDS/PR/F" -> {

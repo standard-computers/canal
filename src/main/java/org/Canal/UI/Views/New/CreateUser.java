@@ -17,6 +17,7 @@ public class CreateUser extends JInternalFrame {
 
     public CreateUser(){
         setTitle("Create User");
+        setFrameIcon(new ImageIcon(CreateUser.class.getResource("/icons/create.png")));
         JPanel l = new JPanel(new BorderLayout());
         Form f = new Form();
         String puid = "U" + (10000 + (Engine.getUsers().size() + 1));

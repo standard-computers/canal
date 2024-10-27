@@ -10,7 +10,6 @@ import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Pipe;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -21,6 +20,7 @@ public class CreateEmployee extends JInternalFrame {
 
     public CreateEmployee(DesktopState desktop){
         setTitle("Create Employee");
+        setFrameIcon(new ImageIcon(CreateEmployee.class.getResource("/icons/create.png")));
         JPanel l = new JPanel(new BorderLayout());
         Form f = new Form();
         String puid = "E" + (10000 + (Engine.getEmployees().size() + 1));
@@ -42,7 +42,8 @@ public class CreateEmployee extends JInternalFrame {
         Button cr = new Button("Process");
         l.add(cr, BorderLayout.SOUTH);
         add(l);
-        setResizable(false);
+        setIconifiable(true);
+        setClosable(true);
         cr.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 String empId = empIdField.getText().trim();

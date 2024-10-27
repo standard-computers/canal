@@ -14,26 +14,13 @@ public class CustomJTable extends JTable {
     private List<Object[]> rowData;
 
     public CustomJTable(Object[][] data, String[] columnNames) {
-        super(new DefaultTableModel(data, columnNames) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                if (column == 0) return true; // First column as selector
-                return editableColumns != null && editableColumns[column];
-            }
-        });
-
-        // Initialize editable column array
+        super();
         editableColumns = new boolean[columnNames.length];
         Arrays.fill(editableColumns, true);
-
-        // Store row data for easy access
         rowData = new ArrayList<>(Arrays.asList(data));
-
-        // Add checkbox to the first column
+        setModel(new CustomTableModel(data, columnNames));
         TableColumn tc = getColumnModel().getColumn(0);
         tc.setCellEditor(new DefaultCellEditor(new JCheckBox()));
-
-        // Set row click listener
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -45,29 +32,21 @@ public class CustomJTable extends JTable {
             }
         });
     }
-
-    // Toggle editing for a specific column
     public void setColumnEditable(int column, boolean isEditable) {
         if (column >= 0 && column < editableColumns.length) {
             editableColumns[column] = isEditable;
             repaint();
         }
     }
-
-    // Export table data to XLSX file
     public void exportToXLSX(String filePath) {
         try (XSSFWorkbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Table Data");
             DefaultTableModel model = (DefaultTableModel) getModel();
-
-            // Create header row
             Row headerRow = sheet.createRow(0);
             for (int i = 0; i < model.getColumnCount(); i++) {
                 Cell cell = headerRow.createCell(i);
                 cell.setCellValue(model.getColumnName(i));
             }
-
-            // Populate data rows
             for (int rowIndex = 0; rowIndex < model.getRowCount(); rowIndex++) {
                 Row row = sheet.createRow(rowIndex + 1);
                 for (int colIndex = 0; colIndex < model.getColumnCount(); colIndex++) {
@@ -76,8 +55,6 @@ public class CustomJTable extends JTable {
                     cell.setCellValue(cellValue != null ? cellValue.toString() : "");
                 }
             }
-
-            // Write to file
             try (FileOutputStream fos = new FileOutputStream(filePath)) {
                 workbook.write(fos);
                 System.out.println("Exported to " + filePath);
@@ -87,8 +64,19 @@ public class CustomJTable extends JTable {
         }
     }
 
-    // Get data at a specific row
     public Object[] getRowData(int rowIndex) {
         return rowData.get(rowIndex);
+    }
+
+    private class CustomTableModel extends DefaultTableModel {
+        public CustomTableModel(Object[][] data, Object[] columnNames) {
+            super(data, columnNames);
+        }
+
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            if (column == 0) return true;
+            return editableColumns[column];
+        }
     }
 }

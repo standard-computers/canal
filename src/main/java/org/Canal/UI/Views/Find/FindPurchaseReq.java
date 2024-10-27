@@ -13,10 +13,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class FindCustomer extends JInternalFrame {
+public class FindPurchaseReq extends JInternalFrame {
 
-    public FindCustomer(DesktopState desktop) {
-        setTitle("Find Customer");
+    public FindPurchaseReq(DesktopState desktop) {
+        setTitle("Find Purchase Req.");
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/find.png")));
         JTextField direct = new JTextField(10);
         direct.addKeyListener(new KeyAdapter() {
@@ -25,21 +25,21 @@ public class FindCustomer extends JInternalFrame {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     String inputText = direct.getText().trim();
                     if (!inputText.isEmpty()) {
-                        desktop.put(Engine.router("/CSTS/" + direct.getText(), desktop));
+                        desktop.put(Engine.router("/PR/" + direct.getText(), desktop));
                         dispose();
                     }
                 }
             }
         });
         Form f = new Form();
-        f.addInput(new Label("Customer ID", UIManager.getColor("Label.foreground")), direct);
+        f.addInput(new Label("Purchase Req. ID/#", UIManager.getColor("Label.foreground")), direct);
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);
         Button find = new Button("Find");
         add(find, BorderLayout.SOUTH);
         find.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                desktop.put(Engine.router("/CSTS/" + direct.getText(), desktop));
+                desktop.put(Engine.router("/PR/" + direct.getText(), desktop));
                 dispose();
             }
         });
