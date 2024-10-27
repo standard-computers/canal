@@ -2,10 +2,7 @@ package org.Canal.UI.Views.Singleton;
 
 import org.Canal.Models.BusinessUnits.OrderLineItem;
 import org.Canal.Models.BusinessUnits.PurchaseOrder;
-import org.Canal.Models.SupplyChainUnits.Area;
-import org.Canal.Models.SupplyChainUnits.Flex;
-import org.Canal.Models.SupplyChainUnits.Item;
-import org.Canal.Models.SupplyChainUnits.Location;
+import org.Canal.Models.SupplyChainUnits.*;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.Labels;
 import org.Canal.UI.Views.New.CreateFlex;
@@ -15,7 +12,6 @@ import org.Canal.Utils.Canal;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.RefreshListener;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
@@ -30,11 +26,11 @@ import java.util.ArrayList;
 
 public class WarehouseView extends JInternalFrame implements RefreshListener {
 
-    private Location location;
+    private Warehouse location;
     private JTree dataTree;
     private DesktopState desktop;
 
-    public WarehouseView(Location loc, DesktopState desktop) {
+    public WarehouseView(Warehouse loc, DesktopState desktop) {
         this.location = loc;
         this.desktop = desktop;
         setTitle("Warehouse / " + loc.getId() + " - " + loc.getName());
@@ -74,8 +70,6 @@ public class WarehouseView extends JInternalFrame implements RefreshListener {
     private JPanel makeOverview(){
         JPanel kanbanBoard = new JPanel();
         kanbanBoard.setLayout(new GridLayout(1, 3, 10, 10));
-
-
         ArrayList<String[]> ibd = new ArrayList<>();
         for(PurchaseOrder ibdo : Engine.getOrders(location.getId())){
             double c = 0;
@@ -89,7 +83,6 @@ public class WarehouseView extends JInternalFrame implements RefreshListener {
                     "Receive"
             });
         }
-
         ArrayList<String[]> obd = new ArrayList<>();
         ArrayList<String[]> ipt = new ArrayList<>();
         ArrayList<String[]> myt = new ArrayList<>();
@@ -203,21 +196,21 @@ public class WarehouseView extends JInternalFrame implements RefreshListener {
 
     private Canal createRootNode() {
 
-        Canal[] customers = new Canal[Engine.getCustomers(location.getTie()).size()];
-        for (int i = 0; i < Engine.getCustomers(location.getTie()).size(); i++) {
-            Location l = Engine.getCustomers(location.getTie()).get(i);
+        Canal[] customers = new Canal[Engine.getCustomers(location.getOrg()).size()];
+        for (int i = 0; i < Engine.getCustomers(location.getOrg()).size(); i++) {
+            Location l = Engine.getCustomers(location.getOrg()).get(i);
             customers[i] = new Canal(l.getId() + " - " + l.getName(), false, "/CSTS/" + l.getId(), Color.PINK, null);
         }
 
-        Canal[] vendors = new Canal[Engine.getVendors(location.getTie()).size()];
-        for (int i = 0; i < Engine.getVendors(location.getTie()).size(); i++) {
-            Location l = Engine.getVendors(location.getTie()).get(i);
+        Canal[] vendors = new Canal[Engine.getVendors(location.getOrg()).size()];
+        for (int i = 0; i < Engine.getVendors(location.getOrg()).size(); i++) {
+            Location l = Engine.getVendors(location.getOrg()).get(i);
             vendors[i] = new Canal(l.getId() + " - " + l.getName(), false, "/VEND/" + l.getId(), Color.CYAN, null);
         }
 
-        Canal[] items = new Canal[Engine.getItems(location.getTie()).size()];
-        for (int i = 0; i < Engine.getItems(location.getTie()).size(); i++) {
-            Item l = Engine.getItems(location.getTie()).get(i);
+        Canal[] items = new Canal[Engine.getItems(location.getOrg()).size()];
+        for (int i = 0; i < Engine.getItems(location.getOrg()).size(); i++) {
+            Item l = Engine.getItems(location.getOrg()).get(i);
             items[i] = new Canal(l.getId() + " - " + l.getName(), false, "/ITS/" + l.getId(), new Color(147, 70, 3), null);
         }
         Canal[] areas = new Canal[Engine.getAreas(location.getId()).size()];

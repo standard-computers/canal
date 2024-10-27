@@ -7,6 +7,7 @@ package org.Canal.Utils;
  * <a href='https://telifie.com/projects/Canal/documention'>See Documention</a>
  */
 public enum LockeType {
+    ACTIVE,
     APPROVED, //Approved by whoever necessary
     ARCHIVED, //Like delete but still in system and can't be used AT ALL
     BLOCKED, //BLocked for forseeable future

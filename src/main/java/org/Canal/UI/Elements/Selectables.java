@@ -1,6 +1,7 @@
 package org.Canal.UI.Elements;
 
 import org.Canal.Models.SupplyChainUnits.Location;
+import org.Canal.Models.SupplyChainUnits.Warehouse;
 import org.Canal.Utils.Engine;
 import java.util.HashMap;
 
@@ -14,7 +15,7 @@ public class Selectables {
         for(Location dcs : Engine.getDistributionCenters()){
             availableLocations.put(dcs.getId() + " – " + dcs.getName(), dcs.getId());
         }
-        for(Location whs : Engine.getWarehouses()){
+        for(Warehouse whs : Engine.getWarehouses()){
             availableLocations.put(whs.getId() + " – " + whs.getName(), whs.getId());
         }
         return new Selectable(availableLocations);

@@ -25,7 +25,7 @@ public class AutoMakePurchaseOrders extends JInternalFrame {
         setTitle("AutoMake Purchase Orders");
         locations = Engine.getCostCenters();
         locations.addAll(Engine.getDistributionCenters());
-        locations.addAll(Engine.getWarehouses());
+//        locations.addAll(Engine.getWarehouses());
         this.checkboxes = new ArrayList<>();
         checkboxPanel = new JPanel();
         checkboxPanel.setLayout(new BoxLayout(checkboxPanel, BoxLayout.Y_AXIS));

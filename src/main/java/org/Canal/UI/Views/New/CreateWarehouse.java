@@ -1,8 +1,8 @@
 package org.Canal.UI.Views.New;
 
-import org.Canal.Models.SupplyChainUnits.Location;
+import org.Canal.Models.SupplyChainUnits.Warehouse;
+import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Button;
-import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Views.Singleton.Controller;
 import org.Canal.UI.Views.Singleton.WarehouseView;
@@ -21,28 +21,40 @@ public class CreateWarehouse extends JInternalFrame {
     public CreateWarehouse(DesktopState desktop) {
         setTitle("New Warehouse");
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));
-        ArrayList<Location> ls = Engine.getWarehouses();
+        ArrayList<Warehouse> ls = Engine.getWarehouses();
         String generatedId = "WH" + (100000 + (ls.size() + 1));
         JTextField whsIdField = new JTextField(generatedId);
         JTextField orgIdField = new JTextField(Engine.getOrganization().getId());
-        JTextField warehouseNameField = new JTextField(20);
-        JTextField streetField = new JTextField(20);
-        JTextField cityField = new JTextField(20);
-        JTextField stateField = new JTextField(20);
-        JTextField postalCodeField = new JTextField(20);
-        JTextField countryField = new JTextField(20);
-        countryField.setText("US");
+        JTextField warehouseNameField = new JTextField(15);
+        JTextField streetField = new JTextField(15);
+        JTextField cityField = new JTextField(15);
+        JTextField stateField = new JTextField(15);
+        JTextField postalCodeField = new JTextField(15);
+        Selectable countries = Selectables.countries();
+        countries.setSelectedValue("US");
+        JTextField taxIdField = new JTextField(15);
+        JCheckBox isTaxExempt = new JCheckBox();
         Button make = new Button("Make");
         getRootPane().setDefaultButton(make);
         Form f = new Form();
         f.addInput(new Label("*New ID", UIManager.getColor("Label.foreground")), whsIdField);
         f.addInput(new Label("*Organization", UIManager.getColor("Label.foreground")), orgIdField);
-        f.addInput(new Label("Name", Constants.colors[0]), warehouseNameField);
-        f.addInput(new Label("Street", Constants.colors[1]), streetField);
-        f.addInput(new Label("City", Constants.colors[2]), cityField);
-        f.addInput(new Label("State", Constants.colors[3]), stateField);
-        f.addInput(new Label("Postal", Constants.colors[4]), postalCodeField);
-        f.addInput(new Label("Country", Constants.colors[5]), countryField);
+        f.addInput(new Label("Name", Constants.colors[10]), warehouseNameField);
+        f.addInput(new Label("Street", Constants.colors[9]), streetField);
+        f.addInput(new Label("City", Constants.colors[8]), cityField);
+        f.addInput(new Label("State", Constants.colors[7]), stateField);
+        f.addInput(new Label("Postal", Constants.colors[6]), postalCodeField);
+        f.addInput(new Label("Country", Constants.colors[5]), countries);
+        f.addInput(new Label("Tax ID (optional)", UIManager.getColor("Label.foreground")), taxIdField);
+        f.addInput(new Label("Tax Exempt?", UIManager.getColor("Label.foreground")), isTaxExempt);
+
+        JPanel sif = new JPanel();
+        JTextField areaField = new JTextField(12);
+        JTextField areaUOMField = new JTextField("SQ FT", 5);
+        sif.add(areaField);
+        sif.add(areaUOMField);
+        f.addInput(new Label("Area", UIManager.getColor("Label.foreground")), sif);
+
         add(f, BorderLayout.CENTER);
         add(make, BorderLayout.SOUTH);
         setResizable(false);
@@ -58,11 +70,26 @@ public class CreateWarehouse extends JInternalFrame {
                 String city = cityField.getText().trim();
                 String state = stateField.getText().trim();
                 String postal = postalCodeField.getText().trim();
-                String country = countryField.getText();
-                Location location = new Location(genId, orgTieId, name, line1, city, state, postal, country, false);
-                Pipe.save("/WHS", location);
+                String country = countries.getSelectedValue();
+                String taxId = taxIdField.getText().trim();
+                double area = Double.parseDouble(areaField.getText().trim());
+                String areaUOM = areaUOMField.getText().trim();
+                Warehouse newWarehouse = new Warehouse();
+                newWarehouse.setId(genId);
+                newWarehouse.setOrg(orgTieId);
+                newWarehouse.setName(name);
+                newWarehouse.setLine1(line1);
+                newWarehouse.setCity(city);
+                newWarehouse.setState(state);
+                newWarehouse.setPostal(postal);
+                newWarehouse.setCountry(country);
+                newWarehouse.setTaxId(taxId);
+                newWarehouse.setArea(area);
+                newWarehouse.setAreaUOM(areaUOM);
+                newWarehouse.setTaxExempt(isTaxExempt.isSelected());
+                Pipe.save("/WHS", newWarehouse);
                 dispose();
-                desktop.put(new WarehouseView(location, desktop));
+                desktop.put(new WarehouseView(newWarehouse, desktop));
             }
         });
     }

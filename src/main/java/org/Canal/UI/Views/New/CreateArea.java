@@ -1,6 +1,7 @@
 package org.Canal.UI.Views.New;
 
 import org.Canal.Models.SupplyChainUnits.Location;
+import org.Canal.Models.SupplyChainUnits.Warehouse;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Label;
@@ -27,7 +28,7 @@ public class CreateArea extends JInternalFrame {
         for(Location l : Engine.getDistributionCenters()){
             locations.put(l.getId() + " - " + l.getName(), l.getId());
         }
-        for(Location l : Engine.getWarehouses()){
+        for(Warehouse l : Engine.getWarehouses()){
             locations.put(l.getId() + " - " + l.getName(), l.getId());
         }
         Selectable locationIdField = new Selectable(locations);

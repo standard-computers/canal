@@ -2,6 +2,7 @@ package org.Canal.UI.Views.Transactions.Orders;
 
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.Models.BusinessUnits.PurchaseRequisition;
+import org.Canal.Models.SupplyChainUnits.Warehouse;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Label;
@@ -37,7 +38,7 @@ public class CreatePurchaseRequisition extends JInternalFrame {
         for(Location vs : Engine.getCostCenters()){
             opts.put(vs.getId() + " – " + vs.getName(), vs.getId());
         }
-        for(Location vs : Engine.getWarehouses()){
+        for(Warehouse vs : Engine.getWarehouses()){
             opts.put(vs.getId() + " – " + vs.getName(), vs.getId());
         }
         availableVendors = new Selectable(opts);

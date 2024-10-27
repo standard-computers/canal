@@ -1,6 +1,6 @@
 package org.Canal.UI.Views.Lists;
 
-import org.Canal.Models.SupplyChainUnits.Location;
+import org.Canal.Models.SupplyChainUnits.Warehouse;
 import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Views.Singleton.Controller;
 import org.Canal.Utils.DesktopState;
@@ -16,14 +16,14 @@ import java.util.ArrayList;
 
 public class Warehouses extends JInternalFrame {
 
-    private DefaultListModel<Location> listModel;
+    private DefaultListModel<Warehouse> listModel;
 
     public Warehouses(DesktopState desktop) {
         setTitle("Warehouses");
-        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/distribution_centers.png")));
+        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/warehouses.png")));
         listModel = new DefaultListModel<>();
-        JList<Location> list = new JList<>(listModel);
-        list.setCellRenderer(new LocationRenderer());
+        JList<Warehouse> list = new JList<>(listModel);
+        list.setCellRenderer(new WarehouseRenderer());
         JScrollPane scrollPane = new JScrollPane(list);
         scrollPane.setPreferredSize(new Dimension(300, 400));
         list.addMouseListener(new MouseAdapter() {
@@ -32,7 +32,7 @@ public class Warehouses extends JInternalFrame {
                 if (e.getClickCount() == 2) {
                     int selectedIndex = list.locationToIndex(e.getPoint());
                     if (selectedIndex != -1) {
-                        Location l = listModel.getElementAt(selectedIndex);
+                        Warehouse l = listModel.getElementAt(selectedIndex);
                         if (l != null) {
                             desktop.put(Engine.router("/WHS/" + l.getId(), desktop));
                         } else {
@@ -72,20 +72,20 @@ public class Warehouses extends JInternalFrame {
     private void loadLocations(){
         listModel.removeAllElements();
         Engine.load();
-        ArrayList<Location> found = Engine.getWarehouses();
-        for (Location loc : found) {
+        ArrayList<Warehouse> found = Engine.getWarehouses();
+        for (Warehouse loc : found) {
             listModel.addElement(loc);
         }
     }
 
-    class LocationRenderer extends JPanel implements ListCellRenderer<Location> {
+    class WarehouseRenderer extends JPanel implements ListCellRenderer<Warehouse> {
 
         private JLabel ccName;
         private JLabel ccId;
         private JLabel line1;
         private JLabel line2;
 
-        public LocationRenderer() {
+        public WarehouseRenderer() {
             setLayout(new GridLayout(4, 1));
             ccName = new JLabel();
             ccId = new JLabel();
@@ -103,11 +103,11 @@ public class Warehouses extends JInternalFrame {
         }
 
         @Override
-        public Component getListCellRendererComponent(JList<? extends Location> list, Location value, int index, boolean isSelected, boolean cellHasFocus) {
-            ccName.setText(value.getName());
-            ccId.setText(value.getId());
-            line1.setText(value.getLine1());
-            line2.setText(value.getCity() + ", " + value.getState() + " " + value.getPostal() + " " + value.getCountry());
+        public Component getListCellRendererComponent(JList<? extends Warehouse> list, Warehouse warehouse, int index, boolean isSelected, boolean cellHasFocus) {
+            ccName.setText(warehouse.getName());
+            ccId.setText(warehouse.getId());
+            line1.setText(warehouse.getLine1());
+            line2.setText(warehouse.getCity() + ", " + warehouse.getState() + " " + warehouse.getPostal() + " " + warehouse.getCountry());
             if (isSelected) {
                 setBackground(list.getSelectionBackground());
                 setForeground(list.getSelectionForeground());

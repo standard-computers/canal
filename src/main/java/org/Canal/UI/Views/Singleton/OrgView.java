@@ -202,7 +202,7 @@ public class OrgView extends JInternalFrame {
 
         Canal[] warehouses = new Canal[Engine.getWarehouses(location.getId()).size()];
         for (int i = 0; i < Engine.getWarehouses(location.getId()).size(); i++) {
-            Location l = Engine.getWarehouses(location.getId()).get(i);
+            Warehouse l = Engine.getWarehouses(location.getId()).get(i);
             warehouses[i] = new Canal(l.getId() + " - " + l.getName() + " (" + l.getCity() + ")", false, "/WHS/" + l.getId(), Constants.colors[2], null);
             printables.add(l.getId());
         }

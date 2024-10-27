@@ -1,6 +1,7 @@
 package org.Canal.UI.Views.Singleton;
 
 import org.Canal.Models.SupplyChainUnits.Location;
+import org.Canal.Models.SupplyChainUnits.Warehouse;
 import org.Canal.UI.Elements.FormFrame;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Selectable;
@@ -22,7 +23,7 @@ public class AutoMake extends FormFrame {
         for(Location l : Engine.getDistributionCenters()){
             als.put(l.getId(), l.getId());
         }
-        for(Location l : Engine.getWarehouses()){
+        for(Warehouse l : Engine.getWarehouses()){
             als.put(l.getId(), l.getId());
         }
         Selectable locations = new Selectable(als);

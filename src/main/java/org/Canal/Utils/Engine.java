@@ -40,7 +40,7 @@ public class Engine {
     public static ArrayList<Organization> organizations = new ArrayList<>();
     public static ArrayList<Location> costCenters = new ArrayList<>();
     public static ArrayList<Location> distributionCenters = new ArrayList<>();
-    public static ArrayList<Location> warehouses = new ArrayList<>();
+    public static ArrayList<Warehouse> warehouses = new ArrayList<>();
     public static ArrayList<Location> customers = new ArrayList<>();
     public static ArrayList<Location> vendors = new ArrayList<>();
     public static ArrayList<Item> items = new ArrayList<>();
@@ -84,11 +84,11 @@ public class Engine {
         File[] whdir = Pipe.list("WHS");
         for (File file : whdir) {
             if (!file.isDirectory()) {
-                Location l = Json.load(file.getPath(), Location.class);
+                Warehouse l = Json.load(file.getPath(), Warehouse.class);
                 warehouses.add(l);
             }
         }
-        warehouses.sort(Comparator.comparing(Location::getId));
+        warehouses.sort(Comparator.comparing(Warehouse::getId));
         customers.clear();
         File[] cstsDir = Pipe.list("CSTS");
         for (File file : cstsDir) {
@@ -217,11 +217,11 @@ public class Engine {
         return distributionCenters.stream().filter(location -> location.getTie().equals(id)).collect(Collectors.toList());
     }
 
-    public static List<Location> getWarehouses(String id) {
-        return warehouses.stream().filter(location -> location.getTie().equals(id)).collect(Collectors.toList());
+    public static List<Warehouse> getWarehouses(String id) {
+        return warehouses.stream().filter(location -> location.getOrg().equals(id)).collect(Collectors.toList());
     }
 
-    public static ArrayList<Location> getWarehouses() {
+    public static ArrayList<Warehouse> getWarehouses() {
         return warehouses;
     }
 
