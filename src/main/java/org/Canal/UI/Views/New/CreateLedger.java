@@ -1,7 +1,6 @@
 package org.Canal.UI.Views.New;
 
 import org.Canal.Models.BusinessUnits.Ledger;
-import org.Canal.Utils.RefreshListener;
 import org.Canal.UI.Elements.Input;
 import org.Canal.Utils.Pipe;
 import javax.swing.*;
@@ -11,14 +10,14 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 
-public class NewLedger extends JInternalFrame {
+/**
+ * /LGS/NEW
+ */
+public class CreateLedger extends JInternalFrame {
 
-    private RefreshListener refreshListener;
-
-    public NewLedger() {
-        this.refreshListener = refreshListener;
+    public CreateLedger() {
         setTitle("Create Ledger");
-//        setIconImage(new ImageIcon(OrgView.class.getResource("/icons/add_ledger.png")).getImage());
+        setFrameIcon(new ImageIcon(CreateLedger.class.getResource("/icons/create.png")));
         JPanel panel = new JPanel(new GridLayout(2, 1));
         panel.setBorder(new EmptyBorder(10, 10, 10, 10));
         Input name = new Input("Ledger Name");
@@ -37,10 +36,7 @@ public class NewLedger extends JInternalFrame {
             public void mouseClicked(MouseEvent e) {
                 Ledger l = new Ledger(id.value(), name.value());
                 Pipe.save("/LGS", l);
-                if(refreshListener != null){
-                    refreshListener.onRefresh();
-                    dispose();
-                }
+                dispose();
             }
         });
     }

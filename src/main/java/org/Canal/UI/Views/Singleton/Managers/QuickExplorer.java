@@ -1,4 +1,4 @@
-package org.Canal.UI.Views;
+package org.Canal.UI.Views.Singleton.Managers;
 
 import org.Canal.UI.Views.Singleton.Controller;
 import org.Canal.Utils.DesktopState;

@@ -12,13 +12,15 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * /CATS
+ */
 public class Catalogs extends JInternalFrame {
 
     private DefaultListModel<Catalog> listModel;
 
     public Catalogs(DesktopState desktop) {
         setTitle("Catalogs");
-//        setIconImage(new ImageIcon(OrgView.class.getResource("/icons/find.png")).getImage());
         listModel = new DefaultListModel<>();
         JList<Catalog> list = new JList<>(listModel);
         list.setCellRenderer(new CatalogRenderer());
@@ -53,7 +55,7 @@ public class Catalogs extends JInternalFrame {
                 }
             }
         });
-        JButton nla = new JButton("Add");
+        JButton nla = new JButton("Build a Catalog");
         nla.addActionListener(e -> new CreateCatalog(desktop));
         JPanel options = new JPanel();
         options.add(nla);

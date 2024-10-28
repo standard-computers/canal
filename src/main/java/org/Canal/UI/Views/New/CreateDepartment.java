@@ -1,5 +1,7 @@
 package org.Canal.UI.Views.New;
 
+import org.Canal.Models.BusinessUnits.Organization;
+import org.Canal.Models.HumanResources.Department;
 import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.*;
@@ -20,20 +22,19 @@ public class CreateDepartment extends JInternalFrame {
         Form f = new Form();
 
         String genId = "D0" + Engine.getEmployees().size() + 1;
-        JTextField empIdField = new JTextField(genId, 18);
-        JTextField orgIdField = new JTextField(Engine.getOrganization().getId(), 18);
-        JTextField empNameField = new JTextField(18);
+        JTextField deptIdField = new JTextField(genId, 18);
+        JTextField deptNameField = new JTextField(18);
         Selectable manager = Selectables.allEmployees();
         manager.editable();
-        DatePicker startDatePicker = new DatePicker();
+        DatePicker openedDatePicker = new DatePicker();
         Selectable locations = Selectables.allLocations();
-
-        f.addInput(new Label("*New Department ID", UIManager.getColor("Label.foreground")), empIdField);
-        f.addInput(new Label("*Organization", UIManager.getColor("Label.foreground")), orgIdField);
+        Selectable orgs = Selectables.allOrgs();
+        f.addInput(new Label("*New Department ID", UIManager.getColor("Label.foreground")), deptIdField);
+        f.addInput(new Label("*Organization", UIManager.getColor("Label.foreground")), orgs);
         f.addInput(new Label("Location (optional)", Constants.colors[9]), locations);
-        f.addInput(new Label("Name", UIManager.getColor("Label.foreground")), empNameField);
+        f.addInput(new Label("Name", UIManager.getColor("Label.foreground")), deptNameField);
         f.addInput(new Label("Manager", UIManager.getColor("Label.foreground")), manager);
-        f.addInput(new Label("Start Date", UIManager.getColor("Label.foreground")), startDatePicker);
+        f.addInput(new Label("Open Date", UIManager.getColor("Label.foreground")), openedDatePicker);
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);
         Button cr = new Button("Process");
@@ -42,9 +43,18 @@ public class CreateDepartment extends JInternalFrame {
         setClosable(true);
         cr.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                String orgId = orgIdField.getText().trim();
+
+                Department newDepartment = new Department();
+                newDepartment.setId(deptIdField.getText());
+                newDepartment.setOrg(orgs.getSelectedValue());
+                newDepartment.setLocation(locations.getSelectedValue());
+                //Parent Department
+                newDepartment.setName(deptNameField.getText());
+                Organization selectedOrg = Engine.getOrganization(orgs.getSelectedValue());
+                selectedOrg.addDepartment(newDepartment);
+                selectedOrg.save();
                 dispose();
-                JOptionPane.showMessageDialog(null, "Department Created in ORG " + orgId);
+                JOptionPane.showMessageDialog(null, "Department Created in ORG " + orgs.getSelectedValue());
             }
         });
     }

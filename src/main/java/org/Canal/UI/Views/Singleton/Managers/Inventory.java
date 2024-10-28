@@ -1,4 +1,4 @@
-package org.Canal.UI.Views.Lists;
+package org.Canal.UI.Views.Singleton.Managers;
 
 import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.IconButton;
@@ -10,6 +10,9 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * /INV
+ */
 public class Inventory extends JInternalFrame {
 
     private JTable table;

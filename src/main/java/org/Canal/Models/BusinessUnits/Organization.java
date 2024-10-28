@@ -1,7 +1,12 @@
 package org.Canal.Models.BusinessUnits;
 
 import org.Canal.Models.HumanResources.Department;
+import org.Canal.Start;
+import org.Canal.Utils.Configuration;
+import org.Canal.Utils.Engine;
+import org.Canal.Utils.Json;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class Organization {
@@ -136,5 +141,22 @@ public class Organization {
     @Override
     public String toString() {
         return this.id;
+    }
+
+    public void save(){
+        File md = new File(Start.WINDOWS_SYSTEM_DIR + "\\.store\\ORGS\\");
+        File[] mdf = md.listFiles();
+        if (mdf != null && mdf.length > 0) {
+            for (int i = 0; i < mdf.length; i++) {
+                File file = mdf[i];
+                if (file.getPath().endsWith(".orgs")) {
+                    Organization forg = Json.load(file.getPath(), Organization.class);
+                    if(forg.getId().equals(this.id)){
+                        Json.save(file.getPath(), this);
+                    }
+                    break;
+                }
+            }
+        }
     }
 }

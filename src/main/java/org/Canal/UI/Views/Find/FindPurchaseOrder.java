@@ -13,10 +13,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * /ORDS/PO/F
+ */
 public class FindPurchaseOrder extends JInternalFrame {
 
     public FindPurchaseOrder(DesktopState desktop) {
-        setTitle("Find Order");
+        setTitle("Find Purchase Order");
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/find.png")));
         Form f = new Form();
         JTextField direct = new JTextField(10);
@@ -32,7 +35,7 @@ public class FindPurchaseOrder extends JInternalFrame {
                 }
             }
         });
-        f.addInput(new Label("Warehouse ID", UIManager.getColor("Label.foreground")), direct);
+        f.addInput(new Label("Purchase Order ID/#", UIManager.getColor("Label.foreground")), direct);
         JPanel main = new JPanel(new BorderLayout());
         main.add(f, BorderLayout.CENTER);
         Button find = new Button("Open");

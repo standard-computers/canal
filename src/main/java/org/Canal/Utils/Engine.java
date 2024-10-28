@@ -12,6 +12,8 @@ import org.Canal.UI.Views.Lists.*;
 import org.Canal.UI.Views.Modifiers.*;
 import org.Canal.UI.Views.New.*;
 import org.Canal.UI.Views.Singleton.*;
+import org.Canal.UI.Views.Singleton.Managers.Finance;
+import org.Canal.UI.Views.Singleton.Managers.Inventory;
 import org.Canal.UI.Views.Singleton.Orders.AutoMakePurchaseRequisitions;
 import org.Canal.UI.Views.Singleton.Orders.PurchaseOrders;
 import org.Canal.UI.Views.Singleton.Orders.PurchaseRequisitions;
@@ -38,7 +40,6 @@ public class Engine {
     private static Configuration configuration;
     public static Organization organization;
     public static User client;
-    public static ArrayList<Location> costCenters = new ArrayList<>();
     public static ArrayList<Location> distributionCenters = new ArrayList<>();
     public static ArrayList<Warehouse> warehouses = new ArrayList<>();
     public static ArrayList<Location> customers = new ArrayList<>();
@@ -53,15 +54,6 @@ public class Engine {
     public static ArrayList<Ledger> ledgers = new ArrayList<>();
 
     public static void load(){
-        costCenters.clear();
-        File[] ccsDir = Pipe.list("CCS");
-        for (File file : ccsDir) {
-            if (!file.isDirectory()) {
-                Location l = Json.load(file.getPath(), Location.class);
-                costCenters.add(l);
-            }
-        }
-        costCenters.sort(Comparator.comparing(Location::getId));
         distributionCenters.clear();
         File[] dcssDir = Pipe.list("DCSS");
         for (File file : dcssDir) {
@@ -202,11 +194,20 @@ public class Engine {
     }
 
     public static ArrayList<Location> getCostCenters() {
+        ArrayList<Location> costCenters = new ArrayList<>();
+        File[] ccsDir = Pipe.list("CCS");
+        for (File file : ccsDir) {
+            if (!file.isDirectory()) {
+                Location l = Json.load(file.getPath(), Location.class);
+                costCenters.add(l);
+            }
+        }
+        costCenters.sort(Comparator.comparing(Location::getId));
         return costCenters;
     }
 
     public static List<Location> getCostCenters(String id) {
-        return costCenters.stream().filter(location -> location.getTie().equals(id)).collect(Collectors.toList());
+        return getCostCenters().stream().filter(location -> location.getTie().equals(id)).collect(Collectors.toList());
     }
 
     public static ArrayList<Location> getDistributionCenters() {
@@ -437,6 +438,9 @@ public class Engine {
             case "/EMPS/MOD" -> {
                 return new ModifyEmployee(null); //TODO
             }
+            case "/DPTS" -> {
+                return new Departments(desktop);
+            }
             case "/DPTS/F" -> {
                 return new FindDepartment(desktop);
             }
@@ -497,11 +501,14 @@ public class Engine {
             case "/ORDS/NEW", "/ORDS/PO/NEW" -> {
                 return new CreatePurchaseOrder();
             }
-            case "/ORDS/PR", "/ORDS/PR/F" -> {
+            case "/ORDS/PR" -> {
                 return new PurchaseRequisitions(desktop);
             }
             case "/ORDS/PR/NEW" -> {
                 return new CreatePurchaseRequisition();
+            }
+            case "/ORDS/PR/F" -> {
+                return new FindPurchaseReq(desktop);
             }
             case "/ORDS/PR/AUTO_MK" -> {
                 return new AutoMakePurchaseRequisitions();

@@ -7,13 +7,16 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-public class CreateInvoice extends JInternalFrame {
+/**
+ * /INVS/CR
+ */
+public class CreditInvoice extends JInternalFrame {
 
     private Invoice newInvoice;
 
-    public CreateInvoice(String providedCustomerId) {
-        setTitle("Create Invoice");
-        if(Engine.getCustomers().isEmpty()){
+    public CreditInvoice(Invoice invoice) {
+        setTitle("Credit Invoice");
+        if(Engine.getCustomers().size() == 0){
             JOptionPane.showMessageDialog(null, "No customers to invoice.");
             dispose();
             return;
@@ -21,10 +24,6 @@ public class CreateInvoice extends JInternalFrame {
         JPanel orderInfo = new JPanel(new GridLayout(2, 1));
         Input customerId = new Input("Customer ID");
         Input vendorId = new Input("Vendor ID");
-        if(providedCustomerId != null){
-            customerId.setValue(providedCustomerId);
-            customerId.disable();
-        }
         orderInfo.setBorder(new EmptyBorder(10, 10, 10, 10));
         JButton save = new JButton("Save");
         orderInfo.add(customerId);

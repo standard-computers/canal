@@ -16,6 +16,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+/**
+ * /WHS/NEW
+ */
 public class CreateWarehouse extends JInternalFrame {
 
     public CreateWarehouse(DesktopState desktop) {

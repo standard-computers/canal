@@ -7,7 +7,8 @@ import java.util.ArrayList;
  */
 public class Catalog {
 
-    private String id, name;
+    private String id; //Catalog ID
+    private String name; //Name of Catalog
     private String[] costCenters, customers, vendors;
     private ArrayList<Flex> items = new ArrayList<>();
 

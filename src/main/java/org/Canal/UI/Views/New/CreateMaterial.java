@@ -15,6 +15,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 
+/**
+ * /MTS/NEW
+ */
 public class CreateMaterial extends JInternalFrame {
 
     private Copiable orgIdField;

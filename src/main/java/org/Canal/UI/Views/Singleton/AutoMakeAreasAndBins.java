@@ -11,9 +11,9 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class AutoMake extends FormFrame {
+public class AutoMakeAreasAndBins extends FormFrame {
 
-    public AutoMake() {
+    public AutoMakeAreasAndBins() {
         setTitle("Area/Bin AutoMake");
 
         HashMap<String, String> als = new HashMap<>();

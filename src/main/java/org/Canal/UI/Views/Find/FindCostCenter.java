@@ -12,6 +12,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * /CCS/F
+ */
 public class FindCostCenter extends JInternalFrame {
 
     public FindCostCenter(DesktopState desktop) {

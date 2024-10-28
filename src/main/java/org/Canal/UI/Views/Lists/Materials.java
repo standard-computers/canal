@@ -4,7 +4,6 @@ import org.Canal.Models.SupplyChainUnits.Material;
 import org.Canal.UI.Views.New.CreateMaterial;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -14,6 +13,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+/**
+ * /MTS
+ */
 public class Materials extends JInternalFrame {
 
     private DefaultListModel<Material> listModel;

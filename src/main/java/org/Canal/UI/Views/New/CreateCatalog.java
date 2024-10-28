@@ -10,6 +10,9 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * /CATS/NEW
+ */
 public class CreateCatalog extends JInternalFrame {
 
     public CreateCatalog(DesktopState desktop) {
@@ -43,6 +46,7 @@ public class CreateCatalog extends JInternalFrame {
                 c.setCustomers(availableCustomers.value().split(";"));
                 c.setVendors(availableVendors.value().split(";"));
                 Pipe.save("/CATS", c);
+                //TODO Catalog View
                 dispose();
             }
         });

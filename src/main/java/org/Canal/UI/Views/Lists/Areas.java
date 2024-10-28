@@ -12,6 +12,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+/**
+ * /AREAS
+ */
 public class Areas extends JInternalFrame {
 
     private DefaultListModel<Area> listModel;

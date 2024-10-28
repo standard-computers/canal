@@ -14,6 +14,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+/**
+ * /ORDS, /ORDS/PO
+ */
 public class PurchaseOrders extends JInternalFrame {
 
     private JTable table;

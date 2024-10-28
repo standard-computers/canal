@@ -4,7 +4,6 @@ import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Views.Singleton.Controller;
-import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import javax.swing.*;
@@ -14,6 +13,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * /ITS/F
+ */
 public class FindItem extends JInternalFrame {
 
     public FindItem(DesktopState desktop) {
@@ -33,7 +35,7 @@ public class FindItem extends JInternalFrame {
                 }
             }
         });
-        f.addInput(new Label("Item ID", UIManager.getColor("Label.foreground")), direct);
+        f.addInput(new Label("Item ID [or] Name", UIManager.getColor("Label.foreground")), direct);
         JPanel main = new JPanel(new BorderLayout());
         main.add(f, BorderLayout.CENTER);
         Button find = new Button("Open");

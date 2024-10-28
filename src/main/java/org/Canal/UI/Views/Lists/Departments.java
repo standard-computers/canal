@@ -2,6 +2,7 @@ package org.Canal.UI.Views.Lists;
 
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.Button;
+import org.Canal.UI.Views.Singleton.Controller;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import javax.swing.*;
@@ -14,16 +15,15 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 /**
- * /WHS
+ * /DPTS
  */
-public class Vendors extends JInternalFrame {
+public class Departments extends JInternalFrame {
 
-    private String tcode;
     private DefaultListModel<Location> listModel;
 
-    public Vendors(String type, String tcode, DesktopState desktop) {
-        setTitle("Locations");
-        this.tcode = tcode;
+    public Departments(DesktopState desktop) {
+        setTitle("Departments");
+        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/distribution_centers.png")));
         listModel = new DefaultListModel<>();
         JList<Location> list = new JList<>(listModel);
         list.setCellRenderer(new LocationRenderer());
@@ -37,7 +37,7 @@ public class Vendors extends JInternalFrame {
                     if (selectedIndex != -1) {
                         Location l = listModel.getElementAt(selectedIndex);
                         if (l != null) {
-                            desktop.put(Engine.router(tcode + "/" + l.getId(), desktop));
+                            desktop.put(Engine.router("/DPTS/" + l.getId(), desktop));
                         } else {
                             JOptionPane.showMessageDialog(null, "Location Not Found");
                         }
@@ -53,35 +53,29 @@ public class Vendors extends JInternalFrame {
                     String inputText = direct.getText().trim();
                     System.out.println(inputText);
                     if (!inputText.isEmpty()) {
-                        desktop.put(Engine.router(tcode + "/" + inputText, desktop));
+                        desktop.put(Engine.router("/DCSS/" + inputText, desktop));
                     }
                 }
             }
         });
-        Button nla = new Button("Add");
-        nla.addActionListener(e -> desktop.put(Engine.router(tcode + "/NEW", desktop)));
-        JPanel options = new JPanel();
-        options.add(nla);
+        Button nla = new Button("Create Department");
+        nla.addActionListener(e -> desktop.put(Engine.router("/DPTS/NEW", desktop)));
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
         mainPanel.add(direct, BorderLayout.NORTH);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
-        mainPanel.add(options, BorderLayout.SOUTH);
+        mainPanel.add(nla, BorderLayout.SOUTH);
         add(mainPanel);
         setResizable(false);
+        setIconifiable(true);
+        setClosable(true);
         loadLocations();
     }
 
     private void loadLocations(){
-        ArrayList<Location> found = new ArrayList<>();
         listModel.removeAllElements();
         Engine.load();
-        switch (tcode){
-            case "/CCS" -> found = Engine.getCostCenters();
-            case "/CSTS" -> found = Engine.getCustomers();
-            case "/DCSS" -> found = Engine.getDistributionCenters();
-            case "/VEND" -> found = Engine.getVendors();
-        }
+        ArrayList<Location> found = Engine.getDistributionCenters();
         for (Location loc : found) {
             listModel.addElement(loc);
         }

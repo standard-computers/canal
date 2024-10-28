@@ -2,24 +2,27 @@ package org.Canal.UI.Views.Lists;
 
 import org.Canal.Models.BusinessUnits.Ledger;
 import org.Canal.UI.Elements.Button;
-import org.Canal.UI.Views.New.NewLedger;
+import org.Canal.UI.Views.New.CreateLedger;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * /LGS
+ */
 public class Ledgers extends JInternalFrame {
 
     private DefaultListModel<Ledger> listModel;
 
     public Ledgers(DesktopState desktop) {
         setTitle("Ledgers");
+        setFrameIcon(new ImageIcon(Ledgers.class.getResource("/icons/ledgers.png")));
         listModel = new DefaultListModel<>();
         JList<Ledger> list = new JList<>(listModel);
         list.setCellRenderer(new LedgerRenderer());
@@ -56,7 +59,7 @@ public class Ledgers extends JInternalFrame {
         });
         Button nla = new Button("Add");
         nla.color(Constants.colors[7]);
-        nla.addActionListener(e -> new NewLedger());
+        nla.addActionListener(e -> new CreateLedger());
         JPanel options = new JPanel();
         options.add(nla);
         JPanel mainPanel = new JPanel();
@@ -66,7 +69,8 @@ public class Ledgers extends JInternalFrame {
         mainPanel.add(options, BorderLayout.SOUTH);
         add(mainPanel);
         loadLocations();
-        setResizable(false);
+        setIconifiable(true);
+        setClosable(true);
     }
 
     private void loadLocations(){
@@ -79,29 +83,28 @@ public class Ledgers extends JInternalFrame {
 
     class LedgerRenderer extends JPanel implements ListCellRenderer<Ledger> {
 
-        private JLabel ccName;
-        private JLabel ccId;
-        private JLabel line1;
+        private JLabel ledgerName;
+        private JLabel ledgerId;
+        private JLabel ledgerTransactionCount;
 
         public LedgerRenderer() {
-            setLayout(new GridLayout(4, 1));
-            ccName = new JLabel();
-            ccId = new JLabel();
-            line1 = new JLabel();
-            ccName.setFont(new Font("Arial", Font.BOLD, 16));
-            ccId.setFont(new Font("Arial", Font.PLAIN, 12));
-            line1.setFont(new Font("Arial", Font.PLAIN, 12));
-            add(ccName);
-            add(ccId);
-            add(line1);
-            setBorder(new EmptyBorder(5, 5, 5, 5));
+            setLayout(new GridLayout(3, 1));
+            ledgerName = new JLabel();
+            ledgerId = new JLabel();
+            ledgerTransactionCount = new JLabel();
+            ledgerName.setFont(new Font("Arial", Font.BOLD, 16));
+            ledgerId.setFont(new Font("Arial", Font.PLAIN, 12));
+            ledgerTransactionCount.setFont(new Font("Arial", Font.PLAIN, 12));
+            add(ledgerName);
+            add(ledgerId);
+            add(ledgerTransactionCount);
         }
 
         @Override
         public Component getListCellRendererComponent(JList<? extends Ledger> list, Ledger ledger, int index, boolean isSelected, boolean cellHasFocus) {
-            ccName.setText(ledger.getName());
-            ccId.setText(ledger.getId());
-            line1.setText(ledger.getTransactions().size() + " Transactions");
+            ledgerName.setText(ledger.getName());
+            ledgerId.setText(ledger.getId());
+            ledgerTransactionCount.setText(ledger.getTransactions().size() + " Transactions");
             if (isSelected) {
                 setBackground(list.getSelectionBackground());
                 setForeground(list.getSelectionForeground());

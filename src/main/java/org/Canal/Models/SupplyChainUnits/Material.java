@@ -2,7 +2,12 @@ package org.Canal.Models.SupplyChainUnits;
 
 public class Material {
 
-    private String id, org, name, vendor, color, upc;
+    private String id;
+    private String org;
+    private String name;
+    private String vendor;
+    private String color;
+    private String upc;
     private boolean batched;
     private boolean skud;
     private boolean consumable;
@@ -13,9 +18,6 @@ public class Material {
     private double weight;
     private double tax;
     private double exciseTax;
-
-    public Material() {
-    }
 
     public String getId() {
         return id;

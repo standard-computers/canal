@@ -1,0 +1,15 @@
+/EMPS/PR/NEW
+
+Employee ID
+@copiable employee $id
+
+Employee Name
+@text name $name
+
+Overall Impresson
+@textarea
+
+Salary % Increase
+@number raise 0.03
+
+@submit /EMPS/PR/$id

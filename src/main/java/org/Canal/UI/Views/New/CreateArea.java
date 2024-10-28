@@ -14,6 +14,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 
+/**
+ * /AREAS/NEW
+ */
 public class CreateArea extends JInternalFrame {
 
     public CreateArea(DesktopState desktop, Location location) {

@@ -14,6 +14,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+/**
+ * /WHS
+ */
 public class Warehouses extends JInternalFrame {
 
     private DefaultListModel<Warehouse> listModel;

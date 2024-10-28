@@ -1,4 +1,4 @@
-package org.Canal.UI.Views;
+package org.Canal.UI.Views.Singleton.Managers;
 
 import org.Canal.Models.SupplyChainUnits.Transaction;
 import org.Canal.Start;

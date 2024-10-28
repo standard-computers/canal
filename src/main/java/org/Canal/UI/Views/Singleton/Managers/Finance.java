@@ -1,4 +1,4 @@
-package org.Canal.UI.Views.Lists;
+package org.Canal.UI.Views.Singleton.Managers;
 
 import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Views.Singleton.Orders.PurchaseRequisitions;
@@ -11,6 +11,9 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * /FIN
+ */
 public class Finance extends JInternalFrame {
 
     public Finance(DesktopState desktop) {
@@ -46,6 +49,11 @@ public class Finance extends JInternalFrame {
         newPurOrd.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 desktop.put(new CreatePurchaseOrder());
+            }
+        });
+        purOrd.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+
             }
         });
 

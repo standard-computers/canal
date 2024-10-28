@@ -14,6 +14,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+/**
+ * /ITS
+ */
 public class Items extends JInternalFrame {
 
     private DefaultListModel<Item> listModel;

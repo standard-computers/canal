@@ -13,6 +13,9 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * /ORGS/NEW
+ */
 public class CreateOrganization extends JInternalFrame {
 
     public CreateOrganization(DesktopState desktop) {

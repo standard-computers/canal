@@ -7,6 +7,7 @@ import org.Canal.UI.Elements.*;
 import org.Canal.UI.Views.Singleton.EmployeeView;
 import org.Canal.Utils.*;
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -26,7 +27,7 @@ public class CreateEmployee extends JInternalFrame {
 
         String genId = "E" + (10000 + (Engine.getEmployees().size() + 1));
         JTextField empIdField = new JTextField(genId, 18);
-        JTextField orgIdField = new JTextField(Engine.getOrganization().getId(), 18);
+        Selectable orgIdField = Selectables.allOrgs();
         JTextField empNameField = new JTextField(18);
         HashMap<String, String> availablePositions = new HashMap<>();
         Selectable position = new Selectable(availablePositions);
@@ -42,11 +43,21 @@ public class CreateEmployee extends JInternalFrame {
 
 
         f.addInput(new Label("Location (optional)", Constants.colors[9]), locations);
-        f.addInput(new Label("Full Name", UIManager.getColor("Label.foreground")), empNameField);
-        f.addInput(new Label("Position", UIManager.getColor("Label.foreground")), position);
-        f.addInput(new Label("Supervisor", UIManager.getColor("Label.foreground")), supervisor);
-        f.addInput(new Label("Start Date", UIManager.getColor("Label.foreground")), startDatePicker);
+        f.addInput(new Label("Full Name", Constants.colors[9]), empNameField);
+        f.addInput(new Label("Position", Constants.colors[8]), position);
+        f.addInput(new Label("Supervisor", Constants.colors[7]), supervisor);
+        f.addInput(new Label("Start Date", Constants.colors[6]), startDatePicker);
         setLayout(new BorderLayout());
+
+        Form f2 = new Form();
+        f2.addInput(new Label("Street Line 1", UIManager.getColor("Label.foreground")), new JTextField());
+        f2.addInput(new Label("Street Line 2", UIManager.getColor("Label.foreground")), new JTextField());
+        f2.addInput(new Label("City", UIManager.getColor("Label.foreground")), new JTextField());
+        f2.addInput(new Label("State", UIManager.getColor("Label.foreground")), new JTextField());
+        f2.addInput(new Label("Postal", UIManager.getColor("Label.foreground")), new JTextField());
+        f2.addInput(new Label("Country", UIManager.getColor("Label.foreground")), Selectables.countries());
+        f2.setBorder(new TitledBorder("Employee Residential Address"));
+        add(f2, BorderLayout.EAST);
         add(f, BorderLayout.CENTER);
         Button cr = new Button("Process");
         add(cr, BorderLayout.SOUTH);
@@ -55,7 +66,7 @@ public class CreateEmployee extends JInternalFrame {
         cr.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 String empId = empIdField.getText().trim();
-                String orgId = orgIdField.getText().trim();
+                String orgId = orgIdField.getSelectedValue().trim();
                 String location = locations.getSelectedValue();
                 String empName = empNameField.getText().trim();
                 String empSupervisor = supervisor.getSelectedValue();

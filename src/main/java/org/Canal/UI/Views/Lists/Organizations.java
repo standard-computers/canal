@@ -12,6 +12,9 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * /ORGS
+ */
 public class Organizations extends JInternalFrame {
 
     private DefaultListModel<Organization> listModel;

@@ -14,6 +14,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+/**
+ * /CCS
+ */
 public class CostCenters extends JInternalFrame {
 
     private DefaultListModel<Location> listModel;

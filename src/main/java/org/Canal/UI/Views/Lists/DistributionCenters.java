@@ -14,6 +14,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+/**
+ * /DCSS
+ */
 public class DistributionCenters extends JInternalFrame {
 
     private DefaultListModel<Location> listModel;

@@ -11,6 +11,9 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * /EMPS/F
+ */
 public class FindEmployee extends JInternalFrame {
 
     public FindEmployee(DesktopState desktop) {

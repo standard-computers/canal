@@ -1,18 +1,24 @@
 package org.Canal.UI.Views.New;
 
 import org.Canal.Models.HumanResources.Employee;
+import org.Canal.Models.HumanResources.User;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Label;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
+import org.Canal.Utils.Pipe;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyVetoException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * /USRS/NEW
+ */
 public class CreateUser extends JInternalFrame {
 
     private JPanel tCodeAccesses;
@@ -21,6 +27,14 @@ public class CreateUser extends JInternalFrame {
     public CreateUser(){
         setTitle("Create User");
         setFrameIcon(new ImageIcon(CreateUser.class.getResource("/icons/create.png")));
+        if(Engine.getEmployees().isEmpty()){
+            JOptionPane.showMessageDialog(null, "No employees to attach to!");
+            try {
+                setClosed(true);
+            } catch (PropertyVetoException e) {
+                throw new RuntimeException(e);
+            }
+        }
         JPanel l = new JPanel(new BorderLayout());
         Form f = new Form();
         String puid = "U" + (10000 + (Engine.getUsers().size() + 1));
@@ -32,10 +46,11 @@ public class CreateUser extends JInternalFrame {
         Selectable empsOpts = new Selectable(emps);
         empsOpts.editable();
         f.addInput(new Label("Employee", new Color(102, 255, 178)), empsOpts);
+        JTextArea pastAccess = new JTextArea();
+        f.addInput(Labels.label("Paste Access"), pastAccess);
         Button cr = new Button("Process");
         cr.color(new Color(102, 204, 255));
         tCodeAccesses = prepareAccesses();
-        prepareAccesses();
         JPanel again = new JPanel(new BorderLayout());
         again.add(f, BorderLayout.NORTH);
         JScrollPane scrollPane = new JScrollPane(tCodeAccesses);
@@ -57,13 +72,30 @@ public class CreateUser extends JInternalFrame {
         sa.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 checkboxes.forEach(cb -> cb.setSelected(true));
-                revalidate();
+                repaint();
             }
         });
         dsa.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 checkboxes.forEach(cb -> cb.setSelected(false));
-                revalidate();
+                repaint();
+            }
+        });
+        cr.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                User newUser = new User();
+                newUser.setId(puid);
+                newUser.setEmployee(empsOpts.getSelectedValue());
+                ArrayList<String> accesses = new ArrayList<>();
+                for(JCheckBox c : checkboxes){
+                    if(c.isSelected()){
+                        accesses.add(c.getText());
+                    }
+                }
+                newUser.setAccesses(accesses);
+                Pipe.save("/USRS", newUser);
+                dispose();
+                JOptionPane.showMessageDialog(null, "User create for ORG " + Engine.getOrganization().getId());
             }
         });
     }

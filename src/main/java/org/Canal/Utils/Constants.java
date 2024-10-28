@@ -170,6 +170,7 @@ public class Constants {
                                 new Canal("Archive", false, "/ORDS/ARCHV", null),
                         }),
                         new Canal("Purchase Reqs.", true, "/ORDS/PR", new Canal[]{
+                                new Canal("AutoMake", false, "/ORDS/PR/AUTO_MK", null),
                                 new Canal("Find", false, "/ORDS/PR", null),
                                 new Canal("Create", false, "/ORDS/PR/NEW", null),
                                 new Canal("Remove", false, "/ORDS/PR/DEL", null),

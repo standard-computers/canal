@@ -92,7 +92,7 @@ public class CostCenterView extends JInternalFrame implements RefreshListener {
         });
         autoMake.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new AutoMake());
+                desktop.put(new AutoMakeAreasAndBins());
             }
         });
         batch.addMouseListener(new MouseAdapter() {

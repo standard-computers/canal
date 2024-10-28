@@ -13,6 +13,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * /CSTS/F
+ */
 public class FindCustomer extends JInternalFrame {
 
     public FindCustomer(DesktopState desktop) {

@@ -15,6 +15,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+/**
+ * /DCSS/NEW
+ */
 public class CreateDistributionCenter extends JInternalFrame {
 
     public CreateDistributionCenter(DesktopState desktop) {

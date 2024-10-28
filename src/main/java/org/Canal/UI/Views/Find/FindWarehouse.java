@@ -4,7 +4,6 @@ import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Views.Singleton.Controller;
-import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import javax.swing.*;
@@ -14,6 +13,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * /WHS/F
+ */
 public class FindWarehouse extends JInternalFrame {
 
     public FindWarehouse(DesktopState desktop) {

@@ -10,11 +10,6 @@ public class User {
     private String fontSize;
     private String theme;
 
-    public User(String id, String employee) {
-        this.id = id;
-        this.employee = employee;
-    }
-
     public String getId() {
         return id;
     }

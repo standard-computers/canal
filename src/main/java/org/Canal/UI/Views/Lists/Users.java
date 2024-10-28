@@ -14,6 +14,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+/**
+ * /USRS
+ */
 public class Users extends JInternalFrame {
 
     private DefaultListModel<User> listModel;
