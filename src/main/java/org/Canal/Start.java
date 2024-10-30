@@ -1,8 +1,8 @@
 package org.Canal;
 
 import com.formdev.flatlaf.IntelliJTheme;
-import org.Canal.UI.Views.Singleton.Managers.QuickExplorer;
-import org.Canal.UI.Views.Singleton.Managers.Setup;
+import org.Canal.UI.Views.Managers.QuickExplorer;
+import org.Canal.UI.Views.Managers.Setup;
 import org.Canal.Utils.Configuration;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Json;

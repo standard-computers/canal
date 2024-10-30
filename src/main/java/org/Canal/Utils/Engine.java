@@ -7,24 +7,47 @@ import org.Canal.Models.BusinessUnits.PurchaseRequisition;
 import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.HumanResources.User;
 import org.Canal.Models.SupplyChainUnits.*;
-import org.Canal.UI.Views.Find.*;
-import org.Canal.UI.Views.Lists.*;
-import org.Canal.UI.Views.Modifiers.*;
-import org.Canal.UI.Views.New.*;
-import org.Canal.UI.Views.Singleton.*;
-import org.Canal.UI.Views.Singleton.Managers.Finance;
-import org.Canal.UI.Views.Singleton.Managers.Inventory;
-import org.Canal.UI.Views.Singleton.Orders.AutoMakePurchaseRequisitions;
-import org.Canal.UI.Views.Singleton.Orders.PurchaseOrders;
-import org.Canal.UI.Views.Singleton.Orders.PurchaseRequisitions;
-import org.Canal.UI.Views.Transactions.Distribution.ReceiveOrder;
-import org.Canal.UI.Views.Transactions.Inventory.CreateSTO;
-import org.Canal.UI.Views.Transactions.Inventory.InventoryForItem;
-import org.Canal.UI.Views.Transactions.Inventory.InventoryForMaterial;
-import org.Canal.UI.Views.Transactions.Invoices.CreateInvoice;
-import org.Canal.UI.Views.Transactions.Orders.CreatePurchaseOrder;
-import org.Canal.UI.Views.Transactions.Orders.CreatePurchaseRequisition;
-import org.Canal.UI.Views.Transactions.Orders.CreateSalesOrder;
+import org.Canal.UI.Views.AreasBins.Areas;
+import org.Canal.UI.Views.AreasBins.CreateArea;
+import org.Canal.UI.Views.AreasBins.ModifyArea;
+import org.Canal.UI.Views.Distribution.DistributionCenters.*;
+import org.Canal.UI.Views.Distribution.Vendors.CreateVendor;
+import org.Canal.UI.Views.Distribution.Vendors.FindVendor;
+import org.Canal.UI.Views.Distribution.Vendors.VendorView;
+import org.Canal.UI.Views.Distribution.Vendors.Vendors;
+import org.Canal.UI.Views.Distribution.Warehouses.CreateWarehouse;
+import org.Canal.UI.Views.Distribution.Warehouses.FindWarehouse;
+import org.Canal.UI.Views.Distribution.Warehouses.ModifyWarehouse;
+import org.Canal.UI.Views.Distribution.Warehouses.Warehouses;
+import org.Canal.UI.Views.Finance.Catalogs.Catalogs;
+import org.Canal.UI.Views.Finance.Catalogs.CreateCatalog;
+import org.Canal.UI.Views.Finance.Catalogs.ModifyCatalog;
+import org.Canal.UI.Views.Finance.CostCenters.*;
+import org.Canal.UI.Views.Finance.Customers.*;
+import org.Canal.UI.Views.Finance.Ledgers.Ledgers;
+import org.Canal.UI.Views.HR.Departments.Departments;
+import org.Canal.UI.Views.HR.Employees.*;
+import org.Canal.UI.Views.HR.Organizations.CreateOrganization;
+import org.Canal.UI.Views.HR.Organizations.OrgView;
+import org.Canal.UI.Views.HR.Organizations.Organizations;
+import org.Canal.UI.Views.HR.Users.CreateUser;
+import org.Canal.UI.Views.HR.Users.FindUser;
+import org.Canal.UI.Views.HR.Users.ModifyUser;
+import org.Canal.UI.Views.HR.Users.Users;
+import org.Canal.UI.Views.Items.*;
+import org.Canal.UI.Views.Managers.CanalSettings;
+import org.Canal.UI.Views.Materials.FindMaterial;
+import org.Canal.UI.Views.Materials.Materials;
+import org.Canal.UI.Views.Orders.*;
+import org.Canal.UI.Views.Managers.Finance;
+import org.Canal.UI.Views.Managers.Inventory;
+import org.Canal.UI.Views.Materials.CreateMaterial;
+import org.Canal.UI.Views.Materials.ModifyMaterial;
+import org.Canal.UI.Views.Inventory.CreateSTO;
+import org.Canal.UI.Views.Inventory.InventoryForItem;
+import org.Canal.UI.Views.Inventory.InventoryForMaterial;
+import org.Canal.UI.Views.Invoices.CreateInvoice;
+
 import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -416,6 +439,9 @@ public class Engine {
             }
             case "/MTS" -> {
                 return new Materials(desktop);
+            }
+            case "/MTS/F" -> {
+                return new FindMaterial(desktop);
             }
             case "/MTS/NEW" -> {
                 return new CreateMaterial();
