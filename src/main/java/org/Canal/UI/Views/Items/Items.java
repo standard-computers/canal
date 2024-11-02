@@ -4,6 +4,7 @@ import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.UI.Elements.Button;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -25,7 +26,7 @@ public class Items extends JInternalFrame {
         setFrameIcon(new ImageIcon(Items.class.getResource("/icons/items.png")));
         listModel = new DefaultListModel<>();
         JList<Item> list = new JList<>(listModel);
-        list.setCellRenderer(new MaterialRenderer());
+        list.setCellRenderer(new ItemRenderer());
         JScrollPane scrollPane = new JScrollPane(list);
         scrollPane.setPreferredSize(new Dimension(300, 400));
         list.addMouseListener(new MouseAdapter() {
@@ -35,7 +36,7 @@ public class Items extends JInternalFrame {
                     int selectedIndex = list.locationToIndex(e.getPoint());
                     if (selectedIndex != -1) {
                         Item item = listModel.getElementAt(selectedIndex);
-                        Engine.router("/ITS/" + item.getId(), desktop);
+                        desktop.put(Engine.router("/ITS/" + item.getId(), desktop));
                     }
                 }
             }
@@ -48,7 +49,7 @@ public class Items extends JInternalFrame {
                     String inputText = direct.getText().trim();
                     System.out.println(inputText);
                     if (!inputText.isEmpty()) {
-                        Engine.router("/ITS/" + inputText, desktop);
+                        desktop.put(Engine.router("/ITS/" + inputText, desktop));
                     }
                 }
             }
@@ -75,14 +76,14 @@ public class Items extends JInternalFrame {
         }
     }
 
-    class MaterialRenderer extends JPanel implements ListCellRenderer<Item> {
+    static class ItemRenderer extends JPanel implements ListCellRenderer<Item> {
 
         private JLabel itemName;
         private JLabel itemId;
         private JLabel itemPrice;
 
-        public MaterialRenderer() {
-            setLayout(new GridLayout(4, 1));
+        public ItemRenderer() {
+            setLayout(new GridLayout(3, 1));
             itemName = new JLabel();
             itemId = new JLabel();
             itemPrice = new JLabel();

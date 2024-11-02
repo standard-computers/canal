@@ -1,8 +1,7 @@
 package org.Canal.UI.Views.HR.Departments;
 
-import org.Canal.Models.SupplyChainUnits.Location;
+import org.Canal.Models.HumanResources.Department;
 import org.Canal.UI.Elements.Button;
-import org.Canal.UI.Views.Managers.Controller;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import javax.swing.*;
@@ -19,14 +18,14 @@ import java.util.ArrayList;
  */
 public class Departments extends JInternalFrame {
 
-    private DefaultListModel<Location> listModel;
+    private DefaultListModel<Department> listModel;
 
     public Departments(DesktopState desktop) {
-        setTitle("Departments");
-        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/distribution_centers.png")));
+        super("Departments", false, true, false, true);
+        setFrameIcon(new ImageIcon(Departments.class.getResource("/icons/departments.png")));
         listModel = new DefaultListModel<>();
-        JList<Location> list = new JList<>(listModel);
-        list.setCellRenderer(new LocationRenderer());
+        JList<Department> list = new JList<>(listModel);
+        list.setCellRenderer(new DepartmentRenderer());
         JScrollPane scrollPane = new JScrollPane(list);
         scrollPane.setPreferredSize(new Dimension(300, 400));
         list.addMouseListener(new MouseAdapter() {
@@ -35,9 +34,10 @@ public class Departments extends JInternalFrame {
                 if (e.getClickCount() == 2) {
                     int selectedIndex = list.locationToIndex(e.getPoint());
                     if (selectedIndex != -1) {
-                        Location l = listModel.getElementAt(selectedIndex);
+                        Department l = listModel.getElementAt(selectedIndex);
                         if (l != null) {
-                            desktop.put(Engine.router("/DPTS/" + l.getId(), desktop));
+                            Department selected = Engine.getOrganization().getDepartment(l.getId());
+                            desktop.put(new DepartmentView(selected));
                         } else {
                             JOptionPane.showMessageDialog(null, "Location Not Found");
                         }
@@ -53,64 +53,55 @@ public class Departments extends JInternalFrame {
                     String inputText = direct.getText().trim();
                     System.out.println(inputText);
                     if (!inputText.isEmpty()) {
-                        desktop.put(Engine.router("/DCSS/" + inputText, desktop));
+                        desktop.put(Engine.router("/DPTS/" + inputText, desktop));
                     }
                 }
             }
         });
         Button nla = new Button("Create Department");
-        nla.addActionListener(e -> desktop.put(Engine.router("/DPTS/NEW", desktop)));
+        nla.addActionListener(_ -> desktop.put(Engine.router("/DPTS/NEW", desktop)));
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
         mainPanel.add(direct, BorderLayout.NORTH);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
         mainPanel.add(nla, BorderLayout.SOUTH);
         add(mainPanel);
-        setResizable(false);
-        setIconifiable(true);
-        setClosable(true);
         loadLocations();
     }
 
     private void loadLocations(){
         listModel.removeAllElements();
-        Engine.load();
-        ArrayList<Location> found = Engine.getDistributionCenters();
-        for (Location loc : found) {
-            listModel.addElement(loc);
+        ArrayList<Department> found = Engine.getOrganization().getDepartments();
+        for (Department dept : found) {
+            listModel.addElement(dept);
         }
     }
 
-    class LocationRenderer extends JPanel implements ListCellRenderer<Location> {
+    static class DepartmentRenderer extends JPanel implements ListCellRenderer<Department> {
 
-        private JLabel ccName;
-        private JLabel ccId;
+        private JLabel deptName;
+        private JLabel deptId;
         private JLabel line1;
-        private JLabel line2;
 
-        public LocationRenderer() {
-            setLayout(new GridLayout(4, 1));
-            ccName = new JLabel();
-            ccId = new JLabel();
+        public DepartmentRenderer() {
+            setLayout(new GridLayout(3, 1));
+            deptName = new JLabel();
+            deptId = new JLabel();
             line1 = new JLabel();
-            line2 = new JLabel();
-            ccName.setFont(new Font("Arial", Font.BOLD, 16));
-            ccId.setFont(new Font("Arial", Font.PLAIN, 12));
+            deptName.setFont(new Font("Arial", Font.BOLD, 16));
+            deptId.setFont(new Font("Arial", Font.PLAIN, 12));
             line1.setFont(new Font("Arial", Font.PLAIN, 12));
-            line2.setFont(new Font("Arial", Font.PLAIN, 12));
-            add(ccName);
-            add(ccId);
+            add(deptName);
+            add(deptId);
             add(line1);
-            add(line2);
             setBorder(new EmptyBorder(5, 5, 5, 5));
         }
 
         @Override
-        public Component getListCellRendererComponent(JList<? extends Location> list, Location value, int index, boolean isSelected, boolean cellHasFocus) {
-            ccName.setText(value.getName());
-            ccId.setText(value.getId());
-            line1.setText(value.getLine1());
-            line2.setText(value.getCity() + ", " + value.getState() + " " + value.getPostal() + " " + value.getCountry());
+        public Component getListCellRendererComponent(JList<? extends Department> list, Department value, int index, boolean isSelected, boolean cellHasFocus) {
+            deptName.setText(value.getName());
+            deptId.setText(value.getId());
+            line1.setText("0");
             if (isSelected) {
                 setBackground(list.getSelectionBackground());
                 setForeground(list.getSelectionForeground());

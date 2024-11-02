@@ -5,12 +5,14 @@ import java.util.ArrayList;
 
 public class Configuration {
 
-    private String endpoint = "127.0.0.1", instance_name = "Canal", product_key = "";
+    private String endpoint = "127.0.0.1";
+    private String instance_name = "Canal";
+    private String product_key = "";
     private String theme = "/com/formdev/flatlaf/intellijthemes/themes/SolarizedDark.theme.json";
     private String defaultModule = "/";
     private int port = 4567;
     private boolean encrypted = false;
-    private ArrayList<Transaction> transactions;
+    private boolean showCanalCodes = false;
 
     public Configuration(String endpoint, String instanceName) {
         this.endpoint = endpoint;
@@ -63,6 +65,22 @@ public class Configuration {
 
     public void setPort(int port) {
         this.port = port;
+    }
+
+    public boolean isEncrypted() {
+        return encrypted;
+    }
+
+    public void setEncrypted(boolean encrypted) {
+        this.encrypted = encrypted;
+    }
+
+    public boolean isShowCanalCodes() {
+        return showCanalCodes;
+    }
+
+    public void setShowCanalCodes(boolean showCanalCodes) {
+        this.showCanalCodes = showCanalCodes;
     }
 
     @Override

@@ -37,6 +37,7 @@ public class DCView extends JInternalFrame implements RefreshListener {
         this.location = loc;
         this.desktop = desktop;
         setTitle("DC / " + loc.getId() + " - " + loc.getName());
+        setFrameIcon(new ImageIcon(DCView.class.getResource("/icons/distribution_centers.png")));
         setLayout(new BorderLayout());
         JPanel tb = createToolBar();
         add(tb, BorderLayout.NORTH);

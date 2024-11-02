@@ -4,4 +4,6 @@ import javax.swing.*;
 
 public interface DesktopState {
     void put(JInternalFrame frame);
+    void clean();
+    void purge();
 }

@@ -4,7 +4,7 @@ import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.*;
-import org.Canal.UI.Views.Managers.Controller;
+import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Pipe;
@@ -27,7 +27,7 @@ public class CreateItem extends JInternalFrame {
 
     public CreateItem(){
         setTitle("Create Item");
-        Constants.checkLocke(this, true);
+        Constants.checkLocke(this, true, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));
         Form f1 = new Form();
         Form f2 = new Form();

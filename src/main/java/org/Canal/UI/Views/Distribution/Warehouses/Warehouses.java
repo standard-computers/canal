@@ -2,7 +2,7 @@ package org.Canal.UI.Views.Distribution.Warehouses;
 
 import org.Canal.Models.SupplyChainUnits.Warehouse;
 import org.Canal.UI.Elements.Button;
-import org.Canal.UI.Views.Managers.Controller;
+import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import javax.swing.*;

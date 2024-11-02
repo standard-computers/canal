@@ -7,9 +7,11 @@ import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Selectable;
+import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -22,8 +24,9 @@ public class ReceiveOrder extends JInternalFrame {
     private Selectable ats, availablePutaway;
 
     public ReceiveOrder(String costCenter, DesktopState desktop){
-        Constants.checkLocke(this, true);
         setTitle("Receive an Order");
+        Constants.checkLocke(this, true, true);
+        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));
         Form f = new Form();
         poField = new JTextField(12);
         onField = new JTextField(12);

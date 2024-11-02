@@ -7,7 +7,6 @@ import org.Canal.UI.Elements.Label;
 import org.Canal.Utils.Canal;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
-import org.Canal.Utils.RefreshListener;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -19,7 +18,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class ItemView extends JInternalFrame implements RefreshListener {
+public class ItemView extends JInternalFrame {
 
     private Item item;
     private JTree dataTree;
@@ -27,9 +26,9 @@ public class ItemView extends JInternalFrame implements RefreshListener {
     private Copiable vendorIdField, vendorNameField, vendorStreetField, vendorCityField, vendorStateField, vendorPostalField, vendorCountryField, vendorTaxExemptField, vendorStatusField;
 
     public ItemView(Item item) {
+        super("Item / " + item.getId() + " - " + item.getName(), true, true, true, true);
         this.item = item;
-        setTitle("Item / " + item.getId() + " - " + item.getName());
-//        setIconImage(new ImageIcon(OrgView.class.getResource("/icons/item.png")).getImage());
+        setFrameIcon(new ImageIcon(Items.class.getResource("/icons/items.png")));
         setLayout(new BorderLayout());
         JPanel tb = createToolBar();
         add(tb, BorderLayout.NORTH);
@@ -56,7 +55,7 @@ public class ItemView extends JInternalFrame implements RefreshListener {
                 TreePath path = dataTree.getPathForLocation(e.getX(), e.getY());
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
                 Canal orgNode = (Canal) node.getUserObject();
-                Item selectedItem  = Engine.realtime.getItem(orgNode.getTransaction());
+                Item selectedItem  = Engine.getItem(orgNode.getTransaction());
                 idField.setText(selectedItem.getId());
                 orgField.setText(selectedItem.getOrg());
                 nameField.setText(selectedItem.getName());
@@ -169,14 +168,14 @@ public class ItemView extends JInternalFrame implements RefreshListener {
         IconButton refresh = new IconButton("", "refresh", "Reload from store");
         refresh.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-            Engine.load();
-            Canal rootNode = createRootNode();
-            DefaultMutableTreeNode rootTreeNode = createTreeNodes(rootNode);
-            DefaultTreeModel model = (DefaultTreeModel) dataTree.getModel();
-            model.setRoot(rootTreeNode);
-            expandAllNodes(dataTree);
-            revalidate();
-            repaint();
+                Engine.load();
+                Canal rootNode = createRootNode();
+                DefaultMutableTreeNode rootTreeNode = createTreeNodes(rootNode);
+                DefaultTreeModel model = (DefaultTreeModel) dataTree.getModel();
+                model.setRoot(rootTreeNode);
+                expandAllNodes(dataTree);
+                revalidate();
+                repaint();
             }
         });
         tb.add(inventory);
@@ -215,11 +214,6 @@ public class ItemView extends JInternalFrame implements RefreshListener {
             }
         }
         return treeNode;
-    }
-
-    @Override
-    public void onRefresh() {
-
     }
 
     static class CustomTreeCellRenderer extends DefaultTreeCellRenderer {

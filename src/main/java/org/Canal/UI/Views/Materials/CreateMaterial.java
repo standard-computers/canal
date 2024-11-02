@@ -4,7 +4,7 @@ import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.Models.SupplyChainUnits.Material;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.*;
-import org.Canal.UI.Views.Managers.Controller;
+import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Pipe;
@@ -26,8 +26,8 @@ public class CreateMaterial extends JInternalFrame {
     private Selectable selectedVendor;
 
     public CreateMaterial(){
-        setTitle("Create Material");
-        Constants.checkLocke(this, true);
+        super("Create Material", false, true, false, true);
+        Constants.checkLocke(this, true, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));
         Form f1 = new Form();
         Form f2 = new Form();
@@ -77,8 +77,6 @@ public class CreateMaterial extends JInternalFrame {
         main.add(biPanel, BorderLayout.CENTER);
         main.add(actionsBar(), BorderLayout.NORTH);
         add(main);
-        setIconifiable(true);
-        setClosable(true);
     }
 
     private JPanel actionsBar() {

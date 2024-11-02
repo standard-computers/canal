@@ -3,7 +3,7 @@ package org.Canal.UI.Views.Distribution.Warehouses;
 import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.Label;
-import org.Canal.UI.Views.Managers.Controller;
+import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import javax.swing.*;
@@ -19,8 +19,8 @@ import java.awt.event.MouseEvent;
 public class FindWarehouse extends JInternalFrame {
 
     public FindWarehouse(DesktopState desktop) {
-        setTitle("Find Warehouse");
-        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/find.png")));
+        super("Find Warehouse", false, true, false, true);
+        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/warehouses.png")));
         Form f = new Form();
         JTextField direct = new JTextField(10);
         direct.addKeyListener(new KeyAdapter() {
@@ -47,7 +47,5 @@ public class FindWarehouse extends JInternalFrame {
             }
         });
         add(main);
-        setIconifiable(true);
-        setClosable(true);
     }
 }

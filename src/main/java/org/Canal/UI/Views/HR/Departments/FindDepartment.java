@@ -3,7 +3,7 @@ package org.Canal.UI.Views.HR.Departments;
 import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.Label;
-import org.Canal.UI.Views.Managers.Controller;
+import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.DesktopState;
 import javax.swing.*;
 import java.awt.*;
@@ -19,7 +19,7 @@ public class FindDepartment extends JInternalFrame {
 
     public FindDepartment(DesktopState desktop) {
         setTitle("Find Department");
-        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/find.png")));
+        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/departments.png")));
         JTextField direct = new JTextField(10);
         direct.addKeyListener(new KeyAdapter() {
             @Override

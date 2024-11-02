@@ -22,6 +22,7 @@ public class Selectable extends JPanel {
 
     private void initializeComponent() {
         comboBox = new JComboBox<>(itemsMap.keySet().stream().sorted().toArray(String[]::new));
+        comboBox.setFont(new Font(UIManager.getFont("Label.font").getName(), Font.PLAIN, 14));
         this.setLayout(new BorderLayout());
         this.add(comboBox, BorderLayout.CENTER);
     }

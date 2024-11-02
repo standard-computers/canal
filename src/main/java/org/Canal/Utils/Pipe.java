@@ -22,14 +22,10 @@ public class Pipe {
     public static void saveConfiguration() {
         File md = new File(Start.WINDOWS_SYSTEM_DIR);
         File[] mdf = md.listFiles();
-        if (mdf != null && mdf.length > 0) {
-            for (int i = 0; i < mdf.length; i++) {
-                File file = mdf[i];
+        if (mdf != null) {
+            for (File file : mdf) {
                 if (file.getPath().endsWith(".cnl.mfg")) {
-                    Configuration newConfig = new Configuration(Engine.getConfiguration().getEndpoint(), Engine.getConfiguration().getInstance_name());
-                    newConfig.setDefaultModule(Engine.getConfiguration().getDefaultModule());
-                    newConfig.setTheme(Engine.getConfiguration().getTheme());
-                    Json.save(file.getPath(), newConfig);
+                    Json.save(file.getPath(), Engine.getConfiguration());
                     break;
                 }
             }

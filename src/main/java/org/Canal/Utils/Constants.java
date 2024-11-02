@@ -2,6 +2,7 @@ package org.Canal.Utils;
 
 import javax.swing.*;
 import java.awt.*;
+import java.beans.PropertyVetoException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -73,7 +74,7 @@ public class Constants {
                         new Canal("Find Organization", false, "/ORGS/F", null),
                         new Canal("Create an Organization", false, "/ORGS/NEW", null),
                         new Canal("Modify an Organization", false, "/ORGS/MOD", null),
-                        new Canal("Departments", true, "/DPTS/MOD",  new Canal[]{
+                        new Canal("Departments", true, "/DPTS",  new Canal[]{
                                 new Canal("Find with ID", false, "/DPTS/F", null),
                                 new Canal("Create a Department", false, "/DPTS/NEW", null),
                                 new Canal("Modify", false, "/DPTS/MOD", null),
@@ -231,17 +232,21 @@ public class Constants {
         return Engine.client == null;
     }
 
-    public static void checkLocke(JInternalFrame parent, boolean checkLedgers){
+    public static void checkLocke(JInternalFrame parent, boolean checkLedgers, boolean checkOperator){
         if(!isCanalAssigned()){
             JOptionPane.showMessageDialog(parent, "Canal locked", "There is no user signed in so nothing can be created.", JOptionPane.INFORMATION_MESSAGE);
-            parent.dispose();
+            try {
+                parent.setClosed(true);
+            } catch (PropertyVetoException e) {
+                throw new RuntimeException(e);
+            }
         }else{
             if(checkLedgers){
-                if(Engine.getLedgers().size() == 0){
+                if(Engine.getLedgers().isEmpty()){
                     JOptionPane.showMessageDialog(parent, "No ledgers to order to.");
                     parent.dispose();
                 }else{
-                    if(Engine.getVendors().size() == 0){
+                    if(Engine.getVendors().isEmpty()){
                         JOptionPane.showMessageDialog(parent, "No vendors to order from.");
                         parent.dispose();
                     }

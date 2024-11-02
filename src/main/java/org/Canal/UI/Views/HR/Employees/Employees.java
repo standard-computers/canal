@@ -21,7 +21,7 @@ public class Employees extends JInternalFrame {
     private DefaultListModel<Employee> listModel;
 
     public Employees(DesktopState desktop) {
-        setTitle("Employees");
+        super("Employees", false, true, false, true);
         setFrameIcon(new ImageIcon(Employees.class.getResource("/icons/employees.png")));
         listModel = new DefaultListModel<>();
         JList<Employee> list = new JList<>(listModel);
@@ -62,8 +62,6 @@ public class Employees extends JInternalFrame {
         mainPanel.add(nla, BorderLayout.SOUTH);
         add(mainPanel);
         loadFlexes();
-        setIconifiable(true);
-        setClosable(true);
     }
 
     private void loadFlexes(){
@@ -75,13 +73,13 @@ public class Employees extends JInternalFrame {
         }
     }
 
-    class EmployeeRenderer extends JPanel implements ListCellRenderer<Employee> {
+    static class EmployeeRenderer extends JPanel implements ListCellRenderer<Employee> {
 
         private JLabel employeeName;
         private JLabel employeeId;
 
         public EmployeeRenderer() {
-            setLayout(new GridLayout(4, 1));
+            setLayout(new GridLayout(2, 1));
             employeeName = new JLabel();
             employeeId = new JLabel();
             employeeName.setFont(new Font("Arial", Font.BOLD, 16));

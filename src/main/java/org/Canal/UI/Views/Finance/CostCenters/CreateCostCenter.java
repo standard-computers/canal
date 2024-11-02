@@ -18,7 +18,7 @@ public class CreateCostCenter extends JInternalFrame {
         super();
         setTitle("Create Cost Center");
         setFrameIcon(new ImageIcon(CreateCostCenter.class.getResource("/icons/create.png")));
-        Constants.checkLocke(this, true);
+        Constants.checkLocke(this, true, true);
         String genId = "CC" + 100000 + (Engine.getItems().size() + 1);
         JTextField ccIdField = new JTextField(genId);
         JTextField orgIdField = new JTextField(Engine.getOrganization().getId());

@@ -8,6 +8,7 @@ import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Pipe;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 public class CreateDistributionCenter extends JInternalFrame {
 
     public CreateDistributionCenter(DesktopState desktop) {
-        setTitle("New Distribution Center");
+        super("New Distribution Center", false, true, false, true);
         setFrameIcon(new ImageIcon(CreateDistributionCenter.class.getResource("/icons/create.png")));
         ArrayList<Location> ls = Engine.getDistributionCenters();
         String generatedId = "DC" + (100000 + (ls.size() + 1));
@@ -46,9 +47,6 @@ public class CreateDistributionCenter extends JInternalFrame {
         add(f, BorderLayout.CENTER);
         add(make, BorderLayout.SOUTH);
         getRootPane().setDefaultButton(make);
-        setResizable(false);
-        setIconifiable(true);
-        setClosable(true);
         make.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

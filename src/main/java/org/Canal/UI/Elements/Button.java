@@ -11,8 +11,20 @@ public class Button extends JButton {
 
     public Button(String text){
         super(text);
-        this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        this.setPreferredSize(new Dimension(190, 35));
+        setFont(new Font(UIManager.getFont("Label.font").getName(), Font.PLAIN, 14));
+        setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        setPreferredSize(new Dimension(190, 35));
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                setCursor(new Cursor(Cursor.HAND_CURSOR)); // Change cursor on hover
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); // Reset cursor when not hovering
+            }
+        });
     }
 
     public void color(Color color){

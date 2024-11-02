@@ -6,7 +6,7 @@ import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Views.AreasBins.CreateArea;
 import org.Canal.UI.Views.Batching.BatchCreateLocations;
-import org.Canal.UI.Views.Orders.CreatePurchaseOrder;
+import org.Canal.UI.Views.Orders.PurchaseOrders.CreatePurchaseOrder;
 import org.Canal.UI.Views.AreasBins.AutoMakeAreasAndBins;
 import org.Canal.Utils.Canal;
 import org.Canal.Utils.DesktopState;

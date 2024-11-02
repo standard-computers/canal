@@ -4,7 +4,7 @@ import org.Canal.Models.SupplyChainUnits.Warehouse;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Label;
-import org.Canal.UI.Views.Managers.Controller;
+import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -22,7 +22,7 @@ public class CreateWarehouse extends JInternalFrame {
 
     public CreateWarehouse(DesktopState desktop) {
         setTitle("New Warehouse");
-        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));
+        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/warehouses.png")));
         ArrayList<Warehouse> ls = Engine.getWarehouses();
         String generatedId = "WH" + (100000 + (ls.size() + 1));
         JTextField whsIdField = new JTextField(generatedId);

@@ -9,10 +9,10 @@ public class Label extends JLabel {
 
     public Label(String text, Color color){
         super(text);
-        setFont(UIManager.getFont("h5.font"));
+        setFont(new Font(UIManager.getFont("Label.font").getName(), Font.PLAIN, 14));
         setMinimumSize(new Dimension(120, 25));
         setMaximumSize(new Dimension(200, 25));
-        Border emptyBorder = new EmptyBorder(5, 5, 5, 5);
+        Border emptyBorder = new EmptyBorder(5, 5, 5, 0);
         Border matteBorder = BorderFactory.createMatteBorder(0, 0, 2, 0, color);
         Border compoundBorder = BorderFactory.createCompoundBorder(matteBorder, emptyBorder);
         setBorder(compoundBorder);

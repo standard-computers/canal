@@ -9,6 +9,7 @@ import org.Canal.Models.HumanResources.User;
 import org.Canal.Models.SupplyChainUnits.*;
 import org.Canal.UI.Views.AreasBins.Areas;
 import org.Canal.UI.Views.AreasBins.CreateArea;
+import org.Canal.UI.Views.AreasBins.FindArea;
 import org.Canal.UI.Views.AreasBins.ModifyArea;
 import org.Canal.UI.Views.Distribution.DistributionCenters.*;
 import org.Canal.UI.Views.Distribution.Vendors.CreateVendor;
@@ -25,7 +26,10 @@ import org.Canal.UI.Views.Finance.Catalogs.ModifyCatalog;
 import org.Canal.UI.Views.Finance.CostCenters.*;
 import org.Canal.UI.Views.Finance.Customers.*;
 import org.Canal.UI.Views.Finance.Ledgers.Ledgers;
+import org.Canal.UI.Views.HR.Departments.CreateDepartment;
 import org.Canal.UI.Views.HR.Departments.Departments;
+import org.Canal.UI.Views.HR.Departments.FindDepartment;
+import org.Canal.UI.Views.HR.Departments.ModifyDepartment;
 import org.Canal.UI.Views.HR.Employees.*;
 import org.Canal.UI.Views.HR.Organizations.CreateOrganization;
 import org.Canal.UI.Views.HR.Organizations.OrgView;
@@ -35,23 +39,33 @@ import org.Canal.UI.Views.HR.Users.FindUser;
 import org.Canal.UI.Views.HR.Users.ModifyUser;
 import org.Canal.UI.Views.HR.Users.Users;
 import org.Canal.UI.Views.Items.*;
-import org.Canal.UI.Views.Managers.CanalSettings;
+import org.Canal.UI.Views.Controllers.CanalSettings;
+import org.Canal.UI.Views.Controllers.TimeClock;
 import org.Canal.UI.Views.Materials.FindMaterial;
 import org.Canal.UI.Views.Materials.Materials;
 import org.Canal.UI.Views.Orders.*;
-import org.Canal.UI.Views.Managers.Finance;
-import org.Canal.UI.Views.Managers.Inventory;
+import org.Canal.UI.Views.Controllers.Finance;
+import org.Canal.UI.Views.Controllers.Inventory;
 import org.Canal.UI.Views.Materials.CreateMaterial;
 import org.Canal.UI.Views.Materials.ModifyMaterial;
 import org.Canal.UI.Views.Inventory.CreateSTO;
 import org.Canal.UI.Views.Inventory.InventoryForItem;
 import org.Canal.UI.Views.Inventory.InventoryForMaterial;
 import org.Canal.UI.Views.Invoices.CreateInvoice;
+import org.Canal.UI.Views.Orders.PurchaseOrders.CreatePurchaseOrder;
+import org.Canal.UI.Views.Orders.PurchaseOrders.FindPurchaseOrder;
+import org.Canal.UI.Views.Orders.PurchaseOrders.PurchaseOrders;
+import org.Canal.UI.Views.Orders.PurchaseRequisitions.AutoMakePurchaseRequisitions;
+import org.Canal.UI.Views.Orders.PurchaseRequisitions.CreatePurchaseRequisition;
+import org.Canal.UI.Views.Orders.PurchaseRequisitions.FindPurchaseReq;
+import org.Canal.UI.Views.Orders.PurchaseRequisitions.PurchaseRequisitions;
+import org.Canal.UI.Views.Orders.SalesOrders.CreateSalesOrder;
+import org.Canal.UI.Views.Transportation.Carriers.CreateCarrier;
 
 import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
-import java.awt.*;
+import java.awt.Component;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -185,14 +199,6 @@ public class Engine {
             }
         }
         ledgers.sort(Comparator.comparing(Ledger::getId));
-    }
-
-    public static void setTheme(String themePath){
-        configuration.setTheme(themePath);
-    }
-
-    public static void setDefaultModule(String modulePath) {
-        configuration.setDefaultModule(modulePath);
     }
 
     public static Configuration getConfiguration() {
@@ -386,6 +392,9 @@ public class Engine {
             case "/AREAS" -> {
                 return new Areas(desktop);
             }
+            case "/AREAS/F" -> {
+                return new FindArea(desktop);
+            }
             case "/AREAS/NEW" -> {
                 return new CreateArea(desktop, null);
             }
@@ -415,6 +424,9 @@ public class Engine {
             }
             case "/DCSS/MOD" -> {
                 return new ModifyDistributionCenter(null);
+            }
+            case "/TRANS/CRRS/NEW" -> {
+                return new CreateCarrier(desktop);
             }
             case "/WHS" -> {
                 return new Warehouses(desktop);
@@ -557,9 +569,14 @@ public class Engine {
             case "/FIN" -> {
                 return new Finance(desktop);
             }
+            case "/TM_CLCK" -> {
+                return new TimeClock(desktop);
+            }
             case "/CNL" -> {
                 return new CanalSettings();
             }
+            case "/CLEAR_DSK" -> desktop.clean();
+            case "/CLOSE_DSK" -> desktop.purge();
             case "/CNL/EXIT" -> System.exit(-1);
             default -> {
                 String[] chs = transactionCode.split("/");
@@ -659,9 +676,9 @@ public class Engine {
         public static ArrayList<PurchaseRequisition> getPurchaseRequisitions() {
             ArrayList<PurchaseRequisition> prs = new ArrayList<>();
             File[] posDir = Pipe.list("PR");
-            for(int i = 0; i < posDir.length; i++){
-                if(!posDir[i].isDirectory()){
-                    PurchaseRequisition a = Json.load(posDir[i].getPath(), PurchaseRequisition.class);
+            for (File file : posDir) {
+                if (!file.isDirectory()) {
+                    PurchaseRequisition a = Json.load(file.getPath(), PurchaseRequisition.class);
                     prs.add(a);
                 }
             }
@@ -670,10 +687,10 @@ public class Engine {
         }
         public static PurchaseRequisition getPurchaseRequisitions(String prNumber) {
             File[] posDir = Pipe.list("PR");
-            for(int i = 0; i < posDir.length; i++){
-                if(!posDir[i].isDirectory()){
-                    PurchaseRequisition a = Json.load(posDir[i].getPath(), PurchaseRequisition.class);
-                    if(a.getName().equals(prNumber)){
+            for (File file : posDir) {
+                if (!file.isDirectory()) {
+                    PurchaseRequisition a = Json.load(file.getPath(), PurchaseRequisition.class);
+                    if (a.getName().equals(prNumber)) {
                         return a;
                     }
                 }
@@ -683,9 +700,9 @@ public class Engine {
         public static ArrayList<PurchaseOrder> getPurchaseOrders() {
             ArrayList<PurchaseOrder> pos = new ArrayList<>();
             File[] posDir = Pipe.list("ORDS");
-            for(int i = 0; i < posDir.length; i++){
-                if(!posDir[i].isDirectory()){
-                    PurchaseOrder a = Json.load(posDir[i].getPath(), PurchaseOrder.class);
+            for (File file : posDir) {
+                if (!file.isDirectory()) {
+                    PurchaseOrder a = Json.load(file.getPath(), PurchaseOrder.class);
                     pos.add(a);
                 }
             }
@@ -694,20 +711,12 @@ public class Engine {
         }
         public static PurchaseOrder getPurchaseOrders(String poNumber) {
             File[] posDir = Pipe.list("ORDS");
-            for(int i = 0; i < posDir.length; i++){
-                if(!posDir[i].isDirectory()){
-                    PurchaseOrder a = Json.load(posDir[i].getPath(), PurchaseOrder.class);
-                    if(a.getOrderId().equals(poNumber)){
+            for (File file : posDir) {
+                if (!file.isDirectory()) {
+                    PurchaseOrder a = Json.load(file.getPath(), PurchaseOrder.class);
+                    if (a.getOrderId().equals(poNumber)) {
                         return a;
                     }
-                }
-            }
-            return null;
-        }
-        public static Item getItem(String poNumber) {
-            for(Item i : items){
-                if(i.getId().equals(poNumber)){
-                    return i;
                 }
             }
             return null;

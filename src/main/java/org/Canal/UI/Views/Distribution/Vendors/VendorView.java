@@ -2,7 +2,7 @@ package org.Canal.UI.Views.Distribution.Vendors;
 
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.IconButton;
-import org.Canal.UI.Views.Orders.CreatePurchaseOrder;
+import org.Canal.UI.Views.Orders.PurchaseOrders.CreatePurchaseOrder;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
