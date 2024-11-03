@@ -11,6 +11,7 @@ import org.Canal.UI.Views.AreasBins.Areas;
 import org.Canal.UI.Views.AreasBins.CreateArea;
 import org.Canal.UI.Views.AreasBins.FindArea;
 import org.Canal.UI.Views.AreasBins.ModifyArea;
+import org.Canal.UI.Views.Controllers.*;
 import org.Canal.UI.Views.Distribution.DistributionCenters.*;
 import org.Canal.UI.Views.Distribution.Vendors.CreateVendor;
 import org.Canal.UI.Views.Distribution.Vendors.FindVendor;
@@ -25,6 +26,8 @@ import org.Canal.UI.Views.Finance.Catalogs.CreateCatalog;
 import org.Canal.UI.Views.Finance.Catalogs.ModifyCatalog;
 import org.Canal.UI.Views.Finance.CostCenters.*;
 import org.Canal.UI.Views.Finance.Customers.*;
+import org.Canal.UI.Views.Finance.Ledgers.CreateLedger;
+import org.Canal.UI.Views.Finance.Ledgers.LedgerView;
 import org.Canal.UI.Views.Finance.Ledgers.Ledgers;
 import org.Canal.UI.Views.HR.Departments.CreateDepartment;
 import org.Canal.UI.Views.HR.Departments.Departments;
@@ -39,13 +42,9 @@ import org.Canal.UI.Views.HR.Users.FindUser;
 import org.Canal.UI.Views.HR.Users.ModifyUser;
 import org.Canal.UI.Views.HR.Users.Users;
 import org.Canal.UI.Views.Items.*;
-import org.Canal.UI.Views.Controllers.CanalSettings;
-import org.Canal.UI.Views.Controllers.TimeClock;
 import org.Canal.UI.Views.Materials.FindMaterial;
 import org.Canal.UI.Views.Materials.Materials;
 import org.Canal.UI.Views.Orders.*;
-import org.Canal.UI.Views.Controllers.Finance;
-import org.Canal.UI.Views.Controllers.Inventory;
 import org.Canal.UI.Views.Materials.CreateMaterial;
 import org.Canal.UI.Views.Materials.ModifyMaterial;
 import org.Canal.UI.Views.Inventory.CreateSTO;
@@ -60,6 +59,7 @@ import org.Canal.UI.Views.Orders.PurchaseRequisitions.CreatePurchaseRequisition;
 import org.Canal.UI.Views.Orders.PurchaseRequisitions.FindPurchaseReq;
 import org.Canal.UI.Views.Orders.PurchaseRequisitions.PurchaseRequisitions;
 import org.Canal.UI.Views.Orders.SalesOrders.CreateSalesOrder;
+import org.Canal.UI.Views.Orders.SalesOrders.SalesOrders;
 import org.Canal.UI.Views.Transportation.Carriers.CreateCarrier;
 
 import javax.swing.*;
@@ -72,11 +72,14 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * This class is responsible for fetching and maintaining Canal objex.
+ */
 public class Engine {
 
     private static Configuration configuration;
     public static Organization organization;
-    public static User client;
+    public static User assignedUser;
     public static ArrayList<Location> distributionCenters = new ArrayList<>();
     public static ArrayList<Warehouse> warehouses = new ArrayList<>();
     public static ArrayList<Location> customers = new ArrayList<>();
@@ -199,6 +202,16 @@ public class Engine {
             }
         }
         ledgers.sort(Comparator.comparing(Ledger::getId));
+    }
+
+    public static User getAssignedUser() {
+        return assignedUser;
+    }
+
+    public static void assignUser(User assignedUser) {
+        Engine.assignedUser = assignedUser;
+        configuration.setAssignedUser(assignedUser.getId());
+        Pipe.saveConfiguration();
     }
 
     public static Configuration getConfiguration() {
@@ -338,12 +351,30 @@ public class Engine {
         return employees.stream().filter(location -> location.getOrg().equals(id)).collect(Collectors.toList());
     }
 
+    public static Employee getEmployee(String Id){
+        for(Employee e : getEmployees()){
+            if(e.getId().equals(Id)){
+                return e;
+            }
+        }
+        return null;
+    }
+
     public static ArrayList<Catalog> getCatalogs() {
         return catalogs;
     }
 
     public static ArrayList<User> getUsers() {
         return users;
+    }
+
+    public static User getUser(String id) {
+        for(User u : users){
+            if(u.getId().equals(id)){
+                return u;
+            }
+        }
+        return null;
     }
 
     public static ArrayList<PurchaseOrder> getOrders() {
@@ -464,6 +495,9 @@ public class Engine {
             case "/LGS" -> {
                 return new Ledgers(desktop);
             }
+            case "/LGS/NEW" -> {
+                return new CreateLedger(desktop);
+            }
             case "/EMPS" -> {
                 return new Employees(desktop);
             }
@@ -522,7 +556,7 @@ public class Engine {
                 return new Items(desktop);
             }
             case "/ITS/NEW" -> {
-                return new CreateItem();
+                return new CreateItem(desktop);
             }
             case "/ITS/F" -> {
                 return new FindItem(desktop);
@@ -551,6 +585,9 @@ public class Engine {
             case "/ORDS/PR/AUTO_MK" -> {
                 return new AutoMakePurchaseRequisitions();
             }
+            case "/ORDS/SO" -> {
+                return new SalesOrders(desktop);
+            }
             case "/ORDS/SO/NEW" -> {
                 return new CreateSalesOrder();
             }
@@ -569,11 +606,17 @@ public class Engine {
             case "/FIN" -> {
                 return new Finance(desktop);
             }
+            case "/CNL/HR" -> {
+                return new HumanResources(desktop);
+            }
             case "/TM_CLCK" -> {
                 return new TimeClock(desktop);
             }
             case "/CNL" -> {
                 return new CanalSettings();
+            }
+            case "/LOGIN" -> {
+                return new Login(true);
             }
             case "/CLEAR_DSK" -> desktop.clean();
             case "/CLOSE_DSK" -> desktop.purge();
@@ -638,6 +681,11 @@ public class Engine {
                         return new Materials(desktop);
                     }
                     case "LGS" -> {
+                        for(Ledger l : getLedgers()){
+                            if(l.getId().equals(oid)){
+                                return new LedgerView(l, desktop);
+                            }
+                        }
                         return new Ledgers(desktop);
                     }
                     case "USRS" -> {

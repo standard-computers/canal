@@ -3,6 +3,7 @@ package org.Canal.UI.Views.AreasBins;
 import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;

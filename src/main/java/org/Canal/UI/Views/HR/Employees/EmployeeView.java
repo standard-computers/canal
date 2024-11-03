@@ -3,16 +3,19 @@ package org.Canal.UI.Views.HR.Employees;
 import org.Canal.Models.HumanResources.Employee;
 import org.Canal.UI.Elements.IconButton;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class EmployeeView extends JInternalFrame {
 
     private Employee employee;
 
     public EmployeeView(Employee employee) {
+        super("", false, true, false, true);
         this.employee = employee;
         setTitle("Employee / " + employee.getId() + " - " + employee.getName());
+        setFrameIcon(new ImageIcon(Employees.class.getResource("/icons/employees.png")));
         JTabbedPane tabbedPane = new JTabbedPane();
 
         JScrollPane positionsHeld = new JScrollPane();
@@ -37,7 +40,6 @@ public class EmployeeView extends JInternalFrame {
         infoLabels.add(vil);
         info.add(infoLabels, BorderLayout.CENTER);
         info.add(createToolBar(), BorderLayout.SOUTH);
-        info.setBorder(new EmptyBorder(10, 10, 10, 10));
         add(info, BorderLayout.NORTH);
         add(tabbedPane, BorderLayout.CENTER);
         setResizable(true);
@@ -48,11 +50,16 @@ public class EmployeeView extends JInternalFrame {
     private JPanel createToolBar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-        IconButton performReview = new IconButton("Perform Review", "invoice", "Invoice customer");
-        IconButton writeup = new IconButton("Writeup", "delinquent", "Customer in dunning");
-        IconButton suspend = new IconButton("Suspend", "blocked", "Customer is blocked. No transactions.");
+        IconButton email = new IconButton("Email", "email", "Email Employee");
+        IconButton giveFeedback = new IconButton("Feedback", "feedback", "Give Feedback");
+        IconButton performReview = new IconButton("Review", "invoice", "New Performance Review");
+        IconButton writeup = new IconButton("", "delinquent", "Writeup Employee");
+        IconButton suspend = new IconButton("", "blocked", "Suspend Employee");
         IconButton label = new IconButton("", "label", "Print labels for properties");
         IconButton refresh = new IconButton("", "refresh", "Reload from store");
+        tb.add(email);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(giveFeedback);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(performReview);
         tb.add(Box.createHorizontalStrut(5));
@@ -63,6 +70,16 @@ public class EmployeeView extends JInternalFrame {
         tb.add(label);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(refresh);
+        performReview.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+
+            }
+        });
+        writeup.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+
+            }
+        });
         return tb;
     }
 }

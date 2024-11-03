@@ -3,12 +3,12 @@ package org.Canal.UI.Views.Distribution.Warehouses;
 import org.Canal.Models.BusinessUnits.OrderLineItem;
 import org.Canal.Models.BusinessUnits.PurchaseOrder;
 import org.Canal.Models.SupplyChainUnits.*;
+import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
-import org.Canal.UI.Elements.Labels;
 import org.Canal.UI.Views.Finance.AcceptPayment;
 import org.Canal.UI.Views.AreasBins.CreateArea;
 import org.Canal.UI.Views.Orders.ReceiveOrder;
-import org.Canal.Utils.Canal;
+import org.Canal.Utils.Locke;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.RefreshListener;
@@ -19,12 +19,16 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
+
 import java.awt.*;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+/**
+ * /WHS/$[WAREHOUSE_ID]
+ */
 public class WarehouseView extends JInternalFrame implements RefreshListener {
 
     private Warehouse warehouse;
@@ -51,7 +55,7 @@ public class WarehouseView extends JInternalFrame implements RefreshListener {
                     TreePath path = dataTree.getPathForLocation(e.getX(), e.getY());
                     if (path != null) {
                         DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
-                        Canal orgNode = (Canal) node.getUserObject();
+                        Locke orgNode = (Locke) node.getUserObject();
                         Engine.router(orgNode.getTransaction(), desktop);
                     }
                 }
@@ -105,9 +109,9 @@ public class WarehouseView extends JInternalFrame implements RefreshListener {
         for (String[] taskInfo : tasks) {
             JPanel taskPanel = new JPanel();
             taskPanel.setLayout(new BoxLayout(taskPanel, BoxLayout.Y_AXIS));
-            JLabel primaryLabel = Labels.h3(taskInfo[0]);
-            JLabel secondaryLabel = Labels.label(taskInfo[1]);
-            JLabel tertiaryLabel = Labels.label(taskInfo[2]);
+            JLabel primaryLabel = Elements.h3(taskInfo[0]);
+            JLabel secondaryLabel = Elements.label(taskInfo[1]);
+            JLabel tertiaryLabel = Elements.label(taskInfo[2]);
             taskPanel.add(primaryLabel);
             taskPanel.add(secondaryLabel);
             taskPanel.add(tertiaryLabel);
@@ -152,7 +156,7 @@ public class WarehouseView extends JInternalFrame implements RefreshListener {
         refresh.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
             Engine.load();
-            Canal rootNode = createRootNode();
+            Locke rootNode = createRootNode();
             DefaultMutableTreeNode rootTreeNode = createTreeNodes(rootNode);
             DefaultTreeModel model = (DefaultTreeModel) dataTree.getModel();
             model.setRoot(rootTreeNode);
@@ -188,7 +192,7 @@ public class WarehouseView extends JInternalFrame implements RefreshListener {
     }
 
     private JTree createTree() {
-        Canal rootNode = createRootNode();
+        Locke rootNode = createRootNode();
         DefaultMutableTreeNode rootTreeNode = createTreeNodes(rootNode);
         DefaultTreeModel treeModel = new DefaultTreeModel(rootTreeNode);
         JTree tree = new JTree(treeModel);
@@ -197,57 +201,57 @@ public class WarehouseView extends JInternalFrame implements RefreshListener {
         return tree;
     }
 
-    private Canal createRootNode() {
+    private Locke createRootNode() {
 
-        Canal[] customers = new Canal[Engine.getCustomers(warehouse.getOrg()).size()];
+        Locke[] customers = new Locke[Engine.getCustomers(warehouse.getOrg()).size()];
         for (int i = 0; i < Engine.getCustomers(warehouse.getOrg()).size(); i++) {
             Location l = Engine.getCustomers(warehouse.getOrg()).get(i);
-            customers[i] = new Canal(l.getId() + " - " + l.getName(), false, "/CSTS/" + l.getId(), Color.PINK, null);
+            customers[i] = new Locke(l.getId() + " - " + l.getName(), false, "/CSTS/" + l.getId(), Color.PINK, null);
         }
 
-        Canal[] vendors = new Canal[Engine.getVendors(warehouse.getOrg()).size()];
+        Locke[] vendors = new Locke[Engine.getVendors(warehouse.getOrg()).size()];
         for (int i = 0; i < Engine.getVendors(warehouse.getOrg()).size(); i++) {
             Location l = Engine.getVendors(warehouse.getOrg()).get(i);
-            vendors[i] = new Canal(l.getId() + " - " + l.getName(), false, "/VEND/" + l.getId(), Color.CYAN, null);
+            vendors[i] = new Locke(l.getId() + " - " + l.getName(), false, "/VEND/" + l.getId(), Color.CYAN, null);
         }
 
-        Canal[] items = new Canal[Engine.getItems(warehouse.getOrg()).size()];
+        Locke[] items = new Locke[Engine.getItems(warehouse.getOrg()).size()];
         for (int i = 0; i < Engine.getItems(warehouse.getOrg()).size(); i++) {
             Item l = Engine.getItems(warehouse.getOrg()).get(i);
-            items[i] = new Canal(l.getId() + " - " + l.getName(), false, "/ITS/" + l.getId(), new Color(147, 70, 3), null);
+            items[i] = new Locke(l.getId() + " - " + l.getName(), false, "/ITS/" + l.getId(), new Color(147, 70, 3), null);
         }
-        Canal[] areas = new Canal[Engine.getAreas(warehouse.getId()).size()];
+        Locke[] areas = new Locke[Engine.getAreas(warehouse.getId()).size()];
         for (int i = 0; i < Engine.getAreas(warehouse.getId()).size(); i++) {
             Area l = Engine.getAreas(warehouse.getId()).get(i);
-            areas[i] = new Canal(l.getId() + " - " + l.getValue("name"), false, "/ITS/" + l.getId(), new Color(147, 70, 3), null);
+            areas[i] = new Locke(l.getId() + " - " + l.getValue("name"), false, "/ITS/" + l.getId(), new Color(147, 70, 3), null);
         }
 
-        return new Canal(warehouse.getId() + " - " + warehouse.getName(), true, "/ORGS", new Canal[]{
-                new Canal("Areas", true, "/AREAS", areas),
-                new Canal("Bins", true, "/BNS", null),
-                new Canal("Items", true, "/ITS", items),
-                new Canal("Customers", true, "/CSTS", customers),
-                new Canal("Materials", true, "/MTS", null),
-                new Canal("Orders", true, "/ORDS", null),
-                new Canal("Vendors", true, "/VEND", vendors),
-                new Canal("Employees", true, "/EMPS", null),
-                new Canal("Reports", true, "/RPTS", new Canal[]{
-                    new Canal("Annual Ledger Report", false, "/RPTS/LGS/ANNUM", null),
-                    new Canal("Monthly Ledger Report", false, "/RPTS/MONTH", null),
-                    new Canal("CC Ledger", false, "/RPTS/CCS/LGS", null),
-                    new Canal("Annual Labor", false, "/RPTS/ANUM_LBR", null),
-                    new Canal("Monthly Labor", false, "/RPTS/MONTH_LBR", null),
-                    new Canal("Daily Labor", false, "/RPTS/DL_LBR", null),
-                    new Canal("Current Inventory", false, "/RPTS/CRNT_INV", null),
-                    new Canal("Inventory Count", false, "/RPTS/COUNT_INV", null),
+        return new Locke(warehouse.getId() + " - " + warehouse.getName(), true, "/ORGS", new Locke[]{
+                new Locke("Areas", true, "/AREAS", areas),
+                new Locke("Bins", true, "/BNS", null),
+                new Locke("Items", true, "/ITS", items),
+                new Locke("Customers", true, "/CSTS", customers),
+                new Locke("Materials", true, "/MTS", null),
+                new Locke("Orders", true, "/ORDS", null),
+                new Locke("Vendors", true, "/VEND", vendors),
+                new Locke("Employees", true, "/EMPS", null),
+                new Locke("Reports", true, "/RPTS", new Locke[]{
+                    new Locke("Annual Ledger Report", false, "/RPTS/LGS/ANNUM", null),
+                    new Locke("Monthly Ledger Report", false, "/RPTS/MONTH", null),
+                    new Locke("CC Ledger", false, "/RPTS/CCS/LGS", null),
+                    new Locke("Annual Labor", false, "/RPTS/ANUM_LBR", null),
+                    new Locke("Monthly Labor", false, "/RPTS/MONTH_LBR", null),
+                    new Locke("Daily Labor", false, "/RPTS/DL_LBR", null),
+                    new Locke("Current Inventory", false, "/RPTS/CRNT_INV", null),
+                    new Locke("Inventory Count", false, "/RPTS/COUNT_INV", null),
                 }),
         });
     }
 
-    private DefaultMutableTreeNode createTreeNodes(Canal node) {
+    private DefaultMutableTreeNode createTreeNodes(Locke node) {
         DefaultMutableTreeNode treeNode = new DefaultMutableTreeNode(node);
         if (node.getChildren() != null) {
-            for (Canal child : node.getChildren()) {
+            for (Locke child : node.getChildren()) {
                 treeNode.add(createTreeNodes(child));
             }
         }
@@ -264,7 +268,7 @@ public class WarehouseView extends JInternalFrame implements RefreshListener {
         public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus) {
             Component component = super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
             DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) value;
-            Canal orgNode = (Canal) treeNode.getUserObject();
+            Locke orgNode = (Locke) treeNode.getUserObject();
             if (orgNode.getStatus()) {
                 setIcon(UIManager.getIcon("FileView.directoryIcon"));
             } else {

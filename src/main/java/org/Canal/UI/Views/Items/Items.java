@@ -55,7 +55,7 @@ public class Items extends JInternalFrame {
             }
         });
         Button nla = new Button("Create an Item");
-        nla.addActionListener(_ -> desktop.put(new CreateItem()));
+        nla.addActionListener(_ -> desktop.put(new CreateItem(desktop)));
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
         mainPanel.add(direct, BorderLayout.NORTH);

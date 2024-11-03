@@ -1,7 +1,11 @@
 package org.Canal.Models.BusinessUnits;
 
+import org.Canal.Start;
 import org.Canal.Utils.Constants;
-import org.Canal.Utils.LockeType;
+import org.Canal.Utils.Json;
+import org.Canal.Utils.LockeStatus;
+
+import java.io.File;
 
 public class PurchaseRequisition {
 
@@ -15,7 +19,7 @@ public class PurchaseRequisition {
     private double maxSpend;
     private boolean isSingleOrder;
     private String start, end;
-    private LockeType status;
+    private LockeStatus status;
     private String notes;
 
     public PurchaseRequisition(String id, String name, String owner, String supplier, String buyer, String number, double maxSpend, String start, String end, String notes) {
@@ -29,7 +33,7 @@ public class PurchaseRequisition {
         this.maxSpend = maxSpend;
         this.start = start;
         this.end = end;
-        this.status = LockeType.NEW;
+        this.status = LockeStatus.NEW;
         this.notes = notes;
     }
 
@@ -121,11 +125,11 @@ public class PurchaseRequisition {
         this.end = end;
     }
 
-    public LockeType getStatus() {
+    public LockeStatus getStatus() {
         return status;
     }
 
-    public void setStatus(LockeType status) {
+    public void setStatus(LockeStatus status) {
         this.status = status;
     }
 
@@ -135,5 +139,21 @@ public class PurchaseRequisition {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public void save(){
+        File md = new File(Start.WINDOWS_SYSTEM_DIR + "\\.store\\PR\\");
+        File[] mdf = md.listFiles();
+        if (mdf != null) {
+            for (File file : mdf) {
+                if (file.getPath().endsWith(".pr")) {
+                    PurchaseRequisition forg = Json.load(file.getPath(), PurchaseRequisition.class);
+                    if (forg.getId().equals(getId())) {
+                        Json.save(file.getPath(), this);
+                    }
+                    break;
+                }
+            }
+        }
     }
 }

@@ -1,13 +1,14 @@
 package org.Canal.UI.Views.Transportation;
 
 import org.Canal.Models.BusinessUnits.PurchaseOrder;
+import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
-import org.Canal.UI.Elements.Labels;
 import org.Canal.UI.Views.Controllers.CheckboxBarcodeFrame;
 import org.Canal.UI.Views.Orders.PurchaseOrders.CreatePurchaseOrder;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -20,7 +21,7 @@ public class OutboundDeliveries extends JInternalFrame {
     private DesktopState desktop;
 
     public OutboundDeliveries(DesktopState desktop) {
-        setTitle("Outbound Deliveries");
+        super("Outbound Deliveries", true, true, true, true);
         this.desktop = desktop;
         JPanel tb = createToolBar();
         JPanel holder = new JPanel(new BorderLayout());
@@ -29,10 +30,6 @@ public class OutboundDeliveries extends JInternalFrame {
         holder.add(tableScrollPane, BorderLayout.CENTER);
         holder.add(tb, BorderLayout.NORTH);
         add(holder);
-        setIconifiable(true);
-        setClosable(true);
-        setMaximizable(true);
-        setResizable(true);
     }
 
     private JPanel createToolBar() {
@@ -46,7 +43,7 @@ public class OutboundDeliveries extends JInternalFrame {
         IconButton archivePo = new IconButton("Archive", "archive", "Archive PO, removes");
         IconButton label = new IconButton("Barcodes", "label", "Print labels for org properties");
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(Labels.h3("Outbound Deliveries", Constants.colors[9]));
+        tb.add(Elements.h3("Outbound Deliveries", Constants.colors[9]));
         tb.add(Box.createHorizontalStrut(5));
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));

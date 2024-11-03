@@ -3,14 +3,14 @@ package org.Canal.Utils;
 import javax.swing.*;
 import java.awt.*;
 
-public class Canal {
+public class Locke {
 
     private String name, transaction;
     private boolean status;
     private Color color;
-    private Canal[] children;
+    private Locke[] children;
 
-    public Canal(String name, boolean status, String transaction, Color color, Canal[] children) {
+    public Locke(String name, boolean status, String transaction, Color color, Locke[] children) {
         this.name = name;
         this.status = status;
         this.transaction = transaction;
@@ -18,7 +18,7 @@ public class Canal {
         this.children = children;
     }
 
-    public Canal(String name, boolean status, String transaction, Canal[] canals) {
+    public Locke(String name, boolean status, String transaction, Locke[] canals) {
         this.name = name;
         this.status = status;
         this.transaction = transaction;
@@ -38,7 +38,7 @@ public class Canal {
         return color;
     }
 
-    public Canal[] getChildren() {
+    public Locke[] getChildren() {
         return children;
     }
 
@@ -48,6 +48,6 @@ public class Canal {
 
     @Override
     public String toString() {
-        return name;
+        return name + (Engine.getConfiguration().isShowCanalCodes() ? " – " + transaction : "");
     }
 }

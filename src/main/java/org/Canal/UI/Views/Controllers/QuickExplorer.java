@@ -1,13 +1,18 @@
 package org.Canal.UI.Views.Controllers;
 
-import org.Canal.UI.Elements.DesktopInterface;
+import org.Canal.UI.Elements.Windows.DesktopInterface;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.beans.PropertyVetoException;
 
+/**
+ * /
+ */
 public class QuickExplorer extends JFrame implements DesktopState {
 
     private JDesktopPane desktopPane;
@@ -19,8 +24,74 @@ public class QuickExplorer extends JFrame implements DesktopState {
         addFrame(new Controller(this));
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setVisible(true);
-        if(Engine.client == null){
-            putCenter(new Login());
+        if(Engine.assignedUser == null){
+            putCenter(new Login(false));
+        }
+        if(Engine.getUsers().isEmpty()){
+            JOptionPane.showMessageDialog(desktopPane, "Please make and assign a user to this Canal");
+            put(Engine.router("/USRS/NEW", this));
+        }
+        installShortcuts();
+    }
+
+    private void installShortcuts() {
+        KeyStroke ctrlShiftTab = KeyStroke.getKeyStroke(KeyEvent.VK_T, KeyEvent.CTRL_DOWN_MASK);
+        KeyStroke ctrlW = KeyStroke.getKeyStroke(KeyEvent.VK_W, KeyEvent.CTRL_DOWN_MASK);
+        KeyStroke ctrlM = KeyStroke.getKeyStroke(KeyEvent.VK_M, KeyEvent.CTRL_DOWN_MASK);
+        KeyStroke ctrlH = KeyStroke.getKeyStroke(KeyEvent.VK_H, KeyEvent.CTRL_DOWN_MASK);
+        desktopPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ctrlShiftTab, "cycleFrames");
+        desktopPane.getActionMap().put("cycleFrames", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cycleThroughFrames(desktopPane);
+            }
+        });
+        Action closeAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JInternalFrame activeFrame = desktopPane.getSelectedFrame();
+                if (activeFrame != null) {
+                    activeFrame.dispose();
+                }
+            }
+        };
+        Action minimizeAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JInternalFrame activeFrame = desktopPane.getSelectedFrame();
+                if (activeFrame != null) {
+                    try {
+                        activeFrame.setIcon(true); // Minimizes the active internal frame
+                    } catch (java.beans.PropertyVetoException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        };
+        desktopPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ctrlW, "closeActiveFrame");
+        desktopPane.getActionMap().put("closeActiveFrame", closeAction);
+        desktopPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ctrlM, "minimizeActiveFrame");
+        desktopPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ctrlH, "minimizeActiveFrame");
+        desktopPane.getActionMap().put("minimizeActiveFrame", minimizeAction);
+    }
+
+    private static void cycleThroughFrames(JDesktopPane desktopPane) {
+        JInternalFrame[] frames = desktopPane.getAllFrames();
+        if (frames.length > 0) {
+            JInternalFrame selectedFrame = desktopPane.getSelectedFrame();
+            int currentIndex = -1;
+            for (int i = 0; i < frames.length; i++) {
+                if (frames[i] == selectedFrame) {
+                    currentIndex = i;
+                    break;
+                }
+            }
+            int nextIndex = (currentIndex - 1 + frames.length) % frames.length;
+            try {
+                frames[nextIndex].setSelected(true);
+            } catch (java.beans.PropertyVetoException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
@@ -32,6 +103,7 @@ public class QuickExplorer extends JFrame implements DesktopState {
     }
 
     public void putCenter(JInternalFrame frame) {
+        frame.pack();
         int desktopWidth = desktopPane.getWidth();
         int desktopHeight = desktopPane.getHeight();
         int frameWidth = frame.getWidth();

@@ -1,7 +1,7 @@
 package org.Canal.UI.Views.Finance.Customers;
 
 import org.Canal.UI.Elements.Button;
-import org.Canal.UI.Elements.Form;
+import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.DesktopState;

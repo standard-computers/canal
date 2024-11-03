@@ -47,6 +47,9 @@ public class Start {
                         i = mdf.length + 1;
                         Engine.load();
                         Engine.setOrganization(Engine.getOrganizations().get(0));
+                        if(!Engine.getConfiguration().getAssignedUser().isBlank()){
+                            Engine.assignUser(Engine.getUser(Engine.getConfiguration().getAssignedUser()));
+                        }
                         new QuickExplorer();
 //                        if(Engine.getConfiguration().getDefaultModule() == null){
 //                        }else{

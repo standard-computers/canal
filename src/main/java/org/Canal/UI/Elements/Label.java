@@ -9,7 +9,7 @@ public class Label extends JLabel {
 
     public Label(String text, Color color){
         super(text);
-        setFont(new Font(UIManager.getFont("Label.font").getName(), Font.PLAIN, 14));
+        setFont(new Font(UIManager.getFont("Label.font").getName(), Font.PLAIN, 12));
         setMinimumSize(new Dimension(120, 25));
         setMaximumSize(new Dimension(200, 25));
         Border emptyBorder = new EmptyBorder(5, 5, 5, 0);

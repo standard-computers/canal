@@ -1,14 +1,15 @@
 package org.Canal.Models.SupplyChainUnits;
 
-public class Item {
+import org.Canal.Models.Objex;
 
-    private String id;
+public class Item extends Objex {
+
     private String org;
-    private String name;
     private String vendor;
     private String color;
     private String upc;
     private String uom;
+    private String widthUOM, lengthUOM, heightUOM;
     private String packagingUnit;
     private boolean batched;
     private boolean rentable;
@@ -25,28 +26,12 @@ public class Item {
     public Item() {
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getOrg() {
         return org;
     }
 
     public void setOrg(String org) {
         this.org = org;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getUpc() {
@@ -179,6 +164,6 @@ public class Item {
 
     @Override
     public String toString() {
-        return id;
+        return super.getId();
     }
 }

@@ -1,5 +1,8 @@
 package org.Canal.Models.HumanResources;
 
+import org.Canal.Utils.Crypter;
+
+import javax.swing.*;
 import java.util.ArrayList;
 
 public class User {
@@ -9,6 +12,7 @@ public class User {
     private ArrayList<String> accesses = new ArrayList<>(); //List of transaction codes User can use
     private String fontSize;
     private String theme;
+    private String hpv;
 
     public String getId() {
         return id;
@@ -48,5 +52,25 @@ public class User {
 
     public void setTheme(String theme) {
         this.theme = theme;
+    }
+
+    public String getHpv() {
+        return hpv;
+    }
+
+    public void setHpv(String hpv) {
+        this.hpv = hpv;
+    }
+
+    public boolean hasPassword(String attempt){
+        try {
+            if(Crypter.md5(attempt).equals(hpv)){
+                return true;
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            return false;
+        }
+        return false;
     }
 }

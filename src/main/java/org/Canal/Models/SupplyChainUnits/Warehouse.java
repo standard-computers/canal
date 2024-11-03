@@ -1,6 +1,6 @@
 package org.Canal.Models.SupplyChainUnits;
 
-import org.Canal.Utils.LockeType;
+import org.Canal.Utils.LockeStatus;
 
 public class Warehouse {
 
@@ -15,7 +15,7 @@ public class Warehouse {
     private String taxId;
     private double area; //Square area of warehouse
     private String areaUOM;
-    private LockeType status = LockeType.ACTIVE;
+    private LockeStatus status = LockeStatus.ACTIVE;
     private boolean taxExempt = false;
 
     public String getId() {
@@ -106,11 +106,11 @@ public class Warehouse {
         this.areaUOM = areaUOM;
     }
 
-    public LockeType getStatus() {
+    public LockeStatus getStatus() {
         return status;
     }
 
-    public void setStatus(LockeType status) {
+    public void setStatus(LockeStatus status) {
         this.status = status;
     }
 

@@ -6,7 +6,7 @@ package org.Canal.Utils;
  *
  * <a href='https://telifie.com/projects/Canal/documention'>See Documention</a>
  */
-public enum LockeType {
+public enum LockeStatus {
     ACTIVE,
     APPROVED, //Approved by whoever necessary
     ARCHIVED, //Like delete but still in system and can't be used AT ALL
@@ -17,6 +17,7 @@ public enum LockeType {
     DELINQUENT, //Past due/delinquent status (mainly customers, orders, payments, etc.)
     ERRORED, //Errorer out in processing, saving, transmission, etc.
     IN_TRANSIT,
+    IN_USE,
     NEW, //Brand new, just made, not touched
     OPEN, //Just open, typically first stage
     PENDING, //From pending, pending first major action

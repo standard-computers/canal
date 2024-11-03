@@ -1,13 +1,15 @@
 package org.Canal.UI.Views.Controllers;
 
+import org.Canal.Utils.DesktopState;
+
 import javax.swing.*;
 
 /**
- * /MNGRS/HR
+ * /CNL/HR
  */
 public class HumanResources extends JInternalFrame {
 
-    public HumanResources() {
+    public HumanResources(DesktopState desktop) {
         super("ERM / Human Resources", false, true, false, true);
 
     }

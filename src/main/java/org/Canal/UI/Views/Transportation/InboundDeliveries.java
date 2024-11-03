@@ -1,19 +1,23 @@
 package org.Canal.UI.Views.Transportation;
 
 import org.Canal.Models.BusinessUnits.PurchaseOrder;
+import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
-import org.Canal.UI.Elements.Labels;
 import org.Canal.UI.Views.Controllers.CheckboxBarcodeFrame;
 import org.Canal.UI.Views.Orders.PurchaseOrders.CreatePurchaseOrder;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+/**
+ * /DIST/IBD
+ */
 public class InboundDeliveries extends JInternalFrame {
 
     private JTable table;
@@ -46,7 +50,7 @@ public class InboundDeliveries extends JInternalFrame {
         IconButton archivePo = new IconButton("Archive", "archive", "Archive PO, removes");
         IconButton label = new IconButton("Barcodes", "label", "Print labels for org properties");
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(Labels.h3("Inbound Deliveries", Constants.colors[9]));
+        tb.add(Elements.h3("Inbound Deliveries", Constants.colors[9]));
         tb.add(Box.createHorizontalStrut(5));
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));

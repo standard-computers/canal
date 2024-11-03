@@ -1,6 +1,6 @@
 package org.Canal.Models.BusinessUnits;
 
-import org.Canal.Utils.LockeType;
+import org.Canal.Utils.LockeStatus;
 import java.util.ArrayList;
 
 public class GoodsReceipt {
@@ -11,9 +11,9 @@ public class GoodsReceipt {
     public String receiver;
     public String location;
     public ArrayList<OrderLineItem> items;
-    private LockeType status;
+    private LockeStatus status;
 
-    public GoodsReceipt(String id, String purchaseOrder, String received, String receiver, String location, ArrayList<OrderLineItem> items, LockeType status) {
+    public GoodsReceipt(String id, String purchaseOrder, String received, String receiver, String location, ArrayList<OrderLineItem> items, LockeStatus status) {
         this.id = id;
         this.purchaseOrder = purchaseOrder;
         this.received = received;
@@ -71,11 +71,11 @@ public class GoodsReceipt {
         this.items = items;
     }
 
-    public LockeType getStatus() {
+    public LockeStatus getStatus() {
         return status;
     }
 
-    public void setStatus(LockeType status) {
+    public void setStatus(LockeStatus status) {
         this.status = status;
     }
 }

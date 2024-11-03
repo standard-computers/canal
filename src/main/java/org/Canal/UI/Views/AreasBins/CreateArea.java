@@ -2,9 +2,10 @@ package org.Canal.UI.Views.AreasBins;
 
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.Models.SupplyChainUnits.Warehouse;
-import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Button;
+import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Label;
+import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;

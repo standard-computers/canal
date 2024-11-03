@@ -1,4 +1,6 @@
-package org.Canal.UI.Elements;
+package org.Canal.UI.Elements.Windows;
+
+import org.Canal.UI.Elements.Button;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -12,7 +14,7 @@ public class FormFrame extends JInternalFrame {
     private JPanel content;
     private JLabel status;
     private GridBagConstraints gbc;
-    private Button commit;
+    private org.Canal.UI.Elements.Button commit;
 
     public FormFrame(){
         setLayout(new BorderLayout());

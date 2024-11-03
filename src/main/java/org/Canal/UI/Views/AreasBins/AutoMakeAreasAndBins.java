@@ -2,9 +2,9 @@ package org.Canal.UI.Views.AreasBins;
 
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.Models.SupplyChainUnits.Warehouse;
-import org.Canal.UI.Elements.FormFrame;
+import org.Canal.UI.Elements.Windows.FormFrame;
 import org.Canal.UI.Elements.Label;
-import org.Canal.UI.Elements.Selectable;
+import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 import javax.swing.*;

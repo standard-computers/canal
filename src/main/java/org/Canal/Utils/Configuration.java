@@ -1,8 +1,5 @@
 package org.Canal.Utils;
 
-import org.Canal.Models.SupplyChainUnits.Transaction;
-import java.util.ArrayList;
-
 public class Configuration {
 
     private String endpoint = "127.0.0.1";
@@ -10,6 +7,7 @@ public class Configuration {
     private String product_key = "";
     private String theme = "/com/formdev/flatlaf/intellijthemes/themes/SolarizedDark.theme.json";
     private String defaultModule = "/";
+    private String assignedUser; //ID of User this instance of Canal is assigned to
     private int port = 4567;
     private boolean encrypted = false;
     private boolean showCanalCodes = false;
@@ -81,6 +79,14 @@ public class Configuration {
 
     public void setShowCanalCodes(boolean showCanalCodes) {
         this.showCanalCodes = showCanalCodes;
+    }
+
+    public String getAssignedUser() {
+        return assignedUser;
+    }
+
+    public void setAssignedUser(String assignedUser) {
+        this.assignedUser = assignedUser;
     }
 
     @Override

@@ -2,12 +2,16 @@ package org.Canal.UI.Views.Materials;
 
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.Models.SupplyChainUnits.Material;
+import org.Canal.UI.Elements.Inputs.Copiable;
+import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.*;
+import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Pipe;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -60,36 +64,37 @@ public class CreateMaterial extends JInternalFrame {
         exciseTax = new JTextField("0");
         materialColor = new JTextField("Black");
         iniVolumeField = new JTextField("100");
-        f2.addInput(new Label("Ini. Volume", Constants.colors[6]), iniVolumeField);
-        f2.addInput(new Label("Color", Constants.colors[7]), materialColor);
-        f2.addInput(new Label("Width", Constants.colors[8]), itemWidth);
-        f2.addInput(new Label("Length", Constants.colors[9]), itemLength);
-        f2.addInput(new Label("Height", Constants.colors[10]), itemHeight);
-        f2.addInput(new Label("Weight", Constants.colors[1]), itemWeight);
-        f2.addInput(new Label("Tax", Constants.colors[1]), tax);
-        f2.addInput(new Label("Excise Tax", Constants.colors[1]), exciseTax);
+        f2.addInput(new Label("Ini. Volume", UIManager.getColor("Label.foreground")), iniVolumeField);
+        f2.addInput(new Label("Color", UIManager.getColor("Label.foreground")), materialColor);
+        f2.addInput(new Label("Width", UIManager.getColor("Label.foreground")), itemWidth);
+        f2.addInput(new Label("Length", UIManager.getColor("Label.foreground")), itemLength);
+        f2.addInput(new Label("Height", UIManager.getColor("Label.foreground")), itemHeight);
+        f2.addInput(new Label("Weight", UIManager.getColor("Label.foreground")), itemWeight);
+        f2.addInput(new Label("Tax", UIManager.getColor("Label.foreground")), tax);
+        f2.addInput(new Label("Excise Tax", UIManager.getColor("Label.foreground")), exciseTax);
         JPanel biPanel = new JPanel(new GridLayout(1, 2));
         f1.setBorder(new EmptyBorder(5, 5, 5, 5));
         f2.setBorder(new EmptyBorder(5, 5, 5, 5));
         biPanel.add(f1);
         biPanel.add(f2);
         JPanel main = new JPanel(new BorderLayout());
+        main.add(Elements.header("Materials are consumable", SwingConstants.LEFT), BorderLayout.NORTH);
         main.add(biPanel, BorderLayout.CENTER);
-        main.add(actionsBar(), BorderLayout.NORTH);
+        main.add(actionsBar(), BorderLayout.SOUTH);
         add(main);
     }
 
     private JPanel actionsBar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-        IconButton saveitem = new IconButton("", "start", "Commit Item");
+        IconButton saveitem = new IconButton("Create Material", "start", "Commit Material");
         saveitem.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 commitItem();
             }
         });
-        tb.add(Box.createHorizontalStrut(5));
         tb.add(saveitem);
+        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
         return tb;
     }
 

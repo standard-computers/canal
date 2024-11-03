@@ -1,10 +1,11 @@
-package org.Canal.UI.Elements;
+package org.Canal.UI.Elements.Inputs;
 
 import org.Canal.Models.BusinessUnits.Organization;
 import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.Models.SupplyChainUnits.Warehouse;
 import org.Canal.Utils.Engine;
+
 import java.util.HashMap;
 
 public class Selectables {
@@ -56,6 +57,39 @@ public class Selectables {
         statusTypes.put("REMOVED", "REMOVED");
         statusTypes.put("SUSPENDED", "SUSPENDED");
         return new Selectable(statusTypes);
+    }
+
+    public static Selectable periods(){
+        HashMap<String, String> statusTypes = new HashMap<>();
+        statusTypes.put("Q1", "Q1");
+        statusTypes.put("Q2", "Q2");
+        statusTypes.put("Q3", "Q3");
+        statusTypes.put("Q4", "Q4");
+        return new Selectable(statusTypes);
+    }
+
+    public static Selectable uoms(String preset){
+        HashMap<String, String> statusTypes = new HashMap<>();
+        statusTypes.put("MM", "MM");
+        statusTypes.put("CM", "CM");
+        statusTypes.put("IN", "IN");
+        statusTypes.put("FT", "FT");
+        statusTypes.put("M", "M");
+        statusTypes.put("YD", "YD");
+        statusTypes.put("MI", "MI");
+        statusTypes.put("NM", "NM");
+        statusTypes.put("KM", "KM");
+        statusTypes.put("OZ", "OZ");
+        statusTypes.put("LBS", "LBS");
+        statusTypes.put("KGS", "KGS");
+        statusTypes.put("TNS", "TNS");
+        Selectable uomField = new Selectable(statusTypes);
+        uomField.setSelectedValue(preset);
+        return uomField;
+    }
+
+    public static Selectable uoms(){
+        return uoms("IN");
     }
 
     public static Selectable countries() {

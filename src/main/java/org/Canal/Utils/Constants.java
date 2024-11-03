@@ -30,20 +30,20 @@ public class Constants {
             transactions.add(allModules().getTransaction());
         }
         if (allModules().getChildren() != null) {
-            for (Canal child : allModules().getChildren()) {
+            for (Locke child : allModules().getChildren()) {
                 transactions.addAll(getTransactions(child));
             }
         }
         return removeDuplicates(transactions);
     }
 
-    public static ArrayList<String> getTransactions(Canal canal) {
+    public static ArrayList<String> getTransactions(Locke canal) {
         ArrayList<String> transactions = new ArrayList<>();
         if (canal.getTransaction() != null && !transactions.contains(canal.getTransaction())) {
             transactions.add(canal.getTransaction());
         }
         if (canal.getChildren() != null) {
-            for (Canal child : canal.getChildren()) {
+            for (Locke child : canal.getChildren()) {
                 transactions.addAll(getTransactions(child));
             }
         }
@@ -60,176 +60,193 @@ public class Constants {
         return uniqueTransactions;
     }
 
-    public static Canal allModules() {
-        return new Canal("Canal – All Actions", true, "/ORGS", new Canal[]{
-                new Canal("Quick Accesses", true, "/", new Canal[]{
-                        new Canal("Finance", false, "/FIN", null),
-                        new Canal("Inventory", false, "/INV", null),
-                        new Canal("Time Clock", false, "/TM_CLCK", null),
-                        new Canal("Inventory", false, "/INV", null),
-                        new Canal("Canal Settings", false, "/CNL", null),
-                        new Canal("Leave Canal", false, "/CNL/EXIT", null),
+    public static Locke allModules() {
+        return new Locke("Canal – All Actions", true, "/ORGS", new Locke[]{
+                new Locke("Quick Accesses", true, "/", new Locke[]{
+                        new Locke("Finance", false, "/FIN", null),
+                        new Locke("Inventory", false, "/INV", null),
+                        new Locke("Human Resources", false, "/CNL/HR", null),
+                        new Locke("Time Clock", false, "/TM_CLCK", null),
+                        new Locke("Canal Settings", false, "/CNL", null),
+                        new Locke("Leave Canal", false, "/CNL/EXIT", null),
                 }),
-                new Canal("Organizations", true, "/ORGS", new Canal[]{
-                        new Canal("Find Organization", false, "/ORGS/F", null),
-                        new Canal("Create an Organization", false, "/ORGS/NEW", null),
-                        new Canal("Modify an Organization", false, "/ORGS/MOD", null),
-                        new Canal("Departments", true, "/DPTS",  new Canal[]{
-                                new Canal("Find with ID", false, "/DPTS/F", null),
-                                new Canal("Create a Department", false, "/DPTS/NEW", null),
-                                new Canal("Modify", false, "/DPTS/MOD", null),
-                                new Canal("Remove", false, "/DPTS/DEL", null),
+                new Locke("Organizations", true, "/ORGS", new Locke[]{
+                        new Locke("Find Organization", false, "/ORGS/F", null),
+                        new Locke("Create an Organization", false, "/ORGS/NEW", null),
+                        new Locke("Modify an Organization", false, "/ORGS/MOD", null),
+                        new Locke("Departments", true, "/DPTS",  new Locke[]{
+                                new Locke("Find Department with ID", false, "/DPTS/F", null),
+                                new Locke("Create a Department", false, "/DPTS/NEW", null),
+                                new Locke("Modify Department", false, "/DPTS/MOD", null),
+                                new Locke("Remove Department", false, "/DPTS/DEL", null),
+                                new Locke("Archive Department", false, "/DPTS/ARCHV", null),
+                        }),
+                        new Locke("Positions", true, "/HR/POS",  new Locke[]{
+                                new Locke("Find Position with ID", false, "/HR/POS/F", null),
+                                new Locke("Create a Position", false, "/HR/POS/NEW", null),
+                                new Locke("Modify Position", false, "/HR/POS/MOD", null),
+                                new Locke("Remove Position", false, "/HR/POS/DEL", null),
+                                new Locke("Archive Position", false, "/HR/POS/ARCHV", null),
+                                new Locke("Post Position", false, "/HR/POS/POST", null),
                         }),
                 }),
-                new Canal("Cost Centers", true, "/CCS", new Canal[]{
-                        new Canal("Find with ID", false, "/CCS/F", null),
-                        new Canal("Create a Cost Center", false, "/CCS/NEW", null),
-                        new Canal("Modify", false, "/CCS/MOD", null),
-                        new Canal("Remove", false, "/CCS/DEL", null),
+                new Locke("Cost Centers", true, "/CCS", new Locke[]{
+                        new Locke("Find CC with ID", false, "/CCS/F", null),
+                        new Locke("Create a Cost Center", false, "/CCS/NEW", null),
+                        new Locke("Modify Cost Center", false, "/CCS/MOD", null),
+                        new Locke("Remove Cost Center", false, "/CCS/DEL", null),
+                        new Locke("Archive Cost Center", false, "/CCS/ARCHV", null),
                 }),
-                new Canal("Distribution Centers", true, "/DCSS", new Canal[]{
-                        new Canal("Find with ID", false, "/DCSS/F", null),
-                        new Canal("Create", false, "/DCSS/NEW", null),
-                        new Canal("Modify", false, "/DCSS/MOD", null),
-                        new Canal("Remove", false, "/DCSS/DEL", null),
+                new Locke("Distribution Centers", true, "/DCSS", new Locke[]{
+                        new Locke("Find with ID", false, "/DCSS/F", null),
+                        new Locke("Create Dist. Center", false, "/DCSS/NEW", null),
+                        new Locke("Modify Dist. Center", false, "/DCSS/MOD", null),
+                        new Locke("Remove Dist. Center", false, "/DCSS/DEL", null),
                 }),
-                new Canal("Warehouses", true, "/WHS", new Canal[]{
-                        new Canal("Find", false, "/WHS/F", null),
-                        new Canal("Create", false, "/WHS/NEW", null),
-                        new Canal("Modify", false, "/WHS/MOD", null),
-                        new Canal("Remove", false, "/WHS/DEL", null),
+                new Locke("Warehouses", true, "/WHS", new Locke[]{
+                        new Locke("Find Warehouse", false, "/WHS/F", null),
+                        new Locke("Create Warehouse", false, "/WHS/NEW", null),
+                        new Locke("Modify Warehouse", false, "/WHS/MOD", null),
+                        new Locke("Remove Warehouse", false, "/WHS/DEL", null),
                 }),
-                new Canal("Customers", true, "/CSTS", new Canal[]{
-                        new Canal("Find", false, "/CSTS/F", null),
-                        new Canal("Create", false, "/CSTS/NEW", null),
-                        new Canal("Remove", false, "/", null),
-                        new Canal("Modify", true, "/", new Canal[]{
-                                new Canal("Invoice", false, "/", null),
-                                new Canal("Delinquent", false, "/", null),
-                                new Canal("Block", false, "/", null),
+                new Locke("Customers", true, "/CSTS", new Locke[]{
+                        new Locke("Find Customer", false, "/CSTS/F", null),
+                        new Locke("Create Customer", false, "/CSTS/NEW", null),
+                        new Locke("Remove Customer", false, "/CSTS/DEL", null),
+                        new Locke("Modify Customer", true, "/CSTS/MOD", new Locke[]{
+                                new Locke("Invoice", false, "/CSTS/INVS/NEW", null),
+                                new Locke("Delinquent", false, "/CSTS/DLQ", null),
+                                new Locke("Block", false, "/CSTS/BLCK", null),
+                                new Locke("Block", false, "/CSTS/ARCHV", null),
                         }),
                 }),
-                new Canal("Invoicing", true, "/INVS", new Canal[]{
-                        new Canal("Find", false, "/INVS/F", null),
-                        new Canal("Create an Invoice", false, "/INVS/NEW", null),
-                        new Canal("Modify", true, "/INVS/MOD", new Canal[]{
-                                new Canal("Invoice", false, "/INVS/", null),
+                new Locke("Invoices", true, "/INVS", new Locke[]{
+                        new Locke("Find", false, "/INVS/F", null),
+                        new Locke("Create an Invoice", false, "/INVS/NEW", null),
+                        new Locke("Accept Payment", false, "/FIN/PYMNTS/NEW", null),
+                        new Locke("Modify", true, "/INVS/MOD", new Locke[]{
+                                new Locke("Invoice", false, "/INVS/MOD", null),
+                                new Locke("Credit", false, "/INVS/CM/MOD", null),
+                                new Locke("Debit", false, "/INVS/DBT/MOD", null),
                         }),
                 }),
-                new Canal("Users", true, "/USRS", new Canal[]{
-                        new Canal("Find", false, "/USRS/F", null),
-                        new Canal("Create", false, "/USRS/NEW", null),
-                        new Canal("View", false, "/USRS", null),
-                        new Canal("Modify", true, "/USRS/MOD", new Canal[]{
-                                new Canal("Suspend", false, "/USRS/MOD/SP", null),
-                                new Canal("Change Access", false, "/USRS/MOD/CHGAC", null),
-                                new Canal("Remove", false, "/USRS/MOD/DEL", null),
+                new Locke("Users", true, "/USRS", new Locke[]{
+                        new Locke("Find User", false, "/USRS/F", null),
+                        new Locke("Create a User", false, "/USRS/NEW", null),
+                        new Locke("View User", false, "/USRS", null),
+                        new Locke("Modify a User", true, "/USRS/MOD", new Locke[]{
+                                new Locke("Suspend", false, "/USRS/MOD/SP", null),
+                                new Locke("Change Access", false, "/USRS/MOD/CHGAC", null),
+                                new Locke("Remove", false, "/USRS/MOD/DEL", null),
                         }),
                 }),
-                new Canal("Vendors", true, "/VEND", new Canal[]{
-                        new Canal("Find", false, "/VEND/F", null),
-                        new Canal("Create", false, "/VEND/NEW", null),
-                        new Canal("Remove", false, "/VEND/DEL", null),
-                        new Canal("Modify", true, "/VEND/MOD", new Canal[]{
-                                new Canal("Order", false, "/ORDS/NEW", null),
-                                new Canal("Stock Check", false, "", null),
-                                new Canal("Block", false, "", null)
+                new Locke("Vendors", true, "/VEND", new Locke[]{
+                        new Locke("Find Vendor", false, "/VEND/F", null),
+                        new Locke("Create Vendor", false, "/VEND/NEW", null),
+                        new Locke("Remove Vendor", false, "/VEND/DEL", null),
+                        new Locke("Modify Vendor", true, "/VEND/MOD", null),
+                        new Locke("Order from Vendor", false, "/VEND/ORDS/NEW", null),
+                        new Locke("Vendor Stock Check", false, "/VEND/INV/CHK", null),
+                        new Locke("Block Vendor", false, "", null)
+                }),
+                new Locke("Items", true, "/ITS", new Locke[]{
+                        new Locke("Find Item", false, "/ITS/F", null),
+                        new Locke("Create Item", false, "/ITS/NEW", null),
+                        new Locke("Modify Item", false, "/ITS/MOD", null),
+                        new Locke("Remove Item", false, "/ITS/DEL", null),
+                }),
+                new Locke("Materials", true, "/MTS", new Locke[]{
+                        new Locke("Find Material", false, "/MTS/F", null),
+                        new Locke("Create Material", false, "/MTS/NEW", null),
+                        new Locke("Modify Material", false, "/MTS/MOD", null),
+                        new Locke("Remove Material", false, "/MTS/DEL", null),
+                }),
+                new Locke("Employees", true, "/EMPS", new Locke[]{
+                        new Locke("Find Employee", false, "/EMPS/F", null),
+                        new Locke("Create Employee", false, "/EMPS/NEW", null),
+                        new Locke("Modify Employee", false, "/EMPS/MOD", null),
+                        new Locke("Remove Employee", false, "/EMPS/DEL", null),
+                }),
+                new Locke("Catalogs", true, "/CATS", new Locke[]{
+                        new Locke("Find Catalog", false, "/CATS/F", null),
+                        new Locke("Create Catalog", false, "/CATS/NEW", null),
+                        new Locke("Modify Catalog", false, "/CATS", null),
+                        new Locke("Remove Catalog", false, "/CATS", null),
+                        new Locke("Archive Catalog", false, "/CATS/ARCHV", null),
+                }),
+                new Locke("Orders", true, "/ORDS", new Locke[]{
+                        new Locke("Purchase Orders", true, "/ORDS", new Locke[]{
+                                new Locke("AutoMake PRs", false, "/ORDS/PO/AUTO_MK", null),
+                                new Locke("Find PO", false, "/ORDS/F", null),
+                                new Locke("Create PO", false, "/ORDS/NEW", null),
+                                new Locke("Remove PO", false, "/ORDS/DEL", null),
+                                new Locke("Block PO", false, "/ORDS/BLK", null),
+                                new Locke("Suspend PO", false, "/ORDS/SP", null),
+                                new Locke("Archive PO", false, "/ORDS/ARCHV", null),
+                        }),
+                        new Locke("Purchase Reqs.", true, "/ORDS/PR", new Locke[]{
+                                new Locke("AutoMake PRs", false, "/ORDS/PR/AUTO_MK", null),
+                                new Locke("Find PR", false, "/ORDS/PR", null),
+                                new Locke("Create PR", false, "/ORDS/PR/NEW", null),
+                                new Locke("Remove PR", false, "/ORDS/PR/DEL", null),
+                                new Locke("Block PR", false, "/ORDS/PR/BLK", null),
+                                new Locke("Suspend PR", false, "/ORDS/PR/SP", null),
+                                new Locke("Archive PR", false, "/ORDS/PR/ARCHV", null),
+                        }),
+                        new Locke("Sales Orders", true, "/ORDS/SO", new Locke[]{
+                                new Locke("AutoMake PRs", false, "/ORDS/SO/AUTO_MK", null),
+                                new Locke("Find SO", false, "/ORDS/SO", null),
+                                new Locke("Create SO", false, "/ORDS/SO/NEW", null),
+                                new Locke("Modify SO", false, "/ORDS/SO/MOD", null),
+                                new Locke("Remove SO", false, "/ORDS/SO/DEL", null),
+                                new Locke("Block SO", false, "/ORDS/SO/BLK", null),
+                                new Locke("Suspend SO", false, "/ORDS/SO/SP", null),
+                                new Locke("Archive SO", false, "/ORDS/SO/ARCHV", null),
                         }),
                 }),
-                new Canal("Items", true, "/ITS", new Canal[]{
-                        new Canal("Find", false, "/ITS/F", null),
-                        new Canal("Create", false, "/ITS/NEW", null),
-                        new Canal("Modify", false, "/ITS/MOD", null),
-                        new Canal("Remove", false, "/ITS/DEL", null),
+                new Locke("Planning", true, "/PLA", new Locke[]{
+                        new Locke("Forecast", false, "/PLA/", null),
+                        new Locke("Demand", false, "/PLA/", null),
+                        new Locke("STO", false, "/PLA/", null),
+                        new Locke("Remove", false, "/PLA/", null),
                 }),
-                new Canal("Materials", true, "/MTS", new Canal[]{
-                        new Canal("Find", false, "/MTS/F", null),
-                        new Canal("Create", false, "/MTS/NEW", null),
-                        new Canal("Modify", false, "/MTS/MOD", null),
-                        new Canal("Remove", false, "/MTS/DEL", null),
+                new Locke("Distribution", true, "/DIST/", new Locke[]{
+                        new Locke("Find", false, "/DIST/", null),
+                        new Locke("Create", false, "/DIST/", null),
+                        new Locke("Modify", false, "/DIST/", null),
+                        new Locke("Remove", false, "/DIST/", null),
                 }),
-                new Canal("Employees", true, "/EMPS", new Canal[]{
-                        new Canal("Find", false, "/EMPS/F", null),
-                        new Canal("Create", false, "/EMPS/NEW", null),
-                        new Canal("Modify", false, "/EMPS/MOD", null),
-                        new Canal("Remove", false, "/EMPS/DEL", null),
+                new Locke("Ledgers", true, "/LGS", new Locke[]{
+                        new Locke("Find", false, "/LGS/F", null),
+                        new Locke("Create", false, "/LGS/NEW", null),
+                        new Locke("Audit", false, "/LGS/AUDIT", null),
+                        new Locke("Archive", false, "/LGS/ARCHV", null),
                 }),
-                new Canal("Catalogs", true, "/CATS", new Canal[]{
-                        new Canal("Find", false, "/CATS/F", null),
-                        new Canal("Create", false, "/CATS/NEW", null),
-                        new Canal("Modify", false, "/CATS", null),
-                        new Canal("Remove", false, "/CATS", null),
-                }),
-                new Canal("Orders", true, "/ORDS", new Canal[]{
-
-                        new Canal("Purchase Orders", true, "/ORDS", new Canal[]{
-                                new Canal("Find", false, "/ORDS/F", null),
-                                new Canal("Create", false, "/ORDS/NEW", null),
-                                new Canal("Remove", false, "/ORDS/DEL", null),
-                                new Canal("Block", false, "/ORDS/BLK", null),
-                                new Canal("Suspend", false, "/ORDS/SP", null),
-                                new Canal("Archive", false, "/ORDS/ARCHV", null),
+                new Locke("Inventory", true, "/INV", new Locke[]{
+                        new Locke("Stock Check", true, "/INV/SC/", new Locke[]{
+                                new Locke("Org Stock Overview", false, "/INV/SC/IID", null),
+                                new Locke("Stock by Vendor", false, "/INV/SC/VEND", null),
+                                new Locke("Stock by Vendor with Item", false, "/INV/SC/VEND_IID", null),
+                                new Locke("Stock by Vendor with Cost Center", false, "/INV/SC/VEND_CCS", null),
+                                new Locke("Stock by Vendor for Distribution Center", false, "/INV/SC/VEND_DCSS", null),
+                                new Locke("Item Stock Check", false, "/INV/SC/IID", null),
                         }),
-                        new Canal("Purchase Reqs.", true, "/ORDS/PR", new Canal[]{
-                                new Canal("AutoMake", false, "/ORDS/PR/AUTO_MK", null),
-                                new Canal("Find", false, "/ORDS/PR", null),
-                                new Canal("Create", false, "/ORDS/PR/NEW", null),
-                                new Canal("Remove", false, "/ORDS/PR/DEL", null),
-                                new Canal("Block", false, "/ORDS/PR/BLK", null),
-                                new Canal("Suspend", false, "/ORDS/PR/SP", null),
-                                new Canal("Archive", false, "/ORDS/PR/ARCHV", null),
+                        new Locke("Move Inventory", true, "/INV/MV/MOD", new Locke[]{
+                                new Locke("Perform Stock Transfer Order (STO)", false, "/INV/MV/STO", null),
                         }),
-                        new Canal("Sales Orders", true, "/ORDS/SO", new Canal[]{
-                                new Canal("Find", false, "/ORDS/SO", null),
-                                new Canal("Create", false, "/ORDS/SO/NEW", null),
-                                new Canal("Modify", false, "/ORDS/SO/MOD", null),
-                                new Canal("Remove", false, "/ORDS/SO/DEL", null),
-                                new Canal("Block", false, "/ORDS/SO/BLK", null),
-                                new Canal("Suspend", false, "/ORDS/SO/SP", null),
-                                new Canal("Archive", false, "/ORDS/SO/ARCHV", null),
-                        }),
-                }),
-                new Canal("Planning", true, "/PLA", new Canal[]{
-                        new Canal("Forecast", false, "/", null),
-                        new Canal("Demand", false, "/", null),
-                        new Canal("STO", false, "/", null),
-                        new Canal("Remove", false, "/", null),
-                }),
-                new Canal("Distribution", true, "/LGS", new Canal[]{
-                        new Canal("Find", false, "/", null),
-                        new Canal("Create", false, "/", null),
-                        new Canal("Modify", false, "/", null),
-                        new Canal("Remove", false, "/", null),
-                }),
-                new Canal("Ledgers", true, "/LGS", new Canal[]{
-                        new Canal("Find", false, "/LGS/F", null),
-                        new Canal("Create", false, "/LGS/NEW", null),
-                        new Canal("Audit", false, "/", null),
-                }),
-                new Canal("Inventory", true, "/INV", new Canal[]{
-                        new Canal("Stock Check", true, "/INV/SC/", new Canal[]{
-                                new Canal("Org Stock Overview", false, "/INV/SC/IID", null),
-                                new Canal("Stock by Vendor", false, "/INV/SC/VEND", null),
-                                new Canal("Stock by Vendor with Item", false, "/INV/SC/VEND_IID", null),
-                                new Canal("Stock by Vendor with Cost Center", false, "/INV/SC/VEND_CCS", null),
-                                new Canal("Stock by Vendor for Distribution Center", false, "/INV/SC/VEND_DCSS", null),
-                                new Canal("Item Stock Check", false, "/INV/SC/IID", null),
-                        }),
-                        new Canal("Move Inventory", true, "/INV/MV/MOD", new Canal[]{
-                                new Canal("Perform Stock Transfer Order (STO)", false, "/INV/MV/STO", null),
-                        }),
-                        new Canal("Remove Inventor", false, "/INV/MV/DEL", null),
-                        new Canal("Adjust Inventory", false, "/INV/MV/ADJ", null),
-                        new Canal("Physical Inventory", true, "/INV/PI", new Canal[]{
-                                new Canal("Physical Inventory for Item", false, "/INV/PI/ITS", null),
-                                new Canal("Physical Inventory for Material", false, "/INV/PI/MTS", null),
+                        new Locke("Remove Inventor", false, "/INV/MV/DEL", null),
+                        new Locke("Adjust Inventory", false, "/INV/MV/ADJ", null),
+                        new Locke("Physical Inventory", true, "/INV/PI", new Locke[]{
+                                new Locke("Physical Inventory for Item", false, "/INV/PI/ITS", null),
+                                new Locke("Physical Inventory for Material", false, "/INV/PI/MTS", null),
+                                new Locke("Physical Inventory for Plant", false, "/INV/PI/PLNT", null),
                         }),
                 })
         });
     }
 
     public static boolean isCanalAssigned(){
-        return Engine.client == null;
+        return Engine.assignedUser != null;
     }
 
     public static void checkLocke(JInternalFrame parent, boolean checkLedgers, boolean checkOperator){

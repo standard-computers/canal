@@ -2,10 +2,13 @@ package org.Canal.UI.Views.Finance.Ledgers;
 
 import org.Canal.Models.BusinessUnits.Ledger;
 import org.Canal.UI.Elements.Button;
+import org.Canal.UI.Elements.Elements;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
+
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -20,7 +23,7 @@ public class Ledgers extends JInternalFrame {
     private DefaultListModel<Ledger> listModel;
 
     public Ledgers(DesktopState desktop) {
-        setTitle("Ledgers");
+        super("Ledgers", false, true, false, true);
         setFrameIcon(new ImageIcon(Ledgers.class.getResource("/icons/ledgers.png")));
         listModel = new DefaultListModel<>();
         JList<Ledger> list = new JList<>(listModel);
@@ -35,7 +38,7 @@ public class Ledgers extends JInternalFrame {
                     if (selectedIndex != -1) {
                         Ledger l = listModel.getElementAt(selectedIndex);
                         if (l != null) {
-                            Engine.router("/LGS/" + l.getId(), desktop);
+                            desktop.put(Engine.router("/LGS/" + l.getId(), desktop));
                         } else {
                             JOptionPane.showMessageDialog(null, "Ledger Not Found");
                         }
@@ -43,7 +46,7 @@ public class Ledgers extends JInternalFrame {
                 }
             }
         });
-        JTextField direct = new JTextField();
+        JTextField direct = Elements.input();
         direct.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -51,14 +54,14 @@ public class Ledgers extends JInternalFrame {
                     String inputText = direct.getText().trim();
                     System.out.println(inputText);
                     if (!inputText.isEmpty()) {
-                        Engine.router("/LGS/" + inputText, desktop);
+                        desktop.put(Engine.router("/LGS/" + inputText, desktop));
                     }
                 }
             }
         });
         Button nla = new Button("Add");
         nla.color(Constants.colors[7]);
-        nla.addActionListener(e -> new CreateLedger());
+        nla.addActionListener(_ -> desktop.put(new CreateLedger(desktop)));
         JPanel options = new JPanel();
         options.add(nla);
         JPanel mainPanel = new JPanel();
@@ -67,20 +70,12 @@ public class Ledgers extends JInternalFrame {
         mainPanel.add(scrollPane, BorderLayout.CENTER);
         mainPanel.add(options, BorderLayout.SOUTH);
         add(mainPanel);
-        loadLocations();
-        setIconifiable(true);
-        setClosable(true);
-    }
-
-    private void loadLocations(){
-        listModel.removeAllElements();
-        Engine.load();
-        for (Ledger loc : Engine.getLedgers()) {
-            listModel.addElement(loc);
+        for(Ledger l : Engine.getLedgers()){
+            listModel.addElement(l);
         }
     }
 
-    class LedgerRenderer extends JPanel implements ListCellRenderer<Ledger> {
+    static class LedgerRenderer extends JPanel implements ListCellRenderer<Ledger> {
 
         private JLabel ledgerName;
         private JLabel ledgerId;
@@ -97,6 +92,7 @@ public class Ledgers extends JInternalFrame {
             add(ledgerName);
             add(ledgerId);
             add(ledgerTransactionCount);
+            setBorder(new EmptyBorder(5, 5, 5, 5));
         }
 
         @Override

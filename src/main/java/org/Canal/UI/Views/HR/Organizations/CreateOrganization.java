@@ -3,7 +3,10 @@ package org.Canal.UI.Views.HR.Organizations;
 import org.Canal.Models.BusinessUnits.Organization;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Button;
+import org.Canal.UI.Elements.Inputs.Selectable;
+import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Label;
+import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -20,17 +23,17 @@ import java.awt.event.MouseEvent;
 public class CreateOrganization extends JInternalFrame {
 
     public CreateOrganization(DesktopState desktop) {
-        super("Create Organization", false, true, false, true);
+        super("Create an Organization", false, true, false, true);
         setFrameIcon(new ImageIcon(CreateOrganization.class.getResource("/icons/create.png")));
-        JTextField orgNameField = new JTextField();
-        JTextField orgIdField = new JTextField();
+        JTextField orgNameField = Elements.input(15);
+        JTextField orgIdField = Elements.input(15);
         orgIdField.setText(String.valueOf(1000 + (Engine.getOrganizations().size() + 1)));
-        JTextField line1Field = new JTextField();
-        JTextField line2Field = new JTextField();
-        JTextField cityField = new JTextField();
-        JTextField stateField = new JTextField();
-        JTextField postalCodeField = new JTextField();
-        JTextField taxId = new JTextField();
+        JTextField line1Field = Elements.input(15);
+        JTextField line2Field = Elements.input(15);
+        JTextField cityField = Elements.input(15);
+        JTextField stateField = Elements.input(15);
+        JTextField postalCodeField = Elements.input(15);
+        JTextField taxId = Elements.input(15);
         JCheckBox isTaxExempt = new JCheckBox();
         Selectable countries = Selectables.countries();
         Form f = new Form();
@@ -46,7 +49,7 @@ public class CreateOrganization extends JInternalFrame {
         f.addInput(new Label("Tax Exempt?", Constants.colors[8]), isTaxExempt);
         Button make = new Button("Make Organization");
         setLayout(new BorderLayout());
-        add(Panels.header("New Organization"), BorderLayout.NORTH);
+        add(Elements.header("New Organization"), BorderLayout.NORTH);
         add(f, BorderLayout.CENTER);
         add(make, BorderLayout.SOUTH);
         make.addMouseListener(new MouseAdapter() {

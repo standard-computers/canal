@@ -2,12 +2,13 @@ package org.Canal.UI.Views.Finance.Customers;
 
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.Button;
-import org.Canal.UI.Elements.Form;
+import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Label;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Pipe;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 public class CreateCustomer extends JInternalFrame {
 
     public CreateCustomer(DesktopState desktop) {
-        setTitle("New Customer");
+        super("New Customer", false, true, false, true);
         setFrameIcon(new ImageIcon(CreateCustomer.class.getResource("/icons/create.png")));
         ArrayList<Location> ls = Engine.getCustomers();
         String genLocId = String.valueOf(100000 + (ls.size() + 1));
@@ -43,9 +44,7 @@ public class CreateCustomer extends JInternalFrame {
         f.addInput(new Label("Country", Constants.colors[5]), countryField);
         add(f, BorderLayout.CENTER);
         add(make, BorderLayout.SOUTH);
-        setResizable(false);
-        setIconifiable(true);
-        setClosable(true);
+        getRootPane().setDefaultButton(make);
         make.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

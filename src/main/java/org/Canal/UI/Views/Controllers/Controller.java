@@ -41,7 +41,7 @@ public class Controller extends JInternalFrame implements RefreshListener {
                     TreePath path = dataTree.getPathForLocation(e.getX(), e.getY());
                     if (path != null) {
                         DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
-                        Canal orgNode = (Canal) node.getUserObject();
+                        Locke orgNode = (Locke) node.getUserObject();
                         desktop.put(Engine.router(orgNode.getTransaction(), desktop));
                     }
                 }
@@ -61,7 +61,7 @@ public class Controller extends JInternalFrame implements RefreshListener {
 
     private void reloadStore(){
         Engine.load();
-        Canal rootNode = Constants.allModules();
+        Locke rootNode = Constants.allModules();
         DefaultMutableTreeNode rootTreeNode = createTreeNodes(rootNode);
         DefaultTreeModel model = (DefaultTreeModel) dataTree.getModel();
         model.setRoot(rootTreeNode);
@@ -71,7 +71,7 @@ public class Controller extends JInternalFrame implements RefreshListener {
     }
 
     private JTree createTree() {
-        Canal rootNode = Constants.allModules();
+        Locke rootNode = Constants.allModules();
         DefaultMutableTreeNode rootTreeNode = createTreeNodes(rootNode);
         DefaultTreeModel treeModel = new DefaultTreeModel(rootTreeNode);
         JTree tree = new JTree(treeModel);
@@ -86,10 +86,10 @@ public class Controller extends JInternalFrame implements RefreshListener {
         }
     }
 
-    private DefaultMutableTreeNode createTreeNodes(Canal node) {
+    private DefaultMutableTreeNode createTreeNodes(Locke node) {
         DefaultMutableTreeNode treeNode = new DefaultMutableTreeNode(node);
         if (node.getChildren() != null) {
-            for (Canal child : node.getChildren()) {
+            for (Locke child : node.getChildren()) {
                 treeNode.add(createTreeNodes(child));
             }
         }
@@ -101,7 +101,7 @@ public class Controller extends JInternalFrame implements RefreshListener {
         public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus) {
             Component component = super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
             DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) value;
-            Canal orgNode = (Canal) treeNode.getUserObject();
+            Locke orgNode = (Locke) treeNode.getUserObject();
             if (orgNode.getStatus()) {
                 setIcon(UIManager.getIcon("FileView.directoryIcon"));
             } else {

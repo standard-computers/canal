@@ -1,8 +1,10 @@
 package org.Canal.UI.Views.HR;
 
 import org.Canal.UI.Elements.Button;
+import org.Canal.UI.Elements.Inputs.Selectable;
+import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Label;
-import org.Canal.UI.Elements.*;
+import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import javax.swing.*;

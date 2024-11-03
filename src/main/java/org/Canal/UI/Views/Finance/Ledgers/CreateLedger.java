@@ -1,10 +1,19 @@
 package org.Canal.UI.Views.Finance.Ledgers;
 
 import org.Canal.Models.BusinessUnits.Ledger;
-import org.Canal.UI.Elements.Input;
+import org.Canal.UI.Elements.Button;
+import org.Canal.UI.Elements.Elements;
+import org.Canal.UI.Elements.Inputs.DatePicker;
+import org.Canal.UI.Elements.Inputs.Selectable;
+import org.Canal.UI.Elements.Inputs.Selectables;
+import org.Canal.UI.Elements.Label;
+import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.Utils.Constants;
+import org.Canal.Utils.DesktopState;
+import org.Canal.Utils.LockeStatus;
 import org.Canal.Utils.Pipe;
+
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -15,28 +24,55 @@ import java.time.LocalDate;
  */
 public class CreateLedger extends JInternalFrame {
 
-    public CreateLedger() {
-        setTitle("Create Ledger");
+    public CreateLedger(DesktopState desktop) {
+
+        super("Create Ledger", false, true, false, true);
         setFrameIcon(new ImageIcon(CreateLedger.class.getResource("/icons/create.png")));
-        JPanel panel = new JPanel(new GridLayout(2, 1));
-        panel.setBorder(new EmptyBorder(10, 10, 10, 10));
-        Input name = new Input("Ledger Name");
-        name.setValue("FY" + LocalDate.now().getYear());
-        Input id = new Input("Ledger ID");
-        id.setValue(String.valueOf(LocalDate.now().getYear()));
-        JButton create = new JButton("Create");
-        panel.add(name);
-        panel.add(id);
-        setLayout(new BorderLayout());
-        add(panel, BorderLayout.CENTER);
-        add(create, BorderLayout.SOUTH);
+
+        Form f = new Form();
+        JTextField ledgerIdField = Elements.input(String.valueOf(LocalDate.now().getYear()), 10);
+        Selectable organizations = Selectables.allOrgs();
+        JTextField ledgerNameField = Elements.input("FY" + LocalDate.now().getYear(), 10);
+        Selectable periods = Selectables.periods();
+        periods.editable();
+        DatePicker ledgerStartPicker = new DatePicker();
+        DatePicker ledgerEndPicker = new DatePicker();
+
+        f.addInput(new Label("*New Ledger ID", UIManager.getColor("Label.foreground")), ledgerIdField);
+        f.addInput(new Label("Organization", Constants.colors[0]), organizations);
+        f.addInput(new Label("Ledger Name", Constants.colors[1]), ledgerNameField);
+        f.addInput(new Label("Period", Constants.colors[2]), periods);
+        f.addInput(new Label("Start Date", Constants.colors[3]), ledgerStartPicker);
+        f.addInput(new Label("Close Date", Constants.colors[4]), ledgerEndPicker);
+
+        Button create = new Button("Create");
         getRootPane().setDefaultButton(create);
-        setResizable(false);
+        setLayout(new BorderLayout());
+        add(Elements.header("Create Ledger"), BorderLayout.NORTH);
+        add(create, BorderLayout.SOUTH);
+        add(f, BorderLayout.CENTER);
+
         create.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                Ledger l = new Ledger(id.value(), name.value());
+
+                String ledgerId = ledgerIdField.getText().trim();
+                String ledgerName = ledgerNameField.getText().trim();
+                String org = organizations.getSelectedValue();
+                String period = periods.getSelectedValue();
+
+                Ledger l = new Ledger();
+                l.setId(ledgerId);
+                l.setName(ledgerName);
+                l.setOrg(org);
+                l.setPeriod(period);
+                l.setStarts(ledgerStartPicker.getSelectedDateString());
+                l.setEnds(ledgerEndPicker.getSelectedDateString());
+                l.setCreated(Constants.now());
+                l.setStatus(LockeStatus.NEW);
+
                 Pipe.save("/LGS", l);
                 dispose();
+                desktop.put(new LedgerView(l, desktop));
             }
         });
     }

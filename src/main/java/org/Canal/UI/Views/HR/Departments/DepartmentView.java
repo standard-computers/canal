@@ -1,7 +1,7 @@
 package org.Canal.UI.Views.HR.Departments;
 
 import org.Canal.Models.HumanResources.Department;
-import org.Canal.UI.Elements.Copiable;
+import org.Canal.UI.Elements.Inputs.Copiable;
 import org.Canal.UI.Elements.IconButton;
 
 import javax.swing.*;

@@ -1,13 +1,17 @@
 package org.Canal.UI.Views.Orders.PurchaseRequisitions;
 
+import org.Canal.Models.BusinessUnits.PurchaseOrder;
 import org.Canal.Models.BusinessUnits.PurchaseRequisition;
+import org.Canal.UI.Elements.CustomJTable;
+import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
-import org.Canal.UI.Elements.Labels;
 import org.Canal.UI.Views.Controllers.CheckboxBarcodeFrame;
-import org.Canal.Utils.Constants;
+import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
+
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -18,23 +22,62 @@ import java.util.ArrayList;
  */
 public class PurchaseRequisitions extends JInternalFrame {
 
-    private JTable table;
+    private CustomJTable table;
     private DesktopState desktop;
 
     public PurchaseRequisitions(DesktopState desktop) {
-        super("Purchase Requisitions");
+        super("Purchase Requisitions", true, true, true, true);
         this.desktop = desktop;
+        setFrameIcon(new ImageIcon(PurchaseRequisitions.class.getResource("/icons/purchasereqs.png")));
         JPanel tb = createToolBar();
         JPanel holder = new JPanel(new BorderLayout());
         table = createTable();
         JScrollPane tableScrollPane = new JScrollPane(table);
-        holder.add(tableScrollPane, BorderLayout.CENTER);
-        holder.add(new JScrollPane(tb), BorderLayout.NORTH);
-        add(holder);
-        setIconifiable(true);
-        setClosable(true);
-        setResizable(true);
-        setMaximizable(true);
+        holder.add(Elements.header("All Purchase Requisitions", SwingConstants.LEFT), BorderLayout.NORTH);
+        holder.add(tb, BorderLayout.SOUTH);
+        setLayout(new BorderLayout());
+        add(holder, BorderLayout.NORTH);
+        add(tableScrollPane, BorderLayout.CENTER);
+    }
+
+    private CustomJTable createTable() {
+        String[] columns = new String[]{"ID", "Created", "Name", "Owner", "Number", "Supplier", "Buyer", "Max Spend", "Consumption", "Remaining", "Single Ord?", "Valid From", "Valid To", "Status"};
+        ArrayList<String[]> prs = new ArrayList<>();
+        for (PurchaseRequisition pr : Engine.realtime.getPurchaseRequisitions()) {
+            double consumption = 0;
+            for(PurchaseOrder po : Engine.getOrders()){
+                if(po.getPurchaseRequisition().equals(pr.getId())){
+                    consumption += po.getTotal();
+                }
+            }
+            double remaining = pr.getMaxSpend() - consumption;
+            prs.add(new String[]{
+                    pr.getId(),
+                    pr.getCreated(),
+                    pr.getName(),
+                    pr.getOwner(),
+                    pr.getNumber(),
+                    pr.getSupplier(),
+                    pr.getBuyer(),
+                    String.valueOf(pr.getMaxSpend()),
+                    String.valueOf(consumption),
+                    String.valueOf(remaining),
+                    String.valueOf(pr.isSingleOrder()),
+                    pr.getStart(),
+                    pr.getEnd(),
+                    String.valueOf(pr.getStatus())
+            });
+        }
+        String[][] data = new String[prs.size()][columns.length];
+        for (int i = 0; i < prs.size(); i++) {
+            data[i] = prs.get(i);
+        }
+        CustomJTable table = new CustomJTable(data, columns); // Use CustomJTable
+        table.setCellSelectionEnabled(true);
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        Engine.adjustColumnWidths(table);
+        return table;
     }
 
     private JPanel createToolBar() {
@@ -48,9 +91,7 @@ public class PurchaseRequisitions extends JInternalFrame {
         IconButton archivePo = new IconButton("Archive", "archive", "Archive PO, removes");
         IconButton autoMake = new IconButton("AutoMake", "automake", "AutoMake Purchase Requisitions");
         IconButton label = new IconButton("Barcodes", "label", "Print labels for org properties");
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(Labels.h3("Purchase Reqs", Constants.colors[6]));
-        tb.add(Box.createHorizontalStrut(5));
+        JTextField filterValue = Elements.input("Search", 10);
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(createPurchaseReq);
@@ -67,6 +108,8 @@ public class PurchaseRequisitions extends JInternalFrame {
         tb.add(Box.createHorizontalStrut(5));
         tb.add(label);
         tb.add(Box.createHorizontalStrut(5));
+        tb.add(filterValue);
+        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
         createPurchaseReq.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 desktop.put(new CreatePurchaseRequisition());
@@ -87,37 +130,5 @@ public class PurchaseRequisitions extends JInternalFrame {
             }
         });
         return tb;
-    }
-
-    private JTable createTable() {
-        String[] columns = new String[]{"ID", "CREATED", "NAME", "OWNER", "NUMBER", "SUPPLIER", "BUYER", "MAX SPEND", "REMAINING", "SINGLE ORD", "VALID FROM", "VALID TO", "STATUS"};
-        ArrayList<String[]> pos = new ArrayList<>();
-        for (PurchaseRequisition po : Engine.realtime.getPurchaseRequisitions()) {
-            pos.add(new String[]{
-                    po.getId(),
-                    po.getCreated(),
-                    po.getName(),
-                    po.getOwner(),
-                    po.getNumber(),
-                    po.getSupplier(),
-                    po.getBuyer(),
-                    String.valueOf(po.getMaxSpend()),
-                    "",
-                    String.valueOf(po.isSingleOrder()),
-                    po.getStart(),
-                    po.getEnd(),
-                    String.valueOf(po.getStatus())
-            });
-        }
-        String[][] data = new String[pos.size()][columns.length];
-        for (int i = 0; i < pos.size(); i++) {
-            data[i] = pos.get(i);
-        }
-        JTable table = new JTable(data, columns);
-        table.setCellSelectionEnabled(true);
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        Engine.adjustColumnWidths(table);
-        return table;
     }
 }

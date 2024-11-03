@@ -2,6 +2,7 @@ package org.Canal.UI.Views.HR.Organizations;
 
 import org.Canal.Models.BusinessUnits.Organization;
 import org.Canal.UI.Elements.Button;
+import org.Canal.UI.Elements.Elements;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import javax.swing.*;
@@ -39,10 +40,10 @@ public class Organizations extends JInternalFrame {
                 }
             }
         });
-        JTextField direct = new JTextField();
-        direct.addActionListener(e -> openOrgViewById(direct.getText()));
+        JTextField direct = Elements.input("", 25);
+        direct.addActionListener(_ -> openOrgViewById(direct.getText()));
         Button nla = new Button("Create");
-        nla.addActionListener(e -> desktop.put(new CreateOrganization(desktop)));
+        nla.addActionListener(_ -> desktop.put(new CreateOrganization(desktop)));
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
         mainPanel.add(direct, BorderLayout.NORTH);
@@ -87,7 +88,7 @@ public class Organizations extends JInternalFrame {
         return null;
     }
 
-    class OrgListRenderer extends JPanel implements ListCellRenderer<Organization> {
+    static class OrgListRenderer extends JPanel implements ListCellRenderer<Organization> {
 
         private JLabel orgName;
         private JLabel orgId;

@@ -1,6 +1,6 @@
 package org.Canal.Models.SupplyChainUnits;
 
-import org.Canal.Utils.LockeType;
+import org.Canal.Utils.LockeStatus;
 
 public class InboundDelivery {
 
@@ -10,7 +10,7 @@ public class InboundDelivery {
     private String destination; //Location ID
     private Area destinationArea;
     private Door destinationDoor;
-    private LockeType status;
+    private LockeStatus status;
 
     public String getId() {
         return id;

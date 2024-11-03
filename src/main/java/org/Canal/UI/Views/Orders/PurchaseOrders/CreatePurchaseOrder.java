@@ -7,12 +7,17 @@ import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Button;
+import org.Canal.UI.Elements.Inputs.Copiable;
+import org.Canal.UI.Elements.Inputs.DatePicker;
+import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Label;
+import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
-import org.Canal.Utils.LockeType;
+import org.Canal.Utils.LockeStatus;
 import org.Canal.Utils.Pipe;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
@@ -28,6 +33,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
+/**
+ * /ORDS/NEW, /ORDS/PO/NEW
+ */
 public class CreatePurchaseOrder extends JInternalFrame {
 
     private PurchaseOrder newOrder;
@@ -108,8 +116,8 @@ public class CreatePurchaseOrder extends JInternalFrame {
                     JOptionPane.showMessageDialog(null, "Must select a delivery date.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                PurchaseRequisition assignedPO = Engine.realtime.getPurchaseRequisitions(availablePrs.getSelectedValue());
-                if(!selectVendor.getSelectedValue().equals(assignedPO.getSupplier())){
+                PurchaseRequisition assignedPR = Engine.realtime.getPurchaseRequisitions(availablePrs.getSelectedValue());
+                if(!selectVendor.getSelectedValue().equals(assignedPR.getSupplier())){
                     JOptionPane.showMessageDialog(null, "Selected PO is not for this vendor.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
@@ -122,7 +130,7 @@ public class CreatePurchaseOrder extends JInternalFrame {
                     newOrder.setPurchaseRequisition(availablePrs.getSelectedValue());
                     SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
                     newOrder.setExpectedDelivery(dateFormat.format(expectedDelivery.getSelectedDate()));
-                    newOrder.setStatus(LockeType.NEW);
+                    newOrder.setStatus(LockeStatus.NEW);
                     ArrayList<OrderLineItem> lineitems = new ArrayList<>();
                     for (int row = 0; row < model.getRowCount(); row++) {
                         for (int col = 0; col < model.getColumnCount(); col++) {
@@ -144,6 +152,8 @@ public class CreatePurchaseOrder extends JInternalFrame {
                     newOrder.setTaxAmount(taxRate * Double.parseDouble(model.getTotalPrice()));
                     newOrder.setTotal(taxRate * Double.parseDouble(model.getTotalPrice()) + Double.parseDouble(model.getTotalPrice()));
                     newOrder.setOrderedOn(LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss")));
+                    assignedPR.setStatus(LockeStatus.IN_USE);
+                    assignedPR.save();
                     Pipe.save("/ORDS", newOrder);
                     dispose();
                     JOptionPane.showMessageDialog(null, "Order submitted.");
@@ -170,11 +180,14 @@ public class CreatePurchaseOrder extends JInternalFrame {
             vendorable.put(l.getName() + " - " + l.getId(), l.getId());
         }
         selectBillTo = new Selectable(billtoables);
+        selectBillTo.editable();
         selectShipTo = new Selectable(billtoables);
+        selectShipTo.editable();
         for(Location l : Engine.getVendors()){
             vendorable.put(l.getName() + " - " + l.getId(), l.getId());
         }
         selectVendor = new Selectable(vendorable);
+        selectVendor.editable();
         orderId = new Copiable("OR" + (70000000 + (Engine.getOrders().size() + 1)));
         f.addInput(new Label("*Order ID", Constants.colors[0]), orderId);
         f.addInput(new Label("Supplier/Vendor", Constants.colors[1]), selectVendor);
@@ -211,9 +224,9 @@ public class CreatePurchaseOrder extends JInternalFrame {
         taxAmount = new JLabel("$" + df.format(taxRate * Double.parseDouble(model.getTotalPrice())));
         taxAmount.setFont(UIManager.getFont("h3.font"));
         f.addInput(new JLabel("Tax Amount"), taxAmount);
-        totalAmount = Labels.h2("$" + df.format(taxRate * Double.parseDouble(model.getTotalPrice()) + Double.parseDouble(model.getTotalPrice())));
+        totalAmount = Elements.h2("$" + df.format(taxRate * Double.parseDouble(model.getTotalPrice()) + Double.parseDouble(model.getTotalPrice())));
         totalAmount.setForeground(new Color(33, 124, 13));
-        f.addInput(Labels.h2("Total"), totalAmount);
+        f.addInput(Elements.h2("Total"), totalAmount);
         return f;
     }
 

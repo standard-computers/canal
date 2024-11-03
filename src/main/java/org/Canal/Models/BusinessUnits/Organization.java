@@ -2,13 +2,17 @@ package org.Canal.Models.BusinessUnits;
 
 import org.Canal.Models.HumanResources.Department;
 import org.Canal.Start;
-import org.Canal.Utils.Configuration;
-import org.Canal.Utils.Engine;
 import org.Canal.Utils.Json;
 
 import java.io.File;
 import java.util.ArrayList;
 
+/**
+ * Organization is a Corporation.
+ * As an example for setup, if you were an Intl. company you would do:
+ * Org 1 – ID: 0001 – US Division
+ * Org 2 – ID: 0002 – CA Division
+ */
 public class Organization {
 
     private String id;
@@ -146,12 +150,11 @@ public class Organization {
     public void save(){
         File md = new File(Start.WINDOWS_SYSTEM_DIR + "\\.store\\ORGS\\");
         File[] mdf = md.listFiles();
-        if (mdf != null && mdf.length > 0) {
-            for (int i = 0; i < mdf.length; i++) {
-                File file = mdf[i];
+        if (mdf != null) {
+            for (File file : mdf) {
                 if (file.getPath().endsWith(".orgs")) {
                     Organization forg = Json.load(file.getPath(), Organization.class);
-                    if(forg.getId().equals(this.id)){
+                    if (forg.getId().equals(id)) {
                         Json.save(file.getPath(), this);
                     }
                     break;

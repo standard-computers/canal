@@ -1,6 +1,6 @@
 package org.Canal.UI.Views.Inventory;
 
-import org.Canal.UI.Elements.FormFrame;
+import org.Canal.UI.Elements.Windows.FormFrame;
 import org.Canal.UI.Elements.Label;
 import javax.swing.*;
 import java.awt.*;

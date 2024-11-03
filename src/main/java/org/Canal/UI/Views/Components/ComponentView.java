@@ -2,10 +2,12 @@ package org.Canal.UI.Views.Components;
 
 import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.Models.SupplyChainUnits.Location;
+import org.Canal.UI.Elements.Inputs.Copiable;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.*;
+import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Views.Items.Items;
-import org.Canal.Utils.Canal;
+import org.Canal.Utils.Locke;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 
@@ -35,7 +37,7 @@ public class ComponentView extends JInternalFrame {
         add(tb, BorderLayout.NORTH);
 
         JPanel iic = new JPanel(new BorderLayout());
-        iic.add(Labels.h2("Item Information"), BorderLayout.NORTH);
+        iic.add(Elements.h2("Item Information"), BorderLayout.NORTH);
         iic.add(itemInfo(), BorderLayout.CENTER);
 
         JScrollPane itemScrollPane = new JScrollPane(iic);
@@ -55,7 +57,7 @@ public class ComponentView extends JInternalFrame {
             public void mouseClicked(MouseEvent e) {
                 TreePath path = dataTree.getPathForLocation(e.getX(), e.getY());
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
-                Canal orgNode = (Canal) node.getUserObject();
+                Locke orgNode = (Locke) node.getUserObject();
                 Item selectedItem  = Engine.getItem(orgNode.getTransaction());
                 idField.setText(selectedItem.getId());
                 orgField.setText(selectedItem.getOrg());
@@ -169,7 +171,7 @@ public class ComponentView extends JInternalFrame {
         refresh.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 Engine.load();
-                Canal rootNode = createRootNode();
+                Locke rootNode = createRootNode();
                 DefaultMutableTreeNode rootTreeNode = createTreeNodes(rootNode);
                 DefaultTreeModel model = (DefaultTreeModel) dataTree.getModel();
                 model.setRoot(rootTreeNode);
@@ -187,7 +189,7 @@ public class ComponentView extends JInternalFrame {
     }
 
     private JTree createTree() {
-        Canal rootNode = createRootNode();
+        Locke rootNode = createRootNode();
         DefaultMutableTreeNode rootTreeNode = createTreeNodes(rootNode);
         DefaultTreeModel treeModel = new DefaultTreeModel(rootTreeNode);
         JTree tree = new JTree(treeModel);
@@ -196,20 +198,20 @@ public class ComponentView extends JInternalFrame {
         return tree;
     }
 
-    private Canal createRootNode() {
+    private Locke createRootNode() {
 
-        Canal[] items = new Canal[Engine.getItems(Engine.getOrganization().getId()).size()];
+        Locke[] items = new Locke[Engine.getItems(Engine.getOrganization().getId()).size()];
         for (int i = 0; i < Engine.getItems(Engine.getOrganization().getId()).size(); i++) {
             Item l = Engine.getItems(Engine.getOrganization().getId()).get(i);
-            items[i] = new Canal(l.getId() + " - " + l.getName() + " / Items", false, l.getId(), new Color(147, 70, 3), null);
+            items[i] = new Locke(l.getId() + " - " + l.getName() + " / Items", false, l.getId(), new Color(147, 70, 3), null);
         }
-        return new Canal(Engine.getOrganization().getId() + " - " + Engine.getOrganization().getName(), true, "/ITS", items);
+        return new Locke(Engine.getOrganization().getId() + " - " + Engine.getOrganization().getName(), true, "/ITS", items);
     }
 
-    private DefaultMutableTreeNode createTreeNodes(Canal node) {
+    private DefaultMutableTreeNode createTreeNodes(Locke node) {
         DefaultMutableTreeNode treeNode = new DefaultMutableTreeNode(node);
         if (node.getChildren() != null) {
-            for (Canal child : node.getChildren()) {
+            for (Locke child : node.getChildren()) {
                 treeNode.add(createTreeNodes(child));
             }
         }
@@ -221,7 +223,7 @@ public class ComponentView extends JInternalFrame {
         public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus) {
             Component component = super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
             DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) value;
-            Canal orgNode = (Canal) treeNode.getUserObject();
+            Locke orgNode = (Locke) treeNode.getUserObject();
             if (orgNode.getStatus()) {
                 setIcon(UIManager.getIcon("FileView.directoryIcon"));
             } else {

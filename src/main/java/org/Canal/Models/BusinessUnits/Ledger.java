@@ -1,32 +1,29 @@
 package org.Canal.Models.BusinessUnits;
 
 import org.Canal.Models.SupplyChainUnits.Transaction;
-import org.Canal.Utils.Engine;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import org.Canal.Start;
+import org.Canal.Utils.Json;
+import org.Canal.Utils.LockeStatus;
+
+import java.io.File;
 import java.util.ArrayList;
 
+/**
+ * Ledger contains a record of certian transactions
+ * done through Lockes that should be tracked for
+ * business purposes.
+ */
 public class Ledger {
 
     private String id;
     public String name;
     public String org;
     public String period;
-    private long starts, ends;
-    private int created, closed;
+    private String starts;
+    private String ends;
+    private String created;
     private ArrayList<Transaction> transactions = new ArrayList<>();
-
-    public Ledger(String id, String name) {
-        this.id = id;
-        this.name = name;
-        this.org = Engine.getOrganization().getId();
-        this.period = id;
-        int currentYear = LocalDateTime.now().getYear();
-        LocalDateTime startOfYear = LocalDateTime.of(currentYear, 1, 1, 0, 0);
-        starts = startOfYear.toEpochSecond(ZoneOffset.UTC);
-        LocalDateTime endOfYear = LocalDateTime.of(currentYear, 12, 31, 23, 59, 59);
-        ends = endOfYear.toEpochSecond(ZoneOffset.UTC);
-    }
+    private LockeStatus status = LockeStatus.NEW;
 
     public String getId() {
         return id;
@@ -48,6 +45,10 @@ public class Ledger {
         return org;
     }
 
+    public void setOrg(String org) {
+        this.org = org;
+    }
+
     public String getPeriod() {
         return period;
     }
@@ -56,28 +57,40 @@ public class Ledger {
         this.period = period;
     }
 
-    public long getStarts() {
+    public String getStarts() {
         return starts;
     }
 
-    public long getEnds() {
+    public void setStarts(String starts) {
+        this.starts = starts;
+    }
+
+    public String getEnds() {
         return ends;
     }
 
-    public int getCreated() {
+    public void setEnds(String ends) {
+        this.ends = ends;
+    }
+
+    public String getCreated() {
         return created;
     }
 
-    public void setCreated(int created) {
+    public void setCreated(String created) {
         this.created = created;
     }
 
-    public int getClosed() {
-        return closed;
+    public LockeStatus getStatus() {
+        return status;
     }
 
-    public void setClosed(int closed) {
-        this.closed = closed;
+    public void setStatus(LockeStatus status) {
+        this.status = status;
+    }
+
+    public void setTransactions(ArrayList<Transaction> transactions) {
+        this.transactions = transactions;
     }
 
     public ArrayList<Transaction> getTransactions() {
@@ -86,5 +99,21 @@ public class Ledger {
 
     public void addTransaction(Transaction transaction) {
         transactions.add(transaction);
+    }
+
+    public void save(){
+        File md = new File(Start.WINDOWS_SYSTEM_DIR + "\\.store\\LGS\\");
+        File[] mdf = md.listFiles();
+        if (mdf != null) {
+            for (File file : mdf) {
+                if (file.getPath().endsWith(".lgs")) {
+                    Ledger fl = Json.load(file.getPath(), Ledger.class);
+                    if (fl.getId().equals(id)) {
+                        Json.save(file.getPath(), this);
+                    }
+                    break;
+                }
+            }
+        }
     }
 }

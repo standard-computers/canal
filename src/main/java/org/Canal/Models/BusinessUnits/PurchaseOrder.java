@@ -1,14 +1,18 @@
 package org.Canal.Models.BusinessUnits;
 
-import org.Canal.Utils.LockeType;
+import org.Canal.Start;
+import org.Canal.Utils.Json;
+import org.Canal.Utils.LockeStatus;
+
+import java.io.File;
 import java.util.ArrayList;
 
 public class PurchaseOrder {
 
     private String orderId; //Order ID
     private String owner; //ID of User who is creating order
-    private String orderedOn;
-    private String expectedDelivery;
+    private String orderedOn; //Timestamp this was ordered on
+    private String expectedDelivery; //When this should arrive to ship to
     private String purchaseRequisition; //Purchase Requisition ID
     private String billTo; //Location ID
     private String shipTo; //Location ID
@@ -18,7 +22,7 @@ public class PurchaseOrder {
     private String vendor;
     private ArrayList<OrderLineItem> items = new ArrayList<>();
     private double netValue, taxRate, taxAmount, total;
-    private LockeType status;
+    private LockeStatus status;
 
     public String getOrderId() {
         return orderId;
@@ -116,11 +120,11 @@ public class PurchaseOrder {
         this.items = items;
     }
 
-    public LockeType getStatus() {
+    public LockeStatus getStatus() {
         return status;
     }
 
-    public void setStatus(LockeType status) {
+    public void setStatus(LockeStatus status) {
         this.status = status;
     }
 
@@ -154,5 +158,21 @@ public class PurchaseOrder {
 
     public void setTotal(double total) {
         this.total = total;
+    }
+
+    public void save(){
+        File md = new File(Start.WINDOWS_SYSTEM_DIR + "\\.store\\ORDS\\");
+        File[] mdf = md.listFiles();
+        if (mdf != null) {
+            for (File file : mdf) {
+                if (file.getPath().endsWith(".ords")) {
+                    PurchaseOrder forg = Json.load(file.getPath(), PurchaseOrder.class);
+                    if (forg.getOrderId().equals(getOrderId())) {
+                        Json.save(file.getPath(), this);
+                    }
+                    break;
+                }
+            }
+        }
     }
 }

@@ -2,19 +2,23 @@ package org.Canal.UI.Views.Productivity.Tasks;
 
 import org.Canal.Models.BusinessUnits.PurchaseOrder;
 import org.Canal.Models.SupplyChainUnits.Location;
+import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
-import org.Canal.UI.Elements.Labels;
 import org.Canal.UI.Views.Orders.PurchaseOrders.CreatePurchaseOrder;
 import org.Canal.UI.Views.Controllers.CheckboxBarcodeFrame;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+/**
+ * /TSKS
+ */
 public class TaskList extends JInternalFrame {
 
     private JTable table;
@@ -22,7 +26,7 @@ public class TaskList extends JInternalFrame {
     private Location location;
 
     public TaskList(Location location, DesktopState desktop) {
-        super("Task List");
+        super("Task List", true, true, true, true);
         this.desktop = desktop;
         JPanel tb = createToolBar();
         JPanel holder = new JPanel(new BorderLayout());
@@ -31,10 +35,6 @@ public class TaskList extends JInternalFrame {
         holder.add(tableScrollPane, BorderLayout.CENTER);
         holder.add(tb, BorderLayout.NORTH);
         add(holder);
-        setIconifiable(true);
-        setClosable(true);
-        setMaximizable(true);
-        setResizable(true);
     }
 
     private JPanel createToolBar() {
@@ -48,7 +48,7 @@ public class TaskList extends JInternalFrame {
         IconButton archivePo = new IconButton("Archive", "archive", "Archive PO, removes");
         IconButton label = new IconButton("Barcodes", "label", "Print labels for org properties");
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(Labels.h3("Purchase Orders", Constants.colors[9]));
+        tb.add(Elements.h3("Purchase Orders", Constants.colors[9]));
         tb.add(Box.createHorizontalStrut(5));
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));

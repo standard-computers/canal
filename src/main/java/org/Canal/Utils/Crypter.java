@@ -41,4 +41,10 @@ public class Crypter {
         keyBytes = Arrays.copyOf(keyBytes, 16);
         return new SecretKeySpec(keyBytes, "AES");
     }
+
+    public static String md5(String content) throws Exception {
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        md.update(content.getBytes(CHARSET));
+        return Base64.getEncoder().encodeToString(md.digest());
+    }
 }

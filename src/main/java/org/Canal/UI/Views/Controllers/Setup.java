@@ -1,9 +1,7 @@
 package org.Canal.UI.Views.Controllers;
 
-import org.Canal.Models.SupplyChainUnits.Transaction;
 import org.Canal.Start;
-import org.Canal.UI.Elements.Frame;
-import org.Canal.UI.Elements.Input;
+import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Views.HR.Organizations.OrgView;
 import org.Canal.Utils.Configuration;
 import org.Canal.Utils.Json;
@@ -16,12 +14,11 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class Setup extends Frame {
+public class Setup extends JFrame {
 
     public Setup(ArrayList<Configuration> configs){
-        super(new Transaction(".cnl.mfg", "/"));
-        Input srvAdd = new Input("Database Address");
-        Input instance = new Input("Instance Name");
+        JTextField srvAdd = Elements.input("Database Address", 10);
+        JTextField instance = Elements.input("Instance Name", 10);
         JButton proceed = new JButton("Begin");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JPanel p = new JPanel(new GridLayout(3, 1));
@@ -35,13 +32,13 @@ public class Setup extends Frame {
         setVisible(true);
         proceed.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                String addr = srvAdd.value();
+                String addr = srvAdd.getText();
                 if(configs == null){
                     if(addr.startsWith("http://") || addr.startsWith("https://")){
                         String l = addr.split("://")[1];
                         if(l.startsWith("127.0.0.1") || l.startsWith("localhost")){
-                            Configuration cfg = new Configuration(addr, instance.value());
-                            Json.save(Start.WINDOWS_SYSTEM_DIR + UUID.randomUUID().toString() + ".cnl.mfg", cfg);
+                            Configuration cfg = new Configuration(addr, instance.getText());
+                            Json.save(Start.WINDOWS_SYSTEM_DIR + UUID.randomUUID() + ".cnl.mfg", cfg);
                         }else{
                             //TODO attempt remote server connection
                         }

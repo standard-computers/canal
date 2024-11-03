@@ -1,7 +1,8 @@
 package org.Canal.UI.Views.Controllers;
 
-import org.Canal.UI.Elements.Labels;
+import org.Canal.UI.Elements.Elements;
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * /CNL/SMPL_FRMS
@@ -9,18 +10,10 @@ import javax.swing.*;
 public class SimpleForms extends JInternalFrame {
 
     public SimpleForms() {
-        setTitle("SimpleForms");
+        super("SimpleForms", true, true, true, true);
         setFrameIcon(new ImageIcon(SimpleForms.class.getResource("/icons/create.png")));
-
-        JPanel titleBar = new JPanel();
-        titleBar.setLayout(new BoxLayout(titleBar, BoxLayout.Y_AXIS));
-        titleBar.add(Box.createVerticalGlue());
-        titleBar.add(Labels.h3("SimpleForms"));
-
-
-        setIconifiable(true);
-        setClosable(true);
-        setResizable(true);
-        setMaximizable(true);
+        JPanel titleBar = Elements.header("SimpleForms");
+        setLayout(new BorderLayout());
+        add(titleBar, BorderLayout.NORTH);
     }
 }

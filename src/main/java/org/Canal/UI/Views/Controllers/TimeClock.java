@@ -2,6 +2,7 @@ package org.Canal.UI.Views.Controllers;
 
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Label;
+import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.Utils.DesktopState;
 
 import javax.swing.*;
@@ -57,7 +58,7 @@ public class TimeClock extends JInternalFrame {
         main.add(dayControl);
         main.add(breakControl);
         setLayout(new BorderLayout());
-        JLabel welcome = Labels.h3("Employee Time Clock");
+        JLabel welcome = Elements.h3("Employee Time Clock");
         JPanel header = new JPanel();
         header.add(welcome);
         add(header, BorderLayout.NORTH);

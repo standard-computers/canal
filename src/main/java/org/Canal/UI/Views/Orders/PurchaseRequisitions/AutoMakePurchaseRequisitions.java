@@ -4,10 +4,16 @@ import org.Canal.Models.BusinessUnits.PurchaseRequisition;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Button;
+import org.Canal.UI.Elements.Inputs.Copiable;
+import org.Canal.UI.Elements.Inputs.DatePicker;
+import org.Canal.UI.Elements.Inputs.Selectable;
+import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Label;
+import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Pipe;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
@@ -52,7 +58,7 @@ public class AutoMakePurchaseRequisitions extends JInternalFrame {
         addtlInfo.addInput(new Label("To", Constants.colors[5]), prEndDateField);
         addtlInfo.addInput(new Label("Notes", Constants.colors[4]), prNotesField);
         main.add(addtlInfo);
-        JLabel description = Labels.h3("Creates a Purchase Req. for each buyer from selected supplier with info.");
+        JLabel description = Elements.h3("Creates a Purchase Req. for each buyer from selected supplier with info.");
         description.setBorder(new EmptyBorder(10, 10, 10, 10));
         add(description, BorderLayout.NORTH);
         add(main, BorderLayout.CENTER);

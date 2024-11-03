@@ -1,13 +1,15 @@
 package org.Canal.UI.Views.Orders.PurchaseOrders;
 
 import org.Canal.Models.BusinessUnits.PurchaseOrder;
+import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
-import org.Canal.UI.Elements.Labels;
 import org.Canal.UI.Views.Controllers.CheckboxBarcodeFrame;
-import org.Canal.Utils.Constants;
+import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
+
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -22,19 +24,19 @@ public class PurchaseOrders extends JInternalFrame {
     private DesktopState desktop;
 
     public PurchaseOrders(DesktopState desktop) {
-        super("Purchase Orders");
+        super("Purchase Orders", true, true, true, true);
         this.desktop = desktop;
+        setFrameIcon(new ImageIcon(PurchaseOrders.class.getResource("/icons/purchaseorders.png")));
         JPanel tb = createToolBar();
         JPanel holder = new JPanel(new BorderLayout());
         table = createTable();
         JScrollPane tableScrollPane = new JScrollPane(table);
-        holder.add(tableScrollPane, BorderLayout.CENTER);
-        holder.add(tb, BorderLayout.NORTH);
+        holder.add(Elements.header("All Purchase Orders", SwingConstants.LEFT), BorderLayout.CENTER);
+        holder.add(tb, BorderLayout.SOUTH);
         add(holder);
-        setIconifiable(true);
-        setClosable(true);
-        setMaximizable(true);
-        setResizable(true);
+        setLayout(new BorderLayout());
+        add(holder, BorderLayout.NORTH);
+        add(tableScrollPane, BorderLayout.CENTER);
     }
 
     private JPanel createToolBar() {
@@ -47,9 +49,7 @@ public class PurchaseOrders extends JInternalFrame {
         IconButton activatePO = new IconButton("Start", "start", "Resume/Activate PO");
         IconButton archivePo = new IconButton("Archive", "archive", "Archive PO, removes");
         IconButton label = new IconButton("Barcodes", "label", "Print labels for org properties");
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(Labels.h3("Purchase Orders", Constants.colors[9]));
-        tb.add(Box.createHorizontalStrut(5));
+        JTextField filterValue = Elements.input("Search", 10);
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(createPurchaseOrder);
@@ -64,6 +64,8 @@ public class PurchaseOrders extends JInternalFrame {
         tb.add(Box.createHorizontalStrut(5));
         tb.add(label);
         tb.add(Box.createHorizontalStrut(5));
+        tb.add(filterValue);
+        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
         createPurchaseOrder.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 desktop.put(new CreatePurchaseOrder());
@@ -82,17 +84,24 @@ public class PurchaseOrders extends JInternalFrame {
     }
 
     private JTable createTable() {
-        String[] columns = new String[]{"ID", "Owner", "Supplier", "Ship To", "Bill To", "Sold To", "Customer", "Status"};
+        String[] columns = new String[]{
+                "ID", "Owner", "Ordered", "Expexcted Deliv.", "Purchase Req.",
+                "Supplier", "Ship To", "Bill To", "Sold To", "Customer", "Status"
+        };
         ArrayList<String[]> pos = new ArrayList<>();
         for (PurchaseOrder po : Engine.realtime.getPurchaseOrders()) {
             pos.add(new String[]{
                     po.getOrderId(),
                     po.getOwner(),
+                    po.getOrderedOn(),
+                    po.getExpectedDelivery(),
+                    po.getPurchaseRequisition(),
                     po.getVendor(),
                     po.getShipTo(),
                     po.getBillTo(),
                     po.getSoldTo(),
                     po.getCustomer(),
+                    String.valueOf(po.getTotal()),
                     String.valueOf(po.getStatus())
             });
         }

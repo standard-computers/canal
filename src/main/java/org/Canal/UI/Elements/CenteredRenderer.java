@@ -5,8 +5,9 @@ import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 
 public class CenteredRenderer extends DefaultTableCellRenderer {
+
     public CenteredRenderer() {
-        setHorizontalAlignment(SwingConstants.CENTER); // Center text
+        setHorizontalAlignment(SwingConstants.CENTER);
     }
 
     @Override

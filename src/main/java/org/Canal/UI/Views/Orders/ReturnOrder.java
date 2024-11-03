@@ -1,12 +1,11 @@
 package org.Canal.UI.Views.Orders;
 
 import org.Canal.Models.BusinessUnits.PurchaseOrder;
-import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.Button;
-import org.Canal.UI.Elements.Form;
+import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Label;
-import org.Canal.UI.Elements.Selectable;
+import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
