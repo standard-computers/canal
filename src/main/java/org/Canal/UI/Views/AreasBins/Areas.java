@@ -71,7 +71,7 @@ public class Areas extends JInternalFrame {
         }
     }
 
-    class AreaRenderer extends JPanel implements ListCellRenderer<Area> {
+    static class AreaRenderer extends JPanel implements ListCellRenderer<Area> {
 
         private JLabel areaName;
         private JLabel areaId;
@@ -89,7 +89,7 @@ public class Areas extends JInternalFrame {
 
         @Override
         public Component getListCellRendererComponent(JList<? extends Area> list, Area value, int index, boolean isSelected, boolean cellHasFocus) {
-            areaName.setText(value.getValue("name"));
+            areaName.setText(value.getName());
             areaId.setText(value.getId());
             if (isSelected) {
                 setBackground(list.getSelectionBackground());

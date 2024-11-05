@@ -87,7 +87,7 @@ public class Bins extends JInternalFrame {
 
         @Override
         public Component getListCellRendererComponent(JList<? extends Area> list, Area value, int index, boolean isSelected, boolean cellHasFocus) {
-            binName.setText(value.getValue("name"));
+            binName.setText(value.getName());
             binId.setText(value.getId());
             if (isSelected) {
                 setBackground(list.getSelectionBackground());

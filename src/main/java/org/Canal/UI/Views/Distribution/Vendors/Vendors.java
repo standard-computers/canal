@@ -1,9 +1,10 @@
 package org.Canal.UI.Views.Distribution.Vendors;
 
-import org.Canal.Models.SupplyChainUnits.Location;
+import org.Canal.Models.SupplyChainUnits.Vendor;
 import org.Canal.UI.Elements.Button;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -14,32 +15,30 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 /**
- * /WHS
+ * /VEND
  */
 public class Vendors extends JInternalFrame {
 
-    private String tcode;
-    private DefaultListModel<Location> listModel;
+    private DefaultListModel<Vendor> listModel;
 
-    public Vendors(String type, String tcode, DesktopState desktop) {
-        setTitle("Locations");
-        this.tcode = tcode;
+    public Vendors(DesktopState desktop) {
+        super("Vendors", false, true, false, true);
+        setFrameIcon(new ImageIcon(Vendors.class.getResource("/icons/vendors.png")));
         listModel = new DefaultListModel<>();
-        JList<Location> list = new JList<>(listModel);
-        list.setCellRenderer(new LocationRenderer());
+        JList<Vendor> list = new JList<>(listModel);
+        list.setCellRenderer(new VendorRenderer());
         JScrollPane scrollPane = new JScrollPane(list);
-        scrollPane.setPreferredSize(new Dimension(300, 400));
         list.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     int selectedIndex = list.locationToIndex(e.getPoint());
                     if (selectedIndex != -1) {
-                        Location l = listModel.getElementAt(selectedIndex);
+                        Vendor l = listModel.getElementAt(selectedIndex);
                         if (l != null) {
-                            desktop.put(Engine.router(tcode + "/" + l.getId(), desktop));
+                            desktop.put(Engine.router("/VEND/" + l.getId(), desktop));
                         } else {
-                            JOptionPane.showMessageDialog(null, "Location Not Found");
+                            JOptionPane.showMessageDialog(null, "Vendor Not Found");
                         }
                     }
                 }
@@ -52,13 +51,13 @@ public class Vendors extends JInternalFrame {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     String inputText = direct.getText().trim();
                     if (!inputText.isEmpty()) {
-                        desktop.put(Engine.router(tcode + "/" + inputText, desktop));
+                        desktop.put(Engine.router("/VEND/" + inputText, desktop));
                     }
                 }
             }
         });
-        Button nla = new Button("Add");
-        nla.addActionListener(e -> desktop.put(Engine.router(tcode + "/NEW", desktop)));
+        Button nla = new Button("Add a Vendor");
+        nla.addActionListener(_ -> desktop.put(Engine.router("/VEND//NEW", desktop)));
         JPanel options = new JPanel();
         options.add(nla);
         JPanel mainPanel = new JPanel();
@@ -67,55 +66,47 @@ public class Vendors extends JInternalFrame {
         mainPanel.add(scrollPane, BorderLayout.CENTER);
         mainPanel.add(options, BorderLayout.SOUTH);
         add(mainPanel);
-        setResizable(false);
         loadLocations();
     }
 
     private void loadLocations(){
-        ArrayList<Location> found = new ArrayList<>();
+        ArrayList<Vendor> found = Engine.getVendors();
         listModel.removeAllElements();
-        Engine.load();
-        switch (tcode){
-            case "/CCS" -> found = Engine.getCostCenters();
-            case "/CSTS" -> found = Engine.getCustomers();
-            case "/DCSS" -> found = Engine.getDistributionCenters();
-            case "/VEND" -> found = Engine.getVendors();
-        }
-        for (Location loc : found) {
+        for (Vendor loc : found) {
             listModel.addElement(loc);
         }
     }
 
-    class LocationRenderer extends JPanel implements ListCellRenderer<Location> {
+    static class VendorRenderer extends JPanel implements ListCellRenderer<Vendor> {
 
-        private JLabel ccName;
-        private JLabel ccId;
+        private JLabel vendorName;
+        private JLabel vendorId;
         private JLabel line1;
         private JLabel line2;
 
-        public LocationRenderer() {
+        public VendorRenderer() {
             setLayout(new GridLayout(4, 1));
-            ccName = new JLabel();
-            ccId = new JLabel();
+            vendorName = new JLabel();
+            vendorId = new JLabel();
             line1 = new JLabel();
             line2 = new JLabel();
-            ccName.setFont(new Font("Arial", Font.BOLD, 16));
-            ccId.setFont(new Font("Arial", Font.PLAIN, 12));
+            vendorName.setFont(new Font("Arial", Font.BOLD, 16));
+            vendorId.setFont(new Font("Arial", Font.PLAIN, 12));
             line1.setFont(new Font("Arial", Font.PLAIN, 12));
             line2.setFont(new Font("Arial", Font.PLAIN, 12));
-            add(ccName);
-            add(ccId);
+            add(vendorName);
+            add(vendorId);
             add(line1);
             add(line2);
             setBorder(new EmptyBorder(5, 5, 5, 5));
         }
 
         @Override
-        public Component getListCellRendererComponent(JList<? extends Location> list, Location value, int index, boolean isSelected, boolean cellHasFocus) {
-            ccName.setText(value.getName());
-            ccId.setText(value.getId());
-            line1.setText(value.getLine1());
-            line2.setText(value.getCity() + ", " + value.getState() + " " + value.getPostal() + " " + value.getCountry());
+        public Component getListCellRendererComponent(JList<? extends Vendor> list, Vendor vendor, int index, boolean isSelected, boolean cellHasFocus) {
+            vendorName.setText(vendor.getName());
+            vendorId.setText(vendor.getId());
+            line1.setText(vendor.getLine1());
+            line2.setText(vendor.getCity() + ", " + vendor.getState() + " " + vendor.getPostal() + " " + vendor.getCountry());
             if (isSelected) {
                 setBackground(list.getSelectionBackground());
                 setForeground(list.getSelectionForeground());

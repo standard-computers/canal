@@ -3,6 +3,7 @@ package org.Canal.UI.Elements.Inputs;
 import org.Canal.Models.BusinessUnits.Organization;
 import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.SupplyChainUnits.Location;
+import org.Canal.Models.SupplyChainUnits.Vendor;
 import org.Canal.Models.SupplyChainUnits.Warehouse;
 import org.Canal.Utils.Engine;
 
@@ -20,6 +21,9 @@ public class Selectables {
         }
         for(Warehouse whs : Engine.getWarehouses()){
             availableLocations.put(whs.getId(), whs.getId());
+        }
+        for(Vendor vndr : Engine.getVendors()){
+            availableLocations.put(vndr.getId(), vndr.getId());
         }
         return new Selectable(availableLocations);
     }
@@ -116,6 +120,8 @@ public class Selectables {
         statusTypes.put("South Korea", "KR");
         statusTypes.put("Singapore", "SG");
         statusTypes.put("Luxembourg", "LU");
-        return new Selectable(statusTypes);
+        Selectable s = new Selectable(statusTypes);
+        s.setSelectedValue("US");
+        return s;
     }
 }

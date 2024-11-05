@@ -2,6 +2,7 @@ package org.Canal.UI.Views.Components;
 
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.Models.SupplyChainUnits.Material;
+import org.Canal.Models.SupplyChainUnits.Vendor;
 import org.Canal.UI.Elements.Inputs.Copiable;
 import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Label;
@@ -35,7 +36,7 @@ public class CreateComponent extends JInternalFrame {
         Form f1 = new Form();
         Form f2 = new Form();
         HashMap<String, String> availableVendors = new HashMap<>();
-        for(Location vs : Engine.getVendors()){
+        for(Vendor vs : Engine.getVendors()){
             availableVendors.put(vs.getId() + " – " + vs.getName(), vs.getId());
         }
         selectedVendor = new Selectable(availableVendors);

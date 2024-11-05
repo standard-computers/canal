@@ -9,7 +9,9 @@ public class Catalog {
 
     private String id; //Catalog ID
     private String name; //Name of Catalog
-    private String[] costCenters, customers, vendors;
+    private ArrayList<String> costCenters;
+    private ArrayList<String> customers;
+    private ArrayList<String> vendors;
     private ArrayList<Flex> items = new ArrayList<>();
 
     public Catalog(String id, String name) {
@@ -33,27 +35,27 @@ public class Catalog {
         this.name = name;
     }
 
-    public String[] getCostCenters() {
+    public ArrayList<String> getCostCenters() {
         return costCenters;
     }
 
-    public void setCostCenters(String[] costCenters) {
+    public void setCostCenters(ArrayList<String> costCenters) {
         this.costCenters = costCenters;
     }
 
-    public String[] getCustomers() {
+    public ArrayList<String> getCustomers() {
         return customers;
     }
 
-    public void setCustomers(String[] customers) {
+    public void setCustomers(ArrayList<String> customers) {
         this.customers = customers;
     }
 
-    public String[] getVendors() {
+    public ArrayList<String> getVendors() {
         return vendors;
     }
 
-    public void setVendors(String[] vendors) {
+    public void setVendors(ArrayList<String> vendors) {
         this.vendors = vendors;
     }
 

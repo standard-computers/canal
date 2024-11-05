@@ -1,51 +1,152 @@
 package org.Canal.Models.SupplyChainUnits;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Map;
 
 public class Area {
 
-    private String id, location, name;
-    private double width, length, height, area, volume;
+    private String id; //Area ID for system reference
+    private String location; //Location ID this are belongs to
+    private String name; //Area name
+    private String widthUOM;
+    private String lengthUOM;
+    private String heightUOM;
+    private String weightUOM;
+    private String areaUOM;
+    private String volumeUOM;
+    private double width;
+    private double length;
+    private double height;
+    private double area;
+    private double volume;
+    private Map<String, String> properties;
+    private ArrayList<Bin> bins = new ArrayList<Bin>();
 
-    protected Map<String, String> properties;
-
-    public Area(Map<String, String> properties) {
-        this.properties = properties;
+    public String getId() {
+        return id;
     }
 
-    public Area(String id, String cc) {
-        properties = new HashMap<>();
-        properties.put("id", id);
-        properties.put("name", "");
-        properties.put("cost_center", cc);
-        properties.put("width", "");
-        properties.put("length", "");
-        properties.put("height", "");
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getWidthUOM() {
+        return widthUOM;
+    }
+
+    public void setWidthUOM(String widthUOM) {
+        this.widthUOM = widthUOM;
+    }
+
+    public String getHeightUOM() {
+        return heightUOM;
+    }
+
+    public void setHeightUOM(String heightUOM) {
+        this.heightUOM = heightUOM;
+    }
+
+    public String getLengthUOM() {
+        return lengthUOM;
+    }
+
+    public void setLengthUOM(String lengthUOM) {
+        this.lengthUOM = lengthUOM;
+    }
+
+    public String getWeightUOM() {
+        return weightUOM;
+    }
+
+    public void setWeightUOM(String weightUOM) {
+        this.weightUOM = weightUOM;
+    }
+
+    public String getAreaUOM() {
+        return areaUOM;
+    }
+
+    public void setAreaUOM(String areaUOM) {
+        this.areaUOM = areaUOM;
+    }
+
+    public String getVolumeUOM() {
+        return volumeUOM;
+    }
+
+    public void setVolumeUOM(String volumUOM) {
+        this.volumeUOM = volumUOM;
+    }
+
+    public double getWidth() {
+        return width;
+    }
+
+    public void setWidth(double width) {
+        this.width = width;
+    }
+
+    public double getLength() {
+        return length;
+    }
+
+    public void setLength(double length) {
+        this.length = length;
+    }
+
+    public double getHeight() {
+        return height;
+    }
+
+    public void setHeight(double height) {
+        this.height = height;
+    }
+
+    public double getArea() {
+        return area;
+    }
+
+    public void setArea(double area) {
+        this.area = area;
+    }
+
+    public double getVolume() {
+        return volume;
+    }
+
+    public void setVolume(double volume) {
+        this.volume = volume;
     }
 
     public Map<String, String> getProperties() {
         return properties;
     }
 
-    public void setProperties(Map<String, String> defaultProperties) {
-        this.properties = defaultProperties;
+    public void setProperties(Map<String, String> properties) {
+        this.properties = properties;
     }
 
-    public String getValue(String key) {
-        return properties.get(key);
+    public ArrayList<Bin> getBins() {
+        return bins;
     }
 
-    public void updateProperties(Map<String, String> updatedProperties) {
-        properties.putAll(updatedProperties);
-    }
-
-    public String getId(){
-        return properties.get("id");
-    }
-
-    @Override
-    public String toString() {
-        return getId();
+    public void setBins(ArrayList<Bin> bins) {
+        this.bins = bins;
     }
 }

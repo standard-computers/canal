@@ -9,7 +9,9 @@ public class Item extends Objex {
     private String color;
     private String upc;
     private String uom;
-    private String widthUOM, lengthUOM, heightUOM;
+    private String widthUOM;
+    private String lengthUOM;
+    private String heightUOM;
     private String packagingUnit;
     private boolean batched;
     private boolean rentable;

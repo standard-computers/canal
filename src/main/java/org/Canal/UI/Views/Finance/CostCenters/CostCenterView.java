@@ -3,9 +3,9 @@ package org.Canal.UI.Views.Finance.CostCenters;
 import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.Models.SupplyChainUnits.Location;
+import org.Canal.Models.SupplyChainUnits.Vendor;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Views.AreasBins.CreateArea;
-import org.Canal.UI.Views.Batching.BatchCreateLocations;
 import org.Canal.UI.Views.Orders.PurchaseOrders.CreatePurchaseOrder;
 import org.Canal.UI.Views.AreasBins.AutoMakeAreasAndBins;
 import org.Canal.Utils.Locke;
@@ -14,6 +14,7 @@ import org.Canal.Utils.Engine;
 import org.Canal.Utils.RefreshListener;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
@@ -81,42 +82,39 @@ public class CostCenterView extends JInternalFrame implements RefreshListener {
         IconButton addArea = new IconButton("+ Area", "areas", "Add an area cost center");
         IconButton addBin = new IconButton("+ Bin", "bins", "Add an area cost center");
         IconButton autoMake = new IconButton("Auto Make Areas/Bins", "automake", "Make areas and bins from templates");
-        IconButton batch = new IconButton("Make Areas/Bins", "batch", "Add as csv");
         IconButton pos = new IconButton("POS Mode", "pos", "Launch Point-of-Sale");
         IconButton label = new IconButton("", "label", "Print labels for properties");
         IconButton refresh = new IconButton("", "refresh", "Reload from store");
         order.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
                 desktop.put(new CreatePurchaseOrder());
             }
         });
         addArea.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new CreateArea(desktop, thisCostCenter));
+                desktop.put(new CreateArea(thisCostCenter.getId()));
             }
         });
         autoMake.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
                 desktop.put(new AutoMakeAreasAndBins());
             }
         });
-        batch.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                desktop.put(new BatchCreateLocations("Areas", "/AREAS", thisCostCenter.getId()));
-            }
-        });
         refresh.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
-            Engine.load();
-            Locke rootNode = createRootNode();
-            DefaultMutableTreeNode rootTreeNode = createTreeNodes(rootNode);
-            DefaultTreeModel model = (DefaultTreeModel) dataTree.getModel();
-            model.setRoot(rootTreeNode);
-            revalidate();
-            repaint();
+                Engine.load();
+                Locke rootNode = createRootNode();
+                DefaultMutableTreeNode rootTreeNode = createTreeNodes(rootNode);
+                DefaultTreeModel model = (DefaultTreeModel) dataTree.getModel();
+                model.setRoot(rootTreeNode);
+                revalidate();
+                repaint();
             }
         });
-        tb.add(Box.createHorizontalStrut(8));
         tb.add(order);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(payBill);
@@ -129,14 +127,12 @@ public class CostCenterView extends JInternalFrame implements RefreshListener {
         tb.add(Box.createHorizontalStrut(5));
         tb.add(autoMake);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(batch);
-        tb.add(Box.createHorizontalStrut(5));
         tb.add(pos);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(label);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(refresh);
-        tb.add(Box.createHorizontalStrut(8));
+        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
         return tb;
     }
 
@@ -177,7 +173,7 @@ public class CostCenterView extends JInternalFrame implements RefreshListener {
         }
         Locke[] vendors = new Locke[Engine.getVendors(thisCostCenter.getTie()).size()];
         for (int i = 0; i < Engine.getVendors(thisCostCenter.getTie()).size(); i++) {
-            Location l = Engine.getVendors(thisCostCenter.getTie()).get(i);
+            Vendor l = Engine.getVendors(thisCostCenter.getTie()).get(i);
             vendors[i] = new Locke(l.getId() + " - " + l.getName(), false, "/VEND/" + l.getId(), Color.CYAN, null);
         }
         Locke[] items = new Locke[Engine.getItems(thisCostCenter.getTie()).size()];
@@ -188,7 +184,7 @@ public class CostCenterView extends JInternalFrame implements RefreshListener {
         Locke[] areas = new Locke[Engine.getAreas(thisCostCenter.getId()).size()];
         for (int i = 0; i < Engine.getAreas(thisCostCenter.getId()).size(); i++) {
             Area l = Engine.getAreas(thisCostCenter.getId()).get(i);
-            areas[i] = new Locke(l.getId() + " - " + l.getValue("name"), false, "/ITS/" + l.getId(), new Color(147, 70, 3), null);
+            areas[i] = new Locke(l.getId() + " - " + l.getName(), false, "/ITS/" + l.getId(), new Color(147, 70, 3), null);
         }
         return new Locke(thisCostCenter.getId() + " - " + thisCostCenter.getName(), true, "/ORGS", new Locke[]{
                 new Locke("Areas", true, "/AREAS", areas),

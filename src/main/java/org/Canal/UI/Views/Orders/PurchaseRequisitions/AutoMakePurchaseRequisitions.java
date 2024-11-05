@@ -32,7 +32,6 @@ public class AutoMakePurchaseRequisitions extends JInternalFrame {
         setFrameIcon(new ImageIcon(AutoMakePurchaseRequisitions.class.getResource("/icons/automake.png")));
         locations = Engine.getCostCenters();
         locations.addAll(Engine.getDistributionCenters());
-        locations.addAll(Engine.getVendors());
         this.checkboxes = new ArrayList<>();
         checkboxPanel = new JPanel();
         checkboxPanel.setLayout(new BoxLayout(checkboxPanel, BoxLayout.Y_AXIS));

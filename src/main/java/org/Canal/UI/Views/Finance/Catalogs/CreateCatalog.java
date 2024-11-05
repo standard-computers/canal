@@ -5,6 +5,7 @@ import org.Canal.UI.Elements.Input;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Pipe;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -41,9 +42,6 @@ public class CreateCatalog extends JInternalFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 Catalog c = new Catalog("[ID]", cn.value());
-                c.setCostCenters(availableCostCenters.value().split(";"));
-                c.setCustomers(availableCustomers.value().split(";"));
-                c.setVendors(availableVendors.value().split(";"));
                 Pipe.save("/CATS", c);
                 //TODO Catalog View
                 dispose();

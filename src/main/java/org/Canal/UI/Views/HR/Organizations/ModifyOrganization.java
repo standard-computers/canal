@@ -3,14 +3,12 @@ package org.Canal.UI.Views.HR.Organizations;
 import javax.swing.*;
 
 /**
- * /ORGS/MOD
+ * /ORGS/MOD/?$[ORG_ID]
  */
 public class ModifyOrganization extends JInternalFrame {
 
     public ModifyOrganization() {
-        setTitle("");
+        super("", false, true, false, true);
 
-        setIconifiable(true);
-        setClosable(true);
     }
 }

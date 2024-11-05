@@ -5,9 +5,11 @@ import org.Canal.Models.BusinessUnits.PurchaseOrder;
 import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.Models.SupplyChainUnits.Location;
+import org.Canal.Models.SupplyChainUnits.Vendor;
 import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
+import org.Canal.UI.Views.AreasBins.AutoMakeAreasAndBins;
 import org.Canal.UI.Views.AreasBins.CreateBin;
 import org.Canal.UI.Views.Orders.PurchaseOrders.CreatePurchaseOrder;
 import org.Canal.UI.Views.Orders.ReceiveOrder;
@@ -148,7 +150,7 @@ public class DCView extends JInternalFrame implements RefreshListener {
         IconButton receive = new IconButton("Receive", "receive", "Receive an Inbound Delivery");
         IconButton areas = new IconButton("+ Areas", "areas", "Add an area cost center");
         IconButton addBin = new IconButton("+ Bin", "bins", "Add an area cost center");
-        IconButton autoMake = new IconButton("Auto Make Areas/Bins", "automake", "Make areas and bins from templates");
+        IconButton autoMake = new IconButton("AutoMake Areas/Bins", "automake", "Make areas and bins from templates");
         IconButton label = new IconButton("Barcodes", "label", "Print labels for properties");
         IconButton refresh = new IconButton("", "refresh", "Reload from store");
         order.addMouseListener(new MouseAdapter() {
@@ -180,12 +182,18 @@ public class DCView extends JInternalFrame implements RefreshListener {
         });
         areas.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new CreateArea(desktop, distributionCenter));
+                desktop.put(new CreateArea(distributionCenter.getId()));
             }
         });
         addBin.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new CreateBin(desktop, distributionCenter));
+                desktop.put(new CreateBin(distributionCenter.getId()));
+            }
+        });
+        autoMake.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                desktop.put(new AutoMakeAreasAndBins());
             }
         });
         tb.add(order);
@@ -228,7 +236,7 @@ public class DCView extends JInternalFrame implements RefreshListener {
         }
         Locke[] vendors = new Locke[Engine.getVendors(distributionCenter.getTie()).size()];
         for (int i = 0; i < Engine.getVendors(distributionCenter.getTie()).size(); i++) {
-            Location l = Engine.getVendors(distributionCenter.getTie()).get(i);
+            Vendor l = Engine.getVendors(distributionCenter.getTie()).get(i);
             vendors[i] = new Locke(l.getId() + " - " + l.getName(), false, "/VEND/" + l.getId(), Color.CYAN, null);
         }
         Locke[] items = new Locke[Engine.getItems(distributionCenter.getTie()).size()];
@@ -239,7 +247,7 @@ public class DCView extends JInternalFrame implements RefreshListener {
         Locke[] areas = new Locke[Engine.getAreas(distributionCenter.getId()).size()];
         for (int i = 0; i < Engine.getAreas(distributionCenter.getId()).size(); i++) {
             Area l = Engine.getAreas(distributionCenter.getId()).get(i);
-            areas[i] = new Locke(l.getId() + " - " + l.getValue("name"), false, "/ITS/" + l.getId(), new Color(147, 70, 3), null);
+            areas[i] = new Locke(l.getId() + " - " + l.getName(), false, "/ITS/" + l.getId(), new Color(147, 70, 3), null);
         }
         return new Locke(distributionCenter.getId() + " - " + distributionCenter.getName(), true, "/ORGS", new Locke[]{
                 new Locke("Areas", true, "/AREAS", areas),

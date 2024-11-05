@@ -1,6 +1,7 @@
 package org.Canal.UI.Views.Inventory;
 
 import org.Canal.Models.SupplyChainUnits.Location;
+import org.Canal.Models.SupplyChainUnits.Vendor;
 import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Windows.FormFrame;
@@ -19,7 +20,7 @@ public class CreateSTO extends FormFrame {
         for(Location cs : Engine.getCustomers()){
             opts.put(cs.getId() + " – " + cs.getName(), cs.getId());
         }
-        for(Location vs : Engine.getVendors()){
+        for(Vendor vs : Engine.getVendors()){
             opts.put(vs.getId() + " – " + vs.getName(), vs.getId());
         }
         Selectable senderOps = new Selectable(opts);

@@ -1,11 +1,13 @@
 package org.Canal.UI.Views.Orders.PurchaseOrders;
 
 import org.Canal.UI.Elements.Button;
+import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -19,17 +21,17 @@ import java.awt.event.MouseEvent;
 public class FindPurchaseOrder extends JInternalFrame {
 
     public FindPurchaseOrder(DesktopState desktop) {
-        setTitle("Find Purchase Order");
+        super("Find Purchase Order", false, true, false, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/find.png")));
         Form f = new Form();
-        JTextField direct = new JTextField(10);
+        JTextField direct = Elements.input(15);
         direct.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     String inputText = direct.getText().trim();
                     if (!inputText.isEmpty()) {
-                        Engine.router("/WHS/" + direct.getText(), desktop);
+                        desktop.put(Engine.router("/ORDS/" + direct.getText(), desktop));
                         dispose();
                     }
                 }
@@ -38,16 +40,14 @@ public class FindPurchaseOrder extends JInternalFrame {
         f.addInput(new Label("Purchase Order ID/#", UIManager.getColor("Label.foreground")), direct);
         JPanel main = new JPanel(new BorderLayout());
         main.add(f, BorderLayout.CENTER);
-        Button find = new Button("Open");
+        Button find = new Button("Find");
         main.add(find, BorderLayout.SOUTH);
         find.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                desktop.put(Engine.router("/WHS/" + direct.getText(), desktop));
+                desktop.put(Engine.router("/ORDS/" + direct.getText(), desktop));
                 dispose();
             }
         });
         add(main);
-        setIconifiable(true);
-        setClosable(true);
     }
 }

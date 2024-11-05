@@ -1,23 +1,22 @@
 package org.Canal.UI.Views.Orders.PurchaseRequisitions;
 
-import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.Models.BusinessUnits.PurchaseRequisition;
-import org.Canal.Models.SupplyChainUnits.Warehouse;
 import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Inputs.Copiable;
 import org.Canal.UI.Elements.Inputs.DatePicker;
 import org.Canal.UI.Elements.Inputs.Selectable;
+import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Pipe;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
 
 /**
  * /ORDS/PR/NEW
@@ -25,31 +24,17 @@ import java.util.HashMap;
 public class CreatePurchaseRequisition extends JInternalFrame {
 
     private Copiable prOwnerField;
-    private Selectable availableVendors, availableBuyers;
-    private DatePicker prStartDateField, prEndDateField;
+    private Selectable availableVendors;
+    private Selectable availableBuyers;
+    private DatePicker prStartDateField;
+    private DatePicker prEndDateField;
 
     public CreatePurchaseRequisition(){
         super("Create Purchase Requisition", false, true, false, true);
         setFrameIcon(new ImageIcon(CreatePurchaseRequisition.class.getResource("/icons/create.png")));
         Constants.checkLocke(this, true, true);
-        HashMap<String, String> opts = new HashMap<>();
-        for(Location cs : Engine.getCustomers()){
-            opts.put(cs.getId() + " – " + cs.getName(), cs.getId());
-        }
-        for(Location vs : Engine.getVendors()){
-            opts.put(vs.getId() + " – " + vs.getName(), vs.getId());
-        }
-        for(Location vs : Engine.getDistributionCenters()){
-            opts.put(vs.getId() + " – " + vs.getName(), vs.getId());
-        }
-        for(Location vs : Engine.getCostCenters()){
-            opts.put(vs.getId() + " – " + vs.getName(), vs.getId());
-        }
-        for(Warehouse vs : Engine.getWarehouses()){
-            opts.put(vs.getId() + " – " + vs.getName(), vs.getId());
-        }
-        availableVendors = new Selectable(opts);
-        availableBuyers = new Selectable(opts);
+        availableVendors = Selectables.allLocations();
+        availableBuyers = Selectables.allLocations();
         JTextField prIdField = new JTextField("PR" + (10000000 + (Engine.realtime.getPurchaseRequisitions().size() + 1)));
         JTextField prNumberField = new JTextField("PR" + (10000000 + (Engine.realtime.getPurchaseRequisitions().size() + 1)));
         prOwnerField = new Copiable("U100001");

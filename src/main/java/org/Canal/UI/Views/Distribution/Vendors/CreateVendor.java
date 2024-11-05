@@ -1,13 +1,16 @@
 package org.Canal.UI.Views.Distribution.Vendors;
 
-import org.Canal.Models.SupplyChainUnits.Location;
+import org.Canal.Models.SupplyChainUnits.Vendor;
 import org.Canal.UI.Elements.Button;
+import org.Canal.UI.Elements.Inputs.Selectable;
+import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Label;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Pipe;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -20,20 +23,19 @@ import java.util.ArrayList;
 public class CreateVendor extends JInternalFrame {
 
     public CreateVendor(DesktopState desktop) {
-        setTitle("New Vendor");
+        super("New Vendor", false, true, false, true);
         setFrameIcon(new ImageIcon(CreateVendor.class.getResource("/icons/create.png")));
-        ArrayList<Location> ls = Engine.getVendors();
+        ArrayList<Vendor> ls = Engine.getVendors();
         String generatedId = "V" + (100000 + (ls.size() + 1));
         JTextField vendorIdField = new JTextField(generatedId);
-        JTextField orgIdField = new JTextField(Engine.getOrganization().getId());
+        Selectable orgIdField = Selectables.allOrgs();
         JTextField vendorNameField = new JTextField(20);
         JTextField streetField = new JTextField(20);
         JTextField cityField = new JTextField(20);
         JTextField stateField = new JTextField(20);
         JTextField postalCodeField = new JTextField(20);
-        JTextField countryField = new JTextField(20);
-        countryField.setText("US");
-        Button make = new Button("Make");
+        Selectable countryField = Selectables.countries();
+        Button make = new Button("Make Vendor");
         Form f = new Form();
         f.addInput(new Label("*New ID", UIManager.getColor("Label.foreground")), vendorIdField);
         f.addInput(new Label("*Organization", UIManager.getColor("Label.foreground")), orgIdField);
@@ -45,21 +47,18 @@ public class CreateVendor extends JInternalFrame {
         f.addInput(new Label("Country", Constants.colors[5]), countryField);
         add(f, BorderLayout.CENTER);
         add(make, BorderLayout.SOUTH);
-        setResizable(false);
-        setIconifiable(true);
-        setClosable(true);
         make.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 String vendorId = vendorIdField.getText().trim();
-                String orgTieId = orgIdField.getText().trim();
+                String orgTieId = orgIdField.getSelectedValue();
                 String name = vendorNameField.getText().trim();
                 String line1 = streetField.getText().trim();
                 String city = cityField.getText().trim();
                 String state = stateField.getText().trim();
                 String postal = postalCodeField.getText().trim();
-                String country = countryField.getText();
-                Location location = new Location(vendorId, orgTieId, name, line1, city, state, postal, country, false);
+                String country = countryField.getSelectedValue();
+                Vendor location = new Vendor(vendorId, orgTieId, name, line1, city, state, postal, country, false);
                 Pipe.save("/VEND", location);
                 dispose();
                 desktop.put(new VendorView(location));

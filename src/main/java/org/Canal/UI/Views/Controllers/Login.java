@@ -13,6 +13,9 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * /LOGIN
+ */
 public class Login extends JInternalFrame {
 
     public Login(boolean closable) {

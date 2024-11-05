@@ -1,9 +1,16 @@
 package org.Canal.Models.BusinessUnits;
 
+/**
+ * This class represents a set of items
+ * at a set purchase price.
+ */
 public class OrderLineItem {
 
-    private String name, id;
-    private double quantity, price, total;
+    private String id;
+    private String name;
+    private double quantity;
+    private double price;
+    private double total;
 
     public OrderLineItem(String name, String id, double quantity, double price, double total) {
         this.name = name;

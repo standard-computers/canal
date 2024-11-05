@@ -5,6 +5,7 @@ import org.Canal.Models.BusinessUnits.PurchaseOrder;
 import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.CustomJTable;
+import org.Canal.UI.Elements.Inputs.Copiable;
 import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Label;
@@ -48,6 +49,7 @@ public class ReceiveOrder extends JInternalFrame {
         String[][] data = new String[][]{};
         CustomJTable receivedItems = new CustomJTable(data, new String[]{"Item", "Exp. Qty.", "Rcvd. Qty."});
         JScrollPane p = new JScrollPane(receivedItems);
+        Copiable expDelivery = new Copiable("");
         itemInput.add(p);
         add(itemInput, BorderLayout.CENTER);
         poField.getDocument().addDocumentListener(new DocumentListener() {
@@ -69,6 +71,7 @@ public class ReceiveOrder extends JInternalFrame {
                 if(foundPo != null){
                     String[][] rcvData = new String[foundPo.getItems().size()][3];
                     ArrayList<OrderLineItem> items = foundPo.getItems();
+                    expDelivery.setText(foundPo.getExpectedDelivery());
                     for (int i = 0; i < items.size(); i++) {
                         OrderLineItem oli = items.get(i);
                         System.out.println(oli.toString());
@@ -84,8 +87,10 @@ public class ReceiveOrder extends JInternalFrame {
         availRcvLocations.editable();
         availRcvLocations.setSelectedValue(receivingLocation);
         availablePutaway = new Selectable(putAwayOptions);
-        f.addInput(new Label("Receiving Location", Constants.colors[2]), availRcvLocations);
-        f.addInput(new Label("Putaway Area", Constants.colors[3]), availablePutaway);
+        f.addInput(new Label("Receiving Location", Constants.colors[1]), availRcvLocations);
+        f.addInput(new Label("Putaway Area", Constants.colors[2]), availablePutaway);
+        f.addInput(new Label("Expected Delivery", Constants.colors[3]), expDelivery);
+        f.addInput(new Label("Delivery Date", Constants.colors[4]), availRcvLocations);
         add(f, BorderLayout.NORTH);
 
         Button receive = new Button("Receive");

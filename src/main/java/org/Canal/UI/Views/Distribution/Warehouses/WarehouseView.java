@@ -5,13 +5,16 @@ import org.Canal.Models.BusinessUnits.PurchaseOrder;
 import org.Canal.Models.SupplyChainUnits.*;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
+import org.Canal.UI.Views.AreasBins.CreateBin;
 import org.Canal.UI.Views.Finance.AcceptPayment;
 import org.Canal.UI.Views.AreasBins.CreateArea;
+import org.Canal.UI.Views.Finance.IssuePayment;
 import org.Canal.UI.Views.Orders.ReceiveOrder;
 import org.Canal.Utils.Locke;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.RefreshListener;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
@@ -19,7 +22,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
-
 import java.awt.*;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
@@ -36,9 +38,10 @@ public class WarehouseView extends JInternalFrame implements RefreshListener {
     private DesktopState desktop;
 
     public WarehouseView(Warehouse loc, DesktopState desktop) {
+        super("Warehouse / " + loc.getId() + " - " + loc.getName(), true, true, true, true);
         this.warehouse = loc;
         this.desktop = desktop;
-        setTitle("Warehouse / " + loc.getId() + " - " + loc.getName());
+        setFrameIcon(new ImageIcon(WarehouseView.class.getResource("/icons/warehouses.png")));
         setLayout(new BorderLayout());
         JPanel tb = createToolBar();
         add(tb, BorderLayout.NORTH);
@@ -66,10 +69,6 @@ public class WarehouseView extends JInternalFrame implements RefreshListener {
         splitPane.setDividerLocation(250);
         splitPane.setResizeWeight(0.2);
         add(splitPane, BorderLayout.CENTER);
-        setIconifiable(true);
-        setClosable(true);
-        setResizable(true);
-        setMaximizable(true);
     }
 
     private JPanel makeOverview(){
@@ -139,40 +138,58 @@ public class WarehouseView extends JInternalFrame implements RefreshListener {
         IconButton payBill = new IconButton("Pay Bill", "bill", "Receiving a bill from a vendor");
         IconButton inventory = new IconButton("Inventory", "inventory", "Inventory of items in cost center");
         IconButton receive = new IconButton("Receive", "receive", "Receive an Inbound Delivery");
-        IconButton areas = new IconButton("+ Areas", "areas", "Add an area cost center");
-        IconButton label = new IconButton("", "label", "Print labels for properties");
-        IconButton pos = new IconButton("", "pos", "Launch Point-of-Sale");
+        IconButton addArea = new IconButton("+ Area", "areas", "Add an area cost center");
+        IconButton addBin = new IconButton("+ Bin", "bins", "Add an area cost center");
+        IconButton label = new IconButton("Barcodes", "label", "Print labels for properties");
         IconButton refresh = new IconButton("", "refresh", "Reload from store");
         acceptPayment.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
                 desktop.put(new AcceptPayment());
             }
         });
+        payBill.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                desktop.put(new IssuePayment());
+            }
+        });
+        inventory.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+            }
+        });
+        addArea.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                desktop.put(new CreateArea(warehouse.getId()));
+            }
+        });
+        addBin.addMouseListener(new MouseAdapter() {
+            @Override
+           public void mouseClicked(MouseEvent e) {
+               desktop.put(new CreateBin(warehouse.getId()));
+           }
+        });
         receive.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
                 desktop.put(new ReceiveOrder(warehouse.getId(), desktop));
             }
         });
         refresh.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
-            Engine.load();
-            Locke rootNode = createRootNode();
-            DefaultMutableTreeNode rootTreeNode = createTreeNodes(rootNode);
-            DefaultTreeModel model = (DefaultTreeModel) dataTree.getModel();
-            model.setRoot(rootTreeNode);
-            expandAllNodes(dataTree);
-            revalidate();
-            repaint();
+                Locke rootNode = createRootNode();
+                DefaultMutableTreeNode rootTreeNode = createTreeNodes(rootNode);
+                DefaultTreeModel model = (DefaultTreeModel) dataTree.getModel();
+                model.setRoot(rootTreeNode);
+                expandAllNodes(dataTree);
+                revalidate();
+                repaint();
             }
         });
-        areas.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                Location whs = new Location();
-                whs.setId(warehouse.getId());
-                new CreateArea(desktop, whs);
-            }
-        });
-        tb.add(Box.createHorizontalStrut(5));
         tb.add(acceptPayment);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(payBill);
@@ -181,13 +198,14 @@ public class WarehouseView extends JInternalFrame implements RefreshListener {
         tb.add(Box.createHorizontalStrut(5));
         tb.add(receive);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(areas);
+        tb.add(addArea);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(addBin);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(label);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(refresh);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(pos);
+        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
         return tb;
     }
 
@@ -202,19 +220,16 @@ public class WarehouseView extends JInternalFrame implements RefreshListener {
     }
 
     private Locke createRootNode() {
-
         Locke[] customers = new Locke[Engine.getCustomers(warehouse.getOrg()).size()];
         for (int i = 0; i < Engine.getCustomers(warehouse.getOrg()).size(); i++) {
             Location l = Engine.getCustomers(warehouse.getOrg()).get(i);
             customers[i] = new Locke(l.getId() + " - " + l.getName(), false, "/CSTS/" + l.getId(), Color.PINK, null);
         }
-
         Locke[] vendors = new Locke[Engine.getVendors(warehouse.getOrg()).size()];
         for (int i = 0; i < Engine.getVendors(warehouse.getOrg()).size(); i++) {
-            Location l = Engine.getVendors(warehouse.getOrg()).get(i);
+            Vendor l = Engine.getVendors(warehouse.getOrg()).get(i);
             vendors[i] = new Locke(l.getId() + " - " + l.getName(), false, "/VEND/" + l.getId(), Color.CYAN, null);
         }
-
         Locke[] items = new Locke[Engine.getItems(warehouse.getOrg()).size()];
         for (int i = 0; i < Engine.getItems(warehouse.getOrg()).size(); i++) {
             Item l = Engine.getItems(warehouse.getOrg()).get(i);
@@ -223,9 +238,8 @@ public class WarehouseView extends JInternalFrame implements RefreshListener {
         Locke[] areas = new Locke[Engine.getAreas(warehouse.getId()).size()];
         for (int i = 0; i < Engine.getAreas(warehouse.getId()).size(); i++) {
             Area l = Engine.getAreas(warehouse.getId()).get(i);
-            areas[i] = new Locke(l.getId() + " - " + l.getValue("name"), false, "/ITS/" + l.getId(), new Color(147, 70, 3), null);
+            areas[i] = new Locke(l.getId() + " - " + l.getName(), false, "/ITS/" + l.getId(), new Color(147, 70, 3), null);
         }
-
         return new Locke(warehouse.getId() + " - " + warehouse.getName(), true, "/ORGS", new Locke[]{
                 new Locke("Areas", true, "/AREAS", areas),
                 new Locke("Bins", true, "/BNS", null),

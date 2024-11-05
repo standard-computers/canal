@@ -38,7 +38,6 @@ public class DistributionCenters extends JInternalFrame {
                         Location l = listModel.getElementAt(selectedIndex);
                         if (l != null) {
                             desktop.put(Engine.router("/DCSS/" + l.getId(), desktop));
-                            dispose();
                         } else {
                             JOptionPane.showMessageDialog(null, "Location Not Found");
                         }
@@ -54,7 +53,6 @@ public class DistributionCenters extends JInternalFrame {
                     String inputText = direct.getText().trim();
                     if (!inputText.isEmpty()) {
                         desktop.put(Engine.router("/DCSS/" + inputText, desktop));
-                        dispose();
                     }
                 }
             }

@@ -17,7 +17,7 @@ public class UOMField extends JPanel {
         add(uom);
     }
 
-    public String getText(){
+    public String getValue(){
         return textField.getText();
     }
 

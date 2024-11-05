@@ -4,7 +4,10 @@ import org.Canal.Models.SupplyChainUnits.Location;
 
 public class Person {
 
-    private String id, first, last, description;
+    private String id;
+    private String first;
+    private String last;
+    private String description;
     private Location address;
     private int access;
 

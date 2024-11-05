@@ -2,6 +2,7 @@ package org.Canal.UI.Views.Items;
 
 import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.Models.SupplyChainUnits.Location;
+import org.Canal.Models.SupplyChainUnits.Vendor;
 import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Label;
@@ -37,7 +38,7 @@ public class CreateItem extends JInternalFrame implements Includer {
         Form f1 = new Form();
         Form f2 = new Form();
         HashMap<String, String> availableVendors = new HashMap<>();
-        for(Location vs : Engine.getVendors()){
+        for(Vendor vs : Engine.getVendors()){
             availableVendors.put(vs.getId() + " – " + vs.getName(), vs.getId());
         }
         selectedVendor = new Selectable(availableVendors);
@@ -179,11 +180,11 @@ public class CreateItem extends JInternalFrame implements Includer {
         newItem.setSkud(isSkud.isSelected());
         newItem.setConsumable(isConsumable.isSelected());
         newItem.setPrice(Double.parseDouble(itemPriceField.getText()));
-        newItem.setWidth(Double.parseDouble(itemWidth.getText()));
-        newItem.setLength(Double.parseDouble(itemLength.getText()));
-        newItem.setHeight(Double.parseDouble(itemHeight.getText()));
-        newItem.setWeight(Double.parseDouble(itemWeight.getText()));
-        newItem.setTax(Double.parseDouble(itemWeight.getText()));
+        newItem.setWidth(Double.parseDouble(itemWidth.getValue()));
+        newItem.setLength(Double.parseDouble(itemLength.getValue()));
+        newItem.setHeight(Double.parseDouble(itemHeight.getValue()));
+        newItem.setWeight(Double.parseDouble(itemWeight.getValue()));
+        newItem.setTax(Double.parseDouble(itemWeight.getValue()));
         newItem.setExciseTax(Double.parseDouble(exciseTax.getText()));
         Pipe.save("/ITS", newItem);
         dispose();

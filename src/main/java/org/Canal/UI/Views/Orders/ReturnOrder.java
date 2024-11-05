@@ -1,8 +1,8 @@
 package org.Canal.UI.Views.Orders;
 
 import org.Canal.Models.BusinessUnits.PurchaseOrder;
-import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.Button;
+import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Inputs.Selectable;
@@ -14,39 +14,31 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.HashMap;
 
+/**
+ * /ORDS/RTRN
+ */
 public class ReturnOrder extends JInternalFrame {
 
-    private JTextField poField, onField;
-    private Selectable ats, availablePutaway;
+    private JTextField poField;
+    private JTextField onField;
+    private Selectable ats;
+    private Selectable availablePutaway;
 
     public ReturnOrder(DesktopState desktop){
+        super("Return Order", false, true, false, true);
         Constants.checkLocke(this, true, true);
-        setTitle("Return Order");
         Form f = new Form();
         poField = new JTextField(12);
         onField = new JTextField(12);
         f.addInput(new Label("Purchase Order #", Constants.colors[0]), poField);
         f.addInput(new Label("[or] Order #", Constants.colors[1]), onField);
-        HashMap<String, String> opts = new HashMap<>();
-        for(Location cs : Engine.getCustomers()){
-            opts.put(cs.getId() + " – " + cs.getName(), cs.getId());
-        }
-        for(Location vs : Engine.getVendors()){
-            opts.put(vs.getId() + " – " + vs.getName(), vs.getId());
-        }
-        for(Location vs : Engine.getDistributionCenters()){
-            opts.put(vs.getId() + " – " + vs.getName(), vs.getId());
-        }
-        ats = new Selectable(opts);
+        ats = Selectables.allLocations();
         f.addInput(new Label("Receiving Location", Constants.colors[2]), ats);
         f.addInput(new Label("Putaway Area", Constants.colors[3]), availablePutaway);
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);
         Button receive = new Button("Receive Order");
-        setClosable(true);
-        setIconifiable(true);
         receive.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 String po = poField.getText();

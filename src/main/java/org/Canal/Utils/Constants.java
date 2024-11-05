@@ -3,6 +3,7 @@ package org.Canal.Utils;
 import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyVetoException;
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -23,6 +24,17 @@ public class Constants {
         new Color(171, 90, 253),
         new Color(251, 90, 251)
     };
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    private static final SecureRandom RANDOM = new SecureRandom();
+
+    public static String generateId(int length) {
+        StringBuilder result = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            int index = RANDOM.nextInt(CHARACTERS.length());
+            result.append(CHARACTERS.charAt(index));
+        }
+        return result.toString();
+    }
 
     public static ArrayList<String> getAllTransactions() {
         ArrayList<String> transactions = new ArrayList<>();
@@ -279,4 +291,6 @@ public class Constants {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         return now.format(formatter);
     }
+
+
 }

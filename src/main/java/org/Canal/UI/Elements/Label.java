@@ -13,7 +13,7 @@ public class Label extends JLabel {
         setMinimumSize(new Dimension(120, 25));
         setMaximumSize(new Dimension(200, 25));
         Border emptyBorder = new EmptyBorder(5, 5, 5, 5);
-        Border matteBorder = BorderFactory.createMatteBorder(0, 2   , 2, 0, color);
+        Border matteBorder = BorderFactory.createMatteBorder(0, 0, 2, 0, color);
         Border compoundBorder = BorderFactory.createCompoundBorder(matteBorder, emptyBorder);
         setBorder(compoundBorder);
     }

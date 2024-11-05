@@ -15,6 +15,7 @@ import org.Canal.UI.Views.Orders.PurchaseOrders.CreatePurchaseOrder;
 import org.Canal.UI.Views.Controllers.CheckboxBarcodeFrame;
 import org.Canal.Utils.*;
 import org.Canal.Utils.DesktopState;
+
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
@@ -26,6 +27,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+/**
+ * /ORGS/$[ORGANIZATION_ID]
+ */
 public class OrgView extends JInternalFrame {
 
     private Organization location;
@@ -146,7 +150,6 @@ public class OrgView extends JInternalFrame {
         tb.add(costCenters);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(label);
-        tb.add(Box.createHorizontalStrut(5));
         return tb;
     }
 
@@ -196,75 +199,64 @@ public class OrgView extends JInternalFrame {
             ccs[i] = new Locke(l.getId() + " - " + l.getName() + " (" + l.getCity() + ")", false, "/CCS/" + l.getId(), Constants.colors[0], null);
             printables.add(l.getId());
         }
-
         Locke[] dcss = new Locke[Engine.getDistributionCenters(location.getId()).size()];
         for (int i = 0; i < Engine.getDistributionCenters(location.getId()).size(); i++) {
             Location l = Engine.getDistributionCenters(location.getId()).get(i);
             dcss[i] = new Locke(l.getId() + " - " + l.getName() + " (" + l.getCity() + ")", false, "/DCSS/" + l.getId(), Constants.colors[1], null);
             printables.add(l.getId());
         }
-
         Locke[] warehouses = new Locke[Engine.getWarehouses(location.getId()).size()];
         for (int i = 0; i < Engine.getWarehouses(location.getId()).size(); i++) {
             Warehouse l = Engine.getWarehouses(location.getId()).get(i);
             warehouses[i] = new Locke(l.getId() + " - " + l.getName() + " (" + l.getCity() + ")", false, "/WHS/" + l.getId(), Constants.colors[2], null);
             printables.add(l.getId());
         }
-
         Locke[] customers = new Locke[Engine.getCustomers(location.getId()).size()];
         for (int i = 0; i < Engine.getCustomers(location.getId()).size(); i++) {
             Location l = Engine.getCustomers(location.getId()).get(i);
             customers[i] = new Locke(l.getId() + " - " + l.getName() + " (" + l.getCity() + ")", false, "/CSTS/" + l.getId(), Constants.colors[3], null);
             printables.add(l.getId());
         }
-
         Locke[] vendors = new Locke[Engine.getVendors(location.getId()).size()];
         for (int i = 0; i < Engine.getVendors(location.getId()).size(); i++) {
-            Location l = Engine.getVendors(location.getId()).get(i);
+            Vendor l = Engine.getVendors(location.getId()).get(i);
             vendors[i] = new Locke(l.getId() + " - " + l.getName() + " (" + l.getCity() + ")", false, "/VEND/" + l.getId(), Constants.colors[4], null);
             printables.add(l.getId());
         }
-
         Locke[] items = new Locke[Engine.getItems(location.getId()).size()];
         for (int i = 0; i < Engine.getItems(location.getId()).size(); i++) {
             Item l = Engine.getItems(location.getId()).get(i);
             items[i] = new Locke(l.getId() + " - " + l.getName(), false, "/ITS/" + l.getId(), Constants.colors[5], null);
             printables.add(l.getId());
         }
-
         Locke[] materials = new Locke[Engine.getMaterials(location.getId()).size()];
         for (int i = 0; i < Engine.getMaterials(location.getId()).size(); i++) {
             Material l = Engine.getMaterials(location.getId()).get(i);
             materials[i] = new Locke(l.getId() + " - " + l.getName(), false, "/MTS/" + l.getId(), Constants.colors[6], null);
             printables.add(l.getId());
         }
-
         Locke[] employees = new Locke[Engine.getEmployees(location.getId()).size()];
         for (int i = 0; i < Engine.getEmployees(location.getId()).size(); i++) {
             Employee l = Engine.getEmployees(location.getId()).get(i);
             employees[i] = new Locke(l.getId() + " - " + l.getName(), false, "/EMPS/" + l.getId(), Constants.colors[7], null);
             printables.add(l.getId());
         }
-
         Locke[] catalogs = new Locke[Engine.getCatalogs().size()];
         for (int i = 0; i < Engine.getCatalogs().size(); i++) {
             Catalog l = Engine.getCatalogs().get(i);
             catalogs[i] = new Locke(l.getId() + " - " + l.getName(), false, "/CATS/" + l.getId(), Constants.colors[8], null);
             printables.add(l.getId());
         }
-
         Locke[] orders = new Locke[Engine.getOrders().size()];
         for (int i = 0; i < Engine.getOrders().size(); i++) {
             PurchaseOrder l = Engine.getOrders().get(i);
             orders[i] = new Locke(String.valueOf(l.getOrderId()), false, "/ORDS/" + l.getOrderId(), Constants.colors[9], null);
         }
-
         Locke[] ledgers = new Locke[Engine.getLedgers(location.getId()).size()];
         for (int i = 0; i < Engine.getLedgers(location.getId()).size(); i++) {
             Ledger l = Engine.getLedgers(location.getId()).get(i);
             ledgers[i] = new Locke(l.getId() + " - " + l.getName(), false, "/LGS/" + l.getId(), Constants.colors[10], null);
         }
-
         return new Locke(location.getId() + " - " + location.getName(), true, "/ORGS", new Locke[]{
                 new Locke("Cost Centers", true, "/CCS", ccs),
                 new Locke("Distribution Centers", true, "/DCSS", dcss),

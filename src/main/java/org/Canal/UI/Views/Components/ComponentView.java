@@ -2,6 +2,7 @@ package org.Canal.UI.Views.Components;
 
 import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.Models.SupplyChainUnits.Location;
+import org.Canal.Models.SupplyChainUnits.Vendor;
 import org.Canal.UI.Elements.Inputs.Copiable;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.*;
@@ -76,7 +77,7 @@ public class ComponentView extends JInternalFrame {
                 taxField.setText(String.valueOf(selectedItem.getTax()));
                 exciseTaxfield.setText(String.valueOf(selectedItem.getExciseTax()));
 
-                Location selectedVendor = Engine.getVendor(selectedItem.getVendor());
+                Vendor selectedVendor = Engine.getVendor(selectedItem.getVendor());
                 vendorIdField.setText(selectedVendor.getId());
                 vendorNameField.setText(selectedVendor.getName());
                 vendorStreetField.setText(selectedVendor.getLine1());
@@ -85,7 +86,7 @@ public class ComponentView extends JInternalFrame {
                 vendorPostalField.setText(selectedVendor.getPostal());
                 vendorCountryField.setText(selectedVendor.getCountry());
                 vendorTaxExemptField.setText(String.valueOf(selectedVendor.isTaxExempt()));
-                vendorStatusField.setText(selectedVendor.getStatus());
+                vendorStatusField.setText(String.valueOf(selectedVendor.getStatus()));
             }
         });
         JScrollPane treeScrollPane = new JScrollPane(dataTree);
@@ -98,7 +99,7 @@ public class ComponentView extends JInternalFrame {
         setResizable(true);
     }
 
-    private JPanel vendorInfo(Location vendor) {
+    private JPanel vendorInfo(Vendor vendor) {
         if (vendor == null) {
             JOptionPane.showMessageDialog(null, "A Vendor has not been allocated for this item. Please contact the data team.");
         }
@@ -111,7 +112,7 @@ public class ComponentView extends JInternalFrame {
         vendorPostalField = new Copiable(vendor.getPostal());
         vendorCountryField = new Copiable(vendor.getCountry());
         vendorTaxExemptField = new Copiable(String.valueOf(vendor.isTaxExempt()));
-        vendorStatusField = new Copiable(vendor.getStatus());
+        vendorStatusField = new Copiable(String.valueOf(vendor.getStatus()));
         vi.addInput(new Label("Vendor ID", UIManager.getColor("Label.foreground")), vendorIdField);
         vi.addInput(new Label("Vendor Name", UIManager.getColor("Label.foreground")), vendorNameField);
         vi.addInput(new Label("Street", UIManager.getColor("Label.foreground")), vendorStreetField);

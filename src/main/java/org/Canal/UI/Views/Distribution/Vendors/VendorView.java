@@ -1,21 +1,26 @@
 package org.Canal.UI.Views.Distribution.Vendors;
 
-import org.Canal.Models.SupplyChainUnits.Location;
+import org.Canal.Models.SupplyChainUnits.Vendor;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Views.Orders.PurchaseOrders.CreatePurchaseOrder;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * /VEND/$[VENDOR_ID]
+ */
 public class VendorView extends JInternalFrame {
 
-    private Location vendor;
+    private Vendor vendor;
 
-    public VendorView(Location vendor) {
+    public VendorView(Vendor vendor) {
+        super("Vendor / " + vendor.getId() + " - " + vendor.getName(), false, true, false, true);
+        setFrameIcon(new ImageIcon(VendorView.class.getResource("/icons/vendors.png")));
         this.vendor = vendor;
-        setTitle("Vendor / " + vendor.getId() + " - " + vendor.getName());
         JTabbedPane tabbedPane = new JTabbedPane();
         JPanel formPanel = new JPanel();
         formPanel.setLayout(new GridLayout(2, 2));
@@ -36,7 +41,7 @@ public class VendorView extends JInternalFrame {
         JTextField vnl = new JTextField(vendor.getName());
         JTextField vil = new JTextField(vendor.getId());
         JTextField vl1l = new JTextField(vendor.getLine1() + ", " + vendor.getCity() + ", " + vendor.getState() + " " + vendor.getPostal() + " " + vendor.getCountry());
-        JTextField val = new JTextField(vendor.getStatus());
+        JTextField val = new JTextField(String.valueOf(vendor.getStatus()));
         vnl.setEditable(false);
         vil.setEditable(false);
         vl1l.setEditable(false);
@@ -51,7 +56,6 @@ public class VendorView extends JInternalFrame {
         info.setBorder(new EmptyBorder(10, 10, 10, 10));
         add(info, BorderLayout.NORTH);
         add(tabbedPane, BorderLayout.CENTER);
-        setResizable(false);
     }
 
     private JPanel createToolBar() {

@@ -1,9 +1,6 @@
 package org.Canal.Utils;
 
-import org.Canal.Models.BusinessUnits.Ledger;
-import org.Canal.Models.BusinessUnits.Organization;
-import org.Canal.Models.BusinessUnits.PurchaseOrder;
-import org.Canal.Models.BusinessUnits.PurchaseRequisition;
+import org.Canal.Models.BusinessUnits.*;
 import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.HumanResources.User;
 import org.Canal.Models.SupplyChainUnits.*;
@@ -17,15 +14,15 @@ import org.Canal.UI.Views.Distribution.Vendors.CreateVendor;
 import org.Canal.UI.Views.Distribution.Vendors.FindVendor;
 import org.Canal.UI.Views.Distribution.Vendors.VendorView;
 import org.Canal.UI.Views.Distribution.Vendors.Vendors;
-import org.Canal.UI.Views.Distribution.Warehouses.CreateWarehouse;
-import org.Canal.UI.Views.Distribution.Warehouses.FindWarehouse;
-import org.Canal.UI.Views.Distribution.Warehouses.ModifyWarehouse;
-import org.Canal.UI.Views.Distribution.Warehouses.Warehouses;
+import org.Canal.UI.Views.Distribution.Warehouses.*;
 import org.Canal.UI.Views.Finance.Catalogs.Catalogs;
 import org.Canal.UI.Views.Finance.Catalogs.CreateCatalog;
+import org.Canal.UI.Views.Finance.Catalogs.FindCatalog;
 import org.Canal.UI.Views.Finance.Catalogs.ModifyCatalog;
 import org.Canal.UI.Views.Finance.CostCenters.*;
 import org.Canal.UI.Views.Finance.Customers.*;
+import org.Canal.UI.Views.Finance.GoodsReceipts.FindGoodsReceipt;
+import org.Canal.UI.Views.Finance.GoodsReceipts.GoodsReceipts;
 import org.Canal.UI.Views.Finance.Ledgers.CreateLedger;
 import org.Canal.UI.Views.Finance.Ledgers.LedgerView;
 import org.Canal.UI.Views.Finance.Ledgers.Ledgers;
@@ -37,10 +34,7 @@ import org.Canal.UI.Views.HR.Employees.*;
 import org.Canal.UI.Views.HR.Organizations.CreateOrganization;
 import org.Canal.UI.Views.HR.Organizations.OrgView;
 import org.Canal.UI.Views.HR.Organizations.Organizations;
-import org.Canal.UI.Views.HR.Users.CreateUser;
-import org.Canal.UI.Views.HR.Users.FindUser;
-import org.Canal.UI.Views.HR.Users.ModifyUser;
-import org.Canal.UI.Views.HR.Users.Users;
+import org.Canal.UI.Views.HR.Users.*;
 import org.Canal.UI.Views.Items.*;
 import org.Canal.UI.Views.Materials.FindMaterial;
 import org.Canal.UI.Views.Materials.Materials;
@@ -51,10 +45,7 @@ import org.Canal.UI.Views.Inventory.CreateSTO;
 import org.Canal.UI.Views.Inventory.InventoryForItem;
 import org.Canal.UI.Views.Inventory.InventoryForMaterial;
 import org.Canal.UI.Views.Invoices.CreateInvoice;
-import org.Canal.UI.Views.Orders.PurchaseOrders.AutoMakePurchaseOrders;
-import org.Canal.UI.Views.Orders.PurchaseOrders.CreatePurchaseOrder;
-import org.Canal.UI.Views.Orders.PurchaseOrders.FindPurchaseOrder;
-import org.Canal.UI.Views.Orders.PurchaseOrders.PurchaseOrders;
+import org.Canal.UI.Views.Orders.PurchaseOrders.*;
 import org.Canal.UI.Views.Orders.PurchaseRequisitions.AutoMakePurchaseRequisitions;
 import org.Canal.UI.Views.Orders.PurchaseRequisitions.CreatePurchaseRequisition;
 import org.Canal.UI.Views.Orders.PurchaseRequisitions.FindPurchaseReq;
@@ -62,6 +53,8 @@ import org.Canal.UI.Views.Orders.PurchaseRequisitions.PurchaseRequisitions;
 import org.Canal.UI.Views.Orders.SalesOrders.AutoMakeSalesOrders;
 import org.Canal.UI.Views.Orders.SalesOrders.CreateSalesOrder;
 import org.Canal.UI.Views.Orders.SalesOrders.SalesOrders;
+import org.Canal.UI.Views.Productivity.Tasks.CreateTask;
+import org.Canal.UI.Views.Productivity.Tasks.TaskList;
 import org.Canal.UI.Views.Transportation.Carriers.CreateCarrier;
 
 import javax.swing.*;
@@ -85,7 +78,6 @@ public class Engine {
     public static ArrayList<Location> distributionCenters = new ArrayList<>();
     public static ArrayList<Warehouse> warehouses = new ArrayList<>();
     public static ArrayList<Location> customers = new ArrayList<>();
-    public static ArrayList<Location> vendors = new ArrayList<>();
     public static ArrayList<Item> items = new ArrayList<>();
     public static ArrayList<Material> materials = new ArrayList<>();
     public static ArrayList<Area> areas = new ArrayList<>();
@@ -123,15 +115,6 @@ public class Engine {
             }
         }
         customers.sort(Comparator.comparing(Location::getId));
-        vendors.clear();
-        File[] vendDir = Pipe.list("VEND");
-        for (File file : vendDir) {
-            if (!file.isDirectory()) {
-                Location l = Json.load(file.getPath(), Location.class);
-                vendors.add(l);
-            }
-        }
-        vendors.sort(Comparator.comparing(Location::getId));
         items.clear();
         File[] itsDir = Pipe.list("ITS");
         for (File file : itsDir) {
@@ -278,18 +261,27 @@ public class Engine {
         return customers.stream().filter(location -> location.getTie().equals(id)).collect(Collectors.toList());
     }
 
-    public static ArrayList<Location> getVendors() {
+    public static ArrayList<Vendor> getVendors() {
+        ArrayList<Vendor> vendors = new ArrayList<>();
+        File[] vendDir = Pipe.list("VEND");
+        for (File file : vendDir) {
+            if (!file.isDirectory()) {
+                Vendor l = Json.load(file.getPath(), Vendor.class);
+                vendors.add(l);
+            }
+        }
+        vendors.sort(Comparator.comparing(Vendor::getId));
         return vendors;
     }
 
-    public static List<Location> getVendors(String id) {
-        return vendors.stream().filter(location -> location.getTie().equals(id)).collect(Collectors.toList());
+    public static List<Vendor> getVendors(String id) {
+        return getVendors().stream().filter(vendor -> vendor.getTie().equals(id)).collect(Collectors.toList());
     }
 
-    public static Location getVendor(String id){
-        for(Location loc : vendors){
-            if(loc.getId().equals(id)){
-                return loc;
+    public static Vendor getVendor(String id){
+        for(Vendor vendor : getVendors()){
+            if(vendor.getId().equals(id)){
+                return vendor;
             }
         }
         return null;
@@ -325,7 +317,7 @@ public class Engine {
     }
 
     public static List<Area> getAreas(String id) {
-        return areas.stream().filter(location -> location.getValue("cost_center").equals(id)).collect(Collectors.toList());
+        return areas.stream().filter(area -> area.getLocation().equals(id)).collect(Collectors.toList());
     }
 
     public static void setOrganization(Organization organization) {
@@ -429,7 +421,7 @@ public class Engine {
                 return new FindArea(desktop);
             }
             case "/AREAS/NEW" -> {
-                return new CreateArea(desktop, null);
+                return new CreateArea(null);
             }
             case "/AREAS/MOD" -> {
                 return new ModifyArea();
@@ -474,7 +466,7 @@ public class Engine {
                 return new ModifyWarehouse(null);
             }
             case "/VEND" -> {
-                return new Vendors("Vendors", "/VEND", desktop);
+                return new Vendors(desktop);
             }
             case "/VEND/F" -> {
                 return new FindVendor(desktop);
@@ -527,6 +519,9 @@ public class Engine {
             case "/USRS" -> {
                 return new Users(desktop);
             }
+            case "/USRS/CHG_PSSWD" -> {
+                return new ChangeUserPassword();
+            }
             case "/USRS/F" -> {
                 return new FindUser(desktop);
             }
@@ -554,6 +549,9 @@ public class Engine {
             case "/CATS/MOD" -> {
                 return new ModifyCatalog();
             }
+            case "/CATS/F" -> {
+                return new FindCatalog(desktop);
+            }
             case "/ITS" -> {
                 return new Items(desktop);
             }
@@ -577,6 +575,9 @@ public class Engine {
             }
             case "/ORDS/NEW", "/ORDS/PO/NEW" -> {
                 return new CreatePurchaseOrder();
+            }
+            case "/ORDS/RTRN" -> {
+                return new ReturnOrder(desktop);
             }
             case "/ORDS/PO/AUTO_MK" -> {
                 return new AutoMakePurchaseOrders();
@@ -602,6 +603,12 @@ public class Engine {
             case "/ORDS/SO/AUTO_MK" -> {
                 return new AutoMakeSalesOrders();
             }
+            case "/GR" -> {
+                return new GoodsReceipts(desktop);
+            }
+            case "/GR/F" -> {
+                return new FindGoodsReceipt(desktop);
+            }
             case "/INV/MV/STO" -> {
                 return new CreateSTO();
             }
@@ -616,6 +623,12 @@ public class Engine {
             }
             case "/FIN" -> {
                 return new Finance(desktop);
+            }
+            case "/MVMT/TSKS" -> {
+                return new TaskList(null, desktop);
+            }
+            case "/MVMT/TSKS/NEW" -> {
+                return new CreateTask();
             }
             case "/CNL/HR" -> {
                 return new HumanResources(desktop);
@@ -667,7 +680,7 @@ public class Engine {
                         }
                     }
                     case "VEND" -> {
-                        for(Location l : Engine.getVendors()){
+                        for(Vendor l : Engine.getVendors()){
                             if(l.getId().equals(oid)){
                                 return new VendorView(l);
                             }
@@ -697,6 +710,22 @@ public class Engine {
                             }
                         }
                         return new Ledgers(desktop);
+                    }
+                    case "WHS" -> {
+                        for(Warehouse l : getWarehouses()){
+                            if(l.getId().equals(oid)){
+                                return new WarehouseView(l, desktop);
+                            }
+                        }
+                        return new Warehouses(desktop);
+                    }
+                    case "ORDS" -> {
+                        for(PurchaseOrder l : Engine.realtime.getPurchaseOrders()){
+                            if(l.getOrderId().equals(oid)){
+                                return new PurchaseOrderView(l);
+                            }
+                        }
+                        return new Warehouses(desktop);
                     }
                     case "USRS" -> {
                         return new Users(desktop);
@@ -731,6 +760,7 @@ public class Engine {
     }
 
     public static class realtime {
+
         public static ArrayList<PurchaseRequisition> getPurchaseRequisitions() {
             ArrayList<PurchaseRequisition> prs = new ArrayList<>();
             File[] posDir = Pipe.list("PR");
@@ -743,6 +773,7 @@ public class Engine {
             prs.sort(Comparator.comparing(PurchaseRequisition::getId));
             return prs;
         }
+
         public static PurchaseRequisition getPurchaseRequisitions(String prNumber) {
             File[] posDir = Pipe.list("PR");
             for (File file : posDir) {
@@ -755,6 +786,7 @@ public class Engine {
             }
             return null;
         }
+
         public static ArrayList<PurchaseOrder> getPurchaseOrders() {
             ArrayList<PurchaseOrder> pos = new ArrayList<>();
             File[] posDir = Pipe.list("ORDS");
@@ -767,6 +799,7 @@ public class Engine {
             pos.sort(Comparator.comparing(PurchaseOrder::getOrderId));
             return pos;
         }
+
         public static PurchaseOrder getPurchaseOrders(String poNumber) {
             File[] posDir = Pipe.list("ORDS");
             for (File file : posDir) {
@@ -778,6 +811,19 @@ public class Engine {
                 }
             }
             return null;
+        }
+
+        public static ArrayList<GoodsReceipt> getGoodsReceipts() {
+            ArrayList<GoodsReceipt> pos = new ArrayList<>();
+            File[] posDir = Pipe.list("GR");
+            for (File file : posDir) {
+                if (!file.isDirectory()) {
+                    GoodsReceipt a = Json.load(file.getPath(), GoodsReceipt.class);
+                    pos.add(a);
+                }
+            }
+            pos.sort(Comparator.comparing(GoodsReceipt::getId));
+            return pos;
         }
     }
 }

@@ -71,6 +71,14 @@ public class GoodsReceipt {
         this.items = items;
     }
 
+    public double getTotalItems(){
+        double total = 0;
+        for(OrderLineItem item : items){
+            total += item.getQuantity();
+        }
+        return total;
+    }
+
     public LockeStatus getStatus() {
         return status;
     }

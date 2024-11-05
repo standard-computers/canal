@@ -5,6 +5,7 @@ import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -58,7 +59,7 @@ public class Warehouses extends JInternalFrame {
             }
         });
         Button nla = new Button("Add a Warehouse");
-        nla.addActionListener(e -> desktop.put(Engine.router("/WHS/NEW", desktop)));
+        nla.addActionListener(_ -> desktop.put(Engine.router("/WHS/NEW", desktop)));
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
         mainPanel.add(direct, BorderLayout.NORTH);
@@ -80,7 +81,7 @@ public class Warehouses extends JInternalFrame {
         }
     }
 
-    class WarehouseRenderer extends JPanel implements ListCellRenderer<Warehouse> {
+    static class WarehouseRenderer extends JPanel implements ListCellRenderer<Warehouse> {
 
         private JLabel ccName;
         private JLabel ccId;

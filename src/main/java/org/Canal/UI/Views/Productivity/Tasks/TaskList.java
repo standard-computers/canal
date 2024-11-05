@@ -2,11 +2,9 @@ package org.Canal.UI.Views.Productivity.Tasks;
 
 import org.Canal.Models.BusinessUnits.PurchaseOrder;
 import org.Canal.Models.SupplyChainUnits.Location;
-import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Views.Orders.PurchaseOrders.CreatePurchaseOrder;
 import org.Canal.UI.Views.Controllers.CheckboxBarcodeFrame;
-import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
@@ -17,7 +15,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 /**
- * /TSKS
+ * /MVMT/TSKS
  */
 public class TaskList extends JInternalFrame {
 
@@ -47,9 +45,6 @@ public class TaskList extends JInternalFrame {
         IconButton activatePO = new IconButton("Start", "start", "Resume/Activate PO");
         IconButton archivePo = new IconButton("Archive", "archive", "Archive PO, removes");
         IconButton label = new IconButton("Barcodes", "label", "Print labels for org properties");
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(Elements.h3("Purchase Orders", Constants.colors[9]));
-        tb.add(Box.createHorizontalStrut(5));
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(createPurchaseOrder);
@@ -63,7 +58,6 @@ public class TaskList extends JInternalFrame {
         tb.add(archivePo);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(label);
-        tb.add(Box.createHorizontalStrut(5));
         createPurchaseOrder.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 desktop.put(new CreatePurchaseOrder());
@@ -82,7 +76,16 @@ public class TaskList extends JInternalFrame {
     }
 
     private JTable createTable() {
-        String[] columns = new String[]{"ID", "Owner", "Supplier", "Ship To", "Bill To", "Sold To", "Customer", "Status"};
+        String[] columns = new String[]{
+                "ID",
+                "Owner",
+                "Supplier",
+                "Ship To",
+                "Bill To",
+                "Sold To",
+                "Customer",
+                "Status"
+        };
         ArrayList<String[]> pos = new ArrayList<>();
         for (PurchaseOrder po : Engine.realtime.getPurchaseOrders()) {
             pos.add(new String[]{
