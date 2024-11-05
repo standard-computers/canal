@@ -12,10 +12,12 @@ public class CustomJTable extends JTable {
 
     private boolean[] editableColumns;
     private List<Object[]> rowData;
+    private String[] columnNames;
 
     public CustomJTable(Object[][] data, String[] columnNames) {
         super();
         editableColumns = new boolean[columnNames.length];
+        this.columnNames = columnNames;
         Arrays.fill(editableColumns, true);
         rowData = new ArrayList<>(Arrays.asList(data));
         setModel(new CustomTableModel(data, columnNames));
@@ -27,7 +29,6 @@ public class CustomJTable extends JTable {
                 int row = rowAtPoint(e.getPoint());
                 if (row != -1) {
                     Object[] rowData = getRowData(row);
-                    System.out.println("Row data: " + Arrays.toString(rowData));
                 }
             }
         });
@@ -66,6 +67,16 @@ public class CustomJTable extends JTable {
 
     public Object[] getRowData(int rowIndex) {
         return rowData.get(rowIndex);
+    }
+
+    public void setRowData(Object[][] newRowData) {
+        rowData = new ArrayList<>(Arrays.asList(newRowData));
+        ((DefaultTableModel) getModel()).setDataVector(newRowData, getColumnIdentifiers().toArray());
+        repaint();
+    }
+
+    public List<String> getColumnIdentifiers() {
+        return List.of(columnNames);
     }
 
     private class CustomTableModel extends DefaultTableModel {

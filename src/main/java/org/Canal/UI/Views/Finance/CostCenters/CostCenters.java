@@ -51,7 +51,6 @@ public class CostCenters extends JInternalFrame {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     String inputText = direct.getText().trim();
-                    System.out.println(inputText);
                     if (!inputText.isEmpty()) {
                         desktop.put(Engine.router("/CCS/" + inputText, desktop));
                     }

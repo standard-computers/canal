@@ -42,7 +42,6 @@ public class CreateCostCenter extends JInternalFrame {
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);
         Button make = new Button("Make");
-        getRootPane().setDefaultButton(make);
         add(make, BorderLayout.SOUTH);
         setIconifiable(true);
         setClosable(true);

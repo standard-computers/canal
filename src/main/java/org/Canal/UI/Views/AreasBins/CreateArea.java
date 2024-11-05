@@ -58,7 +58,6 @@ public class CreateArea extends JInternalFrame {
         f.addInput(new Label("Height", Constants.colors[7]), heightField);
         f.addInput(new Label("Area", Constants.colors[7]), areaName);
         add(make, BorderLayout.SOUTH);
-        getRootPane().setDefaultButton(make);
         JPanel main = new JPanel(new GridLayout(1, 2));
         main.add(f);
         JPanel binner = new JPanel();

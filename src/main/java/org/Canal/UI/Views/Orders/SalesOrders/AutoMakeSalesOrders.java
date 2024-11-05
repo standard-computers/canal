@@ -31,7 +31,8 @@ public class AutoMakeSalesOrders extends JInternalFrame {
     private ArrayList<JCheckBox> checkboxes;
 
     public AutoMakeSalesOrders() {
-        setTitle("AutoMake Sales Orders");
+        super("AutoMake Sales Orders", false, true, false, true);
+        setFrameIcon(new ImageIcon(AutoMakeSalesOrders.class.getResource("/icons/automake.png")));
         locations = Engine.getCostCenters();
         locations.addAll(Engine.getDistributionCenters());
         this.checkboxes = new ArrayList<>();
@@ -64,7 +65,6 @@ public class AutoMakeSalesOrders extends JInternalFrame {
         add(description, BorderLayout.NORTH);
         add(main, BorderLayout.CENTER);
         Button createPrs = new Button("AutoMake Purchase Reqs.");
-        getRootPane().setDefaultButton(createPrs);
         createPrs.addActionListener(_ -> {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             for (JCheckBox checkbox : checkboxes) {
@@ -78,8 +78,6 @@ public class AutoMakeSalesOrders extends JInternalFrame {
             JOptionPane.showMessageDialog(null, "AutoMake Purchase Reqs Complete");
         });
         add(createPrs, BorderLayout.SOUTH);
-        setIconifiable(true);
-        setClosable(true);
     }
 
     private void addCheckboxes() {

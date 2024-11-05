@@ -39,7 +39,6 @@ public class CreateWarehouse extends JInternalFrame {
         JTextField taxIdField = new JTextField(15);
         JCheckBox isTaxExempt = new JCheckBox();
         Button make = new Button("Make");
-        getRootPane().setDefaultButton(make);
         Form f = new Form();
         f.addInput(new Label("*New ID", UIManager.getColor("Label.foreground")), whsIdField);
         f.addInput(new Label("*Organization", UIManager.getColor("Label.foreground")), orgIdField);

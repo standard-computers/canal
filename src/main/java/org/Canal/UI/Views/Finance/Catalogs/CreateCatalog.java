@@ -36,7 +36,6 @@ public class CreateCatalog extends JInternalFrame {
         php.add(hp, BorderLayout.CENTER);
         php.add(bl, BorderLayout.SOUTH);
         add(php);
-        getRootPane().setDefaultButton(bl);
         setResizable(false);
         bl.addMouseListener(new MouseAdapter() {
             @Override

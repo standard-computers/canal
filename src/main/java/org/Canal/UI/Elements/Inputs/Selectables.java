@@ -13,13 +13,13 @@ public class Selectables {
     public static Selectable allLocations(){
         HashMap<String, String> availableLocations = new HashMap<>();
         for(Location cs : Engine.getCostCenters()){
-            availableLocations.put(cs.getId() + " – " + cs.getName(), cs.getId());
+            availableLocations.put(cs.getId(), cs.getId());
         }
         for(Location dcs : Engine.getDistributionCenters()){
-            availableLocations.put(dcs.getId() + " – " + dcs.getName(), dcs.getId());
+            availableLocations.put(dcs.getId(), dcs.getId());
         }
         for(Warehouse whs : Engine.getWarehouses()){
-            availableLocations.put(whs.getId() + " – " + whs.getName(), whs.getId());
+            availableLocations.put(whs.getId(), whs.getId());
         }
         return new Selectable(availableLocations);
     }
@@ -35,7 +35,7 @@ public class Selectables {
     public static Selectable allOrgs(){
         HashMap<String, String> availableOrgs = new HashMap<>();
         for(Organization org : Engine.getOrganizations()){
-            availableOrgs.put(org.getId() + " – " + org.getName(), org.getId());
+            availableOrgs.put(org.getId(), org.getId());
         }
         return new Selectable(availableOrgs);
     }

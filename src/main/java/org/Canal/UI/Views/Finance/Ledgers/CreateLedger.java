@@ -46,7 +46,6 @@ public class CreateLedger extends JInternalFrame {
         f.addInput(new Label("Close Date", Constants.colors[4]), ledgerEndPicker);
 
         Button create = new Button("Create");
-        getRootPane().setDefaultButton(create);
         setLayout(new BorderLayout());
         add(Elements.header("Create Ledger"), BorderLayout.NORTH);
         add(create, BorderLayout.SOUTH);

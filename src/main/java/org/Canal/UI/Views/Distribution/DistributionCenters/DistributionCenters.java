@@ -22,11 +22,11 @@ public class DistributionCenters extends JInternalFrame {
     private DefaultListModel<Location> listModel;
 
     public DistributionCenters(DesktopState desktop) {
-        setTitle("Distribution Centers");
+        super("Distribution Centers", false, true, false, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/distribution_centers.png")));
         listModel = new DefaultListModel<>();
         JList<Location> list = new JList<>(listModel);
-        list.setCellRenderer(new LocationRenderer());
+        list.setCellRenderer(new DCRenderer());
         JScrollPane scrollPane = new JScrollPane(list);
         scrollPane.setPreferredSize(new Dimension(300, 400));
         list.addMouseListener(new MouseAdapter() {
@@ -38,6 +38,7 @@ public class DistributionCenters extends JInternalFrame {
                         Location l = listModel.getElementAt(selectedIndex);
                         if (l != null) {
                             desktop.put(Engine.router("/DCSS/" + l.getId(), desktop));
+                            dispose();
                         } else {
                             JOptionPane.showMessageDialog(null, "Location Not Found");
                         }
@@ -51,24 +52,21 @@ public class DistributionCenters extends JInternalFrame {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     String inputText = direct.getText().trim();
-                    System.out.println(inputText);
                     if (!inputText.isEmpty()) {
                         desktop.put(Engine.router("/DCSS/" + inputText, desktop));
+                        dispose();
                     }
                 }
             }
         });
         Button nla = new Button("Add");
-        nla.addActionListener(e -> desktop.put(Engine.router("/DCSS/NEW", desktop)));
+        nla.addActionListener(_ -> desktop.put(Engine.router("/DCSS/NEW", desktop)));
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
         mainPanel.add(direct, BorderLayout.NORTH);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
         mainPanel.add(nla, BorderLayout.SOUTH);
         add(mainPanel);
-        setResizable(false);
-        setIconifiable(true);
-        setClosable(true);
         loadLocations();
     }
 
@@ -81,14 +79,14 @@ public class DistributionCenters extends JInternalFrame {
         }
     }
 
-    class LocationRenderer extends JPanel implements ListCellRenderer<Location> {
+    static class DCRenderer extends JPanel implements ListCellRenderer<Location> {
 
         private JLabel ccName;
         private JLabel ccId;
         private JLabel line1;
         private JLabel line2;
 
-        public LocationRenderer() {
+        public DCRenderer() {
             setLayout(new GridLayout(4, 1));
             ccName = new JLabel();
             ccId = new JLabel();

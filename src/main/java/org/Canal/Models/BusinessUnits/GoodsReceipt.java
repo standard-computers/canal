@@ -5,13 +5,13 @@ import java.util.ArrayList;
 
 public class GoodsReceipt {
 
-    public String id;
-    public String purchaseOrder;
-    public String received;
-    public String receiver;
-    public String location;
-    public ArrayList<OrderLineItem> items;
-    private LockeStatus status;
+    public String id; //GR ID
+    public String purchaseOrder; //PO this is tied to
+    public String received; //Timestamp of when received
+    public String receiver; //User ID
+    public String location; //Location receiving in at
+    public ArrayList<OrderLineItem> items; //Items received and qty received
+    private LockeStatus status; //Status of this receival
 
     public GoodsReceipt(String id, String purchaseOrder, String received, String receiver, String location, ArrayList<OrderLineItem> items, LockeStatus status) {
         this.id = id;

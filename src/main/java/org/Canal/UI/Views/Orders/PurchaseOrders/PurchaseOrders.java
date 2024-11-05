@@ -4,7 +4,6 @@ import org.Canal.Models.BusinessUnits.PurchaseOrder;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Views.Controllers.CheckboxBarcodeFrame;
-import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
@@ -86,7 +85,7 @@ public class PurchaseOrders extends JInternalFrame {
     private JTable createTable() {
         String[] columns = new String[]{
                 "ID", "Owner", "Ordered", "Expexcted Deliv.", "Purchase Req.",
-                "Supplier", "Ship To", "Bill To", "Sold To", "Customer", "Status"
+                "Supplier", "Ship To", "Bill To", "Sold To", "Customer", "Total", "Status"
         };
         ArrayList<String[]> pos = new ArrayList<>();
         for (PurchaseOrder po : Engine.realtime.getPurchaseOrders()) {

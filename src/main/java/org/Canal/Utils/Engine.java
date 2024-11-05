@@ -51,6 +51,7 @@ import org.Canal.UI.Views.Inventory.CreateSTO;
 import org.Canal.UI.Views.Inventory.InventoryForItem;
 import org.Canal.UI.Views.Inventory.InventoryForMaterial;
 import org.Canal.UI.Views.Invoices.CreateInvoice;
+import org.Canal.UI.Views.Orders.PurchaseOrders.AutoMakePurchaseOrders;
 import org.Canal.UI.Views.Orders.PurchaseOrders.CreatePurchaseOrder;
 import org.Canal.UI.Views.Orders.PurchaseOrders.FindPurchaseOrder;
 import org.Canal.UI.Views.Orders.PurchaseOrders.PurchaseOrders;
@@ -58,6 +59,7 @@ import org.Canal.UI.Views.Orders.PurchaseRequisitions.AutoMakePurchaseRequisitio
 import org.Canal.UI.Views.Orders.PurchaseRequisitions.CreatePurchaseRequisition;
 import org.Canal.UI.Views.Orders.PurchaseRequisitions.FindPurchaseReq;
 import org.Canal.UI.Views.Orders.PurchaseRequisitions.PurchaseRequisitions;
+import org.Canal.UI.Views.Orders.SalesOrders.AutoMakeSalesOrders;
 import org.Canal.UI.Views.Orders.SalesOrders.CreateSalesOrder;
 import org.Canal.UI.Views.Orders.SalesOrders.SalesOrders;
 import org.Canal.UI.Views.Transportation.Carriers.CreateCarrier;
@@ -567,11 +569,17 @@ public class Engine {
             case "/ORDS", "/ORDS/PO" -> {
                 return new PurchaseOrders(desktop);
             }
+            case "/ORDS/RCV" -> {
+                return new ReceiveOrder(Engine.getOrganization().getId(), desktop);
+            }
             case "/ORDS/F", "/ORDS/PO/F" -> {
                 return new FindPurchaseOrder(desktop);
             }
             case "/ORDS/NEW", "/ORDS/PO/NEW" -> {
                 return new CreatePurchaseOrder();
+            }
+            case "/ORDS/PO/AUTO_MK" -> {
+                return new AutoMakePurchaseOrders();
             }
             case "/ORDS/PR" -> {
                 return new PurchaseRequisitions(desktop);
@@ -590,6 +598,9 @@ public class Engine {
             }
             case "/ORDS/SO/NEW" -> {
                 return new CreateSalesOrder();
+            }
+            case "/ORDS/SO/AUTO_MK" -> {
+                return new AutoMakeSalesOrders();
             }
             case "/INV/MV/STO" -> {
                 return new CreateSTO();
@@ -625,7 +636,6 @@ public class Engine {
                 String[] chs = transactionCode.split("/");
                 String t = chs[1];
                 String oid = chs[2];
-                System.out.println(oid);
                 switch (t) {
                     case "ORGS" -> new OrgView(Engine.getOrganization(oid), desktop);
                     case "AREAS" -> {

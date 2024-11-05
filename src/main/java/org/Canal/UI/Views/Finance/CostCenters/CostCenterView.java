@@ -22,6 +22,9 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * /CCS/$[COST_CENTER_ID]
+ */
 public class CostCenterView extends JInternalFrame implements RefreshListener {
 
     private Location thisCostCenter;
@@ -77,7 +80,7 @@ public class CostCenterView extends JInternalFrame implements RefreshListener {
         IconButton inventory = new IconButton("Inventory", "inventory", "Inventory of items in cost center");
         IconButton addArea = new IconButton("+ Area", "areas", "Add an area cost center");
         IconButton addBin = new IconButton("+ Bin", "bins", "Add an area cost center");
-        IconButton autoMake = new IconButton("Auto Make Areas/Bins", "auto_bin", "Make areas and bins from templates");
+        IconButton autoMake = new IconButton("Auto Make Areas/Bins", "automake", "Make areas and bins from templates");
         IconButton batch = new IconButton("Make Areas/Bins", "batch", "Add as csv");
         IconButton pos = new IconButton("POS Mode", "pos", "Launch Point-of-Sale");
         IconButton label = new IconButton("", "label", "Print labels for properties");

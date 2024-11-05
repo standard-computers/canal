@@ -46,7 +46,6 @@ public class CreateDistributionCenter extends JInternalFrame {
         f.addInput(new Label("Country", Constants.colors[5]), cy);
         add(f, BorderLayout.CENTER);
         add(make, BorderLayout.SOUTH);
-        getRootPane().setDefaultButton(make);
         make.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

@@ -39,7 +39,6 @@ public class CreatePosition extends JInternalFrame {
         f.addInput(new Label("Tax ID", UIManager.getColor("Label.foreground")), taxId);
         f.addInput(new Label("Tax Exempt?", UIManager.getColor("Label.foreground")), isTaxExempt);
         Button make = new Button("Make Organization");
-        getRootPane().setDefaultButton(make);
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);
         add(make, BorderLayout.SOUTH);

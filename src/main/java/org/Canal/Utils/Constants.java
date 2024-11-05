@@ -67,6 +67,8 @@ public class Constants {
                         new Locke("Inventory", false, "/INV", null),
                         new Locke("Human Resources", false, "/CNL/HR", null),
                         new Locke("Time Clock", false, "/TM_CLCK", null),
+                        new Locke("Clear Desk", false, "/CLEAR_DSK", null),
+                        new Locke("Close Desk", false, "/CLOSE_DSK", null),
                         new Locke("Canal Settings", false, "/CNL", null),
                         new Locke("Leave Canal", false, "/CNL/EXIT", null),
                 }),

@@ -83,7 +83,6 @@ public class CreatePurchaseRequisition extends JInternalFrame {
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);
         Button make = new Button("Commit Purchase Requisition");
-        getRootPane().setDefaultButton(make);
         add(make, BorderLayout.SOUTH);
         make.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class PurchaseOrder {
 
     private String orderId; //Order ID
-    private String owner; //ID of User who is creating order
+    private String owner = "UNKNOWN"; //ID of User who is creating order
     private String orderedOn; //Timestamp this was ordered on
     private String expectedDelivery; //When this should arrive to ship to
     private String purchaseRequisition; //Purchase Requisition ID

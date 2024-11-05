@@ -46,7 +46,6 @@ public class Areas extends JInternalFrame {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     String inputText = direct.getText().trim();
-                    System.out.println(inputText);
                     if (!inputText.isEmpty()) {
                         Engine.router("/AREAS/" + inputText, desktop);
                     }

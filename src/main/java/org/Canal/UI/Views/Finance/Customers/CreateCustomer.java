@@ -32,7 +32,6 @@ public class CreateCustomer extends JInternalFrame {
         JTextField countryField = new JTextField(20);
         countryField.setText("US");
         Button make = new Button("Make");
-        getRootPane().setDefaultButton(make);
         Form f = new Form();
         f.addInput(new Label("*New ID", UIManager.getColor("Label.foreground")), cstIdField);
         f.addInput(new Label("*Organization", UIManager.getColor("Label.foreground")), orgIdField);
@@ -44,7 +43,6 @@ public class CreateCustomer extends JInternalFrame {
         f.addInput(new Label("Country", Constants.colors[5]), countryField);
         add(f, BorderLayout.CENTER);
         add(make, BorderLayout.SOUTH);
-        getRootPane().setDefaultButton(make);
         make.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

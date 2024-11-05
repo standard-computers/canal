@@ -134,9 +134,6 @@ public class CreatePurchaseOrder extends JInternalFrame {
                     ArrayList<OrderLineItem> lineitems = new ArrayList<>();
                     for (int row = 0; row < model.getRowCount(); row++) {
                         for (int col = 0; col < model.getColumnCount(); col++) {
-//                            if(col == 1){
-//
-//                            }
                             Object value = model.getValueAt(row, col);
                             System.out.println("Value at (" + row + ", " + col + "): " + value);
                         }
@@ -161,6 +158,10 @@ public class CreatePurchaseOrder extends JInternalFrame {
             }
         });
         model.addTableModelListener(_ -> updateTotal());
+    }
+
+    public void setBuyer(String buyerId){
+
     }
 
     private JPanel orderInfoPanel(){

@@ -45,7 +45,6 @@ public class CreateVendor extends JInternalFrame {
         f.addInput(new Label("Country", Constants.colors[5]), countryField);
         add(f, BorderLayout.CENTER);
         add(make, BorderLayout.SOUTH);
-        getRootPane().setDefaultButton(make);
         setResizable(false);
         setIconifiable(true);
         setClosable(true);

@@ -1,9 +1,11 @@
 package org.Canal.UI.Views.Orders;
 
+import org.Canal.Models.BusinessUnits.OrderLineItem;
 import org.Canal.Models.BusinessUnits.PurchaseOrder;
 import org.Canal.Models.SupplyChainUnits.Area;
-import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.Button;
+import org.Canal.UI.Elements.CustomJTable;
+import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Inputs.Selectable;
@@ -13,72 +15,113 @@ import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * /ORDS/RCV
+ */
 public class ReceiveOrder extends JInternalFrame {
 
-    private JTextField poField, onField;
-    private Selectable ats, availablePutaway;
+    private JTextField poField;
+    private Selectable availRcvLocations, availablePutaway;
 
-    public ReceiveOrder(String costCenter, DesktopState desktop){
-        setTitle("Receive an Order");
+    public ReceiveOrder(String receivingLocation, DesktopState desktop){
+        super("Receive an Order", false, true, false, true);
         Constants.checkLocke(this, true, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));
+        setLayout(new BorderLayout());
+
         Form f = new Form();
         poField = new JTextField(12);
-        onField = new JTextField(12);
         f.addInput(new Label("Purchase Order #", Constants.colors[0]), poField);
-        f.addInput(new Label("[or] Order #", Constants.colors[1]), onField);
-        HashMap<String, String> opts = new HashMap<>();
-        for(Location cs : Engine.getCustomers()){
-            opts.put(cs.getId() + " – " + cs.getName(), cs.getId());
-        }
-        for(Location vs : Engine.getVendors()){
-            opts.put(vs.getId() + " – " + vs.getName(), vs.getId());
-        }
-        for(Location vs : Engine.getDistributionCenters()){
-            opts.put(vs.getId() + " – " + vs.getName(), vs.getId());
-        }
         HashMap<String, String> putAwayOptions = new HashMap<>();
-        for(Area a : Engine.getAreas(costCenter)){
-            putAwayOptions.put(a.getId() + " – " + a.getValue("name"), a.getId());
+        for(Area a : Engine.getAreas(receivingLocation)){
+            putAwayOptions.put(a.getId(), a.getId());
         }
-        ats = new Selectable(opts);
+        JPanel itemInput = new JPanel();
+        String[][] data = new String[][]{};
+        CustomJTable receivedItems = new CustomJTable(data, new String[]{"Item", "Exp. Qty.", "Rcvd. Qty."});
+        JScrollPane p = new JScrollPane(receivedItems);
+        itemInput.add(p);
+        add(itemInput, BorderLayout.CENTER);
+        poField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                onChange();
+            }
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                onChange();
+            }
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                onChange();
+            }
+            private void onChange() {
+                String poId = poField.getText();
+                PurchaseOrder foundPo = Engine.realtime.getPurchaseOrders(poId);
+                if(foundPo != null){
+                    String[][] rcvData = new String[foundPo.getItems().size()][3];
+                    ArrayList<OrderLineItem> items = foundPo.getItems();
+                    for (int i = 0; i < items.size(); i++) {
+                        OrderLineItem oli = items.get(i);
+                        System.out.println(oli.toString());
+                        rcvData[i][0] = oli.getName();
+                        rcvData[i][1] = String.valueOf(oli.getQuantity());
+                        rcvData[i][2] = String.valueOf(oli.getQuantity());
+                    }
+                    receivedItems.setRowData(rcvData);
+                }
+            }
+        });
+        availRcvLocations = Selectables.allLocations();
+        availRcvLocations.editable();
+        availRcvLocations.setSelectedValue(receivingLocation);
         availablePutaway = new Selectable(putAwayOptions);
-        f.addInput(new Label("Receiving Location", Constants.colors[2]), ats);
+        f.addInput(new Label("Receiving Location", Constants.colors[2]), availRcvLocations);
         f.addInput(new Label("Putaway Area", Constants.colors[3]), availablePutaway);
-        setLayout(new BorderLayout());
-        add(f, BorderLayout.CENTER);
-        Button receive = new Button("Receive Order");
-        setClosable(true);
-        setIconifiable(true);
+        add(f, BorderLayout.NORTH);
+
+        Button receive = new Button("Receive");
+        JPanel receivePanel = new JPanel();
+        JPanel g = new JPanel();
+        JCheckBox confirmAccuracy = new JCheckBox("Confirm Accuracy");
+        g.add(confirmAccuracy);
+        g.add(receive);
+        receivePanel.add(g, BorderLayout.SOUTH);
+
+        add(receivePanel, BorderLayout.SOUTH);
         receive.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 String po = poField.getText();
-                String on = onField.getText();
-                String rlid = ats.getSelectedValue();
-                if(po.isEmpty() && on.isEmpty()){
-                    JOptionPane.showMessageDialog(null, "PO or Order Number required!", "Error", JOptionPane.ERROR_MESSAGE);
+                String rlid = availRcvLocations.getSelectedValue();
+                if(po.isEmpty()){
+                    JOptionPane.showMessageDialog(null, "Purchase Order Number Required!", "Error", JOptionPane.ERROR_MESSAGE);
                 }else{
-                    if(po.isEmpty()){
-                        PurchaseOrder spo = Engine.realtime.getPurchaseOrders(po);
-                        if(spo == null){
-                            JOptionPane.showMessageDialog(null, "PO or Order Number required!", "Error", JOptionPane.ERROR_MESSAGE);
-                            if(!rlid.equals(spo.getVendor())){
-                                int override = JOptionPane.showConfirmDialog(null, "The receiving location and buyer do not match. Override?");
-                                if(override == JOptionPane.NO_OPTION){
+                    PurchaseOrder spo = Engine.realtime.getPurchaseOrders(po);
+                    if(spo == null){
+                        JOptionPane.showMessageDialog(null, "PO or Order Number required!", "Error", JOptionPane.ERROR_MESSAGE);
+                        if(!rlid.equals(spo.getVendor())){
+                            int override = JOptionPane.showConfirmDialog(null, "The receiving location and buyer do not match. Override?");
+                            if(override == JOptionPane.NO_OPTION){
 
-                                }else{
+                            }else{
 
-                                }
                             }
                         }
                     }
                 }
             }
         });
+    }
+
+    public void setPO(String po){
+        poField.setText(po);
     }
 }
