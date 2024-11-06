@@ -1,4 +1,4 @@
-package org.Canal.UI.Views.Transportation;
+package org.Canal.UI.Views.Transportation.OutboundDeliveryOrders;
 
 import org.Canal.Models.BusinessUnits.PurchaseOrder;
 import org.Canal.UI.Elements.Elements;
@@ -15,16 +15,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-/**
- * /TRANS/ASN
- */
-public class ASNList extends JInternalFrame {
+public class OutboundDeliveries extends JInternalFrame {
 
     private JTable table;
     private DesktopState desktop;
 
-    public ASNList(DesktopState desktop) {
-        super("Open ASNs");
+    public OutboundDeliveries(DesktopState desktop) {
+        super("Outbound Deliveries", true, true, true, true);
         this.desktop = desktop;
         JPanel tb = createToolBar();
         JPanel holder = new JPanel(new BorderLayout());
@@ -33,10 +30,6 @@ public class ASNList extends JInternalFrame {
         holder.add(tableScrollPane, BorderLayout.CENTER);
         holder.add(tb, BorderLayout.NORTH);
         add(holder);
-        setIconifiable(true);
-        setClosable(true);
-        setMaximizable(true);
-        setResizable(true);
     }
 
     private JPanel createToolBar() {
@@ -50,7 +43,7 @@ public class ASNList extends JInternalFrame {
         IconButton archivePo = new IconButton("Archive", "archive", "Archive PO, removes");
         IconButton label = new IconButton("Barcodes", "label", "Print labels for org properties");
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(Elements.h3("ASNs", Constants.colors[9]));
+        tb.add(Elements.h3("Outbound Deliveries", Constants.colors[9]));
         tb.add(Box.createHorizontalStrut(5));
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));

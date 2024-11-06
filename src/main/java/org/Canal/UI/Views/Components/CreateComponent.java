@@ -1,6 +1,5 @@
 package org.Canal.UI.Views.Components;
 
-import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.Models.SupplyChainUnits.Material;
 import org.Canal.Models.SupplyChainUnits.Vendor;
 import org.Canal.UI.Elements.Inputs.Copiable;
@@ -12,6 +11,7 @@ import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Pipe;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -25,7 +25,17 @@ import java.util.HashMap;
 public class CreateComponent extends JInternalFrame {
 
     private Copiable orgIdField;
-    private JTextField materialIdField, materialNameField, materialPriceField, materialColor, itemWidth, itemLength, itemHeight, itemWeight, tax, exciseTax, upc;
+    private JTextField materialIdField;
+    private JTextField materialNameField;
+    private JTextField materialPriceField;
+    private JTextField materialColor;
+    private UOMField itemWidth;
+    private UOMField itemLength;
+    private UOMField itemHeight;
+    private UOMField itemWeight;
+    private JTextField tax;
+    private JTextField exciseTax;
+    private JTextField upc;
     private JCheckBox isBatched, isSkud;
     private Selectable selectedVendor;
 
@@ -56,10 +66,10 @@ public class CreateComponent extends JInternalFrame {
         f1.addInput(new Label("Price", Constants.colors[4]), materialPriceField);
         f1.addInput(new Label("SKU'd Product", Constants.colors[5]), isSkud);
         f1.addInput(new Label("UPC", Constants.colors[5]), upc);
-        itemWidth = new JTextField("0");
-        itemLength = new JTextField("0");
-        itemHeight = new JTextField("0");
-        itemWeight = new JTextField("0");
+        itemWidth = new UOMField();
+        itemLength = new UOMField();
+        itemHeight = new UOMField();
+        itemWeight = new UOMField();
         tax = new JTextField("0");
         exciseTax = new JTextField("0");
         materialColor = new JTextField("Black");
@@ -108,11 +118,11 @@ public class CreateComponent extends JInternalFrame {
         newItem.setBatched(isBatched.isSelected());
         newItem.setSkud(isSkud.isSelected());
         newItem.setPrice(Double.parseDouble(materialPriceField.getText()));
-        newItem.setWidth(Double.parseDouble(itemWidth.getText()));
-        newItem.setLength(Double.parseDouble(itemLength.getText()));
-        newItem.setHeight(Double.parseDouble(itemHeight.getText()));
-        newItem.setWeight(Double.parseDouble(itemWeight.getText()));
-        newItem.setTax(Double.parseDouble(itemWeight.getText()));
+        newItem.setWidth(Double.parseDouble(itemWidth.getValue()));
+        newItem.setLength(Double.parseDouble(itemLength.getValue()));
+        newItem.setHeight(Double.parseDouble(itemHeight.getValue()));
+        newItem.setWeight(Double.parseDouble(itemWeight.getValue()));
+        newItem.setTax(Double.parseDouble(itemWeight.getValue()));
         newItem.setExciseTax(Double.parseDouble(exciseTax.getText()));
         Pipe.save("/MTS", newItem);
         dispose();

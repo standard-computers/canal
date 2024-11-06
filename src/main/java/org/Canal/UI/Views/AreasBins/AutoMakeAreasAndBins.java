@@ -2,19 +2,23 @@ package org.Canal.UI.Views.AreasBins;
 
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.Models.SupplyChainUnits.Warehouse;
-import org.Canal.UI.Elements.Windows.FormFrame;
+import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
+
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class AutoMakeAreasAndBins extends FormFrame {
+/**
+ * /AREAS/AUTO_MK
+ */
+public class AutoMakeAreasAndBins extends JInternalFrame {
 
     public AutoMakeAreasAndBins() {
-        setTitle("Area/Bin AutoMake");
+        super("Area/Bin AutoMake", false, true, false, true);
 
         HashMap<String, String> als = new HashMap<>();
         for(Location l : Engine.getCostCenters()){
@@ -27,13 +31,10 @@ public class AutoMakeAreasAndBins extends FormFrame {
             als.put(l.getId(), l.getId());
         }
         Selectable locations = new Selectable(als);
-
-        addInput(new Label("Location", Constants.colors[0]), locations);
-        addInput(new Label("Bins Per Area", Constants.colors[1]), new JTextField("100", 10));
-        add(prepareAreas());
-        setVisible(true);
-        pack();
-
+        Form f = new Form();
+        f.addInput(new Label("Location", Constants.colors[0]), locations);
+        f.addInput(new Label("Bins Per Area", Constants.colors[1]), new JTextField("100", 10));
+        add(f);
     }
 
     private JPanel prepareAreas() {

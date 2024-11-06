@@ -5,7 +5,7 @@ import org.Canal.Models.BusinessUnits.PurchaseOrder;
 import org.Canal.Models.SupplyChainUnits.*;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
-import org.Canal.UI.Views.AreasBins.CreateBin;
+import org.Canal.UI.Views.Bins.CreateBin;
 import org.Canal.UI.Views.Finance.AcceptPayment;
 import org.Canal.UI.Views.AreasBins.CreateArea;
 import org.Canal.UI.Views.Finance.IssuePayment;

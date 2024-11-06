@@ -38,7 +38,8 @@ public class Constants {
 
     public static ArrayList<String> getAllTransactions() {
         ArrayList<String> transactions = new ArrayList<>();
-        if (allModules().getTransaction() != null && !transactions.contains(allModules().getTransaction())) {
+        if (allModules().getTransaction() != null) {
+            allModules();
             transactions.add(allModules().getTransaction());
         }
         if (allModules().getChildren() != null) {
@@ -51,7 +52,7 @@ public class Constants {
 
     public static ArrayList<String> getTransactions(Locke canal) {
         ArrayList<String> transactions = new ArrayList<>();
-        if (canal.getTransaction() != null && !transactions.contains(canal.getTransaction())) {
+        if (canal.getTransaction() != null) {
             transactions.add(canal.getTransaction());
         }
         if (canal.getChildren() != null) {
@@ -123,6 +124,22 @@ public class Constants {
                         new Locke("Modify Warehouse", false, "/WHS/MOD", null),
                         new Locke("Remove Warehouse", false, "/WHS/DEL", null),
                 }),
+                new Locke("Areas", true, "/AREAS", new Locke[]{
+                        new Locke("Find Area", false, "/AREAS/F", null),
+                        new Locke("AutoMake Areas/Bins", false, "/AREAS/AUTO_MK", null),
+                        new Locke("Create Area", false, "/AREAS/NEW", null),
+                        new Locke("Modify Area", false, "/AREAS/MOD", null),
+                        new Locke("Remove Area", false, "/AREAS/DEL", null),
+                        new Locke("Archive Area", false, "/AREAS/ARCHV", null),
+                        new Locke("Bins", false, "/BNS", new Locke[]{
+                            new Locke("Find Bin", false, "/BNS/F", null),
+                            new Locke("Create Bin", false, "/BNS/NEW", null),
+                            new Locke("Modify Bin", false, "/BNS/MOD", null),
+                            new Locke("Remove Bin", false, "/BNS/DEL", null),
+                            new Locke("Archive Bin", false, "/BNS/ARCHV", null),
+                            new Locke("Empty Bin", false, "/BNS/EMPTY", null),
+                        }),
+                }),
                 new Locke("Customers", true, "/CSTS", new Locke[]{
                         new Locke("Find Customer", false, "/CSTS/F", null),
                         new Locke("Create Customer", false, "/CSTS/NEW", null),
@@ -131,7 +148,7 @@ public class Constants {
                                 new Locke("Invoice", false, "/CSTS/INVS/NEW", null),
                                 new Locke("Delinquent", false, "/CSTS/DLQ", null),
                                 new Locke("Block", false, "/CSTS/BLCK", null),
-                                new Locke("Block", false, "/CSTS/ARCHV", null),
+                                new Locke("Archive", false, "/CSTS/ARCHV", null),
                         }),
                 }),
                 new Locke("Invoices", true, "/INVS", new Locke[]{
@@ -229,6 +246,29 @@ public class Constants {
                         new Locke("Create", false, "/DIST/", null),
                         new Locke("Modify", false, "/DIST/", null),
                         new Locke("Remove", false, "/DIST/", null),
+                        new Locke("Transportation", false, "/TRANS", new Locke[]{
+                            new Locke("Carriers", false, "/TRANS/CRRS", new Locke[]{
+                                new Locke("Find Carrier", false, "/TRANS/CRRS/F", null),
+                                new Locke("Create Carrier", false, "/TRANS/CRRS/NEW", null),
+                                new Locke("Modify Carrier", false, "/TRANS/CRRS/MOD", null),
+                                new Locke("Remove Carrier", false, "/TRANS/CRRS/DEL", null),
+                                new Locke("Archive Carrier", false, "/TRANS/CRRS/ARCHV", null),
+                            }),
+                            new Locke("Inbound Deliveries", false, "/TRANS/IDO", new Locke[]{
+                                new Locke("Find Inbound Delivery", false, "/TRANS/IDO/F", null),
+                                new Locke("Create Inbound Delivery", false, "/TRANS/IDO/NEW", null),
+                                new Locke("Modify Inbound Delivery", false, "/TRANS/IDO/MOD", null),
+                                new Locke("Remove Inbound Delivery", false, "/TRANS/IDO/DEL", null),
+                                new Locke("Archive Inbound Delivery", false, "/TRANS/IDO/ARCHV", null),
+                            }),
+                            new Locke("Outbound Deliveries", false, "/TRANS/ODO", new Locke[]{
+                                new Locke("Find Outbound Delivery", false, "/TRANS/ODO/F", null),
+                                new Locke("Create Outbound Delivery", false, "/TRANS/ODO/NEW", null),
+                                new Locke("Modify Outbound Delivery", false, "/TRANS/ODO/MOD", null),
+                                new Locke("Remove Outbound Delivery", false, "/TRANS/ODO/DEL", null),
+                                new Locke("Archive Outbound Delivery", false, "/TRANS/ODO/ARCHV", null),
+                            }),
+                        }),
                 }),
                 new Locke("Ledgers", true, "/LGS", new Locke[]{
                         new Locke("Find", false, "/LGS/F", null),
@@ -248,7 +288,7 @@ public class Constants {
                         new Locke("Move Inventory", true, "/INV/MV/MOD", new Locke[]{
                                 new Locke("Perform Stock Transfer Order (STO)", false, "/INV/MV/STO", null),
                         }),
-                        new Locke("Remove Inventor", false, "/INV/MV/DEL", null),
+                        new Locke("Remove Inventory", false, "/INV/MV/DEL", null),
                         new Locke("Adjust Inventory", false, "/INV/MV/ADJ", null),
                         new Locke("Physical Inventory", true, "/INV/PI", new Locke[]{
                                 new Locke("Physical Inventory for Item", false, "/INV/PI/ITS", null),

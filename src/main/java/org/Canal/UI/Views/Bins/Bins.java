@@ -1,4 +1,4 @@
-package org.Canal.UI.Views.AreasBins;
+package org.Canal.UI.Views.Bins;
 
 import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.Utils.DesktopState;

@@ -10,7 +10,7 @@ import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Views.AreasBins.AutoMakeAreasAndBins;
-import org.Canal.UI.Views.AreasBins.CreateBin;
+import org.Canal.UI.Views.Bins.CreateBin;
 import org.Canal.UI.Views.Orders.PurchaseOrders.CreatePurchaseOrder;
 import org.Canal.UI.Views.Orders.ReceiveOrder;
 import org.Canal.UI.Views.Finance.AcceptPayment;

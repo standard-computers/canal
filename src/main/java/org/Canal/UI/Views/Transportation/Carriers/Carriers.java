@@ -10,5 +10,6 @@ public class Carriers extends JInternalFrame {
 
     public Carriers() {
         super("Carriers", true, true, true, true);
+
     }
 }

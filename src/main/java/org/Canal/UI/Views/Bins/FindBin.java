@@ -1,9 +1,8 @@
-package org.Canal.UI.Views.Transportation.Carriers;
+package org.Canal.UI.Views.Bins;
 
 import org.Canal.UI.Elements.Button;
-import org.Canal.UI.Elements.Elements;
-import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Label;
+import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -16,35 +15,35 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
- * /TRANS/CRRS/F
+ * /BNS/F
  */
-public class FindCarrier extends JInternalFrame {
+public class FindBin extends JInternalFrame {
 
-    public FindCarrier(DesktopState desktop) {
-        super("Find Carrier", false, true, false, true);
+    public FindBin(DesktopState desktop) {
+        super("Find Bin", false, true, false, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/find.png")));
-        JTextField direct = Elements.input();
+        JTextField direct = new JTextField(10);
         direct.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     String inputText = direct.getText().trim();
                     if (!inputText.isEmpty()) {
-                        desktop.put(Engine.router("/TRANS/CRRS/" + direct.getText(), desktop));
+                        Engine.router("/BNS/" + direct.getText(), desktop);
                         dispose();
                     }
                 }
             }
         });
         Form f = new Form();
-        f.addInput(new Label("Search Value", UIManager.getColor("Label.foreground")), direct);
+        f.addInput(new Label("Area ID", UIManager.getColor("Label.foreground")), direct);
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);
         Button find = new Button("Find");
         add(find, BorderLayout.SOUTH);
         find.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                desktop.put(Engine.router("/TRANS/CRRS/" + direct.getText(), desktop));
+                desktop.put(Engine.router("/BNS/" + direct.getText(), desktop));
                 dispose();
             }
         });

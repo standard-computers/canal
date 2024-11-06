@@ -4,10 +4,13 @@ import org.Canal.Models.BusinessUnits.*;
 import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.HumanResources.User;
 import org.Canal.Models.SupplyChainUnits.*;
-import org.Canal.UI.Views.AreasBins.Areas;
-import org.Canal.UI.Views.AreasBins.CreateArea;
-import org.Canal.UI.Views.AreasBins.FindArea;
-import org.Canal.UI.Views.AreasBins.ModifyArea;
+import org.Canal.UI.Views.AreasBins.*;
+import org.Canal.UI.Views.Bins.Bins;
+import org.Canal.UI.Views.Bins.CreateBin;
+import org.Canal.UI.Views.Bins.FindBin;
+import org.Canal.UI.Views.Components.Components;
+import org.Canal.UI.Views.Components.CreateComponent;
+import org.Canal.UI.Views.Components.FindComponent;
 import org.Canal.UI.Views.Controllers.*;
 import org.Canal.UI.Views.Distribution.DistributionCenters.*;
 import org.Canal.UI.Views.Distribution.Vendors.CreateVendor;
@@ -32,6 +35,7 @@ import org.Canal.UI.Views.HR.Departments.FindDepartment;
 import org.Canal.UI.Views.HR.Departments.ModifyDepartment;
 import org.Canal.UI.Views.HR.Employees.*;
 import org.Canal.UI.Views.HR.Organizations.CreateOrganization;
+import org.Canal.UI.Views.HR.Organizations.ModifyOrganization;
 import org.Canal.UI.Views.HR.Organizations.OrgView;
 import org.Canal.UI.Views.HR.Organizations.Organizations;
 import org.Canal.UI.Views.HR.Users.*;
@@ -387,9 +391,9 @@ public class Engine {
         return ledgers.stream().filter(location -> location.getOrg().equals(id)).collect(Collectors.toList());
     }
 
-    public static JInternalFrame router(String transactionCode, DesktopState desktop){
+    public static JInternalFrame router(String transactionCode, DesktopState desktop) {
         transactionCode = transactionCode.toUpperCase().trim();
-        if(!transactionCode.startsWith("/")){
+        if (!transactionCode.startsWith("/")) {
             transactionCode = "/" + transactionCode;
         }
         switch (transactionCode) {
@@ -400,7 +404,7 @@ public class Engine {
                 return new CreateOrganization(desktop);
             }
             case "/ORGS/MOD" -> {
-                return new CreateOrganization(desktop);
+                return new ModifyOrganization();
             }
             case "/CCS" -> {
                 return new CostCenters(desktop);
@@ -425,6 +429,15 @@ public class Engine {
             }
             case "/AREAS/MOD" -> {
                 return new ModifyArea();
+            }
+            case "/BNS" -> {
+                return new Bins(desktop);
+            }
+            case "/BNS/F" -> {
+                return new FindBin(desktop);
+            }
+            case "/BNS/NEW" -> {
+                return new CreateBin("");
             }
             case "/CSTS" -> {
                 return new Customers(desktop);
@@ -485,6 +498,15 @@ public class Engine {
             }
             case "/MTS/MOD" -> {
                 return new ModifyMaterial();
+            }
+            case "/CMPS" -> {
+                return new Components(desktop);
+            }
+            case "/CMPS/F" -> {
+                return new FindComponent(desktop);
+            }
+            case "/CMPS/NEW" -> {
+                return new CreateComponent();
             }
             case "/LGS" -> {
                 return new Ledgers(desktop);
