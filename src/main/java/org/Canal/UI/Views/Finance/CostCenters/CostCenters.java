@@ -1,10 +1,9 @@
 package org.Canal.UI.Views.Finance.CostCenters;
 
 import org.Canal.Models.SupplyChainUnits.Location;
-import org.Canal.UI.Elements.Button;
-import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -22,8 +21,8 @@ public class CostCenters extends JInternalFrame {
     private DefaultListModel<Location> listModel;
 
     public CostCenters(DesktopState desktop) {
-        setTitle("Cost Centers");
-        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/distribution_centers.png")));
+        super("Cost Centers", false, true, false, true);
+        setFrameIcon(new ImageIcon(CostCenters.class.getResource("/icons/distribution_centers.png")));
         listModel = new DefaultListModel<>();
         JList<Location> list = new JList<>(listModel);
         list.setCellRenderer(new CostCenterRenderer());
@@ -57,17 +56,9 @@ public class CostCenters extends JInternalFrame {
                 }
             }
         });
-        Button nla = new Button("Create");
-        nla.addActionListener(e -> desktop.put(Engine.router("/CCS/NEW", desktop)));
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BorderLayout());
-        mainPanel.add(direct, BorderLayout.NORTH);
-        mainPanel.add(scrollPane, BorderLayout.CENTER);
-        mainPanel.add(nla, BorderLayout.SOUTH);
-        add(mainPanel);
-        setResizable(false);
-        setIconifiable(true);
-        setClosable(true);
+        setLayout(new BorderLayout());
+        add(direct, BorderLayout.NORTH);
+        add(scrollPane, BorderLayout.CENTER);
         loadLocations();
     }
 
@@ -80,7 +71,7 @@ public class CostCenters extends JInternalFrame {
         }
     }
 
-    class CostCenterRenderer extends JPanel implements ListCellRenderer<Location> {
+    static class CostCenterRenderer extends JPanel implements ListCellRenderer<Location> {
 
         private JLabel ccName;
         private JLabel ccId;

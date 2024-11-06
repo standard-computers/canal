@@ -1,6 +1,7 @@
 package org.Canal.UI.Elements.Inputs;
 
 import org.Canal.Models.BusinessUnits.Organization;
+import org.Canal.Models.HumanResources.Department;
 import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.Models.SupplyChainUnits.Vendor;
@@ -29,19 +30,29 @@ public class Selectables {
     }
 
     public static Selectable allEmployees(){
-        HashMap<String, String> availableEmps = new HashMap<>();
+        HashMap<String, String> employees = new HashMap<>();
         for(Employee emp : Engine.getEmployees()){
-            availableEmps.put(emp.getId() + " – " + emp.getName(), emp.getId());
+            employees.put(emp.getId(), emp.getId());
         }
-        return new Selectable(availableEmps);
+        Selectable s =  new Selectable(employees);
+        s.editable();
+        return s;
     }
 
-    public static Selectable allOrgs(){
-        HashMap<String, String> availableOrgs = new HashMap<>();
+    public static Selectable organizations(){
+        HashMap<String, String> organizations = new HashMap<>();
         for(Organization org : Engine.getOrganizations()){
-            availableOrgs.put(org.getId(), org.getId());
+            organizations.put(org.getId(), org.getId());
         }
-        return new Selectable(availableOrgs);
+        return new Selectable(organizations);
+    }
+
+    public static Selectable departments(){
+        HashMap<String, String> departments = new HashMap<>();
+        for(Department org : Engine.getOrganization().getDepartments()){
+            departments.put(org.getId(), org.getId());
+        }
+        return new Selectable(departments);
     }
 
     public static Selectable statusTypes(){
@@ -76,8 +87,10 @@ public class Selectables {
         HashMap<String, String> statusTypes = new HashMap<>();
         statusTypes.put("MM", "MM");
         statusTypes.put("CM", "CM");
+        statusTypes.put("CM^3", "CM^3");
         statusTypes.put("IN", "IN");
         statusTypes.put("FT", "FT");
+        statusTypes.put("SQ FT", "SQ FT");
         statusTypes.put("M", "M");
         statusTypes.put("YD", "YD");
         statusTypes.put("MI", "MI");

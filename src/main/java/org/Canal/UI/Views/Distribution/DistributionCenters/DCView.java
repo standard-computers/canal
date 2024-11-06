@@ -9,12 +9,12 @@ import org.Canal.Models.SupplyChainUnits.Vendor;
 import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
-import org.Canal.UI.Views.AreasBins.AutoMakeAreasAndBins;
+import org.Canal.UI.Views.Areas.AutoMakeAreasAndBins;
 import org.Canal.UI.Views.Bins.CreateBin;
 import org.Canal.UI.Views.Orders.PurchaseOrders.CreatePurchaseOrder;
 import org.Canal.UI.Views.Orders.ReceiveOrder;
-import org.Canal.UI.Views.Finance.AcceptPayment;
-import org.Canal.UI.Views.AreasBins.CreateArea;
+import org.Canal.UI.Views.Finance.Payments.AcceptPayment;
+import org.Canal.UI.Views.Areas.CreateArea;
 import org.Canal.Utils.Locke;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -42,8 +42,7 @@ public class DCView extends JInternalFrame implements RefreshListener {
     private DesktopState desktop;
 
     public DCView(Location dc, DesktopState desktop) {
-        super("", true, true, true, true);
-        setTitle("DC / " + dc.getId() + " - " + dc.getName());
+        super("DC / " + dc.getId() + " - " + dc.getName(), true, true, true, true);
         this.distributionCenter = dc;
         this.desktop = desktop;
         setFrameIcon(new ImageIcon(DCView.class.getResource("/icons/distribution_centers.png")));

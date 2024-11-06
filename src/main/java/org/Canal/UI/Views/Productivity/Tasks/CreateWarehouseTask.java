@@ -1,4 +1,4 @@
-package org.Canal.UI.Views.Productivity;
+package org.Canal.UI.Views.Productivity.Tasks;
 
 import javax.swing.*;
 

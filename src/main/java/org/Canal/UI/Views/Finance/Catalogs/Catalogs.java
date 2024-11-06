@@ -3,6 +3,7 @@ package org.Canal.UI.Views.Finance.Catalogs;
 import org.Canal.Models.SupplyChainUnits.Catalog;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -19,7 +20,7 @@ public class Catalogs extends JInternalFrame {
     private DefaultListModel<Catalog> listModel;
 
     public Catalogs(DesktopState desktop) {
-        setTitle("Catalogs");
+        super("Catalogs", false, true, false, true);
         listModel = new DefaultListModel<>();
         JList<Catalog> list = new JList<>(listModel);
         list.setCellRenderer(new CatalogRenderer());
@@ -53,17 +54,9 @@ public class Catalogs extends JInternalFrame {
                 }
             }
         });
-        JButton nla = new JButton("Build a Catalog");
-        nla.addActionListener(e -> new CreateCatalog(desktop));
-        JPanel options = new JPanel();
-        options.add(nla);
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BorderLayout());
-        mainPanel.add(direct, BorderLayout.NORTH);
-        mainPanel.add(scrollPane, BorderLayout.CENTER);
-        mainPanel.add(options, BorderLayout.SOUTH);
-        add(mainPanel);
-        setResizable(false);
+        setLayout(new BorderLayout());
+        add(direct, BorderLayout.NORTH);
+        add(scrollPane, BorderLayout.CENTER);
         loadCatalogs();
     }
 
@@ -75,7 +68,7 @@ public class Catalogs extends JInternalFrame {
         }
     }
 
-    class CatalogRenderer extends JPanel implements ListCellRenderer<Catalog> {
+    static class CatalogRenderer extends JPanel implements ListCellRenderer<Catalog> {
 
         private JLabel catalogName;
         private JLabel catalogId;

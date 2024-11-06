@@ -1,6 +1,7 @@
-package org.Canal.UI.Views.Controllers;
+package org.Canal.UI.Views.Productivity.SimpleForms;
 
 import org.Canal.UI.Elements.Elements;
+
 import javax.swing.*;
 import java.awt.*;
 

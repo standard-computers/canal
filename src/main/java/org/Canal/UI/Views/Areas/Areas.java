@@ -1,6 +1,7 @@
-package org.Canal.UI.Views.AreasBins;
+package org.Canal.UI.Views.Areas;
 
 import org.Canal.Models.SupplyChainUnits.Area;
+import org.Canal.UI.Elements.Elements;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
@@ -21,7 +22,7 @@ public class Areas extends JInternalFrame {
     private DefaultListModel<Area> listModel;
 
     public Areas(DesktopState desktop) {
-        setTitle("All Areas");
+        super("All Areas", false, true, false, true);
         setFrameIcon(new ImageIcon(Areas.class.getResource("/icons/areas.png")));
         listModel = new DefaultListModel<>();
         JList<Area> list = new JList<>(listModel);
@@ -40,7 +41,7 @@ public class Areas extends JInternalFrame {
                 }
             }
         });
-        JTextField direct = new JTextField();
+        JTextField direct = Elements.input();
         direct.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -52,14 +53,10 @@ public class Areas extends JInternalFrame {
                 }
             }
         });
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BorderLayout());
-        mainPanel.add(direct, BorderLayout.NORTH);
-        mainPanel.add(scrollPane, BorderLayout.CENTER);
-        add(mainPanel);
+        setLayout(new BorderLayout());
+        add(direct, BorderLayout.NORTH);
+        add(scrollPane, BorderLayout.CENTER);
         loadFlexes();
-        setIconifiable(true);
-        setClosable(true);
     }
 
     private void loadFlexes(){

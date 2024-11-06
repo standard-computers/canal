@@ -1,7 +1,7 @@
 package org.Canal.UI.Views.Items;
 
 import org.Canal.Models.SupplyChainUnits.Item;
-import org.Canal.UI.Elements.Button;
+import org.Canal.UI.Elements.Elements;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
@@ -22,7 +22,8 @@ public class Items extends JInternalFrame {
     private DefaultListModel<Item> listModel;
 
     public Items(DesktopState desktop) {
-        setTitle("Items");
+
+        super("Items", false, true, false, true);
         setFrameIcon(new ImageIcon(Items.class.getResource("/icons/items.png")));
         listModel = new DefaultListModel<>();
         JList<Item> list = new JList<>(listModel);
@@ -41,7 +42,7 @@ public class Items extends JInternalFrame {
                 }
             }
         });
-        JTextField direct = new JTextField();
+        JTextField direct = Elements.input();
         direct.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -53,21 +54,13 @@ public class Items extends JInternalFrame {
                 }
             }
         });
-        Button nla = new Button("Create an Item");
-        nla.addActionListener(_ -> desktop.put(new CreateItem(desktop)));
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BorderLayout());
-        mainPanel.add(direct, BorderLayout.NORTH);
-        mainPanel.add(scrollPane, BorderLayout.CENTER);
-        mainPanel.add(nla, BorderLayout.SOUTH);
-        add(mainPanel);
+        setLayout(new BorderLayout());
+        add(direct, BorderLayout.NORTH);
+        add(scrollPane, BorderLayout.CENTER);
         loadFlexes();
-        setIconifiable(true);
-        setClosable(true);
     }
 
     private void loadFlexes(){
-        Engine.load();
         ArrayList<Item> found = Engine.getItems();
         listModel.removeAllElements();
         for (Item f : found) {

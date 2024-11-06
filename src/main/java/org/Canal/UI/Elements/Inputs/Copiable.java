@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 public class Copiable extends JTextField {
     public Copiable(String value) {
         super(value);
+        setFont(new Font(UIManager.getFont("Label.font").getName(), Font.PLAIN, 12));
         setEditable(false);
         addMouseListener(new MouseAdapter() {
             @Override

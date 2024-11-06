@@ -1,9 +1,12 @@
 package org.Canal.UI.Views.HR.Departments;
 
 import org.Canal.Models.HumanResources.Department;
-import org.Canal.UI.Elements.Button;
+import org.Canal.UI.Elements.Elements;
+import org.Canal.UI.Elements.Inputs.Selectable;
+import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -27,7 +30,7 @@ public class Departments extends JInternalFrame {
         JList<Department> list = new JList<>(listModel);
         list.setCellRenderer(new DepartmentRenderer());
         JScrollPane scrollPane = new JScrollPane(list);
-        scrollPane.setPreferredSize(new Dimension(300, 400));
+        scrollPane.setPreferredSize(new Dimension(280, 350));
         list.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -39,13 +42,13 @@ public class Departments extends JInternalFrame {
                             Department selected = Engine.getOrganization().getDepartment(l.getId());
                             desktop.put(new DepartmentView(selected));
                         } else {
-                            JOptionPane.showMessageDialog(null, "Location Not Found");
+                            JOptionPane.showMessageDialog(null, "Department Not Found");
                         }
                     }
                 }
             }
         });
-        JTextField direct = new JTextField();
+        JTextField direct = Elements.input("DEPTARTMENT ID");
         direct.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -57,20 +60,20 @@ public class Departments extends JInternalFrame {
                 }
             }
         });
-        Button nla = new Button("Create Department");
-        nla.addActionListener(_ -> desktop.put(Engine.router("/DPTS/NEW", desktop)));
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BorderLayout());
-        mainPanel.add(direct, BorderLayout.NORTH);
-        mainPanel.add(scrollPane, BorderLayout.CENTER);
-        mainPanel.add(nla, BorderLayout.SOUTH);
-        add(mainPanel);
-        loadLocations();
+        setLayout(new BorderLayout());
+        JPanel controller = new JPanel(new GridLayout(1, 2));
+        Selectable orgs = Selectables.organizations();
+        controller.add(direct);
+        controller.add(orgs);
+        add(controller, BorderLayout.NORTH);
+        add(scrollPane, BorderLayout.CENTER);
+        loadLocations(orgs.getSelectedValue());
+        orgs.addActionListener(_ -> loadLocations(orgs.getSelectedValue()));
     }
 
-    private void loadLocations(){
+    private void loadLocations(String orgId){
         listModel.removeAllElements();
-        ArrayList<Department> found = Engine.getOrganization().getDepartments();
+        ArrayList<Department> found = Engine.getOrganization(orgId).getDepartments();
         for (Department dept : found) {
             listModel.addElement(dept);
         }
@@ -78,29 +81,29 @@ public class Departments extends JInternalFrame {
 
     static class DepartmentRenderer extends JPanel implements ListCellRenderer<Department> {
 
-        private JLabel deptName;
-        private JLabel deptId;
-        private JLabel line1;
+        private JLabel departmentName;
+        private JLabel departmentId;
+        private JLabel employeeCount;
 
         public DepartmentRenderer() {
             setLayout(new GridLayout(3, 1));
-            deptName = new JLabel();
-            deptId = new JLabel();
-            line1 = new JLabel();
-            deptName.setFont(new Font("Arial", Font.BOLD, 16));
-            deptId.setFont(new Font("Arial", Font.PLAIN, 12));
-            line1.setFont(new Font("Arial", Font.PLAIN, 12));
-            add(deptName);
-            add(deptId);
-            add(line1);
+            departmentName = new JLabel();
+            departmentId = new JLabel();
+            employeeCount = new JLabel();
+            departmentName.setFont(new Font("Arial", Font.BOLD, 16));
+            departmentId.setFont(new Font("Arial", Font.PLAIN, 12));
+            employeeCount.setFont(new Font("Arial", Font.PLAIN, 12));
+            add(departmentName);
+            add(departmentId);
+            add(employeeCount);
             setBorder(new EmptyBorder(5, 5, 5, 5));
         }
 
         @Override
         public Component getListCellRendererComponent(JList<? extends Department> list, Department value, int index, boolean isSelected, boolean cellHasFocus) {
-            deptName.setText(value.getName());
-            deptId.setText(value.getId());
-            line1.setText("0");
+            departmentName.setText(value.getName());
+            departmentId.setText(value.getId());
+            employeeCount.setText("0");
             if (isSelected) {
                 setBackground(list.getSelectionBackground());
                 setForeground(list.getSelectionForeground());

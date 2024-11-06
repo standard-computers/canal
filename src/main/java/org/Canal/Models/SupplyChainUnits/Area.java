@@ -149,4 +149,12 @@ public class Area {
     public void setBins(ArrayList<Bin> bins) {
         this.bins = bins;
     }
+
+    public void addBin(Bin newBin) {
+        this.bins.add(newBin);
+    }
+
+    public void save() {
+
+    }
 }

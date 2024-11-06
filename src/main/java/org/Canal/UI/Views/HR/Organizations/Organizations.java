@@ -1,10 +1,10 @@
 package org.Canal.UI.Views.HR.Organizations;
 
 import org.Canal.Models.BusinessUnits.Organization;
-import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -20,7 +20,7 @@ public class Organizations extends JInternalFrame {
     private DesktopState desktop;
 
     public Organizations(DesktopState desktop) {
-        setTitle("Organizations");
+        super("Organizations", false, true, false, true);
         setFrameIcon(new ImageIcon(Organizations.class.getResource("/icons/organizations.png")));
         listModel = new DefaultListModel<>();
         this.desktop = desktop;
@@ -40,21 +40,16 @@ public class Organizations extends JInternalFrame {
                 }
             }
         });
-        JTextField direct = Elements.input("", 25);
+        JTextField direct = Elements.input();
         direct.addActionListener(_ -> openOrgViewById(direct.getText()));
-        Button nla = new Button("Create");
-        nla.addActionListener(_ -> desktop.put(new CreateOrganization(desktop)));
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
         mainPanel.add(direct, BorderLayout.NORTH);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
-        mainPanel.add(nla, BorderLayout.SOUTH);
         add(mainPanel);
         for (Organization org : Engine.getOrganizations()) {
             listModel.addElement(org);
         }
-        setIconifiable(true);
-        setClosable(true);
     }
 
     private void openOrgView(Organization selectedOrg) {
@@ -65,7 +60,7 @@ public class Organizations extends JInternalFrame {
             desktop.put(new OrgView(loc, desktop));
             dispose();
         } else {
-            JOptionPane.showMessageDialog(this, "Not Found");
+            JOptionPane.showMessageDialog(this, "Organization Not Found");
         }
     }
 
@@ -75,7 +70,7 @@ public class Organizations extends JInternalFrame {
             desktop.put(new OrgView(loc, desktop));
             dispose();
         } else {
-            JOptionPane.showMessageDialog(this, "Not Found");
+            JOptionPane.showMessageDialog(this, "Organization Not Found");
         }
     }
 

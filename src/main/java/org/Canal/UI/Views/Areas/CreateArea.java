@@ -1,7 +1,8 @@
-package org.Canal.UI.Views.AreasBins;
+package org.Canal.UI.Views.Areas;
 
 import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.UI.Elements.Button;
+import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Label;
@@ -25,7 +26,7 @@ public class CreateArea extends JInternalFrame {
         super("New Location Area", false, true, false, true);
         setFrameIcon(new ImageIcon(CreateArea.class.getResource("/icons/areas.png")));
         String generatedId;
-        JTextField areaIdField = new JTextField();
+        JTextField areaIdField = Elements.input();
         Selectable availableLocations = Selectables.allLocations();
         if(location == null){
             generatedId = "A-" + Engine.getAreas().size();
@@ -34,7 +35,7 @@ public class CreateArea extends JInternalFrame {
             availableLocations.setSelectedValue(location);
         }
         areaIdField.setText(generatedId);
-        JTextField areaNameField = new JTextField(generatedId, 20);
+        JTextField areaNameField = Elements.input(generatedId, 20);
         UOMField widthField = new UOMField();
         UOMField lengthField = new UOMField();
         UOMField heightField = new UOMField();

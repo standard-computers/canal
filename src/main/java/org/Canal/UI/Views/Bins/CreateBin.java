@@ -1,6 +1,7 @@
 package org.Canal.UI.Views.Bins;
 
 import org.Canal.Models.SupplyChainUnits.Area;
+import org.Canal.Models.SupplyChainUnits.Bin;
 import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Inputs.Selectable;
@@ -55,7 +56,11 @@ public class CreateBin extends JInternalFrame {
         make.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                Bin newBin = new Bin();
 
+                Area foundArea = new Area();
+                foundArea.addBin(newBin);
+                foundArea.save();
             }
         });
     }

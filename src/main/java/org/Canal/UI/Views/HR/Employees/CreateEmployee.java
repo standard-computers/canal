@@ -30,7 +30,7 @@ public class CreateEmployee extends JInternalFrame {
 
         String genId = "E" + (10000 + (Engine.getEmployees().size() + 1));
         JTextField empIdField = Elements.input(genId, 15);
-        Selectable orgIdField = Selectables.allOrgs();
+        Selectable orgIdField = Selectables.organizations();
         JTextField empNameField = Elements.input(15);
         HashMap<String, String> availablePositions = new HashMap<>();
         Selectable position = new Selectable(availablePositions);

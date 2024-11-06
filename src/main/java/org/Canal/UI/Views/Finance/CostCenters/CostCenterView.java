@@ -4,10 +4,11 @@ import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.Models.SupplyChainUnits.Vendor;
+import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.IconButton;
-import org.Canal.UI.Views.AreasBins.CreateArea;
+import org.Canal.UI.Views.Areas.CreateArea;
 import org.Canal.UI.Views.Orders.PurchaseOrders.CreatePurchaseOrder;
-import org.Canal.UI.Views.AreasBins.AutoMakeAreasAndBins;
+import org.Canal.UI.Views.Areas.AutoMakeAreasAndBins;
 import org.Canal.Utils.Locke;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -44,8 +45,6 @@ public class CostCenterView extends JInternalFrame implements RefreshListener {
         JTable table = createTable();
         JScrollPane tableScrollPane = new JScrollPane(table);
         JPanel dataView = new JPanel(new BorderLayout());
-        JTextField cmd = new JTextField("/CCS/" + thisCostCenter.getId());
-        dataView.add(cmd, BorderLayout.NORTH);
         dataView.add(tableScrollPane, BorderLayout.CENTER);
         dataTree = createTree();
         dataTree.addMouseListener(new MouseAdapter() {
@@ -84,6 +83,7 @@ public class CostCenterView extends JInternalFrame implements RefreshListener {
         IconButton autoMake = new IconButton("Auto Make Areas/Bins", "automake", "Make areas and bins from templates");
         IconButton pos = new IconButton("POS Mode", "pos", "Launch Point-of-Sale");
         IconButton label = new IconButton("", "label", "Print labels for properties");
+        Button edit = new Button("Edit");
         IconButton refresh = new IconButton("", "refresh", "Reload from store");
         order.addMouseListener(new MouseAdapter() {
             @Override
@@ -101,6 +101,12 @@ public class CostCenterView extends JInternalFrame implements RefreshListener {
             @Override
             public void mouseClicked(MouseEvent e) {
                 desktop.put(new AutoMakeAreasAndBins());
+            }
+        });
+        edit.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                desktop.put(new ModifyCostCenter(thisCostCenter));
             }
         });
         refresh.addMouseListener(new MouseAdapter() {
@@ -130,6 +136,8 @@ public class CostCenterView extends JInternalFrame implements RefreshListener {
         tb.add(pos);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(label);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(edit);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(refresh);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));

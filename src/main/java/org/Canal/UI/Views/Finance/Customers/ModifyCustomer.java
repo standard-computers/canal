@@ -1,6 +1,7 @@
 package org.Canal.UI.Views.Finance.Customers;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * /CSTS/MOD
@@ -8,9 +9,8 @@ import javax.swing.*;
 public class ModifyCustomer extends JInternalFrame {
 
     public ModifyCustomer() {
-        setTitle("Modify Customer");
+        super("Modify Customer", false, true, false, true);
 
-        setIconifiable(true);
-        setClosable(true);
+        setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.YELLOW));
     }
 }

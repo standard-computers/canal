@@ -1,7 +1,6 @@
 package org.Canal.UI.Views.Items;
 
 import org.Canal.Models.SupplyChainUnits.Item;
-import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.Models.SupplyChainUnits.Vendor;
 import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
@@ -23,8 +22,15 @@ import java.util.HashMap;
  */
 public class CreateItem extends JInternalFrame implements Includer {
 
-    private JTextField itemIdField, itemNameField, itemPriceField, itemColor,
-            tax, exciseTax, upc, uomField, packagingUnitField;
+    private JTextField itemIdField;
+    private JTextField itemNameField;
+    private JTextField itemPriceField;
+    private JTextField itemColor;
+    private JTextField tax;
+    private JTextField exciseTax;
+    private JTextField upc;
+    private JTextField uomField;
+    private JTextField packagingUnitField;
     private UOMField itemWidth, itemLength, itemHeight, itemWeight;
     private JCheckBox isBatched, isRentable, isSkud, isConsumable;
     private Selectable orgIdField, selectedVendor;
@@ -39,12 +45,12 @@ public class CreateItem extends JInternalFrame implements Includer {
         Form f2 = new Form();
         HashMap<String, String> availableVendors = new HashMap<>();
         for(Vendor vs : Engine.getVendors()){
-            availableVendors.put(vs.getId() + " – " + vs.getName(), vs.getId());
+            availableVendors.put(vs.getId(), vs.getId());
         }
         selectedVendor = new Selectable(availableVendors);
         selectedVendor.editable();
         itemIdField = Elements.input("X0" + (1000 + (Engine.getItems().size() + 1)));
-        orgIdField = Selectables.allOrgs();
+        orgIdField = Selectables.organizations();
         itemNameField = Elements.input("Black Shirt");
         itemPriceField = Elements.input("1.00");
         isBatched = new JCheckBox(" Item expires");

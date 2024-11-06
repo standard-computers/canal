@@ -10,9 +10,9 @@ public class Bin {
     private String id;
     private String name;
     private String area; //Area ID this bin is in
-    private boolean autoReplenish; //If this bin is on a flow, do not replenish if false
+    private boolean auto_replenish; //If this bin is on a flow, do not replenish if false
     private boolean fixed; //Only one item allowed
-    private ArrayList<String> allowedItems;
+    private ArrayList<String> allowed_items;
     private int[] coordinates = new int[3];
     private int min; //Min quantity of items before replenishment
     private int max; //Quantity of items it may contain
@@ -51,12 +51,12 @@ public class Bin {
         this.area = area;
     }
 
-    public boolean isAutoReplenish() {
-        return autoReplenish;
+    public boolean isAuto_replenish() {
+        return auto_replenish;
     }
 
-    public void setAutoReplenish(boolean autoReplenish) {
-        this.autoReplenish = autoReplenish;
+    public void setAuto_replenish(boolean auto_replenish) {
+        this.auto_replenish = auto_replenish;
     }
 
     public boolean isFixed() {
@@ -67,12 +67,12 @@ public class Bin {
         this.fixed = fixed;
     }
 
-    public ArrayList<String> getAllowedItems() {
-        return allowedItems;
+    public ArrayList<String> getAllowed_items() {
+        return allowed_items;
     }
 
-    public void setAllowedItems(ArrayList<String> allowedItems) {
-        this.allowedItems = allowedItems;
+    public void setAllowed_items(ArrayList<String> allowed_items) {
+        this.allowed_items = allowed_items;
     }
 
     public int[] getCoordinates() {

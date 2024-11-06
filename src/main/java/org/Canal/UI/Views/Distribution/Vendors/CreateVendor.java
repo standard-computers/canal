@@ -28,7 +28,7 @@ public class CreateVendor extends JInternalFrame {
         ArrayList<Vendor> ls = Engine.getVendors();
         String generatedId = "V" + (100000 + (ls.size() + 1));
         JTextField vendorIdField = new JTextField(generatedId);
-        Selectable orgIdField = Selectables.allOrgs();
+        Selectable orgIdField = Selectables.organizations();
         JTextField vendorNameField = new JTextField(20);
         JTextField streetField = new JTextField(20);
         JTextField cityField = new JTextField(20);

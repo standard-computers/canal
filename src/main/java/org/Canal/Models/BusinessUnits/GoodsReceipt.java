@@ -1,6 +1,7 @@
 package org.Canal.Models.BusinessUnits;
 
 import org.Canal.Utils.LockeStatus;
+
 import java.util.ArrayList;
 
 public class GoodsReceipt {

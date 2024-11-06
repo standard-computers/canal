@@ -4,7 +4,7 @@ import org.Canal.Models.BusinessUnits.*;
 import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.HumanResources.User;
 import org.Canal.Models.SupplyChainUnits.*;
-import org.Canal.UI.Views.AreasBins.*;
+import org.Canal.UI.Views.Areas.*;
 import org.Canal.UI.Views.Bins.Bins;
 import org.Canal.UI.Views.Bins.CreateBin;
 import org.Canal.UI.Views.Bins.FindBin;
@@ -455,7 +455,7 @@ public class Engine {
                 return new DistributionCenters(desktop);
             }
             case "/DCSS/F" -> {
-                return new FindDC(desktop);
+                return new FindDistributionCenter(desktop);
             }
             case "/DCSS/NEW" -> {
                 return new CreateDistributionCenter(desktop);
@@ -569,7 +569,7 @@ public class Engine {
                 return new CreateCatalog(null);
             }
             case "/CATS/MOD" -> {
-                return new ModifyCatalog();
+                return new ModifyCatalog(null);
             }
             case "/CATS/F" -> {
                 return new FindCatalog(desktop);

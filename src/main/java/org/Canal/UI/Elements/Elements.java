@@ -112,7 +112,7 @@ public class Elements {
         JPanel panel = new JPanel();
         panel.add(Elements.h2(text));
         panel.setBorder(new EmptyBorder(5, 10, 5, 10));
-        panel.setBackground(UIManager.getColor("Panel.background").darker());
+        panel.setBackground(UIManager.getColor("Component.selectionBackground"));
         return panel;
     }
 
@@ -122,7 +122,7 @@ public class Elements {
         label.setHorizontalAlignment(alignment);
         panel.add(label, BorderLayout.CENTER);
         panel.setBorder(new EmptyBorder(5, 10, 5, 10));
-        panel.setBackground(UIManager.getColor("Panel.background").darker());
+        panel.setBackground(UIManager.getColor("Component.selectionBackground"));
         return panel;
     }
 }

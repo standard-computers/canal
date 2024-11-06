@@ -31,7 +31,7 @@ public class CreateLedger extends JInternalFrame {
 
         Form f = new Form();
         JTextField ledgerIdField = Elements.input(String.valueOf(LocalDate.now().getYear()), 10);
-        Selectable organizations = Selectables.allOrgs();
+        Selectable organizations = Selectables.organizations();
         JTextField ledgerNameField = Elements.input("FY" + LocalDate.now().getYear(), 10);
         Selectable periods = Selectables.periods();
         periods.editable();

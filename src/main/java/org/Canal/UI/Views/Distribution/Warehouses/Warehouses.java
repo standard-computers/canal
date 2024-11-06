@@ -1,7 +1,6 @@
 package org.Canal.UI.Views.Distribution.Warehouses;
 
 import org.Canal.Models.SupplyChainUnits.Warehouse;
-import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -23,7 +22,7 @@ public class Warehouses extends JInternalFrame {
     private DefaultListModel<Warehouse> listModel;
 
     public Warehouses(DesktopState desktop) {
-        setTitle("Warehouses");
+        super("Warehouses", false, true, false, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/warehouses.png")));
         listModel = new DefaultListModel<>();
         JList<Warehouse> list = new JList<>(listModel);
@@ -40,7 +39,7 @@ public class Warehouses extends JInternalFrame {
                         if (l != null) {
                             desktop.put(Engine.router("/WHS/" + l.getId(), desktop));
                         } else {
-                            JOptionPane.showMessageDialog(null, "Location Not Found");
+                            JOptionPane.showMessageDialog(null, "Warehouse Not Found");
                         }
                     }
                 }
@@ -58,17 +57,9 @@ public class Warehouses extends JInternalFrame {
                 }
             }
         });
-        Button nla = new Button("Add a Warehouse");
-        nla.addActionListener(_ -> desktop.put(Engine.router("/WHS/NEW", desktop)));
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BorderLayout());
-        mainPanel.add(direct, BorderLayout.NORTH);
-        mainPanel.add(scrollPane, BorderLayout.CENTER);
-        mainPanel.add(nla, BorderLayout.SOUTH);
-        add(mainPanel);
-        setResizable(false);
-        setIconifiable(true);
-        setClosable(true);
+        setLayout(new BorderLayout());
+        add(direct, BorderLayout.NORTH);
+        add(scrollPane, BorderLayout.CENTER);
         loadLocations();
     }
 

@@ -1,7 +1,7 @@
 package org.Canal.UI.Views.Components;
 
 import org.Canal.Models.SupplyChainUnits.Vendor;
-import org.Canal.UI.Elements.Button;
+import org.Canal.UI.Elements.Elements;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
@@ -44,7 +44,7 @@ public class Components extends JInternalFrame {
                 }
             }
         });
-        JTextField direct = new JTextField();
+        JTextField direct = Elements.input();
         direct.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -56,16 +56,9 @@ public class Components extends JInternalFrame {
                 }
             }
         });
-        Button nla = new Button("Add a Vendor");
-        nla.addActionListener(_ -> desktop.put(Engine.router("/VEND//NEW", desktop)));
-        JPanel options = new JPanel();
-        options.add(nla);
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BorderLayout());
-        mainPanel.add(direct, BorderLayout.NORTH);
-        mainPanel.add(scrollPane, BorderLayout.CENTER);
-        mainPanel.add(options, BorderLayout.SOUTH);
-        add(mainPanel);
+        setLayout(new BorderLayout());
+        add(direct, BorderLayout.NORTH);
+        add(scrollPane, BorderLayout.CENTER);
         loadLocations();
     }
 

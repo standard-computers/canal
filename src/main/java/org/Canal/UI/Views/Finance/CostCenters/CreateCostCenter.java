@@ -2,16 +2,21 @@ package org.Canal.UI.Views.Finance.CostCenters;
 
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.Button;
+import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Label;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Pipe;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * /CCS/NEW
+ */
 public class CreateCostCenter extends JInternalFrame {
 
     public CreateCostCenter(){
@@ -20,14 +25,14 @@ public class CreateCostCenter extends JInternalFrame {
         setFrameIcon(new ImageIcon(CreateCostCenter.class.getResource("/icons/create.png")));
         Constants.checkLocke(this, true, true);
         String genId = "CC" + 100000 + (Engine.getItems().size() + 1);
-        JTextField ccIdField = new JTextField(genId);
-        JTextField orgIdField = new JTextField(Engine.getOrganization().getId());
-        JTextField ccNameField = new JTextField(20);
-        JTextField streetNameField = new JTextField(20);
-        JTextField ccCityField = new JTextField(20);
-        JTextField ccStateField = new JTextField(20);
-        JTextField ccPostalField = new JTextField(20);
-        JTextField ccCountryField = new JTextField(20);
+        JTextField ccIdField = Elements.input(genId);
+        JTextField orgIdField = Elements.input(Engine.getOrganization().getId());
+        JTextField ccNameField = Elements.input(20);
+        JTextField streetNameField = Elements.input(20);
+        JTextField ccCityField = Elements.input(20);
+        JTextField ccStateField = Elements.input(20);
+        JTextField ccPostalField = Elements.input(20);
+        JTextField ccCountryField = Elements.input(20);
         Form f = new Form();
         f.addInput(new Label("*New ID", UIManager.getColor("Label.foreground")), ccIdField);
         f.addInput(new Label("*Organization", UIManager.getColor("Label.foreground")), orgIdField);

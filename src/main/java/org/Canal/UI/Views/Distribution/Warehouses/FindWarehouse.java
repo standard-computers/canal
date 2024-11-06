@@ -1,11 +1,13 @@
 package org.Canal.UI.Views.Distribution.Warehouses;
 
 import org.Canal.UI.Elements.Button;
+import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -22,14 +24,14 @@ public class FindWarehouse extends JInternalFrame {
         super("Find Warehouse", false, true, false, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/warehouses.png")));
         Form f = new Form();
-        JTextField direct = new JTextField(10);
+        JTextField direct = Elements.input(10);
         direct.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     String inputText = direct.getText().trim();
                     if (!inputText.isEmpty()) {
-                        Engine.router("/WHS/" + direct.getText(), desktop);
+                        desktop.put(Engine.router("/WHS/" + direct.getText(), desktop));
                         dispose();
                     }
                 }

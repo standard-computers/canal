@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Department {
 
     private String id; //Department ID
-    private String org; //Org this Department belongs too
+    private String organization; //Org this Department belongs too
     private String location;
     private String department; //If child Department, Parent Department ID
     private String name; //Name of Department
@@ -19,12 +19,12 @@ public class Department {
         this.id = id;
     }
 
-    public String getOrg() {
-        return org;
+    public String getOrganization() {
+        return organization;
     }
 
-    public void setOrg(String org) {
-        this.org = org;
+    public void setOrganization(String organization) {
+        this.organization = organization;
     }
 
     public String getLocation() {

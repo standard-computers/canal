@@ -241,33 +241,27 @@ public class Constants {
                         new Locke("STO", false, "/PLA/", null),
                         new Locke("Remove", false, "/PLA/", null),
                 }),
-                new Locke("Distribution", true, "/DIST/", new Locke[]{
-                        new Locke("Find", false, "/DIST/", null),
-                        new Locke("Create", false, "/DIST/", null),
-                        new Locke("Modify", false, "/DIST/", null),
-                        new Locke("Remove", false, "/DIST/", null),
-                        new Locke("Transportation", false, "/TRANS", new Locke[]{
-                            new Locke("Carriers", false, "/TRANS/CRRS", new Locke[]{
+                new Locke("Transportation", false, "/TRANS", new Locke[]{
+                        new Locke("Carriers", false, "/TRANS/CRRS", new Locke[]{
                                 new Locke("Find Carrier", false, "/TRANS/CRRS/F", null),
                                 new Locke("Create Carrier", false, "/TRANS/CRRS/NEW", null),
                                 new Locke("Modify Carrier", false, "/TRANS/CRRS/MOD", null),
                                 new Locke("Remove Carrier", false, "/TRANS/CRRS/DEL", null),
                                 new Locke("Archive Carrier", false, "/TRANS/CRRS/ARCHV", null),
-                            }),
-                            new Locke("Inbound Deliveries", false, "/TRANS/IDO", new Locke[]{
+                        }),
+                        new Locke("Inbound Deliveries", false, "/TRANS/IDO", new Locke[]{
                                 new Locke("Find Inbound Delivery", false, "/TRANS/IDO/F", null),
                                 new Locke("Create Inbound Delivery", false, "/TRANS/IDO/NEW", null),
                                 new Locke("Modify Inbound Delivery", false, "/TRANS/IDO/MOD", null),
                                 new Locke("Remove Inbound Delivery", false, "/TRANS/IDO/DEL", null),
                                 new Locke("Archive Inbound Delivery", false, "/TRANS/IDO/ARCHV", null),
-                            }),
-                            new Locke("Outbound Deliveries", false, "/TRANS/ODO", new Locke[]{
+                        }),
+                        new Locke("Outbound Deliveries", false, "/TRANS/ODO", new Locke[]{
                                 new Locke("Find Outbound Delivery", false, "/TRANS/ODO/F", null),
                                 new Locke("Create Outbound Delivery", false, "/TRANS/ODO/NEW", null),
                                 new Locke("Modify Outbound Delivery", false, "/TRANS/ODO/MOD", null),
                                 new Locke("Remove Outbound Delivery", false, "/TRANS/ODO/DEL", null),
                                 new Locke("Archive Outbound Delivery", false, "/TRANS/ODO/ARCHV", null),
-                            }),
                         }),
                 }),
                 new Locke("Ledgers", true, "/LGS", new Locke[]{

@@ -1,10 +1,9 @@
 package org.Canal.UI.Views.HR.Users;
 
 import org.Canal.Models.HumanResources.User;
-import org.Canal.UI.Elements.Button;
-import org.Canal.UI.Views.HR.Employees.CreateEmployee;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -22,7 +21,7 @@ public class Users extends JInternalFrame {
     private DefaultListModel<User> listModel;
 
     public Users(DesktopState desktop) {
-        setTitle("Users");
+        super("Users", false, true, false, true);
         setFrameIcon(new ImageIcon(Users.class.getResource("/icons/employees.png")));
         listModel = new DefaultListModel<>();
         JList<User> list = new JList<>(listModel);
@@ -53,17 +52,10 @@ public class Users extends JInternalFrame {
                 }
             }
         });
-        Button nla = new Button("Add User");
-        nla.addActionListener(_ -> desktop.put(new CreateEmployee(desktop)));
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BorderLayout());
-        mainPanel.add(direct, BorderLayout.NORTH);
-        mainPanel.add(scrollPane, BorderLayout.CENTER);
-        mainPanel.add(nla, BorderLayout.SOUTH);
-        add(mainPanel);
+        setLayout(new BorderLayout());
+        add(direct, BorderLayout.NORTH);
+        add(scrollPane, BorderLayout.CENTER);
         loadFlexes();
-        setIconifiable(true);
-        setClosable(true);
     }
 
     private void loadFlexes(){

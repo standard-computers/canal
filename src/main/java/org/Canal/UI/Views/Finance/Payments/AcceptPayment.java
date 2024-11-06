@@ -1,4 +1,4 @@
-package org.Canal.UI.Views.Finance;
+package org.Canal.UI.Views.Finance.Payments;
 
 import org.Canal.UI.Elements.Input;
 import javax.swing.*;

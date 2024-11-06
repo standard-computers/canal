@@ -1,8 +1,10 @@
 package org.Canal.UI.Views.Materials;
 
 import org.Canal.Models.SupplyChainUnits.Material;
+import org.Canal.UI.Elements.Elements;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -26,7 +28,7 @@ public class Materials extends JInternalFrame {
         JList<Material> list = new JList<>(listModel);
         list.setCellRenderer(new MaterialRenderer());
         JScrollPane scrollPane = new JScrollPane(list);
-        scrollPane.setPreferredSize(new Dimension(300, 400));
+        scrollPane.setPreferredSize(new Dimension(250, 400));
         list.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -39,7 +41,7 @@ public class Materials extends JInternalFrame {
                 }
             }
         });
-        JTextField direct = new JTextField();
+        JTextField direct = Elements.input();
         direct.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -51,17 +53,9 @@ public class Materials extends JInternalFrame {
                 }
             }
         });
-        JButton nla = new JButton("Create a Material");
-        nla.addActionListener(_ -> desktop.put(new CreateMaterial()));
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BorderLayout());
-        mainPanel.add(direct, BorderLayout.NORTH);
-        mainPanel.add(scrollPane, BorderLayout.CENTER);
-        mainPanel.add(nla, BorderLayout.SOUTH);
-        add(mainPanel);
-        setResizable(false);
-        pack();
-        setVisible(true);
+        setLayout(new BorderLayout());
+        add(direct, BorderLayout.NORTH);
+        add(scrollPane, BorderLayout.CENTER);
         loadFlexes();
     }
 
@@ -74,7 +68,7 @@ public class Materials extends JInternalFrame {
         }
     }
 
-    class MaterialRenderer extends JPanel implements ListCellRenderer<Material> {
+    static class MaterialRenderer extends JPanel implements ListCellRenderer<Material> {
 
         private JLabel materialName;
         private JLabel materialId;

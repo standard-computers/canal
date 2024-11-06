@@ -6,6 +6,7 @@ import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Inputs.Copiable;
 import org.Canal.UI.Elements.Inputs.Selectable;
+import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.Utils.Constants;
@@ -19,7 +20,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyVetoException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * /USRS/NEW
@@ -44,17 +44,11 @@ public class CreateUser extends JInternalFrame {
         Form f = new Form();
         String puid = "U" + (10000 + (Engine.getUsers().size() + 1));
         f.addInput(new Label("New User ID", new Color(178, 255, 102)), new Copiable(puid));
-        HashMap<String, String> emps = new HashMap<>();
-        for(Employee emp : Engine.getEmployees()){
-            emps.put(emp.getId() + " – " + emp.getName(), emp.getId());
-        }
-        Selectable empsOpts = new Selectable(emps);
-        empsOpts.editable();
+        Selectable empsOpts = Selectables.allEmployees();
         f.addInput(new Label("Employee", new Color(102, 255, 178)), empsOpts);
         JTextArea pastAccess = new JTextArea();
         f.addInput(Elements.label("Paste Access"), pastAccess);
-        Button cr = new Button("Process");
-        cr.color(new Color(102, 204, 255));
+        Button make = new Button("Create User");
         canalAccess = prepareAccesses();
         JPanel again = new JPanel(new BorderLayout());
         again.add(f, BorderLayout.NORTH);
@@ -69,11 +63,8 @@ public class CreateUser extends JInternalFrame {
         ctrls.add(dsa);
         again.add(ctrls, BorderLayout.SOUTH);
         l.add(again, BorderLayout.CENTER);
-        l.add(cr, BorderLayout.SOUTH);
+        l.add(make, BorderLayout.SOUTH);
         add(l);
-        setResizable(false);
-        setIconifiable(true);
-        setClosable(true);
         sa.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 checkboxes.forEach(cb -> cb.setSelected(true));
@@ -86,7 +77,7 @@ public class CreateUser extends JInternalFrame {
                 repaint();
             }
         });
-        cr.addMouseListener(new MouseAdapter() {
+        make.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 User newUser = new User();
                 newUser.setId(puid);

@@ -1,10 +1,9 @@
 package org.Canal.UI.Views.Distribution.DistributionCenters;
 
 import org.Canal.Models.SupplyChainUnits.Location;
-import org.Canal.UI.Elements.Button;
-import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -23,7 +22,7 @@ public class DistributionCenters extends JInternalFrame {
 
     public DistributionCenters(DesktopState desktop) {
         super("Distribution Centers", false, true, false, true);
-        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/distribution_centers.png")));
+        setFrameIcon(new ImageIcon(DistributionCenters.class.getResource("/icons/distribution_centers.png")));
         listModel = new DefaultListModel<>();
         JList<Location> list = new JList<>(listModel);
         list.setCellRenderer(new DCRenderer());
@@ -57,20 +56,14 @@ public class DistributionCenters extends JInternalFrame {
                 }
             }
         });
-        Button nla = new Button("Add");
-        nla.addActionListener(_ -> desktop.put(Engine.router("/DCSS/NEW", desktop)));
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BorderLayout());
-        mainPanel.add(direct, BorderLayout.NORTH);
-        mainPanel.add(scrollPane, BorderLayout.CENTER);
-        mainPanel.add(nla, BorderLayout.SOUTH);
-        add(mainPanel);
+        setLayout(new BorderLayout());
+        add(direct, BorderLayout.NORTH);
+        add(scrollPane, BorderLayout.CENTER);
         loadLocations();
     }
 
     private void loadLocations(){
         listModel.removeAllElements();
-        Engine.load();
         ArrayList<Location> found = Engine.getDistributionCenters();
         for (Location loc : found) {
             listModel.addElement(loc);

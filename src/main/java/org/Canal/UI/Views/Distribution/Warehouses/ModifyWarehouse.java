@@ -2,6 +2,7 @@ package org.Canal.UI.Views.Distribution.Warehouses;
 
 import org.Canal.Models.SupplyChainUnits.Warehouse;
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * /WHS/MOD
@@ -9,9 +10,8 @@ import javax.swing.*;
 public class ModifyWarehouse extends JInternalFrame {
 
     public ModifyWarehouse(Warehouse warehouse) {
-        setTitle(warehouse.getId() + " - " + warehouse.getName());
+        super(warehouse.getId() + " - " + warehouse.getName(), false, true, false, true);
 
-        setIconifiable(true);
-        setClosable(true);
+        setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.YELLOW));
     }
 }

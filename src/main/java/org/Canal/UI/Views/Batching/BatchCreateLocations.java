@@ -2,6 +2,7 @@ package org.Canal.UI.Views.Batching;
 
 import org.Canal.UI.Elements.Input;
 import org.Canal.Utils.Pipe;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;

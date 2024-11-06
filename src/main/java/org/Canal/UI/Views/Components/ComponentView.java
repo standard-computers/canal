@@ -22,6 +22,9 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * /CMPS/$[COMPONENT_ID]
+ */
 public class ComponentView extends JInternalFrame {
 
     private Item item;

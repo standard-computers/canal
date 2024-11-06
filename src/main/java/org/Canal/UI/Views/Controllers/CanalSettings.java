@@ -25,7 +25,6 @@ public class CanalSettings extends JInternalFrame {
     public CanalSettings(){
         super("Canal Settings", false, true, false, false);
         setFrameIcon(new ImageIcon(CanalSettings.class.getResource("/icons/settings.png")));
-        JPanel l = new JPanel(new BorderLayout());
         Form f = new Form();
         HashMap<String, String> themeMap = new HashMap<>();
         themeMap.put("Arc", "/com/formdev/flatlaf/intellijthemes/themes/arc-theme.theme.json");
@@ -127,8 +126,9 @@ public class CanalSettings extends JInternalFrame {
                 dispose();
             }
         });
-        l.add(f, BorderLayout.CENTER);
-        l.add(cr, BorderLayout.SOUTH);
-        add(l);
+        setLayout(new BorderLayout());
+        add(Elements.header("Canal Settings", SwingConstants.LEFT), BorderLayout.NORTH);
+        add(f, BorderLayout.CENTER);
+        add(cr, BorderLayout.SOUTH);
     }
 }

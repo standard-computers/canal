@@ -3,21 +3,23 @@ package org.Canal.UI.Views.Finance.Customers;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Views.Invoices.CreateInvoice;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * /CSTS/$[CUSTOMER_ID]
+ */
 public class CustomerView extends JInternalFrame {
 
     private Location customer;
 
     public CustomerView(Location customer) {
-        setTitle(customer.getName());
+        super("Customer / " + customer.getId() + " - " + customer.getName(), false, true, false, true);
         this.customer = customer;
-        setTitle("Customer / " + customer.getId() + " - " + customer.getName());
-//        setIconImage(new ImageIcon(OrgView.class.getResource("/icons/customer.png")).getImage());
         JTabbedPane tabbedPane = new JTabbedPane();
         JPanel formPanel = new JPanel();
         formPanel.setLayout(new GridLayout(2, 2));

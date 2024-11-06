@@ -42,7 +42,9 @@ public class CreatePurchaseOrder extends JInternalFrame {
     private PurchaseOrder newOrder;
     private ItemTableModel model;
     private double taxRate = 0.05;
-    private JLabel netValue, taxAmount, totalAmount;
+    private JLabel netValue;
+    private JLabel taxAmount;
+    private JLabel totalAmount;
     private Selectable availablePrs, selectVendor, selectBillTo, selectShipTo;
     private Copiable orderId;
     private DatePicker expectedDelivery;
@@ -194,7 +196,7 @@ public class CreatePurchaseOrder extends JInternalFrame {
         f.addInput(new Label("*Ordered", Constants.colors[4]), ordered);
         f.addInput(new Label("Purchase Requisition", Constants.colors[5]), availablePrs);
         f.addInput(new Label("Expected Delivery", Constants.colors[6]), expectedDelivery);
-        f.addInput(new Label("Due Date", Constants.colors[7]), new JTextField());
+        f.addInput(new Label("Due Date", Constants.colors[7]), Elements.input());
         f.addInput(new Label("Status", Constants.colors[8]), new Copiable("DRAFT"));
         return f;
     }
