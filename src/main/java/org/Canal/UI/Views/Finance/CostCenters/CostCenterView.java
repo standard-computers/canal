@@ -7,6 +7,7 @@ import org.Canal.Models.SupplyChainUnits.Vendor;
 import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Views.Areas.CreateArea;
+import org.Canal.UI.Views.Bins.CreateBin;
 import org.Canal.UI.Views.Orders.PurchaseOrders.CreatePurchaseOrder;
 import org.Canal.UI.Views.Areas.AutoMakeAreasAndBins;
 import org.Canal.Utils.Locke;
@@ -97,6 +98,12 @@ public class CostCenterView extends JInternalFrame implements RefreshListener {
                 desktop.put(new CreateArea(thisCostCenter.getId()));
             }
         });
+        addBin.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                desktop.put(new CreateBin(thisCostCenter.getId()));
+            }
+        });
         autoMake.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -112,7 +119,6 @@ public class CostCenterView extends JInternalFrame implements RefreshListener {
         refresh.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                Engine.load();
                 Locke rootNode = createRootNode();
                 DefaultMutableTreeNode rootTreeNode = createTreeNodes(rootNode);
                 DefaultTreeModel model = (DefaultTreeModel) dataTree.getModel();

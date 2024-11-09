@@ -18,6 +18,7 @@ public class QuickExplorer extends JFrame implements DesktopState {
     private JDesktopPane desktopPane;
 
     public QuickExplorer() {
+        setTitle("Canal – Enterprise Resource Planner – 2024");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         desktopPane = new DesktopInterface();
         add(desktopPane);

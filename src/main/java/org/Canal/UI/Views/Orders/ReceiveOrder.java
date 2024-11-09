@@ -67,7 +67,7 @@ public class ReceiveOrder extends JInternalFrame {
             }
             private void onChange() {
                 String poId = poField.getText();
-                PurchaseOrder foundPo = Engine.realtime.getPurchaseOrders(poId);
+                PurchaseOrder foundPo = Engine.orderProcessing.getPurchaseOrders(poId);
                 if(foundPo != null){
                     String[][] rcvData = new String[foundPo.getItems().size()][3];
                     ArrayList<OrderLineItem> items = foundPo.getItems();
@@ -109,7 +109,7 @@ public class ReceiveOrder extends JInternalFrame {
                 if(po.isEmpty()){
                     JOptionPane.showMessageDialog(null, "Purchase Order Number Required!", "Error", JOptionPane.ERROR_MESSAGE);
                 }else{
-                    PurchaseOrder spo = Engine.realtime.getPurchaseOrders(po);
+                    PurchaseOrder spo = Engine.orderProcessing.getPurchaseOrders(po);
                     if(spo == null){
                         JOptionPane.showMessageDialog(null, "PO or Order Number required!", "Error", JOptionPane.ERROR_MESSAGE);
                         if(!rlid.equals(spo.getVendor())){

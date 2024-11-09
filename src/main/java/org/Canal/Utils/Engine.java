@@ -79,7 +79,6 @@ public class Engine {
     private static Configuration configuration;
     public static Organization organization;
     public static User assignedUser;
-    public static ArrayList<Location> distributionCenters = new ArrayList<>();
     public static ArrayList<Warehouse> warehouses = new ArrayList<>();
     public static ArrayList<Location> customers = new ArrayList<>();
     public static ArrayList<Item> items = new ArrayList<>();
@@ -92,15 +91,6 @@ public class Engine {
     public static ArrayList<Ledger> ledgers = new ArrayList<>();
 
     public static void load(){
-        distributionCenters.clear();
-        File[] dcssDir = Pipe.list("DCSS");
-        for (File file : dcssDir) {
-            if (!file.isDirectory()) {
-                Location l = Json.load(file.getPath(), Location.class);
-                distributionCenters.add(l);
-            }
-        }
-        distributionCenters.sort(Comparator.comparing(Location::getId));
         warehouses.clear();
         File[] whdir = Pipe.list("WHS");
         for (File file : whdir) {
@@ -242,11 +232,20 @@ public class Engine {
     }
 
     public static ArrayList<Location> getDistributionCenters() {
+        ArrayList<Location> distributionCenters = new ArrayList<>();
+        File[] dcssDir = Pipe.list("DCSS");
+        for (File file : dcssDir) {
+            if (!file.isDirectory()) {
+                Location l = Json.load(file.getPath(), Location.class);
+                distributionCenters.add(l);
+            }
+        }
+        distributionCenters.sort(Comparator.comparing(Location::getId));
         return distributionCenters;
     }
 
     public static List<Location> getDistributionCenters(String id) {
-        return distributionCenters.stream().filter(location -> location.getTie().equals(id)).collect(Collectors.toList());
+        return getDistributionCenters().stream().filter(location -> location.getTie().equals(id)).collect(Collectors.toList());
     }
 
     public static List<Warehouse> getWarehouses(String id) {
@@ -742,7 +741,7 @@ public class Engine {
                         return new Warehouses(desktop);
                     }
                     case "ORDS" -> {
-                        for(PurchaseOrder l : Engine.realtime.getPurchaseOrders()){
+                        for(PurchaseOrder l : Engine.orderProcessing.getPurchaseOrders()){
                             if(l.getOrderId().equals(oid)){
                                 return new PurchaseOrderView(l);
                             }
@@ -781,20 +780,7 @@ public class Engine {
         }
     }
 
-    public static class realtime {
-
-        public static ArrayList<PurchaseRequisition> getPurchaseRequisitions() {
-            ArrayList<PurchaseRequisition> prs = new ArrayList<>();
-            File[] posDir = Pipe.list("PR");
-            for (File file : posDir) {
-                if (!file.isDirectory()) {
-                    PurchaseRequisition a = Json.load(file.getPath(), PurchaseRequisition.class);
-                    prs.add(a);
-                }
-            }
-            prs.sort(Comparator.comparing(PurchaseRequisition::getId));
-            return prs;
-        }
+    public static class orderProcessing {
 
         public static PurchaseRequisition getPurchaseRequisitions(String prNumber) {
             File[] posDir = Pipe.list("PR");
@@ -834,6 +820,22 @@ public class Engine {
             }
             return null;
         }
+    }
+
+    public static class realtime {
+
+        public static ArrayList<PurchaseRequisition> getPurchaseRequisitions() {
+            ArrayList<PurchaseRequisition> prs = new ArrayList<>();
+            File[] posDir = Pipe.list("PR");
+            for (File file : posDir) {
+                if (!file.isDirectory()) {
+                    PurchaseRequisition a = Json.load(file.getPath(), PurchaseRequisition.class);
+                    prs.add(a);
+                }
+            }
+            prs.sort(Comparator.comparing(PurchaseRequisition::getId));
+            return prs;
+        }
 
         public static ArrayList<GoodsReceipt> getGoodsReceipts() {
             ArrayList<GoodsReceipt> pos = new ArrayList<>();
@@ -846,6 +848,19 @@ public class Engine {
             }
             pos.sort(Comparator.comparing(GoodsReceipt::getId));
             return pos;
+        }
+
+        public static Area getArea(String areaId) {
+            File[] areaDir = Pipe.list("AREAS");
+            for (File file : areaDir) {
+                if (!file.isDirectory()) {
+                    Area a = Json.load(file.getPath(), Area.class);
+                    if (a.getId().equals(areaId)) {
+                        return a;
+                    }
+                }
+            }
+            return null;
         }
     }
 }

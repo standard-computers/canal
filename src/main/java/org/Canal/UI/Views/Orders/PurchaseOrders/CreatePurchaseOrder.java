@@ -119,7 +119,7 @@ public class CreatePurchaseOrder extends JInternalFrame {
                     JOptionPane.showMessageDialog(null, "Must select a delivery date.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                PurchaseRequisition assignedPR = Engine.realtime.getPurchaseRequisitions(availablePrs.getSelectedValue());
+                PurchaseRequisition assignedPR = Engine.orderProcessing.getPurchaseRequisitions(availablePrs.getSelectedValue());
                 if(!selectVendor.getSelectedValue().equals(assignedPR.getSupplier())){
                     JOptionPane.showMessageDialog(null, "Selected PO is not for this vendor.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;

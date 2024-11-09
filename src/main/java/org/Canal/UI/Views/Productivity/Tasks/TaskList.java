@@ -65,9 +65,9 @@ public class TaskList extends JInternalFrame {
         });
         label.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                String[] printables = new String[Engine.realtime.getPurchaseOrders().size()];
-                for (int i = 0; i < Engine.realtime.getPurchaseOrders().size(); i++) {
-                    printables[i] = Engine.realtime.getPurchaseOrders().get(i).getOrderId();
+                String[] printables = new String[Engine.orderProcessing.getPurchaseOrders().size()];
+                for (int i = 0; i < Engine.orderProcessing.getPurchaseOrders().size(); i++) {
+                    printables[i] = Engine.orderProcessing.getPurchaseOrders().get(i).getOrderId();
                 }
                 new CheckboxBarcodeFrame(printables);
             }
@@ -87,7 +87,7 @@ public class TaskList extends JInternalFrame {
                 "Status"
         };
         ArrayList<String[]> pos = new ArrayList<>();
-        for (PurchaseOrder po : Engine.realtime.getPurchaseOrders()) {
+        for (PurchaseOrder po : Engine.orderProcessing.getPurchaseOrders()) {
             pos.add(new String[]{
                     po.getOrderId(),
                     po.getOwner(),
