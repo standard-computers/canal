@@ -19,6 +19,8 @@ public class ModifyCatalog extends JInternalFrame {
 
     public ModifyCatalog(Catalog catalog) {
         super("Catalog Modifier", false, true, false, true);
+        setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.RED));
+        setFrameIcon(new ImageIcon(ModifyCatalog.class.getResource("/icons/modify.png")));
         this.catalog = catalog;
         JTable table = createTable();
         table.setFont(new Font(UIManager.getFont("Label.font").getName(), Font.PLAIN, 12));

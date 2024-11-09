@@ -102,6 +102,7 @@ public class Selectables {
         statusTypes.put("TNS", "TNS");
         Selectable uomField = new Selectable(statusTypes);
         uomField.setSelectedValue(preset);
+        uomField.editable();
         return uomField;
     }
 

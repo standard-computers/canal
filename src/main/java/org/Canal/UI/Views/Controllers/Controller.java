@@ -60,7 +60,6 @@ public class Controller extends JInternalFrame implements RefreshListener {
     }
 
     private void reloadStore(){
-        Engine.load();
         Locke rootNode = Constants.allModules();
         DefaultMutableTreeNode rootTreeNode = createTreeNodes(rootNode);
         DefaultTreeModel model = (DefaultTreeModel) dataTree.getModel();

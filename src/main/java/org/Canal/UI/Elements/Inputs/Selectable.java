@@ -41,6 +41,13 @@ public class Selectable extends JPanel {
         }
     }
 
+    public void updateOptions(Map<String, String> newOptions) {
+        itemsMap.clear();
+        itemsMap.putAll(newOptions);
+        this.revalidate();
+        this.repaint();
+    }
+
     public void addActionListener(ActionListener l){
         comboBox.addActionListener(l);
     }

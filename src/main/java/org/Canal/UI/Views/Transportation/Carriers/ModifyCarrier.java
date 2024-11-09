@@ -10,7 +10,7 @@ public class ModifyCarrier extends JInternalFrame {
 
     public ModifyCarrier() {
         super("Modify Carrier", false, true, false, true);
-
-        setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.YELLOW));
+        setFrameIcon(new ImageIcon(ModifyCarrier.class.getResource("/icons/modify.png")));
+        setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.RED));
     }
 }

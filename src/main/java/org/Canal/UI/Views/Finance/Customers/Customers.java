@@ -73,7 +73,6 @@ public class Customers extends JInternalFrame {
 
     private void loadCustomers(){
         listModel.removeAllElements();
-        Engine.load();
         ArrayList<Location> found = Engine.getCustomers();
         for (Location customer : found) {
             listModel.addElement(customer);

@@ -64,7 +64,6 @@ public class CostCenters extends JInternalFrame {
 
     private void loadLocations(){
         listModel.removeAllElements();
-        Engine.load();
         ArrayList<Location> found = Engine.getCostCenters();
         for (Location loc : found) {
             listModel.addElement(loc);

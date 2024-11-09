@@ -12,7 +12,7 @@ public class ModifyVendor extends JInternalFrame {
 
     public ModifyVendor(Warehouse warehouse) {
         super(warehouse.getId() + " - " + warehouse.getName(), false, true, false, true);
-
-        setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.YELLOW));
+        setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.RED));
+        setFrameIcon(new ImageIcon(ModifyVendor.class.getResource("/icons/modify.png")));
     }
 }

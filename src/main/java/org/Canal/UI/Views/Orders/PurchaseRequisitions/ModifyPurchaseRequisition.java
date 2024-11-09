@@ -1,6 +1,7 @@
 package org.Canal.UI.Views.Orders.PurchaseRequisitions;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * /ORDS/PR/MOD
@@ -8,9 +9,8 @@ import javax.swing.*;
 public class ModifyPurchaseRequisition extends JInternalFrame {
 
     public ModifyPurchaseRequisition() {
-        setTitle("Modify Purchase Req.");
-
-        setIconifiable(true);
-        setClosable(true);
+        super("Modify Purchase Req.", false, true, false, true);
+        setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.RED));
+        setFrameIcon(new ImageIcon(ModifyPurchaseRequisition.class.getResource("/icons/modify.png")));
     }
 }

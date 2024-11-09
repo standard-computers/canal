@@ -60,7 +60,6 @@ public class Materials extends JInternalFrame {
     }
 
     private void loadFlexes(){
-        Engine.load();
         ArrayList<Material> found = Engine.getMaterials();
         listModel.removeAllElements();
         for (Material f : found) {

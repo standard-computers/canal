@@ -59,7 +59,6 @@ public class Users extends JInternalFrame {
     }
 
     private void loadFlexes(){
-        Engine.load();
         ArrayList<User> found = Engine.getUsers();
         listModel.removeAllElements();
         for (User f : found) {

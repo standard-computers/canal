@@ -65,7 +65,6 @@ public class Warehouses extends JInternalFrame {
 
     private void loadLocations(){
         listModel.removeAllElements();
-        Engine.load();
         ArrayList<Warehouse> found = Engine.getWarehouses();
         for (Warehouse loc : found) {
             listModel.addElement(loc);

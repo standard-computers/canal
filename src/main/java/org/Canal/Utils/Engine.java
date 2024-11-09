@@ -57,9 +57,16 @@ import org.Canal.UI.Views.Orders.PurchaseRequisitions.PurchaseRequisitions;
 import org.Canal.UI.Views.Orders.SalesOrders.AutoMakeSalesOrders;
 import org.Canal.UI.Views.Orders.SalesOrders.CreateSalesOrder;
 import org.Canal.UI.Views.Orders.SalesOrders.SalesOrders;
+import org.Canal.UI.Views.Productivity.Notes.*;
 import org.Canal.UI.Views.Productivity.Tasks.CreateTask;
 import org.Canal.UI.Views.Productivity.Tasks.TaskList;
-import org.Canal.UI.Views.Transportation.Carriers.CreateCarrier;
+import org.Canal.UI.Views.Transportation.Carriers.*;
+import org.Canal.UI.Views.Transportation.InboundDeliveryOrders.*;
+import org.Canal.UI.Views.Transportation.OutboundDeliveryOrders.*;
+import org.Canal.UI.Views.Transportation.Trucks.ArchiveTruck;
+import org.Canal.UI.Views.Transportation.Trucks.FindTruck;
+import org.Canal.UI.Views.Transportation.Trucks.RemoveTruck;
+import org.Canal.UI.Views.Transportation.Trucks.Trucks;
 
 import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
@@ -79,109 +86,6 @@ public class Engine {
     private static Configuration configuration;
     public static Organization organization;
     public static User assignedUser;
-    public static ArrayList<Warehouse> warehouses = new ArrayList<>();
-    public static ArrayList<Location> customers = new ArrayList<>();
-    public static ArrayList<Item> items = new ArrayList<>();
-    public static ArrayList<Material> materials = new ArrayList<>();
-    public static ArrayList<Area> areas = new ArrayList<>();
-    public static ArrayList<Employee> employees = new ArrayList<>();
-    public static ArrayList<Catalog> catalogs = new ArrayList<>();
-    public static ArrayList<PurchaseOrder> orders = new ArrayList<>();
-    public static ArrayList<User> users = new ArrayList<>();
-    public static ArrayList<Ledger> ledgers = new ArrayList<>();
-
-    public static void load(){
-        warehouses.clear();
-        File[] whdir = Pipe.list("WHS");
-        for (File file : whdir) {
-            if (!file.isDirectory()) {
-                Warehouse l = Json.load(file.getPath(), Warehouse.class);
-                warehouses.add(l);
-            }
-        }
-        warehouses.sort(Comparator.comparing(Warehouse::getId));
-        customers.clear();
-        File[] cstsDir = Pipe.list("CSTS");
-        for (File file : cstsDir) {
-            if (!file.isDirectory()) {
-                Location l = Json.load(file.getPath(), Location.class);
-                customers.add(l);
-            }
-        }
-        customers.sort(Comparator.comparing(Location::getId));
-        items.clear();
-        File[] itsDir = Pipe.list("ITS");
-        for (File file : itsDir) {
-            if (!file.isDirectory()) {
-                Item l = Json.load(file.getPath(), Item.class);
-                items.add(l);
-            }
-        }
-        items.sort(Comparator.comparing(Item::getId));
-        areas.clear();
-        File[] areasDir = Pipe.list("AREAS");
-        for (File file : areasDir) {
-            if (!file.isDirectory()) {
-                Area a = Json.load(file.getPath(), Area.class);
-                areas.add(a);
-            }
-        }
-        areas.sort(Comparator.comparing(Area::getId));
-        materials.clear();
-        File[] mtsDir = Pipe.list("MTS");
-        for (File file : mtsDir) {
-            if (!file.isDirectory()) {
-                Material a = Json.load(file.getPath(), Material.class);
-                materials.add(a);
-            }
-        }
-        materials.sort(Comparator.comparing(Material::getId));
-        employees.clear();
-        File[] empDir = Pipe.list("EMPS");
-        for (File file : empDir) {
-            if (!file.isDirectory()) {
-                Employee a = Json.load(file.getPath(), Employee.class);
-                employees.add(a);
-            }
-        }
-        employees.sort(Comparator.comparing(Employee::getId));
-        catalogs.clear();
-        File[] catsDirs = Pipe.list("CATS");
-        for (File catsDir : catsDirs) {
-            if (!catsDir.isDirectory()) {
-                Catalog a = Json.load(catsDir.getPath(), Catalog.class);
-                catalogs.add(a);
-            }
-        }
-        catalogs.sort(Comparator.comparing(Catalog::getId));
-        users.clear();
-        File[] usrsDir = Pipe.list("USRS");
-        for (File file : usrsDir) {
-            if (!file.isDirectory()) {
-                User a = Json.load(file.getPath(), User.class);
-                users.add(a);
-            }
-        }
-        users.sort(Comparator.comparing(User::getId));
-        orders.clear();
-        File[] ordsDir = Pipe.list("ORDS");
-        for (File file : ordsDir) {
-            if (!file.isDirectory()) {
-                PurchaseOrder a = Json.load(file.getPath(), PurchaseOrder.class);
-                orders.add(a);
-            }
-        }
-        orders.sort(Comparator.comparing(PurchaseOrder::getOrderId));
-        ledgers.clear();
-        File[] lgsDir = Pipe.list("LGS");
-        for (File file : lgsDir) {
-            if (!file.isDirectory()) {
-                Ledger a = Json.load(file.getPath(), Ledger.class);
-                ledgers.add(a);
-            }
-        }
-        ledgers.sort(Comparator.comparing(Ledger::getId));
-    }
 
     public static User getAssignedUser() {
         return assignedUser;
@@ -248,20 +152,39 @@ public class Engine {
         return getDistributionCenters().stream().filter(location -> location.getTie().equals(id)).collect(Collectors.toList());
     }
 
-    public static List<Warehouse> getWarehouses(String id) {
-        return warehouses.stream().filter(location -> location.getOrg().equals(id)).collect(Collectors.toList());
-    }
-
     public static ArrayList<Warehouse> getWarehouses() {
+        ArrayList<Warehouse> warehouses = new ArrayList<>();
+        File[] whdir = Pipe.list("WHS");
+        for (File file : whdir) {
+            if (!file.isDirectory()) {
+                Warehouse l = Json.load(file.getPath(), Warehouse.class);
+                warehouses.add(l);
+            }
+        }
+        warehouses.sort(Comparator.comparing(Warehouse::getId));
         return warehouses;
     }
 
+    public static List<Warehouse> getWarehouses(String id) {
+        return getWarehouses().stream().filter(location -> location.getOrg().equals(id)).collect(Collectors.toList());
+    }
+
+
     public static ArrayList<Location> getCustomers() {
+        ArrayList<Location> customers = new ArrayList<>();
+        File[] cstsDir = Pipe.list("CSTS");
+        for (File file : cstsDir) {
+            if (!file.isDirectory()) {
+                Location l = Json.load(file.getPath(), Location.class);
+                customers.add(l);
+            }
+        }
+        customers.sort(Comparator.comparing(Location::getId));
         return customers;
     }
 
     public static List<Location> getCustomers(String id) {
-        return customers.stream().filter(location -> location.getTie().equals(id)).collect(Collectors.toList());
+        return getCustomers().stream().filter(location -> location.getTie().equals(id)).collect(Collectors.toList());
     }
 
     public static ArrayList<Vendor> getVendors() {
@@ -291,15 +214,24 @@ public class Engine {
     }
 
     public static ArrayList<Item> getItems() {
+        ArrayList<Item> items = new ArrayList<>();
+        File[] itsDir = Pipe.list("ITS");
+        for (File file : itsDir) {
+            if (!file.isDirectory()) {
+                Item l = Json.load(file.getPath(), Item.class);
+                items.add(l);
+            }
+        }
+        items.sort(Comparator.comparing(Item::getId));
         return items;
     }
 
     public static List<Item> getItems(String id) {
-        return items.stream().filter(item -> item.getOrg().equals(id)).collect(Collectors.toList());
+        return getItems().stream().filter(item -> item.getOrg().equals(id)).collect(Collectors.toList());
     }
 
     public static Item getItem(String id) {
-        for(Item item : items){
+        for(Item item : getItems()){
             if(item.getId().equals(id)){
                 return item;
             }
@@ -308,19 +240,37 @@ public class Engine {
     }
 
     public static ArrayList<Material> getMaterials() {
+        ArrayList<Material> materials = new ArrayList<>();
+        File[] mtsDir = Pipe.list("MTS");
+        for (File file : mtsDir) {
+            if (!file.isDirectory()) {
+                Material a = Json.load(file.getPath(), Material.class);
+                materials.add(a);
+            }
+        }
+        materials.sort(Comparator.comparing(Material::getId));
         return materials;
     }
 
     public static List<Material> getMaterials(String id) {
-        return materials.stream().filter(location -> location.getOrg().equals(id)).collect(Collectors.toList());
+        return getMaterials().stream().filter(location -> location.getOrg().equals(id)).collect(Collectors.toList());
     }
 
     public static ArrayList<Area> getAreas() {
+        ArrayList<Area> areas = new ArrayList<>();
+        File[] areasDir = Pipe.list("AREAS");
+        for (File file : areasDir) {
+            if (!file.isDirectory()) {
+                Area a = Json.load(file.getPath(), Area.class);
+                areas.add(a);
+            }
+        }
+        areas.sort(Comparator.comparing(Area::getId));
         return areas;
     }
 
     public static List<Area> getAreas(String id) {
-        return areas.stream().filter(area -> area.getLocation().equals(id)).collect(Collectors.toList());
+        return getAreas().stream().filter(area -> area.getLocation().equals(id)).collect(Collectors.toList());
     }
 
     public static void setOrganization(Organization organization) {
@@ -341,11 +291,20 @@ public class Engine {
     }
 
     public static ArrayList<Employee> getEmployees() {
+        ArrayList<Employee> employees = new ArrayList<>();
+        File[] empDir = Pipe.list("EMPS");
+        for (File file : empDir) {
+            if (!file.isDirectory()) {
+                Employee a = Json.load(file.getPath(), Employee.class);
+                employees.add(a);
+            }
+        }
+        employees.sort(Comparator.comparing(Employee::getId));
         return employees;
     }
 
     public static List<Employee> getEmployees(String id) {
-        return employees.stream().filter(location -> location.getOrg().equals(id)).collect(Collectors.toList());
+        return getEmployees().stream().filter(location -> location.getOrg().equals(id)).collect(Collectors.toList());
     }
 
     public static Employee getEmployee(String Id){
@@ -358,15 +317,33 @@ public class Engine {
     }
 
     public static ArrayList<Catalog> getCatalogs() {
+        ArrayList<Catalog> catalogs = new ArrayList<>();
+        File[] catsDirs = Pipe.list("CATS");
+        for (File catsDir : catsDirs) {
+            if (!catsDir.isDirectory()) {
+                Catalog a = Json.load(catsDir.getPath(), Catalog.class);
+                catalogs.add(a);
+            }
+        }
+        catalogs.sort(Comparator.comparing(Catalog::getId));
         return catalogs;
     }
 
     public static ArrayList<User> getUsers() {
+        ArrayList<User> users = new ArrayList<>();
+        File[] usrsDir = Pipe.list("USRS");
+        for (File file : usrsDir) {
+            if (!file.isDirectory()) {
+                User a = Json.load(file.getPath(), User.class);
+                users.add(a);
+            }
+        }
+        users.sort(Comparator.comparing(User::getId));
         return users;
     }
 
     public static User getUser(String id) {
-        for(User u : users){
+        for(User u : getUsers()){
             if(u.getId().equals(id)){
                 return u;
             }
@@ -375,19 +352,37 @@ public class Engine {
     }
 
     public static ArrayList<PurchaseOrder> getOrders() {
+        ArrayList<PurchaseOrder> orders = new ArrayList<>();
+        File[] ordsDir = Pipe.list("ORDS");
+        for (File file : ordsDir) {
+            if (!file.isDirectory()) {
+                PurchaseOrder a = Json.load(file.getPath(), PurchaseOrder.class);
+                orders.add(a);
+            }
+        }
+        orders.sort(Comparator.comparing(PurchaseOrder::getOrderId));
         return orders;
     }
 
     public static List<PurchaseOrder> getOrders(String shipTo) {
-        return orders.stream().filter(order -> order.getShipTo().equals(shipTo)).collect(Collectors.toList());
+        return getOrders().stream().filter(order -> order.getShipTo().equals(shipTo)).collect(Collectors.toList());
     }
 
     public static ArrayList<Ledger> getLedgers() {
+        ArrayList<Ledger> ledgers = new ArrayList<>();
+        File[] lgsDir = Pipe.list("LGS");
+        for (File file : lgsDir) {
+            if (!file.isDirectory()) {
+                Ledger a = Json.load(file.getPath(), Ledger.class);
+                ledgers.add(a);
+            }
+        }
+        ledgers.sort(Comparator.comparing(Ledger::getId));
         return ledgers;
     }
 
     public static List<Ledger> getLedgers(String id) {
-        return ledgers.stream().filter(location -> location.getOrg().equals(id)).collect(Collectors.toList());
+        return getLedgers().stream().filter(location -> location.getOrg().equals(id)).collect(Collectors.toList());
     }
 
     public static JInternalFrame router(String transactionCode, DesktopState desktop) {
@@ -462,8 +457,65 @@ public class Engine {
             case "/DCSS/MOD" -> {
                 return new ModifyDistributionCenter(null);
             }
+            case "/TRANS/ODO" -> {
+                return new OutboundDeliveries(desktop);
+            }
+            case "/TRANS/ODO/NEW" -> {
+                return new CreateOutboundDeliveryOrder();
+            }
+            case "/TRANS/ODO/F" -> {
+                return new FindOutboundDeliveryOrder(desktop);
+            }
+            case "/TRANS/ODO/ARCHV" -> {
+                return new ArchiveOutboundDeliveryOrder();
+            }
+            case "/TRANS/ODO/DEL" -> {
+                return new RemoveOutboundDeliveryOrder();
+            }
+            case "/TRANS/IDO" -> {
+                return new InboundDeliveries(desktop);
+            }
+            case "/TRANS/IDO/NEW" -> {
+                return new CreateInboundDeliveryOrder();
+            }
+            case "/TRANS/IDO/F" -> {
+                return new FindInboundDeliveryOrder(desktop);
+            }
+            case "/TRANS/IDO/ARCHV" -> {
+                return new ArchiveInboundDeliveryOrder();
+            }
+            case "/TRANS/IDO/DEL" -> {
+                return new RemoveInboundDeliveryOrder();
+            }
+            case "/TRANS/CRRS" -> {
+                return new Carriers();
+            }
+            case "/TRANS/CRRS/F" -> {
+                return new FindCarrier(desktop);
+            }
             case "/TRANS/CRRS/NEW" -> {
                 return new CreateCarrier(desktop);
+            }
+            case "/TRANS/CRRS/ARCHV" -> {
+                return new ArchiveCarrier();
+            }
+            case "/TRANS/CRRS/DEL" -> {
+                return new RemoveCarrier();
+            }
+            case "/TRANS/TRCKS" -> {
+                return new Trucks();
+            }
+            case "/TRANS/TRCKS/F" -> {
+                return new FindTruck(desktop);
+            }
+            case "/TRANS/TRCKS/NEW" -> {
+                return new RemoveCarrier();
+            }
+            case "/TRANS/TRCKS/ARCHV" -> {
+                return new ArchiveTruck();
+            }
+            case "/TRANS/TRCKS/DEL" -> {
+                return new RemoveTruck();
             }
             case "/WHS" -> {
                 return new Warehouses(desktop);
@@ -642,6 +694,21 @@ public class Engine {
             case "/SHPS/RCV" -> {
                 return new ReceiveOrder("", desktop);
             }
+            case "/NOTES" -> {
+                return new Notes();
+            }
+            case "/NOTES/NEW" -> {
+                return new CreateNote();
+            }
+            case "/NOTES/MOD" -> {
+                return new ModifyNote();
+            }
+            case "/NOTES/ARCHV" -> {
+                return new ArchiveNote();
+            }
+            case "/NOTES/DEL" -> {
+                return new RemoveNote();
+            }
             case "/FIN" -> {
                 return new Finance(desktop);
             }
@@ -708,10 +775,9 @@ public class Engine {
                         }
                     }
                     case "ITS" -> {
-                        for(Item l : Engine.getItems()){
-                            if(l.getId().equals(oid)){
-                                return new ItemView(l);
-                            }
+                        Item i = Engine.getItem(oid);
+                        if(i != null){
+                            return new ItemView(i);
                         }
                     }
                     case "EMPS" -> {

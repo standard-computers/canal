@@ -171,7 +171,6 @@ public class ItemView extends JInternalFrame {
         IconButton refresh = new IconButton("", "refresh", "Reload from store");
         refresh.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                Engine.load();
                 Locke rootNode = createRootNode();
                 DefaultMutableTreeNode rootTreeNode = createTreeNodes(rootNode);
                 DefaultTreeModel model = (DefaultTreeModel) dataTree.getModel();

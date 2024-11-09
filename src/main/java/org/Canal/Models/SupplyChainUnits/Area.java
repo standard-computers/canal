@@ -1,5 +1,10 @@
 package org.Canal.Models.SupplyChainUnits;
 
+import org.Canal.Models.BusinessUnits.PurchaseRequisition;
+import org.Canal.Start;
+import org.Canal.Utils.Json;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -151,10 +156,22 @@ public class Area {
     }
 
     public void addBin(Bin newBin) {
-        this.bins.add(newBin);
+        bins.add(newBin);
     }
 
     public void save() {
-
+        File md = new File(Start.WINDOWS_SYSTEM_DIR + "\\.store\\AREAS\\");
+        File[] mdf = md.listFiles();
+        if (mdf != null) {
+            for (File file : mdf) {
+                if (file.getPath().endsWith(".areas")) {
+                    Area forg = Json.load(file.getPath(), Area.class);
+                    if (forg.getId().equals(getId())) {
+                        Json.save(file.getPath(), this);
+                        System.out.println(".areas.saved");
+                    }
+                }
+            }
+        }
     }
 }

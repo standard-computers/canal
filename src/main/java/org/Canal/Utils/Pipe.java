@@ -16,7 +16,6 @@ public class Pipe {
             f.mkdirs();
         }
         Json.save(Start.WINDOWS_SYSTEM_DIR + "\\.store\\" + dir + "\\" + UUID.randomUUID() + dir.replace("/", ".").toLowerCase(), o);
-        Engine.load();
     }
 
     public static void saveConfiguration() {

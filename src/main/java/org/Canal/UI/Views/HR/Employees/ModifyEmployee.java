@@ -1,7 +1,9 @@
 package org.Canal.UI.Views.HR.Employees;
 
 import org.Canal.Models.HumanResources.Employee;
+
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * /EMPS/MOD
@@ -9,9 +11,8 @@ import javax.swing.*;
 public class ModifyEmployee extends JInternalFrame {
 
     public ModifyEmployee(Employee employee) {
-        setTitle(employee.getId() + " - " + employee.getName());
-
-        setIconifiable(true);
-        setClosable(true);
+        super(employee.getId() + " - " + employee.getName(), false, true, false, true);
+        setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.RED));
+        setFrameIcon(new ImageIcon(ModifyEmployee.class.getResource("/icons/modify.png")));
     }
 }

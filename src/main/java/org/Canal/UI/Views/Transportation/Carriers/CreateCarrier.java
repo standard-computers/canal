@@ -1,6 +1,7 @@
 package org.Canal.UI.Views.Transportation.Carriers;
 
 import org.Canal.UI.Elements.Button;
+import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Inputs.Copiable;
 import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
@@ -23,11 +24,11 @@ public class CreateCarrier extends JInternalFrame {
 
         String genId = "CAR" + 1;
         Copiable carrierId = new Copiable(genId);
-        JTextField carrierName = new JTextField("FedEx", 10);
-        JTextField street = new JTextField("", 10);
-        JTextField city = new JTextField("", 10);
-        JTextField state = new JTextField("", 10);
-        JTextField postal = new JTextField("", 10);
+        JTextField carrierName = Elements.input("FedEx", 10);
+        JTextField street = Elements.input("", 10);
+        JTextField city = Elements.input("", 10);
+        JTextField state = Elements.input("", 10);
+        JTextField postal = Elements.input("", 10);
         Selectable countries = Selectables.countries();
 
         f.addInput(new Label("*New Carrier ID", UIManager.getColor("Label.background")), carrierId);
@@ -40,7 +41,6 @@ public class CreateCarrier extends JInternalFrame {
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);
         Button make = new Button("Make Carrier");
-        make.color(Constants.colors[9]);
         add(make, BorderLayout.SOUTH);
     }
 }

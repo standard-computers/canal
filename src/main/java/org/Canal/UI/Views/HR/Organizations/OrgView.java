@@ -154,7 +154,6 @@ public class OrgView extends JInternalFrame {
     }
 
     private void reloadStore(){
-        Engine.load();
         Locke rootNode = createRootNode();
         DefaultMutableTreeNode rootTreeNode = createTreeNodes(rootNode);
         DefaultTreeModel model = (DefaultTreeModel) dataTree.getModel();

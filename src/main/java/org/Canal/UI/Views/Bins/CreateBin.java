@@ -32,7 +32,7 @@ public class CreateBin extends JInternalFrame {
             areas.put(a.getName(), a.getId());
         }
         Selectable binAreaId = new Selectable(areas);
-        generatedId = "BN-" + (Engine.getAreas(location).size() + 1) + "-" + location;
+        generatedId = "BN" + (Engine.getAreas(location).size() + 1) + "-" + binAreaId.getSelectedValue() + "-" + location;
         binAreaId.setSelectedValue(location);
         binIdField.setText(generatedId);
         JTextField binNameField = Elements.input(generatedId, 20);
@@ -88,10 +88,14 @@ public class CreateBin extends JInternalFrame {
                 newBin.setVolume(binVolume);
                 newBin.setVolumeUOM(binVolumeUom);
                 Area foundArea = Engine.realtime.getArea(binArea);
-                foundArea.addBin(newBin);
-                foundArea.save();
-                dispose();
-                JOptionPane.showMessageDialog(null, "Bin '" + binName + "' created in '" + binArea + "'");
+                if(foundArea != null){
+                    foundArea.addBin(newBin);
+                    foundArea.save();
+                    dispose();
+                    JOptionPane.showMessageDialog(null, "Bin '" + binName + "' created in '" + binArea + "'");
+                }else{
+                    JOptionPane.showMessageDialog(null, "Bin '" + binName + "' could not be created in '" + binArea + "'");
+                }
             }
         });
     }

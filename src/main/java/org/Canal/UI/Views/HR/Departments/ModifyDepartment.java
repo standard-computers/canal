@@ -16,6 +16,8 @@ public class ModifyDepartment extends JInternalFrame {
 
     public ModifyDepartment() {
         super("", false, true, false, true);
+        setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.RED));
+        setFrameIcon(new ImageIcon(ModifyDepartment.class.getResource("/icons/modify.png")));
         JTable table = createTable();
         setLayout(new BorderLayout());
         add(Elements.header("/DPTS OBJEX EDITOR", SwingConstants.LEFT), BorderLayout.NORTH);
@@ -28,7 +30,6 @@ public class ModifyDepartment extends JInternalFrame {
             }
         });
         add(save, BorderLayout.SOUTH);
-        setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.RED));
     }
 
     private JTable createTable() {

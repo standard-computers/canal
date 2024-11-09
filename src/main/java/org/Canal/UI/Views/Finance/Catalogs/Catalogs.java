@@ -62,7 +62,6 @@ public class Catalogs extends JInternalFrame {
 
     private void loadCatalogs(){
         listModel.removeAllElements();
-        Engine.load();
         for (Catalog loc : Engine.getCatalogs()) {
             listModel.addElement(loc);
         }

@@ -10,7 +10,7 @@ public class ModifyCustomer extends JInternalFrame {
 
     public ModifyCustomer() {
         super("Modify Customer", false, true, false, true);
-
-        setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.YELLOW));
+        setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.RED));
+        setFrameIcon(new ImageIcon(ModifyCustomer.class.getResource("/icons/modify.png")));
     }
 }

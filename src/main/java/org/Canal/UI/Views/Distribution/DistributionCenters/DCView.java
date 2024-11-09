@@ -151,7 +151,6 @@ public class DCView extends JInternalFrame implements RefreshListener {
         IconButton addBin = new IconButton("+ Bin", "bins", "Add an area cost center");
         IconButton autoMake = new IconButton("AutoMake Areas/Bins", "automake", "Make areas and bins from templates");
         IconButton label = new IconButton("Barcodes", "label", "Print labels for properties");
-        IconButton refresh = new IconButton("", "refresh", "Reload from store");
         order.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -166,17 +165,6 @@ public class DCView extends JInternalFrame implements RefreshListener {
         receive.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 desktop.put(new ReceiveOrder(distributionCenter.getId(), desktop));
-            }
-        });
-        refresh.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                Engine.load();
-                Locke rootNode = createRootNode();
-                DefaultMutableTreeNode rootTreeNode = createTreeNodes(rootNode);
-                DefaultTreeModel model = (DefaultTreeModel) dataTree.getModel();
-                model.setRoot(rootTreeNode);
-                revalidate();
-                repaint();
             }
         });
         areas.addMouseListener(new MouseAdapter() {
@@ -212,8 +200,6 @@ public class DCView extends JInternalFrame implements RefreshListener {
         tb.add(autoMake);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(label);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(refresh);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));
         return tb;
     }

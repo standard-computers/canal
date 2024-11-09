@@ -1,4 +1,4 @@
-package org.Canal.UI.Views.Transportation.Carriers;
+package org.Canal.UI.Views.Transportation.OutboundDeliveryOrders;
 
 import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Elements;
@@ -11,19 +11,18 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
- * /TRANS/CRRS/DEL
+ * /TRANS/ODO/DEL
  */
-public class RemoveCarrier extends JInternalFrame {
+public class RemoveOutboundDeliveryOrder extends JInternalFrame {
 
-    public RemoveCarrier() {
-        super("Remove Carrier", false, true, false, true);
+    public RemoveOutboundDeliveryOrder() {
+        super("Remove ODO", false, true, false, true);
         setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.RED));
         setLayout(new BorderLayout());
         Form f = new Form();
 
-        f.addInput(new Label("Carrier ID", UIManager.getColor("Label.foreground")), Elements.input(10));
-        f.addInput(new Label("Carrier Name", UIManager.getColor("Label.foreground")), Elements.input(10));
-        f.addInput(new Label("Carrier Postal", UIManager.getColor("Label.foreground")), Elements.input(10));
+        f.addInput(new Label("ODO ID", UIManager.getColor("Label.foreground")), Elements.input(10));
+        f.addInput(new Label("ODO TPDID", UIManager.getColor("Label.foreground")), Elements.input(10));
 
         add(f, BorderLayout.CENTER);
         JPanel options = new JPanel(new GridLayout(1, 2));
@@ -40,6 +39,6 @@ public class RemoveCarrier extends JInternalFrame {
             }
         });
         add(options, BorderLayout.SOUTH);
-        add(Elements.header("Confirm Carrier Deletion"), BorderLayout.NORTH);
+        add(Elements.header("Confirm ODO Deletion"), BorderLayout.NORTH);
     }
 }

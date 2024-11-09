@@ -1,4 +1,4 @@
-package org.Canal.UI.Views.Transportation.Carriers;
+package org.Canal.UI.Views.Transportation.Trucks;
 
 import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Elements;
@@ -11,19 +11,18 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
- * /TRANS/CRRS/DEL
+ * /TRANS/TRCKS/DEL
  */
-public class RemoveCarrier extends JInternalFrame {
+public class RemoveTruck extends JInternalFrame {
 
-    public RemoveCarrier() {
-        super("Remove Carrier", false, true, false, true);
+    public RemoveTruck() {
+        super("Remove Truck", false, true, false, true);
         setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.RED));
         setLayout(new BorderLayout());
         Form f = new Form();
 
-        f.addInput(new Label("Carrier ID", UIManager.getColor("Label.foreground")), Elements.input(10));
-        f.addInput(new Label("Carrier Name", UIManager.getColor("Label.foreground")), Elements.input(10));
-        f.addInput(new Label("Carrier Postal", UIManager.getColor("Label.foreground")), Elements.input(10));
+        f.addInput(new Label("Truck ID", UIManager.getColor("Label.foreground")), Elements.input(10));
+        f.addInput(new Label("Truck TPDID", UIManager.getColor("Label.foreground")), Elements.input(10));
 
         add(f, BorderLayout.CENTER);
         JPanel options = new JPanel(new GridLayout(1, 2));
@@ -40,6 +39,6 @@ public class RemoveCarrier extends JInternalFrame {
             }
         });
         add(options, BorderLayout.SOUTH);
-        add(Elements.header("Confirm Carrier Deletion"), BorderLayout.NORTH);
+        add(Elements.header("Confirm Truck Deletion"), BorderLayout.NORTH);
     }
 }

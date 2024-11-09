@@ -3,6 +3,7 @@ package org.Canal.UI.Views.Finance.CostCenters;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Elements;
+import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;
@@ -19,6 +20,8 @@ public class ModifyCostCenter extends JInternalFrame {
 
     public ModifyCostCenter(Location costCenter) {
         super(costCenter.getId(), false, true, false, true);
+        setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.RED));
+        setFrameIcon(new ImageIcon(ModifyCostCenter.class.getResource("/icons/modify.png")));
         this.costCenter = costCenter;
         JTable table = createTable();
         table.setFont(new Font(UIManager.getFont("Label.font").getName(), Font.PLAIN, 12));
@@ -33,7 +36,6 @@ public class ModifyCostCenter extends JInternalFrame {
             }
         });
         add(save, BorderLayout.SOUTH);
-        setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.YELLOW));
     }
 
     private JTable createTable() {

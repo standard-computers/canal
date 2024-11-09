@@ -3,9 +3,12 @@ package org.Canal.UI.Views.Orders;
 import org.Canal.Models.BusinessUnits.OrderLineItem;
 import org.Canal.Models.BusinessUnits.PurchaseOrder;
 import org.Canal.Models.SupplyChainUnits.Area;
+import org.Canal.Models.SupplyChainUnits.Bin;
 import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.CustomJTable;
+import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Inputs.Copiable;
+import org.Canal.UI.Elements.Inputs.DatePicker;
 import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Label;
@@ -21,7 +24,10 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -30,20 +36,25 @@ import java.util.HashMap;
 public class ReceiveOrder extends JInternalFrame {
 
     private JTextField poField;
-    private Selectable availRcvLocations, availablePutaway;
+    private Selectable availRcvLocations, availablePutaway, availablePutawayBin;
+    private HashMap<String, String> putawayBinOptions;
 
     public ReceiveOrder(String receivingLocation, DesktopState desktop){
-        super("Receive an Order", false, true, false, true);
+        super("Receive Order", false, true, false, true);
         Constants.checkLocke(this, true, true);
-        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));
+        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/label.png")));
         setLayout(new BorderLayout());
 
         Form f = new Form();
-        poField = new JTextField(12);
+        poField = Elements.input(12);
         f.addInput(new Label("Purchase Order #", Constants.colors[0]), poField);
         HashMap<String, String> putAwayOptions = new HashMap<>();
         for(Area a : Engine.getAreas(receivingLocation)){
             putAwayOptions.put(a.getId(), a.getId());
+        }
+        if(putAwayOptions.isEmpty()){
+            dispose();
+            JOptionPane.showMessageDialog(null, "Must establish an Area here!");
         }
         JPanel itemInput = new JPanel();
         String[][] data = new String[][]{};
@@ -87,17 +98,46 @@ public class ReceiveOrder extends JInternalFrame {
         availRcvLocations.editable();
         availRcvLocations.setSelectedValue(receivingLocation);
         availablePutaway = new Selectable(putAwayOptions);
+        putawayBinOptions = new HashMap<>();
+        Area a = Engine.realtime.getArea(availablePutaway.getSelectedValue());
+        for(Bin b : a.getBins()){
+            putawayBinOptions.put(b.getId(), b.getId());
+        }
+        availablePutawayBin = new Selectable(putawayBinOptions);
+        availablePutaway.addActionListener(_ -> {
+            putawayBinOptions.clear();
+            Area a1 = Engine.realtime.getArea(availablePutaway.getSelectedValue());
+            for (Bin b : a1.getBins()) {
+                putawayBinOptions.put(b.getId(), b.getId());
+            }
+            availablePutawayBin.updateOptions(putawayBinOptions);
+            availablePutawayBin.revalidate();
+            availablePutawayBin.repaint();
+        });
         f.addInput(new Label("Receiving Location", Constants.colors[1]), availRcvLocations);
         f.addInput(new Label("Putaway Area", Constants.colors[2]), availablePutaway);
-        f.addInput(new Label("Expected Delivery", Constants.colors[3]), expDelivery);
-        f.addInput(new Label("Delivery Date", Constants.colors[4]), availRcvLocations);
+        f.addInput(new Label("Putaway Bin", Constants.colors[3]), availablePutawayBin);
+        f.addInput(new Label("Expected Delivery", Constants.colors[4]), expDelivery);
+        String timestampFormat = "yyyy-MM-dd HH:mm:ss";
+        DatePicker deliveryDate = new DatePicker();
+        SimpleDateFormat sdf = new SimpleDateFormat(timestampFormat);
+        try {
+            Date currentDate = sdf.parse(Constants.now());
+            deliveryDate.setSelectedDate(currentDate);
+            f.addInput(new Label("Delivery Date", Constants.colors[5]), deliveryDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         add(f, BorderLayout.NORTH);
 
         Button receive = new Button("Receive");
         JPanel receivePanel = new JPanel();
+        JLabel userId = new JLabel(Engine.getEmployee(Engine.getAssignedUser().getEmployee()).getName() + "/" + Engine.getAssignedUser().getId());
+        userId.setBackground(Color.lightGray);
         JPanel g = new JPanel();
         JCheckBox confirmAccuracy = new JCheckBox("Confirm Accuracy");
         g.add(confirmAccuracy);
+        g.add(userId);
         g.add(receive);
         receivePanel.add(g, BorderLayout.SOUTH);
 

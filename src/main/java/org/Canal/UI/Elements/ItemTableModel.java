@@ -1,6 +1,5 @@
 package org.Canal.UI.Elements;
 
-import org.Canal.Models.SupplyChainUnits.Flex;
 import org.Canal.Models.SupplyChainUnits.Item;
 import javax.swing.table.AbstractTableModel;
 import java.text.DecimalFormat;
@@ -11,7 +10,7 @@ public class ItemTableModel extends AbstractTableModel {
 
     private final List<Item> items;
     private final String[] columnNames = {"Item Name", "Item", "Quantity", "Price", "Total"};
-    private final Class<?>[] columnTypes = {String.class, Flex.class, Integer.class, Double.class, Double.class};
+    private final Class<?>[] columnTypes = {String.class, Item.class, Integer.class, Double.class, Double.class};
     private final List<Object[]> data;
 
     public ItemTableModel(List<Item> items) {

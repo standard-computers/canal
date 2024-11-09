@@ -1,6 +1,5 @@
 package org.Canal.Models.BusinessUnits;
 
-import org.Canal.Models.SupplyChainUnits.Flex;
 import java.util.HashMap;
 
 public class Invoice {
@@ -10,5 +9,5 @@ public class Invoice {
     private String number;
     private String billTo;
     public String soldTo;
-    private HashMap<Flex, Integer> items;
+    private HashMap<OrderLineItem, Integer> items;
 }

@@ -63,7 +63,6 @@ public class Bins extends JInternalFrame {
     private void loadFlexes(){
         ArrayList<Area> found = Engine.getAreas();
         listModel.removeAllElements();
-        Engine.load();
         for (Area f : found) {
             listModel.addElement(f);
         }

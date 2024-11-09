@@ -64,7 +64,6 @@ public class Employees extends JInternalFrame {
     }
 
     private void loadFlexes(){
-        Engine.load();
         ArrayList<Employee> found = Engine.getEmployees();
         listModel.removeAllElements();
         for (Employee f : found) {
