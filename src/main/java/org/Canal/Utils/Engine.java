@@ -783,7 +783,7 @@ public class Engine {
                     case "USRS" -> {
                         User u = Engine.getUser(oid);
                         if(u != null){
-                            return new UserView(u);
+                            return new UserView(desktop, u);
                         }
                     }
                     case "EMPS" -> {

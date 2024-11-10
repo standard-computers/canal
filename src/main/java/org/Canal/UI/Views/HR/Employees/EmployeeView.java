@@ -2,6 +2,8 @@ package org.Canal.UI.Views.HR.Employees;
 
 import org.Canal.Models.HumanResources.Employee;
 import org.Canal.UI.Elements.IconButton;
+import org.Canal.UI.Elements.Inputs.Copiable;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -30,10 +32,8 @@ public class EmployeeView extends JInternalFrame {
 
         JPanel info = new JPanel(new BorderLayout());
         JPanel infoLabels = new JPanel(new GridLayout(2, 2));
-        JTextField vnl = new JTextField(employee.getName());
-        JTextField vil = new JTextField(employee.getId());
-        vnl.setEditable(false);
-        vil.setEditable(false);
+        JTextField vnl = new Copiable(employee.getName());
+        JTextField vil = new Copiable(employee.getId());
         vnl.setFont(UIManager.getFont("h2.font"));
         infoLabels.add(vnl);
         infoLabels.add(vil);

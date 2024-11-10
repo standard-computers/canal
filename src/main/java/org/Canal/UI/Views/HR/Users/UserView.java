@@ -1,20 +1,68 @@
 package org.Canal.UI.Views.HR.Users;
 
+import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.HumanResources.User;
+import org.Canal.UI.Elements.Button;
+import org.Canal.UI.Elements.IconButton;
+import org.Canal.UI.Elements.Inputs.Copiable;
 import org.Canal.UI.Views.HR.Employees.Employees;
+import org.Canal.Utils.DesktopState;
+import org.Canal.Utils.Engine;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class UserView extends JInternalFrame {
 
-    public UserView(User user) {
-        super("User View", true, true, true, true);
+    private User user;
+    private DesktopState desktop;
+
+    public UserView(DesktopState desktop, User user) {
+        super("Users / " + user.getId(), true, true, true, true);
+        this.desktop = desktop;
+        this.user = user;
         setFrameIcon(new ImageIcon(Employees.class.getResource("/icons/employees.png")));
-        JPanel userInfo = new JPanel();
-        JTabbedPane tabbedPane = new JTabbedPane();
         setLayout(new BorderLayout());
+        JPanel userInfo = new JPanel(new GridLayout(4, 1));
+        Employee emp = Engine.getEmployee(user.getEmployee());
+        JTextField empName = new Copiable(emp.getName());
+        JTextField vnl = new Copiable(user.getId());
+        JTextField vil = new Copiable(user.getEmployee());
+        userInfo.add(empName);
+        userInfo.add(vnl);
+        userInfo.add(vil);
+        userInfo.add(buttonBar());
+        add(userInfo, BorderLayout.NORTH);
+        JTable table = createTable();
+        JScrollPane accessHolder = new JScrollPane(table);
+        add(accessHolder, BorderLayout.CENTER);
+    }
 
+    private JPanel buttonBar(){
+        JPanel buttonBar = new JPanel();
+        buttonBar.setLayout(new FlowLayout(FlowLayout.LEFT));
+        IconButton modify = new IconButton("Modify", "modify", "");
+        buttonBar.add(modify);
+        modify.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                desktop.put(new ModifyUser(user));
+            }
+        });
+        return buttonBar;
+    }
 
+    private JTable createTable() {
+        String[] columns = new String[]{"Locke Code"};
+        String[][] data = new String[user.getAccesses().size()][columns.length];
+        for(int i = 0; i < user.getAccesses().size(); i++) {
+            data[i] = new String[]{user.getAccess(i)};
+        }
+        JTable table = new JTable(data, columns);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        Engine.adjustColumnWidths(table);
+        return table;
     }
 }

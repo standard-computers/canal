@@ -38,6 +38,10 @@ public class User {
         this.accesses = accesses;
     }
 
+    public String getAccess(int index){
+        return accesses.get(index);
+    }
+
     public String getFontSize() {
         return fontSize;
     }
@@ -70,6 +74,19 @@ public class User {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
             return false;
+        }
+        return false;
+    }
+
+    public boolean hasAccess(String transactionCode) {
+        transactionCode = transactionCode.toUpperCase().trim();
+        if (!transactionCode.startsWith("/")) {
+            transactionCode = "/" + transactionCode;
+        }
+        for(String access : accesses){
+            if(access.equals(transactionCode)){
+                return true;
+            }
         }
         return false;
     }

@@ -1,5 +1,6 @@
 package org.Canal.UI.Views.Controllers;
 
+import org.Canal.Models.HumanResources.User;
 import org.Canal.Utils.*;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -14,16 +15,21 @@ public class Controller extends JInternalFrame implements RefreshListener {
     private JTree dataTree;
 
     public Controller(DesktopState desktop) {
-        setTitle("Controller");
+        super("Controller", false, false, false, true);
+        User me = Engine.getAssignedUser();
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/controller.png")));
         setLayout(new BorderLayout());
         JPanel dataView = new JPanel(new BorderLayout());
         JTextField cmd = new JTextField("/ORGS/" + Engine.getOrganization().getId());
         cmd.addActionListener(_ -> {
-            try{
-                desktop.put(Engine.router(cmd.getText(), desktop));
-            }catch(NullPointerException | ArrayIndexOutOfBoundsException e){
-                JOptionPane.showMessageDialog(this, "Locke not found!", "Error", JOptionPane.ERROR_MESSAGE);
+            if(!me.hasAccess(cmd.getText())) {
+                JOptionPane.showMessageDialog(this, "Not authorized to use this locke!", "Unauthorized", JOptionPane.ERROR_MESSAGE);
+            }else{
+                try{
+                    desktop.put(Engine.router(cmd.getText(), desktop));
+                }catch(NullPointerException | ArrayIndexOutOfBoundsException e){
+                    JOptionPane.showMessageDialog(this, "Locke not found!", "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
         InputMap inputMap = cmd.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
@@ -48,7 +54,11 @@ public class Controller extends JInternalFrame implements RefreshListener {
                     if (path != null) {
                         DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
                         Locke orgNode = (Locke) node.getUserObject();
-                        desktop.put(Engine.router(orgNode.getTransaction(), desktop));
+                        if(!me.hasAccess(orgNode.getTransaction())) {
+                            JOptionPane.showMessageDialog(Controller.this, "Not authorized to use this locke!", "Unauthorized", JOptionPane.ERROR_MESSAGE);
+                        }else{
+                            desktop.put(Engine.router(orgNode.getTransaction(), desktop));
+                        }
                     }
                 }
             }
