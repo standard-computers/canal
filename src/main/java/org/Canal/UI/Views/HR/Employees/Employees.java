@@ -1,9 +1,11 @@
 package org.Canal.UI.Views.HR.Employees;
 
 import org.Canal.Models.HumanResources.Employee;
-import org.Canal.UI.Elements.Button;
+import org.Canal.UI.Elements.Elements;
+import org.Canal.UI.Elements.Label;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -40,7 +42,7 @@ public class Employees extends JInternalFrame {
                 }
             }
         });
-        JTextField direct = new JTextField();
+        JTextField direct = Elements.input();
         direct.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -52,14 +54,9 @@ public class Employees extends JInternalFrame {
                 }
             }
         });
-        Button nla = new Button("Add an Employee");
-        nla.addActionListener(_ -> desktop.put(new CreateEmployee(desktop)));
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BorderLayout());
-        mainPanel.add(direct, BorderLayout.NORTH);
-        mainPanel.add(scrollPane, BorderLayout.CENTER);
-        mainPanel.add(nla, BorderLayout.SOUTH);
-        add(mainPanel);
+        setLayout(new BorderLayout());
+        add(direct, BorderLayout.NORTH);
+        add(scrollPane, BorderLayout.CENTER);
         loadFlexes();
     }
 
@@ -78,10 +75,8 @@ public class Employees extends JInternalFrame {
 
         public EmployeeRenderer() {
             setLayout(new GridLayout(2, 1));
-            employeeName = new JLabel();
+            employeeName = new Label("", new Color(83, 83, 83));
             employeeId = new JLabel();
-            employeeName.setFont(new Font("Arial", Font.BOLD, 16));
-            employeeId.setFont(new Font("Arial", Font.PLAIN, 12));
             add(employeeName);
             add(employeeId);
             setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -92,8 +87,7 @@ public class Employees extends JInternalFrame {
             employeeName.setText(value.getName());
             employeeId.setText(value.getId());
             if (isSelected) {
-                setBackground(list.getSelectionBackground());
-                setForeground(list.getSelectionForeground());
+                setBackground(UIManager.getColor("Panel.background").darker());
             } else {
                 setBackground(list.getBackground());
                 setForeground(list.getForeground());

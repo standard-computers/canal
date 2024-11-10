@@ -19,7 +19,13 @@ public class Controller extends JInternalFrame implements RefreshListener {
         setLayout(new BorderLayout());
         JPanel dataView = new JPanel(new BorderLayout());
         JTextField cmd = new JTextField("/ORGS/" + Engine.getOrganization().getId());
-        cmd.addActionListener(e -> desktop.put(Engine.router(cmd.getText(), desktop)));
+        cmd.addActionListener(_ -> {
+            try{
+                desktop.put(Engine.router(cmd.getText(), desktop));
+            }catch(NullPointerException | ArrayIndexOutOfBoundsException e){
+                JOptionPane.showMessageDialog(this, "Locke not found!", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
         InputMap inputMap = cmd.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         ActionMap actionMap = cmd.getActionMap();
         KeyStroke keyStroke = KeyStroke.getKeyStroke("ctrl shift C");

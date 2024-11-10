@@ -22,7 +22,7 @@ public class Materials extends JInternalFrame {
     private DefaultListModel<Material> listModel;
 
     public Materials(DesktopState desktop) {
-        setTitle("Materials");
+        super("Materials", false, true, false, true);
         setFrameIcon(new ImageIcon(Materials.class.getResource("/icons/materials.png")));
         listModel = new DefaultListModel<>();
         JList<Material> list = new JList<>(listModel);
@@ -93,8 +93,7 @@ public class Materials extends JInternalFrame {
             materialId.setText(value.getId());
             materialPrice.setText("$" + value.getPrice());
             if (isSelected) {
-                setBackground(list.getSelectionBackground());
-                setForeground(list.getSelectionForeground());
+                setBackground(UIManager.getColor("Panel.background").darker());
             } else {
                 setBackground(list.getBackground());
                 setForeground(list.getForeground());

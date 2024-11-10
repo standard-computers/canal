@@ -780,6 +780,12 @@ public class Engine {
                             return new ItemView(i);
                         }
                     }
+                    case "USRS" -> {
+                        User u = Engine.getUser(oid);
+                        if(u != null){
+                            return new UserView(u);
+                        }
+                    }
                     case "EMPS" -> {
                         for(Employee e : Engine.getEmployees()){
                             if(e.getId().equals(oid)){
@@ -813,9 +819,6 @@ public class Engine {
                             }
                         }
                         return new Warehouses(desktop);
-                    }
-                    case "USRS" -> {
-                        return new Users(desktop);
                     }
                     case "INV" -> {
                         return new Inventory();

@@ -12,9 +12,8 @@ public class EmployeeView extends JInternalFrame {
     private Employee employee;
 
     public EmployeeView(Employee employee) {
-        super("", false, true, false, true);
+        super(employee.getId() + " - " + employee.getName(), false, true, false, true);
         this.employee = employee;
-        setTitle("Employee / " + employee.getId() + " - " + employee.getName());
         setFrameIcon(new ImageIcon(Employees.class.getResource("/icons/employees.png")));
         JTabbedPane tabbedPane = new JTabbedPane();
 
@@ -42,9 +41,6 @@ public class EmployeeView extends JInternalFrame {
         info.add(createToolBar(), BorderLayout.SOUTH);
         add(info, BorderLayout.NORTH);
         add(tabbedPane, BorderLayout.CENTER);
-        setResizable(true);
-        setIconifiable(true);
-        setClosable(true);
     }
 
     private JPanel createToolBar() {

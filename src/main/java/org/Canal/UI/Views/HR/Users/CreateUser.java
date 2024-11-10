@@ -15,10 +15,16 @@ import org.Canal.Utils.Engine;
 import org.Canal.Utils.Pipe;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyVetoException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -47,6 +53,34 @@ public class CreateUser extends JInternalFrame {
         Selectable empsOpts = Selectables.allEmployees();
         f.addInput(new Label("Employee", new Color(102, 255, 178)), empsOpts);
         JTextArea pastAccess = new JTextArea();
+        pastAccess.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                handlePaste();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {}
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {}
+
+            private void handlePaste() {
+                String clipboardText = getClipboardText();
+                if (clipboardText != null && pastAccess.getText().contains(clipboardText)) {
+                    canalAccess.removeAll();
+                    checkboxes.clear();
+                    String[] lines = clipboardText.split("\n");
+                    for (String line : lines) {
+                        JCheckBox checkBox = new JCheckBox(line.trim());
+                        checkboxes.add(checkBox);
+                        canalAccess.add(checkBox);
+                    }
+                    canalAccess.revalidate();
+                    canalAccess.repaint();
+                }
+            }
+        });
         f.addInput(Elements.label("Paste Access"), pastAccess);
         Button make = new Button("Create User");
         canalAccess = prepareAccesses();
@@ -101,6 +135,16 @@ public class CreateUser extends JInternalFrame {
                 }
             }
         });
+    }
+
+    private String getClipboardText() {
+        try {
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            return (String) clipboard.getData(DataFlavor.stringFlavor);
+        } catch (UnsupportedFlavorException | IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private JPanel prepareAccesses() {

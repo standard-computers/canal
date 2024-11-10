@@ -1,6 +1,9 @@
 package org.Canal.UI.Views.HR.Users;
 
+import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.HumanResources.User;
+import org.Canal.UI.Elements.Elements;
+import org.Canal.UI.Elements.Label;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
@@ -35,19 +38,19 @@ public class Users extends JInternalFrame {
                     int selectedIndex = list.locationToIndex(e.getPoint());
                     if (selectedIndex != -1) {
                         User item = listModel.getElementAt(selectedIndex);
-                        Engine.router("/USRS/" + item.getId(), desktop);
+                        desktop.put(Engine.router("/USRS/" + item.getId(), desktop));
                     }
                 }
             }
         });
-        JTextField direct = new JTextField();
+        JTextField direct = Elements.input();
         direct.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     String inputText = direct.getText().trim();
                     if (!inputText.isEmpty()) {
-                        Engine.router("/USRS/" + inputText, desktop);
+                        desktop.put(Engine.router("/USRS/" + inputText, desktop));
                     }
                 }
             }
@@ -66,28 +69,31 @@ public class Users extends JInternalFrame {
         }
     }
 
-    class UserRenderer extends JPanel implements ListCellRenderer<User> {
+    static class UserRenderer extends JPanel implements ListCellRenderer<User> {
 
-        private JLabel employeeId;
+        private JLabel employeeName;
         private JLabel userId;
-        private JLabel accessCount;
+        private JLabel employeeId;
 
         public UserRenderer() {
-            setLayout(new GridLayout(4, 1));
-            employeeId = new JLabel();
+            setLayout(new GridLayout(3, 1));
+            employeeName = new Label("", new Color(83, 83, 83));
             userId = new JLabel();
-            add(employeeId);
+            employeeId = new JLabel();
+            add(employeeName);
             add(userId);
+            add(employeeId);
             setBorder(new EmptyBorder(5, 5, 5, 5));
         }
 
         @Override
         public Component getListCellRendererComponent(JList<? extends User> list, User value, int index, boolean isSelected, boolean cellHasFocus) {
-            employeeId.setText(value.getEmployee());
+            Employee thisEmployee = Engine.getEmployee(value.getEmployee());
+            employeeName.setText(thisEmployee.getName());
             userId.setText(value.getId());
+            employeeId.setText(value.getEmployee());
             if (isSelected) {
-                setBackground(list.getSelectionBackground());
-                setForeground(list.getSelectionForeground());
+                setBackground(UIManager.getColor("Panel.background").darker());
             } else {
                 setBackground(list.getBackground());
                 setForeground(list.getForeground());

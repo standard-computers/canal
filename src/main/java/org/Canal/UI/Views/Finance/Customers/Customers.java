@@ -1,10 +1,10 @@
 package org.Canal.UI.Views.Finance.Customers;
 
 import org.Canal.Models.SupplyChainUnits.Location;
-import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -22,7 +22,7 @@ public class Customers extends JInternalFrame {
     private DefaultListModel<Location> listModel;
 
     public Customers(DesktopState desktop) {
-        setTitle("Customers");
+        super("Customers", false, true, false, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/customers.png")));
         listModel = new DefaultListModel<>();
         JList<Location> list = new JList<>(listModel);
@@ -57,17 +57,9 @@ public class Customers extends JInternalFrame {
                 }
             }
         });
-        Button nla = new Button("Create Customer");
-        nla.addActionListener(e -> desktop.put(Engine.router("/CSTS/NEW", desktop)));
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BorderLayout());
-        mainPanel.add(direct, BorderLayout.NORTH);
-        mainPanel.add(scrollPane, BorderLayout.CENTER);
-        mainPanel.add(nla, BorderLayout.SOUTH);
-        add(mainPanel);
-        setResizable(false);
-        setIconifiable(true);
-        setClosable(true);
+        setLayout(new BorderLayout());
+        add(direct, BorderLayout.NORTH);
+        add(scrollPane, BorderLayout.CENTER);
         loadCustomers();
     }
 
@@ -110,8 +102,7 @@ public class Customers extends JInternalFrame {
             line1.setText(value.getLine1());
             line2.setText(value.getCity() + ", " + value.getState() + " " + value.getPostal() + " " + value.getCountry());
             if (isSelected) {
-                setBackground(list.getSelectionBackground());
-                setForeground(list.getSelectionForeground());
+                setBackground(UIManager.getColor("Panel.background").darker());
             } else {
                 setBackground(list.getBackground());
                 setForeground(list.getForeground());
