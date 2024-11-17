@@ -1,6 +1,7 @@
 package org.Canal.UI.Views.Distribution.Vendors;
 
 import org.Canal.Models.SupplyChainUnits.Vendor;
+import org.Canal.UI.Elements.Elements;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
@@ -27,6 +28,7 @@ public class Vendors extends JInternalFrame {
         JList<Vendor> list = new JList<>(listModel);
         list.setCellRenderer(new VendorRenderer());
         JScrollPane scrollPane = new JScrollPane(list);
+        scrollPane.setPreferredSize(new Dimension(300, 400));
         list.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -43,7 +45,7 @@ public class Vendors extends JInternalFrame {
                 }
             }
         });
-        JTextField direct = new JTextField();
+        JTextField direct = Elements.input();
         direct.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {

@@ -17,6 +17,7 @@ import org.Canal.Utils.*;
 import org.Canal.Utils.DesktopState;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
@@ -38,22 +39,17 @@ public class OrgView extends JInternalFrame {
     private DesktopState desktop;
 
     public OrgView(Organization loc, DesktopState desktop) {
+        super(loc.getId() + " - " + loc.getName(), true, true, true, true);
         this.location = loc;
         this.desktop = desktop;
-        setTitle(loc.getId() + " - " + loc.getName());
         setFrameIcon(new ImageIcon(OrgView.class.getResource("/icons/organizations.png")));
         setLayout(new BorderLayout());
         JPanel tb = createToolBar();
-        JScrollPane scrollPane = new JScrollPane(tb);
-        scrollPane.setBackground(UIManager.getColor("secondary1"));
-        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.getViewport().setViewPosition(new Point(0, 0));
-        add(scrollPane, BorderLayout.NORTH);
-        JTable table = createTable();
-        JScrollPane tableScrollPane = new JScrollPane(table);
+        add(tb, BorderLayout.NORTH);
+        JScrollPane tableScrollPane = new JScrollPane(new JTabbedPane());
         JPanel dataView = new JPanel(new BorderLayout());
         JTextField cmd = new JTextField("/ORGS/" + location.getId());
-        cmd.addActionListener(e -> desktop.put(Engine.router(cmd.getText(), desktop)));
+        cmd.addActionListener(_ -> desktop.put(Engine.router(cmd.getText(), desktop)));
         dataView.add(cmd, BorderLayout.NORTH);
         dataView.add(tableScrollPane, BorderLayout.CENTER);
         dataTree = createTree();
@@ -75,10 +71,6 @@ public class OrgView extends JInternalFrame {
         splitPane.setDividerLocation(250);
         splitPane.setResizeWeight(0.3);
         add(splitPane, BorderLayout.CENTER);
-        setResizable(true);
-        setClosable(true);
-        setIconifiable(true);
-        setMaximizable(true);
     }
 
     private JPanel createToolBar() {
@@ -150,6 +142,7 @@ public class OrgView extends JInternalFrame {
         tb.add(costCenters);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(label);
+        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
         return tb;
     }
 
@@ -161,24 +154,6 @@ public class OrgView extends JInternalFrame {
         expandAllNodes(dataTree);
         revalidate();
         repaint();
-    }
-
-    private JTable createTable() {
-        String[] columns = new String[]{"Property", "Value"};
-        String[][] data = {
-                {"Id", location.getId()},
-                {"Name", location.getName()},
-                {"Street", location.getLine1()},
-                {"City", location.getCity()},
-                {"State", location.getState()},
-                {"Postal", location.getPostal()},
-                {"Country", location.getCountry()},
-                {"Tax Exempt Status", String.valueOf(location.isTaxExempt())}
-        };
-        JTable table = new JTable(data, columns);
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        Engine.adjustColumnWidths(table);
-        return table;
     }
 
     private JTree createTree() {

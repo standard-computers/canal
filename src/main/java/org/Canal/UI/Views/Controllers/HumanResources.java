@@ -24,38 +24,15 @@ import java.awt.event.MouseEvent;
  */
 public class HumanResources extends JInternalFrame {
 
+    private DesktopState desktop;
+
     public HumanResources(DesktopState desktop) {
         super("ERM / Human Resources", false, true, false, true);
         setFrameIcon(new ImageIcon(HumanResources.class.getResource("/icons/humanresources.png")));
-        JTabbedPane tabbedPane = new JTabbedPane();
+        this.desktop = desktop;
 
-        JPanel employeeOptions = new JPanel(new GridLayout(2, 2, 5, 5));
-        employeeOptions.setBorder(new EmptyBorder(5, 5, 5, 5));
-        Button viewEmployees = new Button("View Employees");
-        viewEmployees.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                desktop.put(new Employees(desktop));
-            }
-        });
-        employeeOptions.add(viewEmployees);
-        Button createEmployee = new Button("Create Employee");
-        createEmployee.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                desktop.put(new CreateEmployee(desktop));
-            }
-        });
-        employeeOptions.add(createEmployee);
-        Button findEmployee = new Button("Find Employee");
-        findEmployee.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                desktop.put(new FindEmployee(desktop));
-            }
-        });
-        employeeOptions.add(findEmployee);
-        tabbedPane.addTab("Employees", employeeOptions);
+        JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane.addTab("Employees", employees());
 
         JPanel positionOptions = new JPanel();
         positionOptions.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -128,5 +105,37 @@ public class HumanResources extends JInternalFrame {
         setLayout(new BorderLayout());
         add(Elements.header("Human Resources Center", SwingConstants.LEFT), BorderLayout.NORTH);
         add(tabbedPane, BorderLayout.CENTER);
+    }
+
+    private JPanel employees(){
+        JPanel p = new JPanel(new GridLayout(2, 1));
+        JPanel employeeOptions = new JPanel(new GridLayout(2, 2, 5, 5));
+        employeeOptions.setBorder(new EmptyBorder(5, 5, 5, 5));
+        Button viewEmployees = new Button("View Employees");
+        viewEmployees.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                desktop.put(new Employees(desktop));
+            }
+        });
+        employeeOptions.add(viewEmployees);
+        Button createEmployee = new Button("Create Employee");
+        createEmployee.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                desktop.put(new CreateEmployee(desktop));
+            }
+        });
+        employeeOptions.add(createEmployee);
+        Button findEmployee = new Button("Find Employee");
+        findEmployee.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                desktop.put(new FindEmployee(desktop));
+            }
+        });
+        employeeOptions.add(findEmployee);
+        p.add(employeeOptions);
+        return p;
     }
 }

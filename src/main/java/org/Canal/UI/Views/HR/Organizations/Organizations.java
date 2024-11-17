@@ -2,6 +2,8 @@ package org.Canal.UI.Views.HR.Organizations;
 
 import org.Canal.Models.BusinessUnits.Organization;
 import org.Canal.UI.Elements.Elements;
+import org.Canal.UI.Elements.Label;
+import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
@@ -17,13 +19,11 @@ import java.awt.event.MouseEvent;
 public class Organizations extends JInternalFrame {
 
     private DefaultListModel<Organization> listModel;
-    private DesktopState desktop;
 
     public Organizations(DesktopState desktop) {
         super("Organizations", false, true, false, true);
         setFrameIcon(new ImageIcon(Organizations.class.getResource("/icons/organizations.png")));
         listModel = new DefaultListModel<>();
-        this.desktop = desktop;
         JList<Organization> list = new JList<>(listModel);
         list.setCellRenderer(new OrgListRenderer());
         JScrollPane scrollPane = new JScrollPane(list);
@@ -35,13 +35,16 @@ public class Organizations extends JInternalFrame {
                     int selectedIndex = list.locationToIndex(e.getPoint());
                     if (selectedIndex != -1) {
                         Organization selectedOrg = listModel.getElementAt(selectedIndex);
-                        openOrgView(selectedOrg);
+                        desktop.put(new OrgView(selectedOrg, desktop));
                     }
                 }
             }
         });
         JTextField direct = Elements.input();
-        direct.addActionListener(_ -> openOrgViewById(direct.getText()));
+        direct.addActionListener(_ -> {
+            desktop.put(new OrgView(Engine.getOrganization(direct.getText()), desktop));
+            dispose();
+        });
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
         mainPanel.add(direct, BorderLayout.NORTH);
@@ -52,48 +55,15 @@ public class Organizations extends JInternalFrame {
         }
     }
 
-    private void openOrgView(Organization selectedOrg) {
-        Engine.setOrganization(selectedOrg);
-        String orgCode = selectedOrg.getId();
-        Organization loc = match(orgCode);
-        if (loc != null) {
-            desktop.put(new OrgView(loc, desktop));
-            dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "Organization Not Found");
-        }
-    }
-
-    private void openOrgViewById(String id) {
-        Organization loc = match(id);
-        if (loc != null) {
-            desktop.put(new OrgView(loc, desktop));
-            dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "Organization Not Found");
-        }
-    }
-
-    public static Organization match(String id) {
-        for (Organization org : Engine.getOrganizations()) {
-            if (org != null && org.getId().equals(id)) {
-                return org;
-            }
-        }
-        return null;
-    }
-
     static class OrgListRenderer extends JPanel implements ListCellRenderer<Organization> {
 
         private JLabel orgName;
         private JLabel orgId;
 
         public OrgListRenderer() {
-            setLayout(new BorderLayout(2, 2));
-            orgName = new JLabel();
+            setLayout(new GridLayout(2, 1));
+            orgName = new Label("", UIManager.getColor("Panel.background").darker());
             orgId = new JLabel();
-            orgName.setFont(new Font("Arial", Font.BOLD, 16));
-            orgId.setFont(new Font("Arial", Font.PLAIN, 12));
             add(orgName, BorderLayout.NORTH);
             add(orgId, BorderLayout.SOUTH);
             setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -104,8 +74,7 @@ public class Organizations extends JInternalFrame {
             orgName.setText(value.getName());
             orgId.setText(value.getId());
             if (isSelected) {
-                setBackground(list.getSelectionBackground());
-                setForeground(list.getSelectionForeground());
+                setBackground(UIManager.getColor("Panel.background").darker());
             } else {
                 setBackground(list.getBackground());
                 setForeground(list.getForeground());

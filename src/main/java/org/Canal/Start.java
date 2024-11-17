@@ -6,6 +6,7 @@ import org.Canal.UI.Views.Controllers.Setup;
 import org.Canal.Utils.Configuration;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Json;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
@@ -27,14 +28,11 @@ public class Start {
         }else{
             File md = new File(WINDOWS_SYSTEM_DIR);
             File[] mdf = md.listFiles();
-            if (mdf != null || mdf.length > 0) {
+            if (mdf != null && mdf.length > 0) {
                 for (int i = 0; i < mdf.length; i++) {
                     File file = mdf[i];
                     if (file.getPath().endsWith(".cnl.mfg")) {
                         Engine.setConfiguration(Json.load(file.getPath(), Configuration.class));
-                        if(Engine.getConfiguration().getProduct_key() == null){
-                            new Setup.ProductKey();
-                        }
                         try {
                             Font defaultFont = UIManager.getFont("defaultFont");
                             if (defaultFont != null) {
@@ -50,10 +48,6 @@ public class Start {
                             Engine.assignUser(Engine.getUser(Engine.getConfiguration().getAssignedUser()));
                         }
                         new QuickExplorer();
-//                        if(Engine.getConfiguration().getDefaultModule() == null){
-//                        }else{
-//                            Engine.router(Engine.getConfiguration().getDefaultModule());
-//                        }
                     }
                 }
             }else{
