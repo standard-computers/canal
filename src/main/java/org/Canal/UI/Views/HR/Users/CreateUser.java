@@ -50,7 +50,7 @@ public class CreateUser extends JInternalFrame {
         Form f = new Form();
         String puid = "U" + (10000 + (Engine.getUsers().size() + 1));
         f.addInput(new Label("New User ID", new Color(178, 255, 102)), new Copiable(puid));
-        Selectable empsOpts = Selectables.allEmployees();
+        Selectable empsOpts = Selectables.employees();
         f.addInput(new Label("Employee", new Color(102, 255, 178)), empsOpts);
         JTextArea pastAccess = new JTextArea();
         pastAccess.getDocument().addDocumentListener(new DocumentListener() {

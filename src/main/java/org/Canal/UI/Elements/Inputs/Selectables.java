@@ -32,7 +32,7 @@ public class Selectables {
         return new Selectable(availableLocations);
     }
 
-    public static Selectable allEmployees(){
+    public static Selectable employees(){
         HashMap<String, String> employees = new HashMap<>();
         for(Employee emp : Engine.getEmployees()){
             employees.put(emp.getId(), emp.getId());
@@ -55,7 +55,9 @@ public class Selectables {
         for(Department org : Engine.getOrganization().getDepartments()){
             departments.put(org.getId(), org.getId());
         }
-        return new Selectable(departments);
+        Selectable s =  new Selectable(departments);
+        s.editable();
+        return s;
     }
 
     public static Selectable statusTypes(){
@@ -83,6 +85,23 @@ public class Selectables {
         statusTypes.put("Q2", "Q2");
         statusTypes.put("Q3", "Q3");
         statusTypes.put("Q4", "Q4");
+        return new Selectable(statusTypes);
+    }
+
+    public static Selectable ethnicities(){
+        HashMap<String, String> statusTypes = new HashMap<>();
+        statusTypes.put("CAUCASION", "CAUCASION");
+        statusTypes.put("AFRICAN", "AFRICAN");
+        statusTypes.put("NATIVE AMERICAN", "NATIVE AMERICAN");
+        statusTypes.put("ASIAN", "ASIAN");
+        return new Selectable(statusTypes);
+    }
+
+    public static Selectable genders(){
+        HashMap<String, String> statusTypes = new HashMap<>();
+        statusTypes.put("MALE", "MALE");
+        statusTypes.put("FEMALE", "FEMALE");
+        statusTypes.put("UNIDENTIFIED", "UNIDENTIFIED");
         return new Selectable(statusTypes);
     }
 

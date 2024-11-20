@@ -28,7 +28,7 @@ public class CreateDepartment extends JInternalFrame {
         String genId = "D0" + Engine.getEmployees().size() + 1;
         JTextField deptIdField = Elements.input(genId, 18);
         JTextField deptNameField = Elements.input(18);
-        Selectable manager = Selectables.allEmployees();
+        Selectable manager = Selectables.employees();
         manager.editable();
         DatePicker openedDatePicker = new DatePicker();
         Selectable locations = Selectables.allLocations();

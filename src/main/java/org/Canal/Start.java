@@ -29,9 +29,11 @@ public class Start {
             File md = new File(WINDOWS_SYSTEM_DIR);
             File[] mdf = md.listFiles();
             if (mdf != null && mdf.length > 0) {
+                boolean hasConfiguration = false;
                 for (int i = 0; i < mdf.length; i++) {
                     File file = mdf[i];
                     if (file.getPath().endsWith(".cnl.mfg")) {
+                        hasConfiguration = true;
                         Engine.setConfiguration(Json.load(file.getPath(), Configuration.class));
                         try {
                             Font defaultFont = UIManager.getFont("defaultFont");
@@ -44,11 +46,14 @@ public class Start {
                         }
                         i = mdf.length + 1;
                         Engine.setOrganization(Engine.getOrganizations().get(0));
-                        if(!Engine.getConfiguration().getAssignedUser().isBlank()){
+                        if(Engine.getConfiguration().getAssignedUser() != null){
                             Engine.assignUser(Engine.getUser(Engine.getConfiguration().getAssignedUser()));
                         }
                         new QuickExplorer();
                     }
+                }
+                if(!hasConfiguration) {
+                    new Setup();
                 }
             }else{
                 new Setup();

@@ -104,6 +104,13 @@ public class Constants {
                                 new Locke("Archive Position", false, "/HR/POS/ARCHV", null),
                                 new Locke("Post Position", false, "/HR/POS/POST", null),
                         }),
+                        new Locke("Teams", true, "/TMS",  new Locke[]{
+                                new Locke("Find Team with ID", false, "/TMS/F", null),
+                                new Locke("Create a Team", false, "/TMS/NEW", null),
+                                new Locke("Modify Team", false, "/TMS/MOD", null),
+                                new Locke("Remove Team", false, "/TMS/DEL", null),
+                                new Locke("Archive Team", false, "/TMS/ARCHV", null),
+                        }),
                 }),
                 new Locke("Cost Centers", true, "/CCS", new Locke[]{
                         new Locke("Find CC with ID", false, "/CCS/F", null),

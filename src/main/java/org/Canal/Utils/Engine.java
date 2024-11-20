@@ -38,6 +38,9 @@ import org.Canal.UI.Views.HR.Organizations.CreateOrganization;
 import org.Canal.UI.Views.HR.Organizations.ModifyOrganization;
 import org.Canal.UI.Views.HR.Organizations.OrgView;
 import org.Canal.UI.Views.HR.Organizations.Organizations;
+import org.Canal.UI.Views.HR.Teams.CreateTeam;
+import org.Canal.UI.Views.HR.Teams.ModifyTeam;
+import org.Canal.UI.Views.HR.Teams.Teams;
 import org.Canal.UI.Views.HR.Users.*;
 import org.Canal.UI.Views.Items.*;
 import org.Canal.UI.Views.Materials.FindMaterial;
@@ -588,6 +591,15 @@ public class Engine {
             }
             case "/DPTS/MOD" -> {
                 return new ModifyDepartment();
+            }
+            case "/TMS" -> {
+                return new Teams();
+            }
+            case "/TMS/NEW" -> {
+                return new CreateTeam();
+            }
+            case "/TMS/MOD" -> {
+                return new ModifyTeam();
             }
             case "/USRS" -> {
                 return new Users(desktop);

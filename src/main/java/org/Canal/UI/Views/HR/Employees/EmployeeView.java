@@ -52,7 +52,6 @@ public class EmployeeView extends JInternalFrame {
         IconButton writeup = new IconButton("", "delinquent", "Writeup Employee");
         IconButton suspend = new IconButton("", "blocked", "Suspend Employee");
         IconButton label = new IconButton("", "label", "Print labels for properties");
-        IconButton refresh = new IconButton("", "refresh", "Reload from store");
         tb.add(email);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(giveFeedback);
@@ -64,8 +63,6 @@ public class EmployeeView extends JInternalFrame {
         tb.add(suspend);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(label);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(refresh);
         performReview.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
 
