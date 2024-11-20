@@ -9,6 +9,7 @@ public class OrderLineItem {
     private String id;
     private String name;
     private double quantity;
+    private double onHand;
     private double price;
     private double total;
 
@@ -18,6 +19,13 @@ public class OrderLineItem {
         this.quantity = quantity;
         this.price = price;
         this.total = total;
+    }
+
+    public OrderLineItem(String itemId, String name, double quantity, double onHand) {
+        this.id = itemId;
+        this.name = name;
+        this.quantity = quantity;
+        this.onHand = onHand;
     }
 
     public String getName() {
@@ -42,6 +50,14 @@ public class OrderLineItem {
 
     public void setQuantity(double quantity) {
         this.quantity = quantity;
+    }
+
+    public double getOnHand() {
+        return onHand;
+    }
+
+    public void setOnHand(double onHand) {
+        this.onHand = onHand;
     }
 
     public double getPrice() {

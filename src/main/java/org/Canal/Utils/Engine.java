@@ -371,6 +371,10 @@ public class Engine {
         return getOrders().stream().filter(order -> order.getShipTo().equals(shipTo)).collect(Collectors.toList());
     }
 
+    public static List<PurchaseOrder> getOrders(String shipTo, LockeStatus status) {
+        return getOrders().stream().filter(order -> order.getShipTo().equals(shipTo) && order.getStatus().equals(status)).collect(Collectors.toList());
+    }
+
     public static ArrayList<Ledger> getLedgers() {
         ArrayList<Ledger> ledgers = new ArrayList<>();
         File[] lgsDir = Pipe.list("LGS");
@@ -825,7 +829,7 @@ public class Engine {
                         return new Warehouses(desktop);
                     }
                     case "ORDS" -> {
-                        for(PurchaseOrder l : Engine.orderProcessing.getPurchaseOrders()){
+                        for(PurchaseOrder l : Engine.orderProcessing.getPurchaseOrder()){
                             if(l.getOrderId().equals(oid)){
                                 return new PurchaseOrderView(l);
                             }
@@ -876,7 +880,7 @@ public class Engine {
             return null;
         }
 
-        public static ArrayList<PurchaseOrder> getPurchaseOrders() {
+        public static ArrayList<PurchaseOrder> getPurchaseOrder() {
             ArrayList<PurchaseOrder> pos = new ArrayList<>();
             File[] posDir = Pipe.list("ORDS");
             for (File file : posDir) {
@@ -889,7 +893,7 @@ public class Engine {
             return pos;
         }
 
-        public static PurchaseOrder getPurchaseOrders(String poNumber) {
+        public static PurchaseOrder getPurchaseOrder(String poNumber) {
             File[] posDir = Pipe.list("ORDS");
             for (File file : posDir) {
                 if (!file.isDirectory()) {

@@ -121,9 +121,9 @@ public class PurchaseRequisitions extends JInternalFrame {
         });
         label.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                String[] printables = new String[Engine.orderProcessing.getPurchaseOrders().size()];
-                for (int i = 0; i < Engine.orderProcessing.getPurchaseOrders().size(); i++) {
-                    printables[i] = Engine.orderProcessing.getPurchaseOrders().get(i).getOrderId();
+                String[] printables = new String[Engine.orderProcessing.getPurchaseOrder().size()];
+                for (int i = 0; i < Engine.orderProcessing.getPurchaseOrder().size(); i++) {
+                    printables[i] = Engine.orderProcessing.getPurchaseOrder().get(i).getOrderId();
                 }
                 new CheckboxBarcodeFrame(printables);
             }

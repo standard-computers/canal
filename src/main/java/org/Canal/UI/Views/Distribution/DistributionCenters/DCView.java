@@ -15,10 +15,7 @@ import org.Canal.UI.Views.Orders.PurchaseOrders.CreatePurchaseOrder;
 import org.Canal.UI.Views.Orders.ReceiveOrder;
 import org.Canal.UI.Views.Finance.Payments.AcceptPayment;
 import org.Canal.UI.Views.Areas.CreateArea;
-import org.Canal.Utils.Locke;
-import org.Canal.Utils.DesktopState;
-import org.Canal.Utils.Engine;
-import org.Canal.Utils.RefreshListener;
+import org.Canal.Utils.*;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -77,7 +74,7 @@ public class DCView extends JInternalFrame implements RefreshListener {
         JPanel kanbanBoard = new JPanel();
         kanbanBoard.setLayout(new GridLayout(1, 3, 10, 10));
         ArrayList<String[]> ibd = new ArrayList<>();
-        for(PurchaseOrder ibdo : Engine.getOrders(distributionCenter.getId())){
+        for(PurchaseOrder ibdo : Engine.getOrders(distributionCenter.getId(), LockeStatus.NEW)){
             double c = 0;
             for(OrderLineItem oli : ibdo.getItems()){
                 c += oli.getQuantity();

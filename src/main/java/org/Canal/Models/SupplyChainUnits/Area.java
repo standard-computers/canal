@@ -1,6 +1,5 @@
 package org.Canal.Models.SupplyChainUnits;
 
-import org.Canal.Models.BusinessUnits.PurchaseRequisition;
 import org.Canal.Start;
 import org.Canal.Utils.Json;
 

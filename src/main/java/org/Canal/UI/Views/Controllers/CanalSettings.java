@@ -2,6 +2,7 @@ package org.Canal.UI.Views.Controllers;
 
 import com.formdev.flatlaf.IntelliJTheme;
 import org.Canal.UI.Elements.Button;
+import org.Canal.UI.Elements.CustomJTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Inputs.Copiable;
 import org.Canal.UI.Elements.Inputs.Selectable;
@@ -47,6 +48,7 @@ public class CanalSettings extends JInternalFrame {
         setLayout(new BorderLayout());
         JTabbedPane settings = new JTabbedPane();
         settings.add(generalSettings(), "General");
+        settings.add(instanceVars(), "Instace Vars");
 
         add(Elements.header("Canal Settings", SwingConstants.LEFT), BorderLayout.NORTH);
         add(settings, BorderLayout.CENTER);
@@ -82,5 +84,12 @@ public class CanalSettings extends JInternalFrame {
         f.addInput(new Label("Background", Constants.colors[7]), new Button("Choose File"));
         f.addInput(new Label("Show Canal Codes", Constants.colors[6]), showCanalCodes);
         return f;
+    }
+
+    private JPanel instanceVars(){
+        JPanel panel = new JPanel();
+        String[][] data = new String[][]{};
+        CustomJTable table = new CustomJTable(data, new String[]{"Var.", "Value"});add(table);
+        return panel;
     }
 }

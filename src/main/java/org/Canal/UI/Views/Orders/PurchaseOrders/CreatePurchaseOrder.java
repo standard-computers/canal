@@ -4,7 +4,6 @@ import org.Canal.Models.BusinessUnits.OrderLineItem;
 import org.Canal.Models.BusinessUnits.PurchaseOrder;
 import org.Canal.Models.BusinessUnits.PurchaseRequisition;
 import org.Canal.Models.SupplyChainUnits.Item;
-import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Inputs.Copiable;

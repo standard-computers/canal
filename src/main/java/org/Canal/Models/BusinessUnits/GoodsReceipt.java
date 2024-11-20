@@ -14,16 +14,6 @@ public class GoodsReceipt {
     public ArrayList<OrderLineItem> items; //Items received and qty received
     private LockeStatus status; //Status of this receival
 
-    public GoodsReceipt(String id, String purchaseOrder, String received, String receiver, String location, ArrayList<OrderLineItem> items, LockeStatus status) {
-        this.id = id;
-        this.purchaseOrder = purchaseOrder;
-        this.received = received;
-        this.receiver = receiver;
-        this.location = location;
-        this.items = items;
-        this.status = status;
-    }
-
     public String getId() {
         return id;
     }

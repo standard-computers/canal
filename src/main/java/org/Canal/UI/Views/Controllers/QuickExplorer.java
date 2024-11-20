@@ -33,6 +33,7 @@ public class QuickExplorer extends JFrame implements DesktopState {
             put(Engine.router("/USRS/NEW", this));
         }
         installShortcuts();
+
     }
 
     private void installShortcuts() {

@@ -1,22 +1,20 @@
 package org.Canal.UI.Views.Orders;
 
+import org.Canal.Models.BusinessUnits.GoodsReceipt;
 import org.Canal.Models.BusinessUnits.OrderLineItem;
 import org.Canal.Models.BusinessUnits.PurchaseOrder;
 import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.Models.SupplyChainUnits.Bin;
+import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Button;
-import org.Canal.UI.Elements.CustomJTable;
-import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Inputs.Copiable;
 import org.Canal.UI.Elements.Inputs.DatePicker;
 import org.Canal.UI.Elements.Inputs.Selectables;
-import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Label;
+import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Views.Controllers.Controller;
-import org.Canal.Utils.Constants;
-import org.Canal.Utils.DesktopState;
-import org.Canal.Utils.Engine;
+import org.Canal.Utils.*;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -36,8 +34,9 @@ import java.util.HashMap;
 public class ReceiveOrder extends JInternalFrame {
 
     private JTextField poField;
-    private Selectable availRcvLocations, availablePutaway, availablePutawayBin;
+    private Selectable availRcvLocations, availablePutawayBin;
     private HashMap<String, String> putawayBinOptions;
+    private CustomJTable receivedItems;
 
     public ReceiveOrder(String receivingLocation, DesktopState desktop){
         super("Receive Order", false, true, false, true);
@@ -58,7 +57,7 @@ public class ReceiveOrder extends JInternalFrame {
         }
         JPanel itemInput = new JPanel();
         String[][] data = new String[][]{};
-        CustomJTable receivedItems = new CustomJTable(data, new String[]{"Item", "Exp. Qty.", "Rcvd. Qty."});
+        receivedItems = new CustomJTable(data, new String[]{"Item Id", "Item", "Exp. Qty.", "Rcvd. Qty."});
         JScrollPane p = new JScrollPane(receivedItems);
         Copiable expDelivery = new Copiable("");
         itemInput.add(p);
@@ -78,17 +77,17 @@ public class ReceiveOrder extends JInternalFrame {
             }
             private void onChange() {
                 String poId = poField.getText();
-                PurchaseOrder foundPo = Engine.orderProcessing.getPurchaseOrders(poId);
+                PurchaseOrder foundPo = Engine.orderProcessing.getPurchaseOrder(poId);
                 if(foundPo != null){
-                    String[][] rcvData = new String[foundPo.getItems().size()][3];
+                    String[][] rcvData = new String[foundPo.getItems().size()][4];
                     ArrayList<OrderLineItem> items = foundPo.getItems();
                     expDelivery.setText(foundPo.getExpectedDelivery());
                     for (int i = 0; i < items.size(); i++) {
                         OrderLineItem oli = items.get(i);
-                        System.out.println(oli.toString());
-                        rcvData[i][0] = oli.getName();
-                        rcvData[i][1] = String.valueOf(oli.getQuantity());
+                        rcvData[i][0] = oli.getId();
+                        rcvData[i][1] = oli.getName();
                         rcvData[i][2] = String.valueOf(oli.getQuantity());
+                        rcvData[i][3] = String.valueOf(oli.getQuantity());
                     }
                     receivedItems.setRowData(rcvData);
                 }
@@ -97,38 +96,31 @@ public class ReceiveOrder extends JInternalFrame {
         availRcvLocations = Selectables.allLocations();
         availRcvLocations.editable();
         availRcvLocations.setSelectedValue(receivingLocation);
-        availablePutaway = new Selectable(putAwayOptions);
         putawayBinOptions = new HashMap<>();
-        Area a = Engine.realtime.getArea(availablePutaway.getSelectedValue());
-        for(Bin b : a.getBins()){
-            putawayBinOptions.put(b.getId(), b.getId());
-        }
-        availablePutawayBin = new Selectable(putawayBinOptions);
-        availablePutaway.addActionListener(_ -> {
-            putawayBinOptions.clear();
-            Area a1 = Engine.realtime.getArea(availablePutaway.getSelectedValue());
-            for (Bin b : a1.getBins()) {
+        ArrayList<Area> as = (ArrayList<Area>) Engine.getAreas(receivingLocation);
+        for(Area a : as){
+            for(Bin b : a.getBins()){
                 putawayBinOptions.put(b.getId(), b.getId());
             }
-            availablePutawayBin.updateOptions(putawayBinOptions);
-            availablePutawayBin.revalidate();
-            availablePutawayBin.repaint();
-        });
+        }
+        availablePutawayBin = new Selectable(putawayBinOptions);
         f.addInput(new Label("Receiving Location", Constants.colors[1]), availRcvLocations);
-        f.addInput(new Label("Putaway Area", Constants.colors[2]), availablePutaway);
-        f.addInput(new Label("Putaway Bin", Constants.colors[3]), availablePutawayBin);
-        f.addInput(new Label("Expected Delivery", Constants.colors[4]), expDelivery);
+        f.addInput(new Label("Putaway Bin", Constants.colors[2]), availablePutawayBin);
+        f.addInput(new Label("Expected Delivery", Constants.colors[3]), expDelivery);
         String timestampFormat = "yyyy-MM-dd HH:mm:ss";
         DatePicker deliveryDate = new DatePicker();
         SimpleDateFormat sdf = new SimpleDateFormat(timestampFormat);
         try {
             Date currentDate = sdf.parse(Constants.now());
             deliveryDate.setSelectedDate(currentDate);
-            f.addInput(new Label("Delivery Date", Constants.colors[5]), deliveryDate);
+            f.addInput(new Label("Delivery Date", UIManager.getColor("Label.foreground")), deliveryDate);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        add(f, BorderLayout.NORTH);
+        JPanel heading = new JPanel(new BorderLayout());
+        heading.add(Elements.header("Receive Purchase Order", SwingConstants.LEFT), BorderLayout.NORTH);
+        heading.add(f, BorderLayout.CENTER);
+        add(heading, BorderLayout.NORTH);
 
         Button receive = new Button("Receive");
         JPanel receivePanel = new JPanel();
@@ -145,22 +137,52 @@ public class ReceiveOrder extends JInternalFrame {
         receive.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 String po = poField.getText();
-                String rlid = availRcvLocations.getSelectedValue();
-                if(po.isEmpty()){
-                    JOptionPane.showMessageDialog(null, "Purchase Order Number Required!", "Error", JOptionPane.ERROR_MESSAGE);
-                }else{
-                    PurchaseOrder spo = Engine.orderProcessing.getPurchaseOrders(po);
-                    if(spo == null){
-                        JOptionPane.showMessageDialog(null, "PO or Order Number required!", "Error", JOptionPane.ERROR_MESSAGE);
-                        if(!rlid.equals(spo.getVendor())){
-                            int override = JOptionPane.showConfirmDialog(null, "The receiving location and buyer do not match. Override?");
-                            if(override == JOptionPane.NO_OPTION){
-
-                            }else{
-
+                String receivingLocationId = availRcvLocations.getSelectedValue();
+                if(confirmAccuracy.isSelected()){
+                    if(po.isEmpty()){
+                        JOptionPane.showMessageDialog(null, "Purchase Order Number Required!", "Error", JOptionPane.ERROR_MESSAGE);
+                    }else{
+                        PurchaseOrder spo = Engine.orderProcessing.getPurchaseOrder(po);
+                        if(spo != null){
+                            if(!receivingLocationId.equals(spo.getShipTo())){
+                                int override = JOptionPane.showConfirmDialog(null, "The receiving location and ship to do not match. Override?");
+                                if(override == JOptionPane.NO_OPTION){
+                                    JOptionPane.showMessageDialog(null, "PO Receive canceled!", "Error", JOptionPane.ERROR_MESSAGE);
+                                    dispose();
+                                }
                             }
+                            GoodsReceipt gr = new GoodsReceipt();
+                            gr.setId(Constants.generateId(10));
+                            gr.setPurchaseOrder(po);
+                            gr.setReceived(deliveryDate.getSelectedDateString());
+                            gr.setReceiver(Engine.getAssignedUser().getId());
+                            gr.setLocation(receivingLocationId);
+                            gr.setStatus(LockeStatus.DELIVERED);
+                            ArrayList<OrderLineItem> lineitems = new ArrayList<>();
+                            for (int row = 0; row < receivedItems.getRowCount(); row++) {
+                                for (int col = 0; col < receivedItems.getColumnCount(); col++) {
+                                    Object value = receivedItems.getValueAt(row, col);
+                                }
+                                String itemId = receivedItems.getValueAt(row, 0).toString();
+                                String itemName = receivedItems.getValueAt(row, 1).toString();
+                                double itemQty = Double.parseDouble(receivedItems.getValueAt(row, 2).toString());
+                                double itemRcvd = Double.parseDouble(receivedItems.getValueAt(row, 3).toString());
+//                                double itemPrice = Double.parseDouble(receivedItems.getValueAt(row, 3).toString());
+//                                double itemTotal = Double.parseDouble(receivedItems.getValueAt(row, 4).toString());
+                                lineitems.add(new OrderLineItem(itemId, itemName, itemQty, itemRcvd));
+                            }
+                            gr.setItems(lineitems);
+                            Pipe.save("/GR", gr);
+                            spo.setStatus(LockeStatus.DELIVERED);
+                            spo.save();
+                            dispose();
+                            JOptionPane.showMessageDialog(null, "Goods Receipt created and stock put away.");
+                        }else{
+                            JOptionPane.showMessageDialog(null, "PO Not Found!", "Error", JOptionPane.ERROR_MESSAGE);
                         }
                     }
+                }else{
+                    JOptionPane.showMessageDialog(null, "Must confirm accuracy");
                 }
             }
         });
