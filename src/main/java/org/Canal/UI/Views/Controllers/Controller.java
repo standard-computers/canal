@@ -10,14 +10,12 @@ import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.*;
 
-public class Controller extends JInternalFrame implements RefreshListener {
+public class Controller extends JPanel implements RefreshListener {
 
     private JTree dataTree;
 
     public Controller(DesktopState desktop) {
-        super("Controller", false, false, false, true);
         User me = Engine.getAssignedUser();
-        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/controller.png")));
         setLayout(new BorderLayout());
         JPanel dataView = new JPanel(new BorderLayout());
         JTextField cmd = new JTextField("/ORGS/" + Engine.getOrganization().getId());
@@ -66,8 +64,6 @@ public class Controller extends JInternalFrame implements RefreshListener {
         JScrollPane treeScrollPane = new JScrollPane(dataTree);
         add(cmd, BorderLayout.NORTH);
         add(treeScrollPane, BorderLayout.CENTER);
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        setIconifiable(true);
     }
 
     @Override

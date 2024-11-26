@@ -5,10 +5,12 @@ import org.Canal.Models.BusinessUnits.PurchaseOrder;
 import org.Canal.Models.SupplyChainUnits.*;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
+import org.Canal.UI.Views.Areas.AutoMakeAreasAndBins;
 import org.Canal.UI.Views.Bins.CreateBin;
 import org.Canal.UI.Views.Finance.Payments.AcceptPayment;
 import org.Canal.UI.Views.Areas.CreateArea;
 import org.Canal.UI.Views.Finance.Payments.IssuePayment;
+import org.Canal.UI.Views.Inventory.InventoryView;
 import org.Canal.UI.Views.Orders.ReceiveOrder;
 import org.Canal.Utils.Locke;
 import org.Canal.Utils.DesktopState;
@@ -46,8 +48,6 @@ public class WarehouseView extends JInternalFrame implements RefreshListener {
         JPanel tb = createToolBar();
         add(tb, BorderLayout.NORTH);
         JPanel dataView = new JPanel(new BorderLayout());
-        JTextField cmd = new JTextField("/WHS/" + warehouse.getId());
-        dataView.add(cmd, BorderLayout.NORTH);
         JScrollPane tableScrollPane = new JScrollPane(makeOverview());
         dataView.add(tableScrollPane, BorderLayout.CENTER);
         dataTree = createTree();
@@ -134,20 +134,14 @@ public class WarehouseView extends JInternalFrame implements RefreshListener {
     private JPanel createToolBar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-        IconButton acceptPayment = new IconButton("Accept $", "order", "Receiving an order or taking payment");
+        IconButton order = new IconButton("Order", "create", "Order from a vendor");
         IconButton payBill = new IconButton("Pay Bill", "bill", "Receiving a bill from a vendor");
         IconButton inventory = new IconButton("Inventory", "inventory", "Inventory of items in cost center");
         IconButton receive = new IconButton("Receive", "receive", "Receive an Inbound Delivery");
         IconButton addArea = new IconButton("+ Area", "areas", "Add an area cost center");
         IconButton addBin = new IconButton("+ Bin", "bins", "Add an area cost center");
-        IconButton label = new IconButton("Barcodes", "label", "Print labels for properties");
-        IconButton refresh = new IconButton("", "refresh", "Reload from store");
-        acceptPayment.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                desktop.put(new AcceptPayment());
-            }
-        });
+        IconButton autoMake = new IconButton("AutoMake Areas/Bins", "automake", "Make areas and bins from templates");
+        IconButton label = new IconButton("", "label", "Print labels for properties");
         payBill.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -157,7 +151,13 @@ public class WarehouseView extends JInternalFrame implements RefreshListener {
         inventory.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-
+                desktop.put(new InventoryView(desktop, warehouse.getId()));
+            }
+        });
+        receive.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                desktop.put(new ReceiveOrder(warehouse.getId(), desktop));
             }
         });
         addArea.addMouseListener(new MouseAdapter() {
@@ -172,25 +172,13 @@ public class WarehouseView extends JInternalFrame implements RefreshListener {
                desktop.put(new CreateBin(warehouse.getId()));
            }
         });
-        receive.addMouseListener(new MouseAdapter() {
+        autoMake.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new ReceiveOrder(warehouse.getId(), desktop));
+                desktop.put(new AutoMakeAreasAndBins());
             }
         });
-        refresh.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                Locke rootNode = createRootNode();
-                DefaultMutableTreeNode rootTreeNode = createTreeNodes(rootNode);
-                DefaultTreeModel model = (DefaultTreeModel) dataTree.getModel();
-                model.setRoot(rootTreeNode);
-                expandAllNodes(dataTree);
-                revalidate();
-                repaint();
-            }
-        });
-        tb.add(acceptPayment);
+        tb.add(order);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(payBill);
         tb.add(Box.createHorizontalStrut(5));
@@ -203,8 +191,6 @@ public class WarehouseView extends JInternalFrame implements RefreshListener {
         tb.add(addBin);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(label);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(refresh);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));
         return tb;
     }
@@ -274,7 +260,13 @@ public class WarehouseView extends JInternalFrame implements RefreshListener {
 
     @Override
     public void onRefresh() {
-
+        Locke rootNode = createRootNode();
+        DefaultMutableTreeNode rootTreeNode = createTreeNodes(rootNode);
+        DefaultTreeModel model = (DefaultTreeModel) dataTree.getModel();
+        model.setRoot(rootTreeNode);
+        expandAllNodes(dataTree);
+        revalidate();
+        repaint();
     }
 
     static class CustomTreeCellRenderer extends DefaultTreeCellRenderer {

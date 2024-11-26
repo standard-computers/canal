@@ -2,6 +2,7 @@ package org.Canal.UI.Views.Orders.PurchaseRequisitions;
 
 import org.Canal.Models.BusinessUnits.PurchaseRequisition;
 import org.Canal.UI.Elements.Button;
+import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Inputs.Copiable;
 import org.Canal.UI.Elements.Inputs.DatePicker;
 import org.Canal.UI.Elements.Inputs.Selectable;
@@ -35,10 +36,10 @@ public class CreatePurchaseRequisition extends JInternalFrame {
         Constants.checkLocke(this, true, true);
         availableVendors = Selectables.allLocations();
         availableBuyers = Selectables.allLocations();
-        JTextField prIdField = new JTextField("PR" + (10000000 + (Engine.realtime.getPurchaseRequisitions().size() + 1)));
-        JTextField prNumberField = new JTextField("PR" + (10000000 + (Engine.realtime.getPurchaseRequisitions().size() + 1)));
+        JTextField prIdField = Elements.input("PR" + (10000000 + (Engine.realtime.getPurchaseRequisitions().size() + 1)));
+        JTextField prNumberField = Elements.input("PR" + (10000000 + (Engine.realtime.getPurchaseRequisitions().size() + 1)));
         prOwnerField = new Copiable("U100001");
-        JTextField prSpendAmount = new JTextField("500.00");
+        JTextField prSpendAmount = Elements.input("500.00");
         prStartDateField = new DatePicker();
         prEndDateField = new DatePicker();
         JTextArea prNotesField = new JTextArea();

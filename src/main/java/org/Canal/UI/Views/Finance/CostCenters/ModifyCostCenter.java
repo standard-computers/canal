@@ -3,7 +3,6 @@ package org.Canal.UI.Views.Finance.CostCenters;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Elements;
-import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;

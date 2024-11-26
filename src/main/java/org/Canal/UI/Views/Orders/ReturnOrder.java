@@ -2,6 +2,7 @@ package org.Canal.UI.Views.Orders;
 
 import org.Canal.Models.BusinessUnits.PurchaseOrder;
 import org.Canal.UI.Elements.Button;
+import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Label;
@@ -29,8 +30,8 @@ public class ReturnOrder extends JInternalFrame {
         super("Return Order", false, true, false, true);
         Constants.checkLocke(this, true, true);
         Form f = new Form();
-        poField = new JTextField(12);
-        onField = new JTextField(12);
+        poField = Elements.input(12);
+        onField = Elements.input(12);
         f.addInput(new Label("Purchase Order #", Constants.colors[0]), poField);
         f.addInput(new Label("[or] Order #", Constants.colors[1]), onField);
         ats = Selectables.allLocations();

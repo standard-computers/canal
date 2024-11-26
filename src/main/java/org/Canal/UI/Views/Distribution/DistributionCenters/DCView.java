@@ -14,7 +14,6 @@ import org.Canal.UI.Views.Bins.CreateBin;
 import org.Canal.UI.Views.Inventory.InventoryView;
 import org.Canal.UI.Views.Orders.PurchaseOrders.CreatePurchaseOrder;
 import org.Canal.UI.Views.Orders.ReceiveOrder;
-import org.Canal.UI.Views.Finance.Payments.AcceptPayment;
 import org.Canal.UI.Views.Areas.CreateArea;
 import org.Canal.Utils.*;
 
@@ -147,7 +146,7 @@ public class DCView extends JInternalFrame implements RefreshListener {
         IconButton areas = new IconButton("+ Areas", "areas", "Add an area cost center");
         IconButton addBin = new IconButton("+ Bin", "bins", "Add an area cost center");
         IconButton autoMake = new IconButton("AutoMake Areas/Bins", "automake", "Make areas and bins from templates");
-        IconButton label = new IconButton("Barcodes", "label", "Print labels for properties");
+        IconButton label = new IconButton("", "label", "Print labels for properties");
         order.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -229,7 +228,7 @@ public class DCView extends JInternalFrame implements RefreshListener {
             Area l = Engine.getAreas(distributionCenter.getId()).get(i);
             areas[i] = new Locke(l.getId() + " - " + l.getName(), false, "/ITS/" + l.getId(), new Color(147, 70, 3), null);
         }
-        return new Locke(distributionCenter.getId() + " - " + distributionCenter.getName(), true, "/ORGS", new Locke[]{
+        return new Locke(distributionCenter.getName(), true, "/DCSS/" + distributionCenter.getId(), new Locke[]{
                 new Locke("Areas", true, "/AREAS", areas),
                 new Locke("Bins", true, "/BNS", null),
                 new Locke("Items", true, "/ITS", items),
@@ -237,17 +236,6 @@ public class DCView extends JInternalFrame implements RefreshListener {
                 new Locke("Materials", true, "/MTS", null),
                 new Locke("Orders", true, "/ORDS", null),
                 new Locke("Vendors", true, "/VEND", vendors),
-                new Locke("Employees", true, "/EMPS", null),
-                new Locke("Reports", true, "/RPTS", new Locke[]{
-                    new Locke("Annual Ledger Report", false, "/RPTS/LGS/ANNUM", null),
-                    new Locke("Monthly Ledger Report", false, "/RPTS/MONTH", null),
-                    new Locke("CC Ledger", false, "/RPTS/CCS/LGS", null),
-                    new Locke("Annual Labor", false, "/RPTS/ANUM_LBR", null),
-                    new Locke("Monthly Labor", false, "/RPTS/MONTH_LBR", null),
-                    new Locke("Daily Labor", false, "/RPTS/DL_LBR", null),
-                    new Locke("Current Inventory", false, "/RPTS/CRNT_INV", null),
-                    new Locke("Inventory Count", false, "/RPTS/COUNT_INV", null),
-                }),
         });
     }
 
@@ -263,7 +251,13 @@ public class DCView extends JInternalFrame implements RefreshListener {
 
     @Override
     public void onRefresh() {
-
+        Locke rootNode = createRootNode();
+        DefaultMutableTreeNode rootTreeNode = createTreeNodes(rootNode);
+        DefaultTreeModel model = (DefaultTreeModel) dataTree.getModel();
+        model.setRoot(rootTreeNode);
+        expandAllNodes(dataTree);
+        revalidate();
+        repaint();
     }
 
     static class CustomTreeCellRenderer extends DefaultTreeCellRenderer {
@@ -279,6 +273,12 @@ public class DCView extends JInternalFrame implements RefreshListener {
             }
             setForeground(orgNode.getColor());
             return component;
+        }
+    }
+
+    private void expandAllNodes(JTree tree) {
+        for (int i = 0; i < tree.getRowCount(); i++) {
+            tree.expandRow(i);
         }
     }
 }

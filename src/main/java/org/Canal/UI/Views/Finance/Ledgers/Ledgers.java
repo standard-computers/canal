@@ -1,9 +1,7 @@
 package org.Canal.UI.Views.Finance.Ledgers;
 
 import org.Canal.Models.BusinessUnits.Ledger;
-import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Elements;
-import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
@@ -58,17 +56,8 @@ public class Ledgers extends JInternalFrame {
                 }
             }
         });
-        Button nla = new Button("Add");
-        nla.color(Constants.colors[7]);
-        nla.addActionListener(_ -> desktop.put(new CreateLedger(desktop)));
-        JPanel options = new JPanel();
-        options.add(nla);
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BorderLayout());
-        mainPanel.add(direct, BorderLayout.NORTH);
-        mainPanel.add(scrollPane, BorderLayout.CENTER);
-        mainPanel.add(options, BorderLayout.SOUTH);
-        add(mainPanel);
+        add(direct, BorderLayout.NORTH);
+        add(scrollPane, BorderLayout.CENTER);
         for(Ledger l : Engine.getLedgers()){
             listModel.addElement(l);
         }

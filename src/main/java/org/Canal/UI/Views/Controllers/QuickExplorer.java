@@ -21,9 +21,11 @@ public class QuickExplorer extends JFrame implements DesktopState {
         setTitle("Canal – Enterprise Resource Planner – 2024");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         desktopPane = new DesktopInterface();
-        add(desktopPane);
-        addFrame(new Controller(this));
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, new Controller(this), desktopPane);
+        splitPane.setDividerLocation(250);
+        splitPane.setResizeWeight(0.2);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
+        add(splitPane);
         setVisible(true);
         if(Engine.assignedUser == null){
             putCenter(new Login(false));
@@ -33,7 +35,6 @@ public class QuickExplorer extends JFrame implements DesktopState {
             put(Engine.router("/USRS/NEW", this));
         }
         installShortcuts();
-
     }
 
     private void installShortcuts() {

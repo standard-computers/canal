@@ -35,14 +35,12 @@ public class CostCenterView extends JInternalFrame implements RefreshListener {
     private DesktopState desktop;
 
     public CostCenterView(Location loc, DesktopState desktop) {
+        super("Cost Center / " + loc.getId() + " - " + loc.getName(), true, true, true, true);
         this.thisCostCenter = loc;
         this.desktop = desktop;
-        setTitle("Cost Center / " + loc.getId() + " - " + loc.getName());
         setLayout(new BorderLayout());
         JPanel tb = createToolBar();
-        JScrollPane tbHolder = new JScrollPane(tb);
-        tbHolder.setPreferredSize(new Dimension(600, 60));
-        add(tbHolder, BorderLayout.NORTH);
+        add(tb, BorderLayout.NORTH);
         JTable table = createTable();
         JScrollPane tableScrollPane = new JScrollPane(table);
         JPanel dataView = new JPanel(new BorderLayout());
@@ -63,14 +61,9 @@ public class CostCenterView extends JInternalFrame implements RefreshListener {
         });
         JScrollPane treeScrollPane = new JScrollPane(dataTree);
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, treeScrollPane, dataView);
-        splitPane.setDividerLocation(250);
+        splitPane.setDividerLocation(200);
         splitPane.setResizeWeight(0.3);
         add(splitPane, BorderLayout.CENTER);
-        setSize(800, 600);
-        setIconifiable(true);
-        setClosable(true);
-        setResizable(true);
-        setMaximizable(true);
     }
 
     private JPanel createToolBar() {
@@ -82,10 +75,8 @@ public class CostCenterView extends JInternalFrame implements RefreshListener {
         IconButton addArea = new IconButton("+ Area", "areas", "Add an area cost center");
         IconButton addBin = new IconButton("+ Bin", "bins", "Add an area cost center");
         IconButton autoMake = new IconButton("Auto Make Areas/Bins", "automake", "Make areas and bins from templates");
-        IconButton pos = new IconButton("POS Mode", "pos", "Launch Point-of-Sale");
+        IconButton pos = new IconButton("POS", "pos", "Launch Point-of-Sale");
         IconButton label = new IconButton("", "label", "Print labels for properties");
-        Button edit = new Button("Edit");
-        IconButton refresh = new IconButton("", "refresh", "Reload from store");
         order.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -110,23 +101,6 @@ public class CostCenterView extends JInternalFrame implements RefreshListener {
                 desktop.put(new AutoMakeAreasAndBins());
             }
         });
-        edit.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                desktop.put(new ModifyCostCenter(thisCostCenter));
-            }
-        });
-        refresh.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                Locke rootNode = createRootNode();
-                DefaultMutableTreeNode rootTreeNode = createTreeNodes(rootNode);
-                DefaultTreeModel model = (DefaultTreeModel) dataTree.getModel();
-                model.setRoot(rootTreeNode);
-                revalidate();
-                repaint();
-            }
-        });
         tb.add(order);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(payBill);
@@ -142,10 +116,6 @@ public class CostCenterView extends JInternalFrame implements RefreshListener {
         tb.add(pos);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(label);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(edit);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(refresh);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));
         return tb;
     }
@@ -234,7 +204,12 @@ public class CostCenterView extends JInternalFrame implements RefreshListener {
 
     @Override
     public void onRefresh() {
-
+        Locke rootNode = createRootNode();
+        DefaultMutableTreeNode rootTreeNode = createTreeNodes(rootNode);
+        DefaultTreeModel model = (DefaultTreeModel) dataTree.getModel();
+        model.setRoot(rootTreeNode);
+        revalidate();
+        repaint();
     }
 
     static class CustomTreeCellRenderer extends DefaultTreeCellRenderer {

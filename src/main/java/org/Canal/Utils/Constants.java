@@ -278,24 +278,21 @@ public class Constants {
                         new Locke("Archive", false, "/LGS/ARCHV", null),
                 }),
                 new Locke("Inventory", true, "/STK", new Locke[]{
-                        new Locke("Stock Check", true, "/STK/SC/", new Locke[]{
-                                new Locke("Org Stock Overview", false, "/STK/SC/IID", null),
-                                new Locke("Stock by Vendor", false, "/STK/SC/VEND", null),
-                                new Locke("Stock by Vendor with Item", false, "/STK/SC/VEND_IID", null),
-                                new Locke("Stock by Vendor with Cost Center", false, "/STK/SC/VEND_CCS", null),
-                                new Locke("Stock by Vendor for Distribution Center", false, "/STK/SC/VEND_DCSS", null),
-                                new Locke("Item Stock Check", false, "/STK/SC/IID", null),
-                        }),
-                        new Locke("Move Inventory", true, "/INV/MV/MOD", new Locke[]{
-                                new Locke("Perform Stock Transfer Order (STO)", false, "/INV/MV/STO", null),
-                        }),
-                        new Locke("Remove Inventory", false, "/INV/MV/DEL", null),
-                        new Locke("Adjust Inventory", false, "/INV/MV/ADJ", null),
-                        new Locke("Physical Inventory", true, "/INV/PI", new Locke[]{
-                                new Locke("Physical Inventory for Item", false, "/INV/PI/ITS", null),
-                                new Locke("Physical Inventory for Material", false, "/INV/PI/MTS", null),
-                                new Locke("Physical Inventory for Plant", false, "/INV/PI/PLNT", null),
-                        }),
+                        new Locke("Stock Check", true, "/STK/SC/", null),
+                        new Locke("Org Stock Overview", false, "/STK/SC/IID", null),
+                        new Locke("Stock by Vendor", false, "/STK/SC/VEND", null),
+                        new Locke("Stock by Vendor with Item", false, "/STK/SC/VEND_IID", null),
+                        new Locke("Stock by Vendor with Cost Center", false, "/STK/SC/VEND_CCS", null),
+                        new Locke("Stock by Vendor for Distribution Center", false, "/STK/SC/VEND_DCSS", null),
+                        new Locke("Item Stock Check", false, "/STK/SC/IID", null),
+                        new Locke("Move Inventory", true, "/STK/MOD/MV", null),
+                        new Locke("Perform Stock Transfer Order (STO)", false, "/STK/MV/STO", null),
+                        new Locke("Remove Inventory", false, "/STK/MV/DEL", null),
+                        new Locke("Adjust Inventory", false, "/STK/MV/ADJ", null),
+                        new Locke("Physical Inventory", true, "/STK/PI", null),
+                        new Locke("Physical Inventory for Item", false, "/STK/PI/ITS", null),
+                        new Locke("Physical Inventory for Material", false, "/STK/PI/MTS", null),
+                        new Locke("Physical Inventory for Plant", false, "/STK/PI/PLNT", null),
                 })
         });
     }

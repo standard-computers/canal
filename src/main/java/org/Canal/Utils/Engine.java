@@ -441,7 +441,7 @@ public class Engine {
                 return new CreateCostCenter();
             }
             case "/CCS/MOD" -> {
-                return new ModifyCostCenter(null);
+                return new ModifyCostCenter(Engine.getCostCenters().get(0));
             }
             case "/AREAS" -> {
                 return new Areas(desktop);

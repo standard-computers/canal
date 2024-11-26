@@ -29,23 +29,53 @@ public class AutoMakeSalesOrders extends JInternalFrame {
     private JPanel checkboxPanel;
     private ArrayList<Location> locations;
     private ArrayList<JCheckBox> checkboxes;
+    private Selectable vendor;
+    private JTextField maxSpendField;
+    private DatePicker prStartDateField, prEndDateField;
+    private JTextArea prNotesField;
 
     public AutoMakeSalesOrders() {
         super("AutoMake Sales Orders", false, true, false, true);
         setFrameIcon(new ImageIcon(AutoMakeSalesOrders.class.getResource("/icons/automake.png")));
+        JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane.add(buyers(), "Buyers");
+        tabbedPane.add(salesOrderData(), "SO Data");
+        tabbedPane.add(itemData(), "Items");
+        JLabel description = Elements.h3("Creates a Sales Order for each customer with info.");
+        description.setBorder(new EmptyBorder(10, 10, 10, 10));
+        add(description, BorderLayout.NORTH);
+        add(tabbedPane, BorderLayout.CENTER);
+        Button createPrs = new Button("AutoMake");
+        createPrs.addActionListener(_ -> {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            for (JCheckBox checkbox : checkboxes) {
+                if (checkbox.isSelected()) {
+                    String genId = "PR" + (10000000 + (Engine.realtime.getPurchaseRequisitions().size() + 1));
+                    PurchaseRequisition newPr = new PurchaseRequisition(genId, genId, "U10001", vendor.getSelectedValue(), checkbox.getActionCommand(), genId, Double.valueOf(maxSpendField.getText()), dateFormat.format(prStartDateField.getSelectedDate()), dateFormat.format(prEndDateField.getSelectedDate()), prNotesField.getText());
+                    Pipe.save("/PR", newPr);
+                }
+            }
+            dispose();
+            JOptionPane.showMessageDialog(null, "AutoMake Complete");
+        });
+        add(createPrs, BorderLayout.SOUTH);
+    }
+
+    private JPanel buyers() {
         locations = Engine.getCostCenters();
         locations.addAll(Engine.getDistributionCenters());
         this.checkboxes = new ArrayList<>();
         checkboxPanel = new JPanel();
         checkboxPanel.setLayout(new BoxLayout(checkboxPanel, BoxLayout.Y_AXIS));
         addCheckboxes();
-        JScrollPane scrollPane = new JScrollPane(checkboxPanel);
-        scrollPane.setBorder(new TitledBorder("Buyers"));
-        JPanel main = new JPanel(new GridLayout(1, 2));
-        main.add(scrollPane);
+//        /ORDS/SO/AUTO_MK
+        return checkboxPanel;
+    }
+
+    private JPanel salesOrderData() {
         Form addtlInfo = new Form();
-        addtlInfo.setBorder(new TitledBorder("Addtl. Info"));
-        JTextField maxSpendField = new JTextField(10);
+        addtlInfo.setBorder(new TitledBorder("Additional Info"));
+        JTextField maxSpendField = Elements.input(10);
         JCheckBox isSingleOrder = new JCheckBox("");
         Selectable supplier = Selectables.allLocations();
         supplier.editable();
@@ -59,25 +89,13 @@ public class AutoMakeSalesOrders extends JInternalFrame {
         addtlInfo.addInput(new Label("Valid From", Constants.colors[6]), prStartDateField);
         addtlInfo.addInput(new Label("To", Constants.colors[5]), prEndDateField);
         addtlInfo.addInput(new Label("Notes", Constants.colors[4]), prNotesField);
-        main.add(addtlInfo);
-        JLabel description = Elements.h3("Creates a Purchase Order for each buyer with info. After submission, you'll be prompted for order item selection.");
-        description.setBorder(new EmptyBorder(10, 10, 10, 10));
-        add(description, BorderLayout.NORTH);
-        add(main, BorderLayout.CENTER);
-        Button createPrs = new Button("AutoMake Purchase Reqs.");
-        createPrs.addActionListener(_ -> {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            for (JCheckBox checkbox : checkboxes) {
-                if (checkbox.isSelected()) {
-                    String genId = "PR" + (10000000 + (Engine.realtime.getPurchaseRequisitions().size() + 1));
-                    PurchaseRequisition newPr = new PurchaseRequisition(genId, genId, "U10001", supplier.getSelectedValue(), checkbox.getActionCommand(), genId, Double.valueOf(maxSpendField.getText()), dateFormat.format(prStartDateField.getSelectedDate()), dateFormat.format(prEndDateField.getSelectedDate()), prNotesField.getText());
-                    Pipe.save("/PR", newPr);
-                }
-            }
-            dispose();
-            JOptionPane.showMessageDialog(null, "AutoMake Purchase Reqs Complete");
-        });
-        add(createPrs, BorderLayout.SOUTH);
+        return addtlInfo;
+    }
+
+    private JPanel itemData() {
+        JPanel p = new JPanel();
+
+        return p;
     }
 
     private void addCheckboxes() {

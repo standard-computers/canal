@@ -1,5 +1,6 @@
 package org.Canal.UI.Views.Areas;
 
+import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Label;
@@ -19,7 +20,7 @@ public class AutoMakeAreasAndBins extends JInternalFrame {
         Selectable locations = Selectables.allLocations();
         Form f = new Form();
         f.addInput(new Label("Location", Constants.colors[0]), locations);
-        f.addInput(new Label("Bins Per Area", Constants.colors[1]), new JTextField("100", 10));
+        f.addInput(new Label("Bins Per Area", Constants.colors[1]), Elements.input("100", 10));
         add(f);
     }
 }

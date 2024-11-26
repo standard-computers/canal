@@ -45,7 +45,6 @@ public class Inventory {
                     Inventory forg = Json.load(file.getPath(), Inventory.class);
                     if (forg.getLocation().equals(location)) {
                         Json.save(file.getPath(), this);
-                       break;
                     }
                 }
             }
