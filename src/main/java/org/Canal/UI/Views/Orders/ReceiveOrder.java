@@ -1,10 +1,12 @@
 package org.Canal.UI.Views.Orders;
 
 import org.Canal.Models.BusinessUnits.GoodsReceipt;
+import org.Canal.Models.BusinessUnits.Inventory;
 import org.Canal.Models.BusinessUnits.OrderLineItem;
 import org.Canal.Models.BusinessUnits.PurchaseOrder;
 import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.Models.SupplyChainUnits.Bin;
+import org.Canal.Models.SupplyChainUnits.StockLine;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Inputs.Copiable;
@@ -159,22 +161,23 @@ public class ReceiveOrder extends JInternalFrame {
                             gr.setLocation(receivingLocationId);
                             gr.setStatus(LockeStatus.DELIVERED);
                             ArrayList<OrderLineItem> lineitems = new ArrayList<>();
+
+                            Inventory i = Engine.getInventory(spo.getShipTo()); //TODO Double check
                             for (int row = 0; row < receivedItems.getRowCount(); row++) {
-                                for (int col = 0; col < receivedItems.getColumnCount(); col++) {
-                                    Object value = receivedItems.getValueAt(row, col);
-                                }
                                 String itemId = receivedItems.getValueAt(row, 0).toString();
                                 String itemName = receivedItems.getValueAt(row, 1).toString();
                                 double itemQty = Double.parseDouble(receivedItems.getValueAt(row, 2).toString());
                                 double itemRcvd = Double.parseDouble(receivedItems.getValueAt(row, 3).toString());
-//                                double itemPrice = Double.parseDouble(receivedItems.getValueAt(row, 3).toString());
-//                                double itemTotal = Double.parseDouble(receivedItems.getValueAt(row, 4).toString());
+    //                                double itemPrice = Double.parseDouble(receivedItems.getValueAt(row, 3).toString());
+    //                                double itemTotal = Double.parseDouble(receivedItems.getValueAt(row, 4).toString());
                                 lineitems.add(new OrderLineItem(itemId, itemName, itemQty, itemRcvd));
+                                i.addStock(new StockLine("/ITS", itemId, itemQty, "UNKNOWN", availablePutawayBin.getSelectedValue()));
                             }
                             gr.setItems(lineitems);
                             Pipe.save("/GR", gr);
                             spo.setStatus(LockeStatus.DELIVERED);
                             spo.save();
+                            i.save();
                             dispose();
                             JOptionPane.showMessageDialog(null, "Goods Receipt created and stock put away.");
                         }else{

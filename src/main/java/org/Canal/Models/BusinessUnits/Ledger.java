@@ -110,8 +110,8 @@ public class Ledger {
                     Ledger fl = Json.load(file.getPath(), Ledger.class);
                     if (fl.getId().equals(id)) {
                         Json.save(file.getPath(), this);
+                        break;
                     }
-                    break;
                 }
             }
         }

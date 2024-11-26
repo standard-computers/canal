@@ -150,8 +150,8 @@ public class PurchaseRequisition {
                     PurchaseRequisition forg = Json.load(file.getPath(), PurchaseRequisition.class);
                     if (forg.getId().equals(getId())) {
                         Json.save(file.getPath(), this);
+                        break;
                     }
-                    break;
                 }
             }
         }

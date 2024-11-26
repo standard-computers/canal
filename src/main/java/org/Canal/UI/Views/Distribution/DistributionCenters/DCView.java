@@ -11,6 +11,7 @@ import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Views.Areas.AutoMakeAreasAndBins;
 import org.Canal.UI.Views.Bins.CreateBin;
+import org.Canal.UI.Views.Inventory.InventoryView;
 import org.Canal.UI.Views.Orders.PurchaseOrders.CreatePurchaseOrder;
 import org.Canal.UI.Views.Orders.ReceiveOrder;
 import org.Canal.UI.Views.Finance.Payments.AcceptPayment;
@@ -140,7 +141,6 @@ public class DCView extends JInternalFrame implements RefreshListener {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton order = new IconButton("Order", "create", "Order from a vendor");
-        IconButton acceptPayment = new IconButton("Accept Payment", "order", "Receiving an order or taking payment");
         IconButton payBill = new IconButton("Pay Bill", "bill", "Receiving a bill from a vendor");
         IconButton inventory = new IconButton("Inventory", "inventory", "Inventory of items in cost center");
         IconButton receive = new IconButton("Receive", "receive", "Receive an Inbound Delivery");
@@ -154,9 +154,9 @@ public class DCView extends JInternalFrame implements RefreshListener {
                 desktop.put(new CreatePurchaseOrder());
             }
         });
-        acceptPayment.addMouseListener(new MouseAdapter() {
+        inventory.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new AcceptPayment());
+                desktop.put(new InventoryView(desktop, distributionCenter.getId()));
             }
         });
         receive.addMouseListener(new MouseAdapter() {
@@ -181,8 +181,6 @@ public class DCView extends JInternalFrame implements RefreshListener {
             }
         });
         tb.add(order);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(acceptPayment);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(payBill);
         tb.add(Box.createHorizontalStrut(5));

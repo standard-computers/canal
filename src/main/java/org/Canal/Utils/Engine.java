@@ -1,6 +1,7 @@
 package org.Canal.Utils;
 
 import org.Canal.Models.BusinessUnits.*;
+import org.Canal.Models.BusinessUnits.Inventory;
 import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.HumanResources.User;
 import org.Canal.Models.SupplyChainUnits.*;
@@ -42,6 +43,7 @@ import org.Canal.UI.Views.HR.Teams.CreateTeam;
 import org.Canal.UI.Views.HR.Teams.ModifyTeam;
 import org.Canal.UI.Views.HR.Teams.Teams;
 import org.Canal.UI.Views.HR.Users.*;
+import org.Canal.UI.Views.Inventory.InventoryView;
 import org.Canal.UI.Views.Items.*;
 import org.Canal.UI.Views.Materials.FindMaterial;
 import org.Canal.UI.Views.Materials.Materials;
@@ -388,6 +390,28 @@ public class Engine {
         return ledgers;
     }
 
+    public static ArrayList<Inventory> getInventories() {
+        ArrayList<Inventory> inventories = new ArrayList<>();
+        File[] empDir = Pipe.list("STK");
+        for (File file : empDir) {
+            if (!file.isDirectory()) {
+                Inventory a = Json.load(file.getPath(), Inventory.class);
+                inventories.add(a);
+            }
+        }
+        inventories.sort(Comparator.comparing(Inventory::getLocation));
+        return inventories;
+    }
+
+    public static Inventory getInventory(String location){
+        var i = (Inventory) getInventories().stream().filter(inventory -> inventory.getLocation().equals(location)).collect(Collectors.toList()).stream().findFirst().orElse(null);
+        if(i == null){
+            i = new Inventory(location);
+            Pipe.save("/STK", i);
+        }
+        return i;
+    }
+
     public static List<Ledger> getLedgers(String id) {
         return getLedgers().stream().filter(location -> location.getOrg().equals(id)).collect(Collectors.toList());
     }
@@ -620,13 +644,13 @@ public class Engine {
             case "/USRS/MOD" -> {
                 return new ModifyUser(null);
             }
-            case "/INV" -> {
-                return new Inventory();
+            case "/CNL/INV" -> {
+                return new org.Canal.UI.Views.Controllers.Inventory();
             }
-            case "/INVS" -> {
-                return new Inventory();
+            case "/STK" -> {
+                return new InventoryView(desktop, Engine.getOrganization().getId());
             }
-            case "/INVS/NEW" -> {
+            case "/INVS", "/INVS/NEW" -> {
                 return new CreateInvoice(null);
             }
             case "/CATS" -> {
@@ -837,7 +861,7 @@ public class Engine {
                         return new Warehouses(desktop);
                     }
                     case "INV" -> {
-                        return new Inventory();
+                        return new org.Canal.UI.Views.Controllers.Inventory();
                     }
                     case "CATS" -> {
                         return new Catalogs(desktop);

@@ -167,7 +167,7 @@ public class Area {
                     Area forg = Json.load(file.getPath(), Area.class);
                     if (forg.getId().equals(getId())) {
                         Json.save(file.getPath(), this);
-                        System.out.println(".areas.saved");
+                        break;
                     }
                 }
             }

@@ -277,14 +277,14 @@ public class Constants {
                         new Locke("Audit", false, "/LGS/AUDIT", null),
                         new Locke("Archive", false, "/LGS/ARCHV", null),
                 }),
-                new Locke("Inventory", true, "/INV", new Locke[]{
-                        new Locke("Stock Check", true, "/INV/SC/", new Locke[]{
-                                new Locke("Org Stock Overview", false, "/INV/SC/IID", null),
-                                new Locke("Stock by Vendor", false, "/INV/SC/VEND", null),
-                                new Locke("Stock by Vendor with Item", false, "/INV/SC/VEND_IID", null),
-                                new Locke("Stock by Vendor with Cost Center", false, "/INV/SC/VEND_CCS", null),
-                                new Locke("Stock by Vendor for Distribution Center", false, "/INV/SC/VEND_DCSS", null),
-                                new Locke("Item Stock Check", false, "/INV/SC/IID", null),
+                new Locke("Inventory", true, "/STK", new Locke[]{
+                        new Locke("Stock Check", true, "/STK/SC/", new Locke[]{
+                                new Locke("Org Stock Overview", false, "/STK/SC/IID", null),
+                                new Locke("Stock by Vendor", false, "/STK/SC/VEND", null),
+                                new Locke("Stock by Vendor with Item", false, "/STK/SC/VEND_IID", null),
+                                new Locke("Stock by Vendor with Cost Center", false, "/STK/SC/VEND_CCS", null),
+                                new Locke("Stock by Vendor for Distribution Center", false, "/STK/SC/VEND_DCSS", null),
+                                new Locke("Item Stock Check", false, "/STK/SC/IID", null),
                         }),
                         new Locke("Move Inventory", true, "/INV/MV/MOD", new Locke[]{
                                 new Locke("Perform Stock Transfer Order (STO)", false, "/INV/MV/STO", null),

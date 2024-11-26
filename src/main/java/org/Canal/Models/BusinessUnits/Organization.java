@@ -156,8 +156,8 @@ public class Organization {
                     Organization forg = Json.load(file.getPath(), Organization.class);
                     if (forg.getId().equals(id)) {
                         Json.save(file.getPath(), this);
+                        break;
                     }
-                    break;
                 }
             }
         }

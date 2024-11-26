@@ -169,8 +169,8 @@ public class PurchaseOrder {
                     PurchaseOrder forg = Json.load(file.getPath(), PurchaseOrder.class);
                     if (forg.getOrderId().equals(getOrderId())) {
                         Json.save(file.getPath(), this);
+                        break;
                     }
-                    break;
                 }
             }
         }

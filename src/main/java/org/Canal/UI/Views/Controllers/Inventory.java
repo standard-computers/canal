@@ -5,31 +5,26 @@ import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.Utils.Engine;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * /INV
+ * /CNL/INV
  */
 public class Inventory extends JInternalFrame {
 
     private JTable table;
 
     public Inventory() {
-        setTitle("Inventory");
-
+        super("Inventory Control", true, true, true, true);
         setLayout(new BorderLayout());
         add(toolbar(), BorderLayout.NORTH);
-
         table = createTable();
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
-        setClosable(true);
-        setIconifiable(true);
-        setMaximizable(true);
-        setResizable(true);
     }
 
     private JPanel toolbar() {
