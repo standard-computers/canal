@@ -6,21 +6,21 @@ import java.awt.*;
 public class Locke {
 
     private String name, transaction;
-    private boolean status;
+    private Icon icon;
     private Color color;
     private Locke[] children;
 
-    public Locke(String name, boolean status, String transaction, Color color, Locke[] children) {
+    public Locke(String name, Icon icon, String transaction, Color color, Locke[] children) {
         this.name = name;
-        this.status = status;
+        this.icon = icon;
         this.transaction = transaction;
         this.color = (color == null ? UIManager.getColor("Label.foreground") : color);
         this.children = children;
     }
 
-    public Locke(String name, boolean status, String transaction, Locke[] canals) {
+    public Locke(String name, Icon icon, String transaction, Locke[] canals) {
         this.name = name;
-        this.status = status;
+        this.icon = icon;
         this.transaction = transaction;
         this.color = UIManager.getColor("Label.foreground");
         this.children = canals;
@@ -30,8 +30,8 @@ public class Locke {
         return name;
     }
 
-    public boolean getStatus() {
-        return status;
+    public Icon getIcon() {
+        return icon;
     }
 
     public Color getColor() {

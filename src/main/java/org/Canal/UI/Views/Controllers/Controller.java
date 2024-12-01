@@ -114,11 +114,9 @@ public class Controller extends JPanel implements RefreshListener {
             Component component = super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
             DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) value;
             Locke orgNode = (Locke) treeNode.getUserObject();
-            if (orgNode.getStatus()) {
-                setIcon(UIManager.getIcon("FileView.directoryIcon"));
-            } else {
-                setIcon(UIManager.getIcon("FileView.fileIcon"));
-            }
+            setIcon(orgNode.getIcon());
+//            setIcon(UIManager.getIcon("FileView.directoryIcon"));
+//            setIcon(UIManager.getIcon("FileView.fileIcon"));
             setForeground(orgNode.getColor());
             return component;
         }

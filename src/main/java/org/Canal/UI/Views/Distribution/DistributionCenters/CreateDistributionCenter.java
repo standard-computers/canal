@@ -57,7 +57,15 @@ public class CreateDistributionCenter extends JInternalFrame {
                 String state = st.getText().trim();
                 String postal = ps.getText().trim();
                 String country = cy.getText();
-                Location location = new Location(dcId, orgTieId, name, line1, city, state, postal, country, false);
+                Location location = new Location();
+                location.setId(dcId);
+                location.setTie(orgTieId);
+                location.setName(name);
+                location.setLine1(line1);
+                location.setCity(city);
+                location.setState(state);
+                location.setPostal(postal);
+                location.setCountry(country);
                 Pipe.save("/DCSS", location);
                 dispose();
                 desktop.put(new DCView(location, desktop));

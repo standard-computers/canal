@@ -209,41 +209,41 @@ public class WarehouseView extends JInternalFrame implements RefreshListener {
         Locke[] customers = new Locke[Engine.getCustomers(warehouse.getOrg()).size()];
         for (int i = 0; i < Engine.getCustomers(warehouse.getOrg()).size(); i++) {
             Location l = Engine.getCustomers(warehouse.getOrg()).get(i);
-            customers[i] = new Locke(l.getId() + " - " + l.getName(), false, "/CSTS/" + l.getId(), Color.PINK, null);
+            customers[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/CSTS/" + l.getId(), Color.PINK, null);
         }
         Locke[] vendors = new Locke[Engine.getVendors(warehouse.getOrg()).size()];
         for (int i = 0; i < Engine.getVendors(warehouse.getOrg()).size(); i++) {
             Vendor l = Engine.getVendors(warehouse.getOrg()).get(i);
-            vendors[i] = new Locke(l.getId() + " - " + l.getName(), false, "/VEND/" + l.getId(), Color.CYAN, null);
+            vendors[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/VEND/" + l.getId(), Color.CYAN, null);
         }
         Locke[] items = new Locke[Engine.getItems(warehouse.getOrg()).size()];
         for (int i = 0; i < Engine.getItems(warehouse.getOrg()).size(); i++) {
             Item l = Engine.getItems(warehouse.getOrg()).get(i);
-            items[i] = new Locke(l.getId() + " - " + l.getName(), false, "/ITS/" + l.getId(), new Color(147, 70, 3), null);
+            items[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/ITS/" + l.getId(), new Color(147, 70, 3), null);
         }
         Locke[] areas = new Locke[Engine.getAreas(warehouse.getId()).size()];
         for (int i = 0; i < Engine.getAreas(warehouse.getId()).size(); i++) {
             Area l = Engine.getAreas(warehouse.getId()).get(i);
-            areas[i] = new Locke(l.getId() + " - " + l.getName(), false, "/ITS/" + l.getId(), new Color(147, 70, 3), null);
+            areas[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/ITS/" + l.getId(), new Color(147, 70, 3), null);
         }
-        return new Locke(warehouse.getId() + " - " + warehouse.getName(), true, "/ORGS", new Locke[]{
-                new Locke("Areas", true, "/AREAS", areas),
-                new Locke("Bins", true, "/BNS", null),
-                new Locke("Items", true, "/ITS", items),
-                new Locke("Customers", true, "/CSTS", customers),
-                new Locke("Materials", true, "/MTS", null),
-                new Locke("Orders", true, "/ORDS", null),
-                new Locke("Vendors", true, "/VEND", vendors),
-                new Locke("Employees", true, "/EMPS", null),
-                new Locke("Reports", true, "/RPTS", new Locke[]{
-                    new Locke("Annual Ledger Report", false, "/RPTS/LGS/ANNUM", null),
-                    new Locke("Monthly Ledger Report", false, "/RPTS/MONTH", null),
-                    new Locke("CC Ledger", false, "/RPTS/CCS/LGS", null),
-                    new Locke("Annual Labor", false, "/RPTS/ANUM_LBR", null),
-                    new Locke("Monthly Labor", false, "/RPTS/MONTH_LBR", null),
-                    new Locke("Daily Labor", false, "/RPTS/DL_LBR", null),
-                    new Locke("Current Inventory", false, "/RPTS/CRNT_INV", null),
-                    new Locke("Inventory Count", false, "/RPTS/COUNT_INV", null),
+        return new Locke(warehouse.getId() + " - " + warehouse.getName(), UIManager.getIcon("FileView.fileIcon"), "/ORGS", new Locke[]{
+                new Locke("Areas", UIManager.getIcon("FileView.fileIcon"), "/AREAS", areas),
+                new Locke("Bins", UIManager.getIcon("FileView.fileIcon"), "/BNS", null),
+                new Locke("Items", UIManager.getIcon("FileView.fileIcon"), "/ITS", items),
+                new Locke("Customers", UIManager.getIcon("FileView.fileIcon"), "/CSTS", customers),
+                new Locke("Materials", UIManager.getIcon("FileView.fileIcon"), "/MTS", null),
+                new Locke("Orders", UIManager.getIcon("FileView.fileIcon"), "/ORDS", null),
+                new Locke("Vendors", UIManager.getIcon("FileView.fileIcon"), "/VEND", vendors),
+                new Locke("Employees", UIManager.getIcon("FileView.fileIcon"), "/EMPS", null),
+                new Locke("Reports", UIManager.getIcon("FileView.fileIcon"), "/RPTS", new Locke[]{
+                    new Locke("Annual Ledger Report", UIManager.getIcon("FileView.fileIcon"), "/RPTS/LGS/ANNUM", null),
+                    new Locke("Monthly Ledger Report", UIManager.getIcon("FileView.fileIcon"), "/RPTS/MONTH", null),
+                    new Locke("CC Ledger", UIManager.getIcon("FileView.fileIcon"), "/RPTS/CCS/LGS", null),
+                    new Locke("Annual Labor", UIManager.getIcon("FileView.fileIcon"), "/RPTS/ANUM_LBR", null),
+                    new Locke("Monthly Labor", UIManager.getIcon("FileView.fileIcon"), "/RPTS/MONTH_LBR", null),
+                    new Locke("Daily Labor", UIManager.getIcon("FileView.fileIcon"), "/RPTS/DL_LBR", null),
+                    new Locke("Current Inventory", UIManager.getIcon("FileView.fileIcon"), "/RPTS/CRNT_INV", null),
+                    new Locke("Inventory Count", UIManager.getIcon("FileView.fileIcon"), "/RPTS/COUNT_INV", null),
                 }),
         });
     }
@@ -275,11 +275,7 @@ public class WarehouseView extends JInternalFrame implements RefreshListener {
             Component component = super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
             DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) value;
             Locke orgNode = (Locke) treeNode.getUserObject();
-            if (orgNode.getStatus()) {
-                setIcon(UIManager.getIcon("FileView.directoryIcon"));
-            } else {
-                setIcon(UIManager.getIcon("FileView.fileIcon"));
-            }
+            setIcon(orgNode.getIcon());
             setForeground(orgNode.getColor());
             return component;
         }

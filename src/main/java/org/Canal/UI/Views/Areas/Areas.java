@@ -21,7 +21,7 @@ public class Areas extends JInternalFrame {
     private CustomTable table;
 
     public Areas() {
-        super("Areas", true, true, true, true);
+        super("/AREAS", true, true, true, true);
         setFrameIcon(new ImageIcon(Areas.class.getResource("/icons/areas.png")));
         JPanel tb = createToolBar();
         JPanel holder = new JPanel(new BorderLayout());

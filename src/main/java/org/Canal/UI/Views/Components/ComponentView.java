@@ -206,9 +206,9 @@ public class ComponentView extends JInternalFrame {
         Locke[] items = new Locke[Engine.getItems(Engine.getOrganization().getId()).size()];
         for (int i = 0; i < Engine.getItems(Engine.getOrganization().getId()).size(); i++) {
             Item l = Engine.getItems(Engine.getOrganization().getId()).get(i);
-            items[i] = new Locke(l.getId() + " - " + l.getName() + " / Items", false, l.getId(), new Color(147, 70, 3), null);
+            items[i] = new Locke(l.getId() + " - " + l.getName() + " / Items", UIManager.getIcon("FileView.fileIcon"), l.getId(), new Color(147, 70, 3), null);
         }
-        return new Locke(Engine.getOrganization().getId() + " - " + Engine.getOrganization().getName(), true, "/ITS", items);
+        return new Locke(Engine.getOrganization().getId() + " - " + Engine.getOrganization().getName(), UIManager.getIcon("FileView.fileIcon"), "/ITS", items);
     }
 
     private DefaultMutableTreeNode createTreeNodes(Locke node) {
@@ -227,11 +227,7 @@ public class ComponentView extends JInternalFrame {
             Component component = super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
             DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) value;
             Locke orgNode = (Locke) treeNode.getUserObject();
-            if (orgNode.getStatus()) {
-                setIcon(UIManager.getIcon("FileView.directoryIcon"));
-            } else {
-                setIcon(UIManager.getIcon("FileView.fileIcon"));
-            }
+            setIcon(orgNode.getIcon());
             setForeground(orgNode.getColor());
             return component;
         }

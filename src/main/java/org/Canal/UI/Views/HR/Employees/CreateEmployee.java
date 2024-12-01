@@ -64,6 +64,8 @@ public class CreateEmployee extends JInternalFrame {
                 newEmployee.setState(empAddressState.getText());
                 newEmployee.setPostal(empAddressPostal.getText());
                 newEmployee.setCountry(countries.getSelectedValue());
+                newEmployee.setPhone(empPhone.getText());
+                newEmployee.setEmail(empEmail.getText());
 
                 Pipe.save("/EMPS", newEmployee);
                 dispose();

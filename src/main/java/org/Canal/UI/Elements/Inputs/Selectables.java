@@ -4,6 +4,7 @@ import com.formdev.flatlaf.IntelliJTheme;
 import org.Canal.Models.BusinessUnits.Organization;
 import org.Canal.Models.HumanResources.Department;
 import org.Canal.Models.HumanResources.Employee;
+import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.Models.SupplyChainUnits.Vendor;
 import org.Canal.Models.SupplyChainUnits.Warehouse;
@@ -48,6 +49,14 @@ public class Selectables {
             organizations.put(org.getId(), org.getId());
         }
         return new Selectable(organizations);
+    }
+
+    public static Selectable areas(){
+        HashMap<String, String> areas = new HashMap<>();
+        for(Area a : Engine.getAreas()){
+            areas.put(a.getId(), a.getId());
+        }
+        return new Selectable(areas);
     }
 
     public static Selectable vendors(){

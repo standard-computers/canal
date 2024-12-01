@@ -69,7 +69,7 @@ public class InventoryView extends JInternalFrame {
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("", "export", "Export as CSV");
         IconButton blockPo = new IconButton("Block", "block", "Block/Pause PO, can't be used");
-        IconButton move = new IconButton("Move", "start", "Resume/Activate PO");
+        IconButton move = new IconButton("Move", "start", "Move Inventory (Internally)", "/STK/MOD/MV");
         IconButton archivePo = new IconButton("Archive", "archive", "Archive PO, removes");
         IconButton label = new IconButton("Barcodes", "label", "Print labels for org properties");
         JTextField filterValue = Elements.input(location, 10);
@@ -85,7 +85,14 @@ public class InventoryView extends JInternalFrame {
         tb.add(Box.createHorizontalStrut(5));
         tb.add(filterValue);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));
+        export.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                table.exportToCSV();
+            }
+        });
         label.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
                 String[] printables = new String[Engine.orderProcessing.getPurchaseOrder().size()];
                 for (int i = 0; i < Engine.orderProcessing.getPurchaseOrder().size(); i++) {

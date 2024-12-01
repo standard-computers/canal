@@ -165,10 +165,10 @@ public class ReceiveOrder extends JInternalFrame {
 
                             Inventory i = Engine.getInventory(spo.getShipTo()); //TODO Double check
                             for (int row = 0; row < receivedItems.getRowCount(); row++) {
-                                String itemId = receivedItems.getValueAt(row, 0).toString();
-                                String itemName = receivedItems.getValueAt(row, 1).toString();
-                                double itemQty = Double.parseDouble(receivedItems.getValueAt(row, 2).toString());
-                                double itemRcvd = Double.parseDouble(receivedItems.getValueAt(row, 3).toString());
+                                String itemId = receivedItems.getValueAt(row, 1).toString();
+                                String itemName = receivedItems.getValueAt(row, 2).toString();
+                                double itemQty = Double.parseDouble(receivedItems.getValueAt(row, 3).toString());
+                                double itemRcvd = Double.parseDouble(receivedItems.getValueAt(row, 4).toString());
     //                                double itemPrice = Double.parseDouble(receivedItems.getValueAt(row, 3).toString());
     //                                double itemTotal = Double.parseDouble(receivedItems.getValueAt(row, 4).toString());
                                 lineitems.add(new OrderLineItem(itemId, itemName, itemQty, itemRcvd));

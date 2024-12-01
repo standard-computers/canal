@@ -151,8 +151,17 @@ public class Engine {
         return distributionCenters;
     }
 
-    public static List<Location> getDistributionCenters(String id) {
-        return getDistributionCenters().stream().filter(location -> location.getTie().equals(id)).collect(Collectors.toList());
+    public static List<Location> getDistributionCenters(String org) {
+        return getDistributionCenters().stream().filter(location -> location.getTie().equals(org)).collect(Collectors.toList());
+    }
+
+    public static Location getDistributionCenter(String id) {
+        for(Location l : getDistributionCenters()) {
+            if(l.getId().equals(id)) {
+                return l;
+            }
+        }
+        return null;
     }
 
     public static ArrayList<Warehouse> getWarehouses() {

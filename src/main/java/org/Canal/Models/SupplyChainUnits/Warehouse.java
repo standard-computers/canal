@@ -1,12 +1,11 @@
 package org.Canal.Models.SupplyChainUnits;
 
+import org.Canal.Models.Objex;
 import org.Canal.Utils.LockeStatus;
 
-public class Warehouse {
+public class Warehouse extends Objex {
 
-    private String id;
     private String org;
-    private String name;
     private String line1;
     private String city;
     private String state;
@@ -18,28 +17,12 @@ public class Warehouse {
     private LockeStatus status = LockeStatus.ACTIVE;
     private boolean taxExempt = false;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getOrg() {
         return org;
     }
 
     public void setOrg(String org) {
         this.org = org;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getLine1() {

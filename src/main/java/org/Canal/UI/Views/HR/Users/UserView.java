@@ -4,7 +4,6 @@ import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.HumanResources.User;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.Inputs.Copiable;
-import org.Canal.UI.Views.HR.Employees.Employees;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
@@ -22,7 +21,7 @@ public class UserView extends JInternalFrame {
         super("Users / " + user.getId(), true, true, true, true);
         this.desktop = desktop;
         this.user = user;
-        setFrameIcon(new ImageIcon(Employees.class.getResource("/icons/employees.png")));
+        setFrameIcon(new ImageIcon(UserView.class.getResource("/icons/employees.png")));
         setLayout(new BorderLayout());
         JPanel userInfo = new JPanel(new GridLayout(4, 1));
         Employee emp = Engine.getEmployee(user.getEmployee());

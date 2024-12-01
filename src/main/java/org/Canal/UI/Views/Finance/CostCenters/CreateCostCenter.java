@@ -61,7 +61,16 @@ public class CreateCostCenter extends JInternalFrame {
                 String state = ccStateField.getText().trim();
                 String postal = ccPostalField.getText().trim();
                 String country = countries.getSelectedValue();
-                Location location = new Location(costCenterId, orgTieId, name, line1, city, state, postal, country, taxExempt.isSelected());
+                Location location = new Location();
+                location.setId(costCenterId);
+                location.setTie(orgTieId);
+                location.setName(name);
+                location.setLine1(line1);
+                location.setCity(city);
+                location.setState(state);
+                location.setPostal(postal);
+                location.setCountry(country);
+                location.setTaxExempt(taxExempt.isSelected());
                 Pipe.save("/CCS", location);
                 dispose();
             }

@@ -204,31 +204,31 @@ public class DCView extends JInternalFrame implements RefreshListener {
         Locke[] customers = new Locke[Engine.getCustomers(distributionCenter.getTie()).size()];
         for (int i = 0; i < Engine.getCustomers(distributionCenter.getTie()).size(); i++) {
             Location l = Engine.getCustomers(distributionCenter.getTie()).get(i);
-            customers[i] = new Locke(l.getId() + " - " + l.getName(), false, "/CSTS/" + l.getId(), Color.PINK, null);
+            customers[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/CSTS/" + l.getId(), Color.PINK, null);
         }
         Locke[] vendors = new Locke[Engine.getVendors(distributionCenter.getTie()).size()];
         for (int i = 0; i < Engine.getVendors(distributionCenter.getTie()).size(); i++) {
             Vendor l = Engine.getVendors(distributionCenter.getTie()).get(i);
-            vendors[i] = new Locke(l.getId() + " - " + l.getName(), false, "/VEND/" + l.getId(), Color.CYAN, null);
+            vendors[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/VEND/" + l.getId(), Color.CYAN, null);
         }
         Locke[] items = new Locke[Engine.getItems(distributionCenter.getTie()).size()];
         for (int i = 0; i < Engine.getItems(distributionCenter.getTie()).size(); i++) {
             Item l = Engine.getItems(distributionCenter.getTie()).get(i);
-            items[i] = new Locke(l.getId() + " - " + l.getName(), false, "/ITS/" + l.getId(), new Color(147, 70, 3), null);
+            items[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/ITS/" + l.getId(), new Color(147, 70, 3), null);
         }
         Locke[] areas = new Locke[Engine.getAreas(distributionCenter.getId()).size()];
         for (int i = 0; i < Engine.getAreas(distributionCenter.getId()).size(); i++) {
             Area l = Engine.getAreas(distributionCenter.getId()).get(i);
-            areas[i] = new Locke(l.getId() + " - " + l.getName(), false, "/ITS/" + l.getId(), new Color(147, 70, 3), null);
+            areas[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/ITS/" + l.getId(), new Color(147, 70, 3), null);
         }
-        return new Locke(distributionCenter.getName(), true, "/DCSS/" + distributionCenter.getId(), new Locke[]{
-                new Locke("Areas", true, "/AREAS", areas),
-                new Locke("Bins", true, "/BNS", null),
-                new Locke("Items", true, "/ITS", items),
-                new Locke("Customers", true, "/CSTS", customers),
-                new Locke("Materials", true, "/MTS", null),
-                new Locke("Orders", true, "/ORDS", null),
-                new Locke("Vendors", true, "/VEND", vendors),
+        return new Locke(distributionCenter.getName(), UIManager.getIcon("FileView.fileIcon"), "/DCSS/" + distributionCenter.getId(), new Locke[]{
+                new Locke("Areas", UIManager.getIcon("FileView.fileIcon"), "/AREAS", areas),
+                new Locke("Bins", UIManager.getIcon("FileView.fileIcon"), "/BNS", null),
+                new Locke("Items", UIManager.getIcon("FileView.fileIcon"), "/ITS", items),
+                new Locke("Customers", UIManager.getIcon("FileView.fileIcon"), "/CSTS", customers),
+                new Locke("Materials", UIManager.getIcon("FileView.fileIcon"), "/MTS", null),
+                new Locke("Orders", UIManager.getIcon("FileView.fileIcon"), "/ORDS", null),
+                new Locke("Vendors", UIManager.getIcon("FileView.fileIcon"), "/VEND", vendors),
         });
     }
 
@@ -259,11 +259,7 @@ public class DCView extends JInternalFrame implements RefreshListener {
             Component component = super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
             DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) value;
             Locke orgNode = (Locke) treeNode.getUserObject();
-            if (orgNode.getStatus()) {
-                setIcon(UIManager.getIcon("FileView.directoryIcon"));
-            } else {
-                setIcon(UIManager.getIcon("FileView.fileIcon"));
-            }
+            setIcon(orgNode.getIcon());
             setForeground(orgNode.getColor());
             return component;
         }

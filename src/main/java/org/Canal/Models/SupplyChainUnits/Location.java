@@ -1,10 +1,10 @@
 package org.Canal.Models.SupplyChainUnits;
 
-public class Location {
+import org.Canal.Models.Objex;
 
-    private String id;
+public class Location extends Objex {
+
     private String tie;
-    private String name;
     private String line1;
     private String city;
     private String state;
@@ -13,53 +13,12 @@ public class Location {
     private String status = "Active";
     private boolean taxExempt = false;
 
-    public Location() {}
-
-    public Location(String id, String tie, String name, String line1, String city, String state, String postal, String country, boolean taxExempt) {
-        this.id = id;
-        this.tie = tie;
-        this.name = name;
-        this.line1 = line1;
-        this.city = city;
-        this.state = state;
-        this.postal = postal;
-        this.country = country;
-        this.taxExempt = taxExempt;
-    }
-
-    public Location(String id, String tie, String name, String line1, String city, String state, String postal, String country) {
-        this.id = id;
-        this.tie = tie;
-        this.name = name;
-        this.line1 = line1;
-        this.city = city;
-        this.state = state;
-        this.postal = postal;
-        this.country = country;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getTie() {
         return tie;
     }
 
     public void setTie(String tie) {
         this.tie = tie;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getLine1() {

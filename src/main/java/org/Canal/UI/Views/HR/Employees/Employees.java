@@ -1,16 +1,15 @@
 package org.Canal.UI.Views.HR.Employees;
 
 import org.Canal.Models.HumanResources.Employee;
+import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
-import org.Canal.UI.Elements.Label;
+import org.Canal.UI.Elements.IconButton;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -20,79 +19,79 @@ import java.util.ArrayList;
  */
 public class Employees extends JInternalFrame {
 
-    private DefaultListModel<Employee> listModel;
+    private CustomTable table;
 
     public Employees(DesktopState desktop) {
-        super("Employees", false, true, false, true);
+        super("Employees", true, true, true, true);
         setFrameIcon(new ImageIcon(Employees.class.getResource("/icons/employees.png")));
-        listModel = new DefaultListModel<>();
-        JList<Employee> list = new JList<>(listModel);
-        list.setCellRenderer(new EmployeeRenderer());
-        JScrollPane scrollPane = new JScrollPane(list);
-        scrollPane.setPreferredSize(new Dimension(300, 400));
-        list.addMouseListener(new MouseAdapter() {
+        JPanel tb = createToolBar();
+        JPanel holder = new JPanel(new BorderLayout());
+        table = createTable();
+        JScrollPane tableScrollPane = new JScrollPane(table);
+        holder.add(Elements.header("Employees", SwingConstants.LEFT), BorderLayout.CENTER);
+        holder.add(tb, BorderLayout.SOUTH);
+        setLayout(new BorderLayout());
+        add(holder, BorderLayout.NORTH);
+        add(tableScrollPane, BorderLayout.CENTER);
+        table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    int selectedIndex = list.locationToIndex(e.getPoint());
-                    if (selectedIndex != -1) {
-                        Employee item = listModel.getElementAt(selectedIndex);
-                        desktop.put(Engine.router("/EMPS/" + item.getId(), desktop));
+                if (e.getClickCount() == 2) { // Detect double click
+                    JTable target = (JTable) e.getSource();
+                    int row = target.getSelectedRow(); // Get the clicked row
+                    if (row != -1) {
+                        String value = String.valueOf(target.getValueAt(row, 1));
+                        desktop.put(new EmployeeView(Engine.getEmployee(value)));
                     }
                 }
             }
         });
-        JTextField direct = Elements.input();
-        direct.addKeyListener(new KeyAdapter() {
+    }
+
+    private JPanel createToolBar() {
+        JPanel tb = new JPanel();
+        tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        IconButton export = new IconButton("Export", "export", "Export as CSV", "");
+        IconButton createEmployee = new IconButton("+ Employee", "order", "Create Employee", "/EMPS/NEW");
+        JTextField filterValue = Elements.input("Search", 10);
+        tb.add(export);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(createEmployee);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(filterValue);
+        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
+        export.addMouseListener(new MouseAdapter() {
             @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    String inputText = direct.getText().trim();
-                    if (!inputText.isEmpty()) {
-                        desktop.put(Engine.router("/EMPS/" + inputText, desktop));
-                    }
-                }
+            public void mouseClicked(MouseEvent e) {
+                table.exportToCSV();
             }
         });
-        setLayout(new BorderLayout());
-        add(direct, BorderLayout.NORTH);
-        add(scrollPane, BorderLayout.CENTER);
-        loadFlexes();
+        return tb;
     }
 
-    private void loadFlexes(){
-        ArrayList<Employee> found = Engine.getEmployees();
-        listModel.removeAllElements();
-        for (Employee f : found) {
-            listModel.addElement(f);
+    private CustomTable createTable() {
+        String[] columns = new String[]{
+            "ID", "Org", "Location", "Name",
+            "Supervisor", "Gender", "Line 1",
+            "City", "State", "Postal", "Country", "Status"
+        };
+        ArrayList<Object[]> data = new ArrayList<>();
+        for (Employee employee : Engine.getEmployees()) {
+            data.add(new Object[]{
+                    employee.getId(),
+                    employee.getOrg(),
+                    employee.getLocation(),
+                    employee.getName(),
+                    employee.getSupervisor(),
+                    employee.getGender(),
+                    employee.getLine1(),
+                    employee.getCity(),
+                    employee.getState(),
+                    employee.getPostal(),
+                    employee.getCountry(),
+                    employee.getStatus()
+            });
         }
-    }
-
-    static class EmployeeRenderer extends JPanel implements ListCellRenderer<Employee> {
-
-        private JLabel employeeName;
-        private JLabel employeeId;
-
-        public EmployeeRenderer() {
-            setLayout(new GridLayout(2, 1));
-            employeeName = new Label("", new Color(83, 83, 83));
-            employeeId = new JLabel();
-            add(employeeName);
-            add(employeeId);
-            setBorder(new EmptyBorder(5, 5, 5, 5));
-        }
-
-        @Override
-        public Component getListCellRendererComponent(JList<? extends Employee> list, Employee value, int index, boolean isSelected, boolean cellHasFocus) {
-            employeeName.setText(value.getName());
-            employeeId.setText(value.getId());
-            if (isSelected) {
-                setBackground(UIManager.getColor("Panel.background").darker());
-            } else {
-                setBackground(list.getBackground());
-                setForeground(list.getForeground());
-            }
-            return this;
-        }
+        return new CustomTable(columns, data);
     }
 }
