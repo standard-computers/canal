@@ -5,7 +5,7 @@ import org.Canal.Utils.LockeStatus;
 public class Vendor {
 
     private String id;
-    private String tie;
+    private String organization;
     private String name;
     private String line1;
     private String city;
@@ -17,9 +17,9 @@ public class Vendor {
 
     public Vendor() {}
 
-    public Vendor(String id, String tie, String name, String line1, String city, String state, String postal, String country, boolean taxExempt) {
+    public Vendor(String id, String organization, String name, String line1, String city, String state, String postal, String country, boolean taxExempt) {
         this.id = id;
-        this.tie = tie;
+        this.organization = organization;
         this.name = name;
         this.line1 = line1;
         this.city = city;
@@ -29,9 +29,9 @@ public class Vendor {
         this.taxExempt = taxExempt;
     }
 
-    public Vendor(String id, String tie, String name, String line1, String city, String state, String postal, String country) {
+    public Vendor(String id, String organization, String name, String line1, String city, String state, String postal, String country) {
         this.id = id;
-        this.tie = tie;
+        this.organization = organization;
         this.name = name;
         this.line1 = line1;
         this.city = city;
@@ -48,12 +48,12 @@ public class Vendor {
         this.id = id;
     }
 
-    public String getTie() {
-        return tie;
+    public String getOrganization() {
+        return organization;
     }
 
-    public void setTie(String tie) {
-        this.tie = tie;
+    public void setOrganization(String organization) {
+        this.organization = organization;
     }
 
     public String getName() {

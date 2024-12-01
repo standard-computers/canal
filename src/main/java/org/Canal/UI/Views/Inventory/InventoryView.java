@@ -1,5 +1,6 @@
 package org.Canal.UI.Views.Inventory;
 
+import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.Models.SupplyChainUnits.StockLine;
 import org.Canal.UI.Elements.CustomJTable;
 import org.Canal.UI.Elements.Elements;
@@ -41,15 +42,23 @@ public class InventoryView extends JInternalFrame {
     }
 
     private CustomJTable createTable() {
-        String[] columns = new String[]{"Type", "ID", "Qty", "Area", "Bin", "Receipt"};
+        String[] columns = new String[]{"Location", "Type", "ID", "Name", "Org. Qty.", "Qty.", "Price", "Value", "Area", "Bin", "Receipt", "Status"};
         ArrayList<String[]> prs = new ArrayList<>();
         for (StockLine sl : Engine.getInventory(location).getStockLines()) {
+            Item i = Engine.getItem(sl.getId());
             prs.add(new String[]{
+                    location,
                     sl.getObjex(),
                     sl.getId(),
+                    i.getName(),
                     String.valueOf(sl.getQuantity()),
+                    String.valueOf(sl.getQuantity()),
+                    String.valueOf(i.getPrice()),
+                    String.valueOf(i.getPrice() * sl.getQuantity()),
                     sl.getArea(),
                     sl.getBin(),
+                    sl.getReceipt(),
+                    String.valueOf(sl.getStatus())
             });
         }
         String[][] data = new String[prs.size()][columns.length];

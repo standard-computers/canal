@@ -43,16 +43,13 @@ import org.Canal.UI.Views.HR.Teams.CreateTeam;
 import org.Canal.UI.Views.HR.Teams.ModifyTeam;
 import org.Canal.UI.Views.HR.Teams.Teams;
 import org.Canal.UI.Views.HR.Users.*;
-import org.Canal.UI.Views.Inventory.InventoryView;
+import org.Canal.UI.Views.Inventory.*;
 import org.Canal.UI.Views.Items.*;
 import org.Canal.UI.Views.Materials.FindMaterial;
 import org.Canal.UI.Views.Materials.Materials;
 import org.Canal.UI.Views.Orders.*;
 import org.Canal.UI.Views.Materials.CreateMaterial;
 import org.Canal.UI.Views.Materials.ModifyMaterial;
-import org.Canal.UI.Views.Inventory.CreateSTO;
-import org.Canal.UI.Views.Inventory.InventoryForItem;
-import org.Canal.UI.Views.Inventory.InventoryForMaterial;
 import org.Canal.UI.Views.Invoices.CreateInvoice;
 import org.Canal.UI.Views.Orders.PurchaseOrders.*;
 import org.Canal.UI.Views.Orders.PurchaseRequisitions.AutoMakePurchaseRequisitions;
@@ -206,7 +203,7 @@ public class Engine {
     }
 
     public static List<Vendor> getVendors(String id) {
-        return getVendors().stream().filter(vendor -> vendor.getTie().equals(id)).collect(Collectors.toList());
+        return getVendors().stream().filter(vendor -> vendor.getOrganization().equals(id)).collect(Collectors.toList());
     }
 
     public static Vendor getVendor(String id){
@@ -649,6 +646,9 @@ public class Engine {
             }
             case "/STK" -> {
                 return new InventoryView(desktop, Engine.getOrganization().getId());
+            }
+            case "/STK/MOD/MV" -> {
+                return new MoveStock();
             }
             case "/INVS", "/INVS/NEW" -> {
                 return new CreateInvoice(null);

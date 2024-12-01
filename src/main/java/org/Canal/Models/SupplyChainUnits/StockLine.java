@@ -1,6 +1,7 @@
 package org.Canal.Models.SupplyChainUnits;
 
 import org.Canal.Utils.Constants;
+import org.Canal.Utils.LockeStatus;
 
 public class StockLine {
 
@@ -10,6 +11,7 @@ public class StockLine {
     private String area;
     private String bin;
     private String receipt;
+    private LockeStatus status;
 
     public StockLine(String objex, String id, double quantity, String area, String bin) {
         this.objex = objex;
@@ -18,6 +20,7 @@ public class StockLine {
         this.area = area;
         this.bin = bin;
         this.receipt = Constants.now();
+        this.status = LockeStatus.UNRESTRICTED;
     }
 
     public String getObjex() {
@@ -60,7 +63,19 @@ public class StockLine {
         this.bin = bin;
     }
 
-    public StockLine(String receipt) {
+    public String getReceipt() {
+        return receipt;
+    }
+
+    public void setReceipt(String receipt) {
         this.receipt = receipt;
+    }
+
+    public LockeStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(LockeStatus status) {
+        this.status = status;
     }
 }

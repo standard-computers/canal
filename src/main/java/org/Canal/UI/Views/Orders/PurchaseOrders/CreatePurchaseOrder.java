@@ -171,7 +171,7 @@ public class CreatePurchaseOrder extends JInternalFrame {
         selectBillTo.editable();
         selectShipTo = Selectables.allLocations();
         selectShipTo.editable();
-        selectVendor = Selectables.allLocations();
+        selectVendor = Selectables.vendors();
         selectVendor.editable();
         orderId = new Copiable("OR" + (70000000 + (Engine.getOrders().size() + 1)));
         f.addInput(new Label("*Order ID", Constants.colors[0]), orderId);

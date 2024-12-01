@@ -48,6 +48,6 @@ public class Locke {
 
     @Override
     public String toString() {
-        return name + (Engine.getConfiguration().isShowCanalCodes() ? " – " + transaction : "");
+        return name + (Engine.getConfiguration().showCanalCodes() ? " – " + transaction : "");
     }
 }

@@ -1,6 +1,7 @@
 package org.Canal.UI.Views.Controllers;
 
 import org.Canal.Models.HumanResources.User;
+import org.Canal.UI.Elements.Elements;
 import org.Canal.Utils.*;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -18,9 +19,9 @@ public class Controller extends JPanel implements RefreshListener {
         User me = Engine.getAssignedUser();
         setLayout(new BorderLayout());
         JPanel dataView = new JPanel(new BorderLayout());
-        JTextField cmd = new JTextField("/ORGS/" + Engine.getOrganization().getId());
+        JTextField cmd = Elements.input("/");
         cmd.addActionListener(_ -> {
-            if(!me.hasAccess(cmd.getText())) {
+            if(me != null && !me.hasAccess(cmd.getText())) {
                 JOptionPane.showMessageDialog(this, "Not authorized to use this locke!", "Unauthorized", JOptionPane.ERROR_MESSAGE);
             }else{
                 try{
@@ -52,7 +53,7 @@ public class Controller extends JPanel implements RefreshListener {
                     if (path != null) {
                         DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
                         Locke orgNode = (Locke) node.getUserObject();
-                        if(!me.hasAccess(orgNode.getTransaction())) {
+                        if(me != null && !me.hasAccess(orgNode.getTransaction())) {
                             JOptionPane.showMessageDialog(Controller.this, "Not authorized to use this locke!", "Unauthorized", JOptionPane.ERROR_MESSAGE);
                         }else{
                             desktop.put(Engine.router(orgNode.getTransaction(), desktop));

@@ -12,33 +12,12 @@ public class Configuration {
     private boolean encrypted = false;
     private boolean showCanalCodes = false;
 
-    public Configuration(String endpoint, String instanceName) {
-        this.endpoint = endpoint;
-        this.instance_name = instanceName;
-    }
-
     public String getEndpoint() {
         return endpoint;
     }
 
-    public void setEndpoint(String endpoint) {
-        this.endpoint = endpoint;
-    }
-
     public String getInstance_name() {
         return instance_name;
-    }
-
-    public void setInstance_name(String instance_name) {
-        this.instance_name = instance_name;
-    }
-
-    public String getProduct_key() {
-        return product_key;
-    }
-
-    public void setProduct_key(String product_key) {
-        this.product_key = product_key;
     }
 
     public String getTheme() {
@@ -49,31 +28,11 @@ public class Configuration {
         this.theme = theme;
     }
 
-    public String getDefaultModule() {
-        return defaultModule;
-    }
-
     public void setDefaultModule(String defaultModule) {
         this.defaultModule = defaultModule;
     }
 
-    public int getPort() {
-        return port;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
-    }
-
-    public boolean isEncrypted() {
-        return encrypted;
-    }
-
-    public void setEncrypted(boolean encrypted) {
-        this.encrypted = encrypted;
-    }
-
-    public boolean isShowCanalCodes() {
+    public boolean showCanalCodes() {
         return showCanalCodes;
     }
 

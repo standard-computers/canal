@@ -34,7 +34,7 @@ public class CreatePurchaseRequisition extends JInternalFrame {
         super("Create Purchase Requisition", false, true, false, true);
         setFrameIcon(new ImageIcon(CreatePurchaseRequisition.class.getResource("/icons/create.png")));
         Constants.checkLocke(this, true, true);
-        availableVendors = Selectables.allLocations();
+        availableVendors = Selectables.vendors();
         availableBuyers = Selectables.allLocations();
         JTextField prIdField = Elements.input("PR" + (10000000 + (Engine.realtime.getPurchaseRequisitions().size() + 1)));
         JTextField prNumberField = Elements.input("PR" + (10000000 + (Engine.realtime.getPurchaseRequisitions().size() + 1)));

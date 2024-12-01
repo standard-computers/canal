@@ -44,8 +44,8 @@ public class AutoMakePurchaseOrders extends JInternalFrame {
         JPanel main = new JPanel(new GridLayout(1, 2));
         main.add(scrollPane);
         Form addtlInfo = new Form();
-        addtlInfo.setBorder(new TitledBorder("Addtl. Info"));
-        JTextField maxSpendField = new JTextField(10);
+        addtlInfo.setBorder(new TitledBorder("Additional Info"));
+        JTextField maxSpendField = Elements.input(10);
         JCheckBox isSingleOrder = new JCheckBox("");
         Selectable supplier = Selectables.allLocations();
         supplier.editable();
@@ -64,7 +64,7 @@ public class AutoMakePurchaseOrders extends JInternalFrame {
         description.setBorder(new EmptyBorder(10, 10, 10, 10));
         add(description, BorderLayout.NORTH);
         add(main, BorderLayout.CENTER);
-        Button createPrs = new Button("AutoMake Purchase Reqs.");
+        Button createPrs = new Button("AutoMake");
         createPrs.addActionListener(_ -> {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             for (JCheckBox checkbox : checkboxes) {
@@ -75,7 +75,7 @@ public class AutoMakePurchaseOrders extends JInternalFrame {
                 }
             }
             dispose();
-            JOptionPane.showMessageDialog(null, "AutoMake Purchase Reqs Complete");
+            JOptionPane.showMessageDialog(null, "AutoMake Complete");
         });
         add(createPrs, BorderLayout.SOUTH);
     }

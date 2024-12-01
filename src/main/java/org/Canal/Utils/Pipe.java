@@ -21,13 +21,17 @@ public class Pipe {
     public static void saveConfiguration() {
         File md = new File(Start.WINDOWS_SYSTEM_DIR);
         File[] mdf = md.listFiles();
+        boolean existed = false;
         if (mdf != null) {
             for (File file : mdf) {
                 if (file.getPath().endsWith(".cnl.mfg")) {
+                    existed = true;
                     Json.save(file.getPath(), Engine.getConfiguration());
-                    break;
                 }
             }
+        }
+        if (!existed) {
+            Json.save(Start.WINDOWS_SYSTEM_DIR + UUID.randomUUID() + ".cnl.mfg", Engine.getConfiguration());
         }
     }
 }

@@ -1,6 +1,5 @@
 package org.Canal.UI.Views.Controllers;
 
-import com.formdev.flatlaf.IntelliJTheme;
 import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.CustomJTable;
 import org.Canal.UI.Elements.Elements;
@@ -68,7 +67,7 @@ public class CanalSettings extends JInternalFrame {
         codeSelect = new Selectable(codeoptsMap);
         codeSelect.editable();
         showCanalCodes = new JCheckBox();
-        if(Engine.getConfiguration().isShowCanalCodes()){
+        if(Engine.getConfiguration().showCanalCodes()){
             showCanalCodes.setSelected(true);
         }
         String assignedUser = "NOT_ASSIGNED/SIGN_IN";

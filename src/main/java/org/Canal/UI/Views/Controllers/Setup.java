@@ -6,16 +6,23 @@ import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Windows.Form;
-import org.Canal.UI.Views.HR.Organizations.OrgView;
+import org.Canal.UI.Views.HR.Employees.CreateEmployee;
+import org.Canal.UI.Views.HR.Organizations.CreateOrganization;
+import org.Canal.UI.Views.HR.Users.CreateUser;
+import org.Canal.Utils.Configuration;
 import org.Canal.Utils.Constants;
+import org.Canal.Utils.Engine;
+import org.Canal.Utils.Pipe;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class Setup extends JFrame {
+
+    private Selectable themes;
+    private JCheckBox showCanalCodes;
 
     public Setup(){
         setTitle("Setup Canal");
@@ -34,6 +41,16 @@ public class Setup extends JFrame {
         setVisible(true);
         proceed.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
+                Configuration config = new Configuration();
+                config.setShowCanalCodes(showCanalCodes.isSelected());
+                config.setTheme(themes.getSelectedValue());
+                Engine.setConfiguration(config);
+                Pipe.saveConfiguration();
+                dispose();
+                QuickExplorer q = new QuickExplorer();
+                q.put(new CreateOrganization(q));
+                q.put(new CreateEmployee(q));
+                q.put(new CreateUser());
             }
         });
     }
@@ -42,16 +59,14 @@ public class Setup extends JFrame {
         JPanel panel = new JPanel();
         Form l = new Form();
         JCheckBox isClient = new JCheckBox("If yes, complete 'Server' tab");
-        JCheckBox isNoob = new JCheckBox("Walks through setup, uncheck Client");
         JTextField pkf = new JTextField("A#A#-X#AA-A#A#-AAAA-A#A#-AAAA-A#A#");
-        JCheckBox showCanalCodes = new JCheckBox();
-        Selectable themes = Selectables.themes();
+        showCanalCodes = new JCheckBox();
+        themes = Selectables.themes();
         l.addInput(new Label("Client Install?", Constants.colors[0]), isClient);
-        l.addInput(new Label("New Install?", Constants.colors[1]), isNoob);
-        l.addInput(new Label("From Import?", Constants.colors[2]), Elements.link("Import *.zip",""));
-        l.addInput(new Label("Product Key", Constants.colors[3]), pkf);
-        l.addInput(new Label("Show Canal Codes?", Constants.colors[4]), showCanalCodes);
-        l.addInput(new Label("Theme", Constants.colors[5]), themes);
+        l.addInput(new Label("From Import?", Constants.colors[1]), Elements.link("Import *.zip",""));
+        l.addInput(new Label("Product Key", Constants.colors[2]), pkf);
+        l.addInput(new Label("Show Canal Codes?", Constants.colors[3]), showCanalCodes);
+        l.addInput(new Label("Theme", Constants.colors[4]), themes);
         panel.add(l);
         return panel;
     }

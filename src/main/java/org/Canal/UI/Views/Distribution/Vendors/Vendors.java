@@ -2,14 +2,14 @@ package org.Canal.UI.Views.Distribution.Vendors;
 
 import org.Canal.Models.SupplyChainUnits.Vendor;
 import org.Canal.UI.Elements.Elements;
+import org.Canal.UI.Elements.IconButton;
+import org.Canal.UI.Views.Controllers.CheckboxBarcodeFrame;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -19,96 +19,95 @@ import java.util.ArrayList;
  */
 public class Vendors extends JInternalFrame {
 
-    private DefaultListModel<Vendor> listModel;
+    private JTable table;
+    private DesktopState desktop;
 
     public Vendors(DesktopState desktop) {
-        super("Vendors", false, true, false, true);
+        super("Vendors", true, true, true, true);
+        this.desktop = desktop;
         setFrameIcon(new ImageIcon(Vendors.class.getResource("/icons/vendors.png")));
-        listModel = new DefaultListModel<>();
-        JList<Vendor> list = new JList<>(listModel);
-        list.setCellRenderer(new VendorRenderer());
-        JScrollPane scrollPane = new JScrollPane(list);
-        scrollPane.setPreferredSize(new Dimension(300, 400));
-        list.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    int selectedIndex = list.locationToIndex(e.getPoint());
-                    if (selectedIndex != -1) {
-                        Vendor l = listModel.getElementAt(selectedIndex);
-                        if (l != null) {
-                            desktop.put(Engine.router("/VEND/" + l.getId(), desktop));
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Vendor Not Found");
-                        }
-                    }
-                }
-            }
-        });
-        JTextField direct = Elements.input();
-        direct.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    String inputText = direct.getText().trim();
-                    if (!inputText.isEmpty()) {
-                        desktop.put(Engine.router("/VEND/" + inputText, desktop));
-                    }
-                }
-            }
-        });
+        JPanel tb = createToolBar();
+        JPanel holder = new JPanel(new BorderLayout());
+        table = createTable();
+        JScrollPane tableScrollPane = new JScrollPane(table);
+        holder.add(Elements.header("Vendors", SwingConstants.LEFT), BorderLayout.CENTER);
+        holder.add(tb, BorderLayout.SOUTH);
+        add(holder);
         setLayout(new BorderLayout());
-        add(direct, BorderLayout.NORTH);
-        add(scrollPane, BorderLayout.CENTER);
-        loadLocations();
+        add(holder, BorderLayout.NORTH);
+        add(tableScrollPane, BorderLayout.CENTER);
     }
 
-    private void loadLocations(){
-        ArrayList<Vendor> found = Engine.getVendors();
-        listModel.removeAllElements();
-        for (Vendor loc : found) {
-            listModel.addElement(loc);
-        }
-    }
-
-    static class VendorRenderer extends JPanel implements ListCellRenderer<Vendor> {
-
-        private JLabel vendorName;
-        private JLabel vendorId;
-        private JLabel line1;
-        private JLabel line2;
-
-        public VendorRenderer() {
-            setLayout(new GridLayout(4, 1));
-            vendorName = new JLabel();
-            vendorId = new JLabel();
-            line1 = new JLabel();
-            line2 = new JLabel();
-            vendorName.setFont(new Font("Arial", Font.BOLD, 16));
-            vendorId.setFont(new Font("Arial", Font.PLAIN, 12));
-            line1.setFont(new Font("Arial", Font.PLAIN, 12));
-            line2.setFont(new Font("Arial", Font.PLAIN, 12));
-            add(vendorName);
-            add(vendorId);
-            add(line1);
-            add(line2);
-            setBorder(new EmptyBorder(5, 5, 5, 5));
-        }
-
-        @Override
-        public Component getListCellRendererComponent(JList<? extends Vendor> list, Vendor vendor, int index, boolean isSelected, boolean cellHasFocus) {
-            vendorName.setText(vendor.getName());
-            vendorId.setText(vendor.getId());
-            line1.setText(vendor.getLine1());
-            line2.setText(vendor.getCity() + ", " + vendor.getState() + " " + vendor.getPostal() + " " + vendor.getCountry());
-            if (isSelected) {
-                setBackground(list.getSelectionBackground());
-                setForeground(list.getSelectionForeground());
-            } else {
-                setBackground(list.getBackground());
-                setForeground(list.getForeground());
+    private JPanel createToolBar() {
+        JPanel tb = new JPanel();
+        tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        IconButton export = new IconButton("Export", "export", "Export as CSV");
+        IconButton createVendor = new IconButton("New Vendor", "order", "Create a Vendor");
+        IconButton blockPo = new IconButton("Block", "block", "Block/Pause Vendor, can't be used");
+        IconButton suspendPo = new IconButton("Suspend", "suspend", "Suspend Vendor, can't be used");
+        IconButton activatePO = new IconButton("Start", "start", "Resume/Activate Vendor");
+        IconButton archivePo = new IconButton("Archive", "archive", "Archive Vendor, removes");
+        IconButton label = new IconButton("Barcodes", "label", "Print labels for vendors");
+        JTextField filterValue = Elements.input("Search", 10);
+        tb.add(export);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(createVendor);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(blockPo);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(suspendPo);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(activatePO);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(archivePo);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(label);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(filterValue);
+        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
+        createVendor.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                desktop.put(new CreateVendor(desktop));
             }
-            return this;
+        });
+        label.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                String[] printables = new String[Engine.orderProcessing.getPurchaseOrder().size()];
+                for (int i = 0; i < Engine.orderProcessing.getPurchaseOrder().size(); i++) {
+                    printables[i] = Engine.orderProcessing.getPurchaseOrder().get(i).getOrderId();
+                }
+                new CheckboxBarcodeFrame(printables);
+            }
+        });
+        return tb;
+    }
+
+    private JTable createTable() {
+        String[] columns = new String[]{"ID", "Org", "Name", "Street", "City", "State", "Postal", "Country", "Status", "Tax Exempt"};
+        ArrayList<String[]> pos = new ArrayList<>();
+        for (Vendor v : Engine.getVendors()) {
+            pos.add(new String[]{
+                    v.getId(),
+                    v.getOrganization(),
+                    v.getName(),
+                    v.getLine1(),
+                    v.getCity(),
+                    v.getState(),
+                    v.getPostal(),
+                    v.getCountry(),
+                    String.valueOf(v.getStatus()),
+                    String.valueOf(v.isTaxExempt())
+            });
         }
+        String[][] data = new String[pos.size()][columns.length];
+        for (int i = 0; i < pos.size(); i++) {
+            data[i] = pos.get(i);
+        }
+        JTable table = new JTable(data, columns);
+        table.setCellSelectionEnabled(true);
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        Engine.adjustColumnWidths(table);
+        return table;
     }
 }

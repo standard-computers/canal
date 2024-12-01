@@ -290,6 +290,7 @@ public class Constants {
                         new Locke("Remove Inventory", false, "/STK/MV/DEL", null),
                         new Locke("Adjust Inventory", false, "/STK/MV/ADJ", null),
                         new Locke("Physical Inventory", true, "/STK/PI", null),
+                        new Locke("Physical Inventory Count", true, "/STK/PI_COUNT", null),
                         new Locke("Physical Inventory for Item", false, "/STK/PI/ITS", null),
                         new Locke("Physical Inventory for Material", false, "/STK/PI/MTS", null),
                         new Locke("Physical Inventory for Plant", false, "/STK/PI/PLNT", null),

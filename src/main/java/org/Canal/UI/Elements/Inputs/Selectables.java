@@ -50,6 +50,15 @@ public class Selectables {
         return new Selectable(organizations);
     }
 
+    public static Selectable vendors(){
+        HashMap<String, String> vendors = new HashMap<>();
+        for(Vendor v : Engine.getVendors()){
+            vendors.put(v.getId(), v.getId());
+        }
+        Selectable s =  new Selectable(vendors);
+        s.editable();
+        return s;
+    }
     public static Selectable departments(){
         HashMap<String, String> departments = new HashMap<>();
         for(Department org : Engine.getOrganization().getDepartments()){
