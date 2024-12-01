@@ -1,7 +1,6 @@
 package org.Canal.UI.Views.Finance.Ledgers;
 
 import org.Canal.Models.BusinessUnits.Ledger;
-import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Inputs.DatePicker;
 import org.Canal.UI.Elements.Inputs.Selectable;
@@ -45,7 +44,7 @@ public class CreateLedger extends JInternalFrame {
         f.addInput(new Label("Start Date", Constants.colors[3]), ledgerStartPicker);
         f.addInput(new Label("Close Date", Constants.colors[4]), ledgerEndPicker);
 
-        Button create = new Button("Create");
+        JButton create = Elements.button("Create");
         setLayout(new BorderLayout());
         add(Elements.header("Create Ledger"), BorderLayout.NORTH);
         add(create, BorderLayout.SOUTH);

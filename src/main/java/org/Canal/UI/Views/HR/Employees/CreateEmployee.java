@@ -1,7 +1,6 @@
 package org.Canal.UI.Views.HR.Employees;
 
 import org.Canal.Models.HumanResources.Employee;
-import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Inputs.DatePicker;
 import org.Canal.UI.Elements.Inputs.Selectable;
@@ -72,7 +71,7 @@ public class CreateEmployee extends JInternalFrame {
         add(Elements.header("New Employee", SwingConstants.LEFT));
         add(f2, BorderLayout.EAST);
         add(f, BorderLayout.CENTER);
-        Button cr = new Button("Process");
+        JButton cr = Elements.button("Process");
         add(cr, BorderLayout.SOUTH);
         cr.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {

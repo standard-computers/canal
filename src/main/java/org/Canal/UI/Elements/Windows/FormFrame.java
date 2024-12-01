@@ -1,6 +1,6 @@
 package org.Canal.UI.Elements.Windows;
 
-import org.Canal.UI.Elements.Button;
+import org.Canal.UI.Elements.Elements;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -14,7 +14,7 @@ public class FormFrame extends JInternalFrame {
     private JPanel content;
     private JLabel status;
     private GridBagConstraints gbc;
-    private org.Canal.UI.Elements.Button commit;
+    private JButton commit;
 
     public FormFrame(){
         setLayout(new BorderLayout());
@@ -31,7 +31,7 @@ public class FormFrame extends JInternalFrame {
         add(statusBar, BorderLayout.SOUTH);
         prepContentPane();
         JPanel mc = new JPanel(new BorderLayout());
-        commit = new Button("Commit");
+        commit = Elements.button("Commit");
         commit.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

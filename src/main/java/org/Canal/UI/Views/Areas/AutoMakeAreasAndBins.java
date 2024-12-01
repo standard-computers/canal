@@ -15,7 +15,7 @@ import javax.swing.*;
 public class AutoMakeAreasAndBins extends JInternalFrame {
 
     public AutoMakeAreasAndBins() {
-        super("Area/Bin AutoMake", false, true, false, true);
+        super("AutoMake Areas & Bins", false, true, false, true);
         setFrameIcon(new ImageIcon(AutoMakeAreasAndBins.class.getResource("/icons/automake.png")));
         Selectable locations = Selectables.allLocations();
         Form f = new Form();

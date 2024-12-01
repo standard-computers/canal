@@ -3,7 +3,6 @@ package org.Canal.UI.Views.Orders.PurchaseRequisitions;
 import org.Canal.Models.BusinessUnits.PurchaseRequisition;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.*;
-import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Inputs.Copiable;
 import org.Canal.UI.Elements.Inputs.DatePicker;
 import org.Canal.UI.Elements.Inputs.Selectable;
@@ -44,7 +43,7 @@ public class AutoMakePurchaseRequisitions extends JInternalFrame {
         addtlInfo.setBorder(new TitledBorder("Addtl. Info"));
         JTextField maxSpendField = new JTextField(10);
         JCheckBox isSingleOrder = new JCheckBox("");
-        Selectable supplier = Selectables.allLocations();
+        Selectable supplier = Selectables.vendors();
         supplier.editable();
         DatePicker prStartDateField = new DatePicker();
         DatePicker prEndDateField = new DatePicker();
@@ -61,7 +60,7 @@ public class AutoMakePurchaseRequisitions extends JInternalFrame {
         description.setBorder(new EmptyBorder(10, 10, 10, 10));
         add(description, BorderLayout.NORTH);
         add(main, BorderLayout.CENTER);
-        Button createPrs = new Button("AutoMake Purchase Reqs.");
+        JButton createPrs = Elements.button("AutoMake Purchase Reqs.");
         createPrs.addActionListener(_ -> {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             for (JCheckBox checkbox : checkboxes) {

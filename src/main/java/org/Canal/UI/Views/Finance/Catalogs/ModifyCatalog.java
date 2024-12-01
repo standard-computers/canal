@@ -1,7 +1,6 @@
 package org.Canal.UI.Views.Finance.Catalogs;
 
 import org.Canal.Models.SupplyChainUnits.Catalog;
-import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.Utils.Engine;
 
@@ -27,7 +26,7 @@ public class ModifyCatalog extends JInternalFrame {
         setLayout(new BorderLayout());
         add(Elements.header("/CATS OBJEX EDITOR", SwingConstants.LEFT), BorderLayout.NORTH);
         add(table, BorderLayout.CENTER);
-        org.Canal.UI.Elements.Button save = new Button("Save");
+        JButton save = Elements.button("Save");
         save.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

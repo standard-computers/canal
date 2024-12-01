@@ -1,6 +1,5 @@
 package org.Canal.UI.Views.Transportation.Carriers;
 
-import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Inputs.Copiable;
 import org.Canal.UI.Elements.Inputs.Selectable;
@@ -40,7 +39,7 @@ public class CreateCarrier extends JInternalFrame {
         f.addInput(new Label("Country", Constants.colors[5]), countries);
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);
-        Button make = new Button("Make Carrier");
+        JButton make = Elements.button("Make Carrier");
         add(make, BorderLayout.SOUTH);
     }
 }

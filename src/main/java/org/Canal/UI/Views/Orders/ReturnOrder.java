@@ -1,7 +1,6 @@
 package org.Canal.UI.Views.Orders;
 
 import org.Canal.Models.BusinessUnits.PurchaseOrder;
-import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Windows.Form;
@@ -39,7 +38,7 @@ public class ReturnOrder extends JInternalFrame {
         f.addInput(new Label("Putaway Area", Constants.colors[3]), availablePutaway);
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);
-        Button receive = new Button("Receive Order");
+        JButton receive = Elements.button("Receive Order");
         receive.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 String po = poField.getText();

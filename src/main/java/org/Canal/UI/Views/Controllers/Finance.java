@@ -1,6 +1,6 @@
 package org.Canal.UI.Views.Controllers;
 
-import org.Canal.UI.Elements.Button;
+import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Views.Orders.PurchaseRequisitions.PurchaseRequisitions;
 import org.Canal.UI.Views.Orders.PurchaseOrders.CreatePurchaseOrder;
 import org.Canal.UI.Views.Orders.PurchaseRequisitions.CreatePurchaseRequisition;
@@ -22,8 +22,8 @@ public class Finance extends JInternalFrame {
         JPanel main = new JPanel(new GridLayout(1, 3));
         JPanel demand = new JPanel(new GridLayout(2, 1));
         demand.setBorder(new TitledBorder("Demand"));
-        Button newPurReg = new Button("New Purchase Req");
-        Button purReg = new Button("Purchase Reqs");
+        JButton newPurReg = Elements.button("New Purchase Req");
+        JButton purReg = Elements.button("Purchase Reqs");
         demand.add(newPurReg);
         demand.add(purReg);
         newPurReg.addMouseListener(new MouseAdapter() {
@@ -39,10 +39,10 @@ public class Finance extends JInternalFrame {
 
         JPanel planning = new JPanel(new GridLayout(4, 1));
         planning.setBorder(new TitledBorder("Planning"));
-        Button newPurOrd = new Button("New Purchase Order");
-        Button purOrd = new Button("Purchase Orders");
-        Button goodsReceipts = new Button("Goods Receipts");
-        Button goodsIssues = new Button("Goods Issues");
+        JButton newPurOrd = Elements.button("New Purchase Order");
+        JButton purOrd = Elements.button("Purchase Orders");
+        JButton goodsReceipts = Elements.button("Goods Receipts");
+        JButton goodsIssues = Elements.button("Goods Issues");
         planning.add(newPurOrd);
         planning.add(purOrd);
         planning.add(goodsReceipts);
@@ -60,13 +60,13 @@ public class Finance extends JInternalFrame {
 
         JPanel reporting = new JPanel(new GridLayout(8, 1));
         reporting.setBorder(new TitledBorder("Reporting"));
-        Button assetsReporting = new Button("Assets");
-        Button liabilitiesReporting = new Button("Liabilities");
-        Button equityReporting = new Button("Equity");
-        Button revenueReporting = new Button("Revenue");
-        Button cogsReporting = new Button("COGS");
-        Button operatingExpensesReporting =  new Button("Operating Expenses");
-        Button balanceReporting = new Button(" PnL/Balance");
+        JButton assetsReporting = Elements.button("Assets");
+        JButton liabilitiesReporting = Elements.button("Liabilities");
+        JButton equityReporting = Elements.button("Equity");
+        JButton revenueReporting = Elements.button("Revenue");
+        JButton cogsReporting = Elements.button("COGS");
+        JButton operatingExpensesReporting =  Elements.button("Operating Expenses");
+        JButton balanceReporting = Elements.button(" PnL/Balance");
         reporting.add(assetsReporting);
         reporting.add(liabilitiesReporting);
         reporting.add(equityReporting);

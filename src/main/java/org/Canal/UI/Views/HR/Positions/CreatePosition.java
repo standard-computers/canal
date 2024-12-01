@@ -1,6 +1,5 @@
 package org.Canal.UI.Views.HR.Positions;
 
-import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
@@ -36,7 +35,7 @@ public class CreatePosition extends JInternalFrame {
         f.addInput(new Label("Compensation", UIManager.getColor("Label.foreground")), compensationField);
         f.addInput(new Label("Comp. Class", UIManager.getColor("Label.foreground")), countries);
         f.addInput(new Label("Auto Post", UIManager.getColor("Label.foreground")), autoPost);
-        Button make = new Button("Create Position");
+        JButton make = Elements.button("Create Position");
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);
         add(make, BorderLayout.SOUTH);

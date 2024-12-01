@@ -6,7 +6,6 @@ import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.Models.SupplyChainUnits.Vendor;
-import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Views.Areas.AutoMakeAreasAndBins;
@@ -113,7 +112,7 @@ public class DCView extends JInternalFrame implements RefreshListener {
             taskPanel.add(primaryLabel);
             taskPanel.add(secondaryLabel);
             taskPanel.add(tertiaryLabel);
-            Button openButton = new Button(taskInfo[3]);
+            JButton openButton = Elements.button(taskInfo[3]);
             openButton.addMouseListener(new MouseAdapter() {
                public void mouseClicked(MouseEvent e) {
                    ReceiveOrder ro = new ReceiveOrder(distributionCenter.getId(), desktop);
@@ -139,20 +138,14 @@ public class DCView extends JInternalFrame implements RefreshListener {
     private JPanel createToolBar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-        IconButton order = new IconButton("Order", "create", "Order from a vendor");
-        IconButton payBill = new IconButton("Pay Bill", "bill", "Receiving a bill from a vendor");
-        IconButton inventory = new IconButton("Inventory", "inventory", "Inventory of items in cost center");
+        IconButton order = new IconButton("Order", "create", "Order from a vendor", "/ORDS/NEW");
+        IconButton payBill = new IconButton("Pay Bill", "bill", "Receiving a bill from a vendor", "/FI/PYMNTS");
+        IconButton inventory = new IconButton("Inventory", "inventory", "Inventory of items in cost center", "/STK");
         IconButton receive = new IconButton("Receive", "receive", "Receive an Inbound Delivery");
         IconButton areas = new IconButton("+ Areas", "areas", "Add an area cost center");
         IconButton addBin = new IconButton("+ Bin", "bins", "Add an area cost center");
         IconButton autoMake = new IconButton("AutoMake Areas/Bins", "automake", "Make areas and bins from templates");
         IconButton label = new IconButton("", "label", "Print labels for properties");
-        order.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                desktop.put(new CreatePurchaseOrder());
-            }
-        });
         inventory.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 desktop.put(new InventoryView(desktop, distributionCenter.getId()));

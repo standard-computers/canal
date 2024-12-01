@@ -1,14 +1,15 @@
 package org.Canal.UI.Views.Finance.CostCenters;
 
 import org.Canal.Models.SupplyChainUnits.Location;
+import org.Canal.UI.Elements.CustomTable;
+import org.Canal.UI.Elements.Elements;
+import org.Canal.UI.Elements.IconButton;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -18,96 +19,62 @@ import java.util.ArrayList;
  */
 public class CostCenters extends JInternalFrame {
 
-    private DefaultListModel<Location> listModel;
+    private CustomTable table;
+    private DesktopState desktop;
 
     public CostCenters(DesktopState desktop) {
-        super("Cost Centers", false, true, false, true);
-        setFrameIcon(new ImageIcon(CostCenters.class.getResource("/icons/distribution_centers.png")));
-        listModel = new DefaultListModel<>();
-        JList<Location> list = new JList<>(listModel);
-        list.setCellRenderer(new CostCenterRenderer());
-        JScrollPane scrollPane = new JScrollPane(list);
-        scrollPane.setPreferredSize(new Dimension(300, 400));
-        list.addMouseListener(new MouseAdapter() {
+        super("Cost Centers", true, true, true, true);
+        this.desktop = desktop;
+        setFrameIcon(new ImageIcon(CostCenters.class.getResource("/icons/cost_centers.png")));
+        JPanel tb = createToolBar();
+        JPanel holder = new JPanel(new BorderLayout());
+        table = createTable();
+        JScrollPane tableScrollPane = new JScrollPane(table);
+        holder.add(Elements.header("Cost Centers", SwingConstants.LEFT), BorderLayout.CENTER);
+        holder.add(tb, BorderLayout.SOUTH);
+        setLayout(new BorderLayout());
+        add(holder, BorderLayout.NORTH);
+        add(tableScrollPane, BorderLayout.CENTER);
+    }
+
+    private JPanel createToolBar() {
+        JPanel tb = new JPanel();
+        tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        IconButton export = new IconButton("Export", "export", "Export as CSV", "");
+        IconButton createVendor = new IconButton("New Cost Center", "order", "Create a Vendor", "/VEND/NEW");
+        JTextField filterValue = Elements.input("Search", 10);
+        tb.add(export);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(createVendor);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(filterValue);
+        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
+        export.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    int selectedIndex = list.locationToIndex(e.getPoint());
-                    if (selectedIndex != -1) {
-                        Location l = listModel.getElementAt(selectedIndex);
-                        if (l != null) {
-                            desktop.put(Engine.router("/CCS/" + l.getId(), desktop));
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Location Not Found");
-                        }
-                    }
-                }
+                table.exportToCSV();
             }
         });
-        JTextField direct = new JTextField();
-        direct.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    String inputText = direct.getText().trim();
-                    if (!inputText.isEmpty()) {
-                        desktop.put(Engine.router("/CCS/" + inputText, desktop));
-                    }
-                }
-            }
-        });
-        setLayout(new BorderLayout());
-        add(direct, BorderLayout.NORTH);
-        add(scrollPane, BorderLayout.CENTER);
-        loadLocations();
+        return tb;
     }
 
-    private void loadLocations(){
-        listModel.removeAllElements();
-        ArrayList<Location> found = Engine.getCostCenters();
-        for (Location loc : found) {
-            listModel.addElement(loc);
+    private CustomTable createTable() {
+        String[] columns = new String[]{"ID", "Org", "Name", "Street", "City", "State", "Postal", "Country", "Status", "Tax Exempt"};
+        ArrayList<Object[]> data = new ArrayList<>();
+        for (Location location : Engine.getCostCenters()) {
+            data.add(new Object[]{
+                    location.getId(),
+                    location.getTie(),
+                    location.getName(),
+                    location.getLine1(),
+                    location.getCity(),
+                    location.getState(),
+                    location.getPostal(),
+                    location.getCountry(),
+                    location.getStatus(),
+                    location.isTaxExempt()
+            });
         }
-    }
-
-    static class CostCenterRenderer extends JPanel implements ListCellRenderer<Location> {
-
-        private JLabel ccName;
-        private JLabel ccId;
-        private JLabel line1;
-        private JLabel line2;
-
-        public CostCenterRenderer() {
-            setLayout(new GridLayout(4, 1));
-            ccName = new JLabel();
-            ccId = new JLabel();
-            line1 = new JLabel();
-            line2 = new JLabel();
-            ccName.setFont(new Font("Arial", Font.BOLD, 16));
-            ccId.setFont(new Font("Arial", Font.PLAIN, 12));
-            line1.setFont(new Font("Arial", Font.PLAIN, 12));
-            line2.setFont(new Font("Arial", Font.PLAIN, 12));
-            add(ccName);
-            add(ccId);
-            add(line1);
-            add(line2);
-            setBorder(new EmptyBorder(5, 5, 5, 5));
-        }
-
-        @Override
-        public Component getListCellRendererComponent(JList<? extends Location> list, Location value, int index, boolean isSelected, boolean cellHasFocus) {
-            ccName.setText(value.getName());
-            ccId.setText(value.getId());
-            line1.setText(value.getLine1());
-            line2.setText(value.getCity() + ", " + value.getState() + " " + value.getPostal() + " " + value.getCountry());
-            if (isSelected) {
-                setBackground(list.getSelectionBackground());
-                setForeground(list.getSelectionForeground());
-            } else {
-                setBackground(list.getBackground());
-                setForeground(list.getForeground());
-            }
-            return this;
-        }
+        return new CustomTable(columns, data);
     }
 }

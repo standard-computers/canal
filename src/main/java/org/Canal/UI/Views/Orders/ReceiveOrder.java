@@ -8,7 +8,6 @@ import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.Models.SupplyChainUnits.Bin;
 import org.Canal.Models.SupplyChainUnits.StockLine;
 import org.Canal.UI.Elements.*;
-import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Inputs.Copiable;
 import org.Canal.UI.Elements.Inputs.DatePicker;
 import org.Canal.UI.Elements.Inputs.Selectables;
@@ -38,7 +37,7 @@ public class ReceiveOrder extends JInternalFrame {
     private JTextField poField;
     private Selectable availRcvLocations, availablePutawayBin;
     private HashMap<String, String> putawayBinOptions;
-    private CustomJTable receivedItems;
+    private CustomTable receivedItems;
 
     public ReceiveOrder(String receivingLocation, DesktopState desktop){
         super("Receive Order", false, true, false, true);
@@ -58,8 +57,8 @@ public class ReceiveOrder extends JInternalFrame {
             JOptionPane.showMessageDialog(null, "Must establish an Area here!");
         }
         JPanel itemInput = new JPanel();
-        String[][] data = new String[][]{};
-        receivedItems = new CustomJTable(data, new String[]{"Item Id", "Item", "Exp. Qty.", "Rcvd. Qty."});
+        ArrayList<Object[]> data = new ArrayList<>();
+        receivedItems = new CustomTable(new String[]{"Item Id", "Item", "Exp. Qty.", "Rcvd. Qty."}, data);
         JScrollPane p = new JScrollPane(receivedItems);
         Copiable expDelivery = new Copiable("");
         itemInput.add(p);
@@ -81,17 +80,19 @@ public class ReceiveOrder extends JInternalFrame {
                 String poId = poField.getText();
                 PurchaseOrder foundPo = Engine.orderProcessing.getPurchaseOrder(poId);
                 if(foundPo != null){
-                    String[][] rcvData = new String[foundPo.getItems().size()][4];
+                    ArrayList<Object[]> its = new ArrayList<>();
                     ArrayList<OrderLineItem> items = foundPo.getItems();
                     expDelivery.setText(foundPo.getExpectedDelivery());
                     for (int i = 0; i < items.size(); i++) {
                         OrderLineItem oli = items.get(i);
-                        rcvData[i][0] = oli.getId();
-                        rcvData[i][1] = oli.getName();
-                        rcvData[i][2] = String.valueOf(oli.getQuantity());
-                        rcvData[i][3] = String.valueOf(oli.getQuantity());
+                        its.add(new String[]{
+                                oli.getId(),
+                                oli.getName(),
+                                String.valueOf(oli.getQuantity()),
+                                String.valueOf(oli.getQuantity())
+                        });
                     }
-                    receivedItems.setRowData(rcvData);
+                    receivedItems.setRowData(its);
                 }
             }
         });
@@ -124,7 +125,7 @@ public class ReceiveOrder extends JInternalFrame {
         heading.add(f, BorderLayout.CENTER);
         add(heading, BorderLayout.NORTH);
 
-        Button receive = new Button("Receive");
+        JButton receive = Elements.button("Receive");
         JPanel receivePanel = new JPanel();
         JLabel userId = new JLabel(Engine.getEmployee(Engine.getAssignedUser().getEmployee()).getName() + "/" + Engine.getAssignedUser().getId());
         userId.setBackground(Color.lightGray);

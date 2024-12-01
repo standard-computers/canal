@@ -1,6 +1,6 @@
 package org.Canal.UI.Views.Productivity.Tasks;
 
-import org.Canal.UI.Elements.Button;
+import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Windows.Form;
 
 import javax.swing.*;
@@ -17,7 +17,7 @@ public class CreateTask extends JInternalFrame {
 
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);
-        Button create = new Button("Create Task");
+        JButton create = Elements.button("Create Task");
         add(create, BorderLayout.SOUTH);
     }
 }

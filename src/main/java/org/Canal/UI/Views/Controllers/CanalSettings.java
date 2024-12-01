@@ -1,7 +1,5 @@
 package org.Canal.UI.Views.Controllers;
 
-import org.Canal.UI.Elements.Button;
-import org.Canal.UI.Elements.CustomJTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Inputs.Copiable;
 import org.Canal.UI.Elements.Inputs.Selectable;
@@ -31,7 +29,7 @@ public class CanalSettings extends JInternalFrame {
         super("Canal Settings", false, true, false, false);
         setFrameIcon(new ImageIcon(CanalSettings.class.getResource("/icons/settings.png")));
 
-        Button cr = new Button("Save");
+        JButton cr = Elements.button("Save");
         cr.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -80,7 +78,7 @@ public class CanalSettings extends JInternalFrame {
         f.addInput(new Label("Font Size", Constants.colors[10]), Elements.input("12", 5));
         f.addInput(new Label("Theme", Constants.colors[9]), themeOptions);
         f.addInput(new Label("Launch Module(s)", Constants.colors[8]), codeSelect);
-        f.addInput(new Label("Background", Constants.colors[7]), new Button("Choose File"));
+        f.addInput(new Label("Background", Constants.colors[7]), Elements.button("Choose File"));
         f.addInput(new Label("Show Canal Codes", Constants.colors[6]), showCanalCodes);
         return f;
     }
@@ -88,7 +86,7 @@ public class CanalSettings extends JInternalFrame {
     private JPanel instanceVars(){
         JPanel panel = new JPanel();
         String[][] data = new String[][]{};
-        CustomJTable table = new CustomJTable(data, new String[]{"Var.", "Value"});add(table);
+//        CustomTable table = new CustomTable(data, new String[]{"Var.", "Value"});add(table);
         return panel;
     }
 }

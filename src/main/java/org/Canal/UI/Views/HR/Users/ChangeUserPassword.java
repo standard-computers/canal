@@ -1,10 +1,9 @@
 package org.Canal.UI.Views.HR.Users;
 
-import org.Canal.UI.Elements.Button;
+import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Inputs.Copiable;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Windows.Form;
-import org.Canal.UI.Views.Controllers.Login;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;
@@ -35,7 +34,7 @@ public class ChangeUserPassword extends JInternalFrame {
         f.addInput(new Label("Current Password", UIManager.getColor("Label.foreground")), currentPasswordField);
         f.addInput(new Label("New Password", UIManager.getColor("Label.foreground")), newPasswordField);
         f.addInput(new Label("Repeat New Password", UIManager.getColor("Label.foreground")), repeatNewPasswordField);
-        Button updateUserPassword = new Button("Update Password");
+        JButton updateUserPassword = Elements.button("Update Password");
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);
         add(updateUserPassword, BorderLayout.SOUTH);

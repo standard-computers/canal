@@ -103,6 +103,25 @@ public class Elements {
         return link;
     }
 
+    public static JButton button(String text) {
+        JButton b = new JButton(text);
+        b.setFont(new Font(UIManager.getFont("Label.font").getName(), Font.PLAIN, 14));
+        b.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        b.setPreferredSize(new Dimension(190, 35));
+        b.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                b.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Change cursor on hover
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                b.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); // Reset cursor when not hovering
+            }
+        });
+        return b;
+    }
+
     /**
      * Center GUI header for Windows
      * @param text Header Text

@@ -1,6 +1,6 @@
 package org.Canal.UI.Views.HR.Employees;
 
-import org.Canal.UI.Elements.Button;
+import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Views.Controllers.Controller;
@@ -28,7 +28,7 @@ public class FindEmployee extends JInternalFrame {
         f.addInput(new Label("Hit Limit", UIManager.getColor("Label.foreground")), empFindLimit);
         JPanel main = new JPanel(new BorderLayout());
         main.add(f, BorderLayout.CENTER);
-        Button find = new Button("Find");
+        JButton find = Elements.button("Find");
         main.add(find, BorderLayout.SOUTH);
         find.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {

@@ -1,6 +1,5 @@
 package org.Canal.UI.Views.Items;
 
-import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.UOMField;
@@ -21,7 +20,7 @@ public class CreateInclusion extends JInternalFrame {
         f.addInput(new Label("Usage", Constants.colors[8]), usage);
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);
-        Button create = new Button("Include");
+        JButton create = Elements.button("Include");
         add(create, BorderLayout.SOUTH);
     }
 }

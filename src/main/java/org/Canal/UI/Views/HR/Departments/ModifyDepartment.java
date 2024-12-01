@@ -1,6 +1,5 @@
 package org.Canal.UI.Views.HR.Departments;
 
-import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.Utils.Engine;
 
@@ -22,7 +21,7 @@ public class ModifyDepartment extends JInternalFrame {
         setLayout(new BorderLayout());
         add(Elements.header("/DPTS OBJEX EDITOR", SwingConstants.LEFT), BorderLayout.NORTH);
         add(table, BorderLayout.CENTER);
-        Button save = new Button("Save");
+        JButton save = Elements.button("Save");
         save.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

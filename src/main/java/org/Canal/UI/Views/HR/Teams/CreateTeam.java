@@ -1,6 +1,5 @@
 package org.Canal.UI.Views.HR.Teams;
 
-import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
@@ -31,7 +30,7 @@ public class CreateTeam extends JInternalFrame {
         f.addInput(new Label("Leader", Constants.colors[8]), leaders);
 
         add(f, BorderLayout.CENTER);
-        Button make = new Button("Make Team");
+        JButton make = Elements.button("Make Team");
         add(make, BorderLayout.SOUTH);
         make.addMouseListener(new MouseAdapter() {
             @Override

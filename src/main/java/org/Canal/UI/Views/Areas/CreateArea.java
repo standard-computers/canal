@@ -1,7 +1,6 @@
 package org.Canal.UI.Views.Areas;
 
 import org.Canal.Models.SupplyChainUnits.Area;
-import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
@@ -51,8 +50,8 @@ public class CreateArea extends JInternalFrame {
         f.addInput(new Label("Area", Constants.colors[6]), areaField);
         f.addInput(new Label("Volume", Constants.colors[6]), volumeField);
 
-        Button addBins = new Button("Add Bins");
-        Button make = new Button("Make");
+        JButton addBins = Elements.button("Add Bins");
+        JButton make = Elements.button("Make");
         JPanel areaOptions = new JPanel();
         areaOptions.add(addBins);
         areaOptions.add(make);

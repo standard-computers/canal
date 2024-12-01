@@ -14,6 +14,7 @@ import java.io.File;
 public class Start {
 
     public static String WINDOWS_SYSTEM_DIR = System.getenv("APPDATA") + "\\Canal\\";
+    public static QuickExplorer q;
 
     public static void main(String[] args) {
         try {
@@ -49,7 +50,7 @@ public class Start {
                         if(Engine.getConfiguration().getAssignedUser() != null){
                             Engine.assignUser(Engine.getUser(Engine.getConfiguration().getAssignedUser()));
                         }
-                        new QuickExplorer();
+                        q = new QuickExplorer();
                     }
                 }
                 if(!hasConfiguration) {

@@ -1,6 +1,6 @@
 package org.Canal.UI.Views.Controllers;
 
-import org.Canal.UI.Elements.Button;
+import org.Canal.Start;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
@@ -33,7 +33,7 @@ public class Setup extends JFrame {
         settings.add(configurationVariables(), "Configuration");
         setLayout(new BorderLayout());
         add(settings, BorderLayout.CENTER);
-        Button proceed = new Button("Begin");
+        JButton proceed = Elements.button("Begin");
         add(proceed, BorderLayout.SOUTH);
         setResizable(false);
         pack();
@@ -51,6 +51,7 @@ public class Setup extends JFrame {
                 q.put(new CreateOrganization(q));
                 q.put(new CreateEmployee(q));
                 q.put(new CreateUser());
+                Start.q = q;
             }
         });
     }

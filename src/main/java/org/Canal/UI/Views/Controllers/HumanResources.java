@@ -1,6 +1,5 @@
 package org.Canal.UI.Views.Controllers;
 
-import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Views.HR.Departments.CreateDepartment;
 import org.Canal.UI.Views.HR.Departments.Departments;
@@ -36,7 +35,7 @@ public class HumanResources extends JInternalFrame {
 
         JPanel positionOptions = new JPanel();
         positionOptions.setBorder(new EmptyBorder(5, 5, 5, 5));
-        Button openPositions = new Button("Open Positions");
+        JButton openPositions = Elements.button("Open Positions");
         openPositions.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -44,7 +43,7 @@ public class HumanResources extends JInternalFrame {
             }
         });
         positionOptions.add(openPositions);
-        Button createPosition = new Button("Create Positions");
+        JButton createPosition = Elements.button("Create Positions");
         createPosition.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -56,7 +55,7 @@ public class HumanResources extends JInternalFrame {
 
         JPanel departmentOptions = new JPanel(new GridLayout(2, 2, 5, 5));
         departmentOptions.setBorder(new EmptyBorder(5, 5, 5, 5));
-        Button viewDepartments = new Button("View Departments");
+        JButton viewDepartments = Elements.button("View Departments");
         viewDepartments.addMouseListener(new MouseAdapter() {
            @Override
            public void mouseClicked(MouseEvent e) {
@@ -64,7 +63,7 @@ public class HumanResources extends JInternalFrame {
            }
         });
         departmentOptions.add(viewDepartments);
-        Button createDepartment = new Button("Create Department");
+        JButton createDepartment = Elements.button("Create Department");
         createDepartment.addMouseListener(new MouseAdapter() {
            @Override
            public void mouseClicked(MouseEvent e) {
@@ -72,7 +71,7 @@ public class HumanResources extends JInternalFrame {
            }
         });
         departmentOptions.add(createDepartment);
-        Button findDepartment = new Button("Find Department");
+        JButton findDepartment = Elements.button("Find Department");
         findDepartment.addMouseListener(new MouseAdapter() {
            @Override
            public void mouseClicked(MouseEvent e) {
@@ -84,7 +83,7 @@ public class HumanResources extends JInternalFrame {
 
         JPanel userOptions = new JPanel(new GridLayout(2, 2, 5, 5));
         userOptions.setBorder(new EmptyBorder(5, 5, 5, 5));
-        Button createUser = new Button("Create User");
+        JButton createUser = Elements.button("Create User");
         userOptions.add(createUser);
         createUser.addMouseListener(new MouseAdapter() {
             @Override
@@ -92,7 +91,7 @@ public class HumanResources extends JInternalFrame {
                 desktop.put(new CreateUser());
             }
         });
-        Button resetPassword = new Button("Reset Password");
+        JButton resetPassword = Elements.button("Reset Password");
         resetPassword.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -111,7 +110,7 @@ public class HumanResources extends JInternalFrame {
         JPanel p = new JPanel(new GridLayout(2, 1));
         JPanel employeeOptions = new JPanel(new GridLayout(2, 2, 5, 5));
         employeeOptions.setBorder(new EmptyBorder(5, 5, 5, 5));
-        Button viewEmployees = new Button("View Employees");
+        JButton viewEmployees = Elements.button("View Employees");
         viewEmployees.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -119,7 +118,7 @@ public class HumanResources extends JInternalFrame {
             }
         });
         employeeOptions.add(viewEmployees);
-        Button createEmployee = new Button("Create Employee");
+        JButton createEmployee = Elements.button("Create Employee");
         createEmployee.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -127,7 +126,7 @@ public class HumanResources extends JInternalFrame {
             }
         });
         employeeOptions.add(createEmployee);
-        Button findEmployee = new Button("Find Employee");
+        JButton findEmployee = Elements.button("Find Employee");
         findEmployee.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

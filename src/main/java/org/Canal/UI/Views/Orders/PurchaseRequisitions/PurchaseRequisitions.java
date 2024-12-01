@@ -2,7 +2,7 @@ package org.Canal.UI.Views.Orders.PurchaseRequisitions;
 
 import org.Canal.Models.BusinessUnits.PurchaseOrder;
 import org.Canal.Models.BusinessUnits.PurchaseRequisition;
-import org.Canal.UI.Elements.CustomJTable;
+import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Views.Controllers.CheckboxBarcodeFrame;
@@ -21,7 +21,7 @@ import java.util.ArrayList;
  */
 public class PurchaseRequisitions extends JInternalFrame {
 
-    private CustomJTable table;
+    private CustomTable table;
     private DesktopState desktop;
 
     public PurchaseRequisitions(DesktopState desktop) {
@@ -39,9 +39,9 @@ public class PurchaseRequisitions extends JInternalFrame {
         add(tableScrollPane, BorderLayout.CENTER);
     }
 
-    private CustomJTable createTable() {
+    private CustomTable createTable() {
         String[] columns = new String[]{"ID", "Created", "Name", "Owner", "Number", "Supplier", "Buyer", "Max Spend", "Consumption", "Remaining", "Single Ord?", "Valid From", "Valid To", "Status"};
-        ArrayList<String[]> prs = new ArrayList<>();
+        ArrayList<Object[]> prs = new ArrayList<>();
         for (PurchaseRequisition pr : Engine.realtime.getPurchaseRequisitions()) {
             double consumption = 0;
             for(PurchaseOrder po : Engine.getOrders()){
@@ -67,16 +67,7 @@ public class PurchaseRequisitions extends JInternalFrame {
                     String.valueOf(pr.getStatus())
             });
         }
-        String[][] data = new String[prs.size()][columns.length];
-        for (int i = 0; i < prs.size(); i++) {
-            data[i] = prs.get(i);
-        }
-        CustomJTable table = new CustomJTable(data, columns); // Use CustomJTable
-        table.setCellSelectionEnabled(true);
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        Engine.adjustColumnWidths(table);
-        return table;
+        return new CustomTable(columns, prs);
     }
 
     private JPanel createToolBar() {

@@ -5,7 +5,6 @@ import org.Canal.Models.BusinessUnits.PurchaseOrder;
 import org.Canal.Models.BusinessUnits.PurchaseRequisition;
 import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.UI.Elements.*;
-import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Inputs.Copiable;
 import org.Canal.UI.Elements.Inputs.DatePicker;
 import org.Canal.UI.Elements.Inputs.Selectable;
@@ -105,7 +104,7 @@ public class CreatePurchaseOrder extends JInternalFrame {
         buttonPanel.add(removeButton);
         buttonPanel.add(addButton);
         orderInfo.add(buttonPanel, BorderLayout.SOUTH);
-        Button save = new Button("Submit Order");
+        JButton save = Elements.button("Submit Order");
         JPanel orderSummary = new JPanel(new BorderLayout());
         JPanel genSummary = orderSummary();
         orderSummary.add(genSummary, BorderLayout.CENTER);

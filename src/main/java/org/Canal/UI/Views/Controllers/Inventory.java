@@ -1,6 +1,6 @@
 package org.Canal.UI.Views.Controllers;
 
-import org.Canal.UI.Elements.Button;
+import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
@@ -31,10 +31,10 @@ public class Inventory extends JInternalFrame {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as XLSX");
-        Button performSTO = new Button("Stock Transfer Order");
-        Button stockCheck = new Button("Stock Check");
-        Button blockImc = new Button("Block Stock");
-        Button physicalInventory = new Button("Conduct PI");
+        JButton performSTO = Elements.button("Stock Transfer Order");
+        JButton stockCheck = Elements.button("Stock Check");
+        JButton blockImc = Elements.button("Block Stock");
+        JButton physicalInventory = Elements.button("Conduct PI");
         blockImc.setToolTipText("Block Item, Material, Component");
         HashMap<String, String> types = new HashMap<>();
         types.put("All", "/");

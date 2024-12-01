@@ -3,7 +3,6 @@ package org.Canal.UI.Views.HR.Users;
 import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.HumanResources.User;
 import org.Canal.UI.Elements.*;
-import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Inputs.Copiable;
 import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
@@ -82,7 +81,7 @@ public class CreateUser extends JInternalFrame {
             }
         });
         f.addInput(Elements.label("Paste Access"), pastAccess);
-        Button make = new Button("Create User");
+        JButton make = Elements.button("Create User");
         canalAccess = prepareAccesses();
         JPanel again = new JPanel(new BorderLayout());
         again.add(f, BorderLayout.NORTH);
@@ -91,8 +90,8 @@ public class CreateUser extends JInternalFrame {
         scrollPane.setPreferredSize(new Dimension(400, 300));
         again.add(scrollPane, BorderLayout.CENTER);
         JPanel ctrls = new JPanel(new GridLayout(1, 2));
-        Button sa = new Button("Select All");
-        Button dsa = new Button("Deselect All");
+        JButton sa = Elements.button("Select All");
+        JButton dsa = Elements.button("Deselect All");
         ctrls.add(sa);
         ctrls.add(dsa);
         again.add(ctrls, BorderLayout.SOUTH);

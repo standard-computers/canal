@@ -1,6 +1,5 @@
 package org.Canal.UI.Views.Transportation.OutboundDeliveryOrders;
 
-import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Windows.Form;
@@ -26,9 +25,9 @@ public class RemoveOutboundDeliveryOrder extends JInternalFrame {
 
         add(f, BorderLayout.CENTER);
         JPanel options = new JPanel(new GridLayout(1, 2));
-        Button confirm = new Button("Confirm");
+        JButton confirm = Elements.button("Confirm");
         confirm.setForeground(Color.RED);
-        Button cancel = new Button("Cancel");
+        JButton cancel = Elements.button("Cancel");
         options.add(confirm);
         options.add(cancel);
         cancel.addMouseListener(new MouseAdapter() {

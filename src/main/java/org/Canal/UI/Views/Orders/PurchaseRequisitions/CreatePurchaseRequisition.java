@@ -1,7 +1,6 @@
 package org.Canal.UI.Views.Orders.PurchaseRequisitions;
 
 import org.Canal.Models.BusinessUnits.PurchaseRequisition;
-import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Inputs.Copiable;
 import org.Canal.UI.Elements.Inputs.DatePicker;
@@ -68,7 +67,7 @@ public class CreatePurchaseRequisition extends JInternalFrame {
         });
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);
-        Button make = new Button("Commit Purchase Requisition");
+        JButton make = Elements.button("Commit Purchase Requisition");
         add(make, BorderLayout.SOUTH);
         make.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {

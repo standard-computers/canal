@@ -1,7 +1,6 @@
 package org.Canal.UI.Views.Finance.CostCenters;
 
 import org.Canal.Models.SupplyChainUnits.Location;
-import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
@@ -47,7 +46,7 @@ public class CreateCostCenter extends JInternalFrame {
         f.addInput(new Label("Tax Exempt?", Constants.colors[7]), taxExempt);
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);
-        Button make = new Button("Make");
+        JButton make = Elements.button("Make");
         add(make, BorderLayout.SOUTH);
         setIconifiable(true);
         setClosable(true);

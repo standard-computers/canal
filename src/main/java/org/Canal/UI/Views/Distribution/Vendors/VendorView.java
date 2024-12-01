@@ -61,12 +61,12 @@ public class VendorView extends JInternalFrame {
     private JPanel createToolBar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-        IconButton order = new IconButton("Order", "order_vendor", "Place an order from vendor");
-        IconButton addPerson = new IconButton("+ Person", "add_person", "Add person to customer");
-        IconButton delinquent = new IconButton("Delinquent", "delinquent", "Customer in dunning");
-        IconButton blocked = new IconButton("Block", "blocked", "Customer is blocked. No transactions.");
-        IconButton label = new IconButton("", "label", "Print labels for properties");
-        IconButton refresh = new IconButton("", "refresh", "Reload from store");
+        IconButton order = new IconButton("Order", "order_vendor", "Place an order from vendor", "/ORDS/NEW");
+        IconButton addPerson = new IconButton("+ Person", "add_person", "Add person to customer", "");
+        IconButton delinquent = new IconButton("Delinquent", "delinquent", "Customer in dunning", "");
+        IconButton blocked = new IconButton("Block", "blocked", "Customer is blocked. No transactions.", "");
+        IconButton label = new IconButton("", "label", "Print labels for properties", "");
+        IconButton refresh = new IconButton("", "refresh", "Reload from store", "");
         order.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

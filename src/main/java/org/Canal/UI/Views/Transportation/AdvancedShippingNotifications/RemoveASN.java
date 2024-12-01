@@ -1,6 +1,5 @@
 package org.Canal.UI.Views.Transportation.AdvancedShippingNotifications;
 
-import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Windows.Form;
 
@@ -26,9 +25,9 @@ public class RemoveASN extends JInternalFrame {
 
         add(f, BorderLayout.CENTER);
         JPanel options = new JPanel(new GridLayout(1, 2));
-        org.Canal.UI.Elements.Button confirm = new org.Canal.UI.Elements.Button("Confirm");
+        JButton confirm = Elements.button("Confirm");
         confirm.setForeground(Color.RED);
-        org.Canal.UI.Elements.Button cancel = new Button("Cancel");
+        JButton cancel = Elements.button("Cancel");
         options.add(confirm);
         options.add(cancel);
         cancel.addMouseListener(new MouseAdapter() {

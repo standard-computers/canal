@@ -2,7 +2,6 @@ package org.Canal.UI.Views.HR.Departments;
 
 import org.Canal.Models.BusinessUnits.Organization;
 import org.Canal.Models.HumanResources.Department;
-import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Inputs.DatePicker;
 import org.Canal.UI.Elements.Inputs.Selectable;
@@ -41,7 +40,7 @@ public class CreateDepartment extends JInternalFrame {
         f.addInput(new Label("Open Date", Constants.colors[3]), openedDatePicker);
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);
-        Button cr = new Button("Process");
+        JButton cr = Elements.button("Process");
         add(cr, BorderLayout.SOUTH);
         cr.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {

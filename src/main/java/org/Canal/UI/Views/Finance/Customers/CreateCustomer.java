@@ -1,7 +1,7 @@
 package org.Canal.UI.Views.Finance.Customers;
 
 import org.Canal.Models.SupplyChainUnits.Location;
-import org.Canal.UI.Elements.Button;
+import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Label;
 import org.Canal.Utils.Constants;
@@ -31,7 +31,7 @@ public class CreateCustomer extends JInternalFrame {
         JTextField postalCodeField = new JTextField(20);
         JTextField countryField = new JTextField(20);
         countryField.setText("US");
-        Button make = new Button("Make");
+        JButton make = Elements.button("Make");
         Form f = new Form();
         f.addInput(new Label("*New ID", UIManager.getColor("Label.foreground")), cstIdField);
         f.addInput(new Label("*Organization", UIManager.getColor("Label.foreground")), orgIdField);

@@ -1,7 +1,7 @@
 package org.Canal.UI.Views.Distribution.Warehouses;
 
 import org.Canal.Models.SupplyChainUnits.Warehouse;
-import org.Canal.UI.Elements.Button;
+import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Label;
@@ -39,7 +39,7 @@ public class CreateWarehouse extends JInternalFrame {
         countries.setSelectedValue("US");
         JTextField taxIdField = new JTextField(15);
         JCheckBox isTaxExempt = new JCheckBox();
-        Button make = new Button("Make");
+        JButton make = Elements.button("Make");
         Form f = new Form();
         f.addInput(new Label("*New ID", UIManager.getColor("Label.foreground")), whsIdField);
         f.addInput(new Label("*Organization", UIManager.getColor("Label.foreground")), orgIdField);

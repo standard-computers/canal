@@ -1,7 +1,6 @@
 package org.Canal.UI.Views.Controllers;
 
 import org.Canal.Models.HumanResources.User;
-import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Label;
@@ -27,7 +26,7 @@ public class Login extends JInternalFrame {
         JPasswordField passwordField = new JPasswordField(10);
         f.addInput(new Label("User ID", UIManager.getColor("Label.foreground")), userIdField);
         f.addInput(new Label("Password", UIManager.getColor("Label.foreground")), passwordField);
-        Button login = new Button("Login");
+        JButton login = Elements.button("Login");
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);
         add(login, BorderLayout.SOUTH);

@@ -2,7 +2,6 @@ package org.Canal.UI.Views.Bins;
 
 import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.Models.SupplyChainUnits.Bin;
-import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Label;
@@ -40,7 +39,7 @@ public class CreateBin extends JInternalFrame {
         UOMField lengthField = new UOMField();
         UOMField heightField = new UOMField();
         UOMField areaName = new UOMField();
-        Button make = new Button("Make");
+        JButton make = Elements.button("Make");
 
         Form f = new Form();
         f.addInput(new Label("*New Bin ID", UIManager.getColor("Label.foreground")), binIdField);

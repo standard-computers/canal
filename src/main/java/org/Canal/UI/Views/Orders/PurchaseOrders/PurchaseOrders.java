@@ -1,6 +1,7 @@
 package org.Canal.UI.Views.Orders.PurchaseOrders;
 
 import org.Canal.Models.BusinessUnits.PurchaseOrder;
+import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Views.Controllers.CheckboxBarcodeFrame;
@@ -42,7 +43,7 @@ public class PurchaseOrders extends JInternalFrame {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV");
-        IconButton createPurchaseOrder = new IconButton("New PO", "order", "Build an item");
+        IconButton createPurchaseOrder = new IconButton("New PO", "order", "Build an item", "/ORDS/NEW");
         IconButton blockPo = new IconButton("Block", "block", "Block/Pause PO, can't be used");
         IconButton suspendPo = new IconButton("Suspend", "suspend", "Suspend PO, can't be used");
         IconButton activatePO = new IconButton("Start", "start", "Resume/Activate PO");
@@ -65,11 +66,6 @@ public class PurchaseOrders extends JInternalFrame {
         tb.add(Box.createHorizontalStrut(5));
         tb.add(filterValue);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));
-        createPurchaseOrder.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                desktop.put(new CreatePurchaseOrder());
-            }
-        });
         label.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 String[] printables = new String[Engine.orderProcessing.getPurchaseOrder().size()];
@@ -82,12 +78,12 @@ public class PurchaseOrders extends JInternalFrame {
         return tb;
     }
 
-    private JTable createTable() {
+    private CustomTable createTable() {
         String[] columns = new String[]{
                 "ID", "Owner", "Ordered", "Expexcted Deliv.", "Purchase Req.",
                 "Supplier", "Ship To", "Bill To", "Sold To", "Customer", "Total", "Status"
         };
-        ArrayList<String[]> pos = new ArrayList<>();
+        ArrayList<Object[]> pos = new ArrayList<>();
         for (PurchaseOrder po : Engine.orderProcessing.getPurchaseOrder()) {
             pos.add(new String[]{
                     po.getOrderId(),
@@ -104,15 +100,6 @@ public class PurchaseOrders extends JInternalFrame {
                     String.valueOf(po.getStatus())
             });
         }
-        String[][] data = new String[pos.size()][columns.length];
-        for (int i = 0; i < pos.size(); i++) {
-            data[i] = pos.get(i);
-        }
-        JTable table = new JTable(data, columns);
-        table.setCellSelectionEnabled(true);
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        Engine.adjustColumnWidths(table);
-        return table;
+        return new CustomTable(columns, pos);
     }
 }

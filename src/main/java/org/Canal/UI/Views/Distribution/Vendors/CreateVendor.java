@@ -1,7 +1,7 @@
 package org.Canal.UI.Views.Distribution.Vendors;
 
 import org.Canal.Models.SupplyChainUnits.Vendor;
-import org.Canal.UI.Elements.Button;
+import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Windows.Form;
@@ -35,7 +35,7 @@ public class CreateVendor extends JInternalFrame {
         JTextField stateField = new JTextField(20);
         JTextField postalCodeField = new JTextField(20);
         Selectable countryField = Selectables.countries();
-        Button make = new Button("Make Vendor");
+        JButton make = Elements.button("Make Vendor");
         Form f = new Form();
         f.addInput(new Label("*New ID", UIManager.getColor("Label.foreground")), vendorIdField);
         f.addInput(new Label("*Organization", UIManager.getColor("Label.foreground")), orgIdField);

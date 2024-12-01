@@ -2,7 +2,6 @@ package org.Canal.UI.Views.Orders.SalesOrders;
 
 import org.Canal.Models.BusinessUnits.PurchaseRequisition;
 import org.Canal.Models.SupplyChainUnits.Location;
-import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Inputs.Copiable;
 import org.Canal.UI.Elements.Inputs.DatePicker;
@@ -45,7 +44,7 @@ public class AutoMakeSalesOrders extends JInternalFrame {
         description.setBorder(new EmptyBorder(10, 10, 10, 10));
         add(description, BorderLayout.NORTH);
         add(tabbedPane, BorderLayout.CENTER);
-        Button createPrs = new Button("AutoMake");
+        JButton createPrs = Elements.button("AutoMake");
         createPrs.addActionListener(_ -> {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             for (JCheckBox checkbox : checkboxes) {

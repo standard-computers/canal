@@ -4,7 +4,6 @@ import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.Models.SupplyChainUnits.Vendor;
-import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Views.Areas.CreateArea;
 import org.Canal.UI.Views.Bins.CreateBin;

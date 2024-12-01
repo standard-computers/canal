@@ -452,6 +452,9 @@ public class Engine {
             case "/AREAS/MOD" -> {
                 return new ModifyArea();
             }
+            case "/AREAS/AUTO_MK" -> {
+                return new AutoMakeAreasAndBins();
+            }
             case "/BNS" -> {
                 return new Bins(desktop);
             }
@@ -558,7 +561,7 @@ public class Engine {
                 return new ModifyWarehouse(null);
             }
             case "/VEND" -> {
-                return new Vendors(desktop);
+                return new Vendors();
             }
             case "/VEND/F" -> {
                 return new FindVendor(desktop);

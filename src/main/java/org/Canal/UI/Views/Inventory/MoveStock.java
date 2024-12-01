@@ -1,6 +1,5 @@
 package org.Canal.UI.Views.Inventory;
 
-import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Windows.Form;
@@ -21,7 +20,7 @@ public class MoveStock extends JInternalFrame {
         f.addInput(new Label("", Constants.colors[0]), Elements.input(""));
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);
-        Button move = new Button("Move Stock");
+        JButton move = Elements.button("Move Stock");
         add(move, BorderLayout.SOUTH);
     }
 }

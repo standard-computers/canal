@@ -2,7 +2,6 @@ package org.Canal.UI.Views.HR.Organizations;
 
 import org.Canal.Models.BusinessUnits.Organization;
 import org.Canal.UI.Elements.*;
-import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Label;
@@ -47,7 +46,7 @@ public class CreateOrganization extends JInternalFrame {
         f.addInput(new Label("Country", Constants.colors[7]), countries);
         f.addInput(new Label("Tax ID", Constants.colors[8]), taxId);
         f.addInput(new Label("Tax Exempt?", Constants.colors[9]), isTaxExempt);
-        Button make = new Button("Make Organization");
+        JButton make = Elements.button("Make Organization");
         setLayout(new BorderLayout());
         add(Elements.header("New Organization"), BorderLayout.NORTH);
         add(f, BorderLayout.CENTER);

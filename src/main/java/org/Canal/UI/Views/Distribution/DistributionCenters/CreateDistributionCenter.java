@@ -1,7 +1,7 @@
 package org.Canal.UI.Views.Distribution.DistributionCenters;
 
 import org.Canal.Models.SupplyChainUnits.Location;
-import org.Canal.UI.Elements.Button;
+import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Label;
 import org.Canal.Utils.Constants;
@@ -34,7 +34,7 @@ public class CreateDistributionCenter extends JInternalFrame {
         JTextField ps = new JTextField(20);
         JTextField cy = new JTextField(20);
         cy.setText("US");
-        Button make = new Button("Make");
+        JButton make = Elements.button("Make");
         Form f = new Form();
         f.addInput(new Label("*New ID", UIManager.getColor("Label.foreground")), dcIdField);
         f.addInput(new Label("*Organization", UIManager.getColor("Label.foreground")), orgIdField);

@@ -1,6 +1,6 @@
 package org.Canal.UI.Views.HR.Departments;
 
-import org.Canal.UI.Elements.Button;
+import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Views.Controllers.Controller;
@@ -37,7 +37,7 @@ public class FindDepartment extends JInternalFrame {
         f.addInput(new Label("Department Name [or] ID", UIManager.getColor("Label.foreground")), direct);
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);
-        Button find = new Button("Find");
+        JButton find = Elements.button("Find");
         add(find, BorderLayout.SOUTH);
         find.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {

@@ -1,6 +1,5 @@
 package org.Canal.UI.Views.Orders.PurchaseOrders;
 
-import org.Canal.UI.Elements.Button;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Label;
@@ -40,7 +39,7 @@ public class FindPurchaseOrder extends JInternalFrame {
         f.addInput(new Label("Purchase Order ID/#", UIManager.getColor("Label.foreground")), direct);
         JPanel main = new JPanel(new BorderLayout());
         main.add(f, BorderLayout.CENTER);
-        Button find = new Button("Find");
+        JButton find = Elements.button("Find");
         main.add(find, BorderLayout.SOUTH);
         find.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {

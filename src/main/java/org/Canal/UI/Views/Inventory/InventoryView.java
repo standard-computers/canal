@@ -2,7 +2,7 @@ package org.Canal.UI.Views.Inventory;
 
 import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.Models.SupplyChainUnits.StockLine;
-import org.Canal.UI.Elements.CustomJTable;
+import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Views.Controllers.CheckboxBarcodeFrame;
@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class InventoryView extends JInternalFrame {
 
     private String location;
-    private CustomJTable table;
+    private CustomTable table;
     private DesktopState desktop;
 
     public InventoryView(DesktopState desktop, String location) {
@@ -41,12 +41,12 @@ public class InventoryView extends JInternalFrame {
         add(tableScrollPane, BorderLayout.CENTER);
     }
 
-    private CustomJTable createTable() {
+    private CustomTable createTable() {
         String[] columns = new String[]{"Location", "Type", "ID", "Name", "Org. Qty.", "Qty.", "Price", "Value", "Area", "Bin", "Receipt", "Status"};
-        ArrayList<String[]> prs = new ArrayList<>();
+        ArrayList<Object[]> stks = new ArrayList<>();
         for (StockLine sl : Engine.getInventory(location).getStockLines()) {
             Item i = Engine.getItem(sl.getId());
-            prs.add(new String[]{
+            stks.add(new String[]{
                     location,
                     sl.getObjex(),
                     sl.getId(),
@@ -61,16 +61,7 @@ public class InventoryView extends JInternalFrame {
                     String.valueOf(sl.getStatus())
             });
         }
-        String[][] data = new String[prs.size()][columns.length];
-        for (int i = 0; i < prs.size(); i++) {
-            data[i] = prs.get(i);
-        }
-        CustomJTable table = new CustomJTable(data, columns); // Use CustomJTable
-        table.setCellSelectionEnabled(true);
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        Engine.adjustColumnWidths(table);
-        return table;
+        return new CustomTable(columns, stks);
     }
 
     private JPanel createToolBar() {

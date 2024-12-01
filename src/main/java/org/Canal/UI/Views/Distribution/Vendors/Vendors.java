@@ -1,6 +1,7 @@
 package org.Canal.UI.Views.Distribution.Vendors;
 
 import org.Canal.Models.SupplyChainUnits.Vendor;
+import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Views.Controllers.CheckboxBarcodeFrame;
@@ -20,11 +21,9 @@ import java.util.ArrayList;
 public class Vendors extends JInternalFrame {
 
     private JTable table;
-    private DesktopState desktop;
 
-    public Vendors(DesktopState desktop) {
+    public Vendors() {
         super("Vendors", true, true, true, true);
-        this.desktop = desktop;
         setFrameIcon(new ImageIcon(Vendors.class.getResource("/icons/vendors.png")));
         JPanel tb = createToolBar();
         JPanel holder = new JPanel(new BorderLayout());
@@ -42,7 +41,7 @@ public class Vendors extends JInternalFrame {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV");
-        IconButton createVendor = new IconButton("New Vendor", "order", "Create a Vendor");
+        IconButton createVendor = new IconButton("New Vendor", "order", "Create a Vendor", "/VEND/NEW");
         IconButton blockPo = new IconButton("Block", "block", "Block/Pause Vendor, can't be used");
         IconButton suspendPo = new IconButton("Suspend", "suspend", "Suspend Vendor, can't be used");
         IconButton activatePO = new IconButton("Start", "start", "Resume/Activate Vendor");
@@ -65,11 +64,6 @@ public class Vendors extends JInternalFrame {
         tb.add(Box.createHorizontalStrut(5));
         tb.add(filterValue);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));
-        createVendor.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                desktop.put(new CreateVendor(desktop));
-            }
-        });
         label.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 String[] printables = new String[Engine.orderProcessing.getPurchaseOrder().size()];
@@ -82,11 +76,11 @@ public class Vendors extends JInternalFrame {
         return tb;
     }
 
-    private JTable createTable() {
+    private CustomTable createTable() {
         String[] columns = new String[]{"ID", "Org", "Name", "Street", "City", "State", "Postal", "Country", "Status", "Tax Exempt"};
-        ArrayList<String[]> pos = new ArrayList<>();
+        ArrayList<Object[]> vendors = new ArrayList<>();
         for (Vendor v : Engine.getVendors()) {
-            pos.add(new String[]{
+            vendors.add(new String[]{
                     v.getId(),
                     v.getOrganization(),
                     v.getName(),
@@ -99,15 +93,6 @@ public class Vendors extends JInternalFrame {
                     String.valueOf(v.isTaxExempt())
             });
         }
-        String[][] data = new String[pos.size()][columns.length];
-        for (int i = 0; i < pos.size(); i++) {
-            data[i] = pos.get(i);
-        }
-        JTable table = new JTable(data, columns);
-        table.setCellSelectionEnabled(true);
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        Engine.adjustColumnWidths(table);
-        return table;
+        return new CustomTable(columns, vendors);
     }
 }
