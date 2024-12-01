@@ -7,7 +7,7 @@ public class Employee {
     private String id;
     private String org; //Org ID
     private String location; //Location ID if any
-    private String name; //EMployee full name, for now
+    private String name; //Employee full name, for now
     private String supervisor; //Employee ID of Supervisor
     private String startDate; //Employee employment date
     private String endDate; //Employee termination date

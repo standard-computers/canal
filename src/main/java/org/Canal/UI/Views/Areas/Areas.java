@@ -1,15 +1,14 @@
 package org.Canal.UI.Views.Areas;
 
 import org.Canal.Models.SupplyChainUnits.Area;
+import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
-import org.Canal.Utils.DesktopState;
+import org.Canal.UI.Elements.IconButton;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -19,82 +18,69 @@ import java.util.ArrayList;
  */
 public class Areas extends JInternalFrame {
 
-    private DefaultListModel<Area> listModel;
+    private CustomTable table;
 
-    public Areas(DesktopState desktop) {
-        super("All Areas", false, true, false, true);
+    public Areas() {
+        super("Areas", true, true, true, true);
         setFrameIcon(new ImageIcon(Areas.class.getResource("/icons/areas.png")));
-        listModel = new DefaultListModel<>();
-        JList<Area> list = new JList<>(listModel);
-        list.setCellRenderer(new AreaRenderer());
-        JScrollPane scrollPane = new JScrollPane(list);
-        scrollPane.setPreferredSize(new Dimension(300, 400));
-        list.addMouseListener(new MouseAdapter() {
+        JPanel tb = createToolBar();
+        JPanel holder = new JPanel(new BorderLayout());
+        table = createTable();
+        JScrollPane tableScrollPane = new JScrollPane(table);
+        holder.add(Elements.header("Areas", SwingConstants.LEFT), BorderLayout.CENTER);
+        holder.add(tb, BorderLayout.SOUTH);
+        setLayout(new BorderLayout());
+        add(holder, BorderLayout.NORTH);
+        add(tableScrollPane, BorderLayout.CENTER);
+    }
+
+    private JPanel createToolBar() {
+        JPanel tb = new JPanel();
+        tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        IconButton export = new IconButton("", "export", "Export as CSV", "");
+        IconButton createArea = new IconButton("New Area", "order", "Create a Area", "/AREAS/NEW");
+        JTextField filterValue = Elements.input("Search", 10);
+        tb.add(export);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(createArea);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(filterValue);
+        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
+        export.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    int selectedIndex = list.locationToIndex(e.getPoint());
-                    if (selectedIndex != -1) {
-                        Area item = listModel.getElementAt(selectedIndex);
-                        Engine.router("/AREAS/" + item.getId(), desktop);
-                    }
-                }
+                table.exportToCSV();
             }
         });
-        JTextField direct = Elements.input();
-        direct.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    String inputText = direct.getText().trim();
-                    if (!inputText.isEmpty()) {
-                        Engine.router("/AREAS/" + inputText, desktop);
-                    }
-                }
-            }
-        });
-        setLayout(new BorderLayout());
-        add(direct, BorderLayout.NORTH);
-        add(scrollPane, BorderLayout.CENTER);
-        loadFlexes();
+        return tb;
     }
 
-    private void loadFlexes(){
-        ArrayList<Area> found = Engine.getAreas();
-        listModel.removeAllElements();
-        for (Area f : found) {
-            listModel.addElement(f);
+    private CustomTable createTable() {
+        String[] columns = new String[]{
+            "ID", "Location", "Name", "Width",
+            "Width UOM", "Length", "Length UOM",
+            "Height", "Height UOM", "Area", "Area UOM",
+            "Volume", "Volume UOM", "Status"
+        };
+        ArrayList<Object[]> data = new ArrayList<>();
+        for (Area area : Engine.getAreas()) {
+            data.add(new Object[]{
+                    area.getId(),
+                    area.getLocation(),
+                    area.getName(),
+                    area.getWidth(),
+                    area.getWidthUOM(),
+                    area.getLength(),
+                    area.getLengthUOM(),
+                    area.getHeight(),
+                    area.getHeightUOM(),
+                    area.getArea(),
+                    area.getAreaUOM(),
+                    area.getVolume(),
+                    area.getVolumeUOM(),
+                    area.getStatus(),
+            });
         }
-    }
-
-    static class AreaRenderer extends JPanel implements ListCellRenderer<Area> {
-
-        private JLabel areaName;
-        private JLabel areaId;
-
-        public AreaRenderer() {
-            setLayout(new GridLayout(2, 1));
-            areaName = new JLabel();
-            areaId = new JLabel();
-            areaName.setFont(new Font("Arial", Font.BOLD, 16));
-            areaId.setFont(new Font("Arial", Font.PLAIN, 12));
-            add(areaName);
-            add(areaId);
-            setBorder(new EmptyBorder(5, 5, 5, 5));
-        }
-
-        @Override
-        public Component getListCellRendererComponent(JList<? extends Area> list, Area value, int index, boolean isSelected, boolean cellHasFocus) {
-            areaName.setText(value.getName());
-            areaId.setText(value.getId());
-            if (isSelected) {
-                setBackground(list.getSelectionBackground());
-                setForeground(list.getSelectionForeground());
-            } else {
-                setBackground(list.getBackground());
-                setForeground(list.getForeground());
-            }
-            return this;
-        }
+        return new CustomTable(columns, data);
     }
 }

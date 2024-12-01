@@ -39,6 +39,7 @@ import org.Canal.UI.Views.HR.Organizations.CreateOrganization;
 import org.Canal.UI.Views.HR.Organizations.ModifyOrganization;
 import org.Canal.UI.Views.HR.Organizations.OrgView;
 import org.Canal.UI.Views.HR.Organizations.Organizations;
+import org.Canal.UI.Views.HR.Positions.CreatePosition;
 import org.Canal.UI.Views.HR.Teams.CreateTeam;
 import org.Canal.UI.Views.HR.Teams.ModifyTeam;
 import org.Canal.UI.Views.HR.Teams.Teams;
@@ -441,7 +442,7 @@ public class Engine {
                 return new ModifyCostCenter(Engine.getCostCenters().get(0));
             }
             case "/AREAS" -> {
-                return new Areas(desktop);
+                return new Areas();
             }
             case "/AREAS/F" -> {
                 return new FindArea(desktop);
@@ -549,7 +550,7 @@ public class Engine {
                 return new RemoveTruck();
             }
             case "/WHS" -> {
-                return new Warehouses(desktop);
+                return new Warehouses();
             }
             case "/WHS/NEW" -> {
                 return new CreateWarehouse(desktop);
@@ -761,6 +762,9 @@ public class Engine {
             case "/MVMT/TSKS/NEW" -> {
                 return new CreateTask();
             }
+            case "/HR/POS/NEW" -> {
+                return new CreatePosition(desktop);
+            }
             case "/CNL/HR" -> {
                 return new HumanResources(desktop);
             }
@@ -853,7 +857,7 @@ public class Engine {
                                 return new WarehouseView(l, desktop);
                             }
                         }
-                        return new Warehouses(desktop);
+                        return new Warehouses();
                     }
                     case "ORDS" -> {
                         for(PurchaseOrder l : Engine.orderProcessing.getPurchaseOrder()){
@@ -861,7 +865,7 @@ public class Engine {
                                 return new PurchaseOrderView(l);
                             }
                         }
-                        return new Warehouses(desktop);
+                        return new Warehouses();
                     }
                     case "INV" -> {
                         return new org.Canal.UI.Views.Controllers.Inventory();

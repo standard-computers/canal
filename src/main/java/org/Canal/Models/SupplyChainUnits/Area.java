@@ -2,6 +2,7 @@ package org.Canal.Models.SupplyChainUnits;
 
 import org.Canal.Start;
 import org.Canal.Utils.Json;
+import org.Canal.Utils.LockeStatus;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class Area {
     private double volume;
     private Map<String, String> properties;
     private ArrayList<Bin> bins = new ArrayList<Bin>();
+    private LockeStatus status;
 
     public String getId() {
         return id;
@@ -156,6 +158,14 @@ public class Area {
 
     public void addBin(Bin newBin) {
         bins.add(newBin);
+    }
+
+    public LockeStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(LockeStatus status) {
+        this.status = status;
     }
 
     public void save() {

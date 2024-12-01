@@ -1,15 +1,14 @@
 package org.Canal.UI.Views.Distribution.Warehouses;
 
 import org.Canal.Models.SupplyChainUnits.Warehouse;
-import org.Canal.UI.Views.Controllers.Controller;
-import org.Canal.Utils.DesktopState;
+import org.Canal.UI.Elements.CustomTable;
+import org.Canal.UI.Elements.Elements;
+import org.Canal.UI.Elements.IconButton;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -19,96 +18,63 @@ import java.util.ArrayList;
  */
 public class Warehouses extends JInternalFrame {
 
-    private DefaultListModel<Warehouse> listModel;
+    private CustomTable table;
 
-    public Warehouses(DesktopState desktop) {
-        super("Warehouses", false, true, false, true);
-        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/warehouses.png")));
-        listModel = new DefaultListModel<>();
-        JList<Warehouse> list = new JList<>(listModel);
-        list.setCellRenderer(new WarehouseRenderer());
-        JScrollPane scrollPane = new JScrollPane(list);
-        scrollPane.setPreferredSize(new Dimension(300, 400));
-        list.addMouseListener(new MouseAdapter() {
+    public Warehouses() {
+        super("Warehouses", true, true, true, true);
+        setFrameIcon(new ImageIcon(Warehouses.class.getResource("/icons/warehouses.png")));
+        JPanel tb = createToolBar();
+        JPanel holder = new JPanel(new BorderLayout());
+        table = createTable();
+        JScrollPane tableScrollPane = new JScrollPane(table);
+        holder.add(Elements.header("Warehouses", SwingConstants.LEFT), BorderLayout.CENTER);
+        holder.add(tb, BorderLayout.SOUTH);
+        setLayout(new BorderLayout());
+        add(holder, BorderLayout.NORTH);
+        add(tableScrollPane, BorderLayout.CENTER);
+    }
+
+    private JPanel createToolBar() {
+        JPanel tb = new JPanel();
+        tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        IconButton export = new IconButton("", "export", "Export as CSV", "");
+        IconButton createWarehouse = new IconButton("New Warehouse", "order", "Create a Warehouse", "/WHS/NEW");
+        JTextField filterValue = Elements.input("Search", 10);
+        tb.add(export);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(createWarehouse);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(filterValue);
+        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
+        export.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    int selectedIndex = list.locationToIndex(e.getPoint());
-                    if (selectedIndex != -1) {
-                        Warehouse l = listModel.getElementAt(selectedIndex);
-                        if (l != null) {
-                            desktop.put(Engine.router("/WHS/" + l.getId(), desktop));
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Warehouse Not Found");
-                        }
-                    }
-                }
+                table.exportToCSV();
             }
         });
-        JTextField direct = new JTextField();
-        direct.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    String inputText = direct.getText().trim();
-                    if (!inputText.isEmpty()) {
-                        desktop.put(Engine.router("/WHS/" + inputText, desktop));
-                    }
-                }
-            }
-        });
-        setLayout(new BorderLayout());
-        add(direct, BorderLayout.NORTH);
-        add(scrollPane, BorderLayout.CENTER);
-        loadLocations();
+        return tb;
     }
 
-    private void loadLocations(){
-        listModel.removeAllElements();
-        ArrayList<Warehouse> found = Engine.getWarehouses();
-        for (Warehouse loc : found) {
-            listModel.addElement(loc);
+    private CustomTable createTable() {
+        String[] columns = new String[]{"ID", "Org", "Name", "Street", "City", "State", "Postal", "Country", "Tax ID", "Area", "Area UOM", "Status", "Tax Exempt"};
+        ArrayList<Object[]> data = new ArrayList<>();
+        for (Warehouse warehouse : Engine.getWarehouses()) {
+            data.add(new Object[]{
+                    warehouse.getId(),
+                    warehouse.getOrg(),
+                    warehouse.getName(),
+                    warehouse.getLine1(),
+                    warehouse.getCity(),
+                    warehouse.getState(),
+                    warehouse.getPostal(),
+                    warehouse.getCountry(),
+                    warehouse.getTaxId(),
+                    warehouse.getArea(),
+                    warehouse.getAreaUOM(),
+                    warehouse.getStatus(),
+                    warehouse.isTaxExempt()
+            });
         }
-    }
-
-    static class WarehouseRenderer extends JPanel implements ListCellRenderer<Warehouse> {
-
-        private JLabel ccName;
-        private JLabel ccId;
-        private JLabel line1;
-        private JLabel line2;
-
-        public WarehouseRenderer() {
-            setLayout(new GridLayout(4, 1));
-            ccName = new JLabel();
-            ccId = new JLabel();
-            line1 = new JLabel();
-            line2 = new JLabel();
-            ccName.setFont(new Font("Arial", Font.BOLD, 16));
-            ccId.setFont(new Font("Arial", Font.PLAIN, 12));
-            line1.setFont(new Font("Arial", Font.PLAIN, 12));
-            line2.setFont(new Font("Arial", Font.PLAIN, 12));
-            add(ccName);
-            add(ccId);
-            add(line1);
-            add(line2);
-            setBorder(new EmptyBorder(5, 5, 5, 5));
-        }
-
-        @Override
-        public Component getListCellRendererComponent(JList<? extends Warehouse> list, Warehouse warehouse, int index, boolean isSelected, boolean cellHasFocus) {
-            ccName.setText(warehouse.getName());
-            ccId.setText(warehouse.getId());
-            line1.setText(warehouse.getLine1());
-            line2.setText(warehouse.getCity() + ", " + warehouse.getState() + " " + warehouse.getPostal() + " " + warehouse.getCountry());
-            if (isSelected) {
-                setBackground(list.getSelectionBackground());
-                setForeground(list.getSelectionForeground());
-            } else {
-                setBackground(list.getBackground());
-                setForeground(list.getForeground());
-            }
-            return this;
-        }
+        return new CustomTable(columns, data);
     }
 }
