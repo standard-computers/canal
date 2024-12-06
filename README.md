@@ -22,3 +22,5 @@ Any large build out or new process implementation should be a 'Project' and comm
 _This will be a simple installation. Detailed to come._
 
 First load of Canal will present a setup view with no Locke code. Check 'New Install?' and import a zip file if you'd like but this assumes not. Ignore the 'Server' and 'Configuration' tabs.
+
+![img.png](img.png)

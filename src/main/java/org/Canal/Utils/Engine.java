@@ -70,6 +70,8 @@ import org.Canal.UI.Views.Transportation.Trucks.ArchiveTruck;
 import org.Canal.UI.Views.Transportation.Trucks.FindTruck;
 import org.Canal.UI.Views.Transportation.Trucks.RemoveTruck;
 import org.Canal.UI.Views.Transportation.Trucks.Trucks;
+import org.Canal.UI.Views.ValueAddedServices.CreateVAS;
+import org.Canal.UI.Views.ValueAddedServices.ValueAddedServices;
 
 import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
@@ -599,6 +601,12 @@ public class Engine {
             }
             case "/CMPS/NEW" -> {
                 return new CreateComponent();
+            }
+            case "/VAS" -> {
+                return new ValueAddedServices();
+            }
+            case "/VAS/NEW" -> {
+                return new CreateVAS();
             }
             case "/LGS" -> {
                 return new Ledgers(desktop);

@@ -205,6 +205,12 @@ public class Constants {
                         new Locke("Modify Component", getIcon("locke"), "/CMPS/MOD", null),
                         new Locke("Remove Component", getIcon("locke"), "/CMPS/DEL", null),
                 }),
+                new Locke("VAS", getIcon("vas"), "/VAS", new Locke[]{
+                        new Locke("Find VAS", getIcon("locke"), "/VAS/F", null),
+                        new Locke("Create VAS", getIcon("locke"), "/VAS/NEW", null),
+                        new Locke("Modify VAS", getIcon("locke"), "/VAS/MOD", null),
+                        new Locke("Remove VAS", getIcon("locke"), "/VAS/DEL", null),
+                }),
                 new Locke("Employees", getIcon("employees"), "/EMPS", new Locke[]{
                         new Locke("Find Employee", getIcon("locke"), "/EMPS/F", null),
                         new Locke("Create Employee", getIcon("locke"), "/EMPS/NEW", null),
