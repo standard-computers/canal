@@ -54,10 +54,16 @@ public class DistributionCenters extends LockeState {
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV", "");
         IconButton createDc = new IconButton("New DC", "order", "Create a DC", "/DCSS/NEW");
+        IconButton modifyDc = new IconButton("Modify", "modify", "Modify a DC", "/DCSS/MOD");
+        IconButton removeDc = new IconButton("Remove", "delete", "Delete a DC", "/DCSS/DEL");
         JTextField filterValue = Elements.input("Search", 10);
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(createDc);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(modifyDc);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(removeDc);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(filterValue);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));

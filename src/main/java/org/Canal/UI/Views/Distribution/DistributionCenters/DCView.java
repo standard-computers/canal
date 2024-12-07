@@ -6,7 +6,8 @@ import org.Canal.Models.SupplyChainUnits.*;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.Windows.LockeState;
-import org.Canal.UI.Views.Areas.AutoMakeAreasAndBins;
+import org.Canal.UI.Views.Areas.AutoMakeAreas;
+import org.Canal.UI.Views.Bins.AutoMakeBins;
 import org.Canal.UI.Views.Bins.CreateBin;
 import org.Canal.UI.Views.Inventory.InventoryView;
 import org.Canal.UI.Views.Orders.ReceiveOrder;
@@ -62,9 +63,10 @@ public class DCView extends LockeState implements RefreshListener {
         });
         JScrollPane treeScrollPane = new JScrollPane(dataTree);
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, treeScrollPane, dataView);
-        splitPane.setDividerLocation(250);
+        splitPane.setDividerLocation(200);
         splitPane.setResizeWeight(0.2);
         add(splitPane, BorderLayout.CENTER);
+        isMaximized();
     }
 
     private JPanel makeOverview(){
@@ -142,7 +144,8 @@ public class DCView extends LockeState implements RefreshListener {
         IconButton receive = new IconButton("Receive", "receive", "Receive an Inbound Delivery");
         IconButton areas = new IconButton("+ Areas", "areas", "Add an area cost center");
         IconButton addBin = new IconButton("+ Bin", "bins", "Add an area cost center");
-        IconButton autoMake = new IconButton("AutoMake Areas/Bins", "automake", "Make areas and bins from templates");
+        IconButton autoMakeAreas = new IconButton("AutoMake Areas", "automake", "Automate the creation of areas");
+        IconButton autoMakeBins = new IconButton("AutoMake Bins", "automake", "Automate the creation of bins");
         IconButton label = new IconButton("", "label", "Print labels for properties");
         inventory.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -165,10 +168,16 @@ public class DCView extends LockeState implements RefreshListener {
                 desktop.put(new CreateBin(distributionCenter.getId(), DCView.this));
             }
         });
-        autoMake.addMouseListener(new MouseAdapter() {
+        autoMakeAreas.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new AutoMakeAreasAndBins());
+                desktop.put(new AutoMakeAreas());
+            }
+        });
+        autoMakeBins.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                desktop.put(new AutoMakeBins());
             }
         });
         tb.add(order);
@@ -183,7 +192,9 @@ public class DCView extends LockeState implements RefreshListener {
         tb.add(Box.createHorizontalStrut(5));
         tb.add(addBin);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(autoMake);
+        tb.add(autoMakeAreas);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(autoMakeBins);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(label);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -200,15 +211,10 @@ public class DCView extends LockeState implements RefreshListener {
     }
 
     private Locke createRootNode() {
-        Locke[] customers = new Locke[Engine.getCustomers(distributionCenter.getTie()).size()];
-        for (int i = 0; i < Engine.getCustomers(distributionCenter.getTie()).size(); i++) {
-            Location l = Engine.getCustomers(distributionCenter.getTie()).get(i);
-            customers[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/CSTS/" + l.getId(), Color.PINK, null);
-        }
         Locke[] areas = new Locke[Engine.getAreas(distributionCenter.getId()).size()];
         for (int i = 0; i < Engine.getAreas(distributionCenter.getId()).size(); i++) {
             Area l = Engine.getAreas(distributionCenter.getId()).get(i);
-            areas[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/ITS/" + l.getId(), new Color(147, 70, 3), null);
+            areas[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/ITS/" + l.getId(), Constants.colors[0], null);
         }
         int binCount = 0;
         ArrayList<Bin> bs = new ArrayList<>();
@@ -220,19 +226,23 @@ public class DCView extends LockeState implements RefreshListener {
         }
         Locke[] bins = new Locke[binCount];
         for (int i = 0; i < bs.size(); i++) {
-
             Bin b = bs.get(i);
-            bins[i] = new Locke(b.getId() + " - " + b.getName(), UIManager.getIcon("FileView.fileIcon"), "/BNS/" + b.getId(), Color.CYAN, null);
+            bins[i] = new Locke(b.getId() + " - " + b.getName(), UIManager.getIcon("FileView.fileIcon"), "/BNS/" + b.getId(), Constants.colors[1], null);
+        }
+        Locke[] customers = new Locke[Engine.getCustomers(distributionCenter.getTie()).size()];
+        for (int i = 0; i < Engine.getCustomers(distributionCenter.getTie()).size(); i++) {
+            Location l = Engine.getCustomers(distributionCenter.getTie()).get(i);
+            customers[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/CSTS/" + l.getId(), Constants.colors[2], null);
         }
         Locke[] vendors = new Locke[Engine.getVendors(distributionCenter.getTie()).size()];
         for (int i = 0; i < Engine.getVendors(distributionCenter.getTie()).size(); i++) {
             Vendor l = Engine.getVendors(distributionCenter.getTie()).get(i);
-            vendors[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/VEND/" + l.getId(), Color.CYAN, null);
+            vendors[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/VEND/" + l.getId(), Constants.colors[3], null);
         }
         Locke[] items = new Locke[Engine.getItems(distributionCenter.getTie()).size()];
         for (int i = 0; i < Engine.getItems(distributionCenter.getTie()).size(); i++) {
             Item l = Engine.getItems(distributionCenter.getTie()).get(i);
-            items[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/ITS/" + l.getId(), new Color(147, 70, 3), null);
+            items[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/ITS/" + l.getId(), Constants.colors[4], null);
         }
         return new Locke(distributionCenter.getName(), UIManager.getIcon("FileView.fileIcon"), "/DCSS/" + distributionCenter.getId(), new Locke[]{
                 new Locke("Areas", UIManager.getIcon("FileView.fileIcon"), "/AREAS", areas),

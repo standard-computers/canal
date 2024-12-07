@@ -38,12 +38,21 @@ public class Areas extends LockeState {
     private JPanel createToolBar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-        IconButton export = new IconButton("", "export", "Export as CSV", "");
+        IconButton export = new IconButton("Export", "export", "Export as CSV", "");
         IconButton createArea = new IconButton("New Area", "order", "Create a Area", "/AREAS/NEW");
+        IconButton autoMakeAreas = new IconButton("AutoMake Areas", "automake", "Automate the creation of areas", "/AREAS/AUTO_MK");
+        IconButton modifyArea = new IconButton("Modify", "modify", "Modify an Area", "/AREAS/MOD");
+        IconButton removeArea = new IconButton("Remove", "delete", "Delete an Area", "/AREAS/DEL");
         JTextField filterValue = Elements.input("Search", 10);
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(createArea);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(autoMakeAreas);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(modifyArea);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(removeArea);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(filterValue);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));

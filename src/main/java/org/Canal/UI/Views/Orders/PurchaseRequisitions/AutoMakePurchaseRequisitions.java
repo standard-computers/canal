@@ -22,7 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
- * /ORDS/PR?AUTO_MK
+ * /ORDS/PR/AUTO_MK
  */
 public class AutoMakePurchaseRequisitions extends LockeState {
 

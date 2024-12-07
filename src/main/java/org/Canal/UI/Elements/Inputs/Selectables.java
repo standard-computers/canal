@@ -127,11 +127,18 @@ public class Selectables {
         HashMap<String, String> statusTypes = new HashMap<>();
         statusTypes.put("MM", "MM");
         statusTypes.put("CM", "CM");
-        statusTypes.put("CM^3", "CM^3");
+        statusTypes.put("CM2", "CM2");
+        statusTypes.put("CM3", "CM3");
         statusTypes.put("IN", "IN");
+        statusTypes.put("IN2", "IN2");
+        statusTypes.put("IN3", "IN3");
         statusTypes.put("FT", "FT");
+        statusTypes.put("FT2", "FT2");
+        statusTypes.put("FT3", "FT3");
         statusTypes.put("SQ FT", "SQ FT");
         statusTypes.put("M", "M");
+        statusTypes.put("M2", "M2");
+        statusTypes.put("M3", "M3");
         statusTypes.put("YD", "YD");
         statusTypes.put("MI", "MI");
         statusTypes.put("NM", "NM");
@@ -147,7 +154,7 @@ public class Selectables {
     }
 
     public static Selectable uoms(){
-        return uoms("IN");
+        return uoms("FT");
     }
 
     public static Selectable countries() {

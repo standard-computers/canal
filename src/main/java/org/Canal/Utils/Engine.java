@@ -466,7 +466,7 @@ public class Engine {
                 return new ModifyArea();
             }
             case "/AREAS/AUTO_MK" -> {
-                return new AutoMakeAreasAndBins();
+                return new AutoMakeAreas();
             }
             case "/BNS" -> {
                 return new Bins(desktop);

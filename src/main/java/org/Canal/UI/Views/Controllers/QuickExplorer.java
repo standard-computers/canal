@@ -23,7 +23,7 @@ public class QuickExplorer extends JFrame implements DesktopState {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         desktopPane = new DesktopInterface();
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, new Controller(this), desktopPane);
-        splitPane.setDividerLocation(250);
+        splitPane.setDividerLocation(200);
         splitPane.setResizeWeight(0.2);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         add(splitPane);

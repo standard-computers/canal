@@ -21,7 +21,7 @@ public class Controller extends JPanel implements RefreshListener {
         JPanel dataView = new JPanel(new BorderLayout());
         JTextField cmd = Elements.input("/");
         cmd.addActionListener(_ -> {
-            if(me != null && !me.hasAccess(cmd.getText())) {
+            if(me != null && !me.hasAccess(cmd.getText().replaceAll("\\.", ""))) {
                 JOptionPane.showMessageDialog(this, "Not authorized to use this locke!", "Unauthorized", JOptionPane.ERROR_MESSAGE);
             }else{
                 try{

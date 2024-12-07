@@ -49,7 +49,7 @@ public class CreatePurchaseOrder extends LockeState {
     private DatePicker expectedDelivery;
 
     public CreatePurchaseOrder() {
-        super("Create Purchase Order", "/ORDS/PO/NEW", false, true, false, true);
+        super("Create Purchase Order", "/ORDS/PO/NEW", true, true, true, true);
         Constants.checkLocke(this, true, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));
         newOrder = new PurchaseOrder();

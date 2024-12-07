@@ -9,7 +9,7 @@ import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Areas.CreateArea;
 import org.Canal.UI.Views.Bins.CreateBin;
 import org.Canal.UI.Views.Orders.PurchaseOrders.CreatePurchaseOrder;
-import org.Canal.UI.Views.Areas.AutoMakeAreasAndBins;
+import org.Canal.UI.Views.Areas.AutoMakeAreas;
 import org.Canal.Utils.Locke;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -98,7 +98,7 @@ public class CostCenterView extends LockeState implements RefreshListener {
         autoMake.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new AutoMakeAreasAndBins());
+                desktop.put(new AutoMakeAreas());
             }
         });
         tb.add(order);

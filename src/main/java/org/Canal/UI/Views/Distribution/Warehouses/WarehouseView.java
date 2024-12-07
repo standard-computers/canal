@@ -6,7 +6,7 @@ import org.Canal.Models.SupplyChainUnits.*;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.Windows.LockeState;
-import org.Canal.UI.Views.Areas.AutoMakeAreasAndBins;
+import org.Canal.UI.Views.Areas.AutoMakeAreas;
 import org.Canal.UI.Views.Bins.CreateBin;
 import org.Canal.UI.Views.Areas.CreateArea;
 import org.Canal.UI.Views.Finance.Payments.IssuePayment;
@@ -175,7 +175,7 @@ public class WarehouseView extends LockeState implements RefreshListener {
         autoMake.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new AutoMakeAreasAndBins());
+                desktop.put(new AutoMakeAreas());
             }
         });
         tb.add(order);
