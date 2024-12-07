@@ -2,6 +2,7 @@ package org.Canal.UI.Views.Finance.Catalogs;
 
 import org.Canal.Models.SupplyChainUnits.Catalog;
 import org.Canal.UI.Elements.Elements;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;
@@ -11,13 +12,15 @@ import java.awt.event.MouseEvent;
 
 /**
  * /CATS/MOD
+ * Modify a Catalog with Catalog ID.
+ * This is more of a Catalog Editor with rich features like the builders.
  */
-public class ModifyCatalog extends JInternalFrame {
+public class ModifyCatalog extends LockeState {
 
     private Catalog catalog;
 
     public ModifyCatalog(Catalog catalog) {
-        super("Catalog Modifier", false, true, false, true);
+        super("Catalog Modifier", "/CATS/MOD", false, true, false, true);
         setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.RED));
         setFrameIcon(new ImageIcon(ModifyCatalog.class.getResource("/icons/modify.png")));
         this.catalog = catalog;

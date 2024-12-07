@@ -1,14 +1,14 @@
 package org.Canal.UI.Views.HR.Positions;
 
-import javax.swing.*;
+import org.Canal.UI.Elements.Windows.LockeState;
 
 /**
  * /HR/POS/ARCHV
  */
-public class ArchivePosition extends JInternalFrame {
+public class ArchivePosition extends LockeState {
 
     public ArchivePosition() {
-        super("Archive Organization", false, true, false, true);
+        super("Archive Organization", "/ORGS/ARCHV", false, true, false, true);
 
     }
 }

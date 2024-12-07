@@ -7,6 +7,7 @@ import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.LockeStatus;
@@ -20,12 +21,13 @@ import java.time.LocalDate;
 
 /**
  * /LGS/NEW
+ * Make a new Ledger for an Organization
  */
-public class CreateLedger extends JInternalFrame {
+public class CreateLedger extends LockeState {
 
     public CreateLedger(DesktopState desktop) {
 
-        super("Create Ledger", false, true, false, true);
+        super("Create Ledger", "/LGS/NEW", false, true, false, true);
         setFrameIcon(new ImageIcon(CreateLedger.class.getResource("/icons/create.png")));
 
         Form f = new Form();

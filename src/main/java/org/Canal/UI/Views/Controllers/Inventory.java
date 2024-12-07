@@ -4,6 +4,7 @@ import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;
@@ -14,12 +15,12 @@ import java.util.HashMap;
 /**
  * /CNL/INV
  */
-public class Inventory extends JInternalFrame {
+public class Inventory extends LockeState {
 
     private JTable table;
 
     public Inventory() {
-        super("Inventory Control", true, true, true, true);
+        super("Inventory Control", "/CNL/INV", true, true, true, true);
         setLayout(new BorderLayout());
         add(toolbar(), BorderLayout.NORTH);
         table = createTable();

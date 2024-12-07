@@ -2,6 +2,7 @@ package org.Canal.UI.Views.Productivity.Tasks;
 
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Windows.LockeState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,10 +10,10 @@ import java.awt.*;
 /**
  * /MVMT/TSKS/NEW
  */
-public class CreateTask extends JInternalFrame {
+public class CreateTask extends LockeState {
 
     public CreateTask() {
-        super("Create Task", false, true, false, true);
+        super("Create Task", "/MVMT/TSKS/NEW", false, true, false, true);
         Form f = new Form();
 
         setLayout(new BorderLayout());

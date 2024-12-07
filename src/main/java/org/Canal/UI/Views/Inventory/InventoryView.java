@@ -5,9 +5,11 @@ import org.Canal.Models.SupplyChainUnits.StockLine;
 import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Controllers.CheckboxBarcodeFrame;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
+import org.Canal.Utils.RefreshListener;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -19,14 +21,14 @@ import java.util.ArrayList;
 /**
  * /STK
  */
-public class InventoryView extends JInternalFrame {
+public class InventoryView extends LockeState implements RefreshListener {
 
     private String location;
     private CustomTable table;
     private DesktopState desktop;
 
     public InventoryView(DesktopState desktop, String location) {
-        super("Location Inventory", true, true, true, true);
+        super("Location Inventory", "/STK", true, true, true, true);
         this.location = location;
         this.desktop = desktop;
         setFrameIcon(new ImageIcon(InventoryView.class.getResource("/icons/purchasereqs.png")));
@@ -39,16 +41,18 @@ public class InventoryView extends JInternalFrame {
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);
         add(tableScrollPane, BorderLayout.CENTER);
+        isMaximized();
     }
 
     private CustomTable createTable() {
-        String[] columns = new String[]{"Location", "Type", "ID", "Name", "Org. Qty.", "Qty.", "Price", "Value", "Area", "Bin", "Receipt", "Status"};
+        String[] columns = new String[]{"Location", "Type", "HU", "ID", "Name", "Org. Qty.", "Qty.", "Price", "Value", "Area", "Bin", "Receipt", "Status"};
         ArrayList<Object[]> stks = new ArrayList<>();
         for (StockLine sl : Engine.getInventory(location).getStockLines()) {
             Item i = Engine.getItem(sl.getId());
             stks.add(new String[]{
                     location,
                     sl.getObjex(),
+                    sl.getHu(),
                     sl.getId(),
                     i.getName(),
                     String.valueOf(sl.getQuantity()),
@@ -69,7 +73,8 @@ public class InventoryView extends JInternalFrame {
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("", "export", "Export as CSV");
         IconButton blockPo = new IconButton("Block", "block", "Block/Pause PO, can't be used");
-        IconButton move = new IconButton("Move", "start", "Move Inventory (Internally)", "/STK/MOD/MV");
+        IconButton move = new IconButton("Move", "start", "Move Inventory (Internally)");
+        IconButton movements = new IconButton("Movements", "archive", "View stock movements");
         IconButton archivePo = new IconButton("Archive", "archive", "Archive PO, removes");
         IconButton label = new IconButton("Barcodes", "label", "Print labels for org properties");
         JTextField filterValue = Elements.input(location, 10);
@@ -78,6 +83,8 @@ public class InventoryView extends JInternalFrame {
         tb.add(blockPo);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(move);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(movements);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(archivePo);
         tb.add(Box.createHorizontalStrut(5));
@@ -91,6 +98,12 @@ public class InventoryView extends JInternalFrame {
                 table.exportToCSV();
             }
         });
+        move.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                desktop.put(new MoveStock(location, InventoryView.this));
+            }
+        });
         label.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -102,5 +115,12 @@ public class InventoryView extends JInternalFrame {
             }
         });
         return tb;
+    }
+
+    @Override
+    public void onRefresh() {
+        table = createTable();
+        repaint();
+        revalidate();
     }
 }

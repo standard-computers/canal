@@ -6,19 +6,22 @@ import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * /TRANS/CRRS/NEW
  */
-public class CreateCarrier extends JInternalFrame {
+public class CreateCarrier extends LockeState {
 
     public CreateCarrier(DesktopState desktop) {
-        super("Create Carrier", true, true, true, true);
+        super("Create Carrier", "/TRANS/CRRS/NEW", true, true, true, true);
         Form f = new Form();
 
         String genId = "CAR" + 1;
@@ -41,5 +44,11 @@ public class CreateCarrier extends JInternalFrame {
         add(f, BorderLayout.CENTER);
         JButton make = Elements.button("Make Carrier");
         add(make, BorderLayout.SOUTH);
+        make.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+            }
+        });
     }
 }

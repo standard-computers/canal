@@ -1,14 +1,14 @@
 package org.Canal.UI.Views.HR.Teams;
 
-import javax.swing.*;
+import org.Canal.UI.Elements.Windows.LockeState;
 
 /**
  * /TMS/$[TEAM_ID]
  */
-public class TeamView extends JInternalFrame {
+public class TeamView extends LockeState {
 
     public TeamView() {
-        super("Team", false, true, false, true);
+        super("Team", "/TMS/$", false, true, false, true);
 
     }
 }

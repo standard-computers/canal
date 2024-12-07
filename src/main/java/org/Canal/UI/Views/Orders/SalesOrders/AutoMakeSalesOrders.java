@@ -9,6 +9,7 @@ import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Pipe;
@@ -23,7 +24,7 @@ import java.util.ArrayList;
 /**
  * /ORDS/SO/AUTO_MK
  */
-public class AutoMakeSalesOrders extends JInternalFrame {
+public class AutoMakeSalesOrders extends LockeState {
 
     private JPanel checkboxPanel;
     private ArrayList<Location> locations;
@@ -34,7 +35,7 @@ public class AutoMakeSalesOrders extends JInternalFrame {
     private JTextArea prNotesField;
 
     public AutoMakeSalesOrders() {
-        super("AutoMake Sales Orders", false, true, false, true);
+        super("AutoMake Sales Orders", "/ORDS/SO/AUTO_MK", false, true, false, true);
         setFrameIcon(new ImageIcon(AutoMakeSalesOrders.class.getResource("/icons/automake.png")));
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.add(buyers(), "Buyers");

@@ -2,17 +2,19 @@ package org.Canal.UI.Views.Invoices;
 
 import org.Canal.Models.BusinessUnits.Invoice;
 import org.Canal.UI.Elements.Input;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.Engine;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-public class CreateInvoice extends JInternalFrame {
+public class CreateInvoice extends LockeState {
 
     private Invoice newInvoice;
 
     public CreateInvoice(String providedCustomerId) {
-        setTitle("Create Invoice");
+        super("Create Invoice", "/INVS/NEW", false, true, false, true);
         if(Engine.getCustomers().isEmpty()){
             JOptionPane.showMessageDialog(null, "No customers to invoice.");
             dispose();
@@ -32,6 +34,5 @@ public class CreateInvoice extends JInternalFrame {
         setLayout(new BorderLayout());
         add(orderInfo, BorderLayout.NORTH);
         add(save, BorderLayout.SOUTH);
-        setResizable(false);
     }
 }

@@ -5,6 +5,7 @@ import org.Canal.Models.BusinessUnits.PurchaseRequisition;
 import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Controllers.CheckboxBarcodeFrame;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -19,13 +20,13 @@ import java.util.ArrayList;
 /**
  * /ORDS/PR
  */
-public class PurchaseRequisitions extends JInternalFrame {
+public class PurchaseRequisitions extends LockeState {
 
     private CustomTable table;
     private DesktopState desktop;
 
     public PurchaseRequisitions(DesktopState desktop) {
-        super("Purchase Requisitions", true, true, true, true);
+        super("Purchase Requisitions", "/ORDS/PR", true, true, true, true);
         this.desktop = desktop;
         setFrameIcon(new ImageIcon(PurchaseRequisitions.class.getResource("/icons/purchasereqs.png")));
         JPanel tb = createToolBar();

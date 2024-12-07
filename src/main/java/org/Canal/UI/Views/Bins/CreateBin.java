@@ -7,8 +7,10 @@ import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.UOMField;
 import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
+import org.Canal.Utils.RefreshListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,10 +21,10 @@ import java.util.HashMap;
 /**
  * /BNS/NEW
  */
-public class CreateBin extends JInternalFrame {
+public class CreateBin extends LockeState {
 
-    public CreateBin(String location) {
-        super("New Area Bin", false, true, false, true);
+    public CreateBin(String location, RefreshListener refreshListener) {
+        super("New Area Bin", "/BNS/NEW", false, true, false, true);
         setFrameIcon(new ImageIcon(CreateBin.class.getResource("/icons/bins.png")));
         String generatedId;
         JTextField binIdField = Elements.input();
@@ -92,6 +94,7 @@ public class CreateBin extends JInternalFrame {
                     foundArea.save();
                     dispose();
                     JOptionPane.showMessageDialog(null, "Bin '" + binName + "' created in '" + binArea + "'");
+                    refreshListener.onRefresh();
                 }else{
                     JOptionPane.showMessageDialog(null, "Bin '" + binName + "' could not be created in '" + binArea + "'");
                 }

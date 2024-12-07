@@ -4,6 +4,7 @@ import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.HumanResources.User;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Label;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
@@ -18,13 +19,14 @@ import java.util.ArrayList;
 
 /**
  * /USRS
+ * List of Users registerd in Canal attached to selected Organization.
  */
-public class Users extends JInternalFrame {
+public class Users extends LockeState {
 
     private DefaultListModel<User> listModel;
 
     public Users(DesktopState desktop) {
-        super("Users", false, true, false, true);
+        super("Users", "/USRS", false, true, false, true);
         setFrameIcon(new ImageIcon(Users.class.getResource("/icons/employees.png")));
         listModel = new DefaultListModel<>();
         JList<User> list = new JList<>(listModel);

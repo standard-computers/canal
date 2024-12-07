@@ -4,6 +4,7 @@ import org.Canal.Models.BusinessUnits.PurchaseOrder;
 import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Controllers.CheckboxBarcodeFrame;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -16,15 +17,15 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 /**
- * /ORDS, /ORDS/PO
+ * /ORDS/PO
  */
-public class PurchaseOrders extends JInternalFrame {
+public class PurchaseOrders extends LockeState {
 
     private JTable table;
     private DesktopState desktop;
 
     public PurchaseOrders(DesktopState desktop) {
-        super("Purchase Orders", true, true, true, true);
+        super("Purchase Orders", "/ORDS/PO", true, true, true, true);
         this.desktop = desktop;
         setFrameIcon(new ImageIcon(PurchaseOrders.class.getResource("/icons/purchaseorders.png")));
         JPanel tb = createToolBar();

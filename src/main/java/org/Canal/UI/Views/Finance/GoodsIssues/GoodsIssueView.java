@@ -1,14 +1,14 @@
 package org.Canal.UI.Views.Finance.GoodsIssues;
 
-import javax.swing.*;
+import org.Canal.UI.Elements.Windows.LockeState;
 
 /**
  * /GI/$[GI_ID]
  */
-public class GoodsIssueView extends JInternalFrame {
+public class GoodsIssueView extends LockeState {
 
     public GoodsIssueView() {
-        super("Goods Issue", false, true, false, true);
+        super("Goods Issue", "/GI/$", false, true, false, true);
 
     }
 }

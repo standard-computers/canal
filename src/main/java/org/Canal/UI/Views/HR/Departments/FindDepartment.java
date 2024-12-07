@@ -3,8 +3,10 @@ package org.Canal.UI.Views.HR.Departments;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Label;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.DesktopState;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -15,10 +17,10 @@ import java.awt.event.MouseEvent;
 /**
  * /DPTS/F
  */
-public class FindDepartment extends JInternalFrame {
+public class FindDepartment extends LockeState {
 
     public FindDepartment(DesktopState desktop) {
-        setTitle("Find Department");
+        super("Find Department", "/DPTS/F", false, true, false, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/departments.png")));
         JTextField direct = new JTextField(10);
         direct.addKeyListener(new KeyAdapter() {

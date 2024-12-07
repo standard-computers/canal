@@ -1,11 +1,14 @@
 package org.Canal.UI.Views.HR.Education;
 
-import javax.swing.*;
+import org.Canal.UI.Elements.Windows.LockeState;
 
-public class CreateEducationPlan extends JInternalFrame {
+/**
+ * /HR/EDU/PLNS/NEW
+ */
+public class CreateEducationPlan extends LockeState {
 
     public CreateEducationPlan() {
-        super("Create Education Plan", false, true, false, true);
+        super("Create Education Plan", "/HR/EDU/PLNS/NEW", false, true, false, true);
 
 
     }

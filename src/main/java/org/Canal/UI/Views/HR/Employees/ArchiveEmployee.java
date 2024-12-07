@@ -1,14 +1,14 @@
 package org.Canal.UI.Views.HR.Employees;
 
-import javax.swing.*;
+import org.Canal.UI.Elements.Windows.LockeState;
 
 /**
  * /EMPS/ARCHV
  */
-public class ArchiveEmployee extends JInternalFrame {
+public class ArchiveEmployee extends LockeState {
 
     public ArchiveEmployee() {
-        super("Archive Employee", false, true, false, true);
+        super("Archive Employee", "/EMPS/ARCHV", false, true, false, true);
 
     }
 }

@@ -3,6 +3,7 @@ package org.Canal.UI.Views.Productivity.Tasks;
 import org.Canal.Models.BusinessUnits.PurchaseOrder;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.IconButton;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Orders.PurchaseOrders.CreatePurchaseOrder;
 import org.Canal.UI.Views.Controllers.CheckboxBarcodeFrame;
 import org.Canal.Utils.DesktopState;
@@ -17,14 +18,14 @@ import java.util.ArrayList;
 /**
  * /MVMT/TSKS
  */
-public class TaskList extends JInternalFrame {
+public class TaskList extends LockeState {
 
     private JTable table;
     private DesktopState desktop;
     private Location location;
 
     public TaskList(Location location, DesktopState desktop) {
-        super("Task List", true, true, true, true);
+        super("Task List", "/MVMT/TSKS", true, true, true, true);
         this.desktop = desktop;
         JPanel tb = createToolBar();
         JPanel holder = new JPanel(new BorderLayout());

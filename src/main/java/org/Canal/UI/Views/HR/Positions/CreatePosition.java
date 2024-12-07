@@ -5,6 +5,7 @@ import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.DesktopState;
 
 import javax.swing.*;
@@ -14,11 +15,13 @@ import java.awt.event.MouseEvent;
 
 /**
  * /HR/POS/NEW
+ *  Create a new Position in an Organization.
+ * Positions MUST be attached to a Department <em>/DPTS</em>
  */
-public class CreatePosition extends JInternalFrame {
+public class CreatePosition extends LockeState {
 
     public CreatePosition(DesktopState desktop) {
-        super("Create Position", false, true, false, true);
+        super("Create Position", "/HR/POS/NEW", false, true, false, true);
         setFrameIcon(new ImageIcon(CreatePosition.class.getResource("/icons/create.png")));
         JTextField positionNameField = Elements.input();
         JTextField positionIdField = Elements.input();

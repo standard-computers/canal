@@ -2,6 +2,7 @@ package org.Canal.UI.Views.Transportation.AdvancedShippingNotifications;
 
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Windows.LockeState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,10 +12,10 @@ import java.awt.event.MouseEvent;
 /**
  * /TRANS/ASN/DEL
  */
-public class RemoveASN extends JInternalFrame {
+public class RemoveASN extends LockeState {
 
     public RemoveASN() {
-        super("Remove ASN", false, true, false, true);
+        super("Remove ASN", "/TRANS/ASN/DEL", false, true, false, true);
         setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.RED));
         setLayout(new BorderLayout());
         Form f = new Form();

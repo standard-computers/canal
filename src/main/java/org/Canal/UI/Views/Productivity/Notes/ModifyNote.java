@@ -1,14 +1,16 @@
 package org.Canal.UI.Views.Productivity.Notes;
 
+import org.Canal.UI.Elements.Windows.LockeState;
+
 import javax.swing.*;
 
 /**
- * /NOTES/MOD
+ * /NTS/MOD
  */
-public class ModifyNote extends JInternalFrame {
+public class ModifyNote extends LockeState {
 
     public ModifyNote() {
-        super("Modify Note", false, true, false, true);
+        super("Modify Note", "/NTS/MOD", false, true, false, true);
         setFrameIcon(new ImageIcon(ModifyNote.class.getResource("/icons/modify.png")));
     }
 }

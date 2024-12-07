@@ -1,14 +1,14 @@
 package org.Canal.UI.Views.HR.Users;
 
-import javax.swing.*;
+import org.Canal.UI.Elements.Windows.LockeState;
 
 /**
  * /USRS/ARCHV
  */
-public class ArchiveUser extends JInternalFrame {
+public class ArchiveUser extends LockeState {
 
     public ArchiveUser() {
-        super("Archive User", false, true, false, true);
+        super("Archive User", "/USRS/ARCHV", false, true, false, true);
 
     }
 }

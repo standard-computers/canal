@@ -5,6 +5,7 @@ import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.Models.SupplyChainUnits.Vendor;
 import org.Canal.UI.Elements.IconButton;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Areas.CreateArea;
 import org.Canal.UI.Views.Bins.CreateBin;
 import org.Canal.UI.Views.Orders.PurchaseOrders.CreatePurchaseOrder;
@@ -27,14 +28,14 @@ import java.awt.event.MouseEvent;
 /**
  * /CCS/$[COST_CENTER_ID]
  */
-public class CostCenterView extends JInternalFrame implements RefreshListener {
+public class CostCenterView extends LockeState implements RefreshListener {
 
     private Location thisCostCenter;
     private JTree dataTree;
     private DesktopState desktop;
 
     public CostCenterView(Location loc, DesktopState desktop) {
-        super("Cost Center / " + loc.getId() + " - " + loc.getName(), true, true, true, true);
+        super("Cost Center / " + loc.getId() + " - " + loc.getName(), "/CCS/$", true, true, true, true);
         this.thisCostCenter = loc;
         this.desktop = desktop;
         setLayout(new BorderLayout());
@@ -85,13 +86,13 @@ public class CostCenterView extends JInternalFrame implements RefreshListener {
         addArea.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new CreateArea(thisCostCenter.getId()));
+                desktop.put(new CreateArea(thisCostCenter.getId(), CostCenterView.this));
             }
         });
         addBin.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new CreateBin(thisCostCenter.getId()));
+                desktop.put(new CreateBin(thisCostCenter.getId(), CostCenterView.this));
             }
         });
         autoMake.addMouseListener(new MouseAdapter() {

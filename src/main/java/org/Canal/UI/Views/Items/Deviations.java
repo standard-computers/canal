@@ -1,13 +1,13 @@
 package org.Canal.UI.Views.Items;
 
-import javax.swing.*;
+import org.Canal.UI.Elements.Windows.LockeState;
 
 /**
  * /ITS/DEVS
  */
-public class Deviations extends JInternalFrame {
+public class Deviations extends LockeState {
 
     public Deviations() {
-        super("Deviations", false, true, false, true);
+        super("Deviations", "/ITS/DEVS", false, true, false, true);
     }
 }

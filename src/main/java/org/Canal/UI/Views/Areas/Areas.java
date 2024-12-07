@@ -4,6 +4,7 @@ import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;
@@ -16,12 +17,12 @@ import java.util.ArrayList;
 /**
  * /AREAS
  */
-public class Areas extends JInternalFrame {
+public class Areas extends LockeState {
 
     private CustomTable table;
 
     public Areas() {
-        super("/AREAS", true, true, true, true);
+        super("Areas", "/AREAS", true, true, true, true);
         setFrameIcon(new ImageIcon(Areas.class.getResource("/icons/areas.png")));
         JPanel tb = createToolBar();
         JPanel holder = new JPanel(new BorderLayout());

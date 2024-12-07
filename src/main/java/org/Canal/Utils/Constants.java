@@ -76,29 +76,30 @@ public class Constants {
     public static Locke allModules() {
         return new Locke("Canal – All Actions", getIcon("controller"), "/ORGS", new Locke[]{
                 new Locke("Quick Accesses", getIcon("controllers"), "/", new Locke[]{
-                        new Locke("Finance", getIcon("locke"), "/FIN", null),
+                        new Locke("Finance", getIcon("finance"), "/FIN", null),
                         new Locke("Inventory", getIcon("locke"), "/INV", null),
-                        new Locke("Human Resources", getIcon("locke"), "/CNL/HR", null),
-                        new Locke("Time Clock", getIcon("locke"), "/TM_CLCK", null),
+                        new Locke("Human Resources", getIcon("humanresources"), "/CNL/HR", null),
+                        new Locke("Time Clock", getIcon("timeclock"), "/TM_CLCK", null),
                         new Locke("Clear Desk", getIcon("locke"), "/CLEAR_DSK", null),
                         new Locke("Close Desk", getIcon("locke"), "/CLOSE_DSK", null),
-                        new Locke("Canal Settings", getIcon("locke"), "/CNL", null),
+                        new Locke("Canal Settings", getIcon("settings"), "/CNL", null),
+                        new Locke("Data Center", getIcon("datacenter"), "/CNL/DATA_CNTR", null),
                         new Locke("Leave Canal", getIcon("locke"), "/CNL/EXIT", null),
                 }),
                 new Locke("Organizations", getIcon("organizations"), "/ORGS", new Locke[]{
                         new Locke("Find Organization", getIcon("locke"), "/ORGS/F", null),
-                        new Locke("Create an Organization", getIcon("locke"), "/ORGS/NEW", null),
+                        new Locke("Create an Organization", getIcon("create"), "/ORGS/NEW", null),
                         new Locke("Modify an Organization", getIcon("locke"), "/ORGS/MOD", null),
                         new Locke("Departments", getIcon("departments"), "/DPTS",  new Locke[]{
                                 new Locke("Find Department with ID", getIcon("locke"), "/DPTS/F", null),
-                                new Locke("Create a Department", getIcon("locke"), "/DPTS/NEW", null),
+                                new Locke("Create a Department", getIcon("create"), "/DPTS/NEW", null),
                                 new Locke("Modify Department", getIcon("locke"), "/DPTS/MOD", null),
                                 new Locke("Remove Department", getIcon("locke"), "/DPTS/DEL", null),
                                 new Locke("Archive Department", getIcon("locke"), "/DPTS/ARCHV", null),
                         }),
                         new Locke("Positions", getIcon("positions"), "/HR/POS",  new Locke[]{
                                 new Locke("Find Position with ID", getIcon("locke"), "/HR/POS/F", null),
-                                new Locke("Create a Position", getIcon("locke"), "/HR/POS/NEW", null),
+                                new Locke("Create a Position", getIcon("create"), "/HR/POS/NEW", null),
                                 new Locke("Modify Position", getIcon("locke"), "/HR/POS/MOD", null),
                                 new Locke("Remove Position", getIcon("locke"), "/HR/POS/DEL", null),
                                 new Locke("Archive Position", getIcon("locke"), "/HR/POS/ARCHV", null),
@@ -106,7 +107,7 @@ public class Constants {
                         }),
                         new Locke("Teams", getIcon("teams"), "/TMS",  new Locke[]{
                                 new Locke("Find Team with ID", getIcon("locke"), "/TMS/F", null),
-                                new Locke("Create a Team", getIcon("locke"), "/TMS/NEW", null),
+                                new Locke("Create a Team", getIcon("create"), "/TMS/NEW", null),
                                 new Locke("Modify Team", getIcon("locke"), "/TMS/MOD", null),
                                 new Locke("Remove Team", getIcon("locke"), "/TMS/DEL", null),
                                 new Locke("Archive Team", getIcon("locke"), "/TMS/ARCHV", null),
@@ -114,33 +115,33 @@ public class Constants {
                 }),
                 new Locke("Cost Centers", getIcon("cost_centers"), "/CCS", new Locke[]{
                         new Locke("Find CC with ID", getIcon("locke"), "/CCS/F", null),
-                        new Locke("Create a Cost Center", getIcon("locke"), "/CCS/NEW", null),
+                        new Locke("Create a Cost Center", getIcon("create"), "/CCS/NEW", null),
                         new Locke("Modify Cost Center", getIcon("locke"), "/CCS/MOD", null),
                         new Locke("Remove Cost Center", getIcon("locke"), "/CCS/DEL", null),
                         new Locke("Archive Cost Center", getIcon("locke"), "/CCS/ARCHV", null),
                 }),
                 new Locke("Distribution Centers", getIcon("distribution_centers"), "/DCSS", new Locke[]{
                         new Locke("Find with ID", getIcon("locke"), "/DCSS/F", null),
-                        new Locke("Create Dist. Center", getIcon("locke"), "/DCSS/NEW", null),
+                        new Locke("Create Dist. Center", getIcon("create"), "/DCSS/NEW", null),
                         new Locke("Modify Dist. Center", getIcon("locke"), "/DCSS/MOD", null),
                         new Locke("Remove Dist. Center", getIcon("locke"), "/DCSS/DEL", null),
                 }),
                 new Locke("Warehouses", getIcon("warehouses"), "/WHS", new Locke[]{
                         new Locke("Find Warehouse", getIcon("locke"), "/WHS/F", null),
-                        new Locke("Create Warehouse", getIcon("locke"), "/WHS/NEW", null),
+                        new Locke("Create Warehouse", getIcon("create"), "/WHS/NEW", null),
                         new Locke("Modify Warehouse", getIcon("locke"), "/WHS/MOD", null),
                         new Locke("Remove Warehouse", getIcon("locke"), "/WHS/DEL", null),
                 }),
                 new Locke("Areas", getIcon("areas"), "/AREAS", new Locke[]{
                         new Locke("Find Area", getIcon("locke"), "/AREAS/F", null),
                         new Locke("AutoMake Areas/Bins", getIcon("locke"), "/AREAS/AUTO_MK", null),
-                        new Locke("Create Area", getIcon("locke"), "/AREAS/NEW", null),
+                        new Locke("Create Area", getIcon("create"), "/AREAS/NEW", null),
                         new Locke("Modify Area", getIcon("locke"), "/AREAS/MOD", null),
                         new Locke("Remove Area", getIcon("locke"), "/AREAS/DEL", null),
                         new Locke("Archive Area", getIcon("locke"), "/AREAS/ARCHV", null),
                         new Locke("Bins", getIcon("bins"), "/BNS", new Locke[]{
                             new Locke("Find Bin", getIcon("locke"), "/BNS/F", null),
-                            new Locke("Create Bin", getIcon("locke"), "/BNS/NEW", null),
+                            new Locke("Create Bin", getIcon("create"), "/BNS/NEW", null),
                             new Locke("Modify Bin", getIcon("locke"), "/BNS/MOD", null),
                             new Locke("Remove Bin", getIcon("locke"), "/BNS/DEL", null),
                             new Locke("Archive Bin", getIcon("locke"), "/BNS/ARCHV", null),
@@ -149,7 +150,7 @@ public class Constants {
                 }),
                 new Locke("Customers", getIcon("customers"), "/CSTS", new Locke[]{
                         new Locke("Find Customer", getIcon("locke"), "/CSTS/F", null),
-                        new Locke("Create Customer", getIcon("locke"), "/CSTS/NEW", null),
+                        new Locke("Create Customer", getIcon("create"), "/CSTS/NEW", null),
                         new Locke("Remove Customer", getIcon("locke"), "/CSTS/DEL", null),
                         new Locke("Modify Customer", UIManager.getIcon("FileView.directoryIcon"), "/CSTS/MOD", new Locke[]{
                                 new Locke("Invoice", getIcon("locke"), "/CSTS/INVS/NEW", null),
@@ -160,7 +161,7 @@ public class Constants {
                 }),
                 new Locke("Invoices", getIcon("invoices"), "/INVS", new Locke[]{
                         new Locke("Find", getIcon("locke"), "/INVS/F", null),
-                        new Locke("Create an Invoice", getIcon("locke"), "/INVS/NEW", null),
+                        new Locke("Create an Invoice", getIcon("create"), "/INVS/NEW", null),
                         new Locke("Accept Payment", getIcon("locke"), "/FIN/PYMNTS/NEW", null),
                         new Locke("Modify", UIManager.getIcon("FileView.directoryIcon"), "/INVS/MOD", new Locke[]{
                                 new Locke("Invoice", getIcon("locke"), "/INVS/MOD", null),
@@ -170,7 +171,7 @@ public class Constants {
                 }),
                 new Locke("Users", getIcon("users"), "/USRS", new Locke[]{
                         new Locke("Find User", getIcon("locke"), "/USRS/F", null),
-                        new Locke("Create a User", getIcon("locke"), "/USRS/NEW", null),
+                        new Locke("Create a User", getIcon("create"), "/USRS/NEW", null),
                         new Locke("View User", getIcon("locke"), "/USRS", null),
                         new Locke("Modify a User", UIManager.getIcon("FileView.directoryIcon"), "/USRS/MOD", new Locke[]{
                                 new Locke("Suspend", getIcon("locke"), "/USRS/MOD/SP", null),
@@ -180,7 +181,7 @@ public class Constants {
                 }),
                 new Locke("Vendors", getIcon("vendors"), "/VEND", new Locke[]{
                         new Locke("Find Vendor", getIcon("locke"), "/VEND/F", null),
-                        new Locke("Create Vendor", getIcon("locke"), "/VEND/NEW", null),
+                        new Locke("Create Vendor", getIcon("create"), "/VEND/NEW", null),
                         new Locke("Remove Vendor", getIcon("locke"), "/VEND/DEL", null),
                         new Locke("Modify Vendor", getIcon("locke"), "/VEND/MOD", null),
                         new Locke("Order from Vendor", getIcon("locke"), "/VEND/ORDS/NEW", null),
@@ -189,37 +190,37 @@ public class Constants {
                 }),
                 new Locke("Items", getIcon("items"), "/ITS", new Locke[]{
                         new Locke("Find Item", getIcon("locke"), "/ITS/F", null),
-                        new Locke("Create Item", getIcon("locke"), "/ITS/NEW", null),
+                        new Locke("Create Item", getIcon("create"), "/ITS/NEW", null),
                         new Locke("Modify Item", getIcon("locke"), "/ITS/MOD", null),
                         new Locke("Remove Item", getIcon("locke"), "/ITS/DEL", null),
                 }),
                 new Locke("Materials", getIcon("materials"), "/MTS", new Locke[]{
                         new Locke("Find Material", getIcon("locke"), "/MTS/F", null),
-                        new Locke("Create Material", getIcon("locke"), "/MTS/NEW", null),
+                        new Locke("Create Material", getIcon("create"), "/MTS/NEW", null),
                         new Locke("Modify Material", getIcon("locke"), "/MTS/MOD", null),
                         new Locke("Remove Material", getIcon("locke"), "/MTS/DEL", null),
                 }),
                 new Locke("Components", getIcon("components"), "/CMPS", new Locke[]{
                         new Locke("Find Component", getIcon("locke"), "/CMPS/F", null),
-                        new Locke("Create Component", getIcon("locke"), "/CMPS/NEW", null),
+                        new Locke("Create Component", getIcon("create"), "/CMPS/NEW", null),
                         new Locke("Modify Component", getIcon("locke"), "/CMPS/MOD", null),
                         new Locke("Remove Component", getIcon("locke"), "/CMPS/DEL", null),
                 }),
                 new Locke("VAS", getIcon("vas"), "/VAS", new Locke[]{
                         new Locke("Find VAS", getIcon("locke"), "/VAS/F", null),
-                        new Locke("Create VAS", getIcon("locke"), "/VAS/NEW", null),
+                        new Locke("Create VAS", getIcon("create"), "/VAS/NEW", null),
                         new Locke("Modify VAS", getIcon("locke"), "/VAS/MOD", null),
                         new Locke("Remove VAS", getIcon("locke"), "/VAS/DEL", null),
                 }),
                 new Locke("Employees", getIcon("employees"), "/EMPS", new Locke[]{
                         new Locke("Find Employee", getIcon("locke"), "/EMPS/F", null),
-                        new Locke("Create Employee", getIcon("locke"), "/EMPS/NEW", null),
+                        new Locke("Create Employee", getIcon("create"), "/EMPS/NEW", null),
                         new Locke("Modify Employee", getIcon("locke"), "/EMPS/MOD", null),
                         new Locke("Remove Employee", getIcon("locke"), "/EMPS/DEL", null),
                 }),
                 new Locke("Catalogs", getIcon("catalogs"), "/CATS", new Locke[]{
                         new Locke("Find Catalog", getIcon("locke"), "/CATS/F", null),
-                        new Locke("Create Catalog", getIcon("locke"), "/CATS/NEW", null),
+                        new Locke("Create Catalog", getIcon("create"), "/CATS/NEW", null),
                         new Locke("Modify Catalog", getIcon("locke"), "/CATS", null),
                         new Locke("Remove Catalog", getIcon("locke"), "/CATS", null),
                         new Locke("Archive Catalog", getIcon("locke"), "/CATS/ARCHV", null),
@@ -228,7 +229,7 @@ public class Constants {
                         new Locke("Purchase Orders", getIcon("order"), "/ORDS", new Locke[]{
                                 new Locke("AutoMake PRs", getIcon("locke"), "/ORDS/PO/AUTO_MK", null),
                                 new Locke("Find PO", getIcon("locke"), "/ORDS/F", null),
-                                new Locke("Create PO", getIcon("locke"), "/ORDS/NEW", null),
+                                new Locke("Create PO", getIcon("create"), "/ORDS/NEW", null),
                                 new Locke("Remove PO", getIcon("locke"), "/ORDS/DEL", null),
                                 new Locke("Block PO", getIcon("locke"), "/ORDS/BLK", null),
                                 new Locke("Suspend PO", getIcon("locke"), "/ORDS/SP", null),
@@ -237,7 +238,7 @@ public class Constants {
                         new Locke("Purchase Reqs.", getIcon("order"), "/ORDS/PR", new Locke[]{
                                 new Locke("AutoMake PRs", getIcon("locke"), "/ORDS/PR/AUTO_MK", null),
                                 new Locke("Find PR", getIcon("locke"), "/ORDS/PR", null),
-                                new Locke("Create PR", getIcon("locke"), "/ORDS/PR/NEW", null),
+                                new Locke("Create PR", getIcon("create"), "/ORDS/PR/NEW", null),
                                 new Locke("Remove PR", getIcon("locke"), "/ORDS/PR/DEL", null),
                                 new Locke("Block PR", getIcon("locke"), "/ORDS/PR/BLK", null),
                                 new Locke("Suspend PR", getIcon("locke"), "/ORDS/PR/SP", null),
@@ -246,7 +247,7 @@ public class Constants {
                         new Locke("Sales Orders", getIcon("order"), "/ORDS/SO", new Locke[]{
                                 new Locke("AutoMake PRs", getIcon("locke"), "/ORDS/SO/AUTO_MK", null),
                                 new Locke("Find SO", getIcon("locke"), "/ORDS/SO", null),
-                                new Locke("Create SO", getIcon("locke"), "/ORDS/SO/NEW", null),
+                                new Locke("Create SO", getIcon("create"), "/ORDS/SO/NEW", null),
                                 new Locke("Modify SO", getIcon("locke"), "/ORDS/SO/MOD", null),
                                 new Locke("Remove SO", getIcon("locke"), "/ORDS/SO/DEL", null),
                                 new Locke("Block SO", getIcon("locke"), "/ORDS/SO/BLK", null),
@@ -263,21 +264,21 @@ public class Constants {
                 new Locke("Transportation", getIcon("transportation"), "/TRANS", new Locke[]{
                         new Locke("Carriers", getIcon("carriers"), "/TRANS/CRRS", new Locke[]{
                                 new Locke("Find Carrier", getIcon("locke"), "/TRANS/CRRS/F", null),
-                                new Locke("Create Carrier", getIcon("locke"), "/TRANS/CRRS/NEW", null),
+                                new Locke("Create Carrier", getIcon("create"), "/TRANS/CRRS/NEW", null),
                                 new Locke("Modify Carrier", getIcon("locke"), "/TRANS/CRRS/MOD", null),
                                 new Locke("Remove Carrier", getIcon("locke"), "/TRANS/CRRS/DEL", null),
                                 new Locke("Archive Carrier", getIcon("locke"), "/TRANS/CRRS/ARCHV", null),
                         }),
                         new Locke("Inbound Deliveries", getIcon("inbound"), "/TRANS/IDO", new Locke[]{
                                 new Locke("Find Inbound Delivery", getIcon("locke"), "/TRANS/IDO/F", null),
-                                new Locke("Create Inbound Delivery", getIcon("locke"), "/TRANS/IDO/NEW", null),
+                                new Locke("Create Inbound Delivery", getIcon("create"), "/TRANS/IDO/NEW", null),
                                 new Locke("Modify Inbound Delivery", getIcon("locke"), "/TRANS/IDO/MOD", null),
                                 new Locke("Remove Inbound Delivery", getIcon("locke"), "/TRANS/IDO/DEL", null),
                                 new Locke("Archive Inbound Delivery", getIcon("locke"), "/TRANS/IDO/ARCHV", null),
                         }),
                         new Locke("Outbound Deliveries", getIcon("outbound"), "/TRANS/ODO", new Locke[]{
                                 new Locke("Find Outbound Delivery", getIcon("locke"), "/TRANS/ODO/F", null),
-                                new Locke("Create Outbound Delivery", getIcon("locke"), "/TRANS/ODO/NEW", null),
+                                new Locke("Create Outbound Delivery", getIcon("create"), "/TRANS/ODO/NEW", null),
                                 new Locke("Modify Outbound Delivery", getIcon("locke"), "/TRANS/ODO/MOD", null),
                                 new Locke("Remove Outbound Delivery", getIcon("locke"), "/TRANS/ODO/DEL", null),
                                 new Locke("Archive Outbound Delivery", getIcon("locke"), "/TRANS/ODO/ARCHV", null),
@@ -285,7 +286,7 @@ public class Constants {
                 }),
                 new Locke("Ledgers", getIcon("ledgers"), "/LGS", new Locke[]{
                         new Locke("Find", getIcon("locke"), "/LGS/F", null),
-                        new Locke("Create", getIcon("locke"), "/LGS/NEW", null),
+                        new Locke("Create", getIcon("create"), "/LGS/NEW", null),
                         new Locke("Audit", getIcon("locke"), "/LGS/AUDIT", null),
                         new Locke("Archive", getIcon("locke"), "/LGS/ARCHV", null),
                 }),

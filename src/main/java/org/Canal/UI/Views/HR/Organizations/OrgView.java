@@ -6,6 +6,7 @@ import org.Canal.Models.BusinessUnits.PurchaseOrder;
 import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.SupplyChainUnits.*;
 import org.Canal.UI.Elements.IconButton;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Finance.Catalogs.CreateCatalog;
 import org.Canal.UI.Views.Finance.CostCenters.CostCenters;
 import org.Canal.UI.Views.Items.CreateItem;
@@ -31,7 +32,7 @@ import java.util.ArrayList;
 /**
  * /ORGS/$[ORGANIZATION_ID]
  */
-public class OrgView extends JInternalFrame {
+public class OrgView extends LockeState {
 
     private Organization location;
     private JTree dataTree;
@@ -39,7 +40,7 @@ public class OrgView extends JInternalFrame {
     private DesktopState desktop;
 
     public OrgView(Organization loc, DesktopState desktop) {
-        super(loc.getId() + " - " + loc.getName(), true, true, true, true);
+        super(loc.getId() + " - " + loc.getName(), "/ORGS/NEW", true, true, true, true);
         this.location = loc;
         this.desktop = desktop;
         setFrameIcon(new ImageIcon(OrgView.class.getResource("/icons/organizations.png")));

@@ -3,6 +3,7 @@ package org.Canal.UI.Views.Distribution.DistributionCenters;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Label;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -17,10 +18,10 @@ import java.awt.event.MouseEvent;
 /**
  * /DCSS/F
  */
-public class FindDistributionCenter extends JInternalFrame {
+public class FindDistributionCenter extends LockeState {
 
     public FindDistributionCenter(DesktopState desktop) {
-        setTitle("Find DC");
+        super("Find DC", "/", false, true, false, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/find.png")));
         Form f = new Form();
         JTextField direct = new JTextField(10);
@@ -41,14 +42,12 @@ public class FindDistributionCenter extends JInternalFrame {
         main.add(f, BorderLayout.CENTER);
         JButton find = Elements.button("Open");
         main.add(find, BorderLayout.SOUTH);
+        add(main);
         find.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 desktop.put(Engine.router("/DCSS/" + direct.getText(), desktop));
                 dispose();
             }
         });
-        add(main);
-        setIconifiable(true);
-        setClosable(true);
     }
 }

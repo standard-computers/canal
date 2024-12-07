@@ -1,6 +1,7 @@
 package org.Canal.UI.Views.Controllers;
 
 import org.Canal.UI.Elements.Windows.DesktopInterface;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
@@ -98,9 +99,16 @@ public class QuickExplorer extends JFrame implements DesktopState {
         }
     }
 
-    private void addFrame(JInternalFrame win) {
+    private void addFrame(LockeState win) {
         win.setLocation(5, 5);
         win.pack();
+        try {
+            if (win.isMaximized()) {
+                win.setMaximum(true); // This maximizes the internal frame
+            }
+        } catch (PropertyVetoException e) {
+            e.printStackTrace(); // Handle the exception or log it
+        }
         win.setVisible(true);
         desktopPane.add(win);
     }
@@ -120,7 +128,7 @@ public class QuickExplorer extends JFrame implements DesktopState {
 
     @Override
     public void put(JInternalFrame frame) {
-        addFrame(frame);
+        addFrame((LockeState) frame);
         smartPlace(frame);
         try {
             frame.setSelected(true);

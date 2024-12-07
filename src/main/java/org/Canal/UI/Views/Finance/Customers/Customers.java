@@ -2,6 +2,7 @@ package org.Canal.UI.Views.Finance.Customers;
 
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.Elements;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -18,12 +19,12 @@ import java.util.ArrayList;
 /**
  * /CSTS
  */
-public class Customers extends JInternalFrame {
+public class Customers extends LockeState {
 
     private DefaultListModel<Location> listModel;
 
     public Customers(DesktopState desktop) {
-        super("Customers", false, true, false, true);
+        super("Customers", "/CSTS", false, true, false, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/customers.png")));
         listModel = new DefaultListModel<>();
         JList<Location> list = new JList<>(listModel);

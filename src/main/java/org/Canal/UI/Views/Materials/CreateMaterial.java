@@ -7,6 +7,7 @@ import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
@@ -22,7 +23,7 @@ import java.util.HashMap;
 /**
  * /MTS/NEW
  */
-public class CreateMaterial extends JInternalFrame {
+public class CreateMaterial extends LockeState {
 
     private Copiable orgIdField;
     private JTextField materialIdField, materialNameField, materialPriceField, materialColor, itemWidth, itemLength, itemHeight, itemWeight, tax, exciseTax, upc, iniVolumeField;
@@ -30,7 +31,7 @@ public class CreateMaterial extends JInternalFrame {
     private Selectable selectedVendor;
 
     public CreateMaterial(){
-        super("Create Material", false, true, false, true);
+        super("Create Material", "/MTS/NEW", false, true, false, true);
         Constants.checkLocke(this, true, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));
         Form f1 = new Form();

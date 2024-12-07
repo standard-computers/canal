@@ -1,10 +1,12 @@
 package org.Canal.UI.Views.Controllers;
 
 import org.Canal.UI.Elements.Elements;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Orders.PurchaseRequisitions.PurchaseRequisitions;
 import org.Canal.UI.Views.Orders.PurchaseOrders.CreatePurchaseOrder;
 import org.Canal.UI.Views.Orders.PurchaseRequisitions.CreatePurchaseRequisition;
 import org.Canal.Utils.DesktopState;
+
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
@@ -12,12 +14,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
- * /FIN
+ * /CNL/FI
  */
-public class Finance extends JInternalFrame {
+public class Finance extends LockeState {
 
     public Finance(DesktopState desktop) {
-        super("Finance", true, true, true, true);
+        super("Finance", "/CNL/FI", true, true, true, true);
         setFrameIcon(new ImageIcon(TimeClock.class.getResource("/icons/finance.png")));
         JPanel main = new JPanel(new GridLayout(1, 3));
         JPanel demand = new JPanel(new GridLayout(2, 1));

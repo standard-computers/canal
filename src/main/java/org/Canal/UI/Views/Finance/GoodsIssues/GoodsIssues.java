@@ -3,6 +3,7 @@ package org.Canal.UI.Views.Finance.GoodsIssues;
 import org.Canal.Models.BusinessUnits.GoodsReceipt;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
@@ -13,14 +14,16 @@ import java.util.ArrayList;
 
 /**
  * /GI
+ * View Goods Issue Receipts
+ * Goods Issue(s) Controller
  */
-public class GoodsIssues extends JInternalFrame {
+public class GoodsIssues extends LockeState {
 
     private JTable table;
     private DesktopState desktop;
 
     public GoodsIssues(DesktopState desktop) {
-        super("Goods Issues", true, true, true, true);
+        super("Goods Issues", "/GI", true, true, true, true);
         setFrameIcon(new ImageIcon(GoodsIssues.class.getResource("/icons/purchaseorders.png")));
         if(Engine.realtime.getGoodsReceipts().isEmpty()){
             dispose();

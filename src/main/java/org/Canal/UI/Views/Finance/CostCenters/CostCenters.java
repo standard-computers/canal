@@ -4,6 +4,7 @@ import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
@@ -17,13 +18,13 @@ import java.util.ArrayList;
 /**
  * /CCS
  */
-public class CostCenters extends JInternalFrame {
+public class CostCenters extends LockeState {
 
     private CustomTable table;
     private DesktopState desktop;
 
     public CostCenters(DesktopState desktop) {
-        super("Cost Centers", true, true, true, true);
+        super("Cost Centers", "/CCS", true, true, true, true);
         this.desktop = desktop;
         setFrameIcon(new ImageIcon(CostCenters.class.getResource("/icons/cost_centers.png")));
         JPanel tb = createToolBar();

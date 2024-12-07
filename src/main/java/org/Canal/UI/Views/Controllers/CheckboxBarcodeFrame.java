@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -15,14 +17,14 @@ import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
-public class CheckboxBarcodeFrame extends JInternalFrame {
+public class CheckboxBarcodeFrame extends LockeState {
 
     private JCheckBox[] checkBoxes;
     private JButton printButton;
     private List<String> selectedValues;
 
     public CheckboxBarcodeFrame(String[] options) {
-        setTitle("Checkbox Barcode Selector");
+        super("Checkbox Barcode Selector", "/CH_BC_PRINTER", false, true, false, true);
         setSize(400, 300);
         setLayout(new BorderLayout());
         JPanel checkboxPanel = new JPanel();
@@ -36,7 +38,6 @@ public class CheckboxBarcodeFrame extends JInternalFrame {
         printButton = new JButton("Print to Barcodes (PDF)");
         printButton.addActionListener(_ -> handlePrintAction());
         add(printButton, BorderLayout.SOUTH);
-        setClosable(true);
     }
 
     private void handlePrintAction() {

@@ -4,6 +4,7 @@ import org.Canal.Models.HumanResources.Department;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
@@ -19,12 +20,12 @@ import java.util.ArrayList;
 /**
  * /DPTS
  */
-public class Departments extends JInternalFrame {
+public class Departments extends LockeState {
 
     private DefaultListModel<Department> listModel;
 
     public Departments(DesktopState desktop) {
-        super("Departments", false, true, false, true);
+        super("Departments", "/DPTS", false, true, false, true);
         setFrameIcon(new ImageIcon(Departments.class.getResource("/icons/departments.png")));
         listModel = new DefaultListModel<>();
         JList<Department> list = new JList<>(listModel);

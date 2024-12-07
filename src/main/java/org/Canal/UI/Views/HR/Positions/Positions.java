@@ -1,11 +1,14 @@
 package org.Canal.UI.Views.HR.Positions;
 
-import javax.swing.*;
+import org.Canal.UI.Elements.Windows.LockeState;
 
-public class Positions extends JInternalFrame {
+/**
+ * /HR/POS
+ */
+public class Positions extends LockeState {
 
     public Positions() {
-        super("Positions", true, true, true, true);
+        super("Positions", "/HR/POS", true, true, true, true);
 
     }
 }

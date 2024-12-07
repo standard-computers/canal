@@ -6,6 +6,7 @@ import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Label;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -19,11 +20,12 @@ import java.util.ArrayList;
 
 /**
  * /VEND/NEW
+ * Create a new Vendor <em>/VEND</em>
  */
-public class CreateVendor extends JInternalFrame {
+public class CreateVendor extends LockeState {
 
     public CreateVendor(DesktopState desktop) {
-        super("New Vendor", false, true, false, true);
+        super("New Vendor", "/VEND/NEW", false, true, false, true);
         setFrameIcon(new ImageIcon(CreateVendor.class.getResource("/icons/create.png")));
         ArrayList<Vendor> ls = Engine.getVendors();
         String generatedId = "V" + (100000 + (ls.size() + 1));

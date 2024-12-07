@@ -1,14 +1,14 @@
 package org.Canal.UI.Views.Productivity.Notes;
 
-import javax.swing.*;
+import org.Canal.UI.Elements.Windows.LockeState;
 
 /**
  * /NOTES/NEW
  */
-public class CreateNote extends JInternalFrame {
+public class CreateNote extends LockeState {
 
     public CreateNote() {
-        super("New Note", false, true, false, true);
+        super("New Note", "/NOTES/NEW", false, true, false, true);
 
     }
 }

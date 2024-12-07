@@ -2,16 +2,13 @@ package org.Canal.UI.Views.Distribution.DistributionCenters;
 
 import org.Canal.Models.BusinessUnits.OrderLineItem;
 import org.Canal.Models.BusinessUnits.PurchaseOrder;
-import org.Canal.Models.SupplyChainUnits.Area;
-import org.Canal.Models.SupplyChainUnits.Item;
-import org.Canal.Models.SupplyChainUnits.Location;
-import org.Canal.Models.SupplyChainUnits.Vendor;
+import org.Canal.Models.SupplyChainUnits.*;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Areas.AutoMakeAreasAndBins;
 import org.Canal.UI.Views.Bins.CreateBin;
 import org.Canal.UI.Views.Inventory.InventoryView;
-import org.Canal.UI.Views.Orders.PurchaseOrders.CreatePurchaseOrder;
 import org.Canal.UI.Views.Orders.ReceiveOrder;
 import org.Canal.UI.Views.Areas.CreateArea;
 import org.Canal.Utils.*;
@@ -24,6 +21,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import java.awt.*;
+import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -31,14 +29,14 @@ import java.util.ArrayList;
 /**
  * /DCSS/$[DC_ID]
  */
-public class DCView extends JInternalFrame implements RefreshListener {
+public class DCView extends LockeState implements RefreshListener {
 
     private Location distributionCenter;
     private JTree dataTree;
     private DesktopState desktop;
 
     public DCView(Location dc, DesktopState desktop) {
-        super("DC / " + dc.getId() + " - " + dc.getName(), true, true, true, true);
+        super("DC / " + dc.getId() + " - " + dc.getName(), "/DCSS/$", true, true, true, true);
         this.distributionCenter = dc;
         this.desktop = desktop;
         setFrameIcon(new ImageIcon(DCView.class.getResource("/icons/distribution_centers.png")));
@@ -148,6 +146,7 @@ public class DCView extends JInternalFrame implements RefreshListener {
         IconButton label = new IconButton("", "label", "Print labels for properties");
         inventory.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
                 desktop.put(new InventoryView(desktop, distributionCenter.getId()));
             }
         });
@@ -158,12 +157,12 @@ public class DCView extends JInternalFrame implements RefreshListener {
         });
         areas.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new CreateArea(distributionCenter.getId()));
+                desktop.put(new CreateArea(distributionCenter.getId(), DCView.this));
             }
         });
         addBin.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new CreateBin(distributionCenter.getId()));
+                desktop.put(new CreateBin(distributionCenter.getId(), DCView.this));
             }
         });
         autoMake.addMouseListener(new MouseAdapter() {
@@ -206,6 +205,25 @@ public class DCView extends JInternalFrame implements RefreshListener {
             Location l = Engine.getCustomers(distributionCenter.getTie()).get(i);
             customers[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/CSTS/" + l.getId(), Color.PINK, null);
         }
+        Locke[] areas = new Locke[Engine.getAreas(distributionCenter.getId()).size()];
+        for (int i = 0; i < Engine.getAreas(distributionCenter.getId()).size(); i++) {
+            Area l = Engine.getAreas(distributionCenter.getId()).get(i);
+            areas[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/ITS/" + l.getId(), new Color(147, 70, 3), null);
+        }
+        int binCount = 0;
+        ArrayList<Bin> bs = new ArrayList<>();
+        for(Area a : Engine.getAreas(distributionCenter.getId())){
+            binCount += a.getBins().size();
+            for(Bin b : a.getBins()){
+                bs.add(b);
+            }
+        }
+        Locke[] bins = new Locke[binCount];
+        for (int i = 0; i < bs.size(); i++) {
+
+            Bin b = bs.get(i);
+            bins[i] = new Locke(b.getId() + " - " + b.getName(), UIManager.getIcon("FileView.fileIcon"), "/BNS/" + b.getId(), Color.CYAN, null);
+        }
         Locke[] vendors = new Locke[Engine.getVendors(distributionCenter.getTie()).size()];
         for (int i = 0; i < Engine.getVendors(distributionCenter.getTie()).size(); i++) {
             Vendor l = Engine.getVendors(distributionCenter.getTie()).get(i);
@@ -216,14 +234,9 @@ public class DCView extends JInternalFrame implements RefreshListener {
             Item l = Engine.getItems(distributionCenter.getTie()).get(i);
             items[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/ITS/" + l.getId(), new Color(147, 70, 3), null);
         }
-        Locke[] areas = new Locke[Engine.getAreas(distributionCenter.getId()).size()];
-        for (int i = 0; i < Engine.getAreas(distributionCenter.getId()).size(); i++) {
-            Area l = Engine.getAreas(distributionCenter.getId()).get(i);
-            areas[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/ITS/" + l.getId(), new Color(147, 70, 3), null);
-        }
         return new Locke(distributionCenter.getName(), UIManager.getIcon("FileView.fileIcon"), "/DCSS/" + distributionCenter.getId(), new Locke[]{
                 new Locke("Areas", UIManager.getIcon("FileView.fileIcon"), "/AREAS", areas),
-                new Locke("Bins", UIManager.getIcon("FileView.fileIcon"), "/BNS", null),
+                new Locke("Bins", UIManager.getIcon("FileView.fileIcon"), "/BNS", bins),
                 new Locke("Items", UIManager.getIcon("FileView.fileIcon"), "/ITS", items),
                 new Locke("Customers", UIManager.getIcon("FileView.fileIcon"), "/CSTS", customers),
                 new Locke("Materials", UIManager.getIcon("FileView.fileIcon"), "/MTS", null),

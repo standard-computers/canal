@@ -6,6 +6,7 @@ import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Pipe;
@@ -19,14 +20,14 @@ import java.util.HashMap;
 /**
  * /CNL
  */
-public class CanalSettings extends JInternalFrame {
+public class CanalSettings extends LockeState {
 
     private Selectable themeOptions;
     private Selectable codeSelect;
     private JCheckBox showCanalCodes;
 
     public CanalSettings(){
-        super("Canal Settings", false, true, false, false);
+        super("Canal Settings", "/CNL", false, true, false, false);
         setFrameIcon(new ImageIcon(CanalSettings.class.getResource("/icons/settings.png")));
 
         JButton cr = Elements.button("Save");

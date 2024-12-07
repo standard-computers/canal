@@ -1,6 +1,7 @@
 package org.Canal.UI.Views.Bins;
 
 import org.Canal.Models.SupplyChainUnits.Area;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
@@ -16,12 +17,12 @@ import java.util.ArrayList;
 /**
  * /BNS
  */
-public class Bins extends JInternalFrame {
+public class Bins extends LockeState {
 
     private DefaultListModel<Area> listModel;
 
     public Bins(DesktopState desktop) {
-        super("Bins", false, true, false, true);
+        super("Bins", "/BNS", false, true, false, true);
         setFrameIcon(new ImageIcon(Bins.class.getResource("/icons/areas.png")));
         listModel = new DefaultListModel<>();
         JList<Area> list = new JList<>(listModel);

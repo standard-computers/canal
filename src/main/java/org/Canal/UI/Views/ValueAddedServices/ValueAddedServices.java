@@ -1,6 +1,7 @@
 package org.Canal.UI.Views.ValueAddedServices;
 
 import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Windows.LockeState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,10 +9,10 @@ import java.awt.*;
 /**
  * /VAS
  */
-public class ValueAddedServices extends JInternalFrame {
+public class ValueAddedServices extends LockeState {
 
     public ValueAddedServices() {
-        super("Value Added Services", false, true, false, true);
+        super("Value Added Services", "/VAS", false, true, false, true);
         Form f = new Form();
 
         setLayout(new BorderLayout());

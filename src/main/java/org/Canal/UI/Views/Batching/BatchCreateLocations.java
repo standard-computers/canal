@@ -1,6 +1,7 @@
 package org.Canal.UI.Views.Batching;
 
 import org.Canal.UI.Elements.Input;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.Pipe;
 
 import javax.swing.*;
@@ -13,14 +14,14 @@ import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BatchCreateLocations extends JInternalFrame {
+public class BatchCreateLocations extends LockeState {
 
     private JTable table;
     private DefaultTableModel model;
     private String tcode;
 
     public BatchCreateLocations(String type, String tcode, String tieValue) {
-        super("New " + type);
+        super("New " + type, "/", false, true, false, true);
         this.tcode = tcode;
         setSize(400, 300);
         model = new DefaultTableModel();

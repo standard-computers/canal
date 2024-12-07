@@ -1,10 +1,12 @@
 package org.Canal.UI.Elements.Windows;
 
-import javax.swing.*;
-
-public class MarkdownViewer extends JInternalFrame {
+/**
+ * /READER
+ * Markdown Document Viewer
+ */
+public class MarkdownViewer extends LockeState {
 
     public MarkdownViewer(String uri) {
-        super("Reader", true, true, true, true);
+        super("Reader", "/READER", true, true, true, true);
     }
 }

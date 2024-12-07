@@ -1,14 +1,14 @@
 package org.Canal.UI.Views.Orders.PurchaseOrders;
 
-import javax.swing.*;
+import org.Canal.UI.Elements.Windows.LockeState;
 
 /**
  * /ORDS/PO/ARCHV
  */
-public class ArchivePurchaseOrder extends JInternalFrame {
+public class ArchivePurchaseOrder extends LockeState {
 
     public ArchivePurchaseOrder() {
-        super("Archive Purchase Order", false, true, false, true);
+        super("Archive Purchase Order", "/ORDS/PO/ARCHV", false, true, false, true);
 
     }
 }

@@ -4,6 +4,7 @@ import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Label;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -17,11 +18,12 @@ import java.util.ArrayList;
 
 /**
  * /DCSS/NEW
+ * Create a Distribution Center
  */
-public class CreateDistributionCenter extends JInternalFrame {
+public class CreateDistributionCenter extends LockeState {
 
     public CreateDistributionCenter(DesktopState desktop) {
-        super("New Distribution Center", false, true, false, true);
+        super("New Distribution Center", "/DCSS/NEW", false, true, false, true);
         setFrameIcon(new ImageIcon(CreateDistributionCenter.class.getResource("/icons/create.png")));
         ArrayList<Location> ls = Engine.getDistributionCenters();
         String generatedId = "DC" + (100000 + (ls.size() + 1));

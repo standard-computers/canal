@@ -14,6 +14,7 @@ import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Inputs.Selectable;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.*;
 
@@ -32,7 +33,7 @@ import java.util.HashMap;
 /**
  * /ORDS/RCV
  */
-public class ReceiveOrder extends JInternalFrame {
+public class ReceiveOrder extends LockeState {
 
     private JTextField poField;
     private Selectable availRcvLocations, availablePutawayBin;
@@ -40,7 +41,7 @@ public class ReceiveOrder extends JInternalFrame {
     private CustomTable receivedItems;
 
     public ReceiveOrder(String receivingLocation, DesktopState desktop){
-        super("Receive Order", false, true, false, true);
+        super("Receive Order", "/ORDS/RCV", false, true, false, true);
         Constants.checkLocke(this, true, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/label.png")));
         setLayout(new BorderLayout());

@@ -4,15 +4,16 @@ import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.UOMField;
 import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.Constants;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class CreateInclusion extends JInternalFrame {
+public class CreateInclusion extends LockeState {
 
     public CreateInclusion(String title) {
-        super(title, false, true, false, true);
+        super(title, "/", false, true, false, true);
         Form f = new Form();
         JTextField inclusionId = Elements.input();
         UOMField usage = new UOMField();

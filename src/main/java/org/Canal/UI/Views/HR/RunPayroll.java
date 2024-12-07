@@ -1,18 +1,14 @@
 package org.Canal.UI.Views.HR;
 
-import javax.swing.*;
+import org.Canal.UI.Elements.Windows.LockeState;
 
 /**
  * /HR/PY_RLL/RUN
  */
-public class RunPayroll extends JInternalFrame {
+public class RunPayroll extends LockeState {
 
     public RunPayroll() {
-        setTitle("Run Payroll");
+        super("Run Payroll", "/HR/PY_RLL/RUN", false, true, false, true);
 
-
-        setIconifiable(true);
-        setClosable(true);
-        setResizable(true);
     }
 }

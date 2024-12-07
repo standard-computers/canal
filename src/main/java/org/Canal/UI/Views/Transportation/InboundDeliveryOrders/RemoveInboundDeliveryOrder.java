@@ -3,6 +3,7 @@ package org.Canal.UI.Views.Transportation.InboundDeliveryOrders;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Windows.LockeState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,10 +13,10 @@ import java.awt.event.MouseEvent;
 /**
  * /TRANS/IDO/DEL
  */
-public class RemoveInboundDeliveryOrder extends JInternalFrame {
+public class RemoveInboundDeliveryOrder extends LockeState {
 
     public RemoveInboundDeliveryOrder() {
-        super("Remove IDO", false, true, false, true);
+        super("Remove IDO", "/TRANS/IDO/DEL", false, true, false, true);
         setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.RED));
         setLayout(new BorderLayout());
         Form f = new Form();

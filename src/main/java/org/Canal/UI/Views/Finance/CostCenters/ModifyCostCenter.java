@@ -2,6 +2,7 @@ package org.Canal.UI.Views.Finance.CostCenters;
 
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.Elements;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;
@@ -11,13 +12,15 @@ import java.awt.event.MouseEvent;
 
 /**
  * /CCS/MOD
+ * Modify Cost Center with Cost Center ID.
+ * Selectable with Cost Center ID and load data on select.
  */
-public class ModifyCostCenter extends JInternalFrame {
+public class ModifyCostCenter extends LockeState {
 
     private Location costCenter;
 
     public ModifyCostCenter(Location costCenter) {
-        super(costCenter.getId(), false, true, false, true);
+        super("Modify Cost Center", "/CCS/MOD", false, true, false, true);
         setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.RED));
         setFrameIcon(new ImageIcon(ModifyCostCenter.class.getResource("/icons/modify.png")));
         this.costCenter = costCenter;

@@ -2,6 +2,7 @@ package org.Canal.UI.Views.Finance.Customers;
 
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.IconButton;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Invoices.CreateInvoice;
 
 import javax.swing.*;
@@ -13,12 +14,12 @@ import java.awt.event.MouseEvent;
 /**
  * /CSTS/$[CUSTOMER_ID]
  */
-public class CustomerView extends JInternalFrame {
+public class CustomerView extends LockeState {
 
     private Location customer;
 
     public CustomerView(Location customer) {
-        super("Customer / " + customer.getId() + " - " + customer.getName(), false, true, false, true);
+        super("Customer / " + customer.getId() + " - " + customer.getName(), "/CSTS/$", false, true, false, true);
         this.customer = customer;
         JTabbedPane tabbedPane = new JTabbedPane();
         JPanel formPanel = new JPanel();

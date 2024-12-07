@@ -46,6 +46,7 @@ public class CustomTable extends JTable {
         TableColumn selectColumn = getColumnModel().getColumn(0);
         selectColumn.setCellRenderer(new CheckboxRenderer());
         selectColumn.setCellEditor(new DefaultCellEditor(new JCheckBox()));
+        autoResizeColumns();
     }
 
     private EventTableModel<Object[]> createTableModel() {
@@ -127,6 +128,22 @@ public class CustomTable extends JTable {
                 checkBox.setBackground(table.getBackground());
             }
             return checkBox;
+        }
+    }
+
+    public void autoResizeColumns() {
+        for (int col = 0; col < getColumnCount(); col++) {
+            TableColumn column = getColumnModel().getColumn(col);
+            int maxWidth = 0;
+            Component headerRenderer = getTableHeader().getDefaultRenderer()
+                    .getTableCellRendererComponent(this, column.getHeaderValue(), false, false, -1, col);
+            maxWidth = headerRenderer.getPreferredSize().width;
+            for (int row = 0; row < getRowCount(); row++) {
+                Component cellRenderer = getCellRenderer(row, col)
+                        .getTableCellRendererComponent(this, getValueAt(row, col), false, false, row, col);
+                maxWidth = Math.max(maxWidth, cellRenderer.getPreferredSize().width);
+            }
+            column.setPreferredWidth(maxWidth + 10);
         }
     }
 }

@@ -1,10 +1,10 @@
 package org.Canal.UI.Views.Inventory;
 
-import javax.swing.*;
+import org.Canal.UI.Elements.Windows.LockeState;
 
-public class MakeTransfer extends JInternalFrame {
+public class MakeTransfer extends LockeState {
 
     public MakeTransfer() {
-        super(null);
+        super("", "", false, true, false, true);
     }
 }

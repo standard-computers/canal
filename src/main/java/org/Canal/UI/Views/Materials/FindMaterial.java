@@ -3,6 +3,7 @@ package org.Canal.UI.Views.Materials;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Label;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -16,10 +17,10 @@ import java.awt.event.MouseEvent;
 /**
  * /MTS/F
  */
-public class FindMaterial extends JInternalFrame {
+public class FindMaterial extends LockeState {
 
     public FindMaterial(DesktopState desktop) {
-        super("Find Material", false, true, false, true);
+        super("Find Material", "/", false, true, false, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/find.png")));
         Form f = new Form();
         JTextField direct = new JTextField(10);

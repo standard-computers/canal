@@ -7,6 +7,7 @@ import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.*;
 
@@ -20,7 +21,7 @@ import java.util.HashMap;
 /**
  * /ITS/NEW
  */
-public class CreateItem extends JInternalFrame implements Includer {
+public class CreateItem extends LockeState implements Includer {
 
     private JTextField itemIdField;
     private JTextField itemNameField;
@@ -37,7 +38,7 @@ public class CreateItem extends JInternalFrame implements Includer {
     private DesktopState desktop;
 
     public CreateItem(DesktopState desktop){
-        super("Item Builder", false, true, false, true);
+        super("Item Builder", "/ITS/NEW", false, true, false, true);
         this.desktop = desktop;
         Constants.checkLocke(this, true, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));

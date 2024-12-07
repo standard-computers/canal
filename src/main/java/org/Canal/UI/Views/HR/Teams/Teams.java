@@ -1,14 +1,14 @@
 package org.Canal.UI.Views.HR.Teams;
 
-import javax.swing.*;
+import org.Canal.UI.Elements.Windows.LockeState;
 
 /**
  * /TMS
  */
-public class Teams extends JInternalFrame {
+public class Teams extends LockeState {
 
     public Teams() {
-        super("Teams", false, true, false, true);
+        super("Teams", "/TMS", false, true, false, true);
 
     }
 }

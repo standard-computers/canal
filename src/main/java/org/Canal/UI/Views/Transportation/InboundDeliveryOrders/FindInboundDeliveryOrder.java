@@ -3,6 +3,7 @@ package org.Canal.UI.Views.Transportation.InboundDeliveryOrders;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -17,10 +18,10 @@ import java.awt.event.MouseEvent;
 /**
  * /TRANS/IDO/F
  */
-public class FindInboundDeliveryOrder extends JInternalFrame {
+public class FindInboundDeliveryOrder extends LockeState {
 
     public FindInboundDeliveryOrder(DesktopState desktop) {
-        super("Find IDO", false, true, false, true);
+        super("Find IDO", "/TRANS/IDO/F", false, true, false, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/find.png")));
         JTextField direct = new JTextField(10);
         direct.addKeyListener(new KeyAdapter() {

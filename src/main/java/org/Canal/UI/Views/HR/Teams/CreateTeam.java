@@ -5,6 +5,7 @@ import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.Constants;
 
 import javax.swing.*;
@@ -15,10 +16,10 @@ import java.awt.event.MouseEvent;
 /**
  * /TMS/NEW
  */
-public class CreateTeam extends JInternalFrame {
+public class CreateTeam extends LockeState {
 
     public CreateTeam() {
-        super("Create Team", false, true, false, true);
+        super("Create Team", "/TMS/NEW", false, true, false, true);
         setLayout(new BorderLayout());
         Form f = new Form();
 

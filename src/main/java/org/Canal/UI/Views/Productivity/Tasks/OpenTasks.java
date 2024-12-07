@@ -1,14 +1,14 @@
 package org.Canal.UI.Views.Productivity.Tasks;
 
-import javax.swing.*;
+import org.Canal.UI.Elements.Windows.LockeState;
 
 /**
  * /MVMT/TSKS, /MVMT/TSKS/IS_OPEN
  */
-public class OpenTasks extends JInternalFrame {
+public class OpenTasks extends LockeState {
 
     public OpenTasks() {
-        super("Open Tasks", false, true, false, true);
+        super("Open Tasks", "/MVMT/TSKS", false, true, false, true);
 
     }
 }

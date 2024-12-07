@@ -1,14 +1,14 @@
 package org.Canal.UI.Views.Finance.Catalogs;
 
-import javax.swing.*;
+import org.Canal.UI.Elements.Windows.LockeState;
 
 /**
  * /CATS/$[CATALOG_ID]
  */
-public class CatalogView extends JInternalFrame {
+public class CatalogView extends LockeState {
 
     public CatalogView() {
-        super("Catalog", true, true, true, true);
+        super("Catalog", "/CATS/$", true, true, true, true);
 
     }
 }

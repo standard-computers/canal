@@ -2,6 +2,7 @@ package org.Canal.UI.Views.Components;
 
 import org.Canal.Models.SupplyChainUnits.Vendor;
 import org.Canal.UI.Elements.Elements;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
@@ -17,12 +18,12 @@ import java.util.ArrayList;
 /**
  * /CMPS
  */
-public class Components extends JInternalFrame {
+public class Components extends LockeState {
 
     private DefaultListModel<Vendor> listModel;
 
     public Components(DesktopState desktop) {
-        super("Components", false, true, false, true);
+        super("Components", "CMPS/", false, true, false, true);
         setFrameIcon(new ImageIcon(Components.class.getResource("/icons/vendors.png")));
         listModel = new DefaultListModel<>();
         JList<Vendor> list = new JList<>(listModel);

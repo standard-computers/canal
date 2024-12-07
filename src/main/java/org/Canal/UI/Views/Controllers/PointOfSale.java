@@ -1,13 +1,13 @@
 package org.Canal.UI.Views.Controllers;
 
-import javax.swing.*;
+import org.Canal.UI.Elements.Windows.LockeState;
 
 /**
  * /CNL/POS
  */
-public class PointOfSale extends JInternalFrame {
+public class PointOfSale extends LockeState {
 
     public PointOfSale() {
-        super("Canal POS", true, true, true, true);
+        super("Canal POS", "/CNL/POS", true, true, true, true);
     }
 }

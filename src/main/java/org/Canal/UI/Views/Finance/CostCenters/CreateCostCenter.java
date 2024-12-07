@@ -6,6 +6,7 @@ import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Label;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Pipe;
@@ -18,11 +19,10 @@ import java.awt.event.MouseEvent;
 /**
  * /CCS/NEW
  */
-public class CreateCostCenter extends JInternalFrame {
+public class CreateCostCenter extends LockeState {
 
     public CreateCostCenter(){
-        super();
-        setTitle("Create Cost Center");
+        super("Create Cost Center", "/CCS/NEW", false, true, false, true);
         setFrameIcon(new ImageIcon(CreateCostCenter.class.getResource("/icons/cost_centers.png")));
         String genId = "CC" + 1000 + (Engine.getCostCenters().size() + 1);
         JTextField ccIdField = Elements.input(genId);
@@ -48,8 +48,6 @@ public class CreateCostCenter extends JInternalFrame {
         add(f, BorderLayout.CENTER);
         JButton make = Elements.button("Make");
         add(make, BorderLayout.SOUTH);
-        setIconifiable(true);
-        setClosable(true);
         make.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

@@ -3,6 +3,7 @@ package org.Canal.UI.Views.Orders.PurchaseOrders;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Label;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -17,10 +18,10 @@ import java.awt.event.MouseEvent;
 /**
  * /ORDS/PO/F
  */
-public class FindPurchaseOrder extends JInternalFrame {
+public class FindPurchaseOrder extends LockeState {
 
     public FindPurchaseOrder(DesktopState desktop) {
-        super("Find Purchase Order", false, true, false, true);
+        super("Find Purchase Order", "/ORDS/PO/F", false, true, false, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/find.png")));
         Form f = new Form();
         JTextField direct = Elements.input(15);

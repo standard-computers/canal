@@ -3,6 +3,7 @@ package org.Canal.UI.Views.Productivity.Tasks;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -15,10 +16,10 @@ import java.awt.event.MouseEvent;
 /**
  * /MVMT/TSKS/F
  */
-public class FindTask extends JInternalFrame {
+public class FindTask extends LockeState {
 
     public FindTask(DesktopState desktop) {
-        setTitle("Find Task");
+        super("Find Task", "/MVMT/TSKS/F", false, true, false, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/find.png")));
         Form f = new Form();
         JTextField empIdField = new JTextField(10);
@@ -39,7 +40,5 @@ public class FindTask extends JInternalFrame {
             }
         });
         add(main);
-        setIconifiable(true);
-        setClosable(true);
     }
 }

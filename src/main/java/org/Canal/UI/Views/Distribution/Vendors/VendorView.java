@@ -2,6 +2,7 @@ package org.Canal.UI.Views.Distribution.Vendors;
 
 import org.Canal.Models.SupplyChainUnits.Vendor;
 import org.Canal.UI.Elements.IconButton;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Orders.PurchaseOrders.CreatePurchaseOrder;
 
 import javax.swing.*;
@@ -12,13 +13,15 @@ import java.awt.event.MouseEvent;
 
 /**
  * /VEND/$[VENDOR_ID]
+ * View Vendor with Vendor ID
+ * Vendor Controller
  */
-public class VendorView extends JInternalFrame {
+public class VendorView extends LockeState {
 
     private Vendor vendor;
 
     public VendorView(Vendor vendor) {
-        super("Vendor / " + vendor.getId() + " - " + vendor.getName(), false, true, false, true);
+        super("Vendor / " + vendor.getId() + " - " + vendor.getName(), "/VEND/$", false, true, false, true);
         setFrameIcon(new ImageIcon(VendorView.class.getResource("/icons/vendors.png")));
         this.vendor = vendor;
         JTabbedPane tabbedPane = new JTabbedPane();

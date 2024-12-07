@@ -1,13 +1,13 @@
 package org.Canal.UI.Views.Production;
 
-import javax.swing.*;
+import org.Canal.UI.Elements.Windows.LockeState;
 
 /**
  * /PROD/CST/NEW
  */
-public class CustomProductionOrder extends JInternalFrame {
+public class CustomProductionOrder extends LockeState {
 
     public CustomProductionOrder() {
-        super("Custom Production Order", true, true, true, true);
+        super("Custom Production Order", "/PROD/CST/NEW", true, true, true, true);
     }
 }

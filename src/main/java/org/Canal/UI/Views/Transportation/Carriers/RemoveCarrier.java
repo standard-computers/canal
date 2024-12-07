@@ -3,6 +3,7 @@ package org.Canal.UI.Views.Transportation.Carriers;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Windows.LockeState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,10 +13,10 @@ import java.awt.event.MouseEvent;
 /**
  * /TRANS/CRRS/DEL
  */
-public class RemoveCarrier extends JInternalFrame {
+public class RemoveCarrier extends LockeState {
 
     public RemoveCarrier() {
-        super("Remove Carrier", false, true, false, true);
+        super("Remove Carrier", "/TRANS/CRRS/DEL", false, true, false, true);
         setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.RED));
         setLayout(new BorderLayout());
         Form f = new Form();

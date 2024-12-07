@@ -3,6 +3,7 @@ package org.Canal.UI.Views.Transportation.Trucks;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -16,11 +17,12 @@ import java.awt.event.MouseEvent;
 
 /**
  * /TRANS/ODO/F
+ * Find a Truck with Truck ID or Carrier Name
  */
-public class FindTruck extends JInternalFrame {
+public class FindTruck extends LockeState {
 
     public FindTruck(DesktopState desktop) {
-        super("Find Truck", false, true, false, true);
+        super("Find Truck", "/TRANS/TRCKS/F", false, true, false, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/find.png")));
         JTextField direct = new JTextField(10);
         direct.addKeyListener(new KeyAdapter() {

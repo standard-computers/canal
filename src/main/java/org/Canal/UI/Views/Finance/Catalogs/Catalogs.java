@@ -1,6 +1,7 @@
 package org.Canal.UI.Views.Finance.Catalogs;
 
 import org.Canal.Models.SupplyChainUnits.Catalog;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
@@ -15,12 +16,12 @@ import java.awt.event.MouseEvent;
 /**
  * /CATS
  */
-public class Catalogs extends JInternalFrame {
+public class Catalogs extends LockeState {
 
     private DefaultListModel<Catalog> listModel;
 
     public Catalogs(DesktopState desktop) {
-        super("Catalogs", false, true, false, true);
+        super("Catalogs", "/CATS", false, true, false, true);
         listModel = new DefaultListModel<>();
         JList<Catalog> list = new JList<>(listModel);
         list.setCellRenderer(new CatalogRenderer());

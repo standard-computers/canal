@@ -3,9 +3,11 @@ package org.Canal.UI.Views.Finance.Customers;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Label;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -16,10 +18,10 @@ import java.awt.event.MouseEvent;
 /**
  * /CSTS/F
  */
-public class FindCustomer extends JInternalFrame {
+public class FindCustomer extends LockeState {
 
     public FindCustomer(DesktopState desktop) {
-        setTitle("Find Customer");
+        super("Find Customer", "/CSTS/F", false, true, false, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/find.png")));
         JTextField direct = new JTextField(10);
         direct.addKeyListener(new KeyAdapter() {

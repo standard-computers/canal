@@ -1,15 +1,15 @@
 package org.Canal.UI.Views.Transportation.Carriers;
 
-import javax.swing.*;
+import org.Canal.UI.Elements.Windows.LockeState;
 
 /**
  * /TRANS/CRRS
  * List of all Carriers created in Canal
  */
-public class Carriers extends JInternalFrame {
+public class Carriers extends LockeState {
 
     public Carriers() {
-        super("Carriers", true, true, true, true);
+        super("Carriers", "/TRANS/CRRS", true, true, true, true);
 
     }
 }

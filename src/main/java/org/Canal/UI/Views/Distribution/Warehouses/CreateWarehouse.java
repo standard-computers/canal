@@ -6,6 +6,7 @@ import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
@@ -21,10 +22,10 @@ import java.util.ArrayList;
 /**
  * /WHS/NEW
  */
-public class CreateWarehouse extends JInternalFrame {
+public class CreateWarehouse extends LockeState {
 
     public CreateWarehouse(DesktopState desktop) {
-        setTitle("New Warehouse");
+        super("New Warehouse", "/WHS/NEW", false, true, false, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/warehouses.png")));
         ArrayList<Warehouse> ls = Engine.getWarehouses();
         String generatedId = "WH" + (100000 + (ls.size() + 1));
@@ -61,9 +62,6 @@ public class CreateWarehouse extends JInternalFrame {
 
         add(f, BorderLayout.CENTER);
         add(make, BorderLayout.SOUTH);
-        setResizable(false);
-        setIconifiable(true);
-        setClosable(true);
         make.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

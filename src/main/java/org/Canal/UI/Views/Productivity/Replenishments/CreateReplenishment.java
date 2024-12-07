@@ -1,14 +1,15 @@
 package org.Canal.UI.Views.Productivity.Replenishments;
 
-import javax.swing.*;
+import org.Canal.UI.Elements.Windows.LockeState;
 
 /**
- * /RPL
+ * /RPL/NEW
+ * Create a new Replenishment schedule
  */
-public class CreateReplenishment extends JInternalFrame {
+public class CreateReplenishment extends LockeState {
 
     public CreateReplenishment() {
-        super("Replenishments", false, true, false, true);
+        super("Create Replenishment", "/RPL/NEW", false, true, false, true);
 
     }
 }

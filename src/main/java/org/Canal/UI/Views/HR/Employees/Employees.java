@@ -4,6 +4,7 @@ import org.Canal.Models.HumanResources.Employee;
 import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
@@ -17,12 +18,12 @@ import java.util.ArrayList;
 /**
  * /EMPS
  */
-public class Employees extends JInternalFrame {
+public class Employees extends LockeState {
 
     private CustomTable table;
 
     public Employees(DesktopState desktop) {
-        super("Employees", true, true, true, true);
+        super("Employees", "/EMPS", true, true, true, true);
         setFrameIcon(new ImageIcon(Employees.class.getResource("/icons/employees.png")));
         JPanel tb = createToolBar();
         JPanel holder = new JPanel(new BorderLayout());

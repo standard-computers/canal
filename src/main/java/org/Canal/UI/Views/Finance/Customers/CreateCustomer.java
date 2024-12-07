@@ -6,6 +6,7 @@ import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Label;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -17,10 +18,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-public class CreateCustomer extends JInternalFrame {
+/**
+ * /CSTS/NEW
+ */
+public class CreateCustomer extends LockeState {
 
     public CreateCustomer(DesktopState desktop) {
-        super("New Customer", false, true, false, true);
+        super("New Customer", "/CSTS/NEW", false, true, false, true);
         setFrameIcon(new ImageIcon(CreateCustomer.class.getResource("/icons/create.png")));
         ArrayList<Location> ls = Engine.getCustomers();
         String genLocId = String.valueOf(100000 + (ls.size() + 1));

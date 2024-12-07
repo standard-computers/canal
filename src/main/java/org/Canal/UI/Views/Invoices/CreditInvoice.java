@@ -2,6 +2,7 @@ package org.Canal.UI.Views.Invoices;
 
 import org.Canal.Models.BusinessUnits.Invoice;
 import org.Canal.UI.Elements.Input;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.Engine;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -10,13 +11,13 @@ import java.awt.*;
 /**
  * /INVS/CR
  */
-public class CreditInvoice extends JInternalFrame {
+public class CreditInvoice extends LockeState {
 
     private Invoice newInvoice;
 
     public CreditInvoice(Invoice invoice) {
-        setTitle("Credit Invoice");
-        if(Engine.getCustomers().size() == 0){
+        super("Credit Invoice", "/", false, true, false, true);
+        if(Engine.getCustomers().isEmpty()){
             JOptionPane.showMessageDialog(null, "No customers to invoice.");
             dispose();
             return;
@@ -31,6 +32,5 @@ public class CreditInvoice extends JInternalFrame {
         setLayout(new BorderLayout());
         add(orderInfo, BorderLayout.NORTH);
         add(save, BorderLayout.SOUTH);
-        setResizable(false);
     }
 }

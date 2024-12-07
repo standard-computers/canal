@@ -9,6 +9,7 @@ import org.Canal.UI.Views.Areas.*;
 import org.Canal.UI.Views.Bins.Bins;
 import org.Canal.UI.Views.Bins.CreateBin;
 import org.Canal.UI.Views.Bins.FindBin;
+import org.Canal.UI.Views.Components.ArchiveComponent;
 import org.Canal.UI.Views.Components.Components;
 import org.Canal.UI.Views.Components.CreateComponent;
 import org.Canal.UI.Views.Components.FindComponent;
@@ -459,7 +460,7 @@ public class Engine {
                 return new FindArea(desktop);
             }
             case "/AREAS/NEW" -> {
-                return new CreateArea(null);
+                return new CreateArea(null, null);
             }
             case "/AREAS/MOD" -> {
                 return new ModifyArea();
@@ -474,7 +475,7 @@ public class Engine {
                 return new FindBin(desktop);
             }
             case "/BNS/NEW" -> {
-                return new CreateBin("");
+                return new CreateBin("", null);
             }
             case "/CSTS" -> {
                 return new Customers(desktop);
@@ -602,6 +603,9 @@ public class Engine {
             case "/CMPS/NEW" -> {
                 return new CreateComponent();
             }
+            case "/CMPS/ARCHV" -> {
+                return new ArchiveComponent();
+            }
             case "/VAS" -> {
                 return new ValueAddedServices();
             }
@@ -669,7 +673,7 @@ public class Engine {
                 return new InventoryView(desktop, Engine.getOrganization().getId());
             }
             case "/STK/MOD/MV" -> {
-                return new MoveStock();
+                return new MoveStock("", null);
             }
             case "/INVS", "/INVS/NEW" -> {
                 return new CreateInvoice(null);
@@ -781,6 +785,9 @@ public class Engine {
             }
             case "/HR/POS/NEW" -> {
                 return new CreatePosition(desktop);
+            }
+            case "/CNL/DATA_CNTR" -> {
+                return new DataCenter();
             }
             case "/CNL/HR" -> {
                 return new HumanResources(desktop);

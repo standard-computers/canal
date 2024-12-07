@@ -1,13 +1,13 @@
 package org.Canal.UI.Views.Orders.PurchaseOrders;
 
-import javax.swing.*;
+import org.Canal.UI.Elements.Windows.LockeState;
 
 /**
  * /RPTS/ORDS/PO/IS_OPEN
  */
-public class OpenPOReport extends JInternalFrame {
+public class OpenPOReport extends LockeState {
 
     public OpenPOReport() {
-        super("Open Purchase Orders", false, true, false, true);
+        super("Open Purchase Orders", "/RPTS/ORDS/PO/IS_OPEN", false, true, false, true);
     }
 }

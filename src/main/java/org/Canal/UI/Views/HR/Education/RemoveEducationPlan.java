@@ -1,11 +1,14 @@
 package org.Canal.UI.Views.HR.Education;
 
-import javax.swing.*;
+import org.Canal.UI.Elements.Windows.LockeState;
 
-public class RemoveEducationPlan extends JInternalFrame {
+/**
+ * /HR/EDU/PLNS/DEL
+ */
+public class RemoveEducationPlan extends LockeState {
 
     public RemoveEducationPlan() {
-        super("Remove Education Plan", true, true, true, true);
+        super("Remove Education Plan", "/HR/EDU/PLNS/DEL", true, true, true, true);
 
     }
 }

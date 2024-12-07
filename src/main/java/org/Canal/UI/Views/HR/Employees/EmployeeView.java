@@ -3,18 +3,22 @@ package org.Canal.UI.Views.HR.Employees;
 import org.Canal.Models.HumanResources.Employee;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.Inputs.Copiable;
+import org.Canal.UI.Elements.Windows.LockeState;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class EmployeeView extends JInternalFrame {
+/**
+ * /EMPS/$[EMPLOYEE_ID]
+ */
+public class EmployeeView extends LockeState {
 
     private Employee employee;
 
     public EmployeeView(Employee employee) {
-        super(employee.getId() + " - " + employee.getName(), false, true, false, true);
+        super(employee.getId() + " - " + employee.getName(), "/EMPS/$", false, true, false, true);
         this.employee = employee;
         setFrameIcon(new ImageIcon(Employees.class.getResource("/icons/employees.png")));
         JTabbedPane tabbedPane = new JTabbedPane();

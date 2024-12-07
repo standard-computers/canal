@@ -4,6 +4,7 @@ import org.Canal.Models.HumanResources.User;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Label;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 
@@ -15,10 +16,10 @@ import java.awt.event.MouseEvent;
 /**
  * /LOGIN
  */
-public class Login extends JInternalFrame {
+public class Login extends LockeState {
 
     public Login(boolean closable) {
-        super("Login", false, closable, false, false);
+        super("Login", "/LOGIN", false, closable, false, false);
         Constants.checkLocke(this, false, true);
         setFrameIcon(new ImageIcon(Login.class.getResource("/icons/login.png")));
         Form f = new Form();

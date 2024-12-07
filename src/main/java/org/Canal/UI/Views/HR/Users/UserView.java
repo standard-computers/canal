@@ -4,6 +4,7 @@ import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.HumanResources.User;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.Inputs.Copiable;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
@@ -12,13 +13,18 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class UserView extends JInternalFrame {
+/**
+ * /USRS/$[USER_ID]
+ * View User provided User ID
+ * User Controller
+ */
+public class UserView extends LockeState {
 
     private User user;
     private DesktopState desktop;
 
     public UserView(DesktopState desktop, User user) {
-        super("Users / " + user.getId(), true, true, true, true);
+        super("Users / " + user.getId(), "/USRS/$", true, true, true, true);
         this.desktop = desktop;
         this.user = user;
         setFrameIcon(new ImageIcon(UserView.class.getResource("/icons/employees.png")));

@@ -4,19 +4,22 @@ import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Inputs.Copiable;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyVetoException;
 
 /**
  * /USRS/CHG_PSSWD
  */
-public class ChangeUserPassword extends JInternalFrame {
+public class ChangeUserPassword extends LockeState {
 
     public ChangeUserPassword(){
-        super("Change Password", false, true, false, true);
+        super("Change Password", "/USRS/CHG_PSSWD", false, true, false, true);
         setFrameIcon(new ImageIcon(ChangeUserPassword.class.getResource("/icons/login.png")));
         if(Engine.getEmployees().isEmpty()){
             JOptionPane.showMessageDialog(null, "No employees to attach to!");
@@ -38,5 +41,11 @@ public class ChangeUserPassword extends JInternalFrame {
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);
         add(updateUserPassword, BorderLayout.SOUTH);
+        updateUserPassword.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+            }
+        });
     }
 }

@@ -3,7 +3,7 @@ package org.Canal.UI.Views.HR.Organizations;
 import org.Canal.Models.BusinessUnits.Organization;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Label;
-import org.Canal.Utils.Constants;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
@@ -15,13 +15,14 @@ import java.awt.event.MouseEvent;
 
 /**
  * /ORGS
+ * View a list of Organizations in this instance of Canal
  */
-public class Organizations extends JInternalFrame {
+public class Organizations extends LockeState {
 
     private DefaultListModel<Organization> listModel;
 
     public Organizations(DesktopState desktop) {
-        super("Organizations", false, true, false, true);
+        super("Organizations", "/ORGS", false, true, false, true);
         setFrameIcon(new ImageIcon(Organizations.class.getResource("/icons/organizations.png")));
         listModel = new DefaultListModel<>();
         JList<Organization> list = new JList<>(listModel);

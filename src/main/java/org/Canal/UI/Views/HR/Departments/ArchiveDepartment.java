@@ -1,14 +1,14 @@
 package org.Canal.UI.Views.HR.Departments;
 
-import javax.swing.*;
+import org.Canal.UI.Elements.Windows.LockeState;
 
 /**
  * /DPTS/ARCHV
  */
-public class ArchiveDepartment extends JInternalFrame {
+public class ArchiveDepartment extends LockeState {
 
     public ArchiveDepartment() {
-        super("Archive Bin", false, true, false, true);
+        super("Archive Department", "/DPTS/ARCHV", false, true, false, true);
 
     }
 }

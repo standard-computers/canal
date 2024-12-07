@@ -7,6 +7,7 @@ import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.*;
 
 import javax.swing.*;
@@ -20,7 +21,7 @@ import java.util.HashMap;
  * This solely evolves around an employee.
  * Not a user of this system. All system actions
  */
-public class CreateEmployee extends JInternalFrame {
+public class CreateEmployee extends LockeState {
 
     private JTextField empIdField, empNameField, empAddressL1, empAddressL2,
             empAddressCity, empAddressState, empAddressPostal, empPhone, empEmail;
@@ -29,7 +30,7 @@ public class CreateEmployee extends JInternalFrame {
     private JCheckBox isVeteran;
 
     public CreateEmployee(DesktopState desktop){
-        super("Create Employee", false, true, false, true);
+        super("Create Employee", "/EMPS/NEW", false, true, false, true);
         setFrameIcon(new ImageIcon(CreateEmployee.class.getResource("/icons/create.png")));
 
         JTabbedPane tabbedPane = new JTabbedPane();

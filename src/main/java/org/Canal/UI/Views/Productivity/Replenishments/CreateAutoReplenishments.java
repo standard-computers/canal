@@ -1,14 +1,14 @@
 package org.Canal.UI.Views.Productivity.Replenishments;
 
-import javax.swing.*;
+import org.Canal.UI.Elements.Windows.LockeState;
 
 /**
- * /RPL
+ * /RPL/AUTO/NEW
  */
-public class CreateAutoReplenishments extends JInternalFrame {
+public class CreateAutoReplenishments extends LockeState {
 
     public CreateAutoReplenishments() {
-        super("Replenishments", false, true, false, true);
+        super("Replenishments", "/RPL/AUTO/NEW", false, true, false, true);
 
     }
 }

@@ -2,6 +2,7 @@ package org.Canal.UI.Views.Materials;
 
 import org.Canal.Models.SupplyChainUnits.Material;
 import org.Canal.UI.Elements.Elements;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
@@ -17,12 +18,12 @@ import java.util.ArrayList;
 /**
  * /MTS
  */
-public class Materials extends JInternalFrame {
+public class Materials extends LockeState {
 
     private DefaultListModel<Material> listModel;
 
     public Materials(DesktopState desktop) {
-        super("Materials", false, true, false, true);
+        super("Materials", "/MTS", false, true, false, true);
         setFrameIcon(new ImageIcon(Materials.class.getResource("/icons/materials.png")));
         listModel = new DefaultListModel<>();
         JList<Material> list = new JList<>(listModel);

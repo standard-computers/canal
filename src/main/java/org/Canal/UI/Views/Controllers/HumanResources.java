@@ -1,6 +1,7 @@
 package org.Canal.UI.Views.Controllers;
 
 import org.Canal.UI.Elements.Elements;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.HR.Departments.CreateDepartment;
 import org.Canal.UI.Views.HR.Departments.Departments;
 import org.Canal.UI.Views.HR.Departments.FindDepartment;
@@ -21,12 +22,12 @@ import java.awt.event.MouseEvent;
 /**
  * /CNL/HR
  */
-public class HumanResources extends JInternalFrame {
+public class HumanResources extends LockeState {
 
     private DesktopState desktop;
 
     public HumanResources(DesktopState desktop) {
-        super("ERM / Human Resources", false, true, false, true);
+        super("ERM / Human Resources", "/CNL/HR", false, true, false, true);
         setFrameIcon(new ImageIcon(HumanResources.class.getResource("/icons/humanresources.png")));
         this.desktop = desktop;
 

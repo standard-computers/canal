@@ -3,6 +3,7 @@ package org.Canal.UI.Views.Transportation.Carriers;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Label;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -17,10 +18,10 @@ import java.awt.event.MouseEvent;
 /**
  * /TRANS/CRRS/F
  */
-public class FindCarrier extends JInternalFrame {
+public class FindCarrier extends LockeState {
 
     public FindCarrier(DesktopState desktop) {
-        super("Find Carrier", false, true, false, true);
+        super("Find Carrier", "/TRANS/CRRS/F", false, true, false, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/find.png")));
         JTextField direct = Elements.input();
         direct.addKeyListener(new KeyAdapter() {

@@ -8,6 +8,7 @@ import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Pipe;
@@ -21,7 +22,7 @@ import java.text.SimpleDateFormat;
 /**
  * /ORDS/PR/NEW
  */
-public class CreatePurchaseRequisition extends JInternalFrame {
+public class CreatePurchaseRequisition extends LockeState {
 
     private Copiable prOwnerField;
     private Selectable availableVendors;
@@ -30,7 +31,7 @@ public class CreatePurchaseRequisition extends JInternalFrame {
     private DatePicker prEndDateField;
 
     public CreatePurchaseRequisition(){
-        super("Create Purchase Requisition", false, true, false, true);
+        super("Create Purchase Requisition", "/ORDS/PR/NEW", false, true, false, true);
         setFrameIcon(new ImageIcon(CreatePurchaseRequisition.class.getResource("/icons/create.png")));
         Constants.checkLocke(this, true, true);
         availableVendors = Selectables.vendors();

@@ -7,9 +7,11 @@ import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.UOMField;
 import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Pipe;
+import org.Canal.Utils.RefreshListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,11 +20,12 @@ import java.awt.event.MouseEvent;
 
 /**
  * /AREAS/NEW
+ * Create a new Area for a location
  */
-public class CreateArea extends JInternalFrame {
+public class CreateArea extends LockeState {
 
-    public CreateArea(String location) {
-        super("New Location Area", false, true, false, true);
+    public CreateArea(String location, RefreshListener refreshListener) {
+        super("New Area", "/AREAS/NEW", false, true, false, true);
         setFrameIcon(new ImageIcon(CreateArea.class.getResource("/icons/areas.png")));
         String generatedId;
         JTextField areaIdField = Elements.input();
@@ -83,6 +86,7 @@ public class CreateArea extends JInternalFrame {
                 Pipe.save("/AREAS", newArea);
                 dispose();
                 JOptionPane.showMessageDialog(CreateArea.this, "Area Created");
+                refreshListener.onRefresh();
             }
         });
     }

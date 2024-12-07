@@ -7,6 +7,7 @@ import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
@@ -22,7 +23,7 @@ import java.util.HashMap;
 /**
  * /CMPS/NEW
  */
-public class CreateComponent extends JInternalFrame {
+public class CreateComponent extends LockeState {
 
     private Copiable orgIdField;
     private JTextField materialIdField;
@@ -40,7 +41,7 @@ public class CreateComponent extends JInternalFrame {
     private Selectable selectedVendor;
 
     public CreateComponent(){
-        setTitle("Create Component");
+        super("Create Component", "/", false, true, false, true);
         Constants.checkLocke(this, true, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));
         Form f1 = new Form();
@@ -89,8 +90,6 @@ public class CreateComponent extends JInternalFrame {
         main.add(biPanel, BorderLayout.CENTER);
         main.add(actionsBar(), BorderLayout.NORTH);
         add(main);
-        setIconifiable(true);
-        setClosable(true);
     }
 
     private JPanel actionsBar() {

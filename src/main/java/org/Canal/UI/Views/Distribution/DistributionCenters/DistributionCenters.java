@@ -4,7 +4,7 @@ import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
-import org.Canal.UI.Views.HR.Employees.EmployeeView;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
@@ -18,12 +18,12 @@ import java.util.ArrayList;
 /**
  * /DCSS
  */
-public class DistributionCenters extends JInternalFrame {
+public class DistributionCenters extends LockeState {
 
     private CustomTable table;
 
     public DistributionCenters(DesktopState desktop) {
-        super("/DCSS", true, true, true, true);
+        super("Dstribution Centers", "/DCSS", true, true, true, true);
         setFrameIcon(new ImageIcon(DistributionCenters.class.getResource("/icons/distribution_centers.png")));
         JPanel tb = createToolBar();
         JPanel holder = new JPanel(new BorderLayout());

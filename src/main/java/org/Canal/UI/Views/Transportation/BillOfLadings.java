@@ -1,13 +1,13 @@
 package org.Canal.UI.Views.Transportation;
 
-import javax.swing.*;
+import org.Canal.UI.Elements.Windows.LockeState;
 
 /**
  * /TRANS/BOLS
  */
-public class BillOfLadings extends JInternalFrame {
+public class BillOfLadings extends LockeState {
 
     public BillOfLadings() {
-        super("Bill of Ladings", false, true, false, true);
+        super("Bill of Ladings", ",", false, true, false, true);
     }
 }

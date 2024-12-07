@@ -3,6 +3,7 @@ package org.Canal.UI.Views.Controllers;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.DesktopState;
 
 import javax.swing.*;
@@ -14,12 +15,12 @@ import java.awt.event.MouseEvent;
 /**
  * /TM_CLCK
  */
-public class TimeClock extends JInternalFrame {
+public class TimeClock extends LockeState {
 
     private DesktopState desktop;
 
     public TimeClock(DesktopState desktop) {
-        super("Employee Time Clock", false, true, false, true);
+        super("Employee Time Clock", "/TM_CLCK", false, true, false, true);
         this.desktop = desktop;
         setFrameIcon(new ImageIcon(TimeClock.class.getResource("/icons/timeclock.png")));
         JPanel main = new JPanel(new GridLayout(1, 2));

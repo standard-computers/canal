@@ -3,6 +3,7 @@ package org.Canal.UI.Views.Bins;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -17,10 +18,10 @@ import java.awt.event.MouseEvent;
 /**
  * /BNS/F
  */
-public class FindBin extends JInternalFrame {
+public class FindBin extends LockeState {
 
     public FindBin(DesktopState desktop) {
-        super("Find Bin", false, true, false, true);
+        super("Find Bin", "/BNS/F", false, true, false, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/find.png")));
         JTextField direct = Elements.input(10);
         direct.addKeyListener(new KeyAdapter() {

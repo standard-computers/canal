@@ -1,14 +1,14 @@
 package org.Canal.UI.Views.Finance.GoodsReceipts;
 
-import javax.swing.*;
+import org.Canal.UI.Elements.Windows.LockeState;
 
 /**
  * /GR/$[GR_ID]
  */
-public class GoodsReceiptView extends JInternalFrame {
+public class GoodsReceiptView extends LockeState {
 
     public GoodsReceiptView() {
-        super("Goods Receipt", false, true, false, true);
+        super("Goods Receipt", "/GR$", false, true, false, true);
 
     }
 }

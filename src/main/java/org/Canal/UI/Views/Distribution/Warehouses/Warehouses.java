@@ -4,6 +4,7 @@ import org.Canal.Models.SupplyChainUnits.Warehouse;
 import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;
@@ -15,13 +16,14 @@ import java.util.ArrayList;
 
 /**
  * /WHS
+ * View a list of Warehouses for Selected Organization
  */
-public class Warehouses extends JInternalFrame {
+public class Warehouses extends LockeState {
 
     private CustomTable table;
 
     public Warehouses() {
-        super("Warehouses", true, true, true, true);
+        super("Warehouses", "/WHS", true, true, true, true);
         setFrameIcon(new ImageIcon(Warehouses.class.getResource("/icons/warehouses.png")));
         JPanel tb = createToolBar();
         JPanel holder = new JPanel(new BorderLayout());

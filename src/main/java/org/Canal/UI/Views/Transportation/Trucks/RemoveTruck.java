@@ -3,6 +3,7 @@ package org.Canal.UI.Views.Transportation.Trucks;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Windows.LockeState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,10 +13,10 @@ import java.awt.event.MouseEvent;
 /**
  * /TRANS/TRCKS/DEL
  */
-public class RemoveTruck extends JInternalFrame {
+public class RemoveTruck extends LockeState {
 
     public RemoveTruck() {
-        super("Remove Truck", false, true, false, true);
+        super("Remove Truck", "/TRANS/TRCKS/DEL", false, true, false, true);
         setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.RED));
         setLayout(new BorderLayout());
         Form f = new Form();
@@ -30,6 +31,8 @@ public class RemoveTruck extends JInternalFrame {
         JButton cancel = Elements.button("Cancel");
         options.add(confirm);
         options.add(cancel);
+        add(options, BorderLayout.SOUTH);
+        add(Elements.header("Confirm Truck Deletion"), BorderLayout.NORTH);
         cancel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -37,7 +40,5 @@ public class RemoveTruck extends JInternalFrame {
                 //TODO Log deletion cancel
             }
         });
-        add(options, BorderLayout.SOUTH);
-        add(Elements.header("Confirm Truck Deletion"), BorderLayout.NORTH);
     }
 }

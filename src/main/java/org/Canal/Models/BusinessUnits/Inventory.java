@@ -36,6 +36,10 @@ public class Inventory {
         this.stockLines = stockLines;
     }
 
+    public void removeStock(StockLine stockLine) {
+        stockLines.remove(stockLine);
+    }
+
     public void save(){
         File md = new File(Start.WINDOWS_SYSTEM_DIR + "\\.store\\STK\\");
         File[] mdf = md.listFiles();

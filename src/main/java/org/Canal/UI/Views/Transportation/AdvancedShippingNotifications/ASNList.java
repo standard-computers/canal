@@ -3,6 +3,7 @@ package org.Canal.UI.Views.Transportation.AdvancedShippingNotifications;
 import org.Canal.Models.BusinessUnits.PurchaseOrder;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Controllers.CheckboxBarcodeFrame;
 import org.Canal.UI.Views.Orders.PurchaseOrders.CreatePurchaseOrder;
 import org.Canal.Utils.Constants;
@@ -17,14 +18,15 @@ import java.util.ArrayList;
 
 /**
  * /TRANS/ASN
+ * List of Advanced Shipping Notice(s)
  */
-public class ASNList extends JInternalFrame {
+public class ASNList extends LockeState {
 
     private JTable table;
     private DesktopState desktop;
 
     public ASNList(DesktopState desktop) {
-        super("Open ASNs");
+        super("Open ASNs", "/", false, true, false, true);
         this.desktop = desktop;
         JPanel tb = createToolBar();
         JPanel holder = new JPanel(new BorderLayout());
@@ -33,10 +35,6 @@ public class ASNList extends JInternalFrame {
         holder.add(tableScrollPane, BorderLayout.CENTER);
         holder.add(tb, BorderLayout.NORTH);
         add(holder);
-        setIconifiable(true);
-        setClosable(true);
-        setMaximizable(true);
-        setResizable(true);
     }
 
     private JPanel createToolBar() {

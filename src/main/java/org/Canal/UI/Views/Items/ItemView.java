@@ -1,12 +1,12 @@
 package org.Canal.UI.Views.Items;
 
 import org.Canal.Models.SupplyChainUnits.Item;
-import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.Models.SupplyChainUnits.Vendor;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Inputs.Copiable;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.Locke;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
@@ -21,7 +21,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class ItemView extends JInternalFrame {
+public class ItemView extends LockeState {
 
     private Item item;
     private JTree dataTree;
@@ -29,7 +29,7 @@ public class ItemView extends JInternalFrame {
     private Copiable vendorIdField, vendorNameField, vendorStreetField, vendorCityField, vendorStateField, vendorPostalField, vendorCountryField, vendorTaxExemptField, vendorStatusField;
 
     public ItemView(Item item) {
-        super("Item / " + item.getId() + " - " + item.getName(), true, true, true, true);
+        super("Item / " + item.getId() + " - " + item.getName(), "/ITS/$", true, true, true, true);
         this.item = item;
         setFrameIcon(new ImageIcon(Items.class.getResource("/icons/items.png")));
         setLayout(new BorderLayout());

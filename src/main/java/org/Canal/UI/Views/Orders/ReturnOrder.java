@@ -6,6 +6,7 @@ import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Inputs.Selectable;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -18,7 +19,7 @@ import java.awt.event.MouseEvent;
 /**
  * /ORDS/RTRN
  */
-public class ReturnOrder extends JInternalFrame {
+public class ReturnOrder extends LockeState {
 
     private JTextField poField;
     private JTextField onField;
@@ -26,7 +27,7 @@ public class ReturnOrder extends JInternalFrame {
     private Selectable availablePutaway;
 
     public ReturnOrder(DesktopState desktop){
-        super("Return Order", false, true, false, true);
+        super("Return Order", "/ORDS/RTRN", false, true, false, true);
         Constants.checkLocke(this, true, true);
         Form f = new Form();
         poField = Elements.input(12);

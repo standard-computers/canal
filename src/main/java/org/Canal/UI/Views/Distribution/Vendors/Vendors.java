@@ -4,8 +4,8 @@ import org.Canal.Models.SupplyChainUnits.Vendor;
 import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Controllers.CheckboxBarcodeFrame;
-import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;
@@ -18,12 +18,12 @@ import java.util.ArrayList;
 /**
  * /VEND
  */
-public class Vendors extends JInternalFrame {
+public class Vendors extends LockeState {
 
     private JTable table;
 
     public Vendors() {
-        super("Vendors", true, true, true, true);
+        super("Vendors", "/VEND", true, true, true, true);
         setFrameIcon(new ImageIcon(Vendors.class.getResource("/icons/vendors.png")));
         JPanel tb = createToolBar();
         JPanel holder = new JPanel(new BorderLayout());

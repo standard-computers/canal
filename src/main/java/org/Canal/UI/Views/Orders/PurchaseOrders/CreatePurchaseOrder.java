@@ -11,6 +11,7 @@ import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
@@ -33,9 +34,9 @@ import java.util.Collections;
 import java.util.HashMap;
 
 /**
- * /ORDS/NEW, /ORDS/PO/NEW
+ * /ORDS/PO/NEW
  */
-public class CreatePurchaseOrder extends JInternalFrame {
+public class CreatePurchaseOrder extends LockeState {
 
     private PurchaseOrder newOrder;
     private ItemTableModel model;
@@ -48,7 +49,7 @@ public class CreatePurchaseOrder extends JInternalFrame {
     private DatePicker expectedDelivery;
 
     public CreatePurchaseOrder() {
-        super("Create Purchase Order", false, true, false, true);
+        super("Create Purchase Order", "/ORDS/PO/NEW", false, true, false, true);
         Constants.checkLocke(this, true, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));
         newOrder = new PurchaseOrder();

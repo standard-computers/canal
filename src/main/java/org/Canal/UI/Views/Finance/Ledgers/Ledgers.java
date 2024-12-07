@@ -2,6 +2,7 @@ package org.Canal.UI.Views.Finance.Ledgers;
 
 import org.Canal.Models.BusinessUnits.Ledger;
 import org.Canal.UI.Elements.Elements;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
@@ -16,12 +17,12 @@ import java.awt.event.MouseEvent;
 /**
  * /LGS
  */
-public class Ledgers extends JInternalFrame {
+public class Ledgers extends LockeState {
 
     private DefaultListModel<Ledger> listModel;
 
     public Ledgers(DesktopState desktop) {
-        super("Ledgers", false, true, false, true);
+        super("Ledgers", "/LGS", false, true, false, true);
         setFrameIcon(new ImageIcon(Ledgers.class.getResource("/icons/ledgers.png")));
         listModel = new DefaultListModel<>();
         JList<Ledger> list = new JList<>(listModel);

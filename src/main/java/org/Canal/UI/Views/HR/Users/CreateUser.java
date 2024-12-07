@@ -8,6 +8,7 @@ import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Crypter;
 import org.Canal.Utils.Engine;
@@ -29,13 +30,13 @@ import java.util.ArrayList;
 /**
  * /USRS/NEW
  */
-public class CreateUser extends JInternalFrame {
+public class CreateUser extends LockeState {
 
     private JPanel canalAccess;
     private ArrayList<JCheckBox> checkboxes;
 
     public CreateUser(){
-        super("Create User", false, true, false, true);
+        super("Create User", "/USRS/NEW", false, true, false, true);
         setFrameIcon(new ImageIcon(CreateUser.class.getResource("/icons/create.png")));
         if(Engine.getEmployees().isEmpty()){
             JOptionPane.showMessageDialog(null, "No employees to attach to!");

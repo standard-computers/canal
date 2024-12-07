@@ -1,14 +1,14 @@
 package org.Canal.UI.Views.Transportation.Trucks;
 
-import javax.swing.*;
+import org.Canal.UI.Elements.Windows.LockeState;
 
 /**
  * /TRANS/TRCKS/ARCHV
  */
-public class ArchiveTruck extends JInternalFrame {
+public class ArchiveTruck extends LockeState {
 
     public ArchiveTruck() {
-        super("Archive Truck", false, true, false, true);
+        super("Archive Truck", "/TRANS/TRCKS/ARCHV", false, true, false, true);
 
     }
 }

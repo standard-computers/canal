@@ -2,7 +2,7 @@ package org.Canal.UI.Views.Orders.SalesOrders;
 
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
-import org.Canal.UI.Views.Controllers.Controller;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Orders.PurchaseRequisitions.CreatePurchaseRequisition;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -17,12 +17,12 @@ import java.util.ArrayList;
 /**
  * /ORDS/SO
  */
-public class SalesOrders extends JInternalFrame {
+public class SalesOrders extends LockeState {
 
     private JTable table;
 
     public SalesOrders(DesktopState desktop) {
-        super("Sales Orders", true, true, true, true);
+        super("Sales Orders", "/ORDS/SO", true, true, true, true);
         setFrameIcon(new ImageIcon(SalesOrders.class.getResource("/icons/salesorders.png")));
         JPanel tb = createToolBar();
         JPanel holder = new JPanel(new BorderLayout());

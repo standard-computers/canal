@@ -4,6 +4,7 @@ import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.HumanResources.User;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.Inputs.Copiable;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;
@@ -12,12 +13,12 @@ import java.awt.*;
 /**
  * /USRS/MOD
  */
-public class ModifyUser extends JInternalFrame {
+public class ModifyUser extends LockeState {
 
     private User user;
 
     public ModifyUser(User user) {
-        super("Modify User", false, true, false, true);
+        super("Modify User", "/USRS/MOD", false, true, false, true);
         this.user = user;
         setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.RED));
         setFrameIcon(new ImageIcon(ModifyUser.class.getResource("/icons/modify.png")));

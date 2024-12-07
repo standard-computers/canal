@@ -5,6 +5,7 @@ import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.Constants;
 
@@ -14,10 +15,10 @@ import java.awt.*;
 /**
  * /VAS/NEW
  */
-public class CreateVAS extends JInternalFrame {
+public class CreateVAS extends LockeState {
 
     public CreateVAS() {
-        super("Create VAS", false, true, false, true);
+        super("Create VAS", "/VAS/NEW", false, true, false, true);
         Constants.checkLocke(this, true, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));
 

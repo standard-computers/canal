@@ -1,13 +1,15 @@
 package org.Canal.UI.Views.Finance.Payments;
 
 import org.Canal.UI.Elements.Input;
+import org.Canal.UI.Elements.Windows.LockeState;
+
 import javax.swing.*;
 import java.awt.*;
 
-public class AcceptPayment extends JInternalFrame {
+public class AcceptPayment extends LockeState {
 
     public AcceptPayment() {
-        setTitle("Process Payment");
+        super("Process Payment", "/", false, true, false, true);
         Input custId = new Input("Customer ID");
         Input poNumber = new Input("PO Number");
         Input amount = new Input("Invoice Number");
@@ -21,6 +23,5 @@ public class AcceptPayment extends JInternalFrame {
         setLayout(new BorderLayout());
         add(panel, BorderLayout.CENTER);
         add(process, BorderLayout.SOUTH);
-        setClosable(true);
     }
 }

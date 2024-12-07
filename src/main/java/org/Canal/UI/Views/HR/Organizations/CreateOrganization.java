@@ -6,6 +6,7 @@ import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -19,10 +20,10 @@ import java.awt.event.MouseEvent;
 /**
  * /ORGS/NEW
  */
-public class CreateOrganization extends JInternalFrame {
+public class CreateOrganization extends LockeState {
 
     public CreateOrganization(DesktopState desktop) {
-        super("Create an Organization", false, true, false, true);
+        super("Create an Organization", "/ORGS/NEW", false, true, false, true);
         setFrameIcon(new ImageIcon(CreateOrganization.class.getResource("/icons/create.png")));
         JTextField orgNameField = Elements.input(15);
         JTextField orgIdField = Elements.input(15);

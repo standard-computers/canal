@@ -3,6 +3,7 @@ package org.Canal.UI.Views.Distribution.Warehouses;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Label;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -16,11 +17,13 @@ import java.awt.event.MouseEvent;
 
 /**
  * /WHS/F
+ * Find Warehouse with Warehouse ID
+ * Opens /WHS/$[WWAREHOUSE_ID], Warehouse Controller
  */
-public class FindWarehouse extends JInternalFrame {
+public class FindWarehouse extends LockeState {
 
     public FindWarehouse(DesktopState desktop) {
-        super("Find Warehouse", false, true, false, true);
+        super("Find Warehouse", "/WHS/F", false, true, false, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/warehouses.png")));
         Form f = new Form();
         JTextField direct = Elements.input(10);
@@ -41,12 +44,12 @@ public class FindWarehouse extends JInternalFrame {
         main.add(f, BorderLayout.CENTER);
         JButton find = Elements.button("Open");
         main.add(find, BorderLayout.SOUTH);
+        add(main);
         find.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 desktop.put(Engine.router("/WHS/" + direct.getText(), desktop));
                 dispose();
             }
         });
-        add(main);
     }
 }

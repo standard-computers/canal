@@ -3,15 +3,16 @@ package org.Canal.UI.Views.HR.Departments;
 import org.Canal.Models.HumanResources.Department;
 import org.Canal.UI.Elements.Inputs.Copiable;
 import org.Canal.UI.Elements.IconButton;
+import org.Canal.UI.Elements.Windows.LockeState;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-public class DepartmentView extends JInternalFrame {
+public class DepartmentView extends LockeState {
 
     public DepartmentView(Department department) {
-        super("Department " + department.getId(), true, true, true, true);
+        super("Department " + department.getId(), "/DPTS/$", true, true, true, true);
         setFrameIcon(new ImageIcon(DepartmentView.class.getResource("/icons/departments.png")));
         JTabbedPane tabbedPane = new JTabbedPane();
 
@@ -26,7 +27,6 @@ public class DepartmentView extends JInternalFrame {
 
         JScrollPane documentsList = new JScrollPane();
         tabbedPane.addTab("Documents", documentsList);
-
 
         JPanel info = new JPanel(new BorderLayout());
         JPanel infoLabels = new JPanel(new GridLayout(2, 1));

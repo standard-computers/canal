@@ -3,6 +3,7 @@ package org.Canal.UI.Views.Finance.GoodsReceipts;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -17,10 +18,10 @@ import java.awt.event.MouseEvent;
 /**
  * /GR/F
  */
-public class FindGoodsReceipt extends JInternalFrame {
+public class FindGoodsReceipt extends LockeState {
 
     public FindGoodsReceipt(DesktopState desktop) {
-        super("Find Goods Receipt", false, true, false, true);
+        super("Find Goods Receipt", "/GR/F", false, true, false, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/catalogs.png")));
         Form f = new Form();
         JTextField direct = new JTextField(10);

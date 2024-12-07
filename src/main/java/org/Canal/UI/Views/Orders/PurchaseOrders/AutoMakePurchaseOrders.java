@@ -9,6 +9,7 @@ import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Pipe;
@@ -23,14 +24,14 @@ import java.util.ArrayList;
 /**
  * /ORDS/PO/AUTO_MK
  */
-public class AutoMakePurchaseOrders extends JInternalFrame {
+public class AutoMakePurchaseOrders extends LockeState {
 
     private JPanel checkboxPanel;
     private ArrayList<Location> locations;
     private ArrayList<JCheckBox> checkboxes;
 
     public AutoMakePurchaseOrders() {
-        super("AutoMake Purchase Orders", false, true, false, true);
+        super("AutoMake Purchase Orders", "/ORDS/PO/AUTO_MK", false, true, false, true);
         setFrameIcon(new ImageIcon(AutoMakePurchaseOrders.class.getResource("/icons/automake.png")));
         locations = Engine.getCostCenters();
         locations.addAll(Engine.getDistributionCenters());

@@ -3,19 +3,15 @@ package org.Canal.UI.Views.Inventory;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.Models.SupplyChainUnits.Vendor;
 import org.Canal.UI.Elements.Inputs.Selectable;
-import org.Canal.UI.Elements.Label;
-import org.Canal.UI.Elements.Windows.FormFrame;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.Engine;
-import javax.swing.*;
-import java.awt.*;
+
 import java.util.HashMap;
 
-public class CreateSTO extends FormFrame {
+public class CreateSTO extends LockeState {
 
     public CreateSTO(){
-        setTitle("Create Stock Transfer Order");
-        setTransactionCode("/INV/MV/STO");
-        addInput(new Label("Purchase Order #", new Color(255, 102, 255)), new JTextField());
+        super("Create Stock Transfer Order", "/", false, true, false, true);
         HashMap<String, String> opts = new HashMap<>();
         for(Location cs : Engine.getCustomers()){
             opts.put(cs.getId() + " – " + cs.getName(), cs.getId());
@@ -25,9 +21,5 @@ public class CreateSTO extends FormFrame {
         }
         Selectable senderOps = new Selectable(opts);
         Selectable destinationOps = new Selectable(opts);
-        addInput(new Label("Sender", new Color(204, 153, 255)), senderOps);
-        addInput(new Label("Destination", new Color(204, 153, 255)), destinationOps);
-        setVisible(true);
-        pack();
     }
 }

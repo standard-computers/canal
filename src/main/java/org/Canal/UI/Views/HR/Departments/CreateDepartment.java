@@ -8,6 +8,7 @@ import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.*;
 
 import javax.swing.*;
@@ -18,10 +19,10 @@ import java.awt.event.MouseEvent;
 /**
  * /DPTS/NEW
  */
-public class CreateDepartment extends JInternalFrame {
+public class CreateDepartment extends LockeState {
 
     public CreateDepartment(DesktopState desktop){
-        super("Create Department", false, true, false, true);
+        super("Create Department", "/DPTS/NEW", false, true, false, true);
         setFrameIcon(new ImageIcon(CreateDepartment.class.getResource("/icons/create.png")));
         Form f = new Form();
         String genId = "D0" + Engine.getEmployees().size() + 1;

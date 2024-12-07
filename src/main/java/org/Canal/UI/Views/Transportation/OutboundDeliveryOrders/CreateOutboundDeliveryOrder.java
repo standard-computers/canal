@@ -1,14 +1,14 @@
 package org.Canal.UI.Views.Transportation.OutboundDeliveryOrders;
 
-import javax.swing.*;
+import org.Canal.UI.Elements.Windows.LockeState;
 
 /**
  * /TRANS/ODO/NEW
  */
-public class CreateOutboundDeliveryOrder extends JInternalFrame {
+public class CreateOutboundDeliveryOrder extends LockeState {
 
     public CreateOutboundDeliveryOrder() {
-        super("Create Outbound Delivery Order", false, true, false, true);
+        super("Create Outbound Delivery Order", "/TRANS/ODO/NEW", false, true, false, true);
 
     }
 }

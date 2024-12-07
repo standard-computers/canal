@@ -1,13 +1,13 @@
 package org.Canal.UI.Views.Productivity.Waves;
 
-import javax.swing.*;
+import org.Canal.UI.Elements.Windows.LockeState;
 
 /**
  * /RPTS/MVMT/WVS/IS_OPEN
  */
-public class OpenWaves extends JInternalFrame {
+public class OpenWaves extends LockeState {
 
     public OpenWaves() {
-        super("Open Waves", false, true, false, true);
+        super("Open Waves", "/RPTS/MVMT/WVS/IS_OPEN", false, true, false, true);
     }
 }

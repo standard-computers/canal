@@ -9,6 +9,7 @@ import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Pipe;
@@ -20,14 +21,17 @@ import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-public class AutoMakePurchaseRequisitions extends JInternalFrame {
+/**
+ * /ORDS/PR?AUTO_MK
+ */
+public class AutoMakePurchaseRequisitions extends LockeState {
 
     private JPanel checkboxPanel;
     private ArrayList<Location> locations;
     private ArrayList<JCheckBox> checkboxes;
 
     public AutoMakePurchaseRequisitions() {
-        super("AutoMake Purchase Reqs.", false, true, false, true);
+        super("AutoMake Purchase Reqs.", "/ORDS/PR/AUTO_MK", false, true, false, true);
         setFrameIcon(new ImageIcon(AutoMakePurchaseRequisitions.class.getResource("/icons/automake.png")));
         locations = Engine.getCostCenters();
         locations.addAll(Engine.getDistributionCenters());

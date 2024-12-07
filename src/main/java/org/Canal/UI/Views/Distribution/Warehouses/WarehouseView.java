@@ -5,9 +5,9 @@ import org.Canal.Models.BusinessUnits.PurchaseOrder;
 import org.Canal.Models.SupplyChainUnits.*;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
+import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Areas.AutoMakeAreasAndBins;
 import org.Canal.UI.Views.Bins.CreateBin;
-import org.Canal.UI.Views.Finance.Payments.AcceptPayment;
 import org.Canal.UI.Views.Areas.CreateArea;
 import org.Canal.UI.Views.Finance.Payments.IssuePayment;
 import org.Canal.UI.Views.Inventory.InventoryView;
@@ -33,14 +33,14 @@ import java.util.ArrayList;
 /**
  * /WHS/$[WAREHOUSE_ID]
  */
-public class WarehouseView extends JInternalFrame implements RefreshListener {
+public class WarehouseView extends LockeState implements RefreshListener {
 
     private Warehouse warehouse;
     private JTree dataTree;
     private DesktopState desktop;
 
     public WarehouseView(Warehouse loc, DesktopState desktop) {
-        super("Warehouse / " + loc.getId() + " - " + loc.getName(), true, true, true, true);
+        super("Warehouse / " + loc.getId() + " - " + loc.getName(), "/WHS/$", true, true, true, true);
         this.warehouse = loc;
         this.desktop = desktop;
         setFrameIcon(new ImageIcon(WarehouseView.class.getResource("/icons/warehouses.png")));
@@ -163,13 +163,13 @@ public class WarehouseView extends JInternalFrame implements RefreshListener {
         addArea.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new CreateArea(warehouse.getId()));
+                desktop.put(new CreateArea(warehouse.getId(), WarehouseView.this));
             }
         });
         addBin.addMouseListener(new MouseAdapter() {
             @Override
            public void mouseClicked(MouseEvent e) {
-               desktop.put(new CreateBin(warehouse.getId()));
+               desktop.put(new CreateBin(warehouse.getId(), WarehouseView.this));
            }
         });
         autoMake.addMouseListener(new MouseAdapter() {
