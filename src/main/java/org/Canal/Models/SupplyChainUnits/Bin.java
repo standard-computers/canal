@@ -1,5 +1,7 @@
 package org.Canal.Models.SupplyChainUnits;
 
+import org.Canal.Utils.LockeStatus;
+
 import java.util.ArrayList;
 
 /**
@@ -26,6 +28,7 @@ public class Bin {
     private double length;
     private double height;
     private double volume;
+    private LockeStatus status;
 
     public String getId() {
         return id;
@@ -177,5 +180,13 @@ public class Bin {
 
     public void setVolume(double volume) {
         this.volume = volume;
+    }
+
+    public LockeStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(LockeStatus status) {
+        this.status = status;
     }
 }

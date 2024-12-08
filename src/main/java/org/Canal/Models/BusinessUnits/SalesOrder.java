@@ -8,7 +8,7 @@ import org.Canal.Utils.LockeStatus;
 import java.io.File;
 import java.util.ArrayList;
 
-public class PurchaseOrder extends Objex {
+public class SalesOrder extends Objex {
 
     private String orderId; //Order ID
     private String owner = "UNKNOWN"; //ID of User who is creating order
@@ -167,7 +167,7 @@ public class PurchaseOrder extends Objex {
         if (mdf != null) {
             for (File file : mdf) {
                 if (file.getPath().endsWith(".ords")) {
-                    PurchaseOrder forg = Json.load(file.getPath(), PurchaseOrder.class);
+                    SalesOrder forg = Json.load(file.getPath(), SalesOrder.class);
                     if (forg.getOrderId().equals(getOrderId())) {
                         Json.save(file.getPath(), this);
                         break;

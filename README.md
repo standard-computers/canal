@@ -6,7 +6,7 @@ Canal is an Open Source modular design Enterprise Resource Planning (ERP) system
 Each 'module' is a transaction code called a Locke. There's a list of all Locke codes as `Transaction Codes.xlsx` in ~/Documentation.
 
 ### Current Operations
-At the moment, Canal is limited in its abilities but can create organizational structures and commit the buying process up to creating a Goods Receipt upon receiving. This project is in its infancy. Current storage mechanism is through a folder in ~/Users/username/Roaming and unencrypted.
+At the moment, Canal is limited in its abilities but can create organizational structures and commit the buying process up to receiving, putting away, and moving product(s). This project is in its infancy. Current storage mechanism is through a folder in ~/Users/username/Roaming and unencrypted.
 
 **GOAL:** Encrypted object storage with AES on Roaming folder or through AWS.
 

@@ -68,6 +68,17 @@ public class Selectables {
         s.editable();
         return s;
     }
+
+    public static Selectable customers(){
+        HashMap<String, String> customers = new HashMap<>();
+        for(Location v : Engine.getCustomers()){
+            customers.put(v.getId(), v.getId());
+        }
+        Selectable s =  new Selectable(customers);
+        s.editable();
+        return s;
+    }
+
     public static Selectable departments(){
         HashMap<String, String> departments = new HashMap<>();
         for(Department org : Engine.getOrganization().getDepartments()){

@@ -1,15 +1,16 @@
 package org.Canal.UI.Views.Bins;
 
 import org.Canal.Models.SupplyChainUnits.Area;
+import org.Canal.Models.SupplyChainUnits.Bin;
+import org.Canal.UI.Elements.CustomTable;
+import org.Canal.UI.Elements.Elements;
+import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.Windows.LockeState;
-import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -19,84 +20,80 @@ import java.util.ArrayList;
  */
 public class Bins extends LockeState {
 
-    private DefaultListModel<Area> listModel;
+    private CustomTable table;
 
-    public Bins(DesktopState desktop) {
-        super("Bins", "/BNS", false, true, false, true);
-        setFrameIcon(new ImageIcon(Bins.class.getResource("/icons/areas.png")));
-        listModel = new DefaultListModel<>();
-        JList<Area> list = new JList<>(listModel);
-        list.setCellRenderer(new BinRenderer());
-        JScrollPane scrollPane = new JScrollPane(list);
-        scrollPane.setPreferredSize(new Dimension(300, 400));
-        list.addMouseListener(new MouseAdapter() {
+    public Bins() {
+        super("Bins", "/BNS", true, true, true, true);
+        setFrameIcon(new ImageIcon(Bins.class.getResource("/icons/bins.png")));
+        JPanel tb = createToolBar();
+        JPanel holder = new JPanel(new BorderLayout());
+        table = createTable();
+        JScrollPane tableScrollPane = new JScrollPane(table);
+        holder.add(Elements.header("All Bins", SwingConstants.LEFT), BorderLayout.CENTER);
+        holder.add(tb, BorderLayout.SOUTH);
+        setLayout(new BorderLayout());
+        add(holder, BorderLayout.NORTH);
+        add(tableScrollPane, BorderLayout.CENTER);
+    }
+
+    private JPanel createToolBar() {
+        JPanel tb = new JPanel();
+        tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        IconButton export = new IconButton("Export", "export", "Export as CSV", "");
+        IconButton createArea = new IconButton("New Bin", "order", "Create a Bin", "/BNS/NEW");
+        IconButton autoMakeAreas = new IconButton("AutoMake Bins", "automake", "Automate the creation of Bin(s)", "/BNS/AUTO_MK");
+        IconButton modifyArea = new IconButton("Modify", "modify", "Modify an Bin", "/BNS/MOD");
+        IconButton removeArea = new IconButton("Remove", "delete", "Delete an Bin", "/BNS/DEL");
+        JTextField filterValue = Elements.input("Search", 10);
+        tb.add(export);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(createArea);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(autoMakeAreas);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(modifyArea);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(removeArea);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(filterValue);
+        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
+        export.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    int selectedIndex = list.locationToIndex(e.getPoint());
-                    if (selectedIndex != -1) {
-                        Area item = listModel.getElementAt(selectedIndex);
-                        Engine.router("/BNS/" + item.getId(), desktop);
-                    }
-                }
+                table.exportToCSV();
             }
         });
-        JTextField direct = new JTextField();
-        direct.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    String inputText = direct.getText().trim();
-                    if (!inputText.isEmpty()) {
-                        Engine.router("/BNS/" + inputText, desktop);
-                    }
-                }
-            }
-        });
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BorderLayout());
-        mainPanel.add(direct, BorderLayout.NORTH);
-        mainPanel.add(scrollPane, BorderLayout.CENTER);
-        add(mainPanel);
-        loadFlexes();
+        return tb;
     }
 
-    private void loadFlexes(){
-        ArrayList<Area> found = Engine.getAreas();
-        listModel.removeAllElements();
-        for (Area f : found) {
-            listModel.addElement(f);
-        }
-    }
-
-    static class BinRenderer extends JPanel implements ListCellRenderer<Area> {
-
-        private JLabel binName;
-        private JLabel binId;
-
-        public BinRenderer() {
-            setLayout(new GridLayout(2, 1));
-            binName = new JLabel();
-            binId = new JLabel();
-            binName.setFont(new Font("Arial", Font.BOLD, 16));
-            binId.setFont(new Font("Arial", Font.PLAIN, 12));
-            add(binName);
-            add(binId);
-            setBorder(new EmptyBorder(5, 5, 5, 5));
-        }
-
-        @Override
-        public Component getListCellRendererComponent(JList<? extends Area> list, Area value, int index, boolean isSelected, boolean cellHasFocus) {
-            binName.setText(value.getName());
-            binId.setText(value.getId());
-            if (isSelected) {
-                setBackground(list.getSelectionBackground());
-                setForeground(list.getSelectionForeground());
-            } else {
-                setBackground(list.getBackground());
-                setForeground(list.getForeground());
+    private CustomTable createTable() {
+        String[] columns = new String[]{
+            "ID", "Area", "Name", "Width",
+            "Width UOM", "Length", "Length UOM",
+            "Height", "Height UOM", "Area", "Area UOM",
+            "Volume", "Volume UOM", "Status"
+        };
+        ArrayList<Object[]> data = new ArrayList<>();
+        for (Area area : Engine.getAreas()) {
+            for(Bin b : area.getBins()){
+                data.add(new Object[]{
+                        b.getId(),
+                        b.getArea(),
+                        b.getName(),
+                        b.getWidth(),
+                        b.getWidthUOM(),
+                        b.getLength(),
+                        b.getLengthUOM(),
+                        b.getHeight(),
+                        b.getHeightUOM(),
+                        b.getArea(),
+                        b.getAreaUOM(),
+                        b.getVolume(),
+                        b.getVolumeUOM(),
+                        b.getStatus(),
+                });
             }
-            return this;
         }
+        return new CustomTable(columns, data);
     }
 }

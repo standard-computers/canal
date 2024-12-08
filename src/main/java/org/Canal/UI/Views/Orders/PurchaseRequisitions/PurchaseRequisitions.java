@@ -43,7 +43,7 @@ public class PurchaseRequisitions extends LockeState {
     private CustomTable createTable() {
         String[] columns = new String[]{"ID", "Created", "Name", "Owner", "Number", "Supplier", "Buyer", "Max Spend", "Consumption", "Remaining", "Single Ord?", "Valid From", "Valid To", "Status"};
         ArrayList<Object[]> prs = new ArrayList<>();
-        for (PurchaseRequisition pr : Engine.realtime.getPurchaseRequisitions()) {
+        for (PurchaseRequisition pr : Engine.orderProcessing.getPurchaseRequisitions()) {
             double consumption = 0;
             for(PurchaseOrder po : Engine.getOrders()){
                 if(po.getPurchaseRequisition().equals(pr.getId())){

@@ -29,16 +29,17 @@ public class CreateCustomer extends LockeState {
         ArrayList<Location> ls = Engine.getCustomers();
         String genLocId = String.valueOf(100000 + (ls.size() + 1));
         JTextField cstIdField = Elements.input(genLocId);
-        JTextField orgIdField = Elements.input(Engine.getOrganization().getId());
+        Selectable orgIdField = Selectables.organizations();
         JTextField customerNameField = Elements.input(20);
         JTextField streetField = Elements.input(20);
         JTextField cityField = Elements.input(20);
         JTextField stateField = Elements.input(20);
         JTextField postalCodeField = Elements.input(20);
         Selectable countries = Selectables.countries();
+        JCheckBox taxExempt = new JCheckBox();
         JButton make = Elements.button("Make");
         Form f = new Form();
-        f.addInput(new Label("*New ID", UIManager.getColor("Label.foreground")), cstIdField);
+        f.addInput(new Label("*New Customer ID", UIManager.getColor("Label.foreground")), cstIdField);
         f.addInput(new Label("*Organization", UIManager.getColor("Label.foreground")), orgIdField);
         f.addInput(new Label("Name", Constants.colors[0]), customerNameField);
         f.addInput(new Label("Street", Constants.colors[1]), streetField);
@@ -46,13 +47,14 @@ public class CreateCustomer extends LockeState {
         f.addInput(new Label("State", Constants.colors[3]), stateField);
         f.addInput(new Label("Postal", Constants.colors[4]), postalCodeField);
         f.addInput(new Label("Country", Constants.colors[5]), countries);
+        f.addInput(new Label("Is Tax Exempt?", Constants.colors[4]), taxExempt);
         add(f, BorderLayout.CENTER);
         add(make, BorderLayout.SOUTH);
         make.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 String customerId = cstIdField.getText().trim();
-                String orgTieId = orgIdField.getText().trim();
+                String orgTieId = orgIdField.getSelectedValue();
                 String name = customerNameField.getText().trim();
                 String line1 = streetField.getText().trim();
                 String city = cityField.getText().trim();
@@ -68,6 +70,7 @@ public class CreateCustomer extends LockeState {
                 newCustomer.setState(state);
                 newCustomer.setPostal(postal);
                 newCustomer.setCountry(country);
+                newCustomer.setTaxExempt(taxExempt.isSelected());
                 Pipe.save("/CSTS", newCustomer);
                 dispose();
                 desktop.put(new CustomerView(newCustomer));

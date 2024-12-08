@@ -29,7 +29,6 @@ public class MoveStock extends LockeState {
     public MoveStock(String location, RefreshListener refreshListener) {
         super("Move Stock", "/STK/MOD/MV", false, true, false, true);
         Form f = new Form();
-        Selectable locations = Selectables.allLocations();
         Selectable areas = Selectables.areas();
         HashMap<String, String> putawayBinOptions = new HashMap<>();
         ArrayList<Area> as = (ArrayList<Area>) Engine.getAreas(location);
@@ -44,7 +43,6 @@ public class MoveStock extends LockeState {
         JCheckBox createHu = new JCheckBox();
         JCheckBox createWt = new JCheckBox();
         createHu.setSelected(true);
-        f.addInput(new Label("Location", UIManager.getColor("Label.foreground")), locations);
         f.addInput(new Label("Destination Area", UIManager.getColor("Label.foreground")), areas);
         f.addInput(new Label("Destination Bin", Constants.colors[0]), destinationBins);
         f.addInput(new Label("HU", Constants.colors[1]), mvHu);

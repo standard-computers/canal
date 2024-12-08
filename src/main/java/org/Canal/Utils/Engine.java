@@ -6,9 +6,7 @@ import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.HumanResources.User;
 import org.Canal.Models.SupplyChainUnits.*;
 import org.Canal.UI.Views.Areas.*;
-import org.Canal.UI.Views.Bins.Bins;
-import org.Canal.UI.Views.Bins.CreateBin;
-import org.Canal.UI.Views.Bins.FindBin;
+import org.Canal.UI.Views.Bins.*;
 import org.Canal.UI.Views.Components.ArchiveComponent;
 import org.Canal.UI.Views.Components.Components;
 import org.Canal.UI.Views.Components.CreateComponent;
@@ -200,6 +198,15 @@ public class Engine {
 
     public static List<Location> getCustomers(String id) {
         return getCustomers().stream().filter(location -> location.getTie().equals(id)).collect(Collectors.toList());
+    }
+
+    public static Location getCustomer(String id){
+        for(Location customer : getCustomers()){
+            if(customer.getId().equals(id)){
+                return customer;
+            }
+        }
+        return null;
     }
 
     public static ArrayList<Vendor> getVendors() {
@@ -469,13 +476,19 @@ public class Engine {
                 return new AutoMakeAreas();
             }
             case "/BNS" -> {
-                return new Bins(desktop);
+                return new Bins();
             }
             case "/BNS/F" -> {
                 return new FindBin(desktop);
             }
             case "/BNS/NEW" -> {
                 return new CreateBin("", null);
+            }
+            case "/BNS/DEL" -> {
+                return new RemoveBin();
+            }
+            case "/BNS/AUTO_MK" -> {
+                return new AutoMakeBins();
             }
             case "/CSTS" -> {
                 return new Customers(desktop);
@@ -960,9 +973,32 @@ public class Engine {
             }
             return null;
         }
-    }
 
-    public static class realtime {
+        public static ArrayList<SalesOrder> getSalesOrders() {
+            ArrayList<SalesOrder> sos = new ArrayList<>();
+            File[] posDir = Pipe.list("ORDS/SO");
+            for (File file : posDir) {
+                if (!file.isDirectory()) {
+                    SalesOrder a = Json.load(file.getPath(), SalesOrder.class);
+                    sos.add(a);
+                }
+            }
+            sos.sort(Comparator.comparing(SalesOrder::getOrderId));
+            return sos;
+        }
+
+        public static SalesOrder getSalesOrder(String poNumber) {
+            File[] posDir = Pipe.list("ORDS/SO");
+            for (File file : posDir) {
+                if (!file.isDirectory()) {
+                    SalesOrder a = Json.load(file.getPath(), SalesOrder.class);
+                    if (a.getOrderId().equals(poNumber)) {
+                        return a;
+                    }
+                }
+            }
+            return null;
+        }
 
         public static ArrayList<PurchaseRequisition> getPurchaseRequisitions() {
             ArrayList<PurchaseRequisition> prs = new ArrayList<>();
@@ -989,18 +1025,18 @@ public class Engine {
             pos.sort(Comparator.comparing(GoodsReceipt::getId));
             return pos;
         }
+    }
 
-        public static Area getArea(String areaId) {
-            File[] areaDir = Pipe.list("AREAS");
-            for (File file : areaDir) {
-                if (!file.isDirectory()) {
-                    Area a = Json.load(file.getPath(), Area.class);
-                    if (a.getId().equals(areaId)) {
-                        return a;
-                    }
+    public static Area getArea(String areaId) {
+        File[] areaDir = Pipe.list("AREAS");
+        for (File file : areaDir) {
+            if (!file.isDirectory()) {
+                Area a = Json.load(file.getPath(), Area.class);
+                if (a.getId().equals(areaId)) {
+                    return a;
                 }
             }
-            return null;
         }
+        return null;
     }
 }

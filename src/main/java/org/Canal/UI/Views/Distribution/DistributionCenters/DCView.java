@@ -48,6 +48,7 @@ public class DCView extends LockeState implements RefreshListener {
         JScrollPane tableScrollPane = new JScrollPane(makeOverview());
         dataView.add(tableScrollPane, BorderLayout.CENTER);
         dataTree = createTree();
+        expandAllNodes(dataTree);
         dataTree.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

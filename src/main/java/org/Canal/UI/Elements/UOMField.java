@@ -21,6 +21,10 @@ public class UOMField extends JPanel {
         return textField.getText();
     }
 
+    public void setValue(String value){
+        textField.setText(value);
+    }
+
     public String getUOM(){
         return uom.getSelectedValue();
     }

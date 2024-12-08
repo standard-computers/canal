@@ -6,12 +6,15 @@ public class Location extends Objex {
 
     private String tie;
     private String line1;
+    private String line2;
     private String city;
     private String state;
     private String postal;
     private String country;
     private String status = "Active";
     private boolean taxExempt = false;
+    private String email;
+    private String phone;
 
     public String getTie() {
         return tie;
@@ -27,6 +30,14 @@ public class Location extends Objex {
 
     public void setLine1(String line1) {
         this.line1 = line1;
+    }
+
+    public String getLine2() {
+        return line2;
+    }
+
+    public void setLine2(String line2) {
+        this.line2 = line2;
     }
 
     public String getCity() {
@@ -75,5 +86,21 @@ public class Location extends Objex {
 
     public void setTaxExempt(boolean taxExempt) {
         this.taxExempt = taxExempt;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

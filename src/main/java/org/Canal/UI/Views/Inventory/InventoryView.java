@@ -71,7 +71,7 @@ public class InventoryView extends LockeState implements RefreshListener {
     private JPanel createToolBar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-        IconButton export = new IconButton("", "export", "Export as CSV");
+        IconButton export = new IconButton("Export", "export", "Export as CSV");
         IconButton blockPo = new IconButton("Block", "block", "Block/Pause PO, can't be used");
         IconButton move = new IconButton("Move", "start", "Move Inventory (Internally)");
         IconButton movements = new IconButton("Movements", "archive", "View stock movements");
@@ -119,8 +119,11 @@ public class InventoryView extends LockeState implements RefreshListener {
 
     @Override
     public void onRefresh() {
-        table = createTable();
-        repaint();
-        revalidate();
+        CustomTable newTable = createTable();
+        JScrollPane scrollPane = (JScrollPane) table.getParent().getParent();
+        scrollPane.setViewportView(newTable);
+        table = newTable;
+        scrollPane.revalidate();
+        scrollPane.repaint();
     }
 }

@@ -88,7 +88,7 @@ public class CreateBin extends LockeState {
                 newBin.setHeightUOM(binHeightUom);
                 newBin.setVolume(binVolume);
                 newBin.setVolumeUOM(binVolumeUom);
-                Area foundArea = Engine.realtime.getArea(binArea);
+                Area foundArea = Engine.getArea(binArea);
                 if(foundArea != null){
                     foundArea.addBin(newBin);
                     foundArea.save();

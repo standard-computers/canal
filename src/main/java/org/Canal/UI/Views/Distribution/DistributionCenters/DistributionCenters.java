@@ -29,6 +29,7 @@ public class DistributionCenters extends LockeState {
         JPanel holder = new JPanel(new BorderLayout());
         table = createTable();
         JScrollPane tableScrollPane = new JScrollPane(table);
+        tableScrollPane.setPreferredSize(new Dimension(900, 700));
         holder.add(Elements.header("Distribution Centers", SwingConstants.LEFT), BorderLayout.CENTER);
         holder.add(tb, BorderLayout.SOUTH);
         setLayout(new BorderLayout());

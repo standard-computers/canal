@@ -41,7 +41,29 @@ public class AutoMakeAreas extends LockeState {
         addCheckboxes();
         JScrollPane js = new JScrollPane(checkboxPanel);
         js.setPreferredSize(new Dimension(200, 200));
-        tabs.add(js, "Locations");
+        JPanel selector = new JPanel(new BorderLayout());
+        JTextField search = Elements.input();
+        selector.add(search, BorderLayout.NORTH);
+        selector.add(js, BorderLayout.CENTER);
+        JPanel opts = new JPanel(new GridLayout(1, 2));
+        JButton sa = Elements.button("Select All");
+        JButton dsa = Elements.button("Deselect All");
+        sa.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                checkboxes.forEach(cb -> cb.setSelected(true));
+                repaint();
+            }
+        });
+        dsa.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                checkboxes.forEach(cb -> cb.setSelected(false));
+                repaint();
+            }
+        });
+        opts.add(sa);
+        opts.add(dsa);
+        selector.add(opts, BorderLayout.SOUTH);
+        tabs.add(selector, "Locations");
         tabs.add(areaInformation(), "Area Info");
         setLayout(new BorderLayout());
         add(Elements.header("AutoMake Areas", SwingConstants.LEFT), BorderLayout.NORTH);

@@ -49,7 +49,8 @@ public class CreateUser extends LockeState {
         JPanel l = new JPanel(new BorderLayout());
         Form f = new Form();
         String puid = "U" + (10000 + (Engine.getUsers().size() + 1));
-        f.addInput(new Label("New User ID", new Color(178, 255, 102)), new Copiable(puid));
+        JTextField userIdField = Elements.input(puid);
+        f.addInput(new Label("New User ID", new Color(178, 255, 102)), userIdField);
         Selectable empsOpts = Selectables.employees();
         f.addInput(new Label("Employee", new Color(102, 255, 178)), empsOpts);
         JTextArea pastAccess = new JTextArea();
@@ -114,7 +115,7 @@ public class CreateUser extends LockeState {
         make.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 User newUser = new User();
-                newUser.setId(puid);
+                newUser.setId(userIdField.getText().trim());
                 newUser.setEmployee(empsOpts.getSelectedValue());
                 ArrayList<String> accesses = new ArrayList<>();
                 for(JCheckBox c : checkboxes){

@@ -106,7 +106,7 @@ public class PurchaseOrderView extends LockeState {
         Form f = new Form();
         JTextField ordered = new Copiable(LocalDate.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy")));
         HashMap<String, String> prs = new HashMap<>();
-        for(PurchaseRequisition pr1 : Engine.realtime.getPurchaseRequisitions()){
+        for(PurchaseRequisition pr1 : Engine.orderProcessing.getPurchaseRequisitions()){
             prs.put(pr1.getId(), pr1.getId());
         }
         poPurchaseReq = new Copiable(po.getPurchaseRequisition());

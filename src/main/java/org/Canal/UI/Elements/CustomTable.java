@@ -21,19 +21,16 @@ public class CustomTable extends JTable {
     private String[] headers;
 
     public CustomTable(String[] headers, ArrayList<Object[]> data) {
-
-        // Add a checkbox column to headers
+        // Original setup code
         this.headers = new String[headers.length + 1];
-        this.headers[0] = "Select"; // Prepend "Select" column
-        System.arraycopy(headers, 0, this.headers, 1, headers.length); // Copy original headers
+        this.headers[0] = "Select";
+        System.arraycopy(headers, 0, this.headers, 1, headers.length);
 
         this.rows = new BasicEventList<>();
-
-        // Add a checkbox as the first column for each row
         for (Object[] row : data) {
             Object[] newRow = new Object[row.length + 1];
-            newRow[0] = Boolean.FALSE; // Default checkbox state is unchecked
-            System.arraycopy(row, 0, newRow, 1, row.length); // Copy the rest of the row
+            newRow[0] = Boolean.FALSE;
+            System.arraycopy(row, 0, newRow, 1, row.length);
             this.rows.add(newRow);
         }
 
@@ -42,10 +39,16 @@ public class CustomTable extends JTable {
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-        // Add custom checkbox renderer for the first column
+        // Set custom checkbox renderer for the first column
         TableColumn selectColumn = getColumnModel().getColumn(0);
         selectColumn.setCellRenderer(new CheckboxRenderer());
         selectColumn.setCellEditor(new DefaultCellEditor(new JCheckBox()));
+
+        // Apply custom row renderer to all other columns
+        for (int i = 1; i < getColumnCount(); i++) {
+            getColumnModel().getColumn(i).setCellRenderer(new CustomRowRenderer());
+        }
+
         autoResizeColumns();
     }
 
@@ -128,6 +131,24 @@ public class CustomTable extends JTable {
                 checkBox.setBackground(table.getBackground());
             }
             return checkBox;
+        }
+    }
+
+    private static class CustomRowRenderer extends DefaultTableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+            if (!isSelected) { // Only apply alternating colors for non-selected rows
+                Color background = (row % 2 == 0) ? UIManager.getColor("Table.background") : UIManager.getColor("Table.alternateRowColor");
+                if (background == null) {
+                    background = UIManager.getColor("Panel.background").darker(); // Fallback for alternate row color
+                }
+                c.setBackground(background);
+            } else {
+                c.setBackground(table.getSelectionBackground()); // Use selection background color
+            }
+            return c;
         }
     }
 
