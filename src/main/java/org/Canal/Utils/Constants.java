@@ -4,9 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyVetoException;
 import java.security.SecureRandom;
+import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class Constants {
 
@@ -348,5 +350,18 @@ public class Constants {
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         return now.format(formatter);
+    }
+
+    /**
+     * Formats a double value as a USD currency string with three decimal places.
+     *
+     * @param amount The double value to format.
+     * @return A string formatted as USD with three decimal places.
+     */
+    public static String formatUSD(double amount) {
+        NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.US);
+        formatter.setMaximumFractionDigits(3);
+        formatter.setMinimumFractionDigits(3);
+        return formatter.format(amount);
     }
 }

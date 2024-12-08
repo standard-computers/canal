@@ -7,6 +7,7 @@ import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Controllers.CheckboxBarcodeFrame;
+import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.RefreshListener;
@@ -57,8 +58,8 @@ public class InventoryView extends LockeState implements RefreshListener {
                     i.getName(),
                     String.valueOf(sl.getQuantity()),
                     String.valueOf(sl.getQuantity()),
-                    String.valueOf(i.getPrice()),
-                    String.valueOf(i.getPrice() * sl.getQuantity()),
+                    Constants.formatUSD(i.getPrice()),
+                    Constants.formatUSD(i.getPrice() * sl.getQuantity()),
                     sl.getArea(),
                     sl.getBin(),
                     sl.getReceipt(),

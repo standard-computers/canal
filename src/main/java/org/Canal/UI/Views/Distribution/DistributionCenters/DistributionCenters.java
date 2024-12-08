@@ -7,6 +7,7 @@ import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
+import org.Canal.Utils.RefreshListener;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -14,11 +15,14 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * /DCSS
  */
-public class DistributionCenters extends LockeState {
+public class DistributionCenters extends LockeState implements RefreshListener {
 
     private CustomTable table;
 
@@ -48,6 +52,9 @@ public class DistributionCenters extends LockeState {
                 }
             }
         });
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        Runnable task = () -> onRefresh();
+        scheduler.scheduleAtFixedRate(task, 60, 30, TimeUnit.SECONDS);
     }
 
     private JPanel createToolBar() {
@@ -56,6 +63,7 @@ public class DistributionCenters extends LockeState {
         IconButton export = new IconButton("Export", "export", "Export as CSV", "");
         IconButton createDc = new IconButton("New DC", "order", "Create a DC", "/DCSS/NEW");
         IconButton modifyDc = new IconButton("Modify", "modify", "Modify a DC", "/DCSS/MOD");
+        IconButton archiveDc = new IconButton("Archive", "archive", "Archive a DC", "/DCSS/ARCHV");
         IconButton removeDc = new IconButton("Remove", "delete", "Delete a DC", "/DCSS/DEL");
         JTextField filterValue = Elements.input("Search", 10);
         tb.add(export);
@@ -63,6 +71,8 @@ public class DistributionCenters extends LockeState {
         tb.add(createDc);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(modifyDc);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(archiveDc);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(removeDc);
         tb.add(Box.createHorizontalStrut(5));
@@ -95,5 +105,15 @@ public class DistributionCenters extends LockeState {
             });
         }
         return new CustomTable(columns, data);
+    }
+
+    @Override
+    public void onRefresh() {
+        CustomTable newTable = createTable();
+        JScrollPane scrollPane = (JScrollPane) table.getParent().getParent();
+        scrollPane.setViewportView(newTable);
+        table = newTable;
+        scrollPane.revalidate();
+        scrollPane.repaint();
     }
 }

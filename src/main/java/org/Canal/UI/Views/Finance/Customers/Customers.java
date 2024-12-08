@@ -7,6 +7,7 @@ import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
+import org.Canal.Utils.RefreshListener;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -14,11 +15,14 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * /CSTS
  */
-public class Customers extends LockeState {
+public class Customers extends LockeState implements RefreshListener {
 
     private CustomTable table;
 
@@ -48,14 +52,23 @@ public class Customers extends LockeState {
                 }
             }
         });
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        Runnable task = () -> onRefresh();
+        scheduler.scheduleAtFixedRate(task, 60, 30, TimeUnit.SECONDS);
+//        Runnable shutdownTask = () -> {
+//            System.out.println("Shutting down scheduler...");
+//            scheduler.shutdown();
+//        };
+//        scheduler.schedule(shutdownTask, 30, TimeUnit.SECONDS);
     }
 
     private JPanel createToolBar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV", "");
-        IconButton createCustomer = new IconButton("New DC", "order", "Create a Customer", "/CSTS/NEW");
+        IconButton createCustomer = new IconButton("New Customer", "order", "Create a Customer", "/CSTS/NEW");
         IconButton modifyCustomer = new IconButton("Modify", "modify", "Modify a Customer", "/CSTS/MOD");
+        IconButton archiveCostCenter = new IconButton("Archive", "archive", "Archive a Cost Center", "/CCS/ARCHV");
         IconButton removeCustomer = new IconButton("Remove", "delete", "Delete a Customer", "/CSTS/DEL");
         JTextField filterValue = Elements.input("Search", 10);
         tb.add(export);
@@ -63,6 +76,8 @@ public class Customers extends LockeState {
         tb.add(createCustomer);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(modifyCustomer);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(archiveCostCenter);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(removeCustomer);
         tb.add(Box.createHorizontalStrut(5));
@@ -78,22 +93,34 @@ public class Customers extends LockeState {
     }
 
     private CustomTable createTable() {
-        String[] columns = new String[]{"ID", "Org", "Name", "Street", "City", "State", "Postal", "Country", "Status", "Tax Exempt"};
+        String[] columns = new String[]{"ID", "Org", "Name", "Street", "City", "State", "Postal", "Country", "Status", "Tax Exempt", "Phone", "Email"};
         ArrayList<Object[]> data = new ArrayList<>();
-        for (Location location : Engine.getCustomers()) {
+        for (Location csts : Engine.getCustomers()) {
             data.add(new Object[]{
-                    location.getId(),
-                    location.getTie(),
-                    location.getName(),
-                    location.getLine1(),
-                    location.getCity(),
-                    location.getState(),
-                    location.getPostal(),
-                    location.getCountry(),
-                    location.getStatus(),
-                    location.isTaxExempt()
+                    csts.getId(),
+                    csts.getTie(),
+                    csts.getName(),
+                    csts.getLine1(),
+                    csts.getCity(),
+                    csts.getState(),
+                    csts.getPostal(),
+                    csts.getCountry(),
+                    csts.getStatus(),
+                    csts.isTaxExempt(),
+                    csts.getPhone(),
+                    csts.getEmail()
             });
         }
         return new CustomTable(columns, data);
+    }
+
+    @Override
+    public void onRefresh() {
+        CustomTable newTable = createTable();
+        JScrollPane scrollPane = (JScrollPane) table.getParent().getParent();
+        scrollPane.setViewportView(newTable);
+        table = newTable;
+        scrollPane.revalidate();
+        scrollPane.repaint();
     }
 }

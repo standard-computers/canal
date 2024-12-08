@@ -26,6 +26,9 @@ import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * /DCSS/$[DC_ID]
@@ -68,6 +71,9 @@ public class DCView extends LockeState implements RefreshListener {
         splitPane.setResizeWeight(0.2);
         add(splitPane, BorderLayout.CENTER);
         isMaximized();
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        Runnable task = () -> onRefresh();
+        scheduler.scheduleAtFixedRate(task, 60, 30, TimeUnit.SECONDS);
     }
 
     private JPanel makeOverview(){
@@ -140,6 +146,7 @@ public class DCView extends LockeState implements RefreshListener {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton order = new IconButton("Order", "create", "Order from a vendor", "/ORDS/NEW");
+        IconButton sell = new IconButton("Sell", "create", "Sell from this DC", "/ORDS/SO/NEW");
         IconButton payBill = new IconButton("Pay Bill", "bill", "Receiving a bill from a vendor", "/FI/PYMNTS");
         IconButton inventory = new IconButton("Inventory", "inventory", "Inventory of items in cost center", "/STK");
         IconButton receive = new IconButton("Receive", "receive", "Receive an Inbound Delivery");
@@ -182,6 +189,8 @@ public class DCView extends LockeState implements RefreshListener {
             }
         });
         tb.add(order);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(sell);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(payBill);
         tb.add(Box.createHorizontalStrut(5));

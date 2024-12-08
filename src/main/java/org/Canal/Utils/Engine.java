@@ -139,6 +139,15 @@ public class Engine {
         return getCostCenters().stream().filter(location -> location.getTie().equals(id)).collect(Collectors.toList());
     }
 
+    public static Location getCostCenter(String id){
+        for(Location customer : getCostCenters()){
+            if(customer.getId().equals(id)){
+                return customer;
+            }
+        }
+        return null;
+    }
+
     public static ArrayList<Location> getDistributionCenters() {
         ArrayList<Location> distributionCenters = new ArrayList<>();
         File[] dcssDir = Pipe.list("DCSS");

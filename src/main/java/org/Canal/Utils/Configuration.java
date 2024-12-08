@@ -1,5 +1,7 @@
 package org.Canal.Utils;
 
+import java.util.HashMap;
+
 public class Configuration {
 
     private String endpoint = "127.0.0.1";
@@ -11,6 +13,7 @@ public class Configuration {
     private int port = 4567;
     private boolean encrypted = false;
     private boolean showCanalCodes = false;
+    private HashMap<String, String> instanceVariables = new HashMap<>();
 
     public String getEndpoint() {
         return endpoint;

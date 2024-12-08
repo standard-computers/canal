@@ -1,6 +1,7 @@
 package org.Canal.UI.Elements;
 
 import com.formdev.flatlaf.ui.FlatBorder;
+import org.Canal.UI.ColorUtil;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -137,11 +138,11 @@ public class Elements {
 
     public static JPanel header(String text, int alignment) {
         JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(ColorUtil.adjustBrightness(UIManager.getColor("Panel.background"), -0.25f));
         JLabel label = Elements.h2(text);
         label.setHorizontalAlignment(alignment);
         panel.add(label, BorderLayout.CENTER);
         panel.setBorder(new EmptyBorder(5, 10, 5, 10));
-        panel.setBackground(UIManager.getColor("Component.selectionBackground"));
         return panel;
     }
 }
