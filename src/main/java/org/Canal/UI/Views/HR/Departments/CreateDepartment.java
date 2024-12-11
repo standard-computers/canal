@@ -1,7 +1,7 @@
 package org.Canal.UI.Views.HR.Departments;
 
-import org.Canal.Models.BusinessUnits.Organization;
 import org.Canal.Models.HumanResources.Department;
+import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Inputs.DatePicker;
 import org.Canal.UI.Elements.Inputs.Selectable;
@@ -50,7 +50,7 @@ public class CreateDepartment extends LockeState {
                 newDepartment.setOrganization(orgs.getSelectedValue());
                 newDepartment.setLocation(locations.getSelectedValue());
                 newDepartment.setName(deptNameField.getText());
-                Organization selectedOrg = Engine.getOrganization(orgs.getSelectedValue());
+                Location selectedOrg = Engine.getLocation(orgs.getSelectedValue(), "ORGS");
                 selectedOrg.addDepartment(newDepartment);
                 selectedOrg.save();
                 dispose();

@@ -26,7 +26,6 @@ import java.util.Map;
 public class CanalSettings extends LockeState {
 
     private Selectable themeOptions;
-    private Selectable codeSelect;
     private JCheckBox showCanalCodes;
 
     public CanalSettings(){
@@ -39,7 +38,6 @@ public class CanalSettings extends LockeState {
             public void mouseClicked(MouseEvent e) {
                 String selectedTheme = themeOptions.getSelectedValue();
                 Engine.getConfiguration().setTheme(selectedTheme);
-                Engine.getConfiguration().setDefaultModule(codeSelect.getSelectedValue());
                 Engine.getConfiguration().setShowCanalCodes(showCanalCodes.isSelected());
                 Pipe.saveConfiguration();
                 dispose();
@@ -66,8 +64,6 @@ public class CanalSettings extends LockeState {
         for(String t : Constants.getAllTransactions()){
             codeoptsMap.put(t, t);
         }
-        codeSelect = new Selectable(codeoptsMap);
-        codeSelect.editable();
         showCanalCodes = new JCheckBox();
         if(Engine.getConfiguration().showCanalCodes()){
             showCanalCodes.setSelected(true);
@@ -81,9 +77,8 @@ public class CanalSettings extends LockeState {
         f.addInput(new Label("Assigned User", UIManager.getColor("Label.foreground")), new Copiable(assignedUser));
         f.addInput(new Label("Font Size", Constants.colors[10]), Elements.input("12", 5));
         f.addInput(new Label("Theme", Constants.colors[9]), themeOptions);
-        f.addInput(new Label("Launch Module(s)", Constants.colors[8]), codeSelect);
-        f.addInput(new Label("Background", Constants.colors[7]), Elements.button("Choose File"));
-        f.addInput(new Label("Show Canal Codes", Constants.colors[6]), showCanalCodes);
+        f.addInput(new Label("Background", Constants.colors[8]), Elements.button("Choose File"));
+        f.addInput(new Label("Show Canal Codes", Constants.colors[7]), showCanalCodes);
         return f;
     }
 

@@ -2,6 +2,7 @@ package org.Canal.Utils;
 
 import org.Canal.Models.BusinessUnits.*;
 import org.Canal.Models.BusinessUnits.Inventory;
+import org.Canal.Models.Codex;
 import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.HumanResources.User;
 import org.Canal.Models.SupplyChainUnits.*;
@@ -86,7 +87,8 @@ import java.util.stream.Collectors;
 public class Engine {
 
     private static Configuration configuration;
-    public static Organization organization;
+    public static Codex codex;
+    public static Location organization;
     public static User assignedUser;
 
     public static User getAssignedUser() {
@@ -105,19 +107,6 @@ public class Engine {
 
     public static void setConfiguration(Configuration configuration) {
         Engine.configuration = configuration;
-    }
-
-    public static ArrayList<Organization> getOrganizations() {
-        ArrayList<Organization> organizations = new ArrayList<>();
-        File[] orgsDir = Pipe.list("ORGS");
-        for (File file : orgsDir) {
-            if (!file.isDirectory()) {
-                Organization l = Json.load(file.getPath(), Organization.class);
-                organizations.add(l);
-            }
-        }
-        organizations.sort(Comparator.comparing(Organization::getId));
-        return organizations;
     }
 
     public static ArrayList<Location> getLocations(String objex) {
@@ -206,21 +195,12 @@ public class Engine {
         return getAreas().stream().filter(area -> area.getLocation().equals(id)).collect(Collectors.toList());
     }
 
-    public static void setOrganization(Organization organization) {
+    public static void setOrganization(Location organization) {
         Engine.organization = organization;
     }
 
-    public static Organization getOrganization() {
+    public static Location getOrganization() {
         return organization;
-    }
-
-    public static Organization getOrganization(String orgId) {
-        for(Organization o : getOrganizations()){
-            if (o.getId().equals(orgId)) {
-                return o;
-            }
-        }
-        return null;
     }
 
     public static ArrayList<Employee> getEmployees() {

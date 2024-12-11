@@ -2,12 +2,16 @@ package org.Canal.Models.SupplyChainUnits;
 
 import org.Canal.Models.HumanResources.Department;
 import org.Canal.Models.Objex;
+import org.Canal.Start;
+import org.Canal.Utils.Json;
 import org.Canal.Utils.LockeStatus;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class Location extends Objex {
 
+    private String type;
     private String organization;
     private String line1;
     private String line2;
@@ -111,14 +115,6 @@ public class Location extends Objex {
         this.phone = phone;
     }
 
-    public ArrayList<Department> getDepartments() {
-        return departments;
-    }
-
-    public void setDepartments(ArrayList<Department> departments) {
-        this.departments = departments;
-    }
-
     public double getArea() {
         return area;
     }
@@ -133,5 +129,42 @@ public class Location extends Objex {
 
     public void setAreaUOM(String areaUOM) {
         this.areaUOM = areaUOM;
+    }
+
+    public ArrayList<Department> getDepartments() {
+        return departments;
+    }
+
+    public void setDepartments(ArrayList<Department> departments) {
+        this.departments = departments;
+    }
+
+    public void addDepartment(Department department) {
+        this.departments.add(department);
+    }
+
+    public Department getDepartment(String id) {
+        for (Department department : departments) {
+            if (department.getId().equals(id)) {
+                return department;
+            }
+        }
+        return null;
+    }
+
+    public void save(){
+        File md = new File(Start.WINDOWS_SYSTEM_DIR + "\\.store\\" + type + "\\");
+        File[] mdf = md.listFiles();
+        if (mdf != null) {
+            for (File file : mdf) {
+                if (file.getPath().endsWith(".orgs")) {
+                    Location forg = Json.load(file.getPath(), Location.class);
+                    if (forg.getId().equals(this.getId())) {
+                        Json.save(file.getPath(), this);
+                        break;
+                    }
+                }
+            }
+        }
     }
 }

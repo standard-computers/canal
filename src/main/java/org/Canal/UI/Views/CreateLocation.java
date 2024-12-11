@@ -28,8 +28,8 @@ public class CreateLocation extends LockeState {
         super("New Location", objexType + "/NEW", false, true, false, true);
         setFrameIcon(new ImageIcon(CreateLocation.class.getResource("/icons/create.png")));
         ArrayList<Location> ls = Engine.getLocations("DCSS");
-        String generatedId = "DC" + (100000 + (ls.size() + 1));
-        Selectable objexSelection = Selectables.locationObjex();
+        String generatedId = ((String) Engine.codex.getValue(objexType, "prefix")) + (100000 + (ls.size() + 1));
+        Selectable objexSelection = Selectables.locationObjex(objexType);
         JTextField dcIdField = new JTextField(generatedId);
         JTextField orgIdField = new JTextField();
         if(!objexType.equals("/ORGS")){

@@ -8,7 +8,6 @@ public class Configuration {
     private String instance_name = "Canal";
     private String product_key = "";
     private String theme = "/com/formdev/flatlaf/intellijthemes/themes/SolarizedDark.theme.json";
-    private String defaultModule = "/";
     private String assignedUser; //ID of User this instance of Canal is assigned to
     private int port = 4567;
     private boolean encrypted = false;
@@ -29,10 +28,6 @@ public class Configuration {
 
     public void setTheme(String theme) {
         this.theme = theme;
-    }
-
-    public void setDefaultModule(String defaultModule) {
-        this.defaultModule = defaultModule;
     }
 
     public boolean showCanalCodes() {

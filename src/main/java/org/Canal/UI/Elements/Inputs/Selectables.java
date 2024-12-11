@@ -1,7 +1,6 @@
 package org.Canal.UI.Elements.Inputs;
 
 import com.formdev.flatlaf.IntelliJTheme;
-import org.Canal.Models.BusinessUnits.Organization;
 import org.Canal.Models.HumanResources.Department;
 import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.SupplyChainUnits.Area;
@@ -43,7 +42,7 @@ public class Selectables {
 
     public static Selectable organizations(){
         HashMap<String, String> organizations = new HashMap<>();
-        for(Organization org : Engine.getOrganizations()){
+        for(Location org : Engine.getLocations("ORGS")){
             organizations.put(org.getId(), org.getId());
         }
         return new Selectable(organizations);
@@ -261,7 +260,7 @@ public class Selectables {
         return s;
     }
 
-    public static Selectable locationObjex() {
+    public static Selectable locationObjex(String preset) {
         HashMap<String, String> statusTypes = new HashMap<>();
         statusTypes.put("Cost Center", "/CCS");
         statusTypes.put("Customer", "/CSTS");
@@ -270,7 +269,7 @@ public class Selectables {
         statusTypes.put("Warehouse", "/WHS");
         statusTypes.put("Organizations", "/ORGS");
         Selectable s = new Selectable(statusTypes);
-        s.setSelectedValue("/CCS");
+        s.setSelectedValue(preset);
         return s;
     }
 }

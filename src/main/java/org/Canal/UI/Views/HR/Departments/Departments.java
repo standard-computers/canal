@@ -74,7 +74,7 @@ public class Departments extends LockeState {
 
     private void loadLocations(String orgId){
         listModel.removeAllElements();
-        ArrayList<Department> found = Engine.getOrganization(orgId).getDepartments();
+        ArrayList<Department> found = Engine.getLocation(orgId, "ORGS").getDepartments();
         for (Department dept : found) {
             listModel.addElement(dept);
         }

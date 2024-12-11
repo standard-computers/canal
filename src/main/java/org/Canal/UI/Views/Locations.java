@@ -38,7 +38,7 @@ public class Locations extends LockeState implements RefreshListener {
         table = createTable();
         JScrollPane tableScrollPane = new JScrollPane(table);
         tableScrollPane.setPreferredSize(new Dimension(900, 700));
-        holder.add(Elements.header(objexType, SwingConstants.LEFT), BorderLayout.CENTER);
+        holder.add(Elements.header(((String) Engine.codex.getValue(objexType, "name")), SwingConstants.LEFT), BorderLayout.CENTER);
         holder.add(tb, BorderLayout.SOUTH);
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);
@@ -52,10 +52,10 @@ public class Locations extends LockeState implements RefreshListener {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV", "");
-        IconButton createDc = new IconButton("New", "order", "Create a DC", "/DCSS/NEW");
-        IconButton modifyDc = new IconButton("Modify", "modify", "Modify a DC", "/DCSS/MOD");
-        IconButton archiveDc = new IconButton("Archive", "archive", "Archive a DC", "/DCSS/ARCHV");
-        IconButton removeDc = new IconButton("Remove", "delete", "Delete a DC", "/DCSS/DEL");
+        IconButton createDc = new IconButton("New", "order", "Create a DC", objexType + "/NEW");
+        IconButton modifyDc = new IconButton("Modify", "modify", "Modify a DC", objexType + "/MOD");
+        IconButton archiveDc = new IconButton("Archive", "archive", "Archive a DC", objexType + "/ARCHV");
+        IconButton removeDc = new IconButton("Remove", "delete", "Delete a DC", objexType + "/DEL");
         JTextField filterValue = Elements.input("Search", 10);
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));

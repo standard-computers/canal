@@ -1,6 +1,7 @@
 package org.Canal;
 
 import com.formdev.flatlaf.IntelliJTheme;
+import org.Canal.Models.Codex;
 import org.Canal.UI.Views.Controllers.QuickExplorer;
 import org.Canal.UI.Views.Controllers.Setup;
 import org.Canal.Utils.Configuration;
@@ -46,15 +47,22 @@ public class Start {
                             System.err.println("Failed self assigned theme.");
                         }
                         i = mdf.length + 1;
-                        Engine.setOrganization(Engine.getOrganizations().get(0));
+                        Engine.setOrganization(Engine.getLocations("ORGS").get(0));
                         if(Engine.getConfiguration().getAssignedUser() != null){
                             Engine.assignUser(Engine.getUser(Engine.getConfiguration().getAssignedUser()));
                         }
                         q = new QuickExplorer();
+                    }else if(file.getPath().endsWith(".cdx")){
+                        Engine.codex = Json.load(file.getPath(), Codex.class);
                     }
                 }
                 if(!hasConfiguration) {
                     new Setup();
+                }
+                if(Engine.codex == null){
+                    Codex cdx = new Codex();
+                    Engine.codex = cdx;
+                    Json.save(WINDOWS_SYSTEM_DIR + "\\codex.cdx", cdx);
                 }
             }else{
                 new Setup();
