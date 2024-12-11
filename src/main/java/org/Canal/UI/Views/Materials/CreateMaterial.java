@@ -1,9 +1,9 @@
 package org.Canal.UI.Views.Materials;
 
 import org.Canal.Models.SupplyChainUnits.Material;
-import org.Canal.Models.SupplyChainUnits.Vendor;
 import org.Canal.UI.Elements.Inputs.Copiable;
 import org.Canal.UI.Elements.Inputs.Selectable;
+import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Windows.Form;
@@ -18,7 +18,6 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.HashMap;
 
 /**
  * /MTS/NEW
@@ -36,11 +35,7 @@ public class CreateMaterial extends LockeState {
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));
         Form f1 = new Form();
         Form f2 = new Form();
-        HashMap<String, String> availableVendors = new HashMap<>();
-        for(Vendor vs : Engine.getVendors()){
-            availableVendors.put(vs.getId() + " – " + vs.getName(), vs.getId());
-        }
-        selectedVendor = new Selectable(availableVendors);
+        selectedVendor = Selectables.vendors();
         selectedVendor.editable();
         materialIdField = new JTextField("M0" + (1000 + (Engine.getItems().size() + 1)));
         orgIdField = new Copiable(Engine.getOrganization().getId());

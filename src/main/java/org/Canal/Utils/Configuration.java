@@ -13,7 +13,7 @@ public class Configuration {
     private int port = 4567;
     private boolean encrypted = false;
     private boolean showCanalCodes = false;
-    private HashMap<String, String> instanceVariables = new HashMap<>();
+    private HashMap<String, String> variables = new HashMap<>();
 
     public String getEndpoint() {
         return endpoint;
@@ -49,6 +49,30 @@ public class Configuration {
 
     public void setAssignedUser(String assignedUser) {
         this.assignedUser = assignedUser;
+    }
+
+    public HashMap<String, String> getVariables() {
+        return variables;
+    }
+
+    public void setVariables(HashMap<String, String> variables) {
+        this.variables = variables;
+    }
+
+    public void addVariable(String key, String value){
+        variables.put(key, value);
+    }
+
+    public void removeVariable(String key){
+        variables.remove(key);
+    }
+
+    public void getVariable(String key){
+        variables.get(key);
+    }
+
+    public void adjustVariable(String key, String value){
+        variables.replace(key, value);
     }
 
     @Override

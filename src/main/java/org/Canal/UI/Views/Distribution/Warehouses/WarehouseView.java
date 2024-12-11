@@ -35,11 +35,11 @@ import java.util.ArrayList;
  */
 public class WarehouseView extends LockeState implements RefreshListener {
 
-    private Warehouse warehouse;
+    private Location warehouse;
     private JTree dataTree;
     private DesktopState desktop;
 
-    public WarehouseView(Warehouse loc, DesktopState desktop) {
+    public WarehouseView(Location loc, DesktopState desktop) {
         super("Warehouse / " + loc.getId() + " - " + loc.getName(), "/WHS/$", true, true, true, true);
         this.warehouse = loc;
         this.desktop = desktop;
@@ -206,19 +206,19 @@ public class WarehouseView extends LockeState implements RefreshListener {
     }
 
     private Locke createRootNode() {
-        Locke[] customers = new Locke[Engine.getCustomers(warehouse.getOrg()).size()];
-        for (int i = 0; i < Engine.getCustomers(warehouse.getOrg()).size(); i++) {
-            Location l = Engine.getCustomers(warehouse.getOrg()).get(i);
+        Locke[] customers = new Locke[Engine.getLocations("CSTS").size()];
+        for (int i = 0; i < Engine.getLocations("CSTS").size(); i++) {
+            Location l = Engine.getLocations("CSTS").get(i);
             customers[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/CSTS/" + l.getId(), Color.PINK, null);
         }
-        Locke[] vendors = new Locke[Engine.getVendors(warehouse.getOrg()).size()];
-        for (int i = 0; i < Engine.getVendors(warehouse.getOrg()).size(); i++) {
-            Vendor l = Engine.getVendors(warehouse.getOrg()).get(i);
+        Locke[] vendors = new Locke[Engine.getLocations("VEND").size()];
+        for (int i = 0; i < Engine.getLocations("VEND").size(); i++) {
+            Location l = Engine.getLocations("VEND").get(i);
             vendors[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/VEND/" + l.getId(), Color.CYAN, null);
         }
-        Locke[] items = new Locke[Engine.getItems(warehouse.getOrg()).size()];
-        for (int i = 0; i < Engine.getItems(warehouse.getOrg()).size(); i++) {
-            Item l = Engine.getItems(warehouse.getOrg()).get(i);
+        Locke[] items = new Locke[Engine.getItems(warehouse.getOrganization()).size()];
+        for (int i = 0; i < Engine.getItems(warehouse.getOrganization()).size(); i++) {
+            Item l = Engine.getItems(warehouse.getOrganization()).get(i);
             items[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/ITS/" + l.getId(), new Color(147, 70, 3), null);
         }
         Locke[] areas = new Locke[Engine.getAreas(warehouse.getId()).size()];

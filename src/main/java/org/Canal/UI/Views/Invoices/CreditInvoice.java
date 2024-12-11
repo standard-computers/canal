@@ -17,7 +17,7 @@ public class CreditInvoice extends LockeState {
 
     public CreditInvoice(Invoice invoice) {
         super("Credit Invoice", "/", false, true, false, true);
-        if(Engine.getCustomers().isEmpty()){
+        if(Engine.getLocations("CSTS").isEmpty()){
             JOptionPane.showMessageDialog(null, "No customers to invoice.");
             dispose();
             return;

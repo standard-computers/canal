@@ -3,7 +3,6 @@ package org.Canal.UI.Views.Finance.CostCenters;
 import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.Models.SupplyChainUnits.Location;
-import org.Canal.Models.SupplyChainUnits.Vendor;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Areas.CreateArea;
@@ -124,7 +123,7 @@ public class CostCenterView extends LockeState implements RefreshListener {
         String[] columns = new String[]{"Property", "Value"};
         String[][] data = {
                 {"Id", thisCostCenter.getId()},
-                {"Tie", thisCostCenter.getTie()},
+                {"Tie", thisCostCenter.getOrganization()},
                 {"Name", thisCostCenter.getName()},
                 {"Address Line 1", thisCostCenter.getLine1()},
                 {"City", thisCostCenter.getCity()},
@@ -150,19 +149,19 @@ public class CostCenterView extends LockeState implements RefreshListener {
 
     private Locke createRootNode() {
 
-        Locke[] customers = new Locke[Engine.getCustomers(thisCostCenter.getTie()).size()];
-        for (int i = 0; i < Engine.getCustomers(thisCostCenter.getTie()).size(); i++) {
-            Location l = Engine.getCustomers(thisCostCenter.getTie()).get(i);
+        Locke[] customers = new Locke[Engine.getLocations(thisCostCenter.getOrganization(), "CSTS").size()];
+        for (int i = 0; i < Engine.getLocations(thisCostCenter.getOrganization(), "CSTS").size(); i++) {
+            Location l = Engine.getLocations(thisCostCenter.getOrganization(), "CSTS").get(i);
             customers[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/CSTS/" + l.getId(), Color.PINK, null);
         }
-        Locke[] vendors = new Locke[Engine.getVendors(thisCostCenter.getTie()).size()];
-        for (int i = 0; i < Engine.getVendors(thisCostCenter.getTie()).size(); i++) {
-            Vendor l = Engine.getVendors(thisCostCenter.getTie()).get(i);
+        Locke[] vendors = new Locke[Engine.getLocations(thisCostCenter.getOrganization(), "VEND").size()];
+        for (int i = 0; i < Engine.getLocations(thisCostCenter.getOrganization(), "VEND").size(); i++) {
+            Location l = Engine.getLocations(thisCostCenter.getOrganization(), "VEND").get(i);
             vendors[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/VEND/" + l.getId(), Color.CYAN, null);
         }
-        Locke[] items = new Locke[Engine.getItems(thisCostCenter.getTie()).size()];
-        for (int i = 0; i < Engine.getItems(thisCostCenter.getTie()).size(); i++) {
-            Item l = Engine.getItems(thisCostCenter.getTie()).get(i);
+        Locke[] items = new Locke[Engine.getItems(thisCostCenter.getOrganization()).size()];
+        for (int i = 0; i < Engine.getItems(thisCostCenter.getOrganization()).size(); i++) {
+            Item l = Engine.getItems(thisCostCenter.getOrganization()).get(i);
             items[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/ITS/" + l.getId(), new Color(147, 70, 3), null);
         }
         Locke[] areas = new Locke[Engine.getAreas(thisCostCenter.getId()).size()];

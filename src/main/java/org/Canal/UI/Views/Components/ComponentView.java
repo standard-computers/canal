@@ -1,7 +1,7 @@
 package org.Canal.UI.Views.Components;
 
 import org.Canal.Models.SupplyChainUnits.Item;
-import org.Canal.Models.SupplyChainUnits.Vendor;
+import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.Inputs.Copiable;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.*;
@@ -45,7 +45,7 @@ public class ComponentView extends LockeState {
         iic.add(itemInfo(), BorderLayout.CENTER);
 
         JScrollPane itemScrollPane = new JScrollPane(iic);
-        JScrollPane vendorScrollPane = new JScrollPane(vendorInfo(Engine.getVendor(item.getVendor())));
+        JScrollPane vendorScrollPane = new JScrollPane(vendorInfo(Engine.getLocation(item.getVendor(), "VEND")));
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, itemScrollPane, vendorScrollPane);
         splitPane.setResizeWeight(0.5);
@@ -80,7 +80,7 @@ public class ComponentView extends LockeState {
                 taxField.setText(String.valueOf(selectedItem.getTax()));
                 exciseTaxfield.setText(String.valueOf(selectedItem.getExciseTax()));
 
-                Vendor selectedVendor = Engine.getVendor(selectedItem.getVendor());
+                Location selectedVendor = Engine.getLocation(selectedItem.getVendor(), "VEND");
                 vendorIdField.setText(selectedVendor.getId());
                 vendorNameField.setText(selectedVendor.getName());
                 vendorStreetField.setText(selectedVendor.getLine1());
@@ -102,7 +102,7 @@ public class ComponentView extends LockeState {
         setResizable(true);
     }
 
-    private JPanel vendorInfo(Vendor vendor) {
+    private JPanel vendorInfo(Location vendor) {
         if (vendor == null) {
             JOptionPane.showMessageDialog(null, "A Vendor has not been allocated for this item. Please contact the data team.");
         }

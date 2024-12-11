@@ -33,8 +33,8 @@ public class AutoMakePurchaseRequisitions extends LockeState {
     public AutoMakePurchaseRequisitions() {
         super("AutoMake Purchase Reqs.", "/ORDS/PR/AUTO_MK", false, true, false, true);
         setFrameIcon(new ImageIcon(AutoMakePurchaseRequisitions.class.getResource("/icons/automake.png")));
-        locations = Engine.getCostCenters();
-        locations.addAll(Engine.getDistributionCenters());
+        locations = Engine.getLocations("CCS");
+        locations.addAll(Engine.getLocations("DCSS"));
         this.checkboxes = new ArrayList<>();
         checkboxPanel = new JPanel();
         checkboxPanel.setLayout(new BoxLayout(checkboxPanel, BoxLayout.Y_AXIS));

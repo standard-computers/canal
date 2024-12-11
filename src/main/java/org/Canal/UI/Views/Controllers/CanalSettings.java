@@ -1,5 +1,6 @@
 package org.Canal.UI.Views.Controllers;
 
+import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Inputs.Copiable;
 import org.Canal.UI.Elements.Inputs.Selectable;
@@ -15,7 +16,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * /CNL
@@ -85,9 +88,13 @@ public class CanalSettings extends LockeState {
     }
 
     private JPanel instanceVars(){
-        JPanel panel = new JPanel();
-        String[][] data = new String[][]{};
-//        CustomTable table = new CustomTable(data, new String[]{"Var.", "Value"});add(table);
+        JPanel panel = new JPanel(new BorderLayout());
+        ArrayList<Object[]> data = new ArrayList<>();
+        for(Map.Entry<String, String> v : Engine.getConfiguration().getVariables().entrySet()){
+            data.add(new Object[]{v.getKey(), v.getValue()});
+        }
+        CustomTable table = new CustomTable(new String[]{"Var.", "Value"}, data);
+        add(table, BorderLayout.CENTER);
         return panel;
     }
 }

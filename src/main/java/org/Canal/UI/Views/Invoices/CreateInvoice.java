@@ -15,7 +15,7 @@ public class CreateInvoice extends LockeState {
 
     public CreateInvoice(String providedCustomerId) {
         super("Create Invoice", "/INVS/NEW", false, true, false, true);
-        if(Engine.getCustomers().isEmpty()){
+        if(Engine.getLocations("CSTS").isEmpty()){
             JOptionPane.showMessageDialog(null, "No customers to invoice.");
             dispose();
             return;

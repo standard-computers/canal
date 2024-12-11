@@ -239,19 +239,19 @@ public class DCView extends LockeState implements RefreshListener {
             Bin b = bs.get(i);
             bins[i] = new Locke(b.getId() + " - " + b.getName(), UIManager.getIcon("FileView.fileIcon"), "/BNS/" + b.getId(), Constants.colors[1], null);
         }
-        Locke[] customers = new Locke[Engine.getCustomers(distributionCenter.getTie()).size()];
-        for (int i = 0; i < Engine.getCustomers(distributionCenter.getTie()).size(); i++) {
-            Location l = Engine.getCustomers(distributionCenter.getTie()).get(i);
+        Locke[] customers = new Locke[Engine.getLocations(distributionCenter.getOrganization(), "CSTS").size()];
+        for (int i = 0; i < Engine.getLocations(distributionCenter.getOrganization(), "CSTS").size(); i++) {
+            Location l = Engine.getLocations(distributionCenter.getOrganization(), "CSTS").get(i);
             customers[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/CSTS/" + l.getId(), Constants.colors[2], null);
         }
-        Locke[] vendors = new Locke[Engine.getVendors(distributionCenter.getTie()).size()];
-        for (int i = 0; i < Engine.getVendors(distributionCenter.getTie()).size(); i++) {
-            Vendor l = Engine.getVendors(distributionCenter.getTie()).get(i);
+        Locke[] vendors = new Locke[Engine.getLocations(distributionCenter.getOrganization(), "DCSS").size()];
+        for (int i = 0; i < Engine.getLocations(distributionCenter.getOrganization(), "DCSS").size(); i++) {
+            Location l = Engine.getLocations(distributionCenter.getOrganization(), "DCSS").get(i);
             vendors[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/VEND/" + l.getId(), Constants.colors[3], null);
         }
-        Locke[] items = new Locke[Engine.getItems(distributionCenter.getTie()).size()];
-        for (int i = 0; i < Engine.getItems(distributionCenter.getTie()).size(); i++) {
-            Item l = Engine.getItems(distributionCenter.getTie()).get(i);
+        Locke[] items = new Locke[Engine.getItems(distributionCenter.getOrganization()).size()];
+        for (int i = 0; i < Engine.getItems(distributionCenter.getOrganization()).size(); i++) {
+            Item l = Engine.getItems(distributionCenter.getOrganization()).get(i);
             items[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/ITS/" + l.getId(), Constants.colors[4], null);
         }
         return new Locke(distributionCenter.getName(), UIManager.getIcon("FileView.fileIcon"), "/DCSS/" + distributionCenter.getId(), new Locke[]{

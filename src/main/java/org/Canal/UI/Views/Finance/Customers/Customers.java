@@ -47,7 +47,7 @@ public class Customers extends LockeState implements RefreshListener {
                     int row = target.getSelectedRow(); // Get the clicked row
                     if (row != -1) {
                         String value = String.valueOf(target.getValueAt(row, 1));
-                        desktop.put(new CustomerView(Engine.getCustomer(value)));
+                        desktop.put(new CustomerView(Engine.getLocation(value, "CSTS")));
                     }
                 }
             }
@@ -95,10 +95,10 @@ public class Customers extends LockeState implements RefreshListener {
     private CustomTable createTable() {
         String[] columns = new String[]{"ID", "Org", "Name", "Street", "City", "State", "Postal", "Country", "Status", "Tax Exempt", "Phone", "Email"};
         ArrayList<Object[]> data = new ArrayList<>();
-        for (Location csts : Engine.getCustomers()) {
+        for (Location csts : Engine.getLocations("CSTS")) {
             data.add(new Object[]{
                     csts.getId(),
-                    csts.getTie(),
+                    csts.getOrganization(),
                     csts.getName(),
                     csts.getLine1(),
                     csts.getCity(),

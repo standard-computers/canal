@@ -1,7 +1,7 @@
 package org.Canal.UI.Views.Items;
 
 import org.Canal.Models.SupplyChainUnits.Item;
-import org.Canal.Models.SupplyChainUnits.Vendor;
+import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Label;
@@ -45,7 +45,7 @@ public class CreateItem extends LockeState implements Includer {
         Form f1 = new Form();
         Form f2 = new Form();
         HashMap<String, String> availableVendors = new HashMap<>();
-        for(Vendor vs : Engine.getVendors()){
+        for(Location vs : Engine.getLocations("VEND")){
             availableVendors.put(vs.getId(), vs.getId());
         }
         selectedVendor = new Selectable(availableVendors);

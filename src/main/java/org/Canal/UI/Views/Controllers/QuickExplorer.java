@@ -2,6 +2,7 @@ package org.Canal.UI.Views.Controllers;
 
 import org.Canal.UI.Elements.Windows.DesktopInterface;
 import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Views.Distribution.DistributionCenters.DCView;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
@@ -20,6 +21,7 @@ public class QuickExplorer extends JFrame implements DesktopState {
 
     public QuickExplorer() {
         setTitle("Canal – Enterprise Resource Planner – 2024");
+        setIconImage(new ImageIcon(DCView.class.getResource("/icons/canal.png")).getImage());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         desktopPane = new DesktopInterface();
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, new Controller(this), desktopPane);

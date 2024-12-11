@@ -6,8 +6,8 @@ import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Views.CreateLocation;
 import org.Canal.UI.Views.HR.Employees.CreateEmployee;
-import org.Canal.UI.Views.HR.Organizations.CreateOrganization;
 import org.Canal.UI.Views.HR.Users.CreateUser;
 import org.Canal.Utils.Configuration;
 import org.Canal.Utils.Constants;
@@ -48,7 +48,7 @@ public class Setup extends JFrame {
                 Pipe.saveConfiguration();
                 dispose();
                 QuickExplorer q = new QuickExplorer();
-                q.put(new CreateOrganization(q));
+                q.put(new CreateLocation("/ORGS", q));
                 q.put(new CreateEmployee(q));
                 q.put(new CreateUser());
                 Start.q = q;

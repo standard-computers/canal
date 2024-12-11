@@ -11,15 +11,14 @@ public class Catalog {
 
     private String id; //Catalog ID
     private String name; //Name of Catalog
+    private String description;
+    private String period;
+    private String validFrom;
+    private String validTo;
     private ArrayList<String> costCenters;
     private ArrayList<String> customers;
     private ArrayList<String> vendors;
     private ArrayList<Items> items = new ArrayList<>();
-
-    public Catalog(String id, String name) {
-        this.id = id;
-        this.name = name;
-    }
 
     public String getId() {
         return id;
@@ -35,6 +34,38 @@ public class Catalog {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(String period) {
+        this.period = period;
+    }
+
+    public String getValidFrom() {
+        return validFrom;
+    }
+
+    public void setValidFrom(String validFrom) {
+        this.validFrom = validFrom;
+    }
+
+    public String getValidTo() {
+        return validTo;
+    }
+
+    public void setValidTo(String validTo) {
+        this.validTo = validTo;
     }
 
     public ArrayList<String> getCostCenters() {

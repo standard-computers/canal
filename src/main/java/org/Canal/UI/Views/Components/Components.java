@@ -1,6 +1,6 @@
 package org.Canal.UI.Views.Components;
 
-import org.Canal.Models.SupplyChainUnits.Vendor;
+import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.DesktopState;
@@ -20,13 +20,13 @@ import java.util.ArrayList;
  */
 public class Components extends LockeState {
 
-    private DefaultListModel<Vendor> listModel;
+    private DefaultListModel<Location> listModel;
 
     public Components(DesktopState desktop) {
         super("Components", "CMPS/", false, true, false, true);
         setFrameIcon(new ImageIcon(Components.class.getResource("/icons/vendors.png")));
         listModel = new DefaultListModel<>();
-        JList<Vendor> list = new JList<>(listModel);
+        JList<Location> list = new JList<>(listModel);
         list.setCellRenderer(new VendorRenderer());
         JScrollPane scrollPane = new JScrollPane(list);
         list.addMouseListener(new MouseAdapter() {
@@ -35,7 +35,7 @@ public class Components extends LockeState {
                 if (e.getClickCount() == 2) {
                     int selectedIndex = list.locationToIndex(e.getPoint());
                     if (selectedIndex != -1) {
-                        Vendor l = listModel.getElementAt(selectedIndex);
+                        Location l = listModel.getElementAt(selectedIndex);
                         if (l != null) {
                             desktop.put(Engine.router("/CMPS/" + l.getId(), desktop));
                         } else {
@@ -64,14 +64,14 @@ public class Components extends LockeState {
     }
 
     private void loadLocations(){
-        ArrayList<Vendor> found = Engine.getVendors();
+        ArrayList<Location> found = Engine.getLocations("VEND");
         listModel.removeAllElements();
-        for (Vendor loc : found) {
+        for (Location loc : found) {
             listModel.addElement(loc);
         }
     }
 
-    static class VendorRenderer extends JPanel implements ListCellRenderer<Vendor> {
+    static class VendorRenderer extends JPanel implements ListCellRenderer<Location> {
 
         private JLabel vendorName;
         private JLabel vendorId;
@@ -96,7 +96,7 @@ public class Components extends LockeState {
         }
 
         @Override
-        public Component getListCellRendererComponent(JList<? extends Vendor> list, Vendor vendor, int index, boolean isSelected, boolean cellHasFocus) {
+        public Component getListCellRendererComponent(JList<? extends Location> list, Location vendor, int index, boolean isSelected, boolean cellHasFocus) {
             vendorName.setText(vendor.getName());
             vendorId.setText(vendor.getId());
             line1.setText(vendor.getLine1());

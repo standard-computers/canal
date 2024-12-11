@@ -1,6 +1,6 @@
 package org.Canal.UI.Views.Distribution.Vendors;
 
-import org.Canal.Models.SupplyChainUnits.Vendor;
+import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Orders.PurchaseOrders.CreatePurchaseOrder;
@@ -18,9 +18,9 @@ import java.awt.event.MouseEvent;
  */
 public class VendorView extends LockeState {
 
-    private Vendor vendor;
+    private Location vendor;
 
-    public VendorView(Vendor vendor) {
+    public VendorView(Location vendor) {
         super("Vendor / " + vendor.getId() + " - " + vendor.getName(), "/VEND/$", false, true, false, true);
         setFrameIcon(new ImageIcon(VendorView.class.getResource("/icons/vendors.png")));
         this.vendor = vendor;

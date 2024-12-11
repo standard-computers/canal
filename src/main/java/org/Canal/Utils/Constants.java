@@ -331,7 +331,7 @@ public class Constants {
                     JOptionPane.showMessageDialog(parent, "No ledgers to order to.");
                     parent.dispose();
                 }else{
-                    if(Engine.getVendors().isEmpty()){
+                    if(Engine.getLocations("VEND").isEmpty()){
                         JOptionPane.showMessageDialog(parent, "No vendors to order from.");
                         parent.dispose();
                     }

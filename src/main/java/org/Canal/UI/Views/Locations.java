@@ -1,4 +1,4 @@
-package org.Canal.UI.Views.Distribution.DistributionCenters;
+package org.Canal.UI.Views;
 
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.CustomTable;
@@ -20,38 +20,29 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
- * /DCSS
+ * /$
  */
-public class DistributionCenters extends LockeState implements RefreshListener {
+public class Locations extends LockeState implements RefreshListener {
 
+    private String objexType;
+    private DesktopState desktop;
     private CustomTable table;
 
-    public DistributionCenters(DesktopState desktop) {
-        super("Dstribution Centers", "/DCSS", true, true, true, true);
-        setFrameIcon(new ImageIcon(DistributionCenters.class.getResource("/icons/distribution_centers.png")));
+    public Locations(String objexType, DesktopState desktop) {
+        super("Locations", objexType, true, true, true, true);
+        this.objexType = objexType;
+        this.desktop = desktop;
+        setFrameIcon(new ImageIcon(Locations.class.getResource("/icons/distribution_centers.png")));
         JPanel tb = createToolBar();
         JPanel holder = new JPanel(new BorderLayout());
         table = createTable();
         JScrollPane tableScrollPane = new JScrollPane(table);
         tableScrollPane.setPreferredSize(new Dimension(900, 700));
-        holder.add(Elements.header("Distribution Centers", SwingConstants.LEFT), BorderLayout.CENTER);
+        holder.add(Elements.header(objexType, SwingConstants.LEFT), BorderLayout.CENTER);
         holder.add(tb, BorderLayout.SOUTH);
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);
         add(tableScrollPane, BorderLayout.CENTER);
-        table.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) { // Detect double click
-                    JTable target = (JTable) e.getSource();
-                    int row = target.getSelectedRow(); // Get the clicked row
-                    if (row != -1) {
-                        String value = String.valueOf(target.getValueAt(row, 1));
-                        desktop.put(new DCView(Engine.getDistributionCenter(value), desktop));
-                    }
-                }
-            }
-        });
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         Runnable task = () -> onRefresh();
         scheduler.scheduleAtFixedRate(task, 60, 30, TimeUnit.SECONDS);
@@ -61,7 +52,7 @@ public class DistributionCenters extends LockeState implements RefreshListener {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV", "");
-        IconButton createDc = new IconButton("New DC", "order", "Create a DC", "/DCSS/NEW");
+        IconButton createDc = new IconButton("New", "order", "Create a DC", "/DCSS/NEW");
         IconButton modifyDc = new IconButton("Modify", "modify", "Modify a DC", "/DCSS/MOD");
         IconButton archiveDc = new IconButton("Archive", "archive", "Archive a DC", "/DCSS/ARCHV");
         IconButton removeDc = new IconButton("Remove", "delete", "Delete a DC", "/DCSS/DEL");
@@ -90,10 +81,10 @@ public class DistributionCenters extends LockeState implements RefreshListener {
     private CustomTable createTable() {
         String[] columns = new String[]{"ID", "Org", "Name", "Street", "City", "State", "Postal", "Country", "Status", "Tax Exempt"};
         ArrayList<Object[]> data = new ArrayList<>();
-        for (Location location : Engine.getDistributionCenters()) {
+        for (Location location : Engine.getLocations(objexType)) {
             data.add(new Object[]{
                     location.getId(),
-                    location.getTie(),
+                    location.getOrganization(),
                     location.getName(),
                     location.getLine1(),
                     location.getCity(),
@@ -115,5 +106,18 @@ public class DistributionCenters extends LockeState implements RefreshListener {
         table = newTable;
         scrollPane.revalidate();
         scrollPane.repaint();
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) { // Detect double click
+                    JTable target = (JTable) e.getSource();
+                    int row = target.getSelectedRow(); // Get the clicked row
+                    if (row != -1) {
+                        String value = String.valueOf(target.getValueAt(row, 1));
+                        desktop.put(Engine.router(objexType + "/" + value, desktop));
+                    }
+                }
+            }
+        });
     }
 }

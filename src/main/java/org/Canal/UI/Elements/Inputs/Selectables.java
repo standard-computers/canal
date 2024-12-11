@@ -6,8 +6,6 @@ import org.Canal.Models.HumanResources.Department;
 import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.Models.SupplyChainUnits.Location;
-import org.Canal.Models.SupplyChainUnits.Vendor;
-import org.Canal.Models.SupplyChainUnits.Warehouse;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;
@@ -18,16 +16,16 @@ public class Selectables {
 
     public static Selectable allLocations(){
         HashMap<String, String> availableLocations = new HashMap<>();
-        for(Location cs : Engine.getCostCenters()){
+        for(Location cs : Engine.getLocations("CCS")){
             availableLocations.put(cs.getId(), cs.getId());
         }
-        for(Location dcs : Engine.getDistributionCenters()){
+        for(Location dcs : Engine.getLocations("DCSS")){
             availableLocations.put(dcs.getId(), dcs.getId());
         }
-        for(Warehouse whs : Engine.getWarehouses()){
+        for(Location whs : Engine.getLocations("WHS")){
             availableLocations.put(whs.getId(), whs.getId());
         }
-        for(Vendor vndr : Engine.getVendors()){
+        for(Location vndr : Engine.getLocations("VEND")){
             availableLocations.put(vndr.getId(), vndr.getId());
         }
         return new Selectable(availableLocations);
@@ -61,7 +59,7 @@ public class Selectables {
 
     public static Selectable vendors(){
         HashMap<String, String> vendors = new HashMap<>();
-        for(Vendor v : Engine.getVendors()){
+        for(Location v : Engine.getLocations("VEND")){
             vendors.put(v.getId(), v.getId());
         }
         Selectable s =  new Selectable(vendors);
@@ -71,7 +69,7 @@ public class Selectables {
 
     public static Selectable customers(){
         HashMap<String, String> customers = new HashMap<>();
-        for(Location v : Engine.getCustomers()){
+        for(Location v : Engine.getLocations("CSTS")){
             customers.put(v.getId(), v.getId());
         }
         Selectable s =  new Selectable(customers);
@@ -260,6 +258,19 @@ public class Selectables {
                 }
             }
         });
+        return s;
+    }
+
+    public static Selectable locationObjex() {
+        HashMap<String, String> statusTypes = new HashMap<>();
+        statusTypes.put("Cost Center", "/CCS");
+        statusTypes.put("Customer", "/CSTS");
+        statusTypes.put("Vendor", "/VEND");
+        statusTypes.put("Distribution Center", "/DCSS");
+        statusTypes.put("Warehouse", "/WHS");
+        statusTypes.put("Organizations", "/ORGS");
+        Selectable s = new Selectable(statusTypes);
+        s.setSelectedValue("/CCS");
         return s;
     }
 }

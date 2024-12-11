@@ -1,27 +1,34 @@
 package org.Canal.Models.SupplyChainUnits;
 
+import org.Canal.Models.HumanResources.Department;
 import org.Canal.Models.Objex;
+import org.Canal.Utils.LockeStatus;
+
+import java.util.ArrayList;
 
 public class Location extends Objex {
 
-    private String tie;
+    private String organization;
     private String line1;
     private String line2;
     private String city;
     private String state;
     private String postal;
     private String country;
-    private String status = "Active";
     private boolean taxExempt = false;
     private String email;
     private String phone;
+    private double area; //Square area of warehouse
+    private String areaUOM;
+    private ArrayList<Department> departments = new ArrayList<>();
+    private LockeStatus status = LockeStatus.ACTIVE;
 
-    public String getTie() {
-        return tie;
+    public String getOrganization() {
+        return organization;
     }
 
-    public void setTie(String tie) {
-        this.tie = tie;
+    public void setOrganization(String organization) {
+        this.organization = organization;
     }
 
     public String getLine1() {
@@ -72,11 +79,11 @@ public class Location extends Objex {
         this.country = country;
     }
 
-    public String getStatus() {
+    public LockeStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(LockeStatus status) {
         this.status = status;
     }
 
@@ -102,5 +109,29 @@ public class Location extends Objex {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public ArrayList<Department> getDepartments() {
+        return departments;
+    }
+
+    public void setDepartments(ArrayList<Department> departments) {
+        this.departments = departments;
+    }
+
+    public double getArea() {
+        return area;
+    }
+
+    public void setArea(double area) {
+        this.area = area;
+    }
+
+    public String getAreaUOM() {
+        return areaUOM;
+    }
+
+    public void setAreaUOM(String areaUOM) {
+        this.areaUOM = areaUOM;
     }
 }

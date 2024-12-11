@@ -33,8 +33,8 @@ public class AutoMakePurchaseOrders extends LockeState {
     public AutoMakePurchaseOrders() {
         super("AutoMake Purchase Orders", "/ORDS/PO/AUTO_MK", false, true, false, true);
         setFrameIcon(new ImageIcon(AutoMakePurchaseOrders.class.getResource("/icons/automake.png")));
-        locations = Engine.getCostCenters();
-        locations.addAll(Engine.getDistributionCenters());
+        locations = Engine.getLocations("CCS"); //TODO Switch to get all locations
+        locations.addAll(Engine.getLocations("DCS"));
         this.checkboxes = new ArrayList<>();
         checkboxPanel = new JPanel();
         checkboxPanel.setLayout(new BoxLayout(checkboxPanel, BoxLayout.Y_AXIS));

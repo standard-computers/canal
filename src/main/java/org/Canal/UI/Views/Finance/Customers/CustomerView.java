@@ -51,7 +51,7 @@ public class CustomerView extends LockeState {
         JTextField vnl = new JTextField(customer.getName());
         JTextField vil = new JTextField(customer.getId());
         JTextField vl1l = new JTextField(customer.getLine1() + ", " + customer.getCity() + ", " + customer.getState() + " " + customer.getPostal() + " " + customer.getCountry());
-        JTextField val = new JTextField(customer.getStatus());
+        JTextField val = new JTextField(String.valueOf(customer.getStatus()));
         vnl.setEditable(false);
         vil.setEditable(false);
         vl1l.setEditable(false);
