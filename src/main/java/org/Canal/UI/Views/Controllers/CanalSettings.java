@@ -85,9 +85,6 @@ public class CanalSettings extends LockeState {
     private JPanel instanceVars(){
         JPanel panel = new JPanel(new BorderLayout());
         ArrayList<Object[]> data = new ArrayList<>();
-        for(Map.Entry<String, String> v : Engine.getConfiguration().getVariables().entrySet()){
-            data.add(new Object[]{v.getKey(), v.getValue()});
-        }
         CustomTable table = new CustomTable(new String[]{"Var.", "Value"}, data);
         add(table, BorderLayout.CENTER);
         return panel;

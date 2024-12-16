@@ -48,7 +48,7 @@ public class Setup extends JFrame {
                 Pipe.saveConfiguration();
                 dispose();
                 QuickExplorer q = new QuickExplorer();
-                q.put(new CreateLocation("/ORGS", q));
+                q.put(new CreateLocation("/ORGS", q, null));
                 q.put(new CreateEmployee(q));
                 q.put(new CreateUser());
                 Start.q = q;

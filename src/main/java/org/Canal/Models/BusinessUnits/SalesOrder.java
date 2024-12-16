@@ -14,6 +14,7 @@ public class SalesOrder extends Objex {
     private String owner = "UNKNOWN"; //ID of User who is creating order
     private String orderedOn; //Timestamp this was ordered on
     private String expectedDelivery; //When this should arrive to ship to
+    private String purchaseOrder;
     private String purchaseRequisition; //Purchase Requisition ID
     private String billTo; //Location ID
     private String shipTo; //Location ID
@@ -55,6 +56,14 @@ public class SalesOrder extends Objex {
 
     public void setExpectedDelivery(String expectedDelivery) {
         this.expectedDelivery = expectedDelivery;
+    }
+
+    public String getPurchaseOrder() {
+        return purchaseOrder;
+    }
+
+    public void setPurchaseOrder(String purchaseOrder) {
+        this.purchaseOrder = purchaseOrder;
     }
 
     public String getPurchaseRequisition() {
@@ -121,14 +130,6 @@ public class SalesOrder extends Objex {
         this.items = items;
     }
 
-    public LockeStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(LockeStatus status) {
-        this.status = status;
-    }
-
     public double getNetValue() {
         return netValue;
     }
@@ -161,8 +162,16 @@ public class SalesOrder extends Objex {
         this.total = total;
     }
 
+    public LockeStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(LockeStatus status) {
+        this.status = status;
+    }
+
     public void save(){
-        File md = new File(Start.WINDOWS_SYSTEM_DIR + "\\.store\\ORDS\\");
+        File md = new File(Start.WINDOWS_SYSTEM_DIR + "\\.store\\ORDS\\SO\\");
         File[] mdf = md.listFiles();
         if (mdf != null) {
             for (File file : mdf) {

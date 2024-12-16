@@ -87,8 +87,9 @@ public class CreateComponent extends LockeState {
         biPanel.add(f1);
         biPanel.add(f2);
         JPanel main = new JPanel(new BorderLayout());
+        main.add(Elements.header("Create Component", SwingConstants.LEFT), BorderLayout.NORTH);
         main.add(biPanel, BorderLayout.CENTER);
-        main.add(actionsBar(), BorderLayout.NORTH);
+        main.add(actionsBar(), BorderLayout.SOUTH);
         add(main);
     }
 

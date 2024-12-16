@@ -1,5 +1,6 @@
 package org.Canal.Models.BusinessUnits;
 
+import org.Canal.Models.SupplyChainUnits.MaterialMovement;
 import org.Canal.Models.SupplyChainUnits.StockLine;
 import org.Canal.Start;
 import org.Canal.Utils.Json;
@@ -11,6 +12,7 @@ public class Inventory {
 
     private String location;
     private ArrayList<StockLine> stockLines =  new ArrayList<StockLine>();
+    private ArrayList<MaterialMovement> materialMovements = new ArrayList<>();
 
     public Inventory(String location) {
         this.location = location;
@@ -38,6 +40,18 @@ public class Inventory {
 
     public void removeStock(StockLine stockLine) {
         stockLines.remove(stockLine);
+    }
+
+    public ArrayList<MaterialMovement> getMaterialMovements() {
+        return materialMovements;
+    }
+
+    public void setMaterialMovements(ArrayList<MaterialMovement> materialMovements) {
+        this.materialMovements = materialMovements;
+    }
+
+    public void addMaterialMovement(MaterialMovement materialMovement) {
+        this.materialMovements.add(materialMovement);
     }
 
     public void save(){

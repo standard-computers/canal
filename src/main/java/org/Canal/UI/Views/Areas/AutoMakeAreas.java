@@ -33,7 +33,7 @@ public class AutoMakeAreas extends LockeState {
         setFrameIcon(new ImageIcon(AutoMakeAreas.class.getResource("/icons/automake.png")));
 
         JTabbedPane tabs = new JTabbedPane();
-        locations = Engine.getLocations("CCS");
+        locations = Engine.getLocations();
         this.checkboxes = new ArrayList<>();
         checkboxPanel = new JPanel();
         checkboxPanel.setLayout(new BoxLayout(checkboxPanel, BoxLayout.Y_AXIS));

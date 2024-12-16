@@ -10,7 +10,7 @@ public class GoodsIssue extends Objex {
     private String comments;
     private String issuer; //User ID of owner
     public String location; //Location receiving in at
-    public ArrayList<OrderLineItem> items; //Items received and qty received
+    public ArrayList<OrderLineItem> items; //ITS received and qty received
     private LockeStatus status; //Status of this receival
 
     public String getComments() {

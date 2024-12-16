@@ -5,7 +5,7 @@ import org.Canal.Utils.LockeStatus;
 
 public class StockLine {
 
-    private String objex; //ITS, MTS, or CMPS ID
+    private String objex; //Items, MTS, or CMPS ID
     private String hu;
     private String id;
     private double quantity;

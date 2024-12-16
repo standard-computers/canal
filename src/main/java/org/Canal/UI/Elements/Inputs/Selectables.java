@@ -161,6 +161,19 @@ public class Selectables {
         return uomField;
     }
 
+    public static Selectable packagingUoms(){
+        HashMap<String, String> statusTypes = new HashMap<>();
+        statusTypes.put("EA", "EA");
+        statusTypes.put("BOX", "BOX");
+        statusTypes.put("CS", "CS");
+        statusTypes.put("CASES", "CASES");
+        statusTypes.put("PALLETS", "PALLETS");
+        statusTypes.put("REEMES", "REEMES");
+        Selectable uomField = new Selectable(statusTypes);
+        uomField.editable();
+        return uomField;
+    }
+
     public static Selectable uoms(){
         return uoms("FT");
     }
@@ -267,7 +280,7 @@ public class Selectables {
         statusTypes.put("Vendor", "/VEND");
         statusTypes.put("Distribution Center", "/DCSS");
         statusTypes.put("Warehouse", "/WHS");
-        statusTypes.put("Organizations", "/ORGS");
+        statusTypes.put("Organization", "/ORGS");
         Selectable s = new Selectable(statusTypes);
         s.setSelectedValue(preset);
         return s;

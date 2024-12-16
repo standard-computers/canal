@@ -1,7 +1,5 @@
 package org.Canal.Models.SupplyChainUnits;
 
-import org.Canal.UI.Views.Items.Items;
-
 import java.util.ArrayList;
 
 /**
@@ -18,7 +16,7 @@ public class Catalog {
     private ArrayList<String> costCenters;
     private ArrayList<String> customers;
     private ArrayList<String> vendors;
-    private ArrayList<Items> items = new ArrayList<>();
+    private ArrayList<Item> items = new ArrayList<>();
 
     public String getId() {
         return id;
@@ -92,11 +90,11 @@ public class Catalog {
         this.vendors = vendors;
     }
 
-    public ArrayList<Items> getItems() {
+    public ArrayList<Item> getItems() {
         return items;
     }
 
-    public void setItems(ArrayList<Items> items) {
+    public void setItems(ArrayList<Item> items) {
         this.items = items;
     }
 }

@@ -14,6 +14,7 @@ public class Codex {
             put("hard_enforce_flows", false);
             put("default_tax_rate", 0.085);
             put("auto_override_rcv_loc", false);
+            put("use_deliveries", true);
         }});
         variables.put("ORGS", new HashMap<String, Object>() {{
             put("name", "Organizations");
@@ -39,6 +40,7 @@ public class Codex {
             put("allow_archival", true);
             put("allow_deletion", true);
             put("automake_enabled", true);
+            put("allow_batch_create", true);
         }});
         variables.put("CCS", new HashMap<String, Object>() {{
             put("name", "Cost Centers");
@@ -46,6 +48,7 @@ public class Codex {
             put("allow_archival", true);
             put("allow_deletion", true);
             put("automake_enabled", true);
+            put("allow_batch_create", true);
         }});
         variables.put("VEND", new HashMap<String, Object>() {{
             put("name", "Vendors");
@@ -53,6 +56,7 @@ public class Codex {
             put("allow_archival", true);
             put("allow_deletion", true);
             put("automake_enabled", true);
+            put("allow_batch_create", true);
         }});
         variables.put("WHS", new HashMap<String, Object>() {{
             put("name", "Warehouses");
@@ -60,6 +64,7 @@ public class Codex {
             put("allow_archival", true);
             put("allow_deletion", true);
             put("automake_enabled", true);
+            put("allow_batch_create", true);
         }});
         variables.put("CSTS", new HashMap<String, Object>() {{
             put("name", "Customers");
@@ -67,6 +72,7 @@ public class Codex {
             put("allow_archival", true);
             put("allow_deletion", true);
             put("automake_enabled", true);
+            put("allow_batch_create", true);
         }});
         variables.put("AREAS", new HashMap<String, Object>() {{
             put("name", "Areas");
@@ -74,6 +80,7 @@ public class Codex {
             put("allow_archival", true);
             put("allow_deletion", true);
             put("automake_enabled", true);
+            put("allow_batch_create", true);
         }});
         variables.put("BNS", new HashMap<String, Object>() {{
             put("name", "Bins");
@@ -81,6 +88,104 @@ public class Codex {
             put("allow_archival", true);
             put("allow_deletion", true);
             put("automake_enabled", true);
+            put("allow_batch_create", true);
+        }});
+        variables.put("DPTS", new HashMap<String, Object>() {{
+            put("name", "Bins");
+            put("prefix", "BN");
+            put("allow_archival", true);
+            put("allow_deletion", true);
+            put("automake_enabled", true);
+            put("allow_batch_create", true);
+        }});
+        variables.put("HR/POS", new HashMap<String, Object>() {{
+            put("name", "Positions");
+            put("prefix", "POS-RQ");
+            put("allow_archival", true);
+            put("allow_deletion", true);
+            put("automake_enabled", true);
+            put("allow_batch_create", true);
+        }});
+        variables.put("EMPS", new HashMap<String, Object>() {{
+            put("name", "Employees");
+            put("prefix", "E");
+            put("allow_archival", true);
+            put("allow_deletion", true);
+            put("automake_enabled", true);
+            put("allow_batch_create", true);
+        }});
+        variables.put("USRS", new HashMap<String, Object>() {{
+            put("name", "Users");
+            put("prefix", "U");
+            put("allow_archival", true);
+            put("allow_deletion", true);
+            put("automake_enabled", true);
+            put("allow_batch_create", true);
+        }});
+        variables.put("LGS", new HashMap<String, Object>() {{
+            put("name", "Ledgers");
+            put("prefix", "GL");
+            put("allow_archival", true);
+            put("allow_deletion", true);
+            put("automake_enabled", true);
+            put("allow_batch_create", true);
+        }});
+        variables.put("ORDS/PO", new HashMap<String, Object>() {{
+            put("name", "Purchase Orders");
+            put("prefix", "PO");
+            put("commit_to_ledger", false);
+            put("allow_archival", true);
+            put("allow_deletion", true);
+            put("automake_enabled", true);
+            put("allow_batch_create", true);
+        }});
+        variables.put("ORDS/PR", new HashMap<String, Object>() {{
+            put("name", "Purchase Requisitions");
+            put("prefix", "PR");
+            put("allow_archival", true);
+            put("allow_deletion", true);
+            put("automake_enabled", true);
+            put("allow_batch_create", true);
+        }});
+        variables.put("GR", new HashMap<String, Object>() {{
+            put("name", "Goods Receipts");
+            put("prefix", "GR");
+            put("allow_archival", true);
+            put("allow_deletion", true);
+            put("automake_enabled", true);
+            put("allow_batch_create", true);
+        }});
+        variables.put("GI", new HashMap<String, Object>() {{
+            put("name", "Goods Issues");
+            put("prefix", "GI");
+            put("allow_archival", true);
+            put("allow_deletion", true);
+            put("automake_enabled", true);
+            put("allow_batch_create", true);
+        }});
+        variables.put("ITS", new HashMap<String, Object>() {{
+            put("name", "Items");
+            put("prefix", "X0");
+            put("allow_archival", true);
+            put("allow_deletion", true);
+            put("automake_enabled", true);
+            put("allow_batch_create", true);
+        }});
+        variables.put("MTS", new HashMap<String, Object>() {{
+            put("name", "Materials");
+            put("prefix", "M0");
+            put("allow_archival", true);
+            put("allow_deletion", true);
+            put("automake_enabled", true);
+            put("allow_batch_create", true);
+        }});
+        variables.put("CMPS", new HashMap<String, Object>() {{
+            put("name", "Components");
+            put("prefix", "CP0");
+            put("allow_archival", true);
+            put("allow_deletion", true);
+            put("automake_enabled", true);
+            put("allow_batch_create", true);
         }});
     }
 

@@ -31,7 +31,7 @@ public class ItemView extends LockeState {
     public ItemView(Item item) {
         super("Item / " + item.getId() + " - " + item.getName(), "/ITS/$", true, true, true, true);
         this.item = item;
-        setFrameIcon(new ImageIcon(Items.class.getResource("/icons/items.png")));
+        setFrameIcon(new ImageIcon(Items.class.getResource("/icons/ITS.png")));
         setLayout(new BorderLayout());
         JPanel tb = createToolBar();
         add(tb, BorderLayout.NORTH);

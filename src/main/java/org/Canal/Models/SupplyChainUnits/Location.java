@@ -27,6 +27,14 @@ public class Location extends Objex {
     private ArrayList<Department> departments = new ArrayList<>();
     private LockeStatus status = LockeStatus.ACTIVE;
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public String getOrganization() {
         return organization;
     }

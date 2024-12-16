@@ -44,67 +44,36 @@ public class CreatePurchaseOrder extends LockeState {
     private JLabel netValue;
     private JLabel taxAmount;
     private JLabel totalAmount;
-    private Selectable availablePrs, selectVendor, selectBillTo, selectShipTo;
+    private Selectable availablePrs, selectVendor, selectBillTo, selectShipTo, organizations;
     private Copiable orderId;
     private DatePicker expectedDelivery;
+    private JCheckBox commitToLedger, makeSalesOrder, createDelivery;
 
     public CreatePurchaseOrder() {
-        super("Create Purchase Order", "/ORDS/PO/NEW", true, true, true, true);
+        super("Create Purchase Order", "/ORDS/PO/NEW", false, true, false, true);
         Constants.checkLocke(this, true, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));
         newOrder = new PurchaseOrder();
+
+        JTabbedPane tabs = new JTabbedPane();
+        tabs.addTab("Item Details", itemDetails());
+        tabs.addTab("Delivery", deliveryDetails());
+        tabs.addTab("Ledger", ledgerDetails());
+
         JPanel coreValues = orderInfoPanel();
         JPanel moreInfo = moreOrderInfoPanel();
         selectBillTo.setSelectedValue(Engine.getOrganization().getId());
         selectShipTo.setSelectedValue(Engine.getOrganization().getId());
         coreValues.setBorder(new EmptyBorder(10, 10, 10, 10));
         moreInfo.setBorder(new EmptyBorder(10, 10, 10, 10));
+
+        setLayout(new BorderLayout());
         JPanel orderInfo = new JPanel(new BorderLayout());
         orderInfo.add(coreValues, BorderLayout.WEST);
         orderInfo.add(moreInfo, BorderLayout.EAST);
-
-        setLayout(new BorderLayout());
         add(orderInfo, BorderLayout.NORTH);
 
-        ArrayList<Item> items = Engine.getItems();
-        if(items.isEmpty()){
-            JOptionPane.showMessageDialog(this, "No items found", "Error", JOptionPane.ERROR_MESSAGE);
-            dispose();
-        }
-        model = new ItemTableModel(Collections.singletonList(items.getFirst()));
-        JTable table = new JTable(model);
-        TableColumn col1 = table.getColumnModel().getColumn(1);
-        TableColumn col2 = table.getColumnModel().getColumn(2);
-        TableColumn col3 = table.getColumnModel().getColumn(3);
-        TableColumn col4 = table.getColumnModel().getColumn(4);
-
-        TableCellRenderer centerRenderer = new CenteredRenderer();
-        col1.setCellRenderer(centerRenderer);
-        col2.setCellRenderer(centerRenderer);
-        col3.setCellRenderer(centerRenderer);
-        col4.setCellRenderer(centerRenderer);
-        JComboBox<Item> itemComboBox = new JComboBox<>(items.toArray(new Item[0]));
-        table.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(itemComboBox));
-        add(new JScrollPane(table), BorderLayout.CENTER);
-
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        buttonPanel.setBackground(UIManager.getColor("Panel.background"));
-        IconButton addButton = new IconButton("", "add_rows", "Add products");
-        addButton.addActionListener((ActionEvent _) -> {
-            if (!items.isEmpty()) {
-                model.addRow(items.getFirst());
-            }
-        });
-        IconButton removeButton = new IconButton("", "delete_rows", "Remove selected product");
-        removeButton.addActionListener((ActionEvent _) -> {
-            int selectedRow = table.getSelectedRow();
-            if (selectedRow != -1) {
-                model.removeRow(selectedRow);
-            }
-        });
-        buttonPanel.add(removeButton);
-        buttonPanel.add(addButton);
-        orderInfo.add(buttonPanel, BorderLayout.SOUTH);
+        add(tabs, BorderLayout.CENTER);
         JButton save = Elements.button("Submit Order");
         JPanel orderSummary = new JPanel(new BorderLayout());
         JPanel genSummary = orderSummary();
@@ -152,7 +121,7 @@ public class CreatePurchaseOrder extends LockeState {
                     newOrder.setOrderedOn(LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss")));
                     assignedPR.setStatus(LockeStatus.IN_USE);
                     assignedPR.save();
-                    Pipe.save("/ORDS", newOrder);
+                    Pipe.save("/ORDS/PO", newOrder);
                     dispose();
                     JOptionPane.showMessageDialog(null, "Order submitted.");
                 }
@@ -178,7 +147,6 @@ public class CreatePurchaseOrder extends LockeState {
         f.addInput(new Label("Supplier/Vendor", Constants.colors[1]), selectVendor);
         f.addInput(new Label("Bill To", Constants.colors[2]), selectBillTo);
         f.addInput(new Label("Ship To", Constants.colors[3]), selectShipTo);
-        f.addInput(new Label("Trans. Type", Constants.colors[3]), new Copiable("/DCSS"));
         return f;
     }
 
@@ -192,11 +160,10 @@ public class CreatePurchaseOrder extends LockeState {
         availablePrs = new Selectable(prs);
         availablePrs.editable();
         expectedDelivery = new DatePicker();
-        f.addInput(new Label("*Ordered", Constants.colors[4]), ordered);
-        f.addInput(new Label("Purchase Requisition", Constants.colors[5]), availablePrs);
-        f.addInput(new Label("Expected Delivery", Constants.colors[6]), expectedDelivery);
-        f.addInput(new Label("Due Date", Constants.colors[7]), Elements.input());
-        f.addInput(new Label("Status", Constants.colors[8]), new Copiable("DRAFT"));
+        f.addInput(new Label("*Ordered", UIManager.getColor("Label.foreground")), ordered);
+        f.addInput(new Label("Purchase Requisition", UIManager.getColor("Label.foreground")), availablePrs);
+        f.addInput(new Label("Expected Delivery", UIManager.getColor("Label.foreground")), expectedDelivery);
+        f.addInput(new Label("Status", UIManager.getColor("Label.foreground")), new Copiable("DRAFT"));
         return f;
     }
 
@@ -220,5 +187,71 @@ public class CreatePurchaseOrder extends LockeState {
         netValue.setText("$" + model.getTotalPrice());
         taxAmount.setText("$" + df.format(taxRate * Double.parseDouble(model.getTotalPrice())));
         totalAmount.setText("$" + df.format(taxRate * Double.parseDouble(model.getTotalPrice()) + Double.parseDouble(model.getTotalPrice())));
+    }
+
+    private JPanel itemDetails(){
+        JPanel p = new JPanel(new BorderLayout());
+        ArrayList<Item> items = Engine.getItems();
+        if(items.isEmpty()){
+            JOptionPane.showMessageDialog(this, "No items found", "Error", JOptionPane.ERROR_MESSAGE);
+            dispose();
+        }
+        model = new ItemTableModel(Collections.singletonList(items.getFirst()));
+        JTable table = new JTable(model);
+        TableColumn col1 = table.getColumnModel().getColumn(1);
+        TableColumn col2 = table.getColumnModel().getColumn(2);
+        TableColumn col3 = table.getColumnModel().getColumn(3);
+        TableColumn col4 = table.getColumnModel().getColumn(4);
+
+        TableCellRenderer centerRenderer = new CenteredRenderer();
+        col1.setCellRenderer(centerRenderer);
+        col2.setCellRenderer(centerRenderer);
+        col3.setCellRenderer(centerRenderer);
+        col4.setCellRenderer(centerRenderer);
+        JComboBox<Item> itemComboBox = new JComboBox<>(items.toArray(new Item[0]));
+        table.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(itemComboBox));
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        buttonPanel.setBackground(UIManager.getColor("Panel.background"));
+        IconButton addButton = new IconButton("", "add_rows", "Add products");
+        addButton.addActionListener((ActionEvent _) -> {
+            if (!items.isEmpty()) {
+                model.addRow(items.getFirst());
+            }
+        });
+        IconButton removeButton = new IconButton("", "delete_rows", "Remove selected product");
+        removeButton.addActionListener((ActionEvent _) -> {
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow != -1) {
+                model.removeRow(selectedRow);
+            }
+        });
+        buttonPanel.add(removeButton);
+        buttonPanel.add(addButton);
+        p.add(new JScrollPane(table), BorderLayout.CENTER);
+        p.add(buttonPanel, BorderLayout.NORTH);
+        return p;
+    }
+
+    private JPanel deliveryDetails(){
+        Form p = new Form();
+        createDelivery = new JCheckBox();
+        p.addInput(new Label("", Constants.colors[9]), createDelivery);
+        return p;
+    }
+
+    private JPanel ledgerDetails(){
+        Form f = new Form();
+        commitToLedger = new JCheckBox();
+        makeSalesOrder = new JCheckBox();
+        if((boolean) Engine.codex("ORDS/PO", "commit_to_ledger")){
+            commitToLedger.setSelected(true);
+        }
+        organizations = Selectables.organizations();
+        JTextField ledgerId = Elements.input();
+        f.addInput(new Label("Commit to Ledger", UIManager.getColor("Label.foreground")), commitToLedger);
+        f.addInput(new Label("Trans. Type", UIManager.getColor("Label.foreground")), new Copiable("/DCSS"));
+        f.addInput(new Label("Purchasing Org.", UIManager.getColor("Label.foreground")), organizations);
+        f.addInput(new Label("Ledger", UIManager.getColor("Label.foreground")), ledgerId);
+        return f;
     }
 }

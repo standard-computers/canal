@@ -145,10 +145,10 @@ public class DCView extends LockeState implements RefreshListener {
     private JPanel createToolBar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-        IconButton order = new IconButton("Order", "create", "Order from a vendor", "/ORDS/NEW");
+        IconButton order = new IconButton("Order", "create", "Order from a vendor", "/ORDS/PO/NEW");
         IconButton sell = new IconButton("Sell", "create", "Sell from this DC", "/ORDS/SO/NEW");
         IconButton payBill = new IconButton("Pay Bill", "bill", "Receiving a bill from a vendor", "/FI/PYMNTS");
-        IconButton inventory = new IconButton("Inventory", "inventory", "Inventory of items in cost center", "/STK");
+        IconButton inventory = new IconButton("Inventory", "inventory", "Inventory of items in cost center");
         IconButton receive = new IconButton("Receive", "receive", "Receive an Inbound Delivery");
         IconButton areas = new IconButton("+ Areas", "areas", "Add an area cost center");
         IconButton addBin = new IconButton("+ Bin", "bins", "Add an area cost center");

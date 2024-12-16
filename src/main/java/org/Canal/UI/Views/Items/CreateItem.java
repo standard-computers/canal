@@ -1,7 +1,6 @@
 package org.Canal.UI.Views.Items;
 
 import org.Canal.Models.SupplyChainUnits.Item;
-import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.Inputs.Selectable;
 import org.Canal.UI.Elements.Inputs.Selectables;
 import org.Canal.UI.Elements.Label;
@@ -16,7 +15,6 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.HashMap;
 
 /**
  * /ITS/NEW
@@ -30,11 +28,10 @@ public class CreateItem extends LockeState implements Includer {
     private JTextField tax;
     private JTextField exciseTax;
     private JTextField upc;
-    private JTextField uomField;
-    private JTextField packagingUnitField;
+    private JTextField baseQtyField;
     private UOMField itemWidth, itemLength, itemHeight, itemWeight;
     private JCheckBox isBatched, isRentable, isSkud, isConsumable;
-    private Selectable orgIdField, selectedVendor;
+    private Selectable orgIdField, selectedVendor, packagingUnits;
     private DesktopState desktop;
 
     public CreateItem(DesktopState desktop){
@@ -44,12 +41,8 @@ public class CreateItem extends LockeState implements Includer {
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));
         Form f1 = new Form();
         Form f2 = new Form();
-        HashMap<String, String> availableVendors = new HashMap<>();
-        for(Location vs : Engine.getLocations("VEND")){
-            availableVendors.put(vs.getId(), vs.getId());
-        }
-        selectedVendor = new Selectable(availableVendors);
-        selectedVendor.editable();
+        selectedVendor = Selectables.vendors();
+        packagingUnits = Selectables.packagingUoms();
         itemIdField = Elements.input("X0" + (1000 + (Engine.getItems().size() + 1)));
         orgIdField = Selectables.organizations();
         itemNameField = Elements.input("Black Shirt");
@@ -58,17 +51,18 @@ public class CreateItem extends LockeState implements Includer {
         isRentable = new JCheckBox(" Item can be rented");
         isSkud = new JCheckBox(" Item has unique SKU");
         upc = Elements.input();
-        uomField = Elements.input();
-        packagingUnitField = Elements.input();
+        baseQtyField = Elements.input();
         f1.addInput(new Label("*New Item ID", new Color(240, 240, 240)), itemIdField);
         f1.addInput(new Label("*Organization", new Color(240, 240, 240)), orgIdField);
         f1.addInput(new Label("Item Name", Constants.colors[0]), itemNameField);
         f1.addInput(new Label("Vendor", Constants.colors[1]), selectedVendor);
-        f1.addInput(new Label("Batched", Constants.colors[2]), isBatched);
-        f1.addInput(new Label("Rentable", Constants.colors[3]), isRentable);
-        f1.addInput(new Label("Price", Constants.colors[4]), itemPriceField);
-        f1.addInput(new Label("SKU'd Product", Constants.colors[5]), isSkud);
-        f1.addInput(new Label("UPC", Constants.colors[6]), upc);
+        f1.addInput(new Label("Packaging UOM Qty.", Constants.colors[2]), baseQtyField);
+        f1.addInput(new Label("Packaging UOM", Constants.colors[3]), packagingUnits);
+        f1.addInput(new Label("Batched", Constants.colors[4]), isBatched);
+        f1.addInput(new Label("Rentable", Constants.colors[5]), isRentable);
+        f1.addInput(new Label("Price", Constants.colors[6]), itemPriceField);
+        f1.addInput(new Label("SKU'd Product", Constants.colors[7]), isSkud);
+        f1.addInput(new Label("UPC", Constants.colors[8]), upc);
         itemWidth = new UOMField();
         itemLength = new UOMField();
         itemHeight = new UOMField();
@@ -175,25 +169,31 @@ public class CreateItem extends LockeState implements Includer {
     }
 
     protected void commitItem() {
-        Item newItem = new Item();
-        newItem.setId(itemIdField.getText());
-        newItem.setOrg(orgIdField.getSelectedValue());
-        newItem.setName(itemNameField.getText());
-        newItem.setUpc(upc.getText());
-        newItem.setVendor(selectedVendor.getSelectedValue());
-        newItem.setColor(itemColor.getText());
-        newItem.setBatched(isBatched.isSelected());
-        newItem.setRentable(isRentable.isSelected());
-        newItem.setSkud(isSkud.isSelected());
-        newItem.setConsumable(isConsumable.isSelected());
-        newItem.setPrice(Double.parseDouble(itemPriceField.getText()));
-        newItem.setWidth(Double.parseDouble(itemWidth.getValue()));
-        newItem.setLength(Double.parseDouble(itemLength.getValue()));
-        newItem.setHeight(Double.parseDouble(itemHeight.getValue()));
-        newItem.setWeight(Double.parseDouble(itemWeight.getValue()));
-        newItem.setTax(Double.parseDouble(itemWeight.getValue()));
-        newItem.setExciseTax(Double.parseDouble(exciseTax.getText()));
-        Pipe.save("/ITS", newItem);
+        Item ni = new Item();
+        ni.setId(itemIdField.getText());
+        ni.setOrg(orgIdField.getSelectedValue());
+        ni.setName(itemNameField.getText());
+        ni.setUpc(upc.getText());
+        ni.setBaseQuantity(Double.parseDouble(baseQtyField.getText().trim()));
+        ni.setPackagingUnit(packagingUnits.getSelectedValue());
+        ni.setVendor(selectedVendor.getSelectedValue());
+        ni.setColor(itemColor.getText());
+        ni.setBatched(isBatched.isSelected());
+        ni.setRentable(isRentable.isSelected());
+        ni.setSkud(isSkud.isSelected());
+        ni.setConsumable(isConsumable.isSelected());
+        ni.setPrice(Double.parseDouble(itemPriceField.getText()));
+        ni.setWidth(Double.parseDouble(itemWidth.getValue()));
+        ni.setWidthUOM(itemWidth.getUOM());
+        ni.setLength(Double.parseDouble(itemLength.getValue()));
+        ni.setLengthUOM(itemLength.getUOM());
+        ni.setHeight(Double.parseDouble(itemHeight.getValue()));
+        ni.setHeightUOM(itemHeight.getUOM());
+        ni.setWeight(Double.parseDouble(itemWeight.getValue()));
+        ni.setWeightUOM(itemWeight.getUOM());
+        ni.setTax(Double.parseDouble(tax.getText()));
+        ni.setExciseTax(Double.parseDouble(exciseTax.getText()));
+        Pipe.save("/ITS", ni);
         dispose();
         JOptionPane.showMessageDialog(this, "Item has been created");
     }

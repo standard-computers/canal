@@ -6,6 +6,8 @@ import org.Canal.Models.Codex;
 import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.HumanResources.User;
 import org.Canal.Models.SupplyChainUnits.*;
+import org.Canal.Start;
+import org.Canal.UI.Views.Archiver;
 import org.Canal.UI.Views.Areas.*;
 import org.Canal.UI.Views.Bins.*;
 import org.Canal.UI.Views.Components.ArchiveComponent;
@@ -107,6 +109,22 @@ public class Engine {
 
     public static void setConfiguration(Configuration configuration) {
         Engine.configuration = configuration;
+    }
+
+    public static ArrayList<Location> getLocations() {
+        ArrayList<Location> locations = new ArrayList<>();
+        String[] locs = new String[]{"DCSS", "CCS", "CSTS", "ORGS", "VEND", "WHS" };
+        for(String l : locs) {
+            File[] dcssDir = Pipe.list(l);
+            for (File file : dcssDir) {
+                if (!file.isDirectory() && file.getPath().endsWith("." + l.toLowerCase())) {
+                    Location loc = Json.load(file.getPath(), Location.class);
+                    locations.add(loc);
+                }
+            }
+        }
+        locations.sort(Comparator.comparing(Location::getId));
+        return locations;
     }
 
     public static ArrayList<Location> getLocations(String objex) {
@@ -266,7 +284,7 @@ public class Engine {
 
     public static ArrayList<PurchaseOrder> getOrders() {
         ArrayList<PurchaseOrder> orders = new ArrayList<>();
-        File[] ordsDir = Pipe.list("ORDS");
+        File[] ordsDir = Pipe.list("ORDS/PO");
         for (File file : ordsDir) {
             if (!file.isDirectory()) {
                 PurchaseOrder a = Json.load(file.getPath(), PurchaseOrder.class);
@@ -324,6 +342,10 @@ public class Engine {
         return getLedgers().stream().filter(location -> location.getOrg().equals(id)).collect(Collectors.toList());
     }
 
+    public static Object codex(String objex, String key){
+        return (Engine.codex.getValue(objex, key) == null ? false : Engine.codex.getValue(objex, key));
+    }
+
     public static JInternalFrame router(String transactionCode, DesktopState desktop) {
         transactionCode = transactionCode.toUpperCase().trim();
         if (!transactionCode.startsWith("/")) {
@@ -334,7 +356,7 @@ public class Engine {
                 return new Locations("/ORGS", desktop);
             }
             case "/ORGS/NEW" -> {
-                return new CreateLocation("/ORGS", desktop);
+                return new CreateLocation("/ORGS", desktop, null);
             }
             case "/ORGS/MOD" -> {
                 return new ModifyOrganization();
@@ -346,7 +368,7 @@ public class Engine {
                 return new FindCostCenter(desktop);
             }
             case "/CCS/NEW" -> {
-                return new CreateLocation("/CCS", desktop);
+                return new CreateLocation("/CCS", desktop, null);
             }
             case "/CCS/MOD" -> {
                 return new ModifyCostCenter(Engine.getLocations("CCS").getFirst());
@@ -388,7 +410,7 @@ public class Engine {
                 return new FindCustomer(desktop);
             }
             case "/CSTS/NEW" -> {
-                return new CreateLocation("/CSTS", desktop);
+                return new CreateLocation("/CSTS", desktop, null);
             }
             case "/CSTS/MOD" -> {
                 return new ModifyCustomer();
@@ -400,7 +422,7 @@ public class Engine {
                 return new FindDistributionCenter(desktop);
             }
             case "/DCSS/NEW" -> {
-                return new CreateLocation("/DCSS", desktop);
+                return new CreateLocation("/DCSS", desktop, null);
             }
             case "/DCSS/MOD" -> {
                 return new ModifyDistributionCenter(null);
@@ -415,7 +437,7 @@ public class Engine {
                 return new FindOutboundDeliveryOrder(desktop);
             }
             case "/TRANS/ODO/ARCHV" -> {
-                return new ArchiveOutboundDeliveryOrder();
+                return new Archiver("/TRANS/ODO");
             }
             case "/TRANS/ODO/DEL" -> {
                 return new RemoveOutboundDeliveryOrder();
@@ -430,7 +452,7 @@ public class Engine {
                 return new FindInboundDeliveryOrder(desktop);
             }
             case "/TRANS/IDO/ARCHV" -> {
-                return new ArchiveInboundDeliveryOrder();
+                return new Archiver("/TRANS/IDO");
             }
             case "/TRANS/IDO/DEL" -> {
                 return new RemoveInboundDeliveryOrder();
@@ -445,7 +467,7 @@ public class Engine {
                 return new CreateCarrier(desktop);
             }
             case "/TRANS/CRRS/ARCHV" -> {
-                return new ArchiveCarrier();
+                return new Archiver("/TRANS/CRRS");
             }
             case "/TRANS/CRRS/DEL" -> {
                 return new RemoveCarrier();
@@ -469,7 +491,7 @@ public class Engine {
                 return new Locations("/WHS", desktop);
             }
             case "/WHS/NEW" -> {
-                return new CreateLocation("/WHS", desktop);
+                return new CreateLocation("/WHS", desktop, null);
             }
             case "/WHS/F" -> {
                 return new FindWarehouse(desktop);
@@ -484,7 +506,7 @@ public class Engine {
                 return new FindVendor(desktop);
             }
             case "/VEND/NEW" -> {
-                return new CreateLocation("/VEND", desktop);
+                return new CreateLocation("/VEND", desktop, null);
             }
             case "/MTS" -> {
                 return new Materials(desktop);
@@ -606,8 +628,20 @@ public class Engine {
             case "/ITS/MOD" -> {
                 return new ModifyItem();
             }
-            case "/ORDS", "/ORDS/PO" -> {
+            case "/ORDS/PO" -> {
                 return new PurchaseOrders(desktop);
+            }
+            case "/ORDS/PO/NEW" -> {
+                return new CreatePurchaseOrder();
+            }
+            case "/ORDS/PO/ARCHV" -> {
+                return new Archiver("/ORDS/PO");
+            }
+            case "/ORDS/PO/DEL" -> {
+                return new DeletePurchaseOrder();
+            }
+            case "/ORDS/PO/AUTO_MK" -> {
+                return new AutoMakePurchaseOrders();
             }
             case "/ORDS/RCV" -> {
                 return new ReceiveOrder(Engine.getOrganization().getId(), desktop);
@@ -615,14 +649,8 @@ public class Engine {
             case "/ORDS/F", "/ORDS/PO/F" -> {
                 return new FindPurchaseOrder(desktop);
             }
-            case "/ORDS/NEW", "/ORDS/PO/NEW" -> {
-                return new CreatePurchaseOrder();
-            }
             case "/ORDS/RTRN" -> {
                 return new ReturnOrder(desktop);
-            }
-            case "/ORDS/PO/AUTO_MK" -> {
-                return new AutoMakePurchaseOrders();
             }
             case "/ORDS/PR" -> {
                 return new PurchaseRequisitions(desktop);
@@ -673,7 +701,7 @@ public class Engine {
                 return new ModifyNote();
             }
             case "/NTS/ARCHV" -> {
-                return new ArchiveNote();
+                return new Archiver("/NTS");
             }
             case "/NTS/DEL" -> {
                 return new RemoveNote();
@@ -695,6 +723,9 @@ public class Engine {
             }
             case "/CNL/HR" -> {
                 return new HumanResources(desktop);
+            }
+            case "/CNL/PROD_MTN" -> {
+                return new ProductMaintainence(desktop);
             }
             case "/TM_CLCK" -> {
                 return new TimeClock(desktop);
@@ -753,7 +784,7 @@ public class Engine {
                             }
                         }
                     }
-                    case "ITS" -> {
+                    case "Items" -> {
                         Item i = Engine.getItem(oid);
                         if(i != null){
                             return new ItemView(i);
@@ -797,7 +828,7 @@ public class Engine {
                                 return new PurchaseOrderView(l);
                             }
                         }
-                        return new Locations("/ORDS", desktop);
+                        return new Locations("/ORDS/PO", desktop);
                     }
                     case "INV" -> {
                         return new org.Canal.UI.Views.Controllers.Inventory();
@@ -845,7 +876,7 @@ public class Engine {
 
         public static ArrayList<PurchaseOrder> getPurchaseOrder() {
             ArrayList<PurchaseOrder> pos = new ArrayList<>();
-            File[] posDir = Pipe.list("ORDS");
+            File[] posDir = Pipe.list("ORDS/PO");
             for (File file : posDir) {
                 if (!file.isDirectory()) {
                     PurchaseOrder a = Json.load(file.getPath(), PurchaseOrder.class);
@@ -857,7 +888,7 @@ public class Engine {
         }
 
         public static PurchaseOrder getPurchaseOrder(String poNumber) {
-            File[] posDir = Pipe.list("ORDS");
+            File[] posDir = Pipe.list("ORDS/PO");
             for (File file : posDir) {
                 if (!file.isDirectory()) {
                     PurchaseOrder a = Json.load(file.getPath(), PurchaseOrder.class);

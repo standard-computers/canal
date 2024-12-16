@@ -2,16 +2,15 @@ package org.Canal.Models.SupplyChainUnits;
 
 import org.Canal.Models.Objex;
 
+import java.util.ArrayList;
+
 public class Item extends Objex {
 
     private String org;
     private String vendor;
     private String color;
     private String upc;
-    private String uom;
-    private String widthUOM;
-    private String lengthUOM;
-    private String heightUOM;
+    private double baseQuantity;
     private String packagingUnit;
     private boolean batched;
     private boolean rentable;
@@ -19,14 +18,16 @@ public class Item extends Objex {
     private boolean consumable;
     private double price;
     private double width;
+    private String widthUOM;
     private double length;
+    private String lengthUOM;
     private double height;
+    private String heightUOM;
     private double weight;
+    private String weightUOM;
     private double tax;
     private double exciseTax;
-
-    public Item() {
-    }
+    private ArrayList<Item> components = new ArrayList<>();
 
     public String getOrg() {
         return org;
@@ -34,30 +35,6 @@ public class Item extends Objex {
 
     public void setOrg(String org) {
         this.org = org;
-    }
-
-    public String getUpc() {
-        return upc;
-    }
-
-    public void setUpc(String upc) {
-        this.upc = upc;
-    }
-
-    public String getUom() {
-        return uom;
-    }
-
-    public void setUom(String uom) {
-        this.uom = uom;
-    }
-
-    public String getPackagingUnit() {
-        return packagingUnit;
-    }
-
-    public void setPackagingUnit(String packagingUnit) {
-        this.packagingUnit = packagingUnit;
     }
 
     public String getVendor() {
@@ -74,6 +51,30 @@ public class Item extends Objex {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public String getUpc() {
+        return upc;
+    }
+
+    public void setUpc(String upc) {
+        this.upc = upc;
+    }
+
+    public double getBaseQuantity() {
+        return baseQuantity;
+    }
+
+    public void setBaseQuantity(double baseQuantity) {
+        this.baseQuantity = baseQuantity;
+    }
+
+    public String getPackagingUnit() {
+        return packagingUnit;
+    }
+
+    public void setPackagingUnit(String packagingUnit) {
+        this.packagingUnit = packagingUnit;
     }
 
     public boolean isBatched() {
@@ -124,12 +125,28 @@ public class Item extends Objex {
         this.width = width;
     }
 
+    public String getWidthUOM() {
+        return widthUOM;
+    }
+
+    public void setWidthUOM(String widthUOM) {
+        this.widthUOM = widthUOM;
+    }
+
     public double getLength() {
         return length;
     }
 
     public void setLength(double length) {
         this.length = length;
+    }
+
+    public String getLengthUOM() {
+        return lengthUOM;
+    }
+
+    public void setLengthUOM(String lengthUOM) {
+        this.lengthUOM = lengthUOM;
     }
 
     public double getHeight() {
@@ -140,12 +157,28 @@ public class Item extends Objex {
         this.height = height;
     }
 
+    public String getHeightUOM() {
+        return heightUOM;
+    }
+
+    public void setHeightUOM(String heightUOM) {
+        this.heightUOM = heightUOM;
+    }
+
     public double getWeight() {
         return weight;
     }
 
     public void setWeight(double weight) {
         this.weight = weight;
+    }
+
+    public String getWeightUOM() {
+        return weightUOM;
+    }
+
+    public void setWeightUOM(String weightUOM) {
+        this.weightUOM = weightUOM;
     }
 
     public double getTax() {
@@ -162,6 +195,14 @@ public class Item extends Objex {
 
     public void setExciseTax(double exciseTax) {
         this.exciseTax = exciseTax;
+    }
+
+    public ArrayList<Item> getComponents() {
+        return components;
+    }
+
+    public void setComponents(ArrayList<Item> components) {
+        this.components = components;
     }
 
     @Override

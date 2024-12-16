@@ -3,6 +3,7 @@ package org.Canal.UI.Views.Inventory;
 import org.Canal.Models.BusinessUnits.Inventory;
 import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.Models.SupplyChainUnits.Bin;
+import org.Canal.Models.SupplyChainUnits.MaterialMovement;
 import org.Canal.Models.SupplyChainUnits.StockLine;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Inputs.Selectable;
@@ -12,6 +13,7 @@ import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
+import org.Canal.Utils.LockeStatus;
 import org.Canal.Utils.RefreshListener;
 
 import javax.swing.*;
@@ -29,7 +31,6 @@ public class MoveStock extends LockeState {
     public MoveStock(String location, RefreshListener refreshListener) {
         super("Move Stock", "/STK/MOD/MV", false, true, false, true);
         Form f = new Form();
-        Selectable areas = Selectables.areas();
         HashMap<String, String> putawayBinOptions = new HashMap<>();
         ArrayList<Area> as = (ArrayList<Area>) Engine.getAreas(location);
         for(Area a : as){
@@ -38,12 +39,12 @@ public class MoveStock extends LockeState {
             }
         }
         Selectable destinationBins = new Selectable(putawayBinOptions);
+        destinationBins.editable();
         JTextField mvHu = Elements.input();
         JTextField mvQty = Elements.input();
-        JCheckBox createHu = new JCheckBox();
+        JCheckBox createHu = new JCheckBox("Assigns new HU to SockLine");
         JCheckBox createWt = new JCheckBox();
         createHu.setSelected(true);
-        f.addInput(new Label("Destination Area", UIManager.getColor("Label.foreground")), areas);
         f.addInput(new Label("Destination Bin", Constants.colors[0]), destinationBins);
         f.addInput(new Label("HU", Constants.colors[1]), mvHu);
         f.addInput(new Label("Quantity", Constants.colors[2]), mvQty);
@@ -67,8 +68,11 @@ public class MoveStock extends LockeState {
 
                 ArrayList<StockLine> toRemove = new ArrayList<>();
                 ArrayList<StockLine> toAdd = new ArrayList<>();
+                StockLine modified = null;
+                String newHu = Constants.generateId(10);
                 for (StockLine s : i.getStockLines()) {
                     if (s.getHu().equals(hu)) {
+                        modified = s;
                         double newQty = s.getQuantity() - qty;
                         s.setQuantity(newQty);
                         StockLine nss = new StockLine(
@@ -79,7 +83,8 @@ public class MoveStock extends LockeState {
                                 destinationBins.getSelectedValue()
                         );
                         if (createHu.isSelected()) {
-                            nss.setHu(Constants.generateId(10));
+                            newHu = Constants.generateId(10);
+                            nss.setHu(newHu);
                         }
                         if (s.getQuantity() <= 0) {
                             toRemove.add(s);
@@ -93,6 +98,18 @@ public class MoveStock extends LockeState {
                 }
                 for (StockLine add : toAdd) {
                     i.addStock(add);
+                }
+                if(modified != null){
+                    MaterialMovement mm = new MaterialMovement();
+                    mm.setObjex(modified.getObjex());
+                    mm.setUser(Engine.getAssignedUser().getId());
+                    mm.setSourceBin(modified.getBin());
+                    mm.setDestinationBin(destinationBins.getSelectedValue());
+                    mm.setSourceHu(modified.getHu());
+                    mm.setDestinationHu(newHu);
+                    mm.setTimestamp(Constants.now());
+                    mm.setStatus(LockeStatus.COMPLETED);
+                    i.addMaterialMovement(mm);
                 }
                 i.save();
                 JOptionPane.showMessageDialog(MoveStock.this, "Moving Stock Complete!");

@@ -91,6 +91,14 @@ public class AutoMakeBins extends LockeState {
                                         .replace("@", checkbox.getActionCommand().split("-")[0])
                                         .replace("+", String.valueOf(i)));
                                 b.setArea(checkbox.getActionCommand());
+                                b.setWidth(Double.parseDouble(widthField.getValue()));
+                                b.setLength(Double.parseDouble(lengthField.getValue()));
+                                b.setHeight(Double.parseDouble(heightField.getValue()));
+                                b.setVolume(Double.parseDouble(volumeField.getValue()));
+                                b.setWidthUOM(widthField.getUOM());
+                                b.setLengthUOM(lengthField.getUOM());
+                                b.setHeightUOM(heightField.getUOM());
+                                b.setVolumeUOM(volumeField.getUOM());
                                 a.addBin(b);
                             }
                         }

@@ -22,6 +22,7 @@ public class Catalogs extends LockeState {
 
     public Catalogs(DesktopState desktop) {
         super("Catalogs", "/CATS", false, true, false, true);
+        setFrameIcon(new ImageIcon(Catalogs.class.getResource("/icons/catalogs.png")));
         listModel = new DefaultListModel<>();
         JList<Catalog> list = new JList<>(listModel);
         list.setCellRenderer(new CatalogRenderer());

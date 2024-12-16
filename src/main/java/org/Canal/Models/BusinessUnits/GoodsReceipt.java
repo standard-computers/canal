@@ -11,7 +11,7 @@ public class GoodsReceipt extends Objex {
     public String received; //Timestamp of when received
     public String receiver; //User ID
     public String location; //Location receiving in at
-    public ArrayList<OrderLineItem> items; //Items received and qty received
+    public ArrayList<OrderLineItem> items; //ITS received and qty received
     private LockeStatus status; //Status of this receival
 
     public String getPurchaseOrder() {

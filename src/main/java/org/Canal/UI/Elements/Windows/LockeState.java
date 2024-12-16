@@ -14,6 +14,7 @@ public class LockeState extends JInternalFrame {
     public LockeState(String title, String locke, boolean resizable, boolean closable, boolean maximizable, boolean iconifiable) {
         super(title, resizable, closable, maximizable, iconifiable);
         this.lock = locke;
+        setBorder(BorderFactory.createLineBorder(UIManager.getColor("Button.darkShadow"), 1));
     }
 
     public String getLock() {

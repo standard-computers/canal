@@ -7,7 +7,6 @@ import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Windows.Form;
 import org.Canal.UI.Elements.Windows.LockeState;
-import org.Canal.UI.Views.Items.Items;
 import org.Canal.Utils.Locke;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
@@ -35,7 +34,7 @@ public class ComponentView extends LockeState {
     public ComponentView(Item item) {
         super("Component / " + item.getId() + " - " + item.getName(), "/CMPS/$", true, true, true, true);
         this.item = item;
-        setFrameIcon(new ImageIcon(Items.class.getResource("/icons/items.png")));
+        setFrameIcon(new ImageIcon(ComponentView.class.getResource("/icons/items.png")));
         setLayout(new BorderLayout());
         JPanel tb = createToolBar();
         add(tb, BorderLayout.NORTH);

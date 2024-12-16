@@ -75,7 +75,7 @@ public class InventoryView extends LockeState implements RefreshListener {
         IconButton export = new IconButton("Export", "export", "Export as CSV");
         IconButton blockPo = new IconButton("Block", "block", "Block/Pause PO, can't be used");
         IconButton move = new IconButton("Move", "start", "Move Inventory (Internally)");
-        IconButton movements = new IconButton("Movements", "archive", "View stock movements");
+        IconButton movements = new IconButton("Movements", "movements", "View stock movements");
         IconButton archivePo = new IconButton("Archive", "archive", "Archive PO, removes");
         IconButton label = new IconButton("Barcodes", "label", "Print labels for org properties");
         JTextField filterValue = Elements.input(location, 10);
@@ -103,6 +103,12 @@ public class InventoryView extends LockeState implements RefreshListener {
             @Override
             public void mouseClicked(MouseEvent e) {
                 desktop.put(new MoveStock(location, InventoryView.this));
+            }
+        });
+        movements.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                desktop.put(new ProductMovements(desktop, location));
             }
         });
         label.addMouseListener(new MouseAdapter() {

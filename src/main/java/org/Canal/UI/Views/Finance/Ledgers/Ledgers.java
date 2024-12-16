@@ -1,7 +1,8 @@
 package org.Canal.UI.Views.Finance.Ledgers;
 
-import org.Canal.Models.BusinessUnits.Ledger;
+import org.Canal.Models.BusinessUnits.GoodsReceipt;
 import org.Canal.UI.Elements.Elements;
+import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -9,94 +10,91 @@ import org.Canal.Utils.Engine;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 /**
- * /LGS
+ * /GR
  */
 public class Ledgers extends LockeState {
 
-    private DefaultListModel<Ledger> listModel;
+    private JTable table;
+    private DesktopState desktop;
 
     public Ledgers(DesktopState desktop) {
-        super("Ledgers", "/LGS", false, true, false, true);
+        super("Ledgers", "/LGS", true, true, true, true);
         setFrameIcon(new ImageIcon(Ledgers.class.getResource("/icons/ledgers.png")));
-        listModel = new DefaultListModel<>();
-        JList<Ledger> list = new JList<>(listModel);
-        list.setCellRenderer(new LedgerRenderer());
-        JScrollPane scrollPane = new JScrollPane(list);
-        scrollPane.setPreferredSize(new Dimension(200, 300));
-        list.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    int selectedIndex = list.locationToIndex(e.getPoint());
-                    if (selectedIndex != -1) {
-                        Ledger l = listModel.getElementAt(selectedIndex);
-                        if (l != null) {
-                            desktop.put(Engine.router("/LGS/" + l.getId(), desktop));
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Ledger Not Found");
-                        }
-                    }
-                }
-            }
-        });
-        JTextField direct = Elements.input();
-        direct.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    String inputText = direct.getText().trim();
-                    if (!inputText.isEmpty()) {
-                        desktop.put(Engine.router("/LGS/" + inputText, desktop));
-                    }
-                }
-            }
-        });
-        add(direct, BorderLayout.NORTH);
-        add(scrollPane, BorderLayout.CENTER);
-        for(Ledger l : Engine.getLedgers()){
-            listModel.addElement(l);
+        if(Engine.orderProcessing.getGoodsReceipts().isEmpty()){
+            dispose();
+            JOptionPane.showMessageDialog(this, "No Ledgers");
         }
+        this.desktop = desktop;
+        JPanel tb = createToolBar();
+        JPanel holder = new JPanel(new BorderLayout());
+        table = createTable();
+        JScrollPane tableScrollPane = new JScrollPane(table);
+        holder.add(Elements.header("Ledgers", SwingConstants.LEFT), BorderLayout.CENTER);
+        holder.add(tb, BorderLayout.SOUTH);
+        add(holder);
+        setLayout(new BorderLayout());
+        add(holder, BorderLayout.NORTH);
+        add(tableScrollPane, BorderLayout.CENTER);
     }
 
-    static class LedgerRenderer extends JPanel implements ListCellRenderer<Ledger> {
+    private JPanel createToolBar() {
+        JPanel tb = new JPanel();
+        tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        IconButton export = new IconButton("Export", "export", "Export as CSV");
+        IconButton blockPo = new IconButton("Block", "block", "Block/Pause PO, can't be used");
+        IconButton suspendPo = new IconButton("Suspend", "suspend", "Suspend PO, can't be used");
+        IconButton activatePO = new IconButton("Start", "start", "Resume/Activate PO");
+        IconButton archivePo = new IconButton("Archive", "archive", "Archive PO, removes");
+        JTextField filterValue = Elements.input("Search", 10);
+        tb.add(export);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(blockPo);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(suspendPo);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(activatePO);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(archivePo);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(filterValue);
+        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
+        return tb;
+    }
 
-        private JLabel ledgerName;
-        private JLabel ledgerId;
-        private JLabel ledgerTransactionCount;
-
-        public LedgerRenderer() {
-            setLayout(new GridLayout(3, 1));
-            ledgerName = new JLabel();
-            ledgerId = new JLabel();
-            ledgerTransactionCount = new JLabel();
-            ledgerName.setFont(new Font("Arial", Font.BOLD, 16));
-            ledgerId.setFont(new Font("Arial", Font.PLAIN, 12));
-            ledgerTransactionCount.setFont(new Font("Arial", Font.PLAIN, 12));
-            add(ledgerName);
-            add(ledgerId);
-            add(ledgerTransactionCount);
-            setBorder(new EmptyBorder(5, 5, 5, 5));
+    private JTable createTable() {
+        String[] columns = new String[]{
+                "ID",
+                "Purchase Order",
+                "Received",
+                "Receiver",
+                "Location",
+                "Items",
+                "Status"
+        };
+        ArrayList<String[]> goodsReceipts = new ArrayList<>();
+        for (GoodsReceipt gr : Engine.orderProcessing.getGoodsReceipts()) {
+            goodsReceipts.add(new String[]{
+                    gr.getId(),
+                    gr.getPurchaseOrder(),
+                    gr.getReceived(),
+                    gr.getReceiver(),
+                    gr.getLocation(),
+                    String.valueOf(gr.getTotalItems()),
+                    String.valueOf(gr.getStatus())
+            });
         }
-
-        @Override
-        public Component getListCellRendererComponent(JList<? extends Ledger> list, Ledger ledger, int index, boolean isSelected, boolean cellHasFocus) {
-            ledgerName.setText(ledger.getName());
-            ledgerId.setText(ledger.getId());
-            ledgerTransactionCount.setText(ledger.getTransactions().size() + " Transactions");
-            if (isSelected) {
-                setBackground(list.getSelectionBackground());
-                setForeground(list.getSelectionForeground());
-            } else {
-                setBackground(list.getBackground());
-                setForeground(list.getForeground());
-            }
-            return this;
+        String[][] data = new String[goodsReceipts.size()][columns.length];
+        for (int i = 0; i < goodsReceipts.size(); i++) {
+            data[i] = goodsReceipts.get(i);
         }
+        JTable table = new JTable(data, columns);
+        table.setCellSelectionEnabled(true);
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        Engine.adjustColumnWidths(table);
+        return table;
     }
 }

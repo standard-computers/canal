@@ -28,6 +28,8 @@ public class Bin {
     private double length;
     private double height;
     private double volume;
+    private boolean picking;
+    private boolean goodsissue;
     private LockeStatus status;
 
     public String getId() {
