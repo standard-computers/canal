@@ -29,13 +29,17 @@ public class Locations extends LockeState implements RefreshListener {
         super("Locations", objexType, true, true, true, true);
         this.objexType = objexType;
         this.desktop = desktop;
+        String oo = objexType;
+        if(oo.startsWith("/")){
+            oo = oo.substring(1);
+        }
         setFrameIcon(new ImageIcon(Locations.class.getResource("/icons/distribution_centers.png")));
         JPanel tb = createToolBar();
         JPanel holder = new JPanel(new BorderLayout());
         table = createTable();
         JScrollPane tableScrollPane = new JScrollPane(table);
         tableScrollPane.setPreferredSize(new Dimension(900, 700));
-        holder.add(Elements.header(((String) Engine.codex.getValue(objexType, "name")), SwingConstants.LEFT), BorderLayout.CENTER);
+        holder.add(Elements.header(((String) Engine.codex.getValue(oo, "name")), SwingConstants.LEFT), BorderLayout.CENTER);
         holder.add(tb, BorderLayout.SOUTH);
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);

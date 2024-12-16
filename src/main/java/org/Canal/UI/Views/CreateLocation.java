@@ -24,8 +24,12 @@ public class CreateLocation extends LockeState {
     public CreateLocation(String objexType, DesktopState desktop, RefreshListener refreshListener) {
         super("New Location", objexType + "/NEW", false, true, false, true);
         setFrameIcon(new ImageIcon(CreateLocation.class.getResource("/icons/create.png")));
-        ArrayList<Location> ls = Engine.getLocations(objexType.replace("/", ""));
-        String generatedId = ((String) Engine.codex.getValue(objexType, "prefix")) + (100000 + (ls.size() + 1));
+        String oo = objexType;
+        if(oo.startsWith("/")){
+            oo = oo.substring(1);
+        }
+        ArrayList<Location> ls = Engine.getLocations(oo);
+        String generatedId = ((String) Engine.codex.getValue(oo, "prefix")) + (100000 + (ls.size() + 1));
         Selectable objexSelection = Selectables.locationObjex(objexType);
         JTextField locationIdField = new JTextField(generatedId);
         Selectable organizations = Selectables.organizations();
@@ -51,6 +55,7 @@ public class CreateLocation extends LockeState {
         add(Elements.header("Make a Location", SwingConstants.LEFT), BorderLayout.NORTH);
         add(f, BorderLayout.CENTER);
         add(make, BorderLayout.SOUTH);
+        String finalObjexType = objexType;
         make.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -72,12 +77,12 @@ public class CreateLocation extends LockeState {
                 location.setState(state);
                 location.setPostal(postal);
                 location.setCountry(country);
-                Pipe.save(objexType, location);
+                Pipe.save(finalObjexType, location);
                 dispose();
                 if(refreshListener != null) {
                     refreshListener.onRefresh();
                 }
-                desktop.put(Engine.router(objexType + "/" + locationId, desktop));
+                desktop.put(Engine.router(finalObjexType + "/" + locationId, desktop));
             }
         });
     }

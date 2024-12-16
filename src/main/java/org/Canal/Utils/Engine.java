@@ -6,7 +6,6 @@ import org.Canal.Models.Codex;
 import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.HumanResources.User;
 import org.Canal.Models.SupplyChainUnits.*;
-import org.Canal.Start;
 import org.Canal.UI.Views.Archiver;
 import org.Canal.UI.Views.Areas.*;
 import org.Canal.UI.Views.Bins.*;
@@ -17,7 +16,6 @@ import org.Canal.UI.Views.Components.FindComponent;
 import org.Canal.UI.Views.Controllers.*;
 import org.Canal.UI.Views.CreateLocation;
 import org.Canal.UI.Views.Distribution.DistributionCenters.*;
-import org.Canal.UI.Views.Distribution.Vendors.FindVendor;
 import org.Canal.UI.Views.Distribution.Vendors.VendorView;
 import org.Canal.UI.Views.Distribution.Warehouses.*;
 import org.Canal.UI.Views.Finance.Catalogs.Catalogs;
@@ -31,6 +29,7 @@ import org.Canal.UI.Views.Finance.GoodsReceipts.GoodsReceipts;
 import org.Canal.UI.Views.Finance.Ledgers.CreateLedger;
 import org.Canal.UI.Views.Finance.Ledgers.LedgerView;
 import org.Canal.UI.Views.Finance.Ledgers.Ledgers;
+import org.Canal.UI.Views.FindLocation;
 import org.Canal.UI.Views.HR.Departments.CreateDepartment;
 import org.Canal.UI.Views.HR.Departments.Departments;
 import org.Canal.UI.Views.HR.Departments.FindDepartment;
@@ -113,7 +112,7 @@ public class Engine {
 
     public static ArrayList<Location> getLocations() {
         ArrayList<Location> locations = new ArrayList<>();
-        String[] locs = new String[]{"DCSS", "CCS", "CSTS", "ORGS", "VEND", "WHS" };
+        String[] locs = new String[]{"DCSS", "CCS", "CSTS", "ORGS", "VEND", "WHS", "TRANS/CRRS" };
         for(String l : locs) {
             File[] dcssDir = Pipe.list(l);
             for (File file : dcssDir) {
@@ -316,6 +315,19 @@ public class Engine {
         return ledgers;
     }
 
+    public static ArrayList<Truck> getTrucks() {
+        ArrayList<Truck> trucks = new ArrayList<>();
+        File[] lgsDir = Pipe.list("TRANS/TRCKS");
+        for (File file : lgsDir) {
+            if (!file.isDirectory()) {
+                Truck a = Json.load(file.getPath(), Truck.class);
+                trucks.add(a);
+            }
+        }
+        trucks.sort(Comparator.comparing(Truck::getId));
+        return trucks;
+    }
+
     public static ArrayList<Inventory> getInventories() {
         ArrayList<Inventory> inventories = new ArrayList<>();
         File[] empDir = Pipe.list("STK");
@@ -365,7 +377,7 @@ public class Engine {
                 return new Locations("/CCS", desktop);
             }
             case "/CCS/F" -> {
-                return new FindCostCenter(desktop);
+                return new FindLocation("/CCS", desktop);
             }
             case "/CCS/NEW" -> {
                 return new CreateLocation("/CCS", desktop, null);
@@ -407,7 +419,7 @@ public class Engine {
                 return new Locations("/CSTS", desktop);
             }
             case "/CSTS/F" -> {
-                return new FindCustomer(desktop);
+                return new FindLocation("/CSTS", desktop);
             }
             case "/CSTS/NEW" -> {
                 return new CreateLocation("/CSTS", desktop, null);
@@ -419,7 +431,7 @@ public class Engine {
                 return new Locations("/DCSS", desktop);
             }
             case "/DCSS/F" -> {
-                return new FindDistributionCenter(desktop);
+                return new FindLocation("/DCSS", desktop);
             }
             case "/DCSS/NEW" -> {
                 return new CreateLocation("/DCSS", desktop, null);
@@ -458,13 +470,13 @@ public class Engine {
                 return new RemoveInboundDeliveryOrder();
             }
             case "/TRANS/CRRS" -> {
-                return new Carriers();
+                return new Locations("/TRANS/CRRS", desktop);
             }
             case "/TRANS/CRRS/F" -> {
-                return new FindCarrier(desktop);
+                return new FindLocation("/TRANS/CRRS", desktop);
             }
             case "/TRANS/CRRS/NEW" -> {
-                return new CreateCarrier(desktop);
+                return new CreateLocation("/TRANS/CRRS", desktop, null);
             }
             case "/TRANS/CRRS/ARCHV" -> {
                 return new Archiver("/TRANS/CRRS");
@@ -494,7 +506,7 @@ public class Engine {
                 return new CreateLocation("/WHS", desktop, null);
             }
             case "/WHS/F" -> {
-                return new FindWarehouse(desktop);
+                return new FindLocation("/WHS", desktop);
             }
             case "/WHS/MOD" -> {
                 return new ModifyWarehouse(null);
@@ -503,7 +515,7 @@ public class Engine {
                 return new Locations("/VEND", desktop);
             }
             case "/VEND/F" -> {
-                return new FindVendor(desktop);
+                return new FindLocation("/VEND", desktop);
             }
             case "/VEND/NEW" -> {
                 return new CreateLocation("/VEND", desktop, null);
@@ -706,9 +718,6 @@ public class Engine {
             case "/NTS/DEL" -> {
                 return new RemoveNote();
             }
-            case "/FIN" -> {
-                return new Finance(desktop);
-            }
             case "/MVMT/TSKS" -> {
                 return new TaskList(null, desktop);
             }
@@ -723,6 +732,9 @@ public class Engine {
             }
             case "/CNL/HR" -> {
                 return new HumanResources(desktop);
+            }
+            case "/CNL/FI" -> {
+                return new Finance(desktop);
             }
             case "/CNL/PROD_MTN" -> {
                 return new ProductMaintainence(desktop);
@@ -828,7 +840,7 @@ public class Engine {
                                 return new PurchaseOrderView(l);
                             }
                         }
-                        return new Locations("/ORDS/PO", desktop);
+                        return new PurchaseOrders(desktop);
                     }
                     case "INV" -> {
                         return new org.Canal.UI.Views.Controllers.Inventory();

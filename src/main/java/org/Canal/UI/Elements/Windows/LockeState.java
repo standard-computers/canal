@@ -5,7 +5,7 @@ import javax.swing.*;
 
 public class LockeState extends JInternalFrame {
 
-    private String lock; //Canal Code
+    private String locke; //Canal Code
     private boolean maximized = false;
     private boolean duplicated = false; //Can have more than one of these open
     private boolean savable = false; //This Locke state can be saved
@@ -13,16 +13,16 @@ public class LockeState extends JInternalFrame {
 
     public LockeState(String title, String locke, boolean resizable, boolean closable, boolean maximizable, boolean iconifiable) {
         super(title, resizable, closable, maximizable, iconifiable);
-        this.lock = locke;
+        this.locke = locke;
         setBorder(BorderFactory.createLineBorder(UIManager.getColor("Button.darkShadow"), 1));
     }
 
-    public String getLock() {
-        return lock;
+    public String getLocke() {
+        return locke;
     }
 
-    public void setLock(String lock) {
-        this.lock = lock;
+    public void setLocke(String locke) {
+        this.locke = locke;
     }
 
     public boolean isMaximized() {

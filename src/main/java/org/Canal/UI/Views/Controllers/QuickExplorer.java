@@ -18,13 +18,15 @@ import java.beans.PropertyVetoException;
 public class QuickExplorer extends JFrame implements DesktopState {
 
     private JDesktopPane desktopPane;
+    private Controller controller;
 
     public QuickExplorer() {
         setTitle("Canal – Enterprise Resource Planner – 2024");
         setIconImage(new ImageIcon(DCView.class.getResource("/icons/canal.png")).getImage());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         desktopPane = new DesktopInterface();
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, new Controller(this), desktopPane);
+        controller = new Controller(this);
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, controller, desktopPane);
         splitPane.setDividerLocation(200);
         splitPane.setResizeWeight(0.2);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -102,6 +104,7 @@ public class QuickExplorer extends JFrame implements DesktopState {
     }
 
     private void addFrame(LockeState win) {
+        controller.setBar(win.getLocke());
         win.setLocation(5, 5);
         win.pack();
         try {

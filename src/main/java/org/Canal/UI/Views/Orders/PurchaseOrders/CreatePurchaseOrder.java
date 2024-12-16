@@ -3,7 +3,10 @@ package org.Canal.UI.Views.Orders.PurchaseOrders;
 import org.Canal.Models.BusinessUnits.OrderLineItem;
 import org.Canal.Models.BusinessUnits.PurchaseOrder;
 import org.Canal.Models.BusinessUnits.PurchaseRequisition;
+import org.Canal.Models.SupplyChainUnits.Delivery;
 import org.Canal.Models.SupplyChainUnits.Item;
+import org.Canal.Models.SupplyChainUnits.Location;
+import org.Canal.Models.SupplyChainUnits.Truck;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Inputs.Copiable;
 import org.Canal.UI.Elements.Inputs.DatePicker;
@@ -44,7 +47,7 @@ public class CreatePurchaseOrder extends LockeState {
     private JLabel netValue;
     private JLabel taxAmount;
     private JLabel totalAmount;
-    private Selectable availablePrs, selectVendor, selectBillTo, selectShipTo, organizations;
+    private Selectable availablePrs, selectVendor, selectBillTo, selectShipTo, organizations, carriers;
     private Copiable orderId;
     private DatePicker expectedDelivery;
     private JCheckBox commitToLedger, makeSalesOrder, createDelivery;
@@ -122,6 +125,20 @@ public class CreatePurchaseOrder extends LockeState {
                     assignedPR.setStatus(LockeStatus.IN_USE);
                     assignedPR.save();
                     Pipe.save("/ORDS/PO", newOrder);
+
+                    if(createDelivery.isSelected()){
+
+                        Truck t = new Truck();
+                        t.setCarrier(carriers.getSelectedValue());
+                        Pipe.save("/TRANS/TRCKS", t);
+
+                        Delivery d = new Delivery();
+                        d.setPurchaseOrder(newOrder.getOrderId());
+                        d.setExpectedDelivery(newOrder.getExpectedDelivery());
+                        d.setDestination(newOrder.getShipTo());
+                        d.setStatus(LockeStatus.PROCESSING);
+                        Pipe.save("/TRANS/IDO", d);
+                    }
                     dispose();
                     JOptionPane.showMessageDialog(null, "Order submitted.");
                 }
@@ -235,7 +252,9 @@ public class CreatePurchaseOrder extends LockeState {
     private JPanel deliveryDetails(){
         Form p = new Form();
         createDelivery = new JCheckBox();
-        p.addInput(new Label("", Constants.colors[9]), createDelivery);
+        carriers = Selectables.carriers();
+        p.addInput(new Label("Create Inbound Delivery (IDO) for Ship-To", Constants.colors[9]), createDelivery);
+        p.addInput(new Label("Carrier", Constants.colors[8]), carriers);
         return p;
     }
 

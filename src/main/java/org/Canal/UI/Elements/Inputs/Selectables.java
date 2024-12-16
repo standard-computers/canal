@@ -76,6 +76,14 @@ public class Selectables {
         return s;
     }
 
+    public static Selectable carriers(){
+        HashMap<String, String> carriers = new HashMap<>();
+        for(Location v : Engine.getLocations("TRANS/CRRS")){
+            carriers.put(v.getName(), v.getId());
+        }
+        return new Selectable(carriers);
+    }
+
     public static Selectable departments(){
         HashMap<String, String> departments = new HashMap<>();
         for(Department org : Engine.getOrganization().getDepartments()){
@@ -276,6 +284,7 @@ public class Selectables {
     public static Selectable locationObjex(String preset) {
         HashMap<String, String> statusTypes = new HashMap<>();
         statusTypes.put("Cost Center", "/CCS");
+        statusTypes.put("Transporation Carrier", "/TRANS/CRRS");
         statusTypes.put("Customer", "/CSTS");
         statusTypes.put("Vendor", "/VEND");
         statusTypes.put("Distribution Center", "/DCSS");

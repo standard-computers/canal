@@ -7,8 +7,8 @@ import org.Canal.Models.SupplyChainUnits.*;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.Windows.LockeState;
 import org.Canal.UI.Views.Finance.Catalogs.CreateCatalog;
+import org.Canal.UI.Views.FindLocation;
 import org.Canal.UI.Views.Items.CreateItem;
-import org.Canal.UI.Views.Finance.Customers.FindCustomer;
 import org.Canal.UI.Views.Locations;
 import org.Canal.UI.Views.Materials.CreateMaterial;
 import org.Canal.UI.Views.Orders.PurchaseOrders.CreatePurchaseOrder;
@@ -110,13 +110,13 @@ public class OrgView extends LockeState {
         findCustomer.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new FindCustomer(desktop));
+                desktop.put(new FindLocation("/CSTS", desktop));
             }
         });
         costCenters.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new Locations("CCS", desktop));
+                desktop.put(new Locations("/CCS", desktop));
             }
         });
         label.addMouseListener(new MouseAdapter() {

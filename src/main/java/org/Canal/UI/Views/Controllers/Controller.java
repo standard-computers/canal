@@ -3,6 +3,7 @@ package org.Canal.UI.Views.Controllers;
 import org.Canal.Models.HumanResources.User;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.Utils.*;
+
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
@@ -14,12 +15,13 @@ import java.awt.event.*;
 public class Controller extends JPanel implements RefreshListener {
 
     private JTree dataTree;
+    private JTextField cmd;
 
     public Controller(DesktopState desktop) {
         User me = Engine.getAssignedUser();
         setLayout(new BorderLayout());
         JPanel dataView = new JPanel(new BorderLayout());
-        JTextField cmd = Elements.input("/");
+        cmd = Elements.input("/");
         cmd.addActionListener(_ -> {
             if(me != null && !me.hasAccess(cmd.getText().replaceAll("\\.", ""))) {
                 JOptionPane.showMessageDialog(this, "Not authorized to use this locke!", "Unauthorized", JOptionPane.ERROR_MESSAGE);
@@ -65,6 +67,12 @@ public class Controller extends JPanel implements RefreshListener {
         JScrollPane treeScrollPane = new JScrollPane(dataTree);
         add(cmd, BorderLayout.NORTH);
         add(treeScrollPane, BorderLayout.CENTER);
+    }
+
+    public void setBar(String s){
+        cmd.setText(s);
+        repaint();
+        revalidate();
     }
 
     @Override

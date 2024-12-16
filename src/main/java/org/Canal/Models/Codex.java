@@ -187,10 +187,44 @@ public class Codex {
             put("automake_enabled", true);
             put("allow_batch_create", true);
         }});
+        variables.put("TRANS/CRRS", new HashMap<String, Object>() {{
+            put("name", "Transportation Carriers");
+            put("prefix", "CRR");
+            put("allow_archival", true);
+            put("allow_deletion", true);
+            put("automake_enabled", true);
+            put("allow_batch_create", true);
+        }});
+        variables.put("TRANS/ODO", new HashMap<String, Object>() {{
+            put("name", "Outbound Deliveries");
+            put("prefix", "OBD");
+            put("allow_archival", true);
+            put("allow_deletion", true);
+            put("automake_enabled", true);
+            put("allow_batch_create", true);
+        }});
+        variables.put("TRANS/IDO", new HashMap<String, Object>() {{
+            put("name", "Inbound Deliveries");
+            put("prefix", "IND");
+            put("allow_archival", true);
+            put("allow_deletion", true);
+            put("automake_enabled", true);
+            put("allow_batch_create", true);
+        }});
+        variables.put("TRANS/TRCKS", new HashMap<String, Object>() {{
+            put("name", "Trucks");
+            put("prefix", "TR");
+            put("allow_archival", true);
+            put("allow_deletion", true);
+            put("automake_enabled", true);
+            put("allow_batch_create", true);
+        }});
     }
 
     public Object getValue(String outerKey, String innerKey) {
-        outerKey = outerKey.toUpperCase().replace("/", "");
+        if(outerKey.startsWith("/")){
+            outerKey = outerKey.toUpperCase().replace("/", "");
+        }
         HashMap<String, Object> innerMap = variables.get(outerKey);
         if (innerMap != null) {
             return innerMap.get(innerKey);

@@ -15,8 +15,7 @@ import org.Canal.Utils.RefreshListener;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 /**
@@ -24,7 +23,7 @@ import java.util.ArrayList;
  */
 public class InventoryView extends LockeState implements RefreshListener {
 
-    private String location;
+    private String title, location;
     private CustomTable table;
     private DesktopState desktop;
 
@@ -37,12 +36,16 @@ public class InventoryView extends LockeState implements RefreshListener {
         JPanel holder = new JPanel(new BorderLayout());
         table = createTable();
         JScrollPane tableScrollPane = new JScrollPane(table);
-        holder.add(Elements.header(location + " Inventory", SwingConstants.LEFT), BorderLayout.NORTH);
+        tableScrollPane.setPreferredSize(new Dimension(1000, 800));
+        title = location + " Inventory";
+        holder.add(Elements.header(title, SwingConstants.LEFT), BorderLayout.NORTH);
         holder.add(tb, BorderLayout.SOUTH);
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);
         add(tableScrollPane, BorderLayout.CENTER);
         isMaximized();
+        repaint();
+        revalidate();
     }
 
     private CustomTable createTable() {
@@ -121,7 +124,46 @@ public class InventoryView extends LockeState implements RefreshListener {
                 new CheckboxBarcodeFrame(printables);
             }
         });
+        filterValue.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    String searchValue = filterValue.getText().trim();
+                    filterTableById(searchValue);
+                }
+            }
+        });
         return tb;
+    }
+
+    private void filterTableById(String id) {
+        String[] columns = new String[]{"Location", "Type", "HU", "ID", "Name", "Org. Qty.", "Qty.", "Price", "Value", "Area", "Bin", "Receipt", "Status"};
+        ArrayList<Object[]> stks = new ArrayList<>();
+        for (StockLine sl : Engine.getInventory(id).getStockLines()) {
+            Item i = Engine.getItem(sl.getId());
+            stks.add(new String[]{
+                    id,
+                    sl.getObjex(),
+                    sl.getHu(),
+                    sl.getId(),
+                    i.getName(),
+                    String.valueOf(sl.getQuantity()),
+                    String.valueOf(sl.getQuantity()),
+                    Constants.formatUSD(i.getPrice()),
+                    Constants.formatUSD(i.getPrice() * sl.getQuantity()),
+                    sl.getArea(),
+                    sl.getBin(),
+                    sl.getReceipt(),
+                    String.valueOf(sl.getStatus())
+            });
+        }
+        title = location + " Inventory";
+        CustomTable filteredTable = new CustomTable(columns, stks);
+        JScrollPane scrollPane = (JScrollPane) table.getParent().getParent();
+        scrollPane.setViewportView(filteredTable);
+        table = filteredTable;
+        scrollPane.revalidate();
+        scrollPane.repaint();
     }
 
     @Override

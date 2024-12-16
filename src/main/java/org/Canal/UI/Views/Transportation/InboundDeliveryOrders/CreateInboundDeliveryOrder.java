@@ -17,7 +17,7 @@ public class CreateInboundDeliveryOrder extends LockeState {
     public CreateInboundDeliveryOrder() {
         super("Create Inbound Delivery Order", "/TRANS/IDO/NEW", false, true, false, true);
         Form f = new Form();
-        JTextField purchaseOrderField = Elements.input(20);
+        JTextField purchaseOrderField = Elements.input(10);
         f.addInput(new Label("Enter Purchase Order", Constants.colors[0]), purchaseOrderField);
         setLayout(new BorderLayout(5, 5));
         add(f, BorderLayout.NORTH);

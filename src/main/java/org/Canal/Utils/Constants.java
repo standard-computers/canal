@@ -136,13 +136,14 @@ public class Constants {
                 }),
                 new Locke("Areas", getIcon("areas"), "/AREAS", new Locke[]{
                         new Locke("Find Area", getIcon("locke"), "/AREAS/F", null),
-                        new Locke("AutoMake Areas/Bins", getIcon("locke"), "/AREAS/AUTO_MK", null),
+                        new Locke("AutoMake Areas", getIcon("locke"), "/AREAS/AUTO_MK", null),
                         new Locke("Create Area", getIcon("create"), "/AREAS/NEW", null),
                         new Locke("Modify Area", getIcon("locke"), "/AREAS/MOD", null),
                         new Locke("Remove Area", getIcon("locke"), "/AREAS/DEL", null),
                         new Locke("Archive Area", getIcon("locke"), "/AREAS/ARCHV", null),
                         new Locke("Bins", getIcon("bins"), "/BNS", new Locke[]{
                             new Locke("Find Bin", getIcon("locke"), "/BNS/F", null),
+                            new Locke("AutoMake Bins", getIcon("locke"), "/BNS/AUTO_MK", null),
                             new Locke("Create Bin", getIcon("create"), "/BNS/NEW", null),
                             new Locke("Modify Bin", getIcon("locke"), "/BNS/MOD", null),
                             new Locke("Remove Bin", getIcon("locke"), "/BNS/DEL", null),

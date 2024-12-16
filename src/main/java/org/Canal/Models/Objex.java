@@ -2,7 +2,7 @@ package org.Canal.Models;
 
 public class Objex {
 
-    private String id, name;
+    protected String id, name;
 
     public String getId() {
         return id;
