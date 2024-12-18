@@ -1,7 +1,7 @@
 package org.Canal.UI.Views.Finance.Payments;
 
 import org.Canal.UI.Elements.Input;
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.LockeState;
 
 import javax.swing.*;
 import java.awt.*;

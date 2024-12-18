@@ -5,7 +5,7 @@ import org.Canal.Models.SupplyChainUnits.Bin;
 import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.LockeState;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;
@@ -40,20 +40,20 @@ public class Bins extends LockeState {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV", "");
-        IconButton createArea = new IconButton("New Bin", "order", "Create a Bin", "/BNS/NEW");
-        IconButton autoMakeAreas = new IconButton("AutoMake Bins", "automake", "Automate the creation of Bin(s)", "/BNS/AUTO_MK");
-        IconButton modifyArea = new IconButton("Modify", "modify", "Modify an Bin", "/BNS/MOD");
-        IconButton removeArea = new IconButton("Remove", "delete", "Delete an Bin", "/BNS/DEL");
+        IconButton createBin = new IconButton("New Bin", "order", "Create a Bin", "/BNS/NEW");
+        IconButton autoMakeBins = new IconButton("AutoMake Bins", "automake", "Automate the creation of Bin(s)", "/BNS/AUTO_MK");
+        IconButton modifyBin = new IconButton("Modify", "modify", "Modify an Bin", "/BNS/MOD");
+        IconButton removeBin = new IconButton("Remove", "delete", "Delete an Bin", "/BNS/DEL");
         JTextField filterValue = Elements.input("Search", 10);
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(createArea);
+        tb.add(createBin);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(autoMakeAreas);
+        tb.add(autoMakeBins);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(modifyArea);
+        tb.add(modifyBin);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(removeArea);
+        tb.add(removeBin);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(filterValue);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -68,10 +68,20 @@ public class Bins extends LockeState {
 
     private CustomTable createTable() {
         String[] columns = new String[]{
-            "ID", "Area", "Name", "Width",
-            "Width UOM", "Length", "Length UOM",
-            "Height", "Height UOM", "Area", "Area UOM",
-            "Volume", "Volume UOM", "Status"
+            "ID",
+            "Area",
+            "Name",
+            "Width",
+            "Width UOM",
+            "Length",
+            "Length UOM",
+            "Height",
+            "Height UOM",
+            "Area",
+            "Area UOM",
+            "Volume",
+            "Volume UOM",
+            "Status"
         };
         ArrayList<Object[]> data = new ArrayList<>();
         for (Area area : Engine.getAreas()) {

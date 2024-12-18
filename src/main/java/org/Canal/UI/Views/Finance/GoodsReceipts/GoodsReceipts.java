@@ -3,7 +3,7 @@ package org.Canal.UI.Views.Finance.GoodsReceipts;
 import org.Canal.Models.BusinessUnits.GoodsReceipt;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.LockeState;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 

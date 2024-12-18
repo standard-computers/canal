@@ -1,4 +1,4 @@
-package org.Canal.UI.Elements.Inputs;
+package org.Canal.UI.Elements;
 
 import javax.swing.*;
 import java.awt.*;

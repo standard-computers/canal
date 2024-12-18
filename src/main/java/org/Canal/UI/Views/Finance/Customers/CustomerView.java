@@ -2,7 +2,7 @@ package org.Canal.UI.Views.Finance.Customers;
 
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.IconButton;
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.LockeState;
 import org.Canal.UI.Views.Invoices.CreateInvoice;
 
 import javax.swing.*;

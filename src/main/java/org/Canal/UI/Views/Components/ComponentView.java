@@ -2,11 +2,11 @@ package org.Canal.UI.Views.Components;
 
 import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.Models.SupplyChainUnits.Location;
-import org.Canal.UI.Elements.Inputs.Copiable;
+import org.Canal.UI.Elements.Copiable;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.*;
-import org.Canal.UI.Elements.Windows.Form;
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.Form;
+import org.Canal.UI.Elements.LockeState;
 import org.Canal.Utils.Locke;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;

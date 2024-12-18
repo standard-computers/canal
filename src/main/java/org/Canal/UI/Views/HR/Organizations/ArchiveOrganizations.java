@@ -1,6 +1,6 @@
 package org.Canal.UI.Views.HR.Organizations;
 
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.LockeState;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;

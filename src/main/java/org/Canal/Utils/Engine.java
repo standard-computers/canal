@@ -6,7 +6,7 @@ import org.Canal.Models.Codex;
 import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.HumanResources.User;
 import org.Canal.Models.SupplyChainUnits.*;
-import org.Canal.UI.Views.Archiver;
+import org.Canal.UI.Views.*;
 import org.Canal.UI.Views.Areas.*;
 import org.Canal.UI.Views.Bins.*;
 import org.Canal.UI.Views.Components.ArchiveComponent;
@@ -14,10 +14,8 @@ import org.Canal.UI.Views.Components.Components;
 import org.Canal.UI.Views.Components.CreateComponent;
 import org.Canal.UI.Views.Components.FindComponent;
 import org.Canal.UI.Views.Controllers.*;
-import org.Canal.UI.Views.CreateLocation;
-import org.Canal.UI.Views.Distribution.DistributionCenters.*;
-import org.Canal.UI.Views.Distribution.Vendors.VendorView;
-import org.Canal.UI.Views.Distribution.Warehouses.*;
+import org.Canal.UI.Views.Distribution.ModifyDistributionCenter;
+import org.Canal.UI.Views.Distribution.ModifyWarehouse;
 import org.Canal.UI.Views.Finance.Catalogs.Catalogs;
 import org.Canal.UI.Views.Finance.Catalogs.CreateCatalog;
 import org.Canal.UI.Views.Finance.Catalogs.FindCatalog;
@@ -29,7 +27,6 @@ import org.Canal.UI.Views.Finance.GoodsReceipts.GoodsReceipts;
 import org.Canal.UI.Views.Finance.Ledgers.CreateLedger;
 import org.Canal.UI.Views.Finance.Ledgers.LedgerView;
 import org.Canal.UI.Views.Finance.Ledgers.Ledgers;
-import org.Canal.UI.Views.FindLocation;
 import org.Canal.UI.Views.HR.Departments.CreateDepartment;
 import org.Canal.UI.Views.HR.Departments.Departments;
 import org.Canal.UI.Views.HR.Departments.FindDepartment;
@@ -44,7 +41,6 @@ import org.Canal.UI.Views.HR.Teams.Teams;
 import org.Canal.UI.Views.HR.Users.*;
 import org.Canal.UI.Views.Inventory.*;
 import org.Canal.UI.Views.Items.*;
-import org.Canal.UI.Views.Locations;
 import org.Canal.UI.Views.Materials.FindMaterial;
 import org.Canal.UI.Views.Materials.Materials;
 import org.Canal.UI.Views.Orders.*;
@@ -348,6 +344,21 @@ public class Engine {
     public static ArrayList<Delivery> getInboundDeliveries(String destination) {
         ArrayList<Delivery> deliveries = new ArrayList<>();
         File[] d = Pipe.list("TRANS/IDO");
+        for (File file : d) {
+            if (!file.isDirectory()) {
+                Delivery a = Json.load(file.getPath(), Delivery.class);
+                if(a.getDestination().equals(destination)){
+                    deliveries.add(a);
+                }
+            }
+        }
+        deliveries.sort(Comparator.comparing(Delivery::getId));
+        return deliveries;
+    }
+
+    public static ArrayList<Delivery> getOutboundDeliveries(String destination) {
+        ArrayList<Delivery> deliveries = new ArrayList<>();
+        File[] d = Pipe.list("TRANS/ODO");
         for (File file : d) {
             if (!file.isDirectory()) {
                 Delivery a = Json.load(file.getPath(), Delivery.class);
@@ -803,7 +814,7 @@ public class Engine {
                     case "CCS" -> {
                         for(Location l : Engine.getLocations("CCS")){
                             if(l.getId().equals(oid)){
-                                return new CostCenterView(l, desktop);
+                                return new LocationView(l, desktop);
                             }
                         }
                     }
@@ -817,14 +828,14 @@ public class Engine {
                     case "DCSS" -> {
                         for(Location l : Engine.getLocations("DCSS")){
                             if(l.getId().equals(oid)){
-                                return new DistributionCenterView(l, desktop);
+                                return new LocationView(l, desktop);
                             }
                         }
                     }
                     case "VEND" -> {
                         for(Location l : Engine.getLocations("VEND")){
                             if(l.getId().equals(oid)){
-                                return new VendorView(l);
+                                return new LocationView(l, desktop);
                             }
                         }
                     }
@@ -861,7 +872,7 @@ public class Engine {
                     case "WHS" -> {
                         for(Location l : getLocations("WHS")){
                             if(l.getId().equals(oid)){
-                                return new WarehouseView(l, desktop);
+                                return new LocationView(l, desktop);
                             }
                         }
                         return new Locations("/WHS", desktop);

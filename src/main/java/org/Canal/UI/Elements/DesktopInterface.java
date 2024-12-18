@@ -1,4 +1,4 @@
-package org.Canal.UI.Elements.Windows;
+package org.Canal.UI.Elements;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

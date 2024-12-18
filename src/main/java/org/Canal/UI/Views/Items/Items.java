@@ -5,7 +5,7 @@ import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.LockeState;
 import org.Canal.UI.Views.HR.Employees.EmployeeView;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;

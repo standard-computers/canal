@@ -1,7 +1,7 @@
 package org.Canal.UI.Views.Orders.PurchaseRequisitions;
 
 import org.Canal.Models.BusinessUnits.PurchaseRequisition;
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.LockeState;
 
 /**
  * /ORDS/PR/$[PR_ID]

@@ -1,7 +1,7 @@
 package org.Canal.UI.Views.HR.Employees;
 
 import org.Canal.Models.HumanResources.Employee;
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.LockeState;
 
 import javax.swing.*;
 import java.awt.*;

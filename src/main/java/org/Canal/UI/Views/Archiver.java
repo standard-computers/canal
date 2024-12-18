@@ -1,6 +1,6 @@
 package org.Canal.UI.Views;
 
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.LockeState;
 
 public class Archiver extends LockeState {
 

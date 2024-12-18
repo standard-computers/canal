@@ -6,15 +6,16 @@ import org.Canal.Models.BusinessUnits.OrderLineItem;
 import org.Canal.Models.BusinessUnits.PurchaseOrder;
 import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.Models.SupplyChainUnits.Bin;
+import org.Canal.Models.SupplyChainUnits.Delivery;
 import org.Canal.Models.SupplyChainUnits.StockLine;
 import org.Canal.UI.Elements.*;
-import org.Canal.UI.Elements.Inputs.Copiable;
-import org.Canal.UI.Elements.Inputs.DatePicker;
-import org.Canal.UI.Elements.Inputs.Selectables;
+import org.Canal.UI.Elements.Copiable;
+import org.Canal.UI.Elements.DatePicker;
+import org.Canal.UI.Elements.Selectables;
 import org.Canal.UI.Elements.Label;
-import org.Canal.UI.Elements.Windows.Form;
-import org.Canal.UI.Elements.Inputs.Selectable;
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.Form;
+import org.Canal.UI.Elements.Selectable;
+import org.Canal.UI.Elements.LockeState;
 import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.*;
 
@@ -179,6 +180,13 @@ public class ReceiveOrder extends LockeState {
                             Pipe.save("/GR", gr);
                             spo.setStatus(LockeStatus.DELIVERED);
                             spo.save();
+
+                            for(Delivery d : Engine.getInboundDeliveries(spo.getShipTo())){
+                                if(d.getPurchaseOrder().equals(po)){
+                                    d.setStatus(LockeStatus.DELIVERED);
+                                    d.save();
+                                }
+                            }
                             i.save();
                             dispose();
                             JOptionPane.showMessageDialog(null, "Goods Receipt created and stock put away.");

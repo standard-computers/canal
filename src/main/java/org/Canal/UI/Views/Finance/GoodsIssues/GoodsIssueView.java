@@ -1,6 +1,6 @@
 package org.Canal.UI.Views.Finance.GoodsIssues;
 
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.LockeState;
 
 /**
  * /GI/$[GI_ID]

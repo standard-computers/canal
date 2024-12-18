@@ -2,10 +2,10 @@ package org.Canal.UI.Views.Controllers;
 
 import org.Canal.Start;
 import org.Canal.UI.Elements.Elements;
-import org.Canal.UI.Elements.Inputs.Selectable;
-import org.Canal.UI.Elements.Inputs.Selectables;
+import org.Canal.UI.Elements.Selectable;
+import org.Canal.UI.Elements.Selectables;
 import org.Canal.UI.Elements.Label;
-import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Views.CreateLocation;
 import org.Canal.UI.Views.HR.Employees.CreateEmployee;
 import org.Canal.UI.Views.HR.Users.CreateUser;

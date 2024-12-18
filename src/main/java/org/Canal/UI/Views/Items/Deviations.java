@@ -1,6 +1,6 @@
 package org.Canal.UI.Views.Items;
 
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.LockeState;
 
 /**
  * /ITS/DEVS

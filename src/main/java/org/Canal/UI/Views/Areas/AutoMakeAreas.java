@@ -4,9 +4,9 @@ import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.UOMField;
-import org.Canal.UI.Elements.Windows.Form;
+import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.Label;
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.LockeState;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Pipe;
@@ -92,7 +92,6 @@ public class AutoMakeAreas extends LockeState {
                         Pipe.save("/AREAS", newArea);
                     }
                 }
-
                 dispose();
                 JOptionPane.showMessageDialog(AutoMakeAreas.this, "AutoMake Complete");
             }

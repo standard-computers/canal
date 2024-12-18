@@ -1,8 +1,8 @@
 package org.Canal.UI.Views.Inventory;
 
 import org.Canal.Models.SupplyChainUnits.Location;
-import org.Canal.UI.Elements.Inputs.Selectable;
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.Selectable;
+import org.Canal.UI.Elements.LockeState;
 import org.Canal.Utils.Engine;
 
 import java.util.HashMap;

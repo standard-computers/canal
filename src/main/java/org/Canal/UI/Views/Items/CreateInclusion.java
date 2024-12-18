@@ -3,8 +3,8 @@ package org.Canal.UI.Views.Items;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.UOMField;
-import org.Canal.UI.Elements.Windows.Form;
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.Form;
+import org.Canal.UI.Elements.LockeState;
 import org.Canal.Utils.Constants;
 
 import javax.swing.*;

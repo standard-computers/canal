@@ -6,11 +6,10 @@ import org.Canal.Models.SupplyChainUnits.Bin;
 import org.Canal.Models.SupplyChainUnits.MaterialMovement;
 import org.Canal.Models.SupplyChainUnits.StockLine;
 import org.Canal.UI.Elements.Elements;
-import org.Canal.UI.Elements.Inputs.Selectable;
-import org.Canal.UI.Elements.Inputs.Selectables;
+import org.Canal.UI.Elements.Selectable;
 import org.Canal.UI.Elements.Label;
-import org.Canal.UI.Elements.Windows.Form;
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.Form;
+import org.Canal.UI.Elements.LockeState;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.LockeStatus;
@@ -44,12 +43,14 @@ public class MoveStock extends LockeState {
         JTextField mvQty = Elements.input();
         JCheckBox createHu = new JCheckBox("Assigns new HU to SockLine");
         JCheckBox createWt = new JCheckBox();
+        JTextField split = Elements.input();
         createHu.setSelected(true);
         f.addInput(new Label("Destination Bin", Constants.colors[0]), destinationBins);
         f.addInput(new Label("HU", Constants.colors[1]), mvHu);
         f.addInput(new Label("Quantity", Constants.colors[2]), mvQty);
         f.addInput(new Label("Create HU", Constants.colors[3]), createHu);
         f.addInput(new Label("Create WT", Constants.colors[3]), createWt);
+        f.addInput(new Label("Split Divisor", Constants.colors[3]), split);
         setLayout(new BorderLayout());
         add(Elements.header("Move Stock Internally", SwingConstants.LEFT), BorderLayout.NORTH);
         add(f, BorderLayout.CENTER);
@@ -63,53 +64,56 @@ public class MoveStock extends LockeState {
                 JOptionPane.showMessageDialog(MoveStock.this, "Moving Stock");
                 Inventory i = Engine.getInventory(location);
                 String hu = mvHu.getText();
-                double qty = Double.parseDouble(mvQty.getText());
                 boolean success = false;
-
-                ArrayList<StockLine> toRemove = new ArrayList<>();
-                ArrayList<StockLine> toAdd = new ArrayList<>();
-                StockLine modified = null;
-                String newHu = Constants.generateId(10);
-                for (StockLine s : i.getStockLines()) {
-                    if (s.getHu().equals(hu)) {
-                        modified = s;
-                        double newQty = s.getQuantity() - qty;
-                        s.setQuantity(newQty);
-                        StockLine nss = new StockLine(
-                                s.getObjex(),
-                                s.getId(),
-                                qty,
-                                "",
-                                destinationBins.getSelectedValue()
-                        );
-                        if (createHu.isSelected()) {
-                            newHu = Constants.generateId(10);
-                            nss.setHu(newHu);
+                double qty = Double.parseDouble(mvQty.getText());
+                int splitDivisor = Integer.parseInt(split.getText());
+                qty = qty / splitDivisor;
+                for(int a = 0; a < splitDivisor; a++){
+                    ArrayList<StockLine> toRemove = new ArrayList<>();
+                    ArrayList<StockLine> toAdd = new ArrayList<>();
+                    StockLine modified = null;
+                    String newHu = Constants.generateId(10);
+                    for (StockLine s : i.getStockLines()) {
+                        if (s.getHu().equals(hu)) {
+                            modified = s;
+                            double newQty = s.getQuantity() - qty;
+                            s.setQuantity(newQty);
+                            StockLine nss = new StockLine(
+                                    s.getObjex(),
+                                    s.getId(),
+                                    qty,
+                                    "",
+                                    destinationBins.getSelectedValue()
+                            );
+                            if (createHu.isSelected()) {
+                                newHu = Constants.generateId(10);
+                                nss.setHu(newHu);
+                            }
+                            if (s.getQuantity() <= 0) {
+                                toRemove.add(s);
+                            }
+                            toAdd.add(nss);
+                            success = true;
                         }
-                        if (s.getQuantity() <= 0) {
-                            toRemove.add(s);
-                        }
-                        toAdd.add(nss);
-                        success = true;
                     }
-                }
-                for (StockLine rem : toRemove) {
-                    i.removeStock(rem);
-                }
-                for (StockLine add : toAdd) {
-                    i.addStock(add);
-                }
-                if(modified != null){
-                    MaterialMovement mm = new MaterialMovement();
-                    mm.setObjex(modified.getObjex());
-                    mm.setUser(Engine.getAssignedUser().getId());
-                    mm.setSourceBin(modified.getBin());
-                    mm.setDestinationBin(destinationBins.getSelectedValue());
-                    mm.setSourceHu(modified.getHu());
-                    mm.setDestinationHu(newHu);
-                    mm.setTimestamp(Constants.now());
-                    mm.setStatus(LockeStatus.COMPLETED);
-                    i.addMaterialMovement(mm);
+                    for (StockLine rem : toRemove) {
+                        i.removeStock(rem);
+                    }
+                    for (StockLine add : toAdd) {
+                        i.addStock(add);
+                    }
+                    if(modified != null){
+                        MaterialMovement mm = new MaterialMovement();
+                        mm.setObjex(modified.getObjex());
+                        mm.setUser(Engine.getAssignedUser().getId());
+                        mm.setSourceBin(modified.getBin());
+                        mm.setDestinationBin(destinationBins.getSelectedValue());
+                        mm.setSourceHu(modified.getHu());
+                        mm.setDestinationHu(newHu);
+                        mm.setTimestamp(Constants.now());
+                        mm.setStatus(LockeStatus.COMPLETED);
+                        i.addMaterialMovement(mm);
+                    }
                 }
                 i.save();
                 JOptionPane.showMessageDialog(MoveStock.this, "Moving Stock Complete!");

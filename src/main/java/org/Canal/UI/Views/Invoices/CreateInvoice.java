@@ -2,7 +2,7 @@ package org.Canal.UI.Views.Invoices;
 
 import org.Canal.Models.BusinessUnits.Invoice;
 import org.Canal.UI.Elements.Input;
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.LockeState;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;

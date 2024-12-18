@@ -1,6 +1,6 @@
 package org.Canal.UI.Views.Production;
 
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.LockeState;
 
 /**
  * /PROD/CST/NEW

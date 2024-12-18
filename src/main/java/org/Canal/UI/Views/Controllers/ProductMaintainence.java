@@ -1,7 +1,7 @@
 package org.Canal.UI.Views.Controllers;
 
 import org.Canal.UI.Elements.Elements;
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.LockeState;
 import org.Canal.UI.Views.Components.Components;
 import org.Canal.UI.Views.Items.Items;
 import org.Canal.UI.Views.Materials.Materials;

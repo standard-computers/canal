@@ -138,15 +138,22 @@ public class CustomTable extends JTable {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-
-            if (!isSelected) { // Only apply alternating colors for non-selected rows
+            if (!isSelected) {
                 Color background = (row % 2 == 0) ? UIManager.getColor("Table.background") : UIManager.getColor("Table.alternateRowColor");
                 if (background == null) {
-                    background = UIManager.getColor("Panel.background").darker(); // Fallback for alternate row color
+                    background = UIManager.getColor("Panel.background").darker();
                 }
                 c.setBackground(background);
+                if (value instanceof Number) {
+                    double numericValue = ((Number) value).doubleValue();
+                    if (numericValue > 0) {
+                        c.setForeground(new Color(9, 143, 14));
+                    } else if (numericValue < 0) {
+                        c.setForeground(new Color(243, 55, 55)); // Light red
+                    }
+                }
             } else {
-                c.setBackground(table.getSelectionBackground()); // Use selection background color
+                c.setBackground(table.getSelectionBackground()); // Use selection background for selected rows
             }
             return c;
         }

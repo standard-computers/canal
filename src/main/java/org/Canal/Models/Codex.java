@@ -140,6 +140,18 @@ public class Codex {
             put("automake_enabled", true);
             put("allow_batch_create", true);
         }});
+        variables.put("ORDS/SO", new HashMap<String, Object>() {{
+            put("name", "Sales Orders");
+            put("prefix", "SO");
+            put("commit_to_ledger", true);
+            put("use_deliveries", true);
+            put("auto_create_po", true);
+            put("create_buyer_inbound", true);
+            put("allow_archival", true);
+            put("allow_deletion", true);
+            put("automake_enabled", true);
+            put("allow_batch_create", true);
+        }});
         variables.put("ORDS/PR", new HashMap<String, Object>() {{
             put("name", "Purchase Requisitions");
             put("prefix", "PR");

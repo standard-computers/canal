@@ -2,12 +2,12 @@ package org.Canal.UI.Views.Areas;
 
 import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.UI.Elements.Elements;
-import org.Canal.UI.Elements.Inputs.Selectable;
-import org.Canal.UI.Elements.Inputs.Selectables;
+import org.Canal.UI.Elements.Selectable;
+import org.Canal.UI.Elements.Selectables;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.UOMField;
-import org.Canal.UI.Elements.Windows.Form;
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.Form;
+import org.Canal.UI.Elements.LockeState;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Pipe;

@@ -1,7 +1,7 @@
-package org.Canal.UI.Views.Distribution.DistributionCenters;
+package org.Canal.UI.Views.Distribution;
 
 import org.Canal.Models.SupplyChainUnits.Location;
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.LockeState;
 
 import javax.swing.*;
 import java.awt.*;

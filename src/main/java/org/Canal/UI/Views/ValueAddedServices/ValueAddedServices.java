@@ -1,7 +1,7 @@
 package org.Canal.UI.Views.ValueAddedServices;
 
-import org.Canal.UI.Elements.Windows.Form;
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.Form;
+import org.Canal.UI.Elements.LockeState;
 
 import javax.swing.*;
 import java.awt.*;

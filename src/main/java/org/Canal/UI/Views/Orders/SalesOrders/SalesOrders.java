@@ -2,7 +2,7 @@ package org.Canal.UI.Views.Orders.SalesOrders;
 
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.LockeState;
 import org.Canal.UI.Views.Orders.PurchaseRequisitions.CreatePurchaseRequisition;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;

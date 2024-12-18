@@ -1,7 +1,7 @@
 package org.Canal.UI.Views.HR.Departments;
 
 import org.Canal.UI.Elements.Elements;
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.LockeState;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;

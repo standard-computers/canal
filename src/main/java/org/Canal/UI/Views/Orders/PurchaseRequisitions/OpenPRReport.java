@@ -1,6 +1,6 @@
 package org.Canal.UI.Views.Orders.PurchaseRequisitions;
 
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.LockeState;
 
 /**
  * /RPTS/ORDS/PR/IS_OPEN

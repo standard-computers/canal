@@ -1,8 +1,8 @@
 package org.Canal.UI.Views.Controllers;
 
-import org.Canal.UI.Elements.Windows.DesktopInterface;
-import org.Canal.UI.Elements.Windows.LockeState;
-import org.Canal.UI.Views.Distribution.DistributionCenters.DistributionCenterView;
+import org.Canal.UI.Elements.DesktopInterface;
+import org.Canal.UI.Elements.LockeState;
+import org.Canal.UI.Views.LocationView;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
@@ -22,7 +22,7 @@ public class QuickExplorer extends JFrame implements DesktopState {
 
     public QuickExplorer() {
         setTitle("Canal – Enterprise Resource Planner – 2024");
-        setIconImage(new ImageIcon(DistributionCenterView.class.getResource("/icons/canal.png")).getImage());
+        setIconImage(new ImageIcon(LocationView.class.getResource("/icons/canal.png")).getImage());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         desktopPane = new DesktopInterface();
         controller = new Controller(this);

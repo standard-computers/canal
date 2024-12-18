@@ -1,7 +1,7 @@
 package org.Canal.UI.Views.Controllers;
 
-import org.Canal.UI.Elements.Windows.LockeState;
-import org.Canal.UI.Views.Distribution.DistributionCenters.DistributionCenterView;
+import org.Canal.UI.Elements.LockeState;
+import org.Canal.UI.Views.LocationView;
 
 import javax.swing.*;
 
@@ -14,7 +14,7 @@ public class DataCenter extends LockeState {
 
     public DataCenter() {
         super("Data Center", "/CNL/DATA_CNTR", true, true, true, true);
-        setFrameIcon(new ImageIcon(DistributionCenterView.class.getResource("/icons/datacenter.png")));
+        setFrameIcon(new ImageIcon(LocationView.class.getResource("/icons/datacenter.png")));
 
     }
 }

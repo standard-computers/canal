@@ -2,9 +2,9 @@ package org.Canal.UI.Views.Controllers;
 
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
-import org.Canal.UI.Elements.Inputs.Selectable;
-import org.Canal.UI.Elements.Inputs.Selectables;
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.Selectable;
+import org.Canal.UI.Elements.Selectables;
+import org.Canal.UI.Elements.LockeState;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;

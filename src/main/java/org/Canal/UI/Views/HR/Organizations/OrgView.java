@@ -5,7 +5,7 @@ import org.Canal.Models.BusinessUnits.PurchaseOrder;
 import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.SupplyChainUnits.*;
 import org.Canal.UI.Elements.IconButton;
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.LockeState;
 import org.Canal.UI.Views.Finance.Catalogs.CreateCatalog;
 import org.Canal.UI.Views.FindLocation;
 import org.Canal.UI.Views.Items.CreateItem;

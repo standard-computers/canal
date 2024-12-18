@@ -4,7 +4,7 @@ import org.Canal.Models.BusinessUnits.Ledger;
 import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.LockeState;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
@@ -35,6 +35,7 @@ public class Ledgers extends LockeState {
         JPanel holder = new JPanel(new BorderLayout());
         table = createTable();
         JScrollPane tableScrollPane = new JScrollPane(table);
+        tableScrollPane.setPreferredSize(new Dimension(900, 600));
         holder.add(Elements.header("Ledgers", SwingConstants.LEFT), BorderLayout.CENTER);
         holder.add(tb, BorderLayout.SOUTH);
         add(holder);
@@ -61,13 +62,14 @@ public class Ledgers extends LockeState {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV");
+        IconButton createLedger = new IconButton("Create", "create", "Resume/Activate PO");
         IconButton closeLedger = new IconButton("Close", "block", "Close a ledger. Audits and adjustments are complete. No more transactions can be comitted.");
         IconButton blockLedger = new IconButton("Block", "block", "Block/Pause PO, can't be used");
         IconButton suspendLedger = new IconButton("Suspend", "suspend", "Suspend PO, can't be used");
-        IconButton createLedger = new IconButton("Create", "create", "Resume/Activate PO");
         IconButton archivePo = new IconButton("Archive", "archive", "Archive PO, removes");
-        JTextField filterValue = Elements.input("Search", 10);
         tb.add(export);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(createLedger);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(closeLedger);
         tb.add(Box.createHorizontalStrut(5));
@@ -75,11 +77,7 @@ public class Ledgers extends LockeState {
         tb.add(Box.createHorizontalStrut(5));
         tb.add(suspendLedger);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(createLedger);
-        tb.add(Box.createHorizontalStrut(5));
         tb.add(archivePo);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(filterValue);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));
         return tb;
     }

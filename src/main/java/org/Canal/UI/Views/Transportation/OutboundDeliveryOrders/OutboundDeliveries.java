@@ -3,7 +3,7 @@ package org.Canal.UI.Views.Transportation.OutboundDeliveryOrders;
 import org.Canal.Models.BusinessUnits.PurchaseOrder;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.LockeState;
 import org.Canal.UI.Views.Controllers.CheckboxBarcodeFrame;
 import org.Canal.UI.Views.Orders.PurchaseOrders.CreatePurchaseOrder;
 import org.Canal.Utils.Constants;

@@ -4,7 +4,7 @@ import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.LockeState;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;
@@ -67,10 +67,20 @@ public class Areas extends LockeState {
 
     private CustomTable createTable() {
         String[] columns = new String[]{
-            "ID", "Location", "Name", "Width",
-            "Width UOM", "Length", "Length UOM",
-            "Height", "Height UOM", "Area", "Area UOM",
-            "Volume", "Volume UOM", "Status"
+            "ID",
+            "Location",
+            "Name",
+            "Width",
+            "Width UOM",
+            "Length",
+            "Length UOM",
+            "Height",
+            "Height UOM",
+            "Area",
+            "Area UOM",
+            "Volume",
+            "Volume UOM",
+            "Status"
         };
         ArrayList<Object[]> data = new ArrayList<>();
         for (Area area : Engine.getAreas()) {

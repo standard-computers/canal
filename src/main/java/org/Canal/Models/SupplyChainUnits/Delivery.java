@@ -1,20 +1,33 @@
 package org.Canal.Models.SupplyChainUnits;
 
+import org.Canal.Models.BusinessUnits.Ledger;
 import org.Canal.Models.Objex;
+import org.Canal.Start;
+import org.Canal.Utils.Json;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class Delivery extends Objex {
 
+    private String type;
     private String salesOrder;
     private String purchaseOrder; //PO delivery is a result of
     private String expectedDelivery; //When it should arrive, could differ from PO
     private String destination; //Location ID
-    private Area destinationArea; //
-    private Bin destinationDoor; //
+    private Area destinationArea; //Area this will arrive to
+    private Bin destinationDoor; //Door this will arrive to
     private String total;
     private Truck truck;
-    private ArrayList<StockLine> pallets;
+    private ArrayList<StockLine> pallets = new ArrayList<>();
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getSalesOrder() {
         return salesOrder;
@@ -86,5 +99,20 @@ public class Delivery extends Objex {
 
     public void setPallets(ArrayList<StockLine> pallets) {
         this.pallets = pallets;
+    }
+
+    public void save(){
+        File md = new File(Start.WINDOWS_SYSTEM_DIR + "\\.store\\TRANS\\");
+        File[] mdf = md.listFiles();
+        if (mdf != null) {
+            for (File file : mdf) {
+                if (file.getPath().endsWith(".lgs")) {
+                    Ledger fl = Json.load(file.getPath(), Ledger.class);
+                    if (fl.getId().equals(id)) {
+                        Json.save(file.getPath(), this);
+                    }
+                }
+            }
+        }
     }
 }

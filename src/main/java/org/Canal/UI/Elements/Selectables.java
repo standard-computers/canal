@@ -1,4 +1,4 @@
-package org.Canal.UI.Elements.Inputs;
+package org.Canal.UI.Elements;
 
 import com.formdev.flatlaf.IntelliJTheme;
 import org.Canal.Models.HumanResources.Department;

@@ -1,7 +1,7 @@
 package org.Canal.UI.Views.Finance.Catalogs;
 
 import org.Canal.Models.SupplyChainUnits.Catalog;
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.LockeState;
 
 import javax.swing.*;
 

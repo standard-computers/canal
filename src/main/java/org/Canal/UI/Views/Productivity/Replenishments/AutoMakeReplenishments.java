@@ -1,6 +1,6 @@
 package org.Canal.UI.Views.Productivity.Replenishments;
 
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.LockeState;
 
 /**
  * /RPL/AUTO_MK

@@ -1,7 +1,7 @@
 package org.Canal.UI.Views.Productivity.SimpleForms;
 
 import org.Canal.UI.Elements.Elements;
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.LockeState;
 
 import javax.swing.*;
 import java.awt.*;

@@ -3,8 +3,8 @@ package org.Canal.UI.Views.HR.Users;
 import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.HumanResources.User;
 import org.Canal.UI.Elements.IconButton;
-import org.Canal.UI.Elements.Inputs.Copiable;
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.Copiable;
+import org.Canal.UI.Elements.LockeState;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 

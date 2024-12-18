@@ -1,6 +1,6 @@
 package org.Canal.UI.Views.HR;
 
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.LockeState;
 
 /**
  * /HR/PY_RLL/RUN

@@ -1,6 +1,6 @@
 package org.Canal.UI.Views.Finance.GoodsReceipts;
 
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.LockeState;
 
 /**
  * /GR/$[GR_ID]

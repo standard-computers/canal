@@ -1,6 +1,6 @@
 package org.Canal.UI.Views.HR.Teams;
 
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.LockeState;
 
 /**
  * /TMS/$[TEAM_ID]

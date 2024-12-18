@@ -1,6 +1,6 @@
 package org.Canal.UI.Views.Transportation.AdvancedShippingNotifications;
 
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.LockeState;
 
 /**
  * /TRANS/ASN/$[ASN_ID || #]

@@ -1,6 +1,6 @@
 package org.Canal.UI.Views.Invoices;
 
-import org.Canal.UI.Elements.Windows.LockeState;
+import org.Canal.UI.Elements.LockeState;
 
 import javax.swing.*;
 import java.awt.*;
