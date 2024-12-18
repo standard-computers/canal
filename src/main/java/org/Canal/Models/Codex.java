@@ -133,7 +133,8 @@ public class Codex {
         variables.put("ORDS/PO", new HashMap<String, Object>() {{
             put("name", "Purchase Orders");
             put("prefix", "PO");
-            put("commit_to_ledger", false);
+            put("commit_to_ledger", true);
+            put("use_deliveries", true);
             put("allow_archival", true);
             put("allow_deletion", true);
             put("automake_enabled", true);

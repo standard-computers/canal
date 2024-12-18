@@ -12,7 +12,6 @@ public class MaterialMovement extends Objex {
     private String sourceHu;
     private String destinationHu;
     private String timestamp;
-    private LockeStatus status = LockeStatus.UNRESTRICTED;
     private String type;
 
     public String getObjex() {
@@ -69,14 +68,6 @@ public class MaterialMovement extends Objex {
 
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
-    }
-
-    public LockeStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(LockeStatus status) {
-        this.status = status;
     }
 
     public String getType() {

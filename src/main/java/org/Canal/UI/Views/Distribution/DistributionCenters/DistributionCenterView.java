@@ -33,17 +33,17 @@ import java.util.concurrent.TimeUnit;
 /**
  * /DCSS/$[DC_ID]
  */
-public class DCView extends LockeState implements RefreshListener {
+public class DistributionCenterView extends LockeState implements RefreshListener {
 
-    private Location distributionCenter;
+    private Location location;
     private JTree dataTree;
     private DesktopState desktop;
 
-    public DCView(Location dc, DesktopState desktop) {
-        super("DC / " + dc.getId() + " - " + dc.getName(), "/DCSS/$", true, true, true, true);
-        this.distributionCenter = dc;
+    public DistributionCenterView(Location location, DesktopState desktop) {
+        super("DC / " + location.getId() + " – " + location.getName(), "/DCSS/$", true, true, true, true);
+        this.location = location;
         this.desktop = desktop;
-        setFrameIcon(new ImageIcon(DCView.class.getResource("/icons/distribution_centers.png")));
+        setFrameIcon(new ImageIcon(DistributionCenterView.class.getResource("/icons/distribution_centers.png")));
         setLayout(new BorderLayout());
         JPanel tb = createToolBar();
         add(tb, BorderLayout.NORTH);
@@ -79,22 +79,34 @@ public class DCView extends LockeState implements RefreshListener {
     private JPanel makeOverview(){
         JPanel kanbanBoard = new JPanel();
         kanbanBoard.setLayout(new GridLayout(1, 3, 10, 10));
-        ArrayList<String[]> ibd = new ArrayList<>();
-        for(PurchaseOrder ibdo : Engine.getOrders(distributionCenter.getId(), LockeStatus.NEW)){
-            double c = 0;
-            for(OrderLineItem oli : ibdo.getItems()){
-                c += oli.getQuantity();
+        ArrayList<JComponent[]> ibd = new ArrayList<>();
+        if((boolean) Engine.codex("ORDS/PO", "use_deliveries")){
+            for(Delivery ibdo : Engine.getInboundDeliveries(location.getId())){
+                ibd.add(new JComponent[]{
+                        Elements.link(ibdo.getId(), "Click to copy"),
+                        new JLabel("PO" + ibdo.getPurchaseOrder() ),
+                        new JLabel("$" + ibdo.getTotal() + " Total Value"),
+                        new JLabel("Expected Delivery: " + ibdo.getExpectedDelivery()),
+                        Elements.button("Receive")
+                });
             }
-            ibd.add(new String[]{
-                    ibdo.getOrderId(),
-                    c + " Total Items | $" + ibdo.getTotal() + " Total",
-                    "Expected Delivery: " + ibdo.getExpectedDelivery(),
-                    "Receive"
-            });
+        }else{
+            for(PurchaseOrder ibdo : Engine.getOrders(location.getId(), LockeStatus.NEW)){
+                double c = 0;
+                for(OrderLineItem oli : ibdo.getItems()){
+                    c += oli.getQuantity();
+                }
+                ibd.add(new JComponent[]{
+                        Elements.link(ibdo.getOrderId(), ""),
+                        new JLabel(c + " Total Items | $" + ibdo.getTotal() + " Total"),
+                        new JLabel("Expected Delivery: " + ibdo.getExpectedDelivery()),
+                        Elements.button("Receive")
+                });
+            }
         }
-        ArrayList<String[]> obd = new ArrayList<>();
-        ArrayList<String[]> ipt = new ArrayList<>();
-        ArrayList<String[]> myt = new ArrayList<>();
+        ArrayList<JComponent[]> obd = new ArrayList<>();
+        ArrayList<JComponent[]> ipt = new ArrayList<>();
+        ArrayList<JComponent[]> myt = new ArrayList<>();
         kanbanBoard.add(createColumn("Inbound Deliveries", ibd));
         kanbanBoard.add(createColumn("Outbound Deliveries", obd));
         kanbanBoard.add(createColumn("In Progress Tasks", ipt));
@@ -102,42 +114,30 @@ public class DCView extends LockeState implements RefreshListener {
         return kanbanBoard;
     }
 
-    private JPanel createColumn(String title, ArrayList<String[]> tasks) {
+    private JPanel createColumn(String title, ArrayList<JComponent[]> tasks) {
         JPanel columnPanel = new JPanel();
         TitledBorder titledBorder = BorderFactory.createTitledBorder(title);
         titledBorder.setTitleFont(UIManager.getFont("h3.font"));
         columnPanel.setBorder(titledBorder);
         columnPanel.setLayout(new BorderLayout());
         JPanel tasksContainer = new JPanel();
-        tasksContainer.setLayout(new BoxLayout(tasksContainer, BoxLayout.Y_AXIS));
-        for (String[] taskInfo : tasks) {
+        tasksContainer.setLayout(new GridLayout(tasks.size() - 1, BoxLayout.Y_AXIS));
+        for (JComponent[] taskInfo : tasks) {
             JPanel taskPanel = new JPanel();
             taskPanel.setLayout(new BoxLayout(taskPanel, BoxLayout.Y_AXIS));
-            JLabel primaryLabel = Elements.h3(taskInfo[0]);
-            JLabel secondaryLabel = Elements.label(taskInfo[1]);
-            JLabel tertiaryLabel = Elements.label(taskInfo[2]);
-            taskPanel.add(primaryLabel);
-            taskPanel.add(secondaryLabel);
-            taskPanel.add(tertiaryLabel);
-            JButton openButton = Elements.button(taskInfo[3]);
-            openButton.addMouseListener(new MouseAdapter() {
-               public void mouseClicked(MouseEvent e) {
-                   ReceiveOrder ro = new ReceiveOrder(distributionCenter.getId(), desktop);
-                   ro.setPO(taskInfo[0]);
-                   desktop.put(ro);
-               }
-            });
-            taskPanel.add(openButton);
+            for (int i = 0; i < taskInfo.length; i++) {
+                taskInfo[i].setAlignmentX(Component.LEFT_ALIGNMENT); // Align components to the left
+                taskPanel.add(taskInfo[i]);
+            }
             taskPanel.setBackground(UIManager.getColor("Panel.background").darker());
             taskPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
-            taskPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+//            taskPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
             taskPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, taskPanel.getPreferredSize().height));
             taskPanel.setMinimumSize(new Dimension(tasksContainer.getWidth(), taskPanel.getPreferredSize().height));
             tasksContainer.add(taskPanel);
             tasksContainer.add(Box.createRigidArea(new Dimension(0, 5)));
         }
         JScrollPane sp = new JScrollPane(tasksContainer, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        sp.setBorder(null);
         columnPanel.add(sp, BorderLayout.CENTER);
         return columnPanel;
     }
@@ -158,22 +158,22 @@ public class DCView extends LockeState implements RefreshListener {
         inventory.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                desktop.put(new InventoryView(desktop, distributionCenter.getId()));
+                desktop.put(new InventoryView(desktop, location.getId()));
             }
         });
         receive.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new ReceiveOrder(distributionCenter.getId(), desktop));
+                desktop.put(new ReceiveOrder(location.getId(), desktop));
             }
         });
         areas.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new CreateArea(distributionCenter.getId(), DCView.this));
+                desktop.put(new CreateArea(location.getId(), DistributionCenterView.this));
             }
         });
         addBin.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new CreateBin(distributionCenter.getId(), DCView.this));
+                desktop.put(new CreateBin(location.getId(), DistributionCenterView.this));
             }
         });
         autoMakeAreas.addMouseListener(new MouseAdapter() {
@@ -221,14 +221,14 @@ public class DCView extends LockeState implements RefreshListener {
     }
 
     private Locke createRootNode() {
-        Locke[] areas = new Locke[Engine.getAreas(distributionCenter.getId()).size()];
-        for (int i = 0; i < Engine.getAreas(distributionCenter.getId()).size(); i++) {
-            Area l = Engine.getAreas(distributionCenter.getId()).get(i);
+        Locke[] areas = new Locke[Engine.getAreas(location.getId()).size()];
+        for (int i = 0; i < Engine.getAreas(location.getId()).size(); i++) {
+            Area l = Engine.getAreas(location.getId()).get(i);
             areas[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/ITS/" + l.getId(), Constants.colors[0], null);
         }
         int binCount = 0;
         ArrayList<Bin> bs = new ArrayList<>();
-        for(Area a : Engine.getAreas(distributionCenter.getId())){
+        for(Area a : Engine.getAreas(location.getId())){
             binCount += a.getBins().size();
             for(Bin b : a.getBins()){
                 bs.add(b);
@@ -239,22 +239,22 @@ public class DCView extends LockeState implements RefreshListener {
             Bin b = bs.get(i);
             bins[i] = new Locke(b.getId() + " - " + b.getName(), UIManager.getIcon("FileView.fileIcon"), "/BNS/" + b.getId(), Constants.colors[1], null);
         }
-        Locke[] customers = new Locke[Engine.getLocations(distributionCenter.getOrganization(), "CSTS").size()];
-        for (int i = 0; i < Engine.getLocations(distributionCenter.getOrganization(), "CSTS").size(); i++) {
-            Location l = Engine.getLocations(distributionCenter.getOrganization(), "CSTS").get(i);
+        Locke[] customers = new Locke[Engine.getLocations(location.getOrganization(), "CSTS").size()];
+        for (int i = 0; i < Engine.getLocations(location.getOrganization(), "CSTS").size(); i++) {
+            Location l = Engine.getLocations(location.getOrganization(), "CSTS").get(i);
             customers[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/CSTS/" + l.getId(), Constants.colors[2], null);
         }
-        Locke[] vendors = new Locke[Engine.getLocations(distributionCenter.getOrganization(), "DCSS").size()];
-        for (int i = 0; i < Engine.getLocations(distributionCenter.getOrganization(), "DCSS").size(); i++) {
-            Location l = Engine.getLocations(distributionCenter.getOrganization(), "DCSS").get(i);
+        Locke[] vendors = new Locke[Engine.getLocations(location.getOrganization(), "DCSS").size()];
+        for (int i = 0; i < Engine.getLocations(location.getOrganization(), "DCSS").size(); i++) {
+            Location l = Engine.getLocations(location.getOrganization(), "DCSS").get(i);
             vendors[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/VEND/" + l.getId(), Constants.colors[3], null);
         }
-        Locke[] items = new Locke[Engine.getItems(distributionCenter.getOrganization()).size()];
-        for (int i = 0; i < Engine.getItems(distributionCenter.getOrganization()).size(); i++) {
-            Item l = Engine.getItems(distributionCenter.getOrganization()).get(i);
+        Locke[] items = new Locke[Engine.getItems(location.getOrganization()).size()];
+        for (int i = 0; i < Engine.getItems(location.getOrganization()).size(); i++) {
+            Item l = Engine.getItems(location.getOrganization()).get(i);
             items[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/ITS/" + l.getId(), Constants.colors[4], null);
         }
-        return new Locke(distributionCenter.getName(), UIManager.getIcon("FileView.fileIcon"), "/DCSS/" + distributionCenter.getId(), new Locke[]{
+        return new Locke(location.getName(), UIManager.getIcon("FileView.fileIcon"), "/DCSS/" + location.getId(), new Locke[]{
                 new Locke("Areas", UIManager.getIcon("FileView.fileIcon"), "/AREAS", areas),
                 new Locke("Bins", UIManager.getIcon("FileView.fileIcon"), "/BNS", bins),
                 new Locke("Items", UIManager.getIcon("FileView.fileIcon"), "/ITS", items),

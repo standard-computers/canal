@@ -1,6 +1,7 @@
 package org.Canal.UI.Views.Finance.Ledgers;
 
-import org.Canal.Models.BusinessUnits.GoodsReceipt;
+import org.Canal.Models.BusinessUnits.Ledger;
+import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.Windows.LockeState;
@@ -10,6 +11,8 @@ import org.Canal.Utils.Engine;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 /**
@@ -17,7 +20,7 @@ import java.util.ArrayList;
  */
 public class Ledgers extends LockeState {
 
-    private JTable table;
+    private CustomTable table;
     private DesktopState desktop;
 
     public Ledgers(DesktopState desktop) {
@@ -38,24 +41,41 @@ public class Ledgers extends LockeState {
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);
         add(tableScrollPane, BorderLayout.CENTER);
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) { // Detect double click
+                    JTable target = (JTable) e.getSource();
+                    int row = target.getSelectedRow(); // Get the clicked row
+                    if (row != -1) {
+                        String value = String.valueOf(target.getValueAt(row, 1));
+                        Ledger l = Engine.getLedger(value);
+                        desktop.put(new LedgerView(l, desktop));
+                    }
+                }
+            }
+        });
     }
 
     private JPanel createToolBar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV");
-        IconButton blockPo = new IconButton("Block", "block", "Block/Pause PO, can't be used");
-        IconButton suspendPo = new IconButton("Suspend", "suspend", "Suspend PO, can't be used");
-        IconButton activatePO = new IconButton("Start", "start", "Resume/Activate PO");
+        IconButton closeLedger = new IconButton("Close", "block", "Close a ledger. Audits and adjustments are complete. No more transactions can be comitted.");
+        IconButton blockLedger = new IconButton("Block", "block", "Block/Pause PO, can't be used");
+        IconButton suspendLedger = new IconButton("Suspend", "suspend", "Suspend PO, can't be used");
+        IconButton createLedger = new IconButton("Create", "create", "Resume/Activate PO");
         IconButton archivePo = new IconButton("Archive", "archive", "Archive PO, removes");
         JTextField filterValue = Elements.input("Search", 10);
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(blockPo);
+        tb.add(closeLedger);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(suspendPo);
+        tb.add(blockLedger);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(activatePO);
+        tb.add(suspendLedger);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(createLedger);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(archivePo);
         tb.add(Box.createHorizontalStrut(5));
@@ -64,37 +84,32 @@ public class Ledgers extends LockeState {
         return tb;
     }
 
-    private JTable createTable() {
+    private CustomTable createTable() {
         String[] columns = new String[]{
                 "ID",
-                "Purchase Order",
-                "Received",
-                "Receiver",
-                "Location",
-                "Items",
-                "Status"
+                "Name",
+                "Organization",
+                "Period",
+                "Starts",
+                "Ends",
+                "Created",
+                "Trans. Count",
+                "Status",
         };
-        ArrayList<String[]> goodsReceipts = new ArrayList<>();
-        for (GoodsReceipt gr : Engine.orderProcessing.getGoodsReceipts()) {
-            goodsReceipts.add(new String[]{
+        ArrayList<Object[]> ledgers = new ArrayList<>();
+        for (Ledger gr : Engine.getLedgers()) {
+            ledgers.add(new Object[]{
                     gr.getId(),
-                    gr.getPurchaseOrder(),
-                    gr.getReceived(),
-                    gr.getReceiver(),
-                    gr.getLocation(),
-                    String.valueOf(gr.getTotalItems()),
+                    gr.getName(),
+                    gr.getOrganization(),
+                    gr.getPeriod(),
+                    gr.getStarts(),
+                    gr.getEnds(),
+                    gr.getCreated(),
+                    String.valueOf(gr.getTransactions().size()),
                     String.valueOf(gr.getStatus())
             });
         }
-        String[][] data = new String[goodsReceipts.size()][columns.length];
-        for (int i = 0; i < goodsReceipts.size(); i++) {
-            data[i] = goodsReceipts.get(i);
-        }
-        JTable table = new JTable(data, columns);
-        table.setCellSelectionEnabled(true);
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        Engine.adjustColumnWidths(table);
-        return table;
+        return new CustomTable(columns, ledgers);
     }
 }

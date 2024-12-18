@@ -25,7 +25,6 @@ public class Location extends Objex {
     private double area; //Square area of warehouse
     private String areaUOM;
     private ArrayList<Department> departments = new ArrayList<>();
-    private LockeStatus status = LockeStatus.ACTIVE;
 
     public String getType() {
         return type;
@@ -89,14 +88,6 @@ public class Location extends Objex {
 
     public void setCountry(String country) {
         this.country = country;
-    }
-
-    public LockeStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(LockeStatus status) {
-        this.status = status;
     }
 
     public boolean isTaxExempt() {

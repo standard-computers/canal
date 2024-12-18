@@ -11,7 +11,6 @@ public class GoodsIssue extends Objex {
     private String issuer; //User ID of owner
     public String location; //Location receiving in at
     public ArrayList<OrderLineItem> items; //ITS received and qty received
-    private LockeStatus status; //Status of this receival
 
     public String getComments() {
         return comments;
@@ -43,13 +42,5 @@ public class GoodsIssue extends Objex {
 
     public void setItems(ArrayList<OrderLineItem> items) {
         this.items = items;
-    }
-
-    public LockeStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(LockeStatus status) {
-        this.status = status;
     }
 }

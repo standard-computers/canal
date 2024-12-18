@@ -1,7 +1,6 @@
 package org.Canal.Models.SupplyChainUnits;
 
 import org.Canal.Models.Objex;
-import org.Canal.Utils.Engine;
 
 public class Truck extends Objex {
 
@@ -9,10 +8,6 @@ public class Truck extends Objex {
     private String driver;
     private String notes;
     private String number;
-
-    public Truck(){
-        super.id = ((String) Engine.codex("TRANS/TRCKS", "prefix") + 1000 + (Engine.getTrucks().size() + 1));
-    }
 
     public String getCarrier() {
         return carrier;

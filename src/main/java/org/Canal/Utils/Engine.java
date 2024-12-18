@@ -304,8 +304,8 @@ public class Engine {
 
     public static ArrayList<Ledger> getLedgers() {
         ArrayList<Ledger> ledgers = new ArrayList<>();
-        File[] lgsDir = Pipe.list("LGS");
-        for (File file : lgsDir) {
+        File[] d = Pipe.list("LGS");
+        for (File file : d) {
             if (!file.isDirectory()) {
                 Ledger a = Json.load(file.getPath(), Ledger.class);
                 ledgers.add(a);
@@ -315,10 +315,14 @@ public class Engine {
         return ledgers;
     }
 
+    public static Ledger getLedger(String id){
+        return getLedgers().stream().filter(inventory -> inventory.getId().equals(id)).toList().stream().findFirst().orElse(null);
+    }
+
     public static ArrayList<Truck> getTrucks() {
         ArrayList<Truck> trucks = new ArrayList<>();
-        File[] lgsDir = Pipe.list("TRANS/TRCKS");
-        for (File file : lgsDir) {
+        File[] d = Pipe.list("TRANS/TRCKS");
+        for (File file : d) {
             if (!file.isDirectory()) {
                 Truck a = Json.load(file.getPath(), Truck.class);
                 trucks.add(a);
@@ -326,6 +330,34 @@ public class Engine {
         }
         trucks.sort(Comparator.comparing(Truck::getId));
         return trucks;
+    }
+
+    public static ArrayList<Delivery> getInboundDeliveries() {
+        ArrayList<Delivery> deliveries = new ArrayList<>();
+        File[] d = Pipe.list("TRANS/IDO");
+        for (File file : d) {
+            if (!file.isDirectory()) {
+                Delivery a = Json.load(file.getPath(), Delivery.class);
+                deliveries.add(a);
+            }
+        }
+        deliveries.sort(Comparator.comparing(Delivery::getId));
+        return deliveries;
+    }
+
+    public static ArrayList<Delivery> getInboundDeliveries(String destination) {
+        ArrayList<Delivery> deliveries = new ArrayList<>();
+        File[] d = Pipe.list("TRANS/IDO");
+        for (File file : d) {
+            if (!file.isDirectory()) {
+                Delivery a = Json.load(file.getPath(), Delivery.class);
+                if(a.getDestination().equals(destination)){
+                    deliveries.add(a);
+                }
+            }
+        }
+        deliveries.sort(Comparator.comparing(Delivery::getId));
+        return deliveries;
     }
 
     public static ArrayList<Inventory> getInventories() {
@@ -351,7 +383,7 @@ public class Engine {
     }
 
     public static List<Ledger> getLedgers(String id) {
-        return getLedgers().stream().filter(location -> location.getOrg().equals(id)).collect(Collectors.toList());
+        return getLedgers().stream().filter(location -> location.getOrganization().equals(id)).collect(Collectors.toList());
     }
 
     public static Object codex(String objex, String key){
@@ -785,7 +817,7 @@ public class Engine {
                     case "DCSS" -> {
                         for(Location l : Engine.getLocations("DCSS")){
                             if(l.getId().equals(oid)){
-                                return new DCView(l, desktop);
+                                return new DistributionCenterView(l, desktop);
                             }
                         }
                     }
@@ -796,7 +828,7 @@ public class Engine {
                             }
                         }
                     }
-                    case "Items" -> {
+                    case "ITS" -> {
                         Item i = Engine.getItem(oid);
                         if(i != null){
                             return new ItemView(i);

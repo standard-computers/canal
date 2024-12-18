@@ -1,8 +1,11 @@
 package org.Canal.Models;
 
+import org.Canal.Utils.LockeStatus;
+
 public class Objex {
 
     protected String id, name;
+    protected LockeStatus status;
 
     public String getId() {
         return id;
@@ -18,5 +21,13 @@ public class Objex {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public LockeStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(LockeStatus status) {
+        this.status = status;
     }
 }

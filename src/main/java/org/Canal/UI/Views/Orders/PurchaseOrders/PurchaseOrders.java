@@ -44,11 +44,11 @@ public class PurchaseOrders extends LockeState {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV");
-        IconButton createPurchaseOrder = new IconButton("New PO", "order", "Build an item", "/ORDS/NEW");
+        IconButton createPurchaseOrder = new IconButton("New PO", "order", "Build an item", "/ORDS/PO/NEW");
         IconButton blockPo = new IconButton("Block", "block", "Block/Pause PO, can't be used");
         IconButton suspendPo = new IconButton("Suspend", "suspend", "Suspend PO, can't be used");
         IconButton activatePO = new IconButton("Start", "start", "Resume/Activate PO");
-        IconButton archivePo = new IconButton("Archive", "archive", "Archive PO, removes");
+        IconButton archivePo = new IconButton("Archive", "archive", "Archive PO, removes", "/ORDS/PO/ARCHV");
         IconButton label = new IconButton("Barcodes", "label", "Print labels for org properties");
         JTextField filterValue = Elements.input("Search", 10);
         tb.add(export);

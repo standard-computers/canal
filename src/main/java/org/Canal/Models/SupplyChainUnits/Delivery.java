@@ -1,7 +1,6 @@
 package org.Canal.Models.SupplyChainUnits;
 
 import org.Canal.Models.Objex;
-import org.Canal.Utils.LockeStatus;
 
 import java.util.ArrayList;
 
@@ -13,7 +12,7 @@ public class Delivery extends Objex {
     private String destination; //Location ID
     private Area destinationArea; //
     private Bin destinationDoor; //
-    private LockeStatus status; //Status of this Delivery
+    private String total;
     private Truck truck;
     private ArrayList<StockLine> pallets;
 
@@ -65,12 +64,12 @@ public class Delivery extends Objex {
         this.destinationDoor = destinationDoor;
     }
 
-    public LockeStatus getStatus() {
-        return status;
+    public String getTotal() {
+        return total;
     }
 
-    public void setStatus(LockeStatus status) {
-        this.status = status;
+    public void setTotal(String total) {
+        this.total = total;
     }
 
     public Truck getTruck() {

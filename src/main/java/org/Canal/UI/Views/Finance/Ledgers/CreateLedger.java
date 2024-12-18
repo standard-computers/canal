@@ -59,20 +59,22 @@ public class CreateLedger extends LockeState {
                 String ledgerName = ledgerNameField.getText().trim();
                 String org = organizations.getSelectedValue();
                 String period = periods.getSelectedValue();
+                String startDate = ledgerStartPicker.getSelectedDateString();
+                String endDate = ledgerEndPicker.getSelectedDateString();
 
-                Ledger l = new Ledger();
-                l.setId(ledgerId);
-                l.setName(ledgerName);
-                l.setOrg(org);
-                l.setPeriod(period);
-                l.setStarts(ledgerStartPicker.getSelectedDateString());
-                l.setEnds(ledgerEndPicker.getSelectedDateString());
-                l.setCreated(Constants.now());
-                l.setStatus(LockeStatus.NEW);
+                Ledger newLedger = new Ledger();
+                newLedger.setId(ledgerId);
+                newLedger.setName(ledgerName);
+                newLedger.setOrganization(org);
+                newLedger.setPeriod(period);
+                newLedger.setStarts(startDate);
+                newLedger.setEnds(endDate);
+                newLedger.setCreated(Constants.now());
+                newLedger.setStatus(LockeStatus.ACTIVE);
 
-                Pipe.save("/LGS", l);
+                Pipe.save("/LGS", newLedger);
                 dispose();
-                desktop.put(new LedgerView(l, desktop));
+                desktop.put(new LedgerView(newLedger, desktop));
             }
         });
     }

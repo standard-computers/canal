@@ -3,7 +3,6 @@ package org.Canal.Models.BusinessUnits;
 import org.Canal.Models.Objex;
 import org.Canal.Start;
 import org.Canal.Utils.Json;
-import org.Canal.Utils.LockeStatus;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -23,7 +22,6 @@ public class PurchaseOrder extends Objex {
     private String vendor;
     private ArrayList<OrderLineItem> items = new ArrayList<>();
     private double netValue, taxRate, taxAmount, total;
-    private LockeStatus status;
 
     public String getOrderId() {
         return orderId;
@@ -119,14 +117,6 @@ public class PurchaseOrder extends Objex {
 
     public void setItems(ArrayList<OrderLineItem> items) {
         this.items = items;
-    }
-
-    public LockeStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(LockeStatus status) {
-        this.status = status;
     }
 
     public double getNetValue() {

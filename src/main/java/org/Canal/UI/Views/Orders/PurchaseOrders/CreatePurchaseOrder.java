@@ -1,11 +1,8 @@
 package org.Canal.UI.Views.Orders.PurchaseOrders;
 
-import org.Canal.Models.BusinessUnits.OrderLineItem;
-import org.Canal.Models.BusinessUnits.PurchaseOrder;
-import org.Canal.Models.BusinessUnits.PurchaseRequisition;
+import org.Canal.Models.BusinessUnits.*;
 import org.Canal.Models.SupplyChainUnits.Delivery;
 import org.Canal.Models.SupplyChainUnits.Item;
-import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.Models.SupplyChainUnits.Truck;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Inputs.Copiable;
@@ -51,6 +48,7 @@ public class CreatePurchaseOrder extends LockeState {
     private Copiable orderId;
     private DatePicker expectedDelivery;
     private JCheckBox commitToLedger, makeSalesOrder, createDelivery;
+    private JTextField buyerObjexType, ledgerId;
 
     public CreatePurchaseOrder() {
         super("Create Purchase Order", "/ORDS/PO/NEW", false, true, false, true);
@@ -97,6 +95,7 @@ public class CreatePurchaseOrder extends LockeState {
                 }
                 int ccc = JOptionPane.showConfirmDialog(null, "Confirm order?", "You have selected the Org ID as the charge account. Are you sure you want to charge the corp account?",JOptionPane.YES_NO_CANCEL_OPTION);
                 if(ccc == JOptionPane.YES_OPTION){
+                    newOrder.setOwner((Engine.getAssignedUser().getId()));
                     newOrder.setOrderId(orderId.value());
                     newOrder.setVendor(selectVendor.getSelectedValue());
                     newOrder.setBillTo(selectBillTo.getSelectedValue());
@@ -129,16 +128,39 @@ public class CreatePurchaseOrder extends LockeState {
                     if(createDelivery.isSelected()){
 
                         Truck t = new Truck();
+                        t.setId(((String) Engine.codex("TRANS/TRCKS", "prefix") + 1000 + (Engine.getTrucks().size() + 1)));
                         t.setCarrier(carriers.getSelectedValue());
                         Pipe.save("/TRANS/TRCKS", t);
 
                         Delivery d = new Delivery();
+                        d.setId(((String) Engine.codex("TRANS/IDO", "prefix") + 1000 + (Engine.getInboundDeliveries().size() + 1)));
                         d.setPurchaseOrder(newOrder.getOrderId());
                         d.setExpectedDelivery(newOrder.getExpectedDelivery());
                         d.setDestination(newOrder.getShipTo());
                         d.setStatus(LockeStatus.PROCESSING);
                         Pipe.save("/TRANS/IDO", d);
                     }
+
+                    if(commitToLedger.isSelected()){
+                        Ledger l = Engine.getLedger(ledgerId.getText().trim());
+                        if(l != null){
+                            Transaction t = new Transaction();
+                            t.setId(Constants.generateId(5));
+                            t.setUser(Engine.getAssignedUser().getId());
+                            t.setLocke(getLocke());
+                            t.setObjex(buyerObjexType.getText().trim());
+                            t.setLocation(selectBillTo.getSelectedValue());
+                            t.setReference(orderId.value());
+                            t.setAmount(-1 * Double.parseDouble(model.getTotalPrice()));
+                            t.setCommitted(Constants.now());
+                            t.setStatus(LockeStatus.PROCESSING);
+                            l.addTransaction(t);
+                            l.save();
+                        }else{
+                            JOptionPane.showMessageDialog(null, "No such ledger.", "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+
                     dispose();
                     JOptionPane.showMessageDialog(null, "Order submitted.");
                 }
@@ -252,6 +274,9 @@ public class CreatePurchaseOrder extends LockeState {
     private JPanel deliveryDetails(){
         Form p = new Form();
         createDelivery = new JCheckBox();
+        if((boolean) Engine.codex("ORDS/PO", "use_deliveries")){
+            createDelivery.setSelected(true);
+        }
         carriers = Selectables.carriers();
         p.addInput(new Label("Create Inbound Delivery (IDO) for Ship-To", Constants.colors[9]), createDelivery);
         p.addInput(new Label("Carrier", Constants.colors[8]), carriers);
@@ -266,9 +291,10 @@ public class CreatePurchaseOrder extends LockeState {
             commitToLedger.setSelected(true);
         }
         organizations = Selectables.organizations();
-        JTextField ledgerId = Elements.input();
+        buyerObjexType = Elements.input();
+        ledgerId = Elements.input();
         f.addInput(new Label("Commit to Ledger", UIManager.getColor("Label.foreground")), commitToLedger);
-        f.addInput(new Label("Trans. Type", UIManager.getColor("Label.foreground")), new Copiable("/DCSS"));
+        f.addInput(new Label("Trans. Type", UIManager.getColor("Label.foreground")), buyerObjexType);
         f.addInput(new Label("Purchasing Org.", UIManager.getColor("Label.foreground")), organizations);
         f.addInput(new Label("Ledger", UIManager.getColor("Label.foreground")), ledgerId);
         return f;

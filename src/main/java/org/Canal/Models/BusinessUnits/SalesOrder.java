@@ -24,7 +24,6 @@ public class SalesOrder extends Objex {
     private String vendor;
     private ArrayList<OrderLineItem> items = new ArrayList<>();
     private double netValue, taxRate, taxAmount, total;
-    private LockeStatus status;
 
     public String getOrderId() {
         return orderId;
@@ -160,14 +159,6 @@ public class SalesOrder extends Objex {
 
     public void setTotal(double total) {
         this.total = total;
-    }
-
-    public LockeStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(LockeStatus status) {
-        this.status = status;
     }
 
     public void save(){

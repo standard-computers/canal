@@ -1,7 +1,6 @@
 package org.Canal.Models.BusinessUnits;
 
 import org.Canal.Models.Objex;
-import org.Canal.Utils.LockeStatus;
 
 import java.util.ArrayList;
 
@@ -12,7 +11,6 @@ public class GoodsReceipt extends Objex {
     public String receiver; //User ID
     public String location; //Location receiving in at
     public ArrayList<OrderLineItem> items; //ITS received and qty received
-    private LockeStatus status; //Status of this receival
 
     public String getPurchaseOrder() {
         return purchaseOrder;
@@ -60,13 +58,5 @@ public class GoodsReceipt extends Objex {
             total += item.getQuantity();
         }
         return total;
-    }
-
-    public LockeStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(LockeStatus status) {
-        this.status = status;
     }
 }

@@ -52,7 +52,6 @@ public class Locations extends LockeState implements RefreshListener {
                     int row = target.getSelectedRow(); // Get the clicked row
                     if (row != -1) {
                         String value = String.valueOf(target.getValueAt(row, 1));
-                        System.out.println(value);
                         desktop.put(Engine.router(objexType + "/" + value, desktop));
                     }
                 }

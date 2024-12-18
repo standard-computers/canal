@@ -1,9 +1,8 @@
 package org.Canal.Models.BusinessUnits;
 
-import org.Canal.Models.SupplyChainUnits.Transaction;
+import org.Canal.Models.Objex;
 import org.Canal.Start;
 import org.Canal.Utils.Json;
-import org.Canal.Utils.LockeStatus;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -13,40 +12,21 @@ import java.util.ArrayList;
  * done through Lockes that should be tracked for
  * business purposes.
  */
-public class Ledger {
+public class Ledger extends Objex {
 
-    private String id;
-    public String name;
-    public String org;
+    public String organization;
     public String period;
     private String starts;
     private String ends;
     private String created;
     private ArrayList<Transaction> transactions = new ArrayList<>();
-    private LockeStatus status = LockeStatus.NEW;
 
-    public String getId() {
-        return id;
+    public String getOrganization() {
+        return organization;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getOrg() {
-        return org;
-    }
-
-    public void setOrg(String org) {
-        this.org = org;
+    public void setOrganization(String organization) {
+        this.organization = organization;
     }
 
     public String getPeriod() {
@@ -79,14 +59,6 @@ public class Ledger {
 
     public void setCreated(String created) {
         this.created = created;
-    }
-
-    public LockeStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(LockeStatus status) {
-        this.status = status;
     }
 
     public void setTransactions(ArrayList<Transaction> transactions) {
