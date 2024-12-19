@@ -33,7 +33,7 @@ public class Locations extends LockeState implements RefreshListener {
         if(oo.startsWith("/")){
             oo = oo.substring(1);
         }
-        setFrameIcon(new ImageIcon(Locations.class.getResource("/icons/distribution_centers.png")));
+        setFrameIcon(new ImageIcon(Locations.class.getResource("/icons/" + Engine.codex(objexType, "icon") + ".png")));
         JPanel tb = createToolBar();
         JPanel holder = new JPanel(new BorderLayout());
         table = createTable();

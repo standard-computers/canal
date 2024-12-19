@@ -19,6 +19,7 @@ public class Codex {
         variables.put("ORGS", new HashMap<String, Object>() {{
             put("name", "Organizations");
             put("prefix", "");
+            put("icon", "organizations");
             put("allow_archival", true);
             put("allow_deletion", true);
             put("auto_putaway", false);
@@ -36,6 +37,7 @@ public class Codex {
         }});
         variables.put("DCSS", new HashMap<String, Object>() {{
             put("name", "Distribution Centers");
+            put("icon", "distribution_centers");
             put("prefix", "DC");
             put("allow_archival", true);
             put("allow_deletion", true);
@@ -44,6 +46,7 @@ public class Codex {
         }});
         variables.put("CCS", new HashMap<String, Object>() {{
             put("name", "Cost Centers");
+            put("icon", "cost_centers");
             put("prefix", "CC");
             put("allow_archival", true);
             put("allow_deletion", true);
@@ -52,6 +55,7 @@ public class Codex {
         }});
         variables.put("VEND", new HashMap<String, Object>() {{
             put("name", "Vendors");
+            put("icon", "vendors");
             put("prefix", "V");
             put("allow_archival", true);
             put("allow_deletion", true);
@@ -60,6 +64,7 @@ public class Codex {
         }});
         variables.put("WHS", new HashMap<String, Object>() {{
             put("name", "Warehouses");
+            put("icon", "warehouses");
             put("prefix", "WH");
             put("allow_archival", true);
             put("allow_deletion", true);
@@ -68,6 +73,7 @@ public class Codex {
         }});
         variables.put("CSTS", new HashMap<String, Object>() {{
             put("name", "Customers");
+            put("icon", "customers");
             put("prefix", "C");
             put("allow_archival", true);
             put("allow_deletion", true);
@@ -76,6 +82,7 @@ public class Codex {
         }});
         variables.put("AREAS", new HashMap<String, Object>() {{
             put("name", "Areas");
+            put("icon", "areas");
             put("prefix", "A");
             put("allow_archival", true);
             put("allow_deletion", true);
@@ -84,6 +91,7 @@ public class Codex {
         }});
         variables.put("BNS", new HashMap<String, Object>() {{
             put("name", "Bins");
+            put("icon", "bins");
             put("prefix", "BN");
             put("allow_archival", true);
             put("allow_deletion", true);
@@ -92,6 +100,7 @@ public class Codex {
         }});
         variables.put("DPTS", new HashMap<String, Object>() {{
             put("name", "Bins");
+            put("icon", "bins");
             put("prefix", "BN");
             put("allow_archival", true);
             put("allow_deletion", true);
@@ -100,6 +109,7 @@ public class Codex {
         }});
         variables.put("HR/POS", new HashMap<String, Object>() {{
             put("name", "Positions");
+            put("icon", "positions");
             put("prefix", "POS-RQ");
             put("allow_archival", true);
             put("allow_deletion", true);
@@ -108,6 +118,7 @@ public class Codex {
         }});
         variables.put("EMPS", new HashMap<String, Object>() {{
             put("name", "Employees");
+            put("icon", "employees");
             put("prefix", "E");
             put("allow_archival", true);
             put("allow_deletion", true);
@@ -116,6 +127,7 @@ public class Codex {
         }});
         variables.put("USRS", new HashMap<String, Object>() {{
             put("name", "Users");
+            put("icon", "users");
             put("prefix", "U");
             put("allow_archival", true);
             put("allow_deletion", true);
@@ -124,6 +136,7 @@ public class Codex {
         }});
         variables.put("LGS", new HashMap<String, Object>() {{
             put("name", "Ledgers");
+            put("icon", "ledgers");
             put("prefix", "GL");
             put("allow_archival", true);
             put("allow_deletion", true);
@@ -132,6 +145,7 @@ public class Codex {
         }});
         variables.put("ORDS/PO", new HashMap<String, Object>() {{
             put("name", "Purchase Orders");
+            put("icon", "orders");
             put("prefix", "PO");
             put("commit_to_ledger", true);
             put("use_deliveries", true);
@@ -142,6 +156,7 @@ public class Codex {
         }});
         variables.put("ORDS/SO", new HashMap<String, Object>() {{
             put("name", "Sales Orders");
+            put("icon", "orders");
             put("prefix", "SO");
             put("commit_to_ledger", true);
             put("use_deliveries", true);
@@ -154,6 +169,7 @@ public class Codex {
         }});
         variables.put("ORDS/PR", new HashMap<String, Object>() {{
             put("name", "Purchase Requisitions");
+
             put("prefix", "PR");
             put("allow_archival", true);
             put("allow_deletion", true);
@@ -202,6 +218,7 @@ public class Codex {
         }});
         variables.put("TRANS/CRRS", new HashMap<String, Object>() {{
             put("name", "Transportation Carriers");
+            put("icon", "carriers");
             put("prefix", "CRR");
             put("allow_archival", true);
             put("allow_deletion", true);

@@ -117,7 +117,7 @@ public class LocationView extends LockeState implements RefreshListener {
                         delivery.getDestinationArea(),
                         delivery.getDestinationDoor(),
                         delivery.getTotal(),
-                        delivery.getTruck().getId(),
+                        "",
                         delivery.getPallets().size(),
                         delivery.getStatus(),
                 });

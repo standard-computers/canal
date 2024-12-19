@@ -1,6 +1,7 @@
 package org.Canal.UI.Elements;
 
 import com.formdev.flatlaf.IntelliJTheme;
+import org.Canal.Models.BusinessUnits.Ledger;
 import org.Canal.Models.HumanResources.Department;
 import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.SupplyChainUnits.Area;
@@ -38,6 +39,14 @@ public class Selectables {
         Selectable s =  new Selectable(employees);
         s.editable();
         return s;
+    }
+
+    public static Selectable ledgers(){
+        HashMap<String, String> ledgers = new HashMap<>();
+        for(Ledger org : Engine.getLedgers()){
+            ledgers.put(org.getId(), org.getId());
+        }
+        return new Selectable(ledgers);
     }
 
     public static Selectable organizations(){

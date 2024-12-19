@@ -3,7 +3,6 @@ package org.Canal.Models.BusinessUnits;
 import org.Canal.Models.Objex;
 import org.Canal.Start;
 import org.Canal.Utils.Json;
-import org.Canal.Utils.LockeStatus;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -15,7 +14,6 @@ public class SalesOrder extends Objex {
     private String orderedOn; //Timestamp this was ordered on
     private String expectedDelivery; //When this should arrive to ship to
     private String purchaseOrder;
-    private String purchaseRequisition; //Purchase Requisition ID
     private String billTo; //Location ID
     private String shipTo; //Location ID
     private String soldTo; //Location ID
@@ -63,14 +61,6 @@ public class SalesOrder extends Objex {
 
     public void setPurchaseOrder(String purchaseOrder) {
         this.purchaseOrder = purchaseOrder;
-    }
-
-    public String getPurchaseRequisition() {
-        return purchaseRequisition;
-    }
-
-    public void setPurchaseRequisition(String purchaseRequisition) {
-        this.purchaseRequisition = purchaseRequisition;
     }
 
     public String getBillTo() {
