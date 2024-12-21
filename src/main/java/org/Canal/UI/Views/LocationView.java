@@ -8,7 +8,6 @@ import org.Canal.UI.Views.Areas.AutoMakeAreas;
 import org.Canal.UI.Views.Bins.AutoMakeBins;
 import org.Canal.UI.Views.Bins.CreateBin;
 import org.Canal.UI.Views.Inventory.InventoryView;
-import org.Canal.UI.Views.Orders.ReceiveOrder;
 import org.Canal.UI.Views.Areas.CreateArea;
 import org.Canal.Utils.*;
 
@@ -76,7 +75,22 @@ public class LocationView extends LockeState implements RefreshListener {
     }
 
     private JScrollPane inboundDeliveries(){
-        String[] columns = new String[]{"ID", "Description", "Type", "Sales Order", "Pur. Order", "Exp. Delivery", "Destination", "Dest. Area", "Dest. Door", "Value", "Truck ID", "Pallet Cnt.", "Status"};
+        String[] columns = new String[]{
+                "ID",
+                "Description",
+                "Type",
+                "Sales Order",
+                "Pur. Order",
+                "Exp. Delivery",
+                "Destination",
+                "Dest. Area",
+                "Dest. Door",
+                "Value",
+                "Truck ID",
+                "Pallet Cnt.",
+                "Status",
+                "Created"
+        };
         ArrayList<Object[]> data = new ArrayList<>();
         for (Delivery delivery : Engine.getInboundDeliveries(location.getId())) {
             if(delivery.getStatus().equals(LockeStatus.PROCESSING)) {
@@ -94,6 +108,7 @@ public class LocationView extends LockeState implements RefreshListener {
                         "",
                         delivery.getPallets().size(),
                         delivery.getStatus(),
+                        delivery.getCreated()
                 });
             }
         }
@@ -102,7 +117,22 @@ public class LocationView extends LockeState implements RefreshListener {
     }
 
     private JScrollPane outboundDeliveries(){
-        String[] columns = new String[]{"ID", "Description", "Type", "Sales Order", "Pur. Order", "Exp. Delivery", "Destination", "Dest. Area", "Dest. Door", "Value", "Truck ID", "Pallet Cnt.", "Status"};
+        String[] columns = new String[]{
+                "ID",
+                "Description",
+                "Type",
+                "Sales Order",
+                "Pur. Order",
+                "Exp. Delivery",
+                "Destination",
+                "Dest. Area",
+                "Dest. Door",
+                "Value",
+                "Truck ID",
+                "Pallet Cnt.",
+                "Status",
+                "Created"
+        };
         ArrayList<Object[]> data = new ArrayList<>();
         for (Delivery delivery : Engine.getOutboundDeliveries(location.getId())) {
             if(delivery.getStatus().equals(LockeStatus.PROCESSING)) {
@@ -120,6 +150,7 @@ public class LocationView extends LockeState implements RefreshListener {
                         "",
                         delivery.getPallets().size(),
                         delivery.getStatus(),
+                        delivery.getCreated()
                 });
             }
         }
@@ -144,9 +175,9 @@ public class LocationView extends LockeState implements RefreshListener {
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton order = new IconButton("Order", "create", "Order from a vendor", "/ORDS/PO/NEW");
         IconButton sell = new IconButton("Sell", "create", "Sell from this DC", "/ORDS/SO/NEW");
-        IconButton payBill = new IconButton("Pay Bill", "bill", "Receiving a bill from a vendor", "/FI/PYMNTS");
         IconButton inventory = new IconButton("Inventory", "inventory", "Inventory of items in cost center");
         IconButton receive = new IconButton("Receive", "receive", "Receive an Inbound Delivery");
+        IconButton fulfill = new IconButton("Fulfill Order", "fulfill", "Fulfill Order");
         IconButton areas = new IconButton("+ Areas", "areas", "Add an area cost center");
         IconButton addBin = new IconButton("+ Bin", "bins", "Add an area cost center");
         IconButton autoMakeAreas = new IconButton("AutoMake Areas", "automake", "Automate the creation of areas");
@@ -161,6 +192,11 @@ public class LocationView extends LockeState implements RefreshListener {
         receive.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 desktop.put(new ReceiveOrder(location.getId(), desktop));
+            }
+        });
+        fulfill.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                desktop.put(new FulfillOrder(location.getId()));
             }
         });
         areas.addMouseListener(new MouseAdapter() {
@@ -189,11 +225,11 @@ public class LocationView extends LockeState implements RefreshListener {
         tb.add(Box.createHorizontalStrut(5));
         tb.add(sell);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(payBill);
-        tb.add(Box.createHorizontalStrut(5));
         tb.add(inventory);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(receive);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(fulfill);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(areas);
         tb.add(Box.createHorizontalStrut(5));

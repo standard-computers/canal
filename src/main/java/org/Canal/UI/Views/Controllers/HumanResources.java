@@ -2,15 +2,14 @@ package org.Canal.UI.Views.Controllers;
 
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.LockeState;
-import org.Canal.UI.Views.HR.Departments.CreateDepartment;
-import org.Canal.UI.Views.HR.Departments.Departments;
-import org.Canal.UI.Views.HR.Departments.FindDepartment;
-import org.Canal.UI.Views.HR.Employees.CreateEmployee;
-import org.Canal.UI.Views.HR.Employees.Employees;
-import org.Canal.UI.Views.HR.Employees.FindEmployee;
-import org.Canal.UI.Views.HR.Positions.CreatePosition;
-import org.Canal.UI.Views.HR.Users.ChangeUserPassword;
-import org.Canal.UI.Views.HR.Users.CreateUser;
+import org.Canal.UI.Views.Finder;
+import org.Canal.UI.Views.Departments.CreateDepartment;
+import org.Canal.UI.Views.Departments.Departments;
+import org.Canal.UI.Views.Employees.CreateEmployee;
+import org.Canal.UI.Views.Employees.Employees;
+import org.Canal.UI.Views.Positions.CreatePosition;
+import org.Canal.UI.Views.Users.ChangeUserPassword;
+import org.Canal.UI.Views.Users.CreateUser;
 import org.Canal.Utils.DesktopState;
 
 import javax.swing.*;
@@ -76,7 +75,7 @@ public class HumanResources extends LockeState {
         findDepartment.addMouseListener(new MouseAdapter() {
            @Override
            public void mouseClicked(MouseEvent e) {
-               desktop.put(new FindDepartment(desktop));
+               desktop.put(new Finder("/DPTS", desktop));
            }
         });
         departmentOptions.add(findDepartment);
@@ -131,7 +130,7 @@ public class HumanResources extends LockeState {
         findEmployee.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new FindEmployee(desktop));
+                desktop.put(new Finder("/EMPS", desktop));
             }
         });
         employeeOptions.add(findEmployee);

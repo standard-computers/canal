@@ -85,7 +85,7 @@ public class Controller extends JPanel implements RefreshListener {
         DefaultMutableTreeNode rootTreeNode = createTreeNodes(rootNode);
         DefaultTreeModel model = (DefaultTreeModel) dataTree.getModel();
         model.setRoot(rootTreeNode);
-        expandAllNodes(dataTree);
+//        expandAllNodes(dataTree);
         revalidate();
         repaint();
     }
@@ -96,7 +96,7 @@ public class Controller extends JPanel implements RefreshListener {
         DefaultTreeModel treeModel = new DefaultTreeModel(rootTreeNode);
         JTree tree = new JTree(treeModel);
         tree.setCellRenderer(new CustomTreeCellRenderer());
-        expandAllNodes(tree);
+//        expandAllNodes(tree);
         return tree;
     }
 
@@ -123,9 +123,13 @@ public class Controller extends JPanel implements RefreshListener {
             DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) value;
             Locke orgNode = (Locke) treeNode.getUserObject();
             setIcon(orgNode.getIcon());
-//            setIcon(UIManager.getIcon("FileView.directoryIcon"));
-//            setIcon(UIManager.getIcon("FileView.fileIcon"));
             setForeground(orgNode.getColor());
+            setFont(UIManager.getFont("Label.font").deriveFont(Font.PLAIN, 14));
+            if(isFocusable()){
+                setBackground(UIManager.getColor("Panel.background"));
+            }else{
+                setBackground(orgNode.getColor());
+            }
             return component;
         }
     }

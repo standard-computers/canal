@@ -1,7 +1,6 @@
 package org.Canal.Models.BusinessUnits;
 
 import org.Canal.Models.Objex;
-import org.Canal.Utils.LockeStatus;
 
 import java.util.ArrayList;
 

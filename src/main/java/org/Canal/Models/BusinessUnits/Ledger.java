@@ -18,7 +18,6 @@ public class Ledger extends Objex {
     public String period;
     private String starts;
     private String ends;
-    private String created;
     private ArrayList<Transaction> transactions = new ArrayList<>();
 
     public String getOrganization() {
@@ -51,14 +50,6 @@ public class Ledger extends Objex {
 
     public void setEnds(String ends) {
         this.ends = ends;
-    }
-
-    public String getCreated() {
-        return created;
-    }
-
-    public void setCreated(String created) {
-        this.created = created;
     }
 
     public void setTransactions(ArrayList<Transaction> transactions) {

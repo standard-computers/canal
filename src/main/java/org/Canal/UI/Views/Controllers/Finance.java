@@ -2,9 +2,9 @@ package org.Canal.UI.Views.Controllers;
 
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.LockeState;
-import org.Canal.UI.Views.Orders.PurchaseRequisitions.PurchaseRequisitions;
-import org.Canal.UI.Views.Orders.PurchaseOrders.CreatePurchaseOrder;
-import org.Canal.UI.Views.Orders.PurchaseRequisitions.CreatePurchaseRequisition;
+import org.Canal.UI.Views.Finance.PurchaseRequisitions.PurchaseRequisitions;
+import org.Canal.UI.Views.Finance.PurchaseOrders.CreatePurchaseOrder;
+import org.Canal.UI.Views.Finance.PurchaseRequisitions.CreatePurchaseRequisition;
 import org.Canal.Utils.DesktopState;
 
 import javax.swing.*;

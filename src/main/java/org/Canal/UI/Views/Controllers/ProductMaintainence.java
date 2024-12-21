@@ -2,9 +2,9 @@ package org.Canal.UI.Views.Controllers;
 
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.LockeState;
-import org.Canal.UI.Views.Components.Components;
-import org.Canal.UI.Views.Items.Items;
-import org.Canal.UI.Views.Materials.Materials;
+import org.Canal.UI.Views.Products.Components.Components;
+import org.Canal.UI.Views.Products.Items.Items;
+import org.Canal.UI.Views.Products.Materials.Materials;
 import org.Canal.Utils.DesktopState;
 
 import javax.swing.*;

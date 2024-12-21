@@ -98,7 +98,7 @@ public class LedgerView extends LockeState implements RefreshListener {
             data.add(new Object[]{
                     t.getId(),
                     t.getName(),
-                    t.getUser(),
+                    t.getOwner(),
                     t.getLocke(),
                     t.getObjex(),
                     t.getLocation(),

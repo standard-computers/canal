@@ -1,7 +1,7 @@
 package org.Canal;
 
 import com.formdev.flatlaf.IntelliJTheme;
-import org.Canal.Models.Codex;
+import org.Canal.Utils.Codex;
 import org.Canal.UI.Views.Controllers.QuickExplorer;
 import org.Canal.UI.Views.Controllers.Setup;
 import org.Canal.Utils.Configuration;

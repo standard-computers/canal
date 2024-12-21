@@ -6,21 +6,12 @@ import java.util.ArrayList;
 
 public class DebitMemo extends Objex {
 
-    private String owner;
     private String customer;
     private String reference;
     private double quantity;
     private double value;
     private ArrayList<Objex> products;
     private String note;
-
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
 
     public String getCustomer() {
         return customer;

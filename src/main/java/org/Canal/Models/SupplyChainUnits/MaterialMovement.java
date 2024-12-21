@@ -1,7 +1,6 @@
 package org.Canal.Models.SupplyChainUnits;
 
 import org.Canal.Models.Objex;
-import org.Canal.Utils.LockeStatus;
 
 public class MaterialMovement extends Objex {
 

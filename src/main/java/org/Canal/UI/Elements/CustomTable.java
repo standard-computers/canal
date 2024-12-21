@@ -7,6 +7,7 @@ import ca.odell.glazedlists.swing.EventTableModel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.io.BufferedWriter;
@@ -68,7 +69,24 @@ public class CustomTable extends JTable {
             public Object getColumnValue(Object[] baseObject, int column) {
                 return baseObject[column];
             }
-        });
+        }) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                // Make all columns except the "Select" column editable
+                return column > 0; // Column 0 is the "Select" checkbox
+            }
+
+            @Override
+            public void setValueAt(Object value, int row, int column) {
+                if (row >= 0 && row < rows.size() && column >= 0 && column < headers.length) {
+                    Object[] rowData = rows.get(row);
+                    rowData[column] = value;
+                    fireTableCellUpdated(row, column); // Notify the table of the change
+                } else {
+                    throw new UnsupportedOperationException("Invalid row or column index");
+                }
+            }
+        };
     }
 
     public void setRowData(ArrayList<Object[]> data) {
@@ -79,6 +97,7 @@ public class CustomTable extends JTable {
             System.arraycopy(row, 0, newRow, 1, row.length); // Copy the rest of the row
             rows.add(newRow);
         }
+        autoResizeColumns();
     }
 
     public void exportToCSV() {
@@ -116,21 +135,21 @@ public class CustomTable extends JTable {
         }
     }
 
-    /**
-     * Custom Checkbox Renderer for the first column.
-     */
-    private static class CheckboxRenderer extends DefaultTableCellRenderer {
+    private static class CheckboxRenderer extends JCheckBox implements TableCellRenderer {
+        public CheckboxRenderer() {
+            setHorizontalAlignment(CENTER);
+            setOpaque(true);
+        }
+
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            JCheckBox checkBox = new JCheckBox();
-            checkBox.setSelected(value != null && (Boolean) value);
-            checkBox.setHorizontalAlignment(CENTER);
+            setSelected(value != null && (Boolean) value);
             if (isSelected) {
-                checkBox.setBackground(table.getSelectionBackground());
+                setBackground(table.getSelectionBackground());
             } else {
-                checkBox.setBackground(table.getBackground());
+                setBackground(table.getBackground());
             }
-            return checkBox;
+            return this;
         }
     }
 
@@ -173,5 +192,58 @@ public class CustomTable extends JTable {
             }
             column.setPreferredWidth(maxWidth + 10);
         }
+    }
+
+    private static class TextFieldRenderer extends JTextField implements TableCellRenderer {
+        public TextFieldRenderer() {
+            setBorder(BorderFactory.createEmptyBorder()); // No border for cleaner look
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            setText(value != null ? value.toString() : ""); // Set the cell's value as text
+            if (isSelected) {
+                setBackground(table.getSelectionBackground());
+                setForeground(table.getSelectionForeground());
+            } else {
+                setBackground(table.getBackground());
+                setForeground(table.getForeground());
+            }
+            return this;
+        }
+    }
+
+    private static class TextFieldEditor extends DefaultCellEditor {
+        private final JTextField textField;
+
+        public TextFieldEditor() {
+            super(new JTextField());
+            textField = (JTextField) getComponent();
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+            textField.setText(value != null ? value.toString() : ""); // Set initial text
+            return textField;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return textField.getText(); // Return the updated value
+        }
+    }
+
+    public void setEditable(int columnIndex) {
+        if (columnIndex < 0 || columnIndex >= getColumnCount()) {
+            throw new IllegalArgumentException("Invalid column index: " + columnIndex);
+        }
+
+        TableColumn column = getColumnModel().getColumn(columnIndex);
+
+        // Apply the custom renderer to always show a JTextField
+        column.setCellRenderer(new TextFieldRenderer());
+
+        // Apply the custom editor to allow editing directly
+        column.setCellEditor(new TextFieldEditor());
     }
 }

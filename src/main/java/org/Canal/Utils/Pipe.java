@@ -1,5 +1,6 @@
 package org.Canal.Utils;
 
+import com.google.gson.JsonObject;
 import org.Canal.Start;
 import java.io.File;
 import java.util.UUID;
@@ -33,5 +34,15 @@ public class Pipe {
         if (!existed) {
             Json.save(Start.WINDOWS_SYSTEM_DIR + UUID.randomUUID() + ".cnl.mfg", Engine.getConfiguration());
         }
+    }
+
+    public static JsonObject get(String objex) {
+        File[] d = Pipe.list(objex); //Excpects '/OBJEX/.../..'
+        for(File f : d){
+            if(!f.isDirectory()){
+                return Json.load(f.getPath(), JsonObject.class);
+            }
+        }
+        return null;
     }
 }

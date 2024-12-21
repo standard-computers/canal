@@ -4,7 +4,6 @@ import org.Canal.Models.Objex;
 
 public class Account extends Objex {
 
-    private String owner; //Objex ID
     private String opened;
     private String closed;
     private boolean passwordProtected;

@@ -10,7 +10,6 @@ import java.util.ArrayList;
 public class PurchaseOrder extends Objex {
 
     private String orderId; //Order ID
-    private String owner = "UNKNOWN"; //ID of User who is creating order
     private String orderedOn; //Timestamp this was ordered on
     private String expectedDelivery; //When this should arrive to ship to
     private String purchaseRequisition; //Purchase Requisition ID
@@ -29,14 +28,6 @@ public class PurchaseOrder extends Objex {
 
     public void setOrderId(String orderId) {
         this.orderId = orderId;
-    }
-
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
     }
 
     public String getOrderedOn() {

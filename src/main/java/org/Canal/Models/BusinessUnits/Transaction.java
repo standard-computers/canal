@@ -4,7 +4,6 @@ import org.Canal.Models.Objex;
 
 public class Transaction extends Objex {
 
-    private String user; //User ID of committing user
     private String locke; //Canal transaction was commited with
     private String objex; //Locke Code for Objex type
     private String location;
@@ -12,14 +11,6 @@ public class Transaction extends Objex {
     private double amount;
     private String committed; //Timestamp transaction committed
     private String settled; //Timestamp transaction settled
-
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
 
     public String getLocke() {
         return locke;

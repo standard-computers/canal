@@ -21,39 +21,24 @@ import java.util.ArrayList;
  */
 public class CreateLocation extends LockeState {
 
+    private String objexType;
+    private Selectable objexSelection, organizations, countries;
+    private JTextField locationIdField, locationNameField, streetField , cityField, stateField, postalField;
+
     public CreateLocation(String objexType, DesktopState desktop, RefreshListener refreshListener) {
+
         super("New Location", objexType + "/NEW", false, true, false, true);
         setFrameIcon(new ImageIcon(CreateLocation.class.getResource("/icons/create.png")));
-        String oo = objexType;
-        if(oo.startsWith("/")){
-            oo = oo.substring(1);
-        }
-        ArrayList<Location> ls = Engine.getLocations(oo);
-        String generatedId = ((String) Engine.codex.getValue(oo, "prefix")) + (100000 + (ls.size() + 1));
-        Selectable objexSelection = Selectables.locationObjex(objexType);
-        JTextField locationIdField = new JTextField(generatedId);
-        Selectable organizations = Selectables.organizations();
-        JTextField locationNameField = Elements.input(15);
-        JTextField streetField = Elements.input(15);
-        JTextField cityField = Elements.input(15);
-        JTextField stateField = Elements.input(15);
-        JTextField postalField = Elements.input(15);
-        Selectable countries = Selectables.countries();
+        this.objexType = objexType;
+
+        JTabbedPane tabs = new JTabbedPane();
+        tabs.add("General Information", generalInformation());
+        tabs.add("Contact Info", contactInformation());
+
         JButton make = Elements.button("Make");
-        Form f = new Form();
-        f.addInput(new Label("Type",  UIManager.getColor("Label.foreground")), objexSelection);
-        f.addInput(new Label("*New ID", UIManager.getColor("Label.foreground")), locationIdField);
-        if(!objexType.equals("/ORGS")) {
-            f.addInput(new Label("*Organization", UIManager.getColor("Label.foreground")), organizations);
-        }
-        f.addInput(new Label("Name", Constants.colors[0]), locationNameField);
-        f.addInput(new Label("Street", Constants.colors[1]), streetField);
-        f.addInput(new Label("City", Constants.colors[2]), cityField);
-        f.addInput(new Label("State", Constants.colors[3]), stateField);
-        f.addInput(new Label("Postal", Constants.colors[4]), postalField);
-        f.addInput(new Label("Country", Constants.colors[5]), countries);
+
         add(Elements.header("Make a Location", SwingConstants.LEFT), BorderLayout.NORTH);
-        add(f, BorderLayout.CENTER);
+        add(tabs, BorderLayout.CENTER);
         add(make, BorderLayout.SOUTH);
         String finalObjexType = objexType;
         make.addMouseListener(new MouseAdapter() {
@@ -85,5 +70,42 @@ public class CreateLocation extends LockeState {
                 desktop.put(Engine.router(finalObjexType + "/" + locationId, desktop));
             }
         });
+    }
+
+    private JPanel generalInformation(){
+        String oo = objexType;
+        if(oo.startsWith("/")){
+            oo = oo.substring(1);
+        }
+        ArrayList<Location> ls = Engine.getLocations(oo);
+        String generatedId = ((String) Engine.codex.getValue(oo, "prefix")) + (100000 + (ls.size() + 1));
+        objexSelection = Selectables.locationObjex(objexType);
+        locationIdField = new JTextField(generatedId);
+        organizations = Selectables.organizations();
+        locationNameField = Elements.input(15);
+        streetField = Elements.input(15);
+        cityField = Elements.input(15);
+        stateField = Elements.input(15);
+        postalField = Elements.input(15);
+        countries = Selectables.countries();
+        Form f = new Form();
+        f.addInput(new Label("Type",  UIManager.getColor("Label.foreground")), objexSelection);
+        f.addInput(new Label("*New ID", UIManager.getColor("Label.foreground")), locationIdField);
+        if(!objexType.equals("/ORGS")) {
+            f.addInput(new Label("*Organization", UIManager.getColor("Label.foreground")), organizations);
+        }
+        f.addInput(new Label("Name", Constants.colors[0]), locationNameField);
+        f.addInput(new Label("Street", Constants.colors[1]), streetField);
+        f.addInput(new Label("City", Constants.colors[2]), cityField);
+        f.addInput(new Label("State", Constants.colors[3]), stateField);
+        f.addInput(new Label("Postal", Constants.colors[4]), postalField);
+        f.addInput(new Label("Country", Constants.colors[5]), countries);
+        return f;
+    }
+
+    private JPanel contactInformation(){
+        Form f = new Form();
+
+        return f;
     }
 }

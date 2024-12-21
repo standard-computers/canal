@@ -2,69 +2,54 @@ package org.Canal.Utils;
 
 import org.Canal.Models.BusinessUnits.*;
 import org.Canal.Models.BusinessUnits.Inventory;
-import org.Canal.Models.Codex;
 import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.HumanResources.User;
 import org.Canal.Models.SupplyChainUnits.*;
 import org.Canal.UI.Views.*;
 import org.Canal.UI.Views.Areas.*;
 import org.Canal.UI.Views.Bins.*;
-import org.Canal.UI.Views.Components.ArchiveComponent;
-import org.Canal.UI.Views.Components.Components;
-import org.Canal.UI.Views.Components.CreateComponent;
-import org.Canal.UI.Views.Components.FindComponent;
+import org.Canal.UI.Views.Finance.PurchaseOrders.*;
+import org.Canal.UI.Views.Products.Components.Components;
+import org.Canal.UI.Views.Products.Components.CreateComponent;
 import org.Canal.UI.Views.Controllers.*;
-import org.Canal.UI.Views.Distribution.ModifyDistributionCenter;
-import org.Canal.UI.Views.Distribution.ModifyWarehouse;
+import org.Canal.UI.Views.Employees.CreateEmployee;
+import org.Canal.UI.Views.Employees.EmployeeView;
+import org.Canal.UI.Views.Employees.Employees;
 import org.Canal.UI.Views.Finance.Catalogs.Catalogs;
 import org.Canal.UI.Views.Finance.Catalogs.CreateCatalog;
-import org.Canal.UI.Views.Finance.Catalogs.FindCatalog;
-import org.Canal.UI.Views.Finance.Catalogs.ModifyCatalog;
-import org.Canal.UI.Views.Finance.CostCenters.*;
-import org.Canal.UI.Views.Finance.Customers.*;
-import org.Canal.UI.Views.Finance.GoodsReceipts.FindGoodsReceipt;
 import org.Canal.UI.Views.Finance.GoodsReceipts.GoodsReceipts;
 import org.Canal.UI.Views.Finance.Ledgers.CreateLedger;
 import org.Canal.UI.Views.Finance.Ledgers.LedgerView;
 import org.Canal.UI.Views.Finance.Ledgers.Ledgers;
-import org.Canal.UI.Views.HR.Departments.CreateDepartment;
-import org.Canal.UI.Views.HR.Departments.Departments;
-import org.Canal.UI.Views.HR.Departments.FindDepartment;
-import org.Canal.UI.Views.HR.Departments.ModifyDepartment;
-import org.Canal.UI.Views.HR.Employees.*;
-import org.Canal.UI.Views.HR.Organizations.ModifyOrganization;
-import org.Canal.UI.Views.HR.Organizations.OrgView;
-import org.Canal.UI.Views.HR.Positions.CreatePosition;
-import org.Canal.UI.Views.HR.Teams.CreateTeam;
-import org.Canal.UI.Views.HR.Teams.ModifyTeam;
-import org.Canal.UI.Views.HR.Teams.Teams;
-import org.Canal.UI.Views.HR.Users.*;
+import org.Canal.UI.Views.Departments.CreateDepartment;
+import org.Canal.UI.Views.Departments.Departments;
+import org.Canal.UI.Views.Distribution.InboundDeliveryOrders.CreateInboundDeliveryOrder;
+import org.Canal.UI.Views.Distribution.InboundDeliveryOrders.InboundDeliveries;
+import org.Canal.UI.Views.Notes.CreateNote;
+import org.Canal.UI.Views.Notes.Notes;
+import org.Canal.UI.Views.Distribution.OutboundDeliveryOrders.CreateOutboundDeliveryOrder;
+import org.Canal.UI.Views.Distribution.OutboundDeliveryOrders.OutboundDeliveries;
+import org.Canal.UI.Views.Positions.CreatePosition;
+import org.Canal.UI.Views.Products.Items.CreateItem;
+import org.Canal.UI.Views.Products.Items.ItemView;
+import org.Canal.UI.Views.Products.Items.Items;
+import org.Canal.UI.Views.Teams.CreateTeam;
+import org.Canal.UI.Views.Teams.Teams;
 import org.Canal.UI.Views.Inventory.*;
-import org.Canal.UI.Views.Items.*;
-import org.Canal.UI.Views.Materials.FindMaterial;
-import org.Canal.UI.Views.Materials.Materials;
-import org.Canal.UI.Views.Orders.*;
-import org.Canal.UI.Views.Materials.CreateMaterial;
-import org.Canal.UI.Views.Materials.ModifyMaterial;
-import org.Canal.UI.Views.Invoices.CreateInvoice;
-import org.Canal.UI.Views.Orders.PurchaseOrders.*;
-import org.Canal.UI.Views.Orders.PurchaseRequisitions.AutoMakePurchaseRequisitions;
-import org.Canal.UI.Views.Orders.PurchaseRequisitions.CreatePurchaseRequisition;
-import org.Canal.UI.Views.Orders.PurchaseRequisitions.FindPurchaseReq;
-import org.Canal.UI.Views.Orders.PurchaseRequisitions.PurchaseRequisitions;
-import org.Canal.UI.Views.Orders.SalesOrders.AutoMakeSalesOrders;
-import org.Canal.UI.Views.Orders.SalesOrders.CreateSalesOrder;
-import org.Canal.UI.Views.Orders.SalesOrders.SalesOrders;
-import org.Canal.UI.Views.Productivity.Notes.*;
-import org.Canal.UI.Views.Productivity.Tasks.CreateTask;
-import org.Canal.UI.Views.Productivity.Tasks.TaskList;
-import org.Canal.UI.Views.Transportation.Carriers.*;
-import org.Canal.UI.Views.Transportation.InboundDeliveryOrders.*;
-import org.Canal.UI.Views.Transportation.OutboundDeliveryOrders.*;
-import org.Canal.UI.Views.Transportation.Trucks.ArchiveTruck;
-import org.Canal.UI.Views.Transportation.Trucks.FindTruck;
-import org.Canal.UI.Views.Transportation.Trucks.RemoveTruck;
-import org.Canal.UI.Views.Transportation.Trucks.Trucks;
+import org.Canal.UI.Views.Products.Materials.Materials;
+import org.Canal.UI.Views.Products.Materials.CreateMaterial;
+import org.Canal.UI.Views.Finance.Invoices.CreateInvoice;
+import org.Canal.UI.Views.Finance.PurchaseRequisitions.AutoMakePurchaseRequisitions;
+import org.Canal.UI.Views.Finance.PurchaseRequisitions.CreatePurchaseRequisition;
+import org.Canal.UI.Views.Finance.PurchaseRequisitions.PurchaseRequisitions;
+import org.Canal.UI.Views.Finance.SalesOrders.AutoMakeSalesOrders;
+import org.Canal.UI.Views.Finance.SalesOrders.CreateSalesOrder;
+import org.Canal.UI.Views.Finance.SalesOrders.SalesOrders;
+import org.Canal.UI.Views.Tasks.CreateTask;
+import org.Canal.UI.Views.Tasks.TaskList;
+import org.Canal.UI.Views.Distribution.Trucks.CreateTruck;
+import org.Canal.UI.Views.Distribution.Trucks.Trucks;
+import org.Canal.UI.Views.Users.*;
 import org.Canal.UI.Views.ValueAddedServices.CreateVAS;
 import org.Canal.UI.Views.ValueAddedServices.ValueAddedServices;
 
@@ -174,21 +159,34 @@ public class Engine {
         return null;
     }
 
-    public static ArrayList<Material> getMaterials() {
-        ArrayList<Material> materials = new ArrayList<>();
+    public static ArrayList<Item> getMaterials() {
+        ArrayList<Item> materials = new ArrayList<>();
         File[] mtsDir = Pipe.list("MTS");
         for (File file : mtsDir) {
             if (!file.isDirectory()) {
-                Material a = Json.load(file.getPath(), Material.class);
+                Item a = Json.load(file.getPath(), Item.class);
                 materials.add(a);
             }
         }
-        materials.sort(Comparator.comparing(Material::getId));
+        materials.sort(Comparator.comparing(Item::getId));
         return materials;
     }
 
-    public static List<Material> getMaterials(String id) {
+    public static List<Item> getMaterials(String id) {
         return getMaterials().stream().filter(location -> location.getOrg().equals(id)).collect(Collectors.toList());
+    }
+
+    public static ArrayList<Item> getComponents() {
+        ArrayList<Item> components = new ArrayList<>();
+        File[] mtsDir = Pipe.list("MTS");
+        for (File file : mtsDir) {
+            if (!file.isDirectory()) {
+                Item a = Json.load(file.getPath(), Item.class);
+                components.add(a);
+            }
+        }
+        components.sort(Comparator.comparing(Item::getId));
+        return components;
     }
 
     public static ArrayList<Area> getAreas() {
@@ -356,6 +354,19 @@ public class Engine {
         return deliveries;
     }
 
+    public static ArrayList<Delivery> getOutboundDeliveries() {
+        ArrayList<Delivery> deliveries = new ArrayList<>();
+        File[] d = Pipe.list("TRANS/ODO");
+        for (File file : d) {
+            if (!file.isDirectory()) {
+                Delivery a = Json.load(file.getPath(), Delivery.class);
+                deliveries.add(a);
+            }
+        }
+        deliveries.sort(Comparator.comparing(Delivery::getId));
+        return deliveries;
+    }
+
     public static ArrayList<Delivery> getOutboundDeliveries(String destination) {
         ArrayList<Delivery> deliveries = new ArrayList<>();
         File[] d = Pipe.list("TRANS/ODO");
@@ -369,6 +380,10 @@ public class Engine {
         }
         deliveries.sort(Comparator.comparing(Delivery::getId));
         return deliveries;
+    }
+
+    public static Delivery getOutboundDelivery(String id){
+        return getOutboundDeliveries().stream().filter(inventory -> inventory.getId().equals(id)).toList().stream().findFirst().orElse(null);
     }
 
     public static ArrayList<Inventory> getInventories() {
@@ -406,39 +421,33 @@ public class Engine {
         if (!transactionCode.startsWith("/")) {
             transactionCode = "/" + transactionCode;
         }
+        if(transactionCode.endsWith("/F")){
+            return new Finder(transactionCode.replace("/F", ""), desktop);
+        }else if(transactionCode.endsWith("/MOD")){
+            return new Modifier(transactionCode.replace("/F", ""));
+        }else if(transactionCode.endsWith("/ARCHV")){
+            return new Archiver(transactionCode.replace("/F", ""));
+        }else if(transactionCode.endsWith("/DEL")){
+            return new Deleter(transactionCode.replace("/F", ""));
+        }
         switch (transactionCode) {
-            case "/ORGS", "/ORGS/F" -> {
+            case "/ORGS" -> {
                 return new Locations("/ORGS", desktop);
             }
             case "/ORGS/NEW" -> {
                 return new CreateLocation("/ORGS", desktop, null);
             }
-            case "/ORGS/MOD" -> {
-                return new ModifyOrganization();
-            }
             case "/CCS" -> {
                 return new Locations("/CCS", desktop);
-            }
-            case "/CCS/F" -> {
-                return new FindLocation("/CCS", desktop);
             }
             case "/CCS/NEW" -> {
                 return new CreateLocation("/CCS", desktop, null);
             }
-            case "/CCS/MOD" -> {
-                return new ModifyCostCenter(Engine.getLocations("CCS").getFirst());
-            }
             case "/AREAS" -> {
                 return new Areas();
             }
-            case "/AREAS/F" -> {
-                return new FindArea(desktop);
-            }
             case "/AREAS/NEW" -> {
                 return new CreateArea(null, null);
-            }
-            case "/AREAS/MOD" -> {
-                return new ModifyArea();
             }
             case "/AREAS/AUTO_MK" -> {
                 return new AutoMakeAreas();
@@ -447,13 +456,10 @@ public class Engine {
                 return new Bins();
             }
             case "/BNS/F" -> {
-                return new FindBin(desktop);
+                return new Finder("/BNS", desktop);
             }
             case "/BNS/NEW" -> {
                 return new CreateBin("", null);
-            }
-            case "/BNS/DEL" -> {
-                return new RemoveBin();
             }
             case "/BNS/AUTO_MK" -> {
                 return new AutoMakeBins();
@@ -461,26 +467,14 @@ public class Engine {
             case "/CSTS" -> {
                 return new Locations("/CSTS", desktop);
             }
-            case "/CSTS/F" -> {
-                return new FindLocation("/CSTS", desktop);
-            }
             case "/CSTS/NEW" -> {
                 return new CreateLocation("/CSTS", desktop, null);
-            }
-            case "/CSTS/MOD" -> {
-                return new ModifyCustomer();
             }
             case "/DCSS" -> {
                 return new Locations("/DCSS", desktop);
             }
-            case "/DCSS/F" -> {
-                return new FindLocation("/DCSS", desktop);
-            }
             case "/DCSS/NEW" -> {
                 return new CreateLocation("/DCSS", desktop, null);
-            }
-            case "/DCSS/MOD" -> {
-                return new ModifyDistributionCenter(null);
             }
             case "/TRANS/ODO" -> {
                 return new OutboundDeliveries(desktop);
@@ -488,59 +482,23 @@ public class Engine {
             case "/TRANS/ODO/NEW" -> {
                 return new CreateOutboundDeliveryOrder();
             }
-            case "/TRANS/ODO/F" -> {
-                return new FindOutboundDeliveryOrder(desktop);
-            }
-            case "/TRANS/ODO/ARCHV" -> {
-                return new Archiver("/TRANS/ODO");
-            }
-            case "/TRANS/ODO/DEL" -> {
-                return new RemoveOutboundDeliveryOrder();
-            }
             case "/TRANS/IDO" -> {
                 return new InboundDeliveries(desktop);
             }
             case "/TRANS/IDO/NEW" -> {
                 return new CreateInboundDeliveryOrder();
             }
-            case "/TRANS/IDO/F" -> {
-                return new FindInboundDeliveryOrder(desktop);
-            }
-            case "/TRANS/IDO/ARCHV" -> {
-                return new Archiver("/TRANS/IDO");
-            }
-            case "/TRANS/IDO/DEL" -> {
-                return new RemoveInboundDeliveryOrder();
-            }
             case "/TRANS/CRRS" -> {
                 return new Locations("/TRANS/CRRS", desktop);
-            }
-            case "/TRANS/CRRS/F" -> {
-                return new FindLocation("/TRANS/CRRS", desktop);
             }
             case "/TRANS/CRRS/NEW" -> {
                 return new CreateLocation("/TRANS/CRRS", desktop, null);
             }
-            case "/TRANS/CRRS/ARCHV" -> {
-                return new Archiver("/TRANS/CRRS");
-            }
-            case "/TRANS/CRRS/DEL" -> {
-                return new RemoveCarrier();
-            }
             case "/TRANS/TRCKS" -> {
                 return new Trucks();
             }
-            case "/TRANS/TRCKS/F" -> {
-                return new FindTruck(desktop);
-            }
             case "/TRANS/TRCKS/NEW" -> {
-                return new RemoveCarrier();
-            }
-            case "/TRANS/TRCKS/ARCHV" -> {
-                return new ArchiveTruck();
-            }
-            case "/TRANS/TRCKS/DEL" -> {
-                return new RemoveTruck();
+                return new CreateTruck();
             }
             case "/WHS" -> {
                 return new Locations("/WHS", desktop);
@@ -548,17 +506,8 @@ public class Engine {
             case "/WHS/NEW" -> {
                 return new CreateLocation("/WHS", desktop, null);
             }
-            case "/WHS/F" -> {
-                return new FindLocation("/WHS", desktop);
-            }
-            case "/WHS/MOD" -> {
-                return new ModifyWarehouse(null);
-            }
             case "/VEND" -> {
                 return new Locations("/VEND", desktop);
-            }
-            case "/VEND/F" -> {
-                return new FindLocation("/VEND", desktop);
             }
             case "/VEND/NEW" -> {
                 return new CreateLocation("/VEND", desktop, null);
@@ -566,26 +515,14 @@ public class Engine {
             case "/MTS" -> {
                 return new Materials(desktop);
             }
-            case "/MTS/F" -> {
-                return new FindMaterial(desktop);
-            }
             case "/MTS/NEW" -> {
                 return new CreateMaterial();
-            }
-            case "/MTS/MOD" -> {
-                return new ModifyMaterial();
             }
             case "/CMPS" -> {
                 return new Components(desktop);
             }
-            case "/CMPS/F" -> {
-                return new FindComponent(desktop);
-            }
             case "/CMPS/NEW" -> {
                 return new CreateComponent();
-            }
-            case "/CMPS/ARCHV" -> {
-                return new ArchiveComponent();
             }
             case "/VAS" -> {
                 return new ValueAddedServices();
@@ -602,26 +539,14 @@ public class Engine {
             case "/EMPS" -> {
                 return new Employees(desktop);
             }
-            case "/EMPS/F" -> {
-                return new FindEmployee(desktop);
-            }
             case "/EMPS/NEW" -> {
                 return new CreateEmployee(desktop);
-            }
-            case "/EMPS/MOD" -> {
-                return new ModifyEmployee(null); //TODO
             }
             case "/DPTS" -> {
                 return new Departments(desktop);
             }
-            case "/DPTS/F" -> {
-                return new FindDepartment(desktop);
-            }
             case "/DPTS/NEW" -> {
                 return new CreateDepartment(desktop);
-            }
-            case "/DPTS/MOD" -> {
-                return new ModifyDepartment();
             }
             case "/TMS" -> {
                 return new Teams();
@@ -629,23 +554,14 @@ public class Engine {
             case "/TMS/NEW" -> {
                 return new CreateTeam();
             }
-            case "/TMS/MOD" -> {
-                return new ModifyTeam();
-            }
             case "/USRS" -> {
                 return new Users(desktop);
             }
             case "/USRS/CHG_PSSWD" -> {
                 return new ChangeUserPassword();
             }
-            case "/USRS/F" -> {
-                return new FindUser(desktop);
-            }
             case "/USRS/NEW" -> {
                 return new CreateUser();
-            }
-            case "/USRS/MOD" -> {
-                return new ModifyUser(null);
             }
             case "/CNL/INV" -> {
                 return new org.Canal.UI.Views.Controllers.Inventory();
@@ -665,23 +581,11 @@ public class Engine {
             case "/CATS/NEW" -> {
                 return new CreateCatalog(null);
             }
-            case "/CATS/MOD" -> {
-                return new ModifyCatalog(null);
-            }
-            case "/CATS/F" -> {
-                return new FindCatalog(desktop);
-            }
             case "/ITS" -> {
                 return new Items(desktop);
             }
             case "/ITS/NEW" -> {
                 return new CreateItem(desktop);
-            }
-            case "/ITS/F" -> {
-                return new FindItem(desktop);
-            }
-            case "/ITS/MOD" -> {
-                return new ModifyItem();
             }
             case "/ORDS/PO" -> {
                 return new PurchaseOrders(desktop);
@@ -689,20 +593,11 @@ public class Engine {
             case "/ORDS/PO/NEW" -> {
                 return new CreatePurchaseOrder();
             }
-            case "/ORDS/PO/ARCHV" -> {
-                return new Archiver("/ORDS/PO");
-            }
-            case "/ORDS/PO/DEL" -> {
-                return new DeletePurchaseOrder();
-            }
             case "/ORDS/PO/AUTO_MK" -> {
                 return new AutoMakePurchaseOrders();
             }
             case "/ORDS/RCV" -> {
                 return new ReceiveOrder(Engine.getOrganization().getId(), desktop);
-            }
-            case "/ORDS/F", "/ORDS/PO/F" -> {
-                return new FindPurchaseOrder(desktop);
             }
             case "/ORDS/RTRN" -> {
                 return new ReturnOrder(desktop);
@@ -712,9 +607,6 @@ public class Engine {
             }
             case "/ORDS/PR/NEW" -> {
                 return new CreatePurchaseRequisition();
-            }
-            case "/ORDS/PR/F" -> {
-                return new FindPurchaseReq(desktop);
             }
             case "/ORDS/PR/AUTO_MK" -> {
                 return new AutoMakePurchaseRequisitions();
@@ -730,9 +622,6 @@ public class Engine {
             }
             case "/GR" -> {
                 return new GoodsReceipts(desktop);
-            }
-            case "/GR/F" -> {
-                return new FindGoodsReceipt(desktop);
             }
             case "/INV/MV/STO" -> {
                 return new CreateSTO();
@@ -751,15 +640,6 @@ public class Engine {
             }
             case "/NTS/NEW" -> {
                 return new CreateNote();
-            }
-            case "/NTS/MOD" -> {
-                return new ModifyNote();
-            }
-            case "/NTS/ARCHV" -> {
-                return new Archiver("/NTS");
-            }
-            case "/NTS/DEL" -> {
-                return new RemoveNote();
             }
             case "/MVMT/TSKS" -> {
                 return new TaskList(null, desktop);
@@ -801,7 +681,7 @@ public class Engine {
                 switch (t) {
                     case "ORGS" -> {
                         for (Location org : Engine.getLocations("ORGS")) {
-                            new OrgView(org, desktop);
+                            new LocationView(org, desktop);
                         }
                     }
                     case "AREAS" -> {
