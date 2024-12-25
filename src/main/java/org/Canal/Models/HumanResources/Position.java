@@ -6,7 +6,8 @@ public class Position {
     private String department; //Department ID
     private String name; //Position Name
     private String description; //Position Description
-    private String employee; //Employee ID of
+    private double compensation;
+    private boolean hourly;
 
     public String getId() {
         return id;
@@ -40,11 +41,19 @@ public class Position {
         this.description = description;
     }
 
-    public String getEmployee() {
-        return employee;
+    public double getCompensation() {
+        return compensation;
     }
 
-    public void setEmployee(String employee) {
-        this.employee = employee;
+    public void setCompensation(double compensation) {
+        this.compensation = compensation;
+    }
+
+    public boolean isHourly() {
+        return hourly;
+    }
+
+    public void setHourly(boolean hourly) {
+        this.hourly = hourly;
     }
 }

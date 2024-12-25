@@ -47,9 +47,9 @@ public class Locations extends LockeState implements RefreshListener {
         table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) { // Detect double click
+                if (e.getClickCount() == 2) {
                     JTable target = (JTable) e.getSource();
-                    int row = target.getSelectedRow(); // Get the clicked row
+                    int row = target.getSelectedRow();
                     if (row != -1) {
                         String value = String.valueOf(target.getValueAt(row, 1));
                         desktop.put(Engine.router(objexType + "/" + value, desktop));
@@ -64,23 +64,26 @@ public class Locations extends LockeState implements RefreshListener {
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV");
         IconButton importLocations = new IconButton("Import", "export", "Import as CSV");
-        IconButton createDc = new IconButton("New", "order", "Create a Location", objexType + "/NEW");
-        IconButton modifyDc = new IconButton("Modify", "modify", "Modify a Location", objexType + "/MOD");
-        IconButton archiveDc = new IconButton("Archive", "archive", "Archive a Location", objexType + "/ARCHV");
-        IconButton removeDc = new IconButton("Remove", "delete", "Delete a Location", objexType + "/DEL");
-        IconButton refresh = new IconButton("Refresh", "refresh", "Refresh Data");
+        IconButton createLocation = new IconButton("New", "order", "Create a Location", objexType + "/NEW");
+        IconButton modifyLocation = new IconButton("Modify", "modify", "Modify a Location", objexType + "/MOD");
+        IconButton archiveLocation = new IconButton("Archive", "archive", "Archive a Location", objexType + "/ARCHV");
+        IconButton removeLocation = new IconButton("Remove", "delete", "Delete a Location", objexType + "/DEL");
+        IconButton findLocation = new IconButton("Advanced Search", "find", "Find by Values", objexType + "/F");
+        IconButton refresh = new IconButton("", "refresh", "Refresh Data");
         JTextField filterValue = Elements.input("Search", 10);
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(importLocations);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(createDc);
+        tb.add(createLocation);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(modifyDc);
+        tb.add(modifyLocation);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(archiveDc);
+        tb.add(archiveLocation);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(removeDc);
+        tb.add(removeLocation);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(findLocation);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(refresh);
         tb.add(Box.createHorizontalStrut(5));
@@ -141,9 +144,9 @@ public class Locations extends LockeState implements RefreshListener {
         table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) { // Detect double click
+                if (e.getClickCount() == 2) {
                     JTable target = (JTable) e.getSource();
-                    int row = target.getSelectedRow(); // Get the clicked row
+                    int row = target.getSelectedRow();
                     if (row != -1) {
                         String value = String.valueOf(target.getValueAt(row, 1));
                         desktop.put(Engine.router(objexType + "/" + value, desktop));

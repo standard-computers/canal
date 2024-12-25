@@ -26,8 +26,8 @@ public class TimeClock extends LockeState {
         JPanel main = new JPanel(new GridLayout(1, 2));
         JPanel dayControl = new JPanel(new GridLayout(2, 1));
         dayControl.setBorder(new TitledBorder("Hello!"));
-        IconButton inForDay = new IconButton("In For Day", "in");
-        IconButton outForDay = new IconButton("Out For Day", "out");
+        IconButton inForDay = new IconButton("In For Day", "in", "");
+        IconButton outForDay = new IconButton("Out For Day", "out", "");
         dayControl.add(inForDay);
         dayControl.add(outForDay);
         inForDay.addMouseListener(new MouseAdapter() {
@@ -42,8 +42,8 @@ public class TimeClock extends LockeState {
         });
         JPanel breakControl = new JPanel(new GridLayout(2, 1));
         breakControl.setBorder(new TitledBorder("Break Time"));
-        IconButton outForBreak = new IconButton("Out For Break", "lunch");
-        IconButton inForBreak = new IconButton("In From Break", "in");
+        IconButton outForBreak = new IconButton("Out For Break", "lunch", "");
+        IconButton inForBreak = new IconButton("In From Break", "in", "");
         breakControl.add(outForBreak);
         breakControl.add(inForBreak);
         outForBreak.addMouseListener(new MouseAdapter() {

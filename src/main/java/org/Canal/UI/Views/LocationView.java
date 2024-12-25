@@ -41,15 +41,16 @@ public class LocationView extends LockeState implements RefreshListener {
         super(location.getId() + " – " + location.getName(), location.getType() + "/$", true, true, true, true);
         this.location = location;
         this.desktop = desktop;
-        setFrameIcon(new ImageIcon(LocationView.class.getResource("/icons/distribution_centers.png")));
+        setFrameIcon(new ImageIcon(LocationView.class.getResource("/icons/" + Engine.codex(location.getType().replace("/", ""), "icon") + ".png")));
         setLayout(new BorderLayout());
         JPanel tb = createToolBar();
         add(tb, BorderLayout.NORTH);
         JTabbedPane tabs = new JTabbedPane();
-        tabs.add("Inbound Deliveries", inboundDeliveries());
-        tabs.add("Outbound Deliveries", outboundDeliveries());
-        tabs.add("Open Tasks", openTasks());
-        tabs.add("Pending Tasks", pendingTasks());
+        tabs.addTab("Inbound Deliveries", new ImageIcon(LocationView.class.getResource("/icons/inbound.png")), inboundDeliveries());
+        tabs.addTab("Outbound Deliveries", new ImageIcon(LocationView.class.getResource("/icons/outbound.png")), outboundDeliveries());
+        tabs.addTab("Open Tasks", openTasks());
+        tabs.addTab("Pending Tasks", pendingTasks());
+        tabs.addTab("Events", events());
         dataTree = createTree();
         expandAllNodes(dataTree);
         dataTree.addMouseListener(new MouseAdapter() {
@@ -178,6 +179,12 @@ public class LocationView extends LockeState implements RefreshListener {
     }
 
     private JPanel pendingTasks(){
+        JPanel p = new JPanel(new BorderLayout());
+
+        return p;
+    }
+
+    private JPanel events(){
         JPanel p = new JPanel(new BorderLayout());
 
         return p;

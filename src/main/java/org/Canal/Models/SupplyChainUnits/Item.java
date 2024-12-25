@@ -25,6 +25,8 @@ public class Item extends Objex {
     private String heightUOM;
     private double weight;
     private String weightUOM;
+    private double initialVolume;
+    private String initialVolumeUOM;
     private double tax;
     private double exciseTax;
     private ArrayList<Item> components = new ArrayList<>();
@@ -179,6 +181,22 @@ public class Item extends Objex {
 
     public void setWeightUOM(String weightUOM) {
         this.weightUOM = weightUOM;
+    }
+
+    public double getInitialVolume() {
+        return initialVolume;
+    }
+
+    public void setInitialVolume(double initialVolume) {
+        this.initialVolume = initialVolume;
+    }
+
+    public String getInitialVolumeUOM() {
+        return initialVolumeUOM;
+    }
+
+    public void setInitialVolumeUOM(String initialVolumeUOM) {
+        this.initialVolumeUOM = initialVolumeUOM;
     }
 
     public double getTax() {

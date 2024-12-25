@@ -150,6 +150,10 @@ public class Location extends Objex {
         return null;
     }
 
+    public void removeDepartment(Department department) {
+        this.departments.remove(department);
+    }
+
     public void save(){
         File md = new File(Start.WINDOWS_SYSTEM_DIR + "\\.store\\" + type + "\\");
         File[] mdf = md.listFiles();

@@ -87,20 +87,18 @@ public class Selectables {
 
     public static Selectable carriers(){
         HashMap<String, String> carriers = new HashMap<>();
-        for(Location v : Engine.getLocations("TRANS/CRRS")){
-            carriers.put(v.getName(), v.getId());
+        for(Location carrier : Engine.getLocations("TRANS/CRRS")){
+            carriers.put(carrier.getName(), carrier.getId());
         }
         return new Selectable(carriers);
     }
 
     public static Selectable departments(){
         HashMap<String, String> departments = new HashMap<>();
-        for(Department org : Engine.getOrganization().getDepartments()){
-            departments.put(org.getId(), org.getId());
+        for(Department department : Engine.getOrganization().getDepartments()){
+            departments.put(department.getId() + " – " + department.getName(), department.getId());
         }
-        Selectable s =  new Selectable(departments);
-        s.editable();
-        return s;
+        return new Selectable(departments);
     }
 
     public static Selectable statusTypes(){
@@ -189,10 +187,6 @@ public class Selectables {
         Selectable uomField = new Selectable(statusTypes);
         uomField.editable();
         return uomField;
-    }
-
-    public static Selectable uoms(){
-        return uoms("FT");
     }
 
     public static Selectable countries() {

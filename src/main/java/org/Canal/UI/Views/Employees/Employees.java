@@ -29,6 +29,7 @@ public class Employees extends LockeState {
         JPanel holder = new JPanel(new BorderLayout());
         table = createTable();
         JScrollPane tableScrollPane = new JScrollPane(table);
+        tableScrollPane.setPreferredSize(new Dimension(800, 600));
         holder.add(Elements.header("Employees", SwingConstants.LEFT), BorderLayout.CENTER);
         holder.add(tb, BorderLayout.SOUTH);
         setLayout(new BorderLayout());
@@ -37,9 +38,9 @@ public class Employees extends LockeState {
         table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) { // Detect double click
+                if (e.getClickCount() == 2) {
                     JTable target = (JTable) e.getSource();
-                    int row = target.getSelectedRow(); // Get the clicked row
+                    int row = target.getSelectedRow();
                     if (row != -1) {
                         String value = String.valueOf(target.getValueAt(row, 1));
                         desktop.put(new EmployeeView(Engine.getEmployee(value)));
@@ -54,10 +55,23 @@ public class Employees extends LockeState {
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV", "");
         IconButton createEmployee = new IconButton("+ Employee", "order", "Create Employee", "/EMPS/NEW");
+        IconButton modifyEmployee = new IconButton("Modify", "modify", "Modify an Employee", "/EMPS/MOD");
+        IconButton archiveEmployee = new IconButton("Archive", "archive", "Archive an Employee", "/EMPS/ARCHV");
+        IconButton removeEmployee = new IconButton("Remove", "delete", "Delete an Employee", "/EMPS/DEL");
+        IconButton advancedFine = new IconButton("Advanced Find", "find", "Find by Values", "/EMPS/F");
         JTextField filterValue = Elements.input("Search", 10);
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(createEmployee);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(modifyEmployee);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(archiveEmployee);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(removeEmployee);
+        tb.add(removeEmployee);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(advancedFine);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(filterValue);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -72,9 +86,22 @@ public class Employees extends LockeState {
 
     private CustomTable createTable() {
         String[] columns = new String[]{
-            "ID", "Org", "Location", "Name",
-            "Supervisor", "Gender", "Line 1",
-            "City", "State", "Postal", "Country", "Status"
+            "ID",
+            "Org",
+            "Location",
+            "Name",
+            "Supervisor",
+            "Position",
+            "Gender",
+            "Line 1",
+            "Line 2",
+            "City",
+            "State",
+            "Postal",
+            "Country",
+            "Email",
+            "Phone",
+            "Status"
         };
         ArrayList<Object[]> data = new ArrayList<>();
         for (Employee employee : Engine.getEmployees()) {
@@ -84,12 +111,16 @@ public class Employees extends LockeState {
                     employee.getLocation(),
                     employee.getName(),
                     employee.getSupervisor(),
+                    employee.getPosition(),
                     employee.getGender(),
                     employee.getLine1(),
+                    employee.getLine2(),
                     employee.getCity(),
                     employee.getState(),
                     employee.getPostal(),
                     employee.getCountry(),
+                    employee.getEmail(),
+                    employee.getPhone(),
                     employee.getStatus()
             });
         }

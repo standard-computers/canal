@@ -52,13 +52,13 @@ public class CreateComponent extends LockeState {
         }
         selectedVendor = new Selectable(availableVendors);
         selectedVendor.editable();
-        materialIdField = new JTextField("XI0" + (1000 + (Engine.getItems().size() + 1)));
+        materialIdField = Elements.input("XI0" + (1000 + (Engine.getItems().size() + 1)));
         orgIdField = new Copiable(Engine.getOrganization().getId());
-        materialNameField = new JTextField("Black Shirt");
-        materialPriceField = new JTextField("1.00");
-        isBatched = new JCheckBox("Item expires");
-        isSkud = new JCheckBox("Item has unique SKU");
-        upc = new JTextField();
+        materialNameField = Elements.input("Black Shirt");
+        materialPriceField = Elements.input("1.00");
+        isBatched = new JCheckBox("Component expires");
+        isSkud = new JCheckBox("Component has unique SKU");
+        upc = Elements.input();
         f1.addInput(new Label("*Component ID", new Color(240, 240, 240)), materialIdField);
         f1.addInput(new Label("*Org ID", new Color(240, 240, 240)), orgIdField);
         f1.addInput(new Label("Component Name", Constants.colors[0]), materialNameField);
@@ -71,16 +71,16 @@ public class CreateComponent extends LockeState {
         itemLength = new UOMField();
         itemHeight = new UOMField();
         itemWeight = new UOMField();
-        tax = new JTextField("0");
-        exciseTax = new JTextField("0");
-        materialColor = new JTextField("Black");
+        tax = Elements.input("0");
+        exciseTax = Elements.input("0");
+        materialColor = Elements.input("Black");
         f2.addInput(new Label("Color", Constants.colors[7]), materialColor);
         f2.addInput(new Label("Width", Constants.colors[8]), itemWidth);
         f2.addInput(new Label("Length", Constants.colors[9]), itemLength);
         f2.addInput(new Label("Height", Constants.colors[10]), itemHeight);
         f2.addInput(new Label("Weight", Constants.colors[1]), itemWeight);
-        f2.addInput(new Label("Tax", Constants.colors[1]), tax);
-        f2.addInput(new Label("Excise Tax", Constants.colors[1]), exciseTax);
+        f2.addInput(new Label("Tax (0.05 as 5%)", Constants.colors[1]), tax);
+        f2.addInput(new Label("Excise Tax (0.05 as 5%)", Constants.colors[1]), exciseTax);
         JPanel biPanel = new JPanel(new GridLayout(1, 2));
         f1.setBorder(new EmptyBorder(5, 5, 5, 5));
         f2.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -96,14 +96,18 @@ public class CreateComponent extends LockeState {
     private JPanel actionsBar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-        IconButton saveitem = new IconButton("", "start", "Commit Item");
+        IconButton review = new IconButton("Review", "review", "Review for warnings or potential errors");
+        IconButton saveitem = new IconButton("Create Component", "start", "Commit Item");
         saveitem.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 commitItem();
             }
         });
+        tb.add(review);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(saveitem);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
         return tb;
     }
 
@@ -124,8 +128,8 @@ public class CreateComponent extends LockeState {
         newItem.setWeight(Double.parseDouble(itemWeight.getValue()));
         newItem.setTax(Double.parseDouble(itemWeight.getValue()));
         newItem.setExciseTax(Double.parseDouble(exciseTax.getText()));
-        Pipe.save("/MTS", newItem);
+        Pipe.save("/CMPS", newItem);
         dispose();
-        JOptionPane.showMessageDialog(this, "Material has been created");
+        JOptionPane.showMessageDialog(this, "Component has been created");
     }
 }

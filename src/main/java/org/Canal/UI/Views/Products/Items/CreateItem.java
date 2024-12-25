@@ -77,8 +77,8 @@ public class CreateItem extends LockeState implements Includer {
         f2.addInput(new Label("Length", UIManager.getColor("Label.foreground")), itemLength);
         f2.addInput(new Label("Height", UIManager.getColor("Label.foreground")), itemHeight);
         f2.addInput(new Label("Weight", UIManager.getColor("Label.foreground")), itemWeight);
-        f2.addInput(new Label("Tax", UIManager.getColor("Label.foreground")), tax);
-        f2.addInput(new Label("Excise Tax", UIManager.getColor("Label.foreground")), exciseTax);
+        f2.addInput(new Label("Tax (0.05 as 5%)", UIManager.getColor("Label.foreground")), tax);
+        f2.addInput(new Label("Excise Tax (0.05 as 5%)", UIManager.getColor("Label.foreground")), exciseTax);
         JPanel biPanel = new JPanel(new GridLayout(1, 2));
         f1.setBorder(new EmptyBorder(5, 5, 5, 5));
         f2.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -127,6 +127,7 @@ public class CreateItem extends LockeState implements Includer {
     private JPanel actionsBar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        IconButton review = new IconButton("Review", "review", "Review for warnings or potential errors");
         IconButton materials = new IconButton("+ Materials", "areas", "Add an area cost center");
         IconButton components = new IconButton("+ Components", "component", "Print labels for properties");
         IconButton addPriceVariance = new IconButton("+ Price Var.", "autoprice", "");
@@ -153,6 +154,8 @@ public class CreateItem extends LockeState implements Includer {
                 commitItem();
             }
         });
+        tb.add(review);
+        tb.add(Box.createHorizontalStrut(5));
         tb.add(materials);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(components);

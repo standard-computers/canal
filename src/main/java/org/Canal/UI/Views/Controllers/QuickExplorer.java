@@ -1,6 +1,7 @@
 package org.Canal.UI.Views.Controllers;
 
 import org.Canal.UI.Elements.DesktopInterface;
+import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.UI.Views.LocationView;
 import org.Canal.Utils.DesktopState;
@@ -30,7 +31,9 @@ public class QuickExplorer extends JFrame implements DesktopState {
         splitPane.setDividerLocation(200);
         splitPane.setResizeWeight(0.2);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-        add(splitPane);
+        setLayout(new BorderLayout());
+        add(toolbar(), BorderLayout.NORTH);
+        add(splitPane, BorderLayout.CENTER);
         setVisible(true);
         if(Engine.assignedUser == null){
             putCenter(new Login(false));
@@ -40,6 +43,15 @@ public class QuickExplorer extends JFrame implements DesktopState {
             put(Engine.router("/USRS/NEW", this));
         }
         installShortcuts();
+    }
+
+    private JPanel toolbar() {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        IconButton activity = new IconButton("", "Activity", "Recent Activity");
+        IconButton inbox = new IconButton("", "inbox", "Message Inbox");
+        panel.add(activity);
+        panel.add(inbox);
+        return panel;
     }
 
     private void installShortcuts() {

@@ -7,11 +7,15 @@ public class UOMField extends JPanel {
     JTextField textField;
     Selectable uom;
 
-    public UOMField() {
+    public UOMField(String preset) {
         textField = Elements.input("0.00", 13);
-        uom = Selectables.uoms();
+        uom = Selectables.uoms(preset);
         add(textField);
         add(uom);
+    }
+
+    public UOMField(){
+        this("IN");
     }
 
     public String getValue(){

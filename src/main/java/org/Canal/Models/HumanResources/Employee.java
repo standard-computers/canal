@@ -9,6 +9,7 @@ public class Employee {
     private String location; //Location ID if any
     private String name; //Employee full name, for now
     private String supervisor; //Employee ID of Supervisor
+    private String position;
     private String startDate; //Employee employment date
     private String endDate; //Employee termination date
     private String createDate;
@@ -65,6 +66,14 @@ public class Employee {
 
     public void setSupervisor(String supervisor) {
         this.supervisor = supervisor;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
     }
 
     public String getStartDate() {

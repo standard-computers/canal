@@ -8,6 +8,7 @@ import org.Canal.Models.SupplyChainUnits.*;
 import org.Canal.UI.Views.*;
 import org.Canal.UI.Views.Areas.*;
 import org.Canal.UI.Views.Bins.*;
+import org.Canal.UI.Views.Departments.DeleteDepartment;
 import org.Canal.UI.Views.Finance.PurchaseOrders.*;
 import org.Canal.UI.Views.Products.Components.Components;
 import org.Canal.UI.Views.Products.Components.CreateComponent;
@@ -421,15 +422,6 @@ public class Engine {
         if (!transactionCode.startsWith("/")) {
             transactionCode = "/" + transactionCode;
         }
-        if(transactionCode.endsWith("/F")){
-            return new Finder(transactionCode.replace("/F", ""), desktop);
-        }else if(transactionCode.endsWith("/MOD")){
-            return new Modifier(transactionCode.replace("/F", ""));
-        }else if(transactionCode.endsWith("/ARCHV")){
-            return new Archiver(transactionCode.replace("/F", ""));
-        }else if(transactionCode.endsWith("/DEL")){
-            return new Deleter(transactionCode.replace("/F", ""));
-        }
         switch (transactionCode) {
             case "/ORGS" -> {
                 return new Locations("/ORGS", desktop);
@@ -498,7 +490,7 @@ public class Engine {
                 return new Trucks();
             }
             case "/TRANS/TRCKS/NEW" -> {
-                return new CreateTruck();
+                return new CreateTruck(desktop);
             }
             case "/WHS" -> {
                 return new Locations("/WHS", desktop);
@@ -547,6 +539,9 @@ public class Engine {
             }
             case "/DPTS/NEW" -> {
                 return new CreateDepartment(desktop);
+            }
+            case "/DPTS/DEL" -> {
+                return new DeleteDepartment();
             }
             case "/TMS" -> {
                 return new Teams();
@@ -674,104 +669,112 @@ public class Engine {
             case "/CLEAR_DSK" -> desktop.clean();
             case "/CLOSE_DSK" -> desktop.purge();
             case "/CNL/EXIT" -> System.exit(-1);
-            default -> {
-                String[] chs = transactionCode.split("/");
-                String t = chs[1];
-                String oid = chs[2];
-                switch (t) {
-                    case "ORGS" -> {
-                        for (Location org : Engine.getLocations("ORGS")) {
-                            new LocationView(org, desktop);
-                        }
-                    }
-                    case "AREAS" -> {
-                        for(Area l : Engine.getAreas()){
-                            if(l.getId().equals(oid)){
+        }
+        if(transactionCode.endsWith("/F")){
+            return new Finder(transactionCode.replace("/F", ""), desktop);
+        }else if(transactionCode.endsWith("/MOD")){
+            return new Modifier(transactionCode.replace("/F", ""));
+        }else if(transactionCode.endsWith("/ARCHV")){
+            return new Archiver(transactionCode.replace("/F", ""));
+        }else if(transactionCode.endsWith("/DEL")){
+            return new Deleter(transactionCode.replace("/F", ""));
+        }
 
-                            }
-                        }
-                    }
-                    case "CCS" -> {
-                        for(Location l : Engine.getLocations("CCS")){
-                            if(l.getId().equals(oid)){
-                                return new LocationView(l, desktop);
-                            }
-                        }
-                    }
-                    case "CSTS" -> {
-                        for(Location l : Engine.getLocations("CSTS")){
-                            if(l.getId().equals(oid)){
-                                return new CustomerView(l);
-                            }
-                        }
-                    }
-                    case "DCSS" -> {
-                        for(Location l : Engine.getLocations("DCSS")){
-                            if(l.getId().equals(oid)){
-                                return new LocationView(l, desktop);
-                            }
-                        }
-                    }
-                    case "VEND" -> {
-                        for(Location l : Engine.getLocations("VEND")){
-                            if(l.getId().equals(oid)){
-                                return new LocationView(l, desktop);
-                            }
-                        }
-                    }
-                    case "ITS" -> {
-                        Item i = Engine.getItem(oid);
-                        if(i != null){
-                            return new ItemView(i);
-                        }
-                    }
-                    case "USRS" -> {
-                        User u = Engine.getUser(oid);
-                        if(u != null){
-                            return new UserView(desktop, u);
-                        }
-                    }
-                    case "EMPS" -> {
-                        for(Employee e : Engine.getEmployees()){
-                            if(e.getId().equals(oid)){
-                                return new EmployeeView(e);
-                            }
-                        }
-                    }
-                    case "MTS" -> {
-                        return new Materials(desktop);
-                    }
-                    case "LGS" -> {
-                        for(Ledger l : getLedgers()){
-                            if(l.getId().equals(oid)){
-                                return new LedgerView(l, desktop);
-                            }
-                        }
-                        return new Ledgers(desktop);
-                    }
-                    case "WHS" -> {
-                        for(Location l : getLocations("WHS")){
-                            if(l.getId().equals(oid)){
-                                return new LocationView(l, desktop);
-                            }
-                        }
-                        return new Locations("/WHS", desktop);
-                    }
-                    case "ORDS" -> {
-                        for(PurchaseOrder l : Engine.orderProcessing.getPurchaseOrder()){
-                            if(l.getOrderId().equals(oid)){
-                                return new PurchaseOrderView(l);
-                            }
-                        }
-                        return new PurchaseOrders(desktop);
-                    }
-                    case "INV" -> {
-                        return new org.Canal.UI.Views.Controllers.Inventory();
-                    }
-                    case "CATS" -> {
-                        return new Catalogs(desktop);
+        String[] chs = transactionCode.split("/");
+        String t = chs[1];
+        String oid = chs[2];
+        switch (t) {
+            case "ORGS" -> {
+                for (Location org : Engine.getLocations("ORGS")) {
+                    new LocationView(org, desktop);
+                }
+            }
+            case "AREAS" -> {
+                for(Area l : Engine.getAreas()){
+                    if(l.getId().equals(oid)){
+
                     }
                 }
+            }
+            case "CCS" -> {
+                for(Location l : Engine.getLocations("CCS")){
+                    if(l.getId().equals(oid)){
+                        return new LocationView(l, desktop);
+                    }
+                }
+            }
+            case "CSTS" -> {
+                for(Location l : Engine.getLocations("CSTS")){
+                    if(l.getId().equals(oid)){
+                        return new CustomerView(l);
+                    }
+                }
+            }
+            case "DCSS" -> {
+                for(Location l : Engine.getLocations("DCSS")){
+                    if(l.getId().equals(oid)){
+                        return new LocationView(l, desktop);
+                    }
+                }
+            }
+            case "VEND" -> {
+                for(Location l : Engine.getLocations("VEND")){
+                    if(l.getId().equals(oid)){
+                        return new LocationView(l, desktop);
+                    }
+                }
+            }
+            case "ITS" -> {
+                Item i = Engine.getItem(oid);
+                if(i != null){
+                    return new ItemView(i);
+                }
+            }
+            case "USRS" -> {
+                User u = Engine.getUser(oid);
+                if(u != null){
+                    return new UserView(desktop, u);
+                }
+            }
+            case "EMPS" -> {
+                for(Employee e : Engine.getEmployees()){
+                    if(e.getId().equals(oid)){
+                        return new EmployeeView(e);
+                    }
+                }
+            }
+            case "MTS" -> {
+                return new Materials(desktop);
+            }
+            case "LGS" -> {
+                for(Ledger l : getLedgers()){
+                    if(l.getId().equals(oid)){
+                        return new LedgerView(l, desktop);
+                    }
+                }
+                return new Ledgers(desktop);
+            }
+            case "WHS" -> {
+                for(Location l : getLocations("WHS")){
+                    if(l.getId().equals(oid)){
+                        return new LocationView(l, desktop);
+                    }
+                }
+                return new Locations("/WHS", desktop);
+            }
+            case "ORDS" -> {
+                for(PurchaseOrder l : Engine.orderProcessing.getPurchaseOrder()){
+                    if(l.getOrderId().equals(oid)){
+                        return new PurchaseOrderView(l);
+                    }
+                }
+                return new PurchaseOrders(desktop);
+            }
+            case "INV" -> {
+                return new org.Canal.UI.Views.Controllers.Inventory();
+            }
+            case "CATS" -> {
+                return new Catalogs(desktop);
             }
         }
         return null;

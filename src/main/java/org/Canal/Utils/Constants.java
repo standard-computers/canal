@@ -278,6 +278,13 @@ public class Constants {
                                 new Locke("Archive Carrier", getIcon("archive"), "/TRANS/CRRS/ARCHV", null),
                                 new Locke("Remove Carrier", getIcon("delete"), "/TRANS/CRRS/DEL", null),
                         }),
+                        new Locke("Trucks", getIcon("trucks"), "/TRANS/TRCKS", new Locke[]{
+                                new Locke("Find Truck", getIcon("find"), "/TRANS/TRCKS/F", null),
+                                new Locke("Create Truck", getIcon("create"), "/TRANS/TRCKS/NEW", null),
+                                new Locke("Modify Truck", getIcon("modify"), "/TRANS/TRCKS/MOD", null),
+                                new Locke("Archive Truck", getIcon("archive"), "/TRANS/TRCKS/ARCHV", null),
+                                new Locke("Remove Truck", getIcon("delete"), "/TRANS/TRCKS/DEL", null),
+                        }),
                         new Locke("Inbound Deliveries", getIcon("inbound"), "/TRANS/IDO", new Locke[]{
                                 new Locke("Find Inbound Delivery", getIcon("find"), "/TRANS/IDO/F", null),
                                 new Locke("Create Inbound Delivery", getIcon("create"), "/TRANS/IDO/NEW", null),

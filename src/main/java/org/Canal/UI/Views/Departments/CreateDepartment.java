@@ -55,6 +55,7 @@ public class CreateDepartment extends LockeState {
                 selectedOrg.save();
                 dispose();
                 JOptionPane.showMessageDialog(null, "Department Created in ORG " + orgs.getSelectedValue());
+                Engine.router("/DPTS/" + deptIdField.getText(), desktop);
             }
         });
     }
