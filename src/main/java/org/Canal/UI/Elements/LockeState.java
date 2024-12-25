@@ -2,6 +2,7 @@ package org.Canal.UI.Elements;
 
 
 import javax.swing.*;
+import java.util.ArrayList;
 
 public class LockeState extends JInternalFrame {
 
@@ -10,6 +11,7 @@ public class LockeState extends JInternalFrame {
     private boolean duplicated = false; //Can have more than one of these open
     private boolean savable = false; //This Locke state can be saved
     private int[] position = new int[2];
+    private ArrayList<String[]> queue = new ArrayList<>();
 
     public LockeState(String title, String locke, boolean resizable, boolean closable, boolean maximizable, boolean iconifiable) {
         super(title, resizable, closable, maximizable, iconifiable);
@@ -55,5 +57,17 @@ public class LockeState extends JInternalFrame {
 
     public void setPosition(int[] position) {
         this.position = position;
+    }
+
+    public ArrayList<String[]> getQueue() {
+        return queue;
+    }
+
+    public void setQueue(ArrayList<String[]> queue) {
+        this.queue = queue;
+    }
+
+    public void addToQueue(String[] message) {
+        queue.add(message);
     }
 }

@@ -14,6 +14,7 @@ public class Delivery extends Objex {
     private String salesOrder;
     private String purchaseOrder; //PO delivery is a result of
     private String expectedDelivery; //When it should arrive, could differ from PO
+    private String origin;
     private String destination; //Location ID
     private Area destinationArea; //Area this will arrive to
     private Bin destinationDoor; //Door this will arrive to
@@ -51,6 +52,14 @@ public class Delivery extends Objex {
 
     public void setExpectedDelivery(String expectedDelivery) {
         this.expectedDelivery = expectedDelivery;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
     }
 
     public String getDestination() {
@@ -106,7 +115,7 @@ public class Delivery extends Objex {
         File[] mdf = md.listFiles();
         if (mdf != null) {
             for (File file : mdf) {
-                if (file.getPath().endsWith(".lgs")) {
+                if (file.getPath().endsWith("." + type.toLowerCase())) {
                     Ledger fl = Json.load(file.getPath(), Ledger.class);
                     if (fl.getId().equals(id)) {
                         Json.save(file.getPath(), this);

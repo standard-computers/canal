@@ -49,7 +49,11 @@ public class InventoryView extends LockeState implements RefreshListener {
     }
 
     private CustomTable createTable() {
-        String[] columns = new String[]{"Location", "Type", "HU", "ID", "Name", "Org. Qty.", "Qty.", "Price", "Value", "Area", "Bin", "Receipt", "Status"};
+        String[] columns = new String[]{
+                "Location", "Type", "HU", "ID", "Name", "Org. Qty.",
+                "Qty.", "Total Weight", "wUOM", "Price", "Value",
+                "Area", "Bin", "Receipt", "Status",
+        };
         ArrayList<Object[]> stks = new ArrayList<>();
         for (StockLine sl : Engine.getInventory(location).getStockLines()) {
             Item i = Engine.getItem(sl.getId());
@@ -63,6 +67,8 @@ public class InventoryView extends LockeState implements RefreshListener {
                     String.valueOf(sl.getQuantity()),
                     Constants.formatUSD(i.getPrice()),
                     Constants.formatUSD(i.getPrice() * sl.getQuantity()),
+                    String.valueOf(sl.getQuantity() * i.getWeight()),
+                    i.getWeightUOM(),
                     sl.getArea(),
                     sl.getBin(),
                     sl.getReceipt(),

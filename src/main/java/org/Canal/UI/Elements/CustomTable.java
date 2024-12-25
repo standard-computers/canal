@@ -237,13 +237,8 @@ public class CustomTable extends JTable {
         if (columnIndex < 0 || columnIndex >= getColumnCount()) {
             throw new IllegalArgumentException("Invalid column index: " + columnIndex);
         }
-
         TableColumn column = getColumnModel().getColumn(columnIndex);
-
-        // Apply the custom renderer to always show a JTextField
         column.setCellRenderer(new TextFieldRenderer());
-
-        // Apply the custom editor to allow editing directly
         column.setCellEditor(new TextFieldEditor());
     }
 }

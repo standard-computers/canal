@@ -147,7 +147,7 @@ public class PurchaseOrder extends Objex {
         File[] mdf = md.listFiles();
         if (mdf != null) {
             for (File file : mdf) {
-                if (file.getPath().endsWith(".ords")) {
+                if (file.getPath().endsWith(".po")) {
                     PurchaseOrder forg = Json.load(file.getPath(), PurchaseOrder.class);
                     if (forg.getOrderId().equals(getOrderId())) {
                         Json.save(file.getPath(), this);

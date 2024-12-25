@@ -8,6 +8,7 @@ public class Codex {
 
     public Codex() {
         variables.put("/", new HashMap<String, Object>() {{
+            put("minumim_build", 1); //What Min build version should clients have?
             put("currency_symbol", "$");
             put("default_currency", "USD");
             put("exit_auto_logout", false);

@@ -373,7 +373,7 @@ public class Engine {
         for (File file : d) {
             if (!file.isDirectory()) {
                 Delivery a = Json.load(file.getPath(), Delivery.class);
-                if(a.getDestination().equals(destination)){
+                if(a.getOrigin().equals(destination)){
                     deliveries.add(a);
                 }
             }

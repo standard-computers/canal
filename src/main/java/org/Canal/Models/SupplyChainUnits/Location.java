@@ -159,7 +159,6 @@ public class Location extends Objex {
                     Location forg = Json.load(file.getPath(), Location.class);
                     if (forg.getId().equals(this.getId())) {
                         Json.save(file.getPath(), this);
-                        break;
                     }
                 }
             }

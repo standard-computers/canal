@@ -44,11 +44,10 @@ public class CreatePurchaseOrder extends LockeState {
     private JLabel netValue;
     private JLabel taxAmount;
     private JLabel totalAmount;
-    private Selectable availablePrs, selectVendor, selectBillTo, selectShipTo, organizations, carriers;
+    private Selectable availablePrs, selectVendor, selectBillTo, selectShipTo, organizations, carriers, buyerObjexType, ledgerId;
     private Copiable orderId;
     private DatePicker expectedDelivery;
     private JCheckBox commitToLedger, makeSalesOrder, createDelivery;
-    private JTextField buyerObjexType, ledgerId;
 
     public CreatePurchaseOrder() {
         super("Create Purchase Order", "/ORDS/PO/NEW", false, true, false, true);
@@ -93,7 +92,7 @@ public class CreatePurchaseOrder extends LockeState {
                     JOptionPane.showMessageDialog(null, "Selected PO is not for this vendor.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                int ccc = JOptionPane.showConfirmDialog(null, "Confirm order?", "You have selected the Org ID as the charge account. Are you sure you want to charge the corp account?",JOptionPane.YES_NO_CANCEL_OPTION);
+                int ccc = JOptionPane.showConfirmDialog(null, "You have selected the Org ID as the charge account. Are you sure you want to charge the corp account?", "Confirm order?", JOptionPane.YES_NO_CANCEL_OPTION);
                 if(ccc == JOptionPane.YES_OPTION){
                     newOrder.setOwner((Engine.getAssignedUser().getId()));
                     newOrder.setOrderId(orderId.value());
@@ -142,13 +141,13 @@ public class CreatePurchaseOrder extends LockeState {
                     }
 
                     if(commitToLedger.isSelected()){
-                        Ledger l = Engine.getLedger(ledgerId.getText().trim());
+                        Ledger l = Engine.getLedger(ledgerId.getSelectedValue());
                         if(l != null){
                             Transaction t = new Transaction();
                             t.setId(Constants.generateId(5));
                             t.setOwner(Engine.getAssignedUser().getId());
                             t.setLocke(getLocke());
-                            t.setObjex(buyerObjexType.getText().trim());
+                            t.setObjex(buyerObjexType.getSelectedValue());
                             t.setLocation(selectBillTo.getSelectedValue());
                             t.setReference(orderId.value());
                             t.setAmount(-1 * Double.parseDouble(model.getTotalPrice()));
@@ -287,10 +286,10 @@ public class CreatePurchaseOrder extends LockeState {
             commitToLedger.setSelected(true);
         }
         organizations = Selectables.organizations();
-        buyerObjexType = Elements.input();
-        ledgerId = Elements.input();
+        buyerObjexType = Selectables.locationObjex("/DCSS");
+        ledgerId = Selectables.ledgers();
         f.addInput(new Label("Commit to Ledger", UIManager.getColor("Label.foreground")), commitToLedger);
-        f.addInput(new Label("Trans. Type", UIManager.getColor("Label.foreground")), buyerObjexType);
+        f.addInput(new Label("Trans. Type (Receiving location type)", UIManager.getColor("Label.foreground")), buyerObjexType);
         f.addInput(new Label("Purchasing Org.", UIManager.getColor("Label.foreground")), organizations);
         f.addInput(new Label("Ledger", UIManager.getColor("Label.foreground")), ledgerId);
         return f;

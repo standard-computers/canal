@@ -3,7 +3,10 @@ package org.Canal.Models.BusinessUnits;
 import org.Canal.Models.SupplyChainUnits.MaterialMovement;
 import org.Canal.Models.SupplyChainUnits.StockLine;
 import org.Canal.Start;
+import org.Canal.Utils.Constants;
+import org.Canal.Utils.Engine;
 import org.Canal.Utils.Json;
+import org.Canal.Utils.LockeStatus;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -52,6 +55,61 @@ public class Inventory {
 
     public void addMaterialMovement(MaterialMovement materialMovement) {
         this.materialMovements.add(materialMovement);
+    }
+
+    public boolean inStock(String itemId) {
+        for(StockLine stockLine : stockLines) {
+            if(stockLine.getId().equals(itemId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public double getStock(String itemId) {
+        for(StockLine stockLine : stockLines) {
+            if(stockLine.getId().equals(itemId)) {
+                return stockLine.getQuantity();
+            }
+        }
+        return 0.0;
+    }
+
+    public StockLine getStockLine(String itemId) {
+        for(StockLine stockLine : stockLines) {
+            if(stockLine.getId().equals(itemId)) {
+                return stockLine;
+            }
+        }
+        return null;
+    }
+
+    public void goodsIssue(StockLine stockLine, double quantity) {
+        for (StockLine sl : stockLines) {
+            if (sl.equals(stockLine)) { // Assuming equals() is properly overridden
+                stockLine.setQuantity(stockLine.getQuantity() - quantity);
+                if(sl.getQuantity() == 0) {
+                    stockLines.remove(sl);
+                }
+                MaterialMovement nmm = new MaterialMovement();
+                nmm.setObjex(stockLine.getObjex());
+                nmm.setUser(Engine.getAssignedUser().getId());
+                nmm.setSourceHu(stockLine.getHu());
+                nmm.setDestinationBin("OUTBOUND");
+                nmm.setDestinationHu("NO_HU");
+                nmm.setTimestamp(Constants.now());
+                nmm.setType("Goods Issue");
+                nmm.setStatus(LockeStatus.COMPLETED);
+                materialMovements.add(nmm);
+//                if (stockLine.getQuantity() >= quantity) {
+//                } else {
+//                    System.out.println("Not enough stock to issue the requested quantity.");
+//                }
+                save();
+                return;
+            }
+        }
+        System.out.println("Stock line not found.");
     }
 
     public void save(){

@@ -1,6 +1,7 @@
 package org.Canal.UI.Views.Distribution.InboundDeliveryOrders;
 
-import org.Canal.Models.BusinessUnits.PurchaseOrder;
+import org.Canal.Models.SupplyChainUnits.Delivery;
+import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
@@ -9,6 +10,7 @@ import org.Canal.UI.Views.Finance.PurchaseOrders.CreatePurchaseOrder;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
+import org.Canal.Utils.LockeStatus;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,15 +19,18 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 /**
- * /DIST/IBD
+ * /TRANS/IBD
  */
 public class InboundDeliveries extends LockeState {
 
-    private JTable table;
+    private CustomTable table;
     private DesktopState desktop;
 
     public InboundDeliveries(DesktopState desktop) {
-        super("Inbound Deliveries", "/", false, true, false, true);
+
+        super("Inbound Deliveries", "/TRANS/IDO", false, true, false, true);
+        setFrameIcon(new ImageIcon(InboundDeliveries.class.getResource("/icons/inbound.png")));
+
         this.desktop = desktop;
         JPanel tb = createToolBar();
         JPanel holder = new JPanel(new BorderLayout());
@@ -80,30 +85,48 @@ public class InboundDeliveries extends LockeState {
         return tb;
     }
 
-    private JTable createTable() {
-        String[] columns = new String[]{"ID", "Owner", "Supplier", "Ship To", "Bill To", "Sold To", "Customer", "Status"};
-        ArrayList<String[]> pos = new ArrayList<>();
-        for (PurchaseOrder po : Engine.orderProcessing.getPurchaseOrder()) {
-            pos.add(new String[]{
-                    po.getOrderId(),
-                    po.getOwner(),
-                    po.getVendor(),
-                    po.getShipTo(),
-                    po.getBillTo(),
-                    po.getSoldTo(),
-                    po.getCustomer(),
-                    String.valueOf(po.getStatus())
-            });
+    private CustomTable createTable() {
+        String[] columns = new String[]{
+                "ID",
+                "Description",
+                "Type",
+                "Sales Order",
+                "Pur. Order",
+                "Exp. Delivery",
+                "Origin",
+                "Destination",
+                "Destination Name",
+                "Dest. Area",
+                "Dest. Door",
+                "Value",
+                "Truck ID",
+                "Pallet Cnt.",
+                "Status",
+                "Created"
+        };
+        ArrayList<Object[]> data = new ArrayList<>();
+        for (Delivery delivery : Engine.getInboundDeliveries()) {
+            if(!delivery.getStatus().equals(LockeStatus.DELIVERED)) {
+                data.add(new Object[]{
+                        delivery.getId(),
+                        delivery.getName(),
+                        delivery.getType(),
+                        delivery.getSalesOrder(),
+                        delivery.getPurchaseOrder(),
+                        delivery.getExpectedDelivery(),
+                        delivery.getOrigin(),
+                        delivery.getDestination(),
+                        Engine.getLocation(delivery.getDestination(), "CCS").getName(),
+                        delivery.getDestinationArea(),
+                        delivery.getDestinationDoor(),
+                        delivery.getTotal(),
+                        "",
+                        delivery.getPallets().size(),
+                        delivery.getStatus(),
+                        delivery.getCreated()
+                });
+            }
         }
-        String[][] data = new String[pos.size()][columns.length];
-        for (int i = 0; i < pos.size(); i++) {
-            data[i] = pos.get(i);
-        }
-        JTable table = new JTable(data, columns);
-        table.setCellSelectionEnabled(true);
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        Engine.adjustColumnWidths(table);
-        return table;
+        return new CustomTable(columns, data);
     }
 }
