@@ -48,7 +48,7 @@ public class ASNList extends LockeState {
         IconButton archivePo = new IconButton("Archive", "archive", "Archive PO, removes");
         IconButton label = new IconButton("Barcodes", "label", "Print labels for org properties");
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(Elements.h3("ASNs", Constants.colors[9]));
+        tb.add(Elements.h3("ASNs"));
         tb.add(Box.createHorizontalStrut(5));
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));

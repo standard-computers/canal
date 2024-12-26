@@ -12,6 +12,8 @@ import org.Canal.Utils.RefreshListener;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -68,9 +70,8 @@ public class Locations extends LockeState implements RefreshListener {
         IconButton modifyLocation = new IconButton("Modify", "modify", "Modify a Location", objexType + "/MOD");
         IconButton archiveLocation = new IconButton("Archive", "archive", "Archive a Location", objexType + "/ARCHV");
         IconButton removeLocation = new IconButton("Remove", "delete", "Delete a Location", objexType + "/DEL");
-        IconButton findLocation = new IconButton("Advanced Search", "find", "Find by Values", objexType + "/F");
+        IconButton findLocation = new IconButton("Find", "find", "Find by Values", objexType + "/F");
         IconButton refresh = new IconButton("", "refresh", "Refresh Data");
-        JTextField filterValue = Elements.input("Search", 10);
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(importLocations);
@@ -86,9 +87,7 @@ public class Locations extends LockeState implements RefreshListener {
         tb.add(findLocation);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(refresh);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(filterValue);
-        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
+        tb.setBorder(new EmptyBorder(0, 5, 0, 5));
         export.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -107,6 +106,20 @@ public class Locations extends LockeState implements RefreshListener {
             public void mouseClicked(MouseEvent e) {
                 onRefresh();
             }
+        });
+        super.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {}
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.isControlDown() && e.getKeyCode() == KeyEvent.VK_F) {
+                    findLocation.doClick();
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {}
         });
         return tb;
     }

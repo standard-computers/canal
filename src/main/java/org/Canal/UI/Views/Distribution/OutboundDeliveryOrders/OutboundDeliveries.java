@@ -7,7 +7,6 @@ import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.UI.Views.Controllers.CheckboxBarcodeFrame;
 import org.Canal.UI.Views.Finance.PurchaseOrders.CreatePurchaseOrder;
-import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.LockeStatus;
@@ -52,7 +51,7 @@ public class OutboundDeliveries extends LockeState {
         IconButton archivePo = new IconButton("Archive", "archive", "Archive PO, removes");
         IconButton label = new IconButton("Barcodes", "label", "Print labels for org properties");
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(Elements.h3("Outbound Deliveries", Constants.colors[9]));
+        tb.add(Elements.h3("Outbound Deliveries"));
         tb.add(Box.createHorizontalStrut(5));
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));

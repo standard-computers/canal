@@ -197,7 +197,7 @@ public class LocationView extends LockeState implements RefreshListener {
         IconButton sell = new IconButton("Sell", "create", "Sell from this DC");
         IconButton inventory = new IconButton("Inventory", "inventory", "Inventory of items in cost center");
         IconButton receive = new IconButton("Receive", "receive", "Receive an Inbound Delivery");
-        IconButton fulfill = new IconButton("Fulfill Order", "fulfill", "Fulfill Order");
+        IconButton fulfill = new IconButton("Fulfill", "fulfill", "Fulfill Order");
         IconButton areas = new IconButton("+ Areas", "areas", "Add an area cost center");
         IconButton addBin = new IconButton("+ Bin", "bins", "Add an area cost center");
         IconButton autoMakeAreas = new IconButton("AutoMake Areas", "automake", "Automate the creation of areas");

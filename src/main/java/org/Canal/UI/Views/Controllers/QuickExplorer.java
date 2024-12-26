@@ -1,6 +1,8 @@
 package org.Canal.UI.Views.Controllers;
 
+import org.Canal.Models.HumanResources.Employee;
 import org.Canal.UI.Elements.DesktopInterface;
+import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.UI.Views.LocationView;
@@ -46,11 +48,24 @@ public class QuickExplorer extends JFrame implements DesktopState {
     }
 
     private JPanel toolbar() {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        IconButton activity = new IconButton("", "Activity", "Recent Activity");
+        JPanel panel = new JPanel(new BorderLayout());
+        JPanel employee = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        Employee e = Engine.getEmployee(Engine.getAssignedUser().getEmployee());
+        JLabel myName = new JLabel(e.getName());
+        myName.setFont(UIManager.getFont("h2.font"));
+        myName.setBorder(BorderFactory.createEmptyBorder(5, 2, 2, 2));
+        employee.add(myName);
+
+        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        IconButton activity = new IconButton("", "activity", "Recent Activity");
         IconButton inbox = new IconButton("", "inbox", "Message Inbox");
-        panel.add(activity);
-        panel.add(inbox);
+        IconButton me = new IconButton("", "me", "Your Profile");
+        buttons.add(activity);
+        buttons.add(inbox);
+        buttons.add(me);
+
+        panel.add(employee, BorderLayout.WEST);
+        panel.add(buttons, BorderLayout.EAST);
         return panel;
     }
 
@@ -121,10 +136,10 @@ public class QuickExplorer extends JFrame implements DesktopState {
         win.pack();
         try {
             if (win.isMaximized()) {
-                win.setMaximum(true); // This maximizes the internal frame
+                win.setMaximum(true);
             }
         } catch (PropertyVetoException e) {
-            e.printStackTrace(); // Handle the exception or log it
+            e.printStackTrace();
         }
         win.setVisible(true);
         desktopPane.add(win);

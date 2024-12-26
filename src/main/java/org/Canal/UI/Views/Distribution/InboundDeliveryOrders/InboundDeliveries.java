@@ -19,7 +19,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 /**
- * /TRANS/IBD
+ * /TRANS/IDO
  */
 public class InboundDeliveries extends LockeState {
 
@@ -52,7 +52,7 @@ public class InboundDeliveries extends LockeState {
         IconButton archivePo = new IconButton("Archive", "archive", "Archive PO, removes");
         IconButton label = new IconButton("Barcodes", "label", "Print labels for org properties");
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(Elements.h3("Inbound Deliveries", Constants.colors[9]));
+        tb.add(Elements.h3("Inbound Deliveries"));
         tb.add(Box.createHorizontalStrut(5));
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));
