@@ -53,9 +53,9 @@ public class EmployeeView extends LockeState {
         IconButton email = new IconButton("Email", "email", "Email Employee");
         IconButton giveFeedback = new IconButton("Feedback", "feedback", "Give Feedback");
         IconButton performReview = new IconButton("Review", "invoice", "New Performance Review");
-        IconButton writeup = new IconButton("", "delinquent", "Writeup Employee");
-        IconButton suspend = new IconButton("", "blocked", "Suspend Employee");
-        IconButton label = new IconButton("", "label", "Print labels for properties");
+        IconButton writeup = new IconButton("Writeup", "delinquent", "Writeup Employee");
+        IconButton suspend = new IconButton("Suspend", "blocked", "Suspend Employee");
+        IconButton label = new IconButton("Labels", "label", "Print labels for properties (like for badges)");
         tb.add(email);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(giveFeedback);
@@ -67,12 +67,44 @@ public class EmployeeView extends LockeState {
         tb.add(suspend);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(label);
+        email.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e){
+                try {
+                    String mailto = "mailto:" + employee.getEmail();
+                    Desktop.getDesktop().mail(new java.net.URI(mailto));
+                } catch (Exception d) {
+                    d.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Unable to open the email client.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        giveFeedback.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e){
+
+            }
+        });
         performReview.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
 
             }
         });
         writeup.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+            }
+        });
+        suspend.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+            }
+        });
+        label.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
 
             }

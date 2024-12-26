@@ -8,6 +8,7 @@ public class Configuration {
     private String theme = "/com/formdev/flatlaf/intellijthemes/themes/SolarizedDark.theme.json";
     private String assignedUser; //ID of User this instance of Canal is assigned to
     private boolean showCanalCodes = false;
+    private boolean showButtonLabels = true;
 
     public String getEndpoint() {
         return endpoint;
@@ -31,6 +32,14 @@ public class Configuration {
 
     public void setShowCanalCodes(boolean showCanalCodes) {
         this.showCanalCodes = showCanalCodes;
+    }
+
+    public boolean isShowButtonLabels() {
+        return showButtonLabels;
+    }
+
+    public void setShowButtonLabels(boolean showButtonLabels) {
+        this.showButtonLabels = showButtonLabels;
     }
 
     public String getAssignedUser() {

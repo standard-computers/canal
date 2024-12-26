@@ -1,20 +1,21 @@
 package org.Canal.Models.HumanResources;
 
-public class Position {
+import org.Canal.Models.Objex;
 
-    private String id; //Position ID
+public class Position extends Objex {
+
+    private String organization;
     private String department; //Department ID
-    private String name; //Position Name
     private String description; //Position Description
     private double compensation;
     private boolean hourly;
 
-    public String getId() {
-        return id;
+    public String getOrganization() {
+        return organization;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setOrganization(String organization) {
+        this.organization = organization;
     }
 
     public String getDepartment() {
@@ -23,14 +24,6 @@ public class Position {
 
     public void setDepartment(String department) {
         this.department = department;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getDescription() {

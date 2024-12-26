@@ -29,7 +29,7 @@ public class Employees extends LockeState {
         JPanel holder = new JPanel(new BorderLayout());
         table = createTable();
         JScrollPane tableScrollPane = new JScrollPane(table);
-        tableScrollPane.setPreferredSize(new Dimension(800, 600));
+        tableScrollPane.setPreferredSize(new Dimension(750, 600));
         holder.add(Elements.header("Employees", SwingConstants.LEFT), BorderLayout.CENTER);
         holder.add(tb, BorderLayout.SOUTH);
         setLayout(new BorderLayout());
@@ -54,13 +54,15 @@ public class Employees extends LockeState {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV", "");
-        IconButton createEmployee = new IconButton("+ Employee", "order", "Create Employee", "/EMPS/NEW");
+        IconButton importEmployees = new IconButton("Import", "export", "Import as CSV", "");
+        IconButton createEmployee = new IconButton("New", "order", "Create Employee", "/EMPS/NEW");
         IconButton modifyEmployee = new IconButton("Modify", "modify", "Modify an Employee", "/EMPS/MOD");
         IconButton archiveEmployee = new IconButton("Archive", "archive", "Archive an Employee", "/EMPS/ARCHV");
         IconButton removeEmployee = new IconButton("Remove", "delete", "Delete an Employee", "/EMPS/DEL");
-        IconButton advancedFine = new IconButton("Advanced Find", "find", "Find by Values", "/EMPS/F");
-        JTextField filterValue = Elements.input("Search", 10);
+        IconButton advancedFine = new IconButton("Find", "find", "Find by Values", "/EMPS/F");
         tb.add(export);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(importEmployees);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(createEmployee);
         tb.add(Box.createHorizontalStrut(5));
@@ -72,8 +74,6 @@ public class Employees extends LockeState {
         tb.add(removeEmployee);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(advancedFine);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(filterValue);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));
         export.addMouseListener(new MouseAdapter() {
             @Override

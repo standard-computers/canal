@@ -16,6 +16,9 @@ public class Selectables {
 
     public static Selectable allLocations(){
         HashMap<String, String> availableLocations = new HashMap<>();
+        for(Location orgs : Engine.getLocations("ORGS")){
+            availableLocations.put(orgs.getId(), orgs.getId());
+        }
         for(Location cs : Engine.getLocations("CCS")){
             availableLocations.put(cs.getId(), cs.getId());
         }
@@ -34,11 +37,9 @@ public class Selectables {
     public static Selectable employees(){
         HashMap<String, String> employees = new HashMap<>();
         for(Employee emp : Engine.getEmployees()){
-            employees.put(emp.getId(), emp.getId());
+            employees.put(emp.getId() + " - " + emp.getName(), emp.getId());
         }
-        Selectable s =  new Selectable(employees);
-        s.editable();
-        return s;
+        return new Selectable(employees);
     }
 
     public static Selectable ledgers(){

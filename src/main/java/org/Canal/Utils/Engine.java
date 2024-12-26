@@ -3,6 +3,7 @@ package org.Canal.Utils;
 import org.Canal.Models.BusinessUnits.*;
 import org.Canal.Models.BusinessUnits.Inventory;
 import org.Canal.Models.HumanResources.Employee;
+import org.Canal.Models.HumanResources.Position;
 import org.Canal.Models.HumanResources.User;
 import org.Canal.Models.SupplyChainUnits.*;
 import org.Canal.UI.Views.*;
@@ -10,6 +11,7 @@ import org.Canal.UI.Views.Areas.*;
 import org.Canal.UI.Views.Bins.*;
 import org.Canal.UI.Views.Departments.DeleteDepartment;
 import org.Canal.UI.Views.Finance.PurchaseOrders.*;
+import org.Canal.UI.Views.Positions.Positions;
 import org.Canal.UI.Views.Products.Components.Components;
 import org.Canal.UI.Views.Products.Components.CreateComponent;
 import org.Canal.UI.Views.Controllers.*;
@@ -327,6 +329,19 @@ public class Engine {
         return trucks;
     }
 
+    public static ArrayList<Position> getPositions() {
+        ArrayList<Position> positions = new ArrayList<>();
+        File[] d = Pipe.list("HR/POS");
+        for (File file : d) {
+            if (!file.isDirectory()) {
+                Position a = Json.load(file.getPath(), Position.class);
+                positions.add(a);
+            }
+        }
+        positions.sort(Comparator.comparing(Position::getId));
+        return positions;
+    }
+
     public static ArrayList<Delivery> getInboundDeliveries() {
         ArrayList<Delivery> deliveries = new ArrayList<>();
         File[] d = Pipe.list("TRANS/IDO");
@@ -641,6 +656,9 @@ public class Engine {
             }
             case "/MVMT/TSKS/NEW" -> {
                 return new CreateTask();
+            }
+            case "/HR/POS" -> {
+                return new Positions(desktop);
             }
             case "/HR/POS/NEW" -> {
                 return new CreatePosition(desktop);
