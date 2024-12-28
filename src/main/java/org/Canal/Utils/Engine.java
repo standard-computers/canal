@@ -6,12 +6,15 @@ import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.HumanResources.Position;
 import org.Canal.Models.HumanResources.User;
 import org.Canal.Models.SupplyChainUnits.*;
+import org.Canal.Start;
 import org.Canal.UI.Views.*;
 import org.Canal.UI.Views.Areas.*;
 import org.Canal.UI.Views.Bins.*;
 import org.Canal.UI.Views.Departments.DeleteDepartment;
 import org.Canal.UI.Views.Finance.PurchaseOrders.*;
 import org.Canal.UI.Views.Positions.Positions;
+import org.Canal.UI.Views.Productivity.Flows.CreateFlow;
+import org.Canal.UI.Views.Productivity.Waves.CreateWave;
 import org.Canal.UI.Views.Products.Components.Components;
 import org.Canal.UI.Views.Products.Components.CreateComponent;
 import org.Canal.UI.Views.Controllers.*;
@@ -48,8 +51,8 @@ import org.Canal.UI.Views.Finance.PurchaseRequisitions.PurchaseRequisitions;
 import org.Canal.UI.Views.Finance.SalesOrders.AutoMakeSalesOrders;
 import org.Canal.UI.Views.Finance.SalesOrders.CreateSalesOrder;
 import org.Canal.UI.Views.Finance.SalesOrders.SalesOrders;
-import org.Canal.UI.Views.Tasks.CreateTask;
-import org.Canal.UI.Views.Tasks.TaskList;
+import org.Canal.UI.Views.Productivity.Tasks.CreateTask;
+import org.Canal.UI.Views.Productivity.Tasks.TaskList;
 import org.Canal.UI.Views.Distribution.Trucks.CreateTruck;
 import org.Canal.UI.Views.Distribution.Trucks.Trucks;
 import org.Canal.UI.Views.Users.*;
@@ -61,6 +64,8 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import java.awt.Component;
 import java.io.File;
+import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -342,6 +347,10 @@ public class Engine {
         return positions;
     }
 
+    public static Position getPosition(String id){
+        return getPositions().stream().filter(position -> position.getId().equals(id)).toList().stream().findFirst().orElse(null);
+    }
+
     public static ArrayList<Delivery> getInboundDeliveries() {
         ArrayList<Delivery> deliveries = new ArrayList<>();
         File[] d = Pipe.list("TRANS/IDO");
@@ -471,6 +480,9 @@ public class Engine {
             case "/BNS/AUTO_MK" -> {
                 return new AutoMakeBins();
             }
+            case "/BNS/DEL" -> {
+                return new RemoveBin();
+            }
             case "/CSTS" -> {
                 return new Locations("/CSTS", desktop);
             }
@@ -573,9 +585,6 @@ public class Engine {
             case "/USRS/NEW" -> {
                 return new CreateUser();
             }
-            case "/CNL/INV" -> {
-                return new org.Canal.UI.Views.Controllers.Inventory();
-            }
             case "/STK" -> {
                 return new InventoryView(desktop, Engine.getOrganization().getId());
             }
@@ -654,6 +663,15 @@ public class Engine {
             case "/MVMT/TSKS" -> {
                 return new TaskList(null, desktop);
             }
+            case "/MVMT/FLWS/NEW" -> {
+                return new CreateFlow();
+            }
+            case "/MVMT/WVS/NEW" -> {
+                return new CreateWave();
+            }
+            case "/MVMT/WO/NEW" -> {
+                return new TaskList(null, desktop);
+            }
             case "/MVMT/TSKS/NEW" -> {
                 return new CreateTask();
             }
@@ -672,6 +690,9 @@ public class Engine {
             case "/CNL/FI" -> {
                 return new Finance(desktop);
             }
+            case "/CNL/ME" -> {
+                return new MyProfile(desktop);
+            }
             case "/CNL/PROD_MTN" -> {
                 return new ProductMaintainence(desktop);
             }
@@ -687,11 +708,35 @@ public class Engine {
             case "/CLEAR_DSK" -> desktop.clean();
             case "/CLOSE_DSK" -> desktop.purge();
             case "/CNL/EXIT" -> System.exit(-1);
+            case "/CNL/RSTRT" -> {
+
+                String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
+
+                // Get the current JVM arguments
+                String vmArguments = String.join(" ", ManagementFactory.getRuntimeMXBean().getInputArguments());
+
+                // Get the current JAR or classpath
+                String currentJar = System.getProperty("java.class.path");
+
+                // Construct the restart command
+                String command = javaBin + " " + vmArguments + " -cp " + currentJar + " " + Start.class.getName();
+
+                // Launch a new process
+                ProcessBuilder builder = new ProcessBuilder(command.split(" "));
+                builder.inheritIO(); // Inherit standard IO from the current process
+                try {
+                    Process process = builder.start();
+                    System.exit(0);
+                } catch (IOException e) {
+                    JOptionPane.showMessageDialog(null, "Failed to restart Canal");
+                    throw new RuntimeException(e);
+                }
+            }
         }
         if(transactionCode.endsWith("/F")){
             return new Finder(transactionCode.replace("/F", ""), desktop);
         }else if(transactionCode.endsWith("/MOD")){
-            return new Modifier(transactionCode.replace("/F", ""));
+            return new Modifier(transactionCode.replace("/F", ""), null, null);
         }else if(transactionCode.endsWith("/ARCHV")){
             return new Archiver(transactionCode.replace("/F", ""));
         }else if(transactionCode.endsWith("/DEL")){

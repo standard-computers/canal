@@ -2,7 +2,6 @@ package org.Canal.UI.Views.Controllers;
 
 import org.Canal.Models.HumanResources.Employee;
 import org.Canal.UI.Elements.DesktopInterface;
-import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.UI.Views.LocationView;
@@ -13,6 +12,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyVetoException;
 
 /**
@@ -63,6 +64,19 @@ public class QuickExplorer extends JFrame implements DesktopState {
         buttons.add(activity);
         buttons.add(inbox);
         buttons.add(me);
+
+        inbox.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                put(new Inbox(QuickExplorer.this));
+            }
+        });
+        me.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                put(new MyProfile(QuickExplorer.this));
+            }
+        });
 
         panel.add(employee, BorderLayout.WEST);
         panel.add(buttons, BorderLayout.EAST);

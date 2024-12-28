@@ -118,6 +118,27 @@ public class Selectables {
         statusTypes.put("PENDING", "PENDING");
         statusTypes.put("REMOVED", "REMOVED");
         statusTypes.put("SUSPENDED", "SUSPENDED");
+        statusTypes.put("IN PROGRESS", "IN_PROGRESS");
+        return new Selectable(statusTypes);
+    }
+
+    public static Selectable taskTypes(){
+        HashMap<String, String> statusTypes = new HashMap<>();
+        statusTypes.put("APPROVED", "APPROVED");
+        statusTypes.put("ARCHIVED", "ARCHIVED");
+        statusTypes.put("BLOCKED", "BLOCKED");
+        statusTypes.put("COMPLETED", "COMPLETED");
+        statusTypes.put("DELIVERED", "DELIVERED");
+        statusTypes.put("DRAFT", "DRAFT");
+        statusTypes.put("DELINQUENT", "DELINQUENT");
+        statusTypes.put("ERRORED", "ERRORED");
+        statusTypes.put("IN TRANSIT", "IN_TRANSIT");
+        statusTypes.put("NEW", "NEW");
+        statusTypes.put("OPEN", "OPEN");
+        statusTypes.put("PENDING", "PENDING");
+        statusTypes.put("REMOVED", "REMOVED");
+        statusTypes.put("SUSPENDED", "SUSPENDED");
+        statusTypes.put("IN PROGRESS", "IN_PROGRESS");
         return new Selectable(statusTypes);
     }
 

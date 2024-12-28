@@ -1,4 +1,4 @@
-package org.Canal.UI.Views.Tasks;
+package org.Canal.UI.Views.Productivity.WorkOrders;
 
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Form;
@@ -8,17 +8,25 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * /MVMT/TSKS/NEW
+ * /MVMT/WO/NEW
  */
-public class CreateTask extends LockeState {
+public class CreateWorkOrder extends LockeState {
 
-    public CreateTask() {
-        super("Create Task", "/MVMT/TSKS/NEW", false, true, false, true);
+    private JTextArea workOrderIdField;
+
+    public CreateWorkOrder() {
+
+        super("Create Work Order", "/MVMT/WO/NEW", false, true, false, true);
+        setFrameIcon(new ImageIcon(CreateWorkOrder.class.getResource("/icons/create.png")));
+
         Form f = new Form();
+
 
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);
         JButton create = Elements.button("Create Task");
         add(create, BorderLayout.SOUTH);
+
+
     }
 }

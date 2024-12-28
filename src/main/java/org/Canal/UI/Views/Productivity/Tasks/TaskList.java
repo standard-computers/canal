@@ -1,4 +1,4 @@
-package org.Canal.UI.Views.Tasks;
+package org.Canal.UI.Views.Productivity.Tasks;
 
 import org.Canal.Models.BusinessUnits.PurchaseOrder;
 import org.Canal.Models.SupplyChainUnits.Location;

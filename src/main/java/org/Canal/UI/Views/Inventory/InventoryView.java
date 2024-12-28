@@ -50,24 +50,36 @@ public class InventoryView extends LockeState implements RefreshListener {
 
     private CustomTable createTable() {
         String[] columns = new String[]{
-                "Location", "Type", "HU", "ID", "Name", "Org. Qty.",
-                "Qty.", "Total Weight", "wUOM", "Price", "Value",
-                "Area", "Bin", "Receipt", "Status",
+                "Location",
+                "Type",
+                "HU",
+                "ID",
+                "Name",
+                "Org. Qty.",
+                "Qty.",
+                "Price",
+                "Value",
+                "Total Weight",
+                "wUOM",
+                "Area",
+                "Bin",
+                "Receipt",
+                "Status",
         };
         ArrayList<Object[]> stks = new ArrayList<>();
         for (StockLine sl : Engine.getInventory(location).getStockLines()) {
             Item i = Engine.getItem(sl.getId());
-            stks.add(new String[]{
+            stks.add(new Object[]{
                     location,
                     sl.getObjex(),
                     sl.getHu(),
                     sl.getId(),
                     i.getName(),
-                    String.valueOf(sl.getQuantity()),
-                    String.valueOf(sl.getQuantity()),
+                    (sl.getQuantity()),
+                    (sl.getQuantity()),
                     Constants.formatUSD(i.getPrice()),
                     Constants.formatUSD(i.getPrice() * sl.getQuantity()),
-                    String.valueOf(sl.getQuantity() * i.getWeight()),
+                    (sl.getQuantity() * i.getWeight()),
                     i.getWeightUOM(),
                     sl.getArea(),
                     sl.getBin(),

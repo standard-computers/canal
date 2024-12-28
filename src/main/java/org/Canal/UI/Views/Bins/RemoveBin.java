@@ -17,15 +17,17 @@ import java.awt.event.MouseEvent;
 public class RemoveBin extends LockeState {
 
     public RemoveBin() {
+
         super("Remove Bin", "/BNS/DEL", false, true, false, true);
         setFrameIcon(new ImageIcon(AutoMakeBins.class.getResource("/icons/delete.png")));
-        setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.RED));
+
         Form f = new Form();
         JTextField binIdField = Elements.input("", 15);
-        f.addInput(new Label("Bin ID", Constants.colors[0]), binIdField);
+        f.addInput(new Label("Bin ID to Delete", Constants.colors[0]), binIdField);
+        setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.RED));
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);
-        JButton remove = Elements.button("Remove");
+        JButton remove = Elements.button("Confirm Deletion");
         add(remove, BorderLayout.SOUTH);
         add(Elements.header("", SwingConstants.LEFT), BorderLayout.NORTH);
         remove.addMouseListener(new MouseAdapter() {

@@ -13,7 +13,10 @@ import java.awt.*;
 public class CreateInclusion extends LockeState {
 
     public CreateInclusion(String title) {
+
         super(title, "/", false, true, false, true);
+        setFrameIcon(new ImageIcon(CreateInclusion.class.getResource("/icons/create.png")));
+
         Form f = new Form();
         JTextField inclusionId = Elements.input();
         UOMField usage = new UOMField();

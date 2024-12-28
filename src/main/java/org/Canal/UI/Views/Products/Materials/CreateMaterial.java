@@ -36,11 +36,12 @@ public class CreateMaterial extends LockeState {
     private Selectable selectedVendor;
 
     public CreateMaterial(){
+
         super("Create Material", "/MTS/NEW", false, true, false, true);
-        Constants.checkLocke(this, true, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));
+        Constants.checkLocke(this, true, true);
+
         Form f1 = new Form();
-        Form f2 = new Form();
         selectedVendor = Selectables.vendors();
         selectedVendor.editable();
         materialIdField = Elements.input("M0" + (1000 + (Engine.getItems().size() + 1)));
@@ -58,6 +59,8 @@ public class CreateMaterial extends LockeState {
         f1.addInput(new Label("Price", Constants.colors[3]), materialPriceField);
         f1.addInput(new Label("SKU'd Product", Constants.colors[4]), isSkud);
         f1.addInput(new Label("UPC", Constants.colors[5]), upc);
+
+        Form f2 = new Form();
         itemWidth = new UOMField();
         itemLength = new UOMField();
         itemHeight = new UOMField();
@@ -74,15 +77,18 @@ public class CreateMaterial extends LockeState {
         f2.addInput(new Label("Weight", UIManager.getColor("Label.foreground")), itemWeight);
         f2.addInput(new Label("Tax (0.05 as 5%)", UIManager.getColor("Label.foreground")), tax);
         f2.addInput(new Label("Excise Tax (0.05 as 5%)", UIManager.getColor("Label.foreground")), exciseTax);
+
         JPanel biPanel = new JPanel(new GridLayout(1, 2));
         f1.setBorder(new EmptyBorder(5, 5, 5, 5));
         f2.setBorder(new EmptyBorder(5, 5, 5, 5));
         biPanel.add(f1);
         biPanel.add(f2);
+
         JPanel main = new JPanel(new BorderLayout());
         main.add(Elements.header("Create Material", SwingConstants.LEFT), BorderLayout.NORTH);
         main.add(biPanel, BorderLayout.CENTER);
         main.add(actionsBar(), BorderLayout.SOUTH);
+
         add(main);
     }
 

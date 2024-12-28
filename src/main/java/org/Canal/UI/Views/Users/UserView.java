@@ -26,7 +26,7 @@ public class UserView extends LockeState {
     private DesktopState desktop;
 
     public UserView(DesktopState desktop, User user) {
-        super("Users / " + user.getId(), "/USRS/$", true, true, true, true);
+        super("Users / " + user.getId(), "/USRS/$", false, true, false, true);
         this.desktop = desktop;
         this.user = user;
         setFrameIcon(new ImageIcon(UserView.class.getResource("/icons/employees.png")));
@@ -59,7 +59,7 @@ public class UserView extends LockeState {
         modify.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new Modifier("/USRS"));
+                desktop.put(new Modifier("/USRS", new User(), user));
             }
         });
         viewEmployee.addMouseListener(new MouseAdapter() {

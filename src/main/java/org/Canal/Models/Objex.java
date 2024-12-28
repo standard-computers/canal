@@ -5,8 +5,10 @@ import org.Canal.Utils.LockeStatus;
 
 public class Objex {
 
-    protected String id, name, owner = "UKNOWN";
-    protected LockeStatus status;
+    protected String id;
+    private String name = "";
+    private String owner = "UKNOWN";
+    protected LockeStatus status = LockeStatus.NEW;
     protected String created = Constants.now();
 
     public String getId() {

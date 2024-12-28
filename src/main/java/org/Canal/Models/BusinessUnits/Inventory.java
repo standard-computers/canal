@@ -1,5 +1,6 @@
 package org.Canal.Models.BusinessUnits;
 
+import org.Canal.Models.Objex;
 import org.Canal.Models.SupplyChainUnits.MaterialMovement;
 import org.Canal.Models.SupplyChainUnits.StockLine;
 import org.Canal.Start;
@@ -11,7 +12,7 @@ import org.Canal.Utils.LockeStatus;
 import java.io.File;
 import java.util.ArrayList;
 
-public class Inventory {
+public class Inventory extends Objex {
 
     private String location;
     private ArrayList<StockLine> stockLines =  new ArrayList<StockLine>();
@@ -97,7 +98,6 @@ public class Inventory {
                 nmm.setSourceHu(stockLine.getHu());
                 nmm.setDestinationBin("OUTBOUND");
                 nmm.setDestinationHu("NO_HU");
-                nmm.setTimestamp(Constants.now());
                 nmm.setType("Goods Issue");
                 nmm.setStatus(LockeStatus.COMPLETED);
                 materialMovements.add(nmm);

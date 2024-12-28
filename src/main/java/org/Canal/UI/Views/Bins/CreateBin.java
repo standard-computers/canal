@@ -24,8 +24,10 @@ import java.util.HashMap;
 public class CreateBin extends LockeState {
 
     public CreateBin(String location, RefreshListener refreshListener) {
-        super("New Area Bin", "/BNS/NEW", false, true, false, true);
+
+        super("New Bin", "/BNS/NEW", false, true, false, true);
         setFrameIcon(new ImageIcon(CreateBin.class.getResource("/icons/bins.png")));
+
         String generatedId;
         JTextField binIdField = Elements.input();
         HashMap<String, String> areas = new HashMap<>();

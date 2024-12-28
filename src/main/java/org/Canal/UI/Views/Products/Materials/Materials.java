@@ -25,8 +25,10 @@ public class Materials extends LockeState implements RefreshListener {
     private CustomTable table;
 
     public Materials(DesktopState desktop) {
+
         super("Materials", "/MTS", true, true, true, true);
         setFrameIcon(new ImageIcon(Materials.class.getResource("/icons/materials.png")));
+
         JPanel tb = createToolBar();
         JPanel holder = new JPanel(new BorderLayout());
         table = createTable();

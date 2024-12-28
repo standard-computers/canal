@@ -14,7 +14,10 @@ public class CreateInvoice extends LockeState {
     private Invoice newInvoice;
 
     public CreateInvoice(String providedCustomerId) {
+
         super("Create Invoice", "/INVS/NEW", false, true, false, true);
+        setFrameIcon(new ImageIcon(CreateInvoice.class.getResource("/icons/create.png")));
+
         if(Engine.getLocations("CSTS").isEmpty()){
             JOptionPane.showMessageDialog(null, "No customers to invoice.");
             dispose();

@@ -35,6 +35,7 @@ public class CreateUser extends LockeState {
     private ArrayList<JCheckBox> checkboxes;
 
     public CreateUser(){
+
         super("Create User", "/USRS/NEW", false, true, false, true);
         setFrameIcon(new ImageIcon(CreateUser.class.getResource("/icons/create.png")));
         if(Engine.getEmployees().isEmpty()){

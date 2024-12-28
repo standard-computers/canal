@@ -50,9 +50,10 @@ public class CreatePurchaseOrder extends LockeState {
     private JCheckBox commitToLedger, makeSalesOrder, createDelivery;
 
     public CreatePurchaseOrder() {
+
         super("Create Purchase Order", "/ORDS/PO/NEW", false, true, false, true);
-        Constants.checkLocke(this, true, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));
+        Constants.checkLocke(this, true, true);
         newOrder = new PurchaseOrder();
 
         JTabbedPane tabs = new JTabbedPane();

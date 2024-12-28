@@ -4,6 +4,7 @@ import org.Canal.Models.HumanResources.Employee;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.Copiable;
 import org.Canal.UI.Elements.LockeState;
+import org.Canal.Utils.LockeStatus;
 
 import javax.swing.*;
 import java.awt.*;
@@ -100,7 +101,8 @@ public class EmployeeView extends LockeState {
         suspend.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-
+                employee.setStatus(LockeStatus.SUSPENDED);
+                employee.save();
             }
         });
         label.addMouseListener(new MouseAdapter() {

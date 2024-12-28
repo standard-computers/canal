@@ -26,8 +26,10 @@ public class Items extends LockeState implements RefreshListener {
     private CustomTable table;
 
     public Items(DesktopState desktop) {
+
         super("Items", "/ITS", true, true, true, true);
         setFrameIcon(new ImageIcon(Items.class.getResource("/icons/items.png")));
+
         JPanel tb = createToolBar();
         JPanel holder = new JPanel(new BorderLayout());
         table = createTable();
@@ -103,13 +105,13 @@ public class Items extends LockeState implements RefreshListener {
             "Consumable",
             "Price",
             "Width",
-            "Width UOM",
+            "wUOM",
             "Length",
-            "Length UOM",
+            "lUOM",
             "Height",
-            "Height UOM",
+            "hUOM",
             "Weight",
-            "Weight UOM",
+            "wtUOM",
             "Tax",
             "Excise Tax"
         };

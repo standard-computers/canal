@@ -25,8 +25,10 @@ public class Components extends LockeState implements RefreshListener {
     private CustomTable table;
 
     public Components(DesktopState desktop) {
+
         super("Components", "/CMPS", true, true, true, true);
         setFrameIcon(new ImageIcon(Components.class.getResource("/icons/components.png")));
+
         JPanel tb = createToolBar();
         JPanel holder = new JPanel(new BorderLayout());
         table = createTable();

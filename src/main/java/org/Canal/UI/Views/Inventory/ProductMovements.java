@@ -42,17 +42,29 @@ public class ProductMovements extends LockeState implements RefreshListener {
     }
 
     private CustomTable createTable() {
-        String[] columns = new String[]{"Objex", "user", "Src. Bin", "Dest. Bin", "Src. HU", "Dest. HU", "Timestamp", "Type", "Status"};
+        String[] columns = new String[]{
+                "Objex",
+                "user",
+                "Src. Bin",
+                "Dest. Bin",
+                "Src. HU",
+                "Dest. HU",
+                "Qty",
+                "Timestamp",
+                "Type",
+                "Status"
+        };
         ArrayList<Object[]> stks = new ArrayList<>();
         for (MaterialMovement mm : Engine.getInventory(location).getMaterialMovements()) {
-            stks.add(new String[]{
+            stks.add(new Object[]{
                     mm.getObjex(),
                     mm.getUser(),
                     mm.getSourceBin(),
                     mm.getDestinationBin(),
                     mm.getSourceHu(),
                     mm.getDestinationHu(),
-                    mm.getTimestamp(),
+                    mm.getQuantity(),
+                    mm.getCreated(),
                     mm.getType(),
                     String.valueOf(mm.getStatus())
             });

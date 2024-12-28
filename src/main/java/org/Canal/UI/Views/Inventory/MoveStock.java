@@ -110,7 +110,6 @@ public class MoveStock extends LockeState {
                         mm.setDestinationBin(destinationBins.getSelectedValue());
                         mm.setSourceHu(modified.getHu());
                         mm.setDestinationHu(newHu);
-                        mm.setTimestamp(Constants.now());
                         mm.setStatus(LockeStatus.COMPLETED);
                         i.addMaterialMovement(mm);
                     }

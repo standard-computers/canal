@@ -31,9 +31,11 @@ public class CreatePurchaseRequisition extends LockeState {
     private DatePicker prEndDateField;
 
     public CreatePurchaseRequisition(){
+
         super("Create Purchase Requisition", "/ORDS/PR/NEW", false, true, false, true);
         setFrameIcon(new ImageIcon(CreatePurchaseRequisition.class.getResource("/icons/create.png")));
         Constants.checkLocke(this, true, true);
+
         availableVendors = Selectables.vendors();
         availableBuyers = Selectables.allLocations();
         JTextField prIdField = Elements.input("PR" + (10000000 + (Engine.orderProcessing.getPurchaseRequisitions().size() + 1)));

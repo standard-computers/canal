@@ -1,19 +1,21 @@
 package org.Canal.Models.HumanResources;
 
-import org.Canal.Utils.LockeStatus;
+import org.Canal.Models.BusinessUnits.Ledger;
+import org.Canal.Models.Objex;
+import org.Canal.Start;
+import org.Canal.Utils.Json;
 
-public class Employee {
+import java.io.File;
 
-    private String id;
+public class Employee extends Objex {
+
     private String org; //Org ID
     private String location; //Location ID if any
-    private String name; //Employee full name, for now
     private String supervisor; //Employee ID of Supervisor
     private String position;
     private String startDate; //Employee employment date
     private String endDate; //Employee termination date
     private String createDate;
-    private LockeStatus status;
     private String line1;
     private String line2;
     private String city;
@@ -27,14 +29,6 @@ public class Employee {
     private String gender;
     private boolean veteran;
     private boolean disability;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getOrg() {
         return org;
@@ -50,14 +44,6 @@ public class Employee {
 
     public void setLocation(String location) {
         this.location = location;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getSupervisor() {
@@ -98,14 +84,6 @@ public class Employee {
 
     public void setCreateDate(String createDate) {
         this.createDate = createDate;
-    }
-
-    public LockeStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(LockeStatus status) {
-        this.status = status;
     }
 
     public String getLine1() {
@@ -210,5 +188,20 @@ public class Employee {
 
     public void setDisability(boolean disability) {
         this.disability = disability;
+    }
+
+    public void save(){
+        File md = new File(Start.WINDOWS_SYSTEM_DIR + "\\.store\\EMPS\\");
+        File[] mdf = md.listFiles();
+        if (mdf != null) {
+            for (File file : mdf) {
+                if (file.getPath().endsWith(".emps")) {
+                    Ledger fl = Json.load(file.getPath(), Ledger.class);
+                    if (fl.getId().equals(id)) {
+                        Json.save(file.getPath(), this);
+                    }
+                }
+            }
+        }
     }
 }

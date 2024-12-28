@@ -78,7 +78,8 @@ public class Constants {
     public static Locke allModules() {
         return new Locke("Canal – All Actions", getIcon("controller"), "/ORGS", new Locke[]{
                 new Locke("Quick Accesses", getIcon("controllers"), "/", new Locke[]{
-                        new Locke("Finance", getIcon("finance"), "/FIN", null),
+                        new Locke("My Profile", getIcon("locke"), "/CNL/ME", null),
+                        new Locke("Finance", getIcon("finance"), "/CNL/FI", null),
                         new Locke("Inventory", getIcon("locke"), "/INV", null),
                         new Locke("Human Resources", getIcon("humanresources"), "/CNL/HR", null),
                         new Locke("Time Clock", getIcon("timeclock"), "/TM_CLCK", null),
@@ -86,6 +87,7 @@ public class Constants {
                         new Locke("Close Desk", getIcon("locke"), "/CLOSE_DSK", null),
                         new Locke("Canal Settings", getIcon("settings"), "/CNL", null),
                         new Locke("Data Center", getIcon("datacenter"), "/CNL/DATA_CNTR", null),
+                        new Locke("Restart Canal", getIcon("locke"), "/CNL/RSTRT", null),
                         new Locke("Leave Canal", getIcon("locke"), "/CNL/EXIT", null),
                 }),
                 new Locke("Organizations", getIcon("organizations"), "/ORGS", new Locke[]{
@@ -253,7 +255,7 @@ public class Constants {
                                 new Locke("Archive PR", getIcon("archive"), "/ORDS/PR/ARCHV", null),
                                 new Locke("Remove PR", getIcon("delete"), "/ORDS/PR/DEL", null),
                         }),
-                        new Locke("Sales Orders", getIcon("order"), "/ORDS/SO", new Locke[]{
+                        new Locke("Sales Orders", getIcon("order"), "/ORDS/SO", new Locke[]{ //Controller
                                 new Locke("Find Sales Order", getIcon("find"), "/ORDS/SO", null),
                                 new Locke("Create Sales Order", getIcon("create"), "/ORDS/SO/NEW", null),
                                 new Locke("Modify Sales Order", getIcon("modify"), "/ORDS/SO/MOD", null),
@@ -261,6 +263,45 @@ public class Constants {
                                 new Locke("Suspend Sales Order", getIcon("locke"), "/ORDS/SO/SP", null),
                                 new Locke("Archive Sales Order", getIcon("archive"), "/ORDS/SO/ARCHV", null),
                                 new Locke("Remove Sales Order", getIcon("delete"), "/ORDS/SO/DEL", null),
+                        }),
+                }),
+                new Locke("Movements", getIcon("locke"), "/MVMT", new Locke[]{ //Controller
+                        new Locke("Waves", getIcon("locke"), "/MVMT/WVS", new Locke[]{
+                                new Locke("Find a Wave", getIcon("find"), "/MVMT/WVS/F", null),
+                                new Locke("Create a Wave", getIcon("create"), "/MVMT/WVS/NEW", null),
+                                new Locke("Modify a Wave", getIcon("modify"), "/MVMT/WVS/MOD", null),
+                                new Locke("Pause a Wave", getIcon("archive"), "/MVMT/WVS/PS", null),
+                                new Locke("Suspend a Wave", getIcon("archive"), "/MVMT/WVS/SSPND", null),
+                                new Locke("Archive a Wave", getIcon("archive"), "/MVMT/WVS/ARCHV", null),
+                                new Locke("Remove a Wave", getIcon("delete"), "/MVMT/WVS/DEL", null),
+                        }),
+                        new Locke("Flows", getIcon("locke"), "/MVMT/FLWS", new Locke[]{ //Controller
+                                new Locke("Find a Flow", getIcon("find"), "/MVMT/FLWS/F", null),
+                                new Locke("Create a Flow", getIcon("create"), "/MVMT/FLWS/NEW", null),
+                                new Locke("Modify a Flow", getIcon("modify"), "/MVMT/FLWS/MOD", null),
+                                new Locke("Pause a Flow", getIcon("archive"), "/MVMT/FLWS/PS", null),
+                                new Locke("Suspend a Flow", getIcon("archive"), "/MVMT/FLWS/SSPND", null),
+                                new Locke("Archive a Flow", getIcon("archive"), "/MVMT/FLWS/ARCHV", null),
+                                new Locke("Remove a Flow", getIcon("delete"), "/MVMT/FLWS/DEL", null),
+                        }),
+                        new Locke("Work Orders", getIcon("locke"), "/MVMT/WO", new Locke[]{ //Controller
+                                new Locke("Find Work Order", getIcon("find"), "/MVMT/WO", null),
+                                new Locke("Create Work Order", getIcon("create"), "/MVMT/WO/NEW", null),
+                                new Locke("Modify Work Order", getIcon("modify"), "/MVMT/WO/MOD", null),
+                                new Locke("Block Work Order", getIcon("locke"), "/MVMT/WO/BLK", null),
+                                new Locke("Suspend Work Order", getIcon("locke"), "/MVMT/WO/SP", null),
+                                new Locke("Archive Work Order", getIcon("archive"), "/MVMT/WO/ARCHV", null),
+                                new Locke("Remove Work Order", getIcon("delete"), "/MVMT/WO/DEL", null),
+                        }),
+                        new Locke("Tasks", getIcon("locke"), "/MVMT/TSKS", new Locke[]{ //Controller
+                                new Locke("AutoMake a Task", getIcon("automake"), "/MVMT/TSKS/AUTO_MK", null),
+                                new Locke("Find a Task", getIcon("find"), "/MVMT/TSKS", null),
+                                new Locke("Create a Task", getIcon("create"), "/MVMT/TSKS/NEW", null),
+                                new Locke("Modify a Task", getIcon("modify"), "/MVMT/TSKS/MOD", null),
+                                new Locke("Block a Task", getIcon("locke"), "/MVMT/TSKS/BLK", null),
+                                new Locke("Suspend a Task", getIcon("locke"), "/MVMT/TSKS/SP", null),
+                                new Locke("Archive a Task", getIcon("archive"), "/MVMT/TSKS/ARCHV", null),
+                                new Locke("Remove a Task", getIcon("delete"), "/MVMT/TSKS/DEL", null),
                         }),
                 }),
                 new Locke("Planning", getIcon("planning"), "/PLA", new Locke[]{
@@ -362,6 +403,10 @@ public class Constants {
         return new ImageIcon(scaledImage);
     }
 
+    /**
+     * Returns the standard format timestamp of this moment.
+     * @return String Timestamp of now.
+     */
     public static String now(){
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

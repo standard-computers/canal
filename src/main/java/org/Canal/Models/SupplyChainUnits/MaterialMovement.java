@@ -10,8 +10,8 @@ public class MaterialMovement extends Objex {
     private String destinationBin;
     private String sourceHu;
     private String destinationHu;
-    private String timestamp;
-    private String type;
+    private String type = "";
+    private double quantity = 0.0;
 
     public String getObjex() {
         return objex;
@@ -61,19 +61,19 @@ public class MaterialMovement extends Objex {
         this.destinationHu = destinationHu;
     }
 
-    public String getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
-    }
-
     public String getType() {
         return type;
     }
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public double getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(double quantity) {
+        this.quantity = quantity;
     }
 }

@@ -7,9 +7,9 @@ public class Truck extends Objex {
     private String number = "N/A";
     private String carrier;
     private String driver = "UNASSIGNED";
-    private String year;
-    private String make;
-    private String model;
+    private String year = "UKNOWN";
+    private String make = "UKNOWN";
+    private String model = "UKNOWN";
     private String notes = "NONE";
 
     public String getNumber() {

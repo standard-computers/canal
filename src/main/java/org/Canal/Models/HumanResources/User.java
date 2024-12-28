@@ -1,26 +1,18 @@
 package org.Canal.Models.HumanResources;
 
+import org.Canal.Models.Objex;
 import org.Canal.Utils.Crypter;
 
 import javax.swing.*;
 import java.util.ArrayList;
 
-public class User {
+public class User extends Objex {
 
-    private String id; //User ID for system
     private String employee; //Employee ID User is tied to
     private ArrayList<String> accesses = new ArrayList<>(); //List of transaction codes User can use
     private String fontSize;
     private String theme;
     private String hpv;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getEmployee() {
         return employee;

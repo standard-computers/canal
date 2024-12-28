@@ -50,12 +50,12 @@ public class Positions extends LockeState implements RefreshListener {
                     int row = target.getSelectedRow();
                     if (row != -1) {
                         String value = String.valueOf(target.getValueAt(row, 1));
-                        desktop.put(Engine.router("/HR/POS/" + value, desktop));
+                        Position p = Engine.getPosition(value);
+                        desktop.put(new PositionView(p));
                     }
                 }
             }
         });
-
     }
 
     private JPanel createToolBar() {
@@ -132,10 +132,12 @@ public class Positions extends LockeState implements RefreshListener {
                 "Department",
                 "Name",
                 "Description",
+                "Assigned",
                 "Compensation",
                 "Hourly?",
                 "Annum",
-                "Assigned",
+                "Bonus",
+                "Commission",
                 "Status",
                 "Created",
         };
@@ -148,10 +150,12 @@ public class Positions extends LockeState implements RefreshListener {
                     position.getDepartment(),
                     position.getName(),
                     position.getDescription(),
+                    0,
                     position.getCompensation(),
                     position.isHourly(),
                     (position.isHourly() ? (40 * 52 * position.getCompensation()) : position.getCompensation()),
-                    0,
+                    position.isBonus(),
+                    position.isCommission(),
                     position.getStatus(),
                     position.getCreated(),
             });

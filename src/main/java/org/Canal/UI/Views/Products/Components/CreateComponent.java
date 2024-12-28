@@ -41,11 +41,12 @@ public class CreateComponent extends LockeState {
     private Selectable selectedVendor;
 
     public CreateComponent(){
+
         super("Create Component", "/", false, true, false, true);
-        Constants.checkLocke(this, true, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));
+        Constants.checkLocke(this, true, true);
+
         Form f1 = new Form();
-        Form f2 = new Form();
         HashMap<String, String> availableVendors = new HashMap<>();
         for(Location vs : Engine.getLocations("VEND")){
             availableVendors.put(vs.getId() + " – " + vs.getName(), vs.getId());
@@ -67,6 +68,8 @@ public class CreateComponent extends LockeState {
         f1.addInput(new Label("Price", Constants.colors[4]), materialPriceField);
         f1.addInput(new Label("SKU'd Product", Constants.colors[5]), isSkud);
         f1.addInput(new Label("UPC", Constants.colors[5]), upc);
+
+        Form f2 = new Form();
         itemWidth = new UOMField();
         itemLength = new UOMField();
         itemHeight = new UOMField();
@@ -81,15 +84,18 @@ public class CreateComponent extends LockeState {
         f2.addInput(new Label("Weight", Constants.colors[1]), itemWeight);
         f2.addInput(new Label("Tax (0.05 as 5%)", Constants.colors[1]), tax);
         f2.addInput(new Label("Excise Tax (0.05 as 5%)", Constants.colors[1]), exciseTax);
+
         JPanel biPanel = new JPanel(new GridLayout(1, 2));
         f1.setBorder(new EmptyBorder(5, 5, 5, 5));
         f2.setBorder(new EmptyBorder(5, 5, 5, 5));
         biPanel.add(f1);
         biPanel.add(f2);
+
         JPanel main = new JPanel(new BorderLayout());
         main.add(Elements.header("Create Component", SwingConstants.LEFT), BorderLayout.NORTH);
         main.add(biPanel, BorderLayout.CENTER);
         main.add(actionsBar(), BorderLayout.SOUTH);
+
         add(main);
     }
 

@@ -33,8 +33,11 @@ public class CreatePosition extends LockeState {
         Selectable departments = Selectables.departments();
         JTextField compensationField = Elements.input();
         Selectable countries = Selectables.countries();
-        JCheckBox isHourly = new JCheckBox();
+        JCheckBox isHourly = new JCheckBox("Employee must clock in and out");
+        JCheckBox isBonusable = new JCheckBox("Employee can earn bonuses");
+        JCheckBox isCommissionable = new JCheckBox("Position is or can earn commission");
         JCheckBox autoPost = new JCheckBox("Post position as open?");
+
         Form f = new Form();
         f.addInput(new Label("*New Position ID", UIManager.getColor("Label.foreground")), positionIdField);
         f.addInput(new Label("*Organization", UIManager.getColor("Label.foreground")), organizations);
@@ -44,10 +47,13 @@ public class CreatePosition extends LockeState {
         f.addInput(new Label("Compensation", Constants.colors[3]), compensationField);
         f.addInput(new Label("Comp. Class", Constants.colors[4]), countries);
         f.addInput(new Label("Hourly?", Constants.colors[5]), isHourly);
+        f.addInput(new Label("Earns Bonuses", Constants.colors[6]), isBonusable);
+        f.addInput(new Label("Earns Commission", Constants.colors[7]), isCommissionable);
         f.addInput(new Label("Auto Post", UIManager.getColor("Label.foreground")), autoPost);
-        JButton make = Elements.button("Create Position");
+
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);
+        JButton make = Elements.button("Create Position");
         add(make, BorderLayout.SOUTH);
         make.addMouseListener(new MouseAdapter() {
             @Override
@@ -60,10 +66,13 @@ public class CreatePosition extends LockeState {
                 position.setDescription(descriptionField.getText());
                 position.setCompensation(Double.parseDouble(compensationField.getText()));
                 position.setHourly(isHourly.isSelected());
+                position.setBonus(isBonusable.isSelected());
+                position.setCommission(isCommissionable.isSelected());
                 position.setStatus(LockeStatus.NEW);
                 Pipe.save("/HR/POS", position);
                 dispose();
                 JOptionPane.showMessageDialog(null, "Position succesfully created!");
+                desktop.put(new PositionView(position));
             }
         });
     }

@@ -1,11 +1,8 @@
 package org.Canal.UI.Views.Controllers;
 
 import org.Canal.Start;
-import org.Canal.UI.Elements.Elements;
-import org.Canal.UI.Elements.Selectable;
-import org.Canal.UI.Elements.Selectables;
 import org.Canal.UI.Elements.Label;
-import org.Canal.UI.Elements.Form;
+import org.Canal.UI.Elements.*;
 import org.Canal.UI.Views.CreateLocation;
 import org.Canal.UI.Views.Employees.CreateEmployee;
 import org.Canal.UI.Views.Users.CreateUser;
@@ -19,18 +16,17 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class Setup extends JFrame {
+public class CustomSetup extends JFrame {
 
     private Selectable themes;
     private JCheckBox showCanalCodes;
 
-    public Setup(){
-        setTitle("Setup Canal");
+    public CustomSetup(){
+        setTitle("Install Canal");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JTabbedPane settings = new JTabbedPane();
         settings.add(generalSettings(), "General");
         settings.add(serverInformation(), "Server");
-        settings.add(configurationVariables(), "Configuration");
         setLayout(new BorderLayout());
         add(settings, BorderLayout.CENTER);
         JButton proceed = Elements.button("Begin");
@@ -63,7 +59,7 @@ public class Setup extends JFrame {
         JTextField pkf = new JTextField("A#A#-X#AA-A#A#-AAAA-A#A#-AAAA-A#A#");
         showCanalCodes = new JCheckBox();
         themes = Selectables.themes();
-        l.addInput(new Label("Client Install?", Constants.colors[0]), isClient);
+        l.addInput(new Label("Client CustomSetup?", Constants.colors[0]), isClient);
         l.addInput(new Label("From Import?", Constants.colors[1]), Elements.link("Import *.zip",""));
         l.addInput(new Label("Product Key", Constants.colors[2]), pkf);
         l.addInput(new Label("Show Canal Codes?", Constants.colors[3]), showCanalCodes);
@@ -90,11 +86,6 @@ public class Setup extends JFrame {
         l.addInput(new Label("AWS Key", Constants.colors[5]), awsKey);
         l.addInput(new Label("AWS Directory", Constants.colors[4]), awsDir);
         panel.add(l);
-        return panel;
-    }
-
-    private JPanel configurationVariables(){
-        JPanel panel = new JPanel();
         return panel;
     }
 }

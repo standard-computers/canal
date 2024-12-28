@@ -27,8 +27,10 @@ import java.util.HashMap;
 public class CreateCatalog extends LockeState {
 
     public CreateCatalog(DesktopState desktop) {
+
         super("Build a Catalog", "/CATS/NEW", true, true, true, true);
         setFrameIcon(new ImageIcon(CreateCatalog.class.getResource("/icons/catalogs.png")));
+
         if(Engine.getItems().isEmpty() && Engine.getMaterials().isEmpty()){
             JOptionPane.showMessageDialog(null, "No materials or items.");
             dispose();

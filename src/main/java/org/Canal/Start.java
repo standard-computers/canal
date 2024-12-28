@@ -3,7 +3,7 @@ package org.Canal;
 import com.formdev.flatlaf.IntelliJTheme;
 import org.Canal.Utils.Codex;
 import org.Canal.UI.Views.Controllers.QuickExplorer;
-import org.Canal.UI.Views.Controllers.Setup;
+import org.Canal.UI.Views.Controllers.Install;
 import org.Canal.Utils.Configuration;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Json;
@@ -26,7 +26,7 @@ public class Start {
         File appDataPath = new File(WINDOWS_SYSTEM_DIR);
         if(!appDataPath.exists()) {
             appDataPath.mkdirs();
-            new Setup();
+            new Install();
         }else{
             File md = new File(WINDOWS_SYSTEM_DIR);
             File[] mdf = md.listFiles();
@@ -57,7 +57,7 @@ public class Start {
                     }
                 }
                 if(!hasConfiguration) {
-                    new Setup();
+                    new Install();
                 }
                 if(Engine.codex == null){
                     Codex cdx = new Codex();
@@ -65,7 +65,7 @@ public class Start {
                     Json.save(WINDOWS_SYSTEM_DIR + "\\codex.cdx", cdx);
                 }
             }else{
-                new Setup();
+                new Install();
             }
         }
     }

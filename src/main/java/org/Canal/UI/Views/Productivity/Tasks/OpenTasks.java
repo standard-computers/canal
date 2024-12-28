@@ -1,4 +1,4 @@
-package org.Canal.UI.Views.Tasks;
+package org.Canal.UI.Views.Productivity.Tasks;
 
 import org.Canal.UI.Elements.LockeState;
 

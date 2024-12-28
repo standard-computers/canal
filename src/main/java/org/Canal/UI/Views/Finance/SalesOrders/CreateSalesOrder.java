@@ -51,9 +51,10 @@ public class CreateSalesOrder extends LockeState {
     private JTextField outboundTruckId, inboundTruckId;
 
     public CreateSalesOrder() {
+
         super("Create Sales Order", "/ORDS/SO/NEW", false, true, false, true);
-        Constants.checkLocke(this, true, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));
+        Constants.checkLocke(this, true, true);
 
         JTabbedPane tabs = new JTabbedPane();
         tabs.addTab("Item Details", itemDetails());

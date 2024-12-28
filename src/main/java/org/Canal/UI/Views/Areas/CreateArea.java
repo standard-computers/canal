@@ -25,8 +25,10 @@ import java.awt.event.MouseEvent;
 public class CreateArea extends LockeState {
 
     public CreateArea(String location, RefreshListener refreshListener) {
+
         super("New Area", "/AREAS/NEW", false, true, false, true);
         setFrameIcon(new ImageIcon(CreateArea.class.getResource("/icons/areas.png")));
+
         String generatedId;
         JTextField areaIdField = Elements.input();
         Selectable availableLocations = Selectables.allLocations();

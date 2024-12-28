@@ -19,7 +19,10 @@ public class CustomerView extends LockeState {
     private Location customer;
 
     public CustomerView(Location customer) {
+
         super("Customer / " + customer.getId() + " - " + customer.getName(), "/CSTS/$", false, true, false, true);
+        setFrameIcon(new ImageIcon(CustomerView.class.getResource("/icons/customers.png")));
+
         this.customer = customer;
         JTabbedPane tabbedPane = new JTabbedPane();
         JPanel formPanel = new JPanel();
@@ -77,10 +80,9 @@ public class CustomerView extends LockeState {
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton invoice = new IconButton("Invoice", "invoice", "Invoice customer");
         IconButton addPerson = new IconButton("+ Person", "add_person", "Add person to customer");
-        IconButton label = new IconButton("", "label", "Print labels for properties");
         IconButton delinquent = new IconButton("Delinquent", "delinquent", "Customer in dunning");
         IconButton blocked = new IconButton("Block", "blocked", "Customer is blocked. No transactions.");
-        IconButton refresh = new IconButton("", "refresh", "Reload from store");
+        IconButton refresh = new IconButton("Refresh", "refresh", "Reload from store");
         invoice.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -94,8 +96,6 @@ public class CustomerView extends LockeState {
         tb.add(delinquent);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(blocked);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(label);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(refresh);
         return tb;

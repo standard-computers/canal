@@ -1,6 +1,7 @@
 package org.Canal.UI.Views.Employees;
 
 import org.Canal.Models.HumanResources.Employee;
+import org.Canal.Models.HumanResources.Position;
 import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
@@ -92,6 +93,7 @@ public class Employees extends LockeState {
             "Name",
             "Supervisor",
             "Position",
+            "Pos. Name",
             "Gender",
             "Line 1",
             "Line 2",
@@ -105,6 +107,7 @@ public class Employees extends LockeState {
         };
         ArrayList<Object[]> data = new ArrayList<>();
         for (Employee employee : Engine.getEmployees()) {
+            Position p = Engine.getPosition(employee.getPosition());
             data.add(new Object[]{
                     employee.getId(),
                     employee.getOrg(),
@@ -112,6 +115,7 @@ public class Employees extends LockeState {
                     employee.getName(),
                     employee.getSupervisor(),
                     employee.getPosition(),
+                    (p != null ? p.getName() : ""),
                     employee.getGender(),
                     employee.getLine1(),
                     employee.getLine2(),
