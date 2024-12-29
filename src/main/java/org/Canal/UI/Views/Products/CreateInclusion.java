@@ -1,4 +1,4 @@
-package org.Canal.UI.Views.Products.Items;
+package org.Canal.UI.Views.Products;
 
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Label;

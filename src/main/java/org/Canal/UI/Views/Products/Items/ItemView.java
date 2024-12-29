@@ -29,9 +29,11 @@ public class ItemView extends LockeState {
     private Copiable vendorIdField, vendorNameField, vendorStreetField, vendorCityField, vendorStateField, vendorPostalField, vendorCountryField, vendorTaxExemptField, vendorStatusField;
 
     public ItemView(Item item) {
+
         super("Item / " + item.getId() + " - " + item.getName(), "/ITS/$", true, true, true, true);
+        setFrameIcon(new ImageIcon(ItemView.class.getResource("/icons/items.png")));
         this.item = item;
-        setFrameIcon(new ImageIcon(Items.class.getResource("/icons/items.png")));
+
         setLayout(new BorderLayout());
         JPanel tb = createToolBar();
         add(tb, BorderLayout.NORTH);

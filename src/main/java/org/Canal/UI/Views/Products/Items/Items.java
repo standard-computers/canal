@@ -43,12 +43,12 @@ public class Items extends LockeState implements RefreshListener {
         table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) { // Detect double click
-                    JTable target = (JTable) e.getSource();
-                    int row = target.getSelectedRow(); // Get the clicked row
+                if (e.getClickCount() == 2) {
+                    JTable t = (JTable) e.getSource();
+                    int row = t.getSelectedRow();
                     if (row != -1) {
-                        String value = String.valueOf(target.getValueAt(row, 1));
-                        desktop.put(new EmployeeView(Engine.getEmployee(value)));
+                        String v = String.valueOf(t.getValueAt(row, 1));
+                        desktop.put(new EmployeeView(Engine.getEmployee(v)));
                     }
                 }
             }
@@ -56,6 +56,7 @@ public class Items extends LockeState implements RefreshListener {
     }
 
     private JPanel createToolBar() {
+
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV", "");
@@ -89,6 +90,7 @@ public class Items extends LockeState implements RefreshListener {
     }
 
     private CustomTable createTable() {
+
         String[] columns = new String[]{
             "ID",
             "Org",
@@ -115,10 +117,10 @@ public class Items extends LockeState implements RefreshListener {
             "Tax",
             "Excise Tax"
         };
-        ArrayList<Object[]> data = new ArrayList<>();
+        ArrayList<Object[]> d = new ArrayList<>();
         for (Item item : Engine.getItems()) {
             Location vendor = Engine.getLocation(item.getVendor(), "VEND");
-            data.add(new Object[]{
+            d.add(new Object[]{
                     item.getId(),
                     item.getOrg(),
                     item.getVendor(),
@@ -145,7 +147,7 @@ public class Items extends LockeState implements RefreshListener {
                     item.getExciseTax()
             });
         }
-        return new CustomTable(columns, data);
+        return new CustomTable(columns, d);
     }
 
     @Override

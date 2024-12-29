@@ -1,11 +1,11 @@
 package org.Canal.UI.Views.Products.Materials;
 
 import org.Canal.Models.SupplyChainUnits.Item;
+import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
-import org.Canal.UI.Views.Employees.EmployeeView;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.RefreshListener;
@@ -42,12 +42,12 @@ public class Materials extends LockeState implements RefreshListener {
         table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) { // Detect double click
-                    JTable target = (JTable) e.getSource();
-                    int row = target.getSelectedRow(); // Get the clicked row
+                if (e.getClickCount() == 2) {
+                    JTable t = (JTable) e.getSource();
+                    int row = t.getSelectedRow();
                     if (row != -1) {
-                        String value = String.valueOf(target.getValueAt(row, 1));
-                        desktop.put(new EmployeeView(Engine.getEmployee(value)));
+                        String v = String.valueOf(t.getValueAt(row, 1));
+                        desktop.put(new MaterialView(Engine.getMaterial(v)));
                     }
                 }
             }
@@ -55,6 +55,7 @@ public class Materials extends LockeState implements RefreshListener {
     }
 
     private JPanel createToolBar() {
+
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV", "");
@@ -88,51 +89,55 @@ public class Materials extends LockeState implements RefreshListener {
     }
 
     private CustomTable createTable() {
+
         String[] columns = new String[]{
             "ID",
             "Org",
             "Vendor",
+            "Vendor Name",
             "Name",
             "Color",
             "UPC",
             "Base Qty",
-            "Pack. Unit",
+            "Packaging Unit",
             "Batched",
             "Rentable",
             "SKU'd",
             "Price",
             "Width",
-            "Width UOM",
+            "wUOM",
             "Length",
-            "Length UOM",
+            "lUOM",
             "Height",
-            "Height UOM",
+            "hUOM",
             "Weight",
-            "Weight UOM",
+            "wtUOM",
             "Tax",
             "Excise Tax"
         };
-        ArrayList<Object[]> data = new ArrayList<>();
-        for (Item item : Engine.getMaterials()) {
-            data.add(new Object[]{
-                    item.getId(),
-                    item.getOrg(),
-                    item.getVendor(),
-                    item.getName(),
-                    item.getColor(),
-                    item.getUpc(),
-                    item.isBatched(),
-                    item.isSkud(),
-                    item.getPrice(),
-                    item.getWidth(),
-                    item.getLength(),
-                    item.getHeight(),
-                    item.getWeight(),
-                    item.getTax(),
-                    item.getExciseTax()
+        ArrayList<Object[]> d = new ArrayList<>();
+        for (Item material : Engine.getMaterials()) {
+            Location vendor = Engine.getLocation(material.getVendor(), "VEND");
+            d.add(new Object[]{
+                    material.getId(),
+                    material.getOrg(),
+                    material.getVendor(),
+                    vendor.getName(),
+                    material.getName(),
+                    material.getColor(),
+                    material.getUpc(),
+                    material.isBatched(),
+                    material.isSkud(),
+                    material.getPrice(),
+                    material.getWidth(),
+                    material.getLength(),
+                    material.getHeight(),
+                    material.getWeight(),
+                    material.getTax(),
+                    material.getExciseTax()
             });
         }
-        return new CustomTable(columns, data);
+        return new CustomTable(columns, d);
     }
 
     @Override

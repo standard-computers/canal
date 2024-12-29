@@ -1,15 +1,14 @@
 package org.Canal.UI.Views.Products.Components;
 
 import org.Canal.Models.SupplyChainUnits.Item;
-import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.Copiable;
 import org.Canal.UI.Elements.Selectable;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.LockeState;
-import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.Constants;
+import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Pipe;
 
@@ -18,18 +17,20 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.HashMap;
 
 /**
  * /CMPS/NEW
  */
 public class CreateComponent extends LockeState {
 
-    private Copiable orgIdField;
+    private DesktopState desktop;
+    private Selectable organizations;
     private JTextField materialIdField;
     private JTextField materialNameField;
     private JTextField materialPriceField;
     private JTextField materialColor;
+    private JTextField baseQtyField;
+    private Selectable packagingUnits;
     private UOMField itemWidth;
     private UOMField itemLength;
     private UOMField itemHeight;
@@ -40,36 +41,37 @@ public class CreateComponent extends LockeState {
     private JCheckBox isBatched, isSkud;
     private Selectable selectedVendor;
 
-    public CreateComponent(){
+    public CreateComponent(DesktopState desktop){
 
         super("Create Component", "/", false, true, false, true);
-        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));
+        setFrameIcon(new ImageIcon(CreateComponent.class.getResource("/icons/create.png")));
         Constants.checkLocke(this, true, true);
+        this.desktop = desktop;
 
         Form f1 = new Form();
-        HashMap<String, String> availableVendors = new HashMap<>();
-        for(Location vs : Engine.getLocations("VEND")){
-            availableVendors.put(vs.getId() + " – " + vs.getName(), vs.getId());
-        }
-        selectedVendor = new Selectable(availableVendors);
+        JButton selectPhoto = Elements.button("Select Photo");
+        selectedVendor = Selectables.vendors();
         selectedVendor.editable();
         materialIdField = Elements.input("XI0" + (1000 + (Engine.getItems().size() + 1)));
-        orgIdField = new Copiable(Engine.getOrganization().getId());
+        organizations = Selectables.organizations();
         materialNameField = Elements.input("Black Shirt");
         materialPriceField = Elements.input("1.00");
         isBatched = new JCheckBox("Component expires");
         isSkud = new JCheckBox("Component has unique SKU");
         upc = Elements.input();
         f1.addInput(new Label("*Component ID", new Color(240, 240, 240)), materialIdField);
-        f1.addInput(new Label("*Org ID", new Color(240, 240, 240)), orgIdField);
-        f1.addInput(new Label("Component Name", Constants.colors[0]), materialNameField);
-        f1.addInput(new Label("Vendor", Constants.colors[1]), selectedVendor);
-        f1.addInput(new Label("Batched", Constants.colors[2]), isBatched);
+        f1.addInput(new Label("*Organization ID", new Color(240, 240, 240)), organizations);
+        f1.addInput(new Label("Component Photo", Constants.colors[0]), selectPhoto);
+        f1.addInput(new Label("Component Name", Constants.colors[1]), materialNameField);
+        f1.addInput(new Label("Vendor", Constants.colors[2]), selectedVendor);
+        f1.addInput(new Label("Batched", Constants.colors[3]), isBatched);
         f1.addInput(new Label("Price", Constants.colors[4]), materialPriceField);
         f1.addInput(new Label("SKU'd Product", Constants.colors[5]), isSkud);
-        f1.addInput(new Label("UPC", Constants.colors[5]), upc);
+        f1.addInput(new Label("UPC", Constants.colors[6]), upc);
 
         Form f2 = new Form();
+        baseQtyField = Elements.input();
+        packagingUnits = Selectables.packagingUoms();
         itemWidth = new UOMField();
         itemLength = new UOMField();
         itemHeight = new UOMField();
@@ -77,13 +79,15 @@ public class CreateComponent extends LockeState {
         tax = Elements.input("0");
         exciseTax = Elements.input("0");
         materialColor = Elements.input("Black");
-        f2.addInput(new Label("Color", Constants.colors[7]), materialColor);
-        f2.addInput(new Label("Width", Constants.colors[8]), itemWidth);
-        f2.addInput(new Label("Length", Constants.colors[9]), itemLength);
-        f2.addInput(new Label("Height", Constants.colors[10]), itemHeight);
-        f2.addInput(new Label("Weight", Constants.colors[1]), itemWeight);
-        f2.addInput(new Label("Tax (0.05 as 5%)", Constants.colors[1]), tax);
-        f2.addInput(new Label("Excise Tax (0.05 as 5%)", Constants.colors[1]), exciseTax);
+        f2.addInput(new Label("Packaging Base Quantity", Constants.colors[10]), baseQtyField);
+        f2.addInput(new Label("Packaging UOM", Constants.colors[9]), packagingUnits);
+        f2.addInput(new Label("Color", Constants.colors[8]), materialColor);
+        f2.addInput(new Label("Width", Constants.colors[7]), itemWidth);
+        f2.addInput(new Label("Length", Constants.colors[6]), itemLength);
+        f2.addInput(new Label("Height", Constants.colors[5]), itemHeight);
+        f2.addInput(new Label("Weight", Constants.colors[4]), itemWeight);
+        f2.addInput(new Label("Tax (0.05 as 5%)", Constants.colors[3]), tax);
+        f2.addInput(new Label("Excise Tax (0.05 as 5%)", Constants.colors[2]), exciseTax);
 
         JPanel biPanel = new JPanel(new GridLayout(1, 2));
         f1.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -106,7 +110,7 @@ public class CreateComponent extends LockeState {
         IconButton saveitem = new IconButton("Create Component", "start", "Commit Item");
         saveitem.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                commitItem();
+                createComponent();
             }
         });
         tb.add(review);
@@ -117,25 +121,26 @@ public class CreateComponent extends LockeState {
         return tb;
     }
 
-    protected void commitItem() {
-        Item newItem = new Item();
-        newItem.setId(materialIdField.getText());
-        newItem.setOrg(orgIdField.getText());
-        newItem.setName(materialNameField.getText());
-        newItem.setUpc(upc.getText());
-        newItem.setVendor(selectedVendor.getSelectedValue());
-        newItem.setColor(materialColor.getText());
-        newItem.setBatched(isBatched.isSelected());
-        newItem.setSkud(isSkud.isSelected());
-        newItem.setPrice(Double.parseDouble(materialPriceField.getText()));
-        newItem.setWidth(Double.parseDouble(itemWidth.getValue()));
-        newItem.setLength(Double.parseDouble(itemLength.getValue()));
-        newItem.setHeight(Double.parseDouble(itemHeight.getValue()));
-        newItem.setWeight(Double.parseDouble(itemWeight.getValue()));
-        newItem.setTax(Double.parseDouble(itemWeight.getValue()));
-        newItem.setExciseTax(Double.parseDouble(exciseTax.getText()));
-        Pipe.save("/CMPS", newItem);
+    protected void createComponent() {
+        Item component = new Item();
+        component.setId(materialIdField.getText());
+        component.setOrg(organizations.getSelectedValue());
+        component.setName(materialNameField.getText());
+        component.setUpc(upc.getText());
+        component.setVendor(selectedVendor.getSelectedValue());
+        component.setColor(materialColor.getText());
+        component.setBatched(isBatched.isSelected());
+        component.setSkud(isSkud.isSelected());
+        component.setPrice(Double.parseDouble(materialPriceField.getText()));
+        component.setWidth(Double.parseDouble(itemWidth.getValue()));
+        component.setLength(Double.parseDouble(itemLength.getValue()));
+        component.setHeight(Double.parseDouble(itemHeight.getValue()));
+        component.setWeight(Double.parseDouble(itemWeight.getValue()));
+        component.setTax(Double.parseDouble(itemWeight.getValue()));
+        component.setExciseTax(Double.parseDouble(exciseTax.getText()));
+        Pipe.save("/CMPS", component);
         dispose();
         JOptionPane.showMessageDialog(this, "Component has been created");
+        desktop.put(new ComponentView(component));
     }
 }

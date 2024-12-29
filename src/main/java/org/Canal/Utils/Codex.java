@@ -223,10 +223,9 @@ public class Codex {
         variables.put("MTS", new HashMap<String, Object>() {{
             put("name", "Materials");
             put("prefix", "M0");
+            put("allow_modification", true);
             put("allow_archival", true);
             put("allow_deletion", true);
-            put("automake_enabled", true);
-            put("allow_batch_create", true);
         }});
         variables.put("CMPS", new HashMap<String, Object>() {{
             put("name", "Components");

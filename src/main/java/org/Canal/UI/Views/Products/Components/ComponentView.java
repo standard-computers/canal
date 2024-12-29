@@ -28,13 +28,36 @@ public class ComponentView extends LockeState {
 
     private Item item;
     private JTree dataTree;
-    private Copiable idField, orgField, nameField, vendorField, colorField, batchedField, rentableField, skudField, consumableField, priceField, widthField, lengthField, heightField, weightField, taxField, exciseTaxfield;
-    private Copiable vendorIdField, vendorNameField, vendorStreetField, vendorCityField, vendorStateField, vendorPostalField, vendorCountryField, vendorTaxExemptField, vendorStatusField;
+    private Copiable idField;
+    private Copiable orgField;
+    private Copiable nameField;
+    private Copiable vendorField;
+    private Copiable colorField;
+    private Copiable batchedField;
+    private Copiable rentableField;
+    private Copiable skudField;
+    private Copiable consumableField;
+    private Copiable priceField;
+    private Copiable widthField;
+    private Copiable lengthField;
+    private Copiable heightField;
+    private Copiable weightField;
+    private Copiable taxField;
+    private Copiable exciseTaxfield;
+    private Copiable vendorIdField;
+    private Copiable vendorNameField;
+    private Copiable vendorStreetField;
+    private Copiable vendorCityField;
+    private Copiable vendorStateField;
+    private Copiable vendorPostalField;
+    private Copiable vendorCountryField;
+    private Copiable vendorTaxExemptField;
+    private Copiable vendorStatusField;
 
     public ComponentView(Item item) {
 
         super("Component / " + item.getId() + " - " + item.getName(), "/CMPS/$", true, true, true, true);
-        setFrameIcon(new ImageIcon(ComponentView.class.getResource("/icons/items.png")));
+        setFrameIcon(new ImageIcon(ComponentView.class.getResource("/icons/components.png")));
         this.item = item;
 
         setLayout(new BorderLayout());

@@ -102,12 +102,20 @@ public class Engine {
         Engine.configuration = configuration;
     }
 
+    public static void setOrganization(Location organization) {
+        Engine.organization = organization;
+    }
+
+    public static Location getOrganization() {
+        return organization;
+    }
+
     public static ArrayList<Location> getLocations() {
         ArrayList<Location> locations = new ArrayList<>();
         String[] locs = new String[]{"DCSS", "CCS", "CSTS", "ORGS", "VEND", "WHS", "TRANS/CRRS" };
         for(String l : locs) {
-            File[] dcssDir = Pipe.list(l);
-            for (File file : dcssDir) {
+            File[] d = Pipe.list(l);
+            for (File file : d) {
                 if (!file.isDirectory() && file.getPath().endsWith("." + l.toLowerCase())) {
                     Location loc = Json.load(file.getPath(), Location.class);
                     locations.add(loc);
@@ -120,8 +128,8 @@ public class Engine {
 
     public static ArrayList<Location> getLocations(String objex) {
         ArrayList<Location> locations = new ArrayList<>();
-        File[] dcssDir = Pipe.list(objex);
-        for (File file : dcssDir) {
+        File[] d = Pipe.list(objex);
+        for (File file : d) {
             if (!file.isDirectory()) {
                 Location l = Json.load(file.getPath(), Location.class);
                 locations.add(l);
@@ -146,8 +154,8 @@ public class Engine {
 
     public static ArrayList<Item> getItems() {
         ArrayList<Item> items = new ArrayList<>();
-        File[] itsDir = Pipe.list("ITS");
-        for (File file : itsDir) {
+        File[] d = Pipe.list("ITS");
+        for (File file : d) {
             if (!file.isDirectory()) {
                 Item l = Json.load(file.getPath(), Item.class);
                 items.add(l);
@@ -167,8 +175,8 @@ public class Engine {
 
     public static ArrayList<Item> getMaterials() {
         ArrayList<Item> materials = new ArrayList<>();
-        File[] mtsDir = Pipe.list("MTS");
-        for (File file : mtsDir) {
+        File[] d = Pipe.list("MTS");
+        for (File file : d) {
             if (!file.isDirectory()) {
                 Item a = Json.load(file.getPath(), Item.class);
                 materials.add(a);
@@ -178,14 +186,14 @@ public class Engine {
         return materials;
     }
 
-    public static List<Item> getMaterials(String id) {
-        return getMaterials().stream().filter(location -> location.getOrg().equals(id)).collect(Collectors.toList());
+    public static Item getMaterial(String id) {
+        return getMaterials().stream().filter(m -> m.getId().equals(id)).toList().stream().findFirst().orElse(null);
     }
 
     public static ArrayList<Item> getComponents() {
         ArrayList<Item> components = new ArrayList<>();
-        File[] mtsDir = Pipe.list("MTS");
-        for (File file : mtsDir) {
+        File[] d = Pipe.list("CMPS");
+        for (File file : d) {
             if (!file.isDirectory()) {
                 Item a = Json.load(file.getPath(), Item.class);
                 components.add(a);
@@ -193,6 +201,10 @@ public class Engine {
         }
         components.sort(Comparator.comparing(Item::getId));
         return components;
+    }
+
+    public static Item getComponent(String id) {
+        return getComponents().stream().filter(c -> c.getId().equals(id)).toList().stream().findFirst().orElse(null);
     }
 
     public static ArrayList<Area> getAreas() {
@@ -209,21 +221,17 @@ public class Engine {
     }
 
     public static List<Area> getAreas(String id) {
-        return getAreas().stream().filter(area -> area.getLocation().equals(id)).collect(Collectors.toList());
+        return getAreas().stream().filter(a -> a.getLocation().equals(id)).collect(Collectors.toList());
     }
 
-    public static void setOrganization(Location organization) {
-        Engine.organization = organization;
-    }
-
-    public static Location getOrganization() {
-        return organization;
+    public static Area getArea(String id) {
+        return getAreas().stream().filter(c -> c.getId().equals(id)).toList().stream().findFirst().orElse(null);
     }
 
     public static ArrayList<Employee> getEmployees() {
         ArrayList<Employee> employees = new ArrayList<>();
-        File[] empDir = Pipe.list("EMPS");
-        for (File file : empDir) {
+        File[] d = Pipe.list("EMPS");
+        for (File file : d) {
             if (!file.isDirectory()) {
                 Employee a = Json.load(file.getPath(), Employee.class);
                 employees.add(a);
@@ -234,7 +242,7 @@ public class Engine {
     }
 
     public static List<Employee> getEmployees(String id) {
-        return getEmployees().stream().filter(location -> location.getOrg().equals(id)).collect(Collectors.toList());
+        return getEmployees().stream().filter(e -> e.getOrg().equals(id)).collect(Collectors.toList());
     }
 
     public static Employee getEmployee(String id){
@@ -537,13 +545,13 @@ public class Engine {
                 return new Materials(desktop);
             }
             case "/MTS/NEW" -> {
-                return new CreateMaterial();
+                return new CreateMaterial(desktop);
             }
             case "/CMPS" -> {
                 return new Components(desktop);
             }
             case "/CMPS/NEW" -> {
-                return new CreateComponent();
+                return new CreateComponent(desktop);
             }
             case "/VAS" -> {
                 return new ValueAddedServices();
@@ -917,10 +925,10 @@ public class Engine {
         }
 
         public static SalesOrder getSalesOrder(String poNumber) {
-            File[] posDir = Pipe.list("ORDS/SO");
-            for (File file : posDir) {
-                if (!file.isDirectory()) {
-                    SalesOrder a = Json.load(file.getPath(), SalesOrder.class);
+            File[] d = Pipe.list("ORDS/SO");
+            for (File f : d) {
+                if (!f.isDirectory()) {
+                    SalesOrder a = Json.load(f.getPath(), SalesOrder.class);
                     if (a.getOrderId().equals(poNumber)) {
                         return a;
                     }
@@ -931,10 +939,10 @@ public class Engine {
 
         public static ArrayList<PurchaseRequisition> getPurchaseRequisitions() {
             ArrayList<PurchaseRequisition> prs = new ArrayList<>();
-            File[] posDir = Pipe.list("PR");
-            for (File file : posDir) {
-                if (!file.isDirectory()) {
-                    PurchaseRequisition a = Json.load(file.getPath(), PurchaseRequisition.class);
+            File[] d = Pipe.list("PR");
+            for (File f : d) {
+                if (!f.isDirectory()) {
+                    PurchaseRequisition a = Json.load(f.getPath(), PurchaseRequisition.class);
                     prs.add(a);
                 }
             }
@@ -954,18 +962,5 @@ public class Engine {
             pos.sort(Comparator.comparing(GoodsReceipt::getId));
             return pos;
         }
-    }
-
-    public static Area getArea(String areaId) {
-        File[] areaDir = Pipe.list("AREAS");
-        for (File file : areaDir) {
-            if (!file.isDirectory()) {
-                Area a = Json.load(file.getPath(), Area.class);
-                if (a.getId().equals(areaId)) {
-                    return a;
-                }
-            }
-        }
-        return null;
     }
 }

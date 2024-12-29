@@ -8,7 +8,11 @@ import java.util.UUID;
 public class Pipe {
 
     public static File[] list(String dir){
-        return new File(Start.WINDOWS_SYSTEM_DIR + "\\.store\\" + dir).listFiles();
+        File f = new File(Start.WINDOWS_SYSTEM_DIR + "\\.store\\" + dir);
+        if(!f.exists()){
+            f.mkdirs();
+        }
+        return f.listFiles();
     }
 
     public static void save(String dir, Object o){
