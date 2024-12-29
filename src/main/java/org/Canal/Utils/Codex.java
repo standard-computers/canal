@@ -82,6 +82,16 @@ public class Codex {
             put("automake_enabled", true);
             put("allow_batch_create", true);
         }});
+        variables.put("ACCS", new HashMap<String, Object>() {{
+            put("name", "Accounts");
+            put("icon", "accounts");
+            put("prefix", "#");
+            put("require_agreements", false);
+            put("allow_archival", true);
+            put("allow_deletion", true);
+            put("automake_enabled", true);
+            put("allow_batch_create", true);
+        }});
         variables.put("AREAS", new HashMap<String, Object>() {{
             put("name", "Areas");
             put("icon", "areas");
@@ -189,6 +199,14 @@ public class Codex {
         variables.put("GI", new HashMap<String, Object>() {{
             put("name", "Goods Issues");
             put("prefix", "GI");
+            put("allow_archival", true);
+            put("allow_deletion", true);
+            put("automake_enabled", true);
+            put("allow_batch_create", true);
+        }});
+        variables.put("CATS", new HashMap<String, Object>() {{
+            put("name", "Catalogs");
+            put("prefix", "CT");
             put("allow_archival", true);
             put("allow_deletion", true);
             put("automake_enabled", true);

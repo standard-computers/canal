@@ -1,4 +1,4 @@
-package org.Canal.UI.Views.Controllers;
+package org.Canal.UI.Views.System;
 
 import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;

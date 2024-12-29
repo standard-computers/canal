@@ -39,7 +39,7 @@ public class CreateFlow extends LockeState {
 
         RSyntaxTextArea textArea = new RSyntaxTextArea(20, 60);
         textArea.setText("{}");
-        textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
+        textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JSON);
         textArea.setCodeFoldingEnabled(true);
 
         // Set theme (optional)

@@ -11,6 +11,8 @@ import org.Canal.UI.Views.*;
 import org.Canal.UI.Views.Areas.*;
 import org.Canal.UI.Views.Bins.*;
 import org.Canal.UI.Views.Departments.DeleteDepartment;
+import org.Canal.UI.Views.Finance.Accounts.Accounts;
+import org.Canal.UI.Views.Finance.Accounts.CreateAccount;
 import org.Canal.UI.Views.Finance.PurchaseOrders.*;
 import org.Canal.UI.Views.Positions.Positions;
 import org.Canal.UI.Views.Productivity.Flows.CreateFlow;
@@ -39,6 +41,7 @@ import org.Canal.UI.Views.Positions.CreatePosition;
 import org.Canal.UI.Views.Products.Items.CreateItem;
 import org.Canal.UI.Views.Products.Items.ItemView;
 import org.Canal.UI.Views.Products.Items.Items;
+import org.Canal.UI.Views.System.CanalSettings;
 import org.Canal.UI.Views.Teams.CreateTeam;
 import org.Canal.UI.Views.Teams.Teams;
 import org.Canal.UI.Views.Inventory.*;
@@ -116,20 +119,20 @@ public class Engine {
     }
 
     public static ArrayList<Location> getLocations(String objex) {
-        ArrayList<Location> distributionCenters = new ArrayList<>();
+        ArrayList<Location> locations = new ArrayList<>();
         File[] dcssDir = Pipe.list(objex);
         for (File file : dcssDir) {
             if (!file.isDirectory()) {
                 Location l = Json.load(file.getPath(), Location.class);
-                distributionCenters.add(l);
+                locations.add(l);
             }
         }
-        distributionCenters.sort(Comparator.comparing(Location::getId));
-        return distributionCenters;
+        locations.sort(Comparator.comparing(Location::getId));
+        return locations;
     }
 
     public static List<Location> getLocations(String org, String objex) {
-        return getLocations(objex).stream().filter(location -> location.getOrganization().equals(org)).collect(Collectors.toList());
+        return getLocations(objex).stream().filter(l -> l.getOrganization().equals(org)).collect(Collectors.toList());
     }
 
     public static Location getLocation(String id, String objex) {
@@ -159,12 +162,7 @@ public class Engine {
     }
 
     public static Item getItem(String id) {
-        for(Item item : getItems()){
-            if(item.getId().equals(id)){
-                return item;
-            }
-        }
-        return null;
+        return getItems().stream().filter(i -> i.getId().equals(id)).toList().stream().findFirst().orElse(null);
     }
 
     public static ArrayList<Item> getMaterials() {
@@ -239,13 +237,8 @@ public class Engine {
         return getEmployees().stream().filter(location -> location.getOrg().equals(id)).collect(Collectors.toList());
     }
 
-    public static Employee getEmployee(String Id){
-        for(Employee e : getEmployees()){
-            if(e.getId().equals(Id)){
-                return e;
-            }
-        }
-        return null;
+    public static Employee getEmployee(String id){
+        return getEmployees().stream().filter(e -> e.getId().equals(id)).toList().stream().findFirst().orElse(null);
     }
 
     public static ArrayList<Catalog> getCatalogs() {
@@ -259,6 +252,10 @@ public class Engine {
         }
         catalogs.sort(Comparator.comparing(Catalog::getId));
         return catalogs;
+    }
+
+    public static Catalog getCatalog(String id) {
+        return getCatalogs().stream().filter(c -> c.getId().equals(id)).toList().stream().findFirst().orElse(null);
     }
 
     public static ArrayList<User> getUsers() {
@@ -275,12 +272,7 @@ public class Engine {
     }
 
     public static User getUser(String id) {
-        for(User u : getUsers()){
-            if(u.getId().equals(id)){
-                return u;
-            }
-        }
-        return null;
+        return getUsers().stream().filter(u -> u.getId().equals(id)).toList().stream().findFirst().orElse(null);
     }
 
     public static ArrayList<PurchaseOrder> getOrders() {
@@ -379,6 +371,10 @@ public class Engine {
         return deliveries;
     }
 
+    public static Delivery getInboundDelivery(String id){
+        return getInboundDeliveries().stream().filter(delivery -> delivery.getId().equals(id)).toList().stream().findFirst().orElse(null);
+    }
+
     public static ArrayList<Delivery> getOutboundDeliveries() {
         ArrayList<Delivery> deliveries = new ArrayList<>();
         File[] d = Pipe.list("TRANS/ODO");
@@ -408,7 +404,7 @@ public class Engine {
     }
 
     public static Delivery getOutboundDelivery(String id){
-        return getOutboundDeliveries().stream().filter(inventory -> inventory.getId().equals(id)).toList().stream().findFirst().orElse(null);
+        return getOutboundDeliveries().stream().filter(delivery -> delivery.getId().equals(id)).toList().stream().findFirst().orElse(null);
     }
 
     public static ArrayList<Inventory> getInventories() {
@@ -488,6 +484,12 @@ public class Engine {
             }
             case "/CSTS/NEW" -> {
                 return new CreateLocation("/CSTS", desktop, null);
+            }
+            case "/ACCS" -> {
+                return new Accounts(desktop);
+            }
+            case "/ACCS/NEW" -> {
+                return new CreateAccount();
             }
             case "/DCSS" -> {
                 return new Locations("/DCSS", desktop);

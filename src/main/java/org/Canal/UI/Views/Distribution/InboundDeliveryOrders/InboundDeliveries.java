@@ -38,6 +38,19 @@ public class InboundDeliveries extends LockeState {
         holder.add(tableScrollPane, BorderLayout.CENTER);
         holder.add(tb, BorderLayout.NORTH);
         add(holder);
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) { // Detect double click
+                    JTable target = (JTable) e.getSource();
+                    int row = target.getSelectedRow(); // Get the clicked row
+                    if (row != -1) {
+                        String value = String.valueOf(target.getValueAt(row, 1));
+                        desktop.put(new DeliveryView(Engine.getInboundDelivery(value)));
+                    }
+                }
+            }
+        });
     }
 
     private JPanel createToolBar() {

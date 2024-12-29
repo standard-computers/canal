@@ -96,7 +96,7 @@ public class PurchaseOrders extends LockeState {
         };
         ArrayList<Object[]> pos = new ArrayList<>();
         for (PurchaseOrder po : Engine.orderProcessing.getPurchaseOrder()) {
-            pos.add(new String[]{
+            pos.add(new Object[]{
                     po.getOrderId(),
                     po.getOwner(),
                     po.getOrderedOn(),
@@ -107,7 +107,7 @@ public class PurchaseOrders extends LockeState {
                     po.getBillTo(),
                     po.getSoldTo(),
                     po.getCustomer(),
-                    String.valueOf(po.getTotal()),
+                    po.getTotal(),
                     String.valueOf(po.getStatus())
             });
         }

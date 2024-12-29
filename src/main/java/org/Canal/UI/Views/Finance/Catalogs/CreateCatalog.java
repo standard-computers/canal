@@ -29,7 +29,7 @@ public class CreateCatalog extends LockeState {
     public CreateCatalog(DesktopState desktop) {
 
         super("Build a Catalog", "/CATS/NEW", true, true, true, true);
-        setFrameIcon(new ImageIcon(CreateCatalog.class.getResource("/icons/catalogs.png")));
+        setFrameIcon(new ImageIcon(CreateCatalog.class.getResource("/icons/create.png")));
 
         if(Engine.getItems().isEmpty() && Engine.getMaterials().isEmpty()){
             JOptionPane.showMessageDialog(null, "No materials or items.");
@@ -38,10 +38,9 @@ public class CreateCatalog extends LockeState {
         }
 
         Form f = new Form();
-
-        String cid = "CATALOG-" + (Engine.getCatalogs().size() + 1);
+        String cid = ((String) Engine.codex("CATS", "preix")) + (Engine.getCatalogs().size() + 1);
         JTextField catalogIdField = new Copiable(cid);
-        JTextField catalogNameField = Elements.input(25);
+        JTextField catalogNameField = Elements.input();
         JTextField descriptionField = Elements.input();
         JTextField periodField = Elements.input();
         DatePicker validFromField = new DatePicker();

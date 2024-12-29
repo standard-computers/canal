@@ -164,6 +164,13 @@ public class Constants {
                         new Locke("Archive Customer", getIcon("archive"), "/CSTS/ARCHV", null),
                         new Locke("Remove Customer", getIcon("delete"), "/CSTS/DEL", null),
                 }),
+                new Locke("Accounts", getIcon("locke"), "/ACCS", new Locke[]{
+                        new Locke("Find Account", getIcon("find"), "/ACCS/F", null),
+                        new Locke("Create Account", getIcon("create"), "/ACCS/NEW", null),
+                        new Locke("Modify Account", getIcon("modify"), "/ACCS/MOD", null),
+                        new Locke("Archive Account", getIcon("archive"), "/ACCS/ARCHV", null),
+                        new Locke("Remove Account", getIcon("delete"), "/ACCS/DEL", null),
+                }),
                 new Locke("Invoices", getIcon("invoices"), "/INVS", new Locke[]{
                         new Locke("Find an Invoice", getIcon("find"), "/INVS/F", null),
                         new Locke("Create an Invoice", getIcon("create"), "/INVS/NEW", null),

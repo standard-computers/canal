@@ -1,14 +1,14 @@
 package org.Canal.Models.SupplyChainUnits;
 
+import org.Canal.Models.Objex;
+
 import java.util.ArrayList;
 
 /**
  * A list of available items to someone.
  */
-public class Catalog {
+public class Catalog extends Objex {
 
-    private String id; //Catalog ID
-    private String name; //Name of Catalog
     private String description;
     private String period;
     private String validFrom;
@@ -17,22 +17,6 @@ public class Catalog {
     private ArrayList<String> customers;
     private ArrayList<String> vendors;
     private ArrayList<Item> items = new ArrayList<>();
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getDescription() {
         return description;

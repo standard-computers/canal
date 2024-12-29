@@ -32,9 +32,11 @@ public class ComponentView extends LockeState {
     private Copiable vendorIdField, vendorNameField, vendorStreetField, vendorCityField, vendorStateField, vendorPostalField, vendorCountryField, vendorTaxExemptField, vendorStatusField;
 
     public ComponentView(Item item) {
+
         super("Component / " + item.getId() + " - " + item.getName(), "/CMPS/$", true, true, true, true);
-        this.item = item;
         setFrameIcon(new ImageIcon(ComponentView.class.getResource("/icons/items.png")));
+        this.item = item;
+
         setLayout(new BorderLayout());
         JPanel tb = createToolBar();
         add(tb, BorderLayout.NORTH);

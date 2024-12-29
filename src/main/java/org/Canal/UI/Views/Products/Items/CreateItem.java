@@ -29,20 +29,29 @@ public class CreateItem extends LockeState implements Includer {
     private JTextField exciseTax;
     private JTextField upc;
     private JTextField baseQtyField;
-    private UOMField itemWidth, itemLength, itemHeight, itemWeight;
-    private JCheckBox isBatched, isRentable, isSkud, isConsumable;
-    private Selectable orgIdField, selectedVendor, packagingUnits;
+    private UOMField itemWidth;
+    private UOMField itemLength;
+    private UOMField itemHeight;
+    private UOMField itemWeight;
+    private JCheckBox isBatched;
+    private JCheckBox isRentable;
+    private JCheckBox isSkud;
+    private JCheckBox isConsumable;
+    private Selectable orgIdField;
+    private Selectable selectedVendor;
+    private Selectable packagingUnits;
     private DesktopState desktop;
 
     public CreateItem(DesktopState desktop){
+
         super("Item Builder", "/ITS/NEW", false, true, false, true);
-        this.desktop = desktop;
-        Constants.checkLocke(this, true, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));
+        Constants.checkLocke(this, true, true);
+        this.desktop = desktop;
+
         Form f1 = new Form();
-        Form f2 = new Form();
+        JButton selectPhoto = Elements.button("Select Photo");
         selectedVendor = Selectables.vendors();
-        packagingUnits = Selectables.packagingUoms();
         itemIdField = Elements.input("X0" + (1000 + (Engine.getItems().size() + 1)));
         orgIdField = Selectables.organizations();
         itemNameField = Elements.input("Black Shirt");
@@ -51,18 +60,21 @@ public class CreateItem extends LockeState implements Includer {
         isRentable = new JCheckBox(" Item can be rented");
         isSkud = new JCheckBox(" Item has unique SKU");
         upc = Elements.input();
-        baseQtyField = Elements.input();
         f1.addInput(new Label("*New Item ID", new Color(240, 240, 240)), itemIdField);
         f1.addInput(new Label("*Organization", new Color(240, 240, 240)), orgIdField);
-        f1.addInput(new Label("Item Name", Constants.colors[0]), itemNameField);
-        f1.addInput(new Label("Vendor", Constants.colors[1]), selectedVendor);
-        f1.addInput(new Label("Packaging UOM Qty.", Constants.colors[2]), baseQtyField);
-        f1.addInput(new Label("Packaging UOM", Constants.colors[3]), packagingUnits);
-        f1.addInput(new Label("Batched", Constants.colors[4]), isBatched);
-        f1.addInput(new Label("Rentable", Constants.colors[5]), isRentable);
-        f1.addInput(new Label("Price", Constants.colors[6]), itemPriceField);
-        f1.addInput(new Label("SKU'd Product", Constants.colors[7]), isSkud);
-        f1.addInput(new Label("UPC", Constants.colors[8]), upc);
+        f1.addInput(new Label("Item Name", Constants.colors[0]), selectPhoto);
+        f1.addInput(new Label("Item Name", Constants.colors[1]), itemNameField);
+        f1.addInput(new Label("Vendor", Constants.colors[2]), selectedVendor);
+        f1.addInput(new Label("Batched", Constants.colors[3]), isBatched);
+        f1.addInput(new Label("Rentable", Constants.colors[4]), isRentable);
+        f1.addInput(new Label("Price", Constants.colors[5]), itemPriceField);
+        f1.addInput(new Label("SKU'd Product", Constants.colors[6]), isSkud);
+        f1.addInput(new Label("UPC", Constants.colors[7]), upc);
+        f1.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+        Form f2 = new Form();
+        baseQtyField = Elements.input();
+        packagingUnits = Selectables.packagingUoms();
         itemWidth = new UOMField();
         itemLength = new UOMField();
         itemHeight = new UOMField();
@@ -71,22 +83,26 @@ public class CreateItem extends LockeState implements Includer {
         exciseTax = Elements.input("0");
         itemColor = Elements.input("Black");
         isConsumable = new JCheckBox();
-        f2.addInput(new Label("Consumable?", UIManager.getColor("Label.foreground")), isConsumable);
-        f2.addInput(new Label("Color", UIManager.getColor("Label.foreground")), itemColor);
-        f2.addInput(new Label("Width", UIManager.getColor("Label.foreground")), itemWidth);
-        f2.addInput(new Label("Length", UIManager.getColor("Label.foreground")), itemLength);
-        f2.addInput(new Label("Height", UIManager.getColor("Label.foreground")), itemHeight);
-        f2.addInput(new Label("Weight", UIManager.getColor("Label.foreground")), itemWeight);
-        f2.addInput(new Label("Tax (0.05 as 5%)", UIManager.getColor("Label.foreground")), tax);
-        f2.addInput(new Label("Excise Tax (0.05 as 5%)", UIManager.getColor("Label.foreground")), exciseTax);
-        JPanel biPanel = new JPanel(new GridLayout(1, 2));
-        f1.setBorder(new EmptyBorder(5, 5, 5, 5));
+        f2.addInput(new Label("Packaging UOM Qty.", Constants.colors[10]), baseQtyField);
+        f2.addInput(new Label("Packaging UOM", Constants.colors[9]), packagingUnits);
+        f2.addInput(new Label("Consumable?", Constants.colors[8]), isConsumable);
+        f2.addInput(new Label("Color", Constants.colors[7]), itemColor);
+        f2.addInput(new Label("Width", Constants.colors[6]), itemWidth);
+        f2.addInput(new Label("Length", Constants.colors[5]), itemLength);
+        f2.addInput(new Label("Height", Constants.colors[4]), itemHeight);
+        f2.addInput(new Label("Weight", Constants.colors[3]), itemWeight);
+        f2.addInput(new Label("Tax (0.05 as 5%)", Constants.colors[2]), tax);
+        f2.addInput(new Label("Excise Tax (0.05 as 5%)", Constants.colors[1]), exciseTax);
         f2.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+        JPanel biPanel = new JPanel(new GridLayout(1, 2));
         biPanel.add(f1);
         biPanel.add(f2);
+
         JPanel topBar = new JPanel(new BorderLayout());
         topBar.add(Elements.header("Item Builder", SwingConstants.LEFT), BorderLayout.CENTER);
         topBar.add(modifiers(), BorderLayout.SOUTH);
+
         setLayout(new BorderLayout());
         add(topBar, BorderLayout.NORTH);
         add(biPanel, BorderLayout.CENTER);
@@ -94,6 +110,7 @@ public class CreateItem extends LockeState implements Includer {
     }
 
     private JPanel modifiers(){
+
         JPanel tb = new JPanel(new BorderLayout());
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         JLabel materialModifer = Elements.link("Materials (0)", "Add/Remove Materials");
@@ -125,14 +142,15 @@ public class CreateItem extends LockeState implements Includer {
     }
 
     private JPanel actionsBar() {
+
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton review = new IconButton("Review", "review", "Review for warnings or potential errors");
-        IconButton materials = new IconButton("+ Materials", "areas", "Add an area cost center");
-        IconButton components = new IconButton("+ Components", "component", "Print labels for properties");
+        IconButton materials = new IconButton("+ Materials", "materials", "Add an area cost center");
+        IconButton components = new IconButton("+ Components", "components", "Print labels for properties");
         IconButton addPriceVariance = new IconButton("+ Price Var.", "autoprice", "");
         IconButton autoprice = new IconButton("Autoprice", "autoprice", "");
-        IconButton generateUPC = new IconButton("Make UPC", "label", "");
+        IconButton importDetails = new IconButton("Import", "import", "");
         IconButton saveitem = new IconButton("Create Item", "start", "");
         materials.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -151,7 +169,10 @@ public class CreateItem extends LockeState implements Includer {
         });
         saveitem.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                commitItem();
+                int ccc = JOptionPane.showConfirmDialog(null, "Confirm item creation and ensure all information is correct.", "Confirm item creation?", JOptionPane.YES_NO_CANCEL_OPTION);
+                if(ccc == JOptionPane.YES_OPTION) {
+                    commitItem();
+                }
             }
         });
         tb.add(review);
@@ -164,7 +185,7 @@ public class CreateItem extends LockeState implements Includer {
         tb.add(Box.createHorizontalStrut(5));
         tb.add(addPriceVariance);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(generateUPC);
+        tb.add(importDetails);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(saveitem);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -172,6 +193,7 @@ public class CreateItem extends LockeState implements Includer {
     }
 
     protected void commitItem() {
+
         Item ni = new Item();
         ni.setId(itemIdField.getText());
         ni.setOrg(orgIdField.getSelectedValue());

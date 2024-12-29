@@ -65,7 +65,7 @@ public class AutoMakeBins extends LockeState {
         opts.add(sa);
         opts.add(dsa);
         selector.add(opts, BorderLayout.SOUTH);
-        tabs.add(selector, "Areas");
+        tabs.add(selector, "Select Areas");
         tabs.addTab("Bin Information", binInformation());
         setLayout(new BorderLayout());
         add(Elements.header("AutoMake Bins", SwingConstants.LEFT), BorderLayout.NORTH);

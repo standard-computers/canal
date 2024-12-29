@@ -23,12 +23,14 @@ public class GoodsIssues extends LockeState {
     private DesktopState desktop;
 
     public GoodsIssues(DesktopState desktop) {
+
         super("Goods Issues", "/GI", true, true, true, true);
         setFrameIcon(new ImageIcon(GoodsIssues.class.getResource("/icons/purchaseorders.png")));
         if(Engine.orderProcessing.getGoodsReceipts().isEmpty()){
             dispose();
             JOptionPane.showMessageDialog(this, "No Goods Receipts Posted!");
         }
+
         this.desktop = desktop;
         JPanel tb = createToolBar();
         JPanel holder = new JPanel(new BorderLayout());
