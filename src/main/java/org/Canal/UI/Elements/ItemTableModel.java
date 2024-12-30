@@ -1,6 +1,9 @@
 package org.Canal.UI.Elements;
 
 import org.Canal.Models.SupplyChainUnits.Item;
+import org.Canal.Models.SupplyChainUnits.Location;
+import org.Canal.Utils.Engine;
+
 import javax.swing.table.AbstractTableModel;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -9,15 +12,28 @@ import java.util.List;
 public class ItemTableModel extends AbstractTableModel {
 
     private final List<Item> items;
-    private final String[] columnNames = {"Item Name", "Item", "Quantity", "Price", "Total"};
-    private final Class<?>[] columnTypes = {String.class, Item.class, Integer.class, Double.class, Double.class};
+    private final String[] columnNames = {
+            "Item Name",
+            "Item",
+            "Vendor",
+            "Vendor Name",
+            "Quantity",
+            "Price",
+            "Total",
+            "Calc. Weight",
+            "wUOM"
+    };
+    private final Class<?>[] columnTypes = {
+            String.class, Item.class, String.class, String.class, Integer.class, Double.class, Double.class, Double.class, String.class
+    };
     private final List<Object[]> data;
 
     public ItemTableModel(List<Item> items) {
         this.items = items;
         data = new ArrayList<>();
         for (Item item : items) {
-            data.add(new Object[]{item.getName(), item, 1, item.getPrice(), item.getPrice()});
+            Location v = Engine.getLocation(item.getVendor(), "VEND");
+            data.add(new Object[]{item.getName(), item, item.getVendor(), v.getName(), 1, item.getPrice(), item.getPrice(), item.getWeight(), item.getWeightUOM()});
         }
     }
 
@@ -42,15 +58,15 @@ public class ItemTableModel extends AbstractTableModel {
             Item selectedItem = (Item) value;
             data.get(rowIndex)[columnIndex] = selectedItem;
             data.get(rowIndex)[0] = selectedItem.getName();
-            data.get(rowIndex)[3] = selectedItem.getPrice();
-            double price = Double.valueOf(data.get(rowIndex)[3].toString());
-            int quantity = Integer.valueOf(data.get(rowIndex)[2].toString());
-            data.get(rowIndex)[4] = price * quantity;
+            data.get(rowIndex)[5] = selectedItem.getPrice();
+            double price = Double.parseDouble(data.get(rowIndex)[5].toString());
+            int quantity = Integer.parseInt(data.get(rowIndex)[4].toString());
+            data.get(rowIndex)[6] = price * quantity;
         } else if (columnIndex == 2) {
-            int quantity = Integer.valueOf(value.toString());
-            data.get(rowIndex)[2] = quantity;
-            double price = Double.valueOf(data.get(rowIndex)[3].toString());
-            data.get(rowIndex)[4] = price * quantity;
+            int quantity = Integer.parseInt(value.toString());
+            data.get(rowIndex)[4] = quantity;
+            double price = Double.parseDouble(data.get(rowIndex)[5].toString());
+            data.get(rowIndex)[6] = price * quantity;
         } else {
             data.get(rowIndex)[columnIndex] = value;
         }
@@ -73,7 +89,8 @@ public class ItemTableModel extends AbstractTableModel {
     }
 
     public void addRow(Item item) {
-        data.add(new Object[]{item.getName(), item, 1, item.getPrice(), item.getPrice()});
+        Location v = Engine.getLocation(item.getVendor(), "VEND");
+        data.add(new Object[]{item.getName(), item, item.getVendor(), v.getName(), 1, item.getPrice(), item.getPrice(), item.getWeight(), item.getWeightUOM()});
         fireTableRowsInserted(data.size() - 1, data.size() - 1);
     }
 
@@ -87,7 +104,7 @@ public class ItemTableModel extends AbstractTableModel {
     public String getTotalPrice() {
         double total = 0.0;
         for (Object[] row : data) {
-            total += Double.valueOf(row[4].toString());
+            total += Double.parseDouble(row[6].toString());
         }
         return new DecimalFormat("#.00").format(total);
     }

@@ -73,16 +73,16 @@ public class CreateMaterial extends LockeState {
         f1.addInput(new Label("UPC", Constants.colors[6]), upc);
 
         Form f2 = new Form();
-        baseQtyField = Elements.input();
+        baseQtyField = Elements.input("1");
         packagingUnits = Selectables.packagingUoms();
+        iniVolumeField = new UOMField();
+        materialColor = Elements.input("Black");
         itemWidth = new UOMField();
         itemLength = new UOMField();
         itemHeight = new UOMField();
         itemWeight = new UOMField();
-        tax = Elements.input();
-        exciseTax = Elements.input();
-        materialColor = Elements.input("Black");
-        iniVolumeField = new UOMField();
+        tax = Elements.input("0");
+        exciseTax = Elements.input("0");
         f2.addInput(new Label("Packaging Base Quantity", Constants.colors[10]), baseQtyField);
         f2.addInput(new Label("Packaging UOM", Constants.colors[9]), packagingUnits);
         f2.addInput(new Label("Ini. Volume", Constants.colors[8]), iniVolumeField);
@@ -136,6 +136,8 @@ public class CreateMaterial extends LockeState {
         material.setBatched(isBatched.isSelected());
         material.setSkud(isSkud.isSelected());
         material.setPrice(Double.parseDouble(materialPriceField.getText()));
+        material.setBaseQuantity(Double.parseDouble(baseQtyField.getText()));
+        material.setPackagingUnit(packagingUnits.getSelectedValue());
         material.setWidth(Double.parseDouble(itemWidth.getValue()));
         material.setWidthUOM(itemWidth.getUOM());
         material.setLength(Double.parseDouble(itemLength.getValue()));

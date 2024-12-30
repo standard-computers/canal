@@ -13,15 +13,12 @@ import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.UI.Views.Controllers.Controller;
-import org.Canal.Utils.Constants;
-import org.Canal.Utils.Engine;
-import org.Canal.Utils.LockeStatus;
-import org.Canal.Utils.Pipe;
+import org.Canal.UI.Views.System.LockeMessages;
+import org.Canal.Utils.*;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.*;
 import java.text.DecimalFormat;
@@ -38,22 +35,34 @@ import java.util.HashMap;
  */
 public class CreatePurchaseOrder extends LockeState {
 
+    private DesktopState desktop;
     private PurchaseOrder newOrder;
     private ItemTableModel model;
     private double taxRate = 0.05;
-    private JLabel netValue;
+    private JLabel netAmount;
     private JLabel taxAmount;
     private JLabel totalAmount;
-    private Selectable availablePrs, selectVendor, selectBillTo, selectShipTo, organizations, carriers, buyerObjexType, ledgerId;
-    private Copiable orderId;
+    private Selectable availablePrs;
+    private Selectable selectVendor;
+    private Selectable selectBillTo;
+    private Selectable selectShipTo;
+    private Selectable organizations;
+    private Selectable carriers;
+    private Selectable buyerObjexType;
+    private Selectable ledgerId;
+    private Selectable statuses;
+    private JTextField orderId;
     private DatePicker expectedDelivery;
-    private JCheckBox commitToLedger, makeSalesOrder, createDelivery;
+    private JCheckBox commitToLedger;
+    private JCheckBox createDelivery;
+    private Truck truck;
 
-    public CreatePurchaseOrder() {
+    public CreatePurchaseOrder(DesktopState desktop) {
 
         super("Create Purchase Order", "/ORDS/PO/NEW", false, true, false, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));
         Constants.checkLocke(this, true, true);
+        this.desktop = desktop;
         newOrder = new PurchaseOrder();
 
         JTabbedPane tabs = new JTabbedPane();
@@ -72,16 +81,67 @@ public class CreatePurchaseOrder extends LockeState {
         JPanel orderInfo = new JPanel(new BorderLayout());
         orderInfo.add(coreValues, BorderLayout.WEST);
         orderInfo.add(moreInfo, BorderLayout.EAST);
+        orderInfo.add(buttons(), BorderLayout.SOUTH);
         add(orderInfo, BorderLayout.NORTH);
 
         add(tabs, BorderLayout.CENTER);
-        JButton save = Elements.button("Submit Order");
         JPanel orderSummary = new JPanel(new BorderLayout());
         JPanel genSummary = orderSummary();
         orderSummary.add(genSummary, BorderLayout.CENTER);
-        orderSummary.add(save, BorderLayout.SOUTH);
         add(orderSummary, BorderLayout.SOUTH);
-        save.addMouseListener(new MouseAdapter() {
+        model.addTableModelListener(_ -> updateTotal());
+    }
+
+    private JPanel buttons(){
+
+        JPanel p = new JPanel(new FlowLayout());
+        p.setLayout(new BoxLayout(p, BoxLayout.X_AXIS));
+        IconButton copyFrom = new IconButton("Copy From","open", "Review for errors or warnings");
+        IconButton review = new IconButton("Review","review", "Review for errors or warnings");
+        IconButton create = new IconButton("Create","start", "Create Purchase Order");
+        p.add(copyFrom);
+        p.add(Box.createHorizontalStrut(5));
+        p.add(review);
+        p.add(Box.createHorizontalStrut(5));
+        p.add(create);
+        p.setBorder(new EmptyBorder(5, 5, 5, 5));
+        review.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+
+                if(!selectShipTo.getSelectedValue().equals(selectBillTo.getSelectedValue())){
+                    addToQueue(new String[]{"WARNING", "Bill To & Ship To do not match"});
+                }
+                if(truck == null){
+                    addToQueue(new String[]{"WARNING", "Truck not selected. One will be created"});
+                }
+                if(Engine.getLocation(selectVendor.getSelectedValue(), "VEND") == null){
+                    addToQueue(new String[]{"WARNING", "Selected supplier is not a technical vendor"});
+                }
+                if(availablePrs.getSelectedValue() != null){
+                    PurchaseRequisition pr = Engine.orderProcessing.getPurchaseRequisition(availablePrs.getSelectedValue());
+                    if(pr == null){
+                        addToQueue(new String[]{"ERROR", "Selected Purchase Requisition was not found!!!"});
+                    }else{
+                        if(!pr.getBuyer().equals(selectBillTo.getSelectedValue())){
+                            addToQueue(new String[]{"WARNING", "Bill To does not match buyer in selected Purchase Requisition"});
+                        }
+                        if(!pr.getBuyer().equals(selectShipTo.getSelectedValue())){
+                            addToQueue(new String[]{"WARNING", "Ship To does not match buyer in selected Purchase Requisition"});
+                        }
+                        if(!pr.getSupplier().equals(selectVendor.getSelectedValue())){
+                            addToQueue(new String[]{"WARNING", "Selected Purchase Requisition NOT for selected Vendor!"});
+                        }
+                    }
+                }else{
+                    addToQueue(new String[]{"WARNING", "No Purchase Requisition selected. Is this intentional?"});
+                }
+                desktop.put(new LockeMessages(getQueue()));
+                purgeQueue();
+            }
+        });
+        create.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if(expectedDelivery.getSelectedDate() == null){
@@ -96,7 +156,7 @@ public class CreatePurchaseOrder extends LockeState {
                 int ccc = JOptionPane.showConfirmDialog(null, "You have selected the Org ID as the charge account. Are you sure you want to charge the corp account?", "Confirm order?", JOptionPane.YES_NO_CANCEL_OPTION);
                 if(ccc == JOptionPane.YES_OPTION){
                     newOrder.setOwner((Engine.getAssignedUser().getId()));
-                    newOrder.setOrderId(orderId.value());
+                    newOrder.setOrderId(orderId.getText());
                     newOrder.setVendor(selectVendor.getSelectedValue());
                     newOrder.setBillTo(selectBillTo.getSelectedValue());
                     newOrder.setShipTo(selectShipTo.getSelectedValue());
@@ -106,9 +166,6 @@ public class CreatePurchaseOrder extends LockeState {
                     newOrder.setStatus(LockeStatus.NEW);
                     ArrayList<OrderLineItem> lineitems = new ArrayList<>();
                     for (int row = 0; row < model.getRowCount(); row++) {
-                        for (int col = 0; col < model.getColumnCount(); col++) {
-                            Object value = model.getValueAt(row, col);
-                        }
                         String itemName = model.getValueAt(row, 0).toString();
                         String itemId = model.getValueAt(row, 1).toString();
                         double itemQty = Double.parseDouble(model.getValueAt(row, 2).toString());
@@ -150,7 +207,7 @@ public class CreatePurchaseOrder extends LockeState {
                             t.setLocke(getLocke());
                             t.setObjex(buyerObjexType.getSelectedValue());
                             t.setLocation(selectBillTo.getSelectedValue());
-                            t.setReference(orderId.value());
+                            t.setReference(orderId.getText());
                             t.setAmount(-1 * Double.parseDouble(model.getTotalPrice()));
                             t.setCommitted(Constants.now());
                             t.setStatus(LockeStatus.PROCESSING);
@@ -160,32 +217,33 @@ public class CreatePurchaseOrder extends LockeState {
                             JOptionPane.showMessageDialog(null, "No such ledger.", "Error", JOptionPane.ERROR_MESSAGE);
                         }
                     }
-
                     dispose();
                     JOptionPane.showMessageDialog(null, "Order submitted.");
                 }
             }
         });
-        model.addTableModelListener(_ -> updateTotal());
+        return p;
     }
 
     private JPanel orderInfoPanel(){
+
         Form f = new Form();
         selectBillTo = Selectables.allLocations();
         selectBillTo.editable();
         selectShipTo = Selectables.allLocations();
         selectShipTo.editable();
-        selectVendor = Selectables.vendors();
+        selectVendor = Selectables.allLocations();
         selectVendor.editable();
-        orderId = new Copiable("OR" + (70000000 + (Engine.getOrders().size() + 1)));
+        orderId = Elements.input(((String) Engine.codex("ORDS/PO", "prefix")) + (70000000 + (Engine.getOrders().size() + 1)));
         f.addInput(new Label("*Order ID", Constants.colors[0]), orderId);
         f.addInput(new Label("Supplier/Vendor", Constants.colors[1]), selectVendor);
-        f.addInput(new Label("Bill To", Constants.colors[2]), selectBillTo);
-        f.addInput(new Label("Ship To", Constants.colors[3]), selectShipTo);
+        f.addInput(new Label("Bill To Location", Constants.colors[2]), selectBillTo);
+        f.addInput(new Label("Ship To Location", Constants.colors[3]), selectShipTo);
         return f;
     }
 
     private JPanel moreOrderInfoPanel(){
+
         Form f = new Form();
         JTextField ordered = new Copiable(LocalDate.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy")));
         HashMap<String, String> prs = new HashMap<>();
@@ -195,54 +253,58 @@ public class CreatePurchaseOrder extends LockeState {
         availablePrs = new Selectable(prs);
         availablePrs.editable();
         expectedDelivery = new DatePicker();
-        f.addInput(new Label("*Ordered", UIManager.getColor("Label.foreground")), ordered);
-        f.addInput(new Label("Purchase Requisition", UIManager.getColor("Label.foreground")), availablePrs);
-        f.addInput(new Label("Expected Delivery", UIManager.getColor("Label.foreground")), expectedDelivery);
-        f.addInput(new Label("Status", UIManager.getColor("Label.foreground")), new Copiable("DRAFT"));
+        statuses = Selectables.statusTypes();
+        f.addInput(new Label("*Ordered On", Constants.colors[10]), ordered);
+        f.addInput(new Label("Purchase Requisition", Constants.colors[9]), availablePrs);
+        f.addInput(new Label("Expected Delivery", Constants.colors[8]), expectedDelivery);
+        f.addInput(new Label("Status", Constants.colors[7]), statuses);
         return f;
     }
 
     private JPanel orderSummary(){
+
         Form f = new Form();
         DecimalFormat df = new DecimalFormat("#0.00");
-        netValue = new JLabel("$" + model.getTotalPrice());
-        netValue.setFont(UIManager.getFont("h3.font"));
-        f.addInput(new JLabel("Net Value"), netValue);
-        taxAmount = new JLabel("$" + df.format(taxRate * Double.parseDouble(model.getTotalPrice())));
-        taxAmount.setFont(UIManager.getFont("h3.font"));
-        f.addInput(new JLabel("Tax Amount"), taxAmount);
-        totalAmount = Elements.h2("$" + df.format(taxRate * Double.parseDouble(model.getTotalPrice()) + Double.parseDouble(model.getTotalPrice())));
-        totalAmount.setForeground(new Color(33, 124, 13));
-        f.addInput(Elements.h2("Total"), totalAmount);
+        netAmount = Elements.label("$" + model.getTotalPrice());
+        f.addInput(new Label("Net Amount", UIManager.getColor("Label.foreground")), netAmount);
+        taxAmount = Elements.label("$" + df.format(taxRate * Double.parseDouble(model.getTotalPrice())));
+
+        JTextField taxRateField = Elements.input("0.05");
+        f.addInput(new Label("Tax Rate", UIManager.getColor("Label.foreground")), taxRateField);
+        f.addInput(new Label("Tax Amount", UIManager.getColor("Label.foreground")), taxAmount);
+        totalAmount = Elements.label("$" + df.format(Double.parseDouble(taxRateField.getText()) * Double.parseDouble(model.getTotalPrice()) + Double.parseDouble(model.getTotalPrice())));
+        f.addInput(new Label("Total Amount", Constants.colors[5]), totalAmount);
         return f;
     }
 
     private void updateTotal(){
+
         DecimalFormat df = new DecimalFormat("#0.00");
-        netValue.setText("$" + model.getTotalPrice());
+        netAmount.setText("$" + model.getTotalPrice());
         taxAmount.setText("$" + df.format(taxRate * Double.parseDouble(model.getTotalPrice())));
         totalAmount.setText("$" + df.format(taxRate * Double.parseDouble(model.getTotalPrice()) + Double.parseDouble(model.getTotalPrice())));
     }
 
     private JPanel itemDetails(){
+
         JPanel p = new JPanel(new BorderLayout());
-        ArrayList<Item> items = Engine.getItems();
+        ArrayList<Item> items = Engine.getProducts();
         if(items.isEmpty()){
-            JOptionPane.showMessageDialog(this, "No items found", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "No products found", "Error", JOptionPane.ERROR_MESSAGE);
             dispose();
         }
         model = new ItemTableModel(Collections.singletonList(items.getFirst()));
         JTable table = new JTable(model);
-        TableColumn col1 = table.getColumnModel().getColumn(1);
-        TableColumn col2 = table.getColumnModel().getColumn(2);
-        TableColumn col3 = table.getColumnModel().getColumn(3);
-        TableColumn col4 = table.getColumnModel().getColumn(4);
 
         TableCellRenderer centerRenderer = new CenteredRenderer();
-        col1.setCellRenderer(centerRenderer);
-        col2.setCellRenderer(centerRenderer);
-        col3.setCellRenderer(centerRenderer);
-        col4.setCellRenderer(centerRenderer);
+        table.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
+        table.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
+        table.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
+        table.getColumnModel().getColumn(4).setCellRenderer(centerRenderer);
+        table.getColumnModel().getColumn(5).setCellRenderer(centerRenderer);
+        table.getColumnModel().getColumn(6).setCellRenderer(centerRenderer);
+        table.getColumnModel().getColumn(7).setCellRenderer(centerRenderer);
+        table.getColumnModel().getColumn(8).setCellRenderer(centerRenderer);
         JComboBox<Item> itemComboBox = new JComboBox<>(items.toArray(new Item[0]));
         table.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(itemComboBox));
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -268,23 +330,28 @@ public class CreatePurchaseOrder extends LockeState {
     }
 
     private JPanel deliveryDetails(){
+
         Form p = new Form();
         createDelivery = new JCheckBox();
         if((boolean) Engine.codex("ORDS/PO", "use_deliveries")){
             createDelivery.setSelected(true);
+            createDelivery.setEnabled(false);
         }
         carriers = Selectables.carriers();
+        JButton selectTruck = Elements.button("Select Truck");
         p.addInput(new Label("Create Inbound Delivery (IDO) for Ship-To", Constants.colors[9]), createDelivery);
         p.addInput(new Label("Carrier", Constants.colors[8]), carriers);
+        p.addInput(new Label("Truck (If Empty, makes new)", Constants.colors[9]), selectTruck);
         return p;
     }
 
     private JPanel ledgerDetails(){
+
         Form f = new Form();
         commitToLedger = new JCheckBox();
-        makeSalesOrder = new JCheckBox();
         if((boolean) Engine.codex("ORDS/PO", "commit_to_ledger")){
             commitToLedger.setSelected(true);
+            commitToLedger.setEnabled(false);
         }
         organizations = Selectables.organizations();
         buyerObjexType = Selectables.locationObjex("/DCSS");

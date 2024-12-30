@@ -70,4 +70,8 @@ public class LockeState extends JInternalFrame {
     public void addToQueue(String[] message) {
         queue.add(message);
     }
+
+    public void purgeQueue(){
+        queue.clear();
+    }
 }

@@ -262,7 +262,7 @@ public class Constants {
                                 new Locke("Archive PR", getIcon("archive"), "/ORDS/PR/ARCHV", null),
                                 new Locke("Remove PR", getIcon("delete"), "/ORDS/PR/DEL", null),
                         }),
-                        new Locke("Sales Orders", getIcon("order"), "/ORDS/SO", new Locke[]{ //Controller
+                        new Locke("Sales Orders", getIcon("salesorders"), "/ORDS/SO", new Locke[]{ //Controller
                                 new Locke("Find Sales Order", getIcon("find"), "/ORDS/SO", null),
                                 new Locke("Create Sales Order", getIcon("create"), "/ORDS/SO/NEW", null),
                                 new Locke("Modify Sales Order", getIcon("modify"), "/ORDS/SO/MOD", null),

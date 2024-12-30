@@ -152,6 +152,22 @@ public class Engine {
         return null;
     }
 
+    public static ArrayList<Item> getProducts() {
+        ArrayList<Item> products = new ArrayList<>();
+        String[] ps = new String[]{"ITS", "MTS", "CMPS"};
+        for(String p : ps) {
+            File[] d = Pipe.list(p);
+            for (File file : d) {
+                if (!file.isDirectory() && file.getPath().endsWith("." + p.toLowerCase())) {
+                    Item loc = Json.load(file.getPath(), Item.class);
+                    products.add(loc);
+                }
+            }
+        }
+        products.sort(Comparator.comparing(Item::getId));
+        return products;
+    }
+
     public static ArrayList<Item> getItems() {
         ArrayList<Item> items = new ArrayList<>();
         File[] d = Pipe.list("ITS");
@@ -620,7 +636,7 @@ public class Engine {
                 return new PurchaseOrders(desktop);
             }
             case "/ORDS/PO/NEW" -> {
-                return new CreatePurchaseOrder();
+                return new CreatePurchaseOrder(desktop);
             }
             case "/ORDS/PO/AUTO_MK" -> {
                 return new AutoMakePurchaseOrders();
@@ -883,6 +899,10 @@ public class Engine {
                 }
             }
             return null;
+        }
+
+        public static PurchaseRequisition getPurchaseRequisition(String id){
+            return getPurchaseRequisitions().stream().filter(pr -> pr.getId().equals(id)).toList().stream().findFirst().orElse(null);
         }
 
         public static ArrayList<PurchaseOrder> getPurchaseOrder() {

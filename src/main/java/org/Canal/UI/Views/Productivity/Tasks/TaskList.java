@@ -61,7 +61,7 @@ public class TaskList extends LockeState {
         tb.add(label);
         createPurchaseOrder.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new CreatePurchaseOrder());
+                desktop.put(new CreatePurchaseOrder(desktop));
             }
         });
         label.addMouseListener(new MouseAdapter() {

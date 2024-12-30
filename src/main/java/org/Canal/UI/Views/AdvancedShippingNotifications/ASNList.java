@@ -66,7 +66,7 @@ public class ASNList extends LockeState {
         tb.add(Box.createHorizontalStrut(5));
         createPurchaseOrder.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new CreatePurchaseOrder());
+                desktop.put(new CreatePurchaseOrder(desktop));
             }
         });
         label.addMouseListener(new MouseAdapter() {

@@ -21,7 +21,7 @@ import java.util.ArrayList;
  */
 public class PurchaseOrders extends LockeState {
 
-    private JTable table;
+    private CustomTable table;
     private DesktopState desktop;
 
     public PurchaseOrders(DesktopState desktop) {
@@ -49,8 +49,8 @@ public class PurchaseOrders extends LockeState {
         IconButton suspendPo = new IconButton("Suspend", "suspend", "Suspend PO, can't be used");
         IconButton activatePO = new IconButton("Start", "start", "Resume/Activate PO");
         IconButton archivePo = new IconButton("Archive", "archive", "Archive PO, removes", "/ORDS/PO/ARCHV");
-        IconButton label = new IconButton("Barcodes", "label", "Print labels for org properties");
-        JTextField filterValue = Elements.input("Search", 10);
+        IconButton find = new IconButton("Find", "find", "Find by values", "/ORDS/PO/F");
+        IconButton label = new IconButton("Labels", "label", "Print labels for org properties");
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(createPurchaseOrder);
@@ -63,9 +63,9 @@ public class PurchaseOrders extends LockeState {
         tb.add(Box.createHorizontalStrut(5));
         tb.add(archivePo);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(label);
+        tb.add(find);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(filterValue);
+        tb.add(label);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));
         label.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {

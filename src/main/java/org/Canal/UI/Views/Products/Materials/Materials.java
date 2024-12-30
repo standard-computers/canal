@@ -113,7 +113,9 @@ public class Materials extends LockeState implements RefreshListener {
             "Weight",
             "wtUOM",
             "Tax",
-            "Excise Tax"
+            "Excise Tax",
+            "Status",
+            "Created",
         };
         ArrayList<Object[]> d = new ArrayList<>();
         for (Item material : Engine.getMaterials()) {
@@ -126,15 +128,24 @@ public class Materials extends LockeState implements RefreshListener {
                     material.getName(),
                     material.getColor(),
                     material.getUpc(),
+                    material.getBaseQuantity(),
+                    material.getPackagingUnit(),
                     material.isBatched(),
+                    material.isRentable(),
                     material.isSkud(),
                     material.getPrice(),
                     material.getWidth(),
+                    material.getWidthUOM(),
                     material.getLength(),
+                    material.getLengthUOM(),
                     material.getHeight(),
+                    material.getHeightUOM(),
                     material.getWeight(),
+                    material.getWeightUOM(),
                     material.getTax(),
-                    material.getExciseTax()
+                    material.getExciseTax(),
+                    material.getStatus(),
+                    material.getCreated(),
             });
         }
         return new CustomTable(columns, d);

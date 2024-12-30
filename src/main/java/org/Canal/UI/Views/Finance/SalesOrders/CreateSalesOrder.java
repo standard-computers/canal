@@ -286,9 +286,9 @@ public class CreateSalesOrder extends LockeState {
 
     private JPanel itemDetails(){
         JPanel p = new JPanel(new BorderLayout());
-        ArrayList<Item> items = Engine.getItems();
+        ArrayList<Item> items = Engine.getProducts();
         if(items.isEmpty()){
-            JOptionPane.showMessageDialog(this, "No items found", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "No products found", "Error", JOptionPane.ERROR_MESSAGE);
             dispose();
         }
         model = new ItemTableModel(Collections.singletonList(items.getFirst()));

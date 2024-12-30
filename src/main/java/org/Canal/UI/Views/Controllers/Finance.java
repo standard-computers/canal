@@ -51,7 +51,7 @@ public class Finance extends LockeState {
         planning.add(goodsIssues);
         newPurOrd.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new CreatePurchaseOrder());
+                desktop.put(new CreatePurchaseOrder(desktop));
             }
         });
         purOrd.addMouseListener(new MouseAdapter() {

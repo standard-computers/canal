@@ -207,6 +207,7 @@ public class Selectables {
         statusTypes.put("PALLETS", "PALLETS");
         statusTypes.put("REEMES", "REEMES");
         Selectable uomField = new Selectable(statusTypes);
+        uomField.setSelectedValue("EA");
         uomField.editable();
         return uomField;
     }
