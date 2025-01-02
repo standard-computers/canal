@@ -13,8 +13,13 @@ import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.UI.Views.Controllers.Controller;
+import org.Canal.UI.Views.Productivity.Flows.CreateFlow;
 import org.Canal.UI.Views.System.LockeMessages;
 import org.Canal.Utils.*;
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rsyntaxtextarea.Theme;
+import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -69,6 +74,7 @@ public class CreatePurchaseOrder extends LockeState {
         tabs.addTab("Item Details", itemDetails());
         tabs.addTab("Delivery", deliveryDetails());
         tabs.addTab("Ledger", ledgerDetails());
+        tabs.addTab("Note", noteMaker());
 
         JPanel coreValues = orderInfoPanel();
         JPanel moreInfo = moreOrderInfoPanel();
@@ -118,6 +124,9 @@ public class CreatePurchaseOrder extends LockeState {
                 }
                 if(Engine.getLocation(selectVendor.getSelectedValue(), "VEND") == null){
                     addToQueue(new String[]{"WARNING", "Selected supplier is not a technical vendor"});
+                }
+                if(statuses.getSelectedValue().equals("COMPLETED")){
+                    addToQueue(new String[]{"WARNING", "Status COMPLETED will prevent further actions!"});
                 }
                 if(availablePrs.getSelectedValue() != null){
                     PurchaseRequisition pr = Engine.orderProcessing.getPurchaseRequisition(availablePrs.getSelectedValue());
@@ -361,5 +370,22 @@ public class CreatePurchaseOrder extends LockeState {
         f.addInput(new Label("Purchasing Org.", UIManager.getColor("Label.foreground")), organizations);
         f.addInput(new Label("Ledger", UIManager.getColor("Label.foreground")), ledgerId);
         return f;
+    }
+
+    private JPanel noteMaker(){
+        JPanel p = new JPanel(new BorderLayout());
+        RSyntaxTextArea textArea = new RSyntaxTextArea(20, 60);
+        textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_MARKDOWN);
+        textArea.setCodeFoldingEnabled(true);
+        textArea.setLineWrap(false);
+        try {
+            Theme theme = Theme.load(CreateFlow.class.getResourceAsStream("/org/fife/ui/rsyntaxtextarea/themes/dark.xml"));
+            theme.apply(textArea);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        RTextScrollPane scrollPane = new RTextScrollPane(textArea);
+        p.add(scrollPane, BorderLayout.CENTER);
+        return p;
     }
 }

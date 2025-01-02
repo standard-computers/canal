@@ -8,14 +8,14 @@ import javax.swing.*;
 /**
  * /MTS/$[MATERIAL_ID]
  */
-public class MaterialView extends LockeState {
+public class ViewMaterial extends LockeState {
 
     private Item material;
 
-    public MaterialView(Item material) {
+    public ViewMaterial(Item material) {
 
         super("Material / " + material.getName(), "/MTS/$", true, true, true, true);
-        setFrameIcon(new ImageIcon(MaterialView.class.getResource("/icons/materials.png")));
+        setFrameIcon(new ImageIcon(ViewMaterial.class.getResource("/icons/materials.png")));
         this.material = material;
 
 

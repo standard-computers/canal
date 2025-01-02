@@ -74,7 +74,7 @@ public class CreateLedger extends LockeState {
 
                 Pipe.save("/LGS", newLedger);
                 dispose();
-                desktop.put(new LedgerView(newLedger, desktop));
+                desktop.put(new ViewLedger(newLedger, desktop));
             }
         });
     }

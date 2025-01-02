@@ -6,7 +6,7 @@ import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
-import org.Canal.UI.Views.Employees.EmployeeView;
+import org.Canal.UI.Views.Employees.ViewEmployee;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.RefreshListener;
@@ -48,7 +48,7 @@ public class Items extends LockeState implements RefreshListener {
                     int row = t.getSelectedRow();
                     if (row != -1) {
                         String v = String.valueOf(t.getValueAt(row, 1));
-                        desktop.put(new EmployeeView(Engine.getEmployee(v)));
+                        desktop.put(new ViewEmployee(Engine.getEmployee(v)));
                     }
                 }
             }

@@ -5,6 +5,7 @@ import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Views.CreateLocation;
 import org.Canal.UI.Views.Employees.CreateEmployee;
+import org.Canal.UI.Views.System.QuickExplorer;
 import org.Canal.UI.Views.Users.CreateUser;
 import org.Canal.Utils.Configuration;
 import org.Canal.Utils.Constants;

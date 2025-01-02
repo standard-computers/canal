@@ -7,6 +7,7 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.Theme;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
+import javax.swing.*;
 import java.util.ArrayList;
 
 /**
@@ -17,6 +18,8 @@ public class LockeMessages extends LockeState {
     public LockeMessages(ArrayList<String[]> messages) {
 
         super("Locke Messages", "/>", true, true, true, true);
+        setFrameIcon(new ImageIcon(LockeMessages.class.getResource("/icons/alerts.png")));
+
         RSyntaxTextArea textArea = new RSyntaxTextArea(20, 60);
         for(String[] m : messages) {
             textArea.append(m[0] + " / " + m[1] + "\n");

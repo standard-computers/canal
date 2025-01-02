@@ -5,9 +5,9 @@ import org.Canal.UI.Elements.LockeState;
 /**
  * /TMS/$[TEAM_ID]
  */
-public class TeamView extends LockeState {
+public class ViewTeam extends LockeState {
 
-    public TeamView() {
+    public ViewTeam() {
         super("Team", "/TMS/$", false, true, false, true);
 
     }

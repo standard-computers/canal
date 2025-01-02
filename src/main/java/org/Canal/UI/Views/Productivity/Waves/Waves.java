@@ -5,9 +5,9 @@ import org.Canal.UI.Elements.LockeState;
 /**
  * /RPTS/MVMT/WVS/IS_OPEN
  */
-public class OpenWaves extends LockeState {
+public class Waves extends LockeState {
 
-    public OpenWaves() {
+    public Waves() {
         super("Open Waves", "/RPTS/MVMT/WVS/IS_OPEN", false, true, false, true);
     }
 }

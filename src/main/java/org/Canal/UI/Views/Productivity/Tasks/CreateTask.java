@@ -2,7 +2,6 @@ package org.Canal.UI.Views.Productivity.Tasks;
 
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Label;
-import org.Canal.UI.Views.Areas.CreateArea;
 import org.Canal.Utils.Constants;
 
 import javax.swing.*;

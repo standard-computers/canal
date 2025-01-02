@@ -2,9 +2,13 @@ package org.Canal.UI.Views.Controllers;
 
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.LockeState;
+import org.Canal.UI.Views.Finance.GoodsIssues.GoodsIssues;
+import org.Canal.UI.Views.Finance.GoodsReceipts.GoodsReceipts;
 import org.Canal.UI.Views.Finance.PurchaseRequisitions.PurchaseRequisitions;
 import org.Canal.UI.Views.Finance.PurchaseOrders.CreatePurchaseOrder;
 import org.Canal.UI.Views.Finance.PurchaseRequisitions.CreatePurchaseRequisition;
+import org.Canal.UI.Views.Finance.SalesOrders.CreateSalesOrder;
+import org.Canal.UI.Views.Finance.SalesOrders.SalesOrders;
 import org.Canal.Utils.DesktopState;
 
 import javax.swing.*;
@@ -19,9 +23,12 @@ import java.awt.event.MouseEvent;
 public class Finance extends LockeState {
 
     public Finance(DesktopState desktop) {
+
         super("Finance", "/CNL/FI", true, true, true, true);
         setFrameIcon(new ImageIcon(TimeClock.class.getResource("/icons/finance.png")));
-        JPanel main = new JPanel(new GridLayout(1, 3));
+
+        JPanel main = new JPanel(new GridLayout(1, 4));
+
         JPanel demand = new JPanel(new GridLayout(2, 1));
         demand.setBorder(new TitledBorder("Demand"));
         JButton newPurReg = Elements.button("New Purchase Req");
@@ -36,6 +43,23 @@ public class Finance extends LockeState {
         purReg.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 desktop.put(new PurchaseRequisitions(desktop));
+            }
+        });
+
+        JPanel sales = new JPanel(new GridLayout(2, 1));
+        sales.setBorder(new TitledBorder("Sales"));
+        JButton createSalesOrder = Elements.button("New Sales Orders");
+        JButton salesOrders = Elements.button("Sales Orders");
+        sales.add(createSalesOrder);
+        sales.add(salesOrders);
+        createSalesOrder.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                desktop.put(new CreateSalesOrder());
+            }
+        });
+        salesOrders.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                desktop.put(new SalesOrders(desktop));
             }
         });
 
@@ -59,6 +83,16 @@ public class Finance extends LockeState {
 
             }
         });
+        goodsReceipts.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                desktop.put(new GoodsReceipts(desktop));
+            }
+        });
+        goodsIssues.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                desktop.put(new GoodsIssues(desktop));
+            }
+        });
 
         JPanel reporting = new JPanel(new GridLayout(8, 1));
         reporting.setBorder(new TitledBorder("Reporting"));
@@ -78,6 +112,7 @@ public class Finance extends LockeState {
         reporting.add(balanceReporting);
 
         main.add(demand);
+        main.add(sales);
         main.add(planning);
         main.add(reporting);
         add(main);

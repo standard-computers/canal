@@ -71,7 +71,7 @@ public class CreateEmployee extends LockeState {
                 Pipe.save("/EMPS", newEmployee);
                 dispose();
                 JOptionPane.showMessageDialog(null, "Employee Created");
-                desktop.put(new EmployeeView(newEmployee));
+                desktop.put(new ViewEmployee(newEmployee));
             }
         });
     }

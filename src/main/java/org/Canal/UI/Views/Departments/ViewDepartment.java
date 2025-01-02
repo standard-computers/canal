@@ -9,11 +9,11 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-public class DepartmentView extends LockeState {
+public class ViewDepartment extends LockeState {
 
-    public DepartmentView(Department department) {
+    public ViewDepartment(Department department) {
         super("Department " + department.getId(), "/DPTS/$", true, true, true, true);
-        setFrameIcon(new ImageIcon(DepartmentView.class.getResource("/icons/departments.png")));
+        setFrameIcon(new ImageIcon(ViewDepartment.class.getResource("/icons/departments.png")));
         JTabbedPane tabbedPane = new JTabbedPane();
 
         JScrollPane positionsList = new JScrollPane();

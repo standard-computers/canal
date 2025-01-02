@@ -13,10 +13,15 @@ import org.Canal.UI.Elements.Selectables;
 import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.UI.Views.Controllers.Controller;
+import org.Canal.UI.Views.Productivity.Flows.CreateFlow;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.LockeStatus;
 import org.Canal.Utils.Pipe;
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rsyntaxtextarea.Theme;
+import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -61,6 +66,7 @@ public class CreateSalesOrder extends LockeState {
         tabs.addTab("Delivery", deliveryDetails());
         tabs.addTab("Ledger", ledgerDetails());
         tabs.addTab("Purchase Order", purchaseOrderDetails());
+        tabs.addTab("Note", noteMaker());
 
         JPanel coreValues = orderInfoPanel();
         JPanel moreInfo = moreOrderInfoPanel();
@@ -385,5 +391,22 @@ public class CreateSalesOrder extends LockeState {
         f.addInput(new Label("Transporation Carrier", Constants.colors[6]), inboundCarriers);
         f.addInput(new Label("Truck ID/Number", Constants.colors[5]), inboundTruckId);
         return f;
+    }
+
+    private JPanel noteMaker(){
+        JPanel p = new JPanel(new BorderLayout());
+        RSyntaxTextArea textArea = new RSyntaxTextArea(20, 60);
+        textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_MARKDOWN);
+        textArea.setCodeFoldingEnabled(true);
+        textArea.setLineWrap(false);
+        try {
+            Theme theme = Theme.load(CreateFlow.class.getResourceAsStream("/org/fife/ui/rsyntaxtextarea/themes/dark.xml"));
+            theme.apply(textArea);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        RTextScrollPane scrollPane = new RTextScrollPane(textArea);
+        p.add(scrollPane, BorderLayout.CENTER);
+        return p;
     }
 }

@@ -6,9 +6,9 @@ import org.Canal.UI.Elements.LockeState;
 /**
  * /ORDS/PR/$[PR_ID]
  */
-public class PurchaseReqView extends LockeState {
+public class ViewPurchaseRequisition extends LockeState {
 
-    public PurchaseReqView(PurchaseRequisition requisition) {
+    public ViewPurchaseRequisition(PurchaseRequisition requisition) {
         super("Purchase Requisitions", "/ORDS/PR/$", false, true, false, true);
 
     }

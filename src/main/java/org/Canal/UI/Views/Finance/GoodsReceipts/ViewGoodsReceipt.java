@@ -5,9 +5,9 @@ import org.Canal.UI.Elements.LockeState;
 /**
  * /GR/$[GR_ID]
  */
-public class GoodsReceiptView extends LockeState {
+public class ViewGoodsReceipt extends LockeState {
 
-    public GoodsReceiptView() {
+    public ViewGoodsReceipt() {
         super("Goods Receipt", "/GR$", false, true, false, true);
 
     }

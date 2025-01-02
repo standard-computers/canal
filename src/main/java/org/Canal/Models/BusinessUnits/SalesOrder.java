@@ -154,7 +154,6 @@ public class SalesOrder extends Objex {
                     SalesOrder forg = Json.load(file.getPath(), SalesOrder.class);
                     if (forg.getOrderId().equals(getOrderId())) {
                         Json.save(file.getPath(), this);
-                        break;
                     }
                 }
             }

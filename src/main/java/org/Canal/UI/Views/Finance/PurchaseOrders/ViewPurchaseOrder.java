@@ -28,7 +28,7 @@ import java.util.HashMap;
 /**
  * /ORDS/NEW, /ORDS/PO/NEW
  */
-public class PurchaseOrderView extends LockeState {
+public class ViewPurchaseOrder extends LockeState {
 
     private PurchaseOrder po;
     private ItemTableModel model;
@@ -43,7 +43,7 @@ public class PurchaseOrderView extends LockeState {
     private Copiable orderId;
     private DatePicker expectedDelivery;
 
-    public PurchaseOrderView(PurchaseOrder po) {
+    public ViewPurchaseOrder(PurchaseOrder po) {
         super("Purchase Order / " + po.getOrderId(), "/", false, true, false, true);
         Constants.checkLocke(this, true, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));

@@ -1,20 +1,20 @@
 package org.Canal.Models.BusinessUnits;
 
+import org.Canal.Models.Objex;
+
 /**
  * This class represents a set of items
  * at a set purchase price.
  */
-public class OrderLineItem {
+public class OrderLineItem extends Objex {
 
-    private String id;
-    private String name;
     private double quantity;
     private double onHand;
     private double price;
     private double total;
 
     public OrderLineItem(String name, String id, double quantity, double price, double total) {
-        this.name = name;
+        super.name = name;
         this.id = id;
         this.quantity = quantity;
         this.price = price;
@@ -26,22 +26,6 @@ public class OrderLineItem {
         this.name = name;
         this.quantity = quantity;
         this.onHand = onHand;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public double getQuantity() {

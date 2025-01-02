@@ -51,7 +51,7 @@ public class Positions extends LockeState implements RefreshListener {
                     if (row != -1) {
                         String value = String.valueOf(target.getValueAt(row, 1));
                         Position p = Engine.getPosition(value);
-                        desktop.put(new PositionView(p));
+                        desktop.put(new ViewPosition(p));
                     }
                 }
             }

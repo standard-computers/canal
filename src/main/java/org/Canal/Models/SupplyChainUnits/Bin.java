@@ -1,16 +1,14 @@
 package org.Canal.Models.SupplyChainUnits;
 
-import org.Canal.Utils.LockeStatus;
+import org.Canal.Models.Objex;
 
 import java.util.ArrayList;
 
 /**
  * For inventory and storage of items.
  */
-public class Bin {
+public class Bin extends Objex {
 
-    private String id;
-    private String name;
     private String area; //Area ID this bin is in
     private boolean auto_replenish; //If this bin is on a flow, do not replenish if false
     private boolean fixed; //Only one item allowed
@@ -30,23 +28,6 @@ public class Bin {
     private double volume;
     private boolean picking;
     private boolean goodsissue;
-    private LockeStatus status;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getArea() {
         return area;
@@ -182,13 +163,5 @@ public class Bin {
 
     public void setVolume(double volume) {
         this.volume = volume;
-    }
-
-    public LockeStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(LockeStatus status) {
-        this.status = status;
     }
 }

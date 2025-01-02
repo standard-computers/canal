@@ -72,7 +72,7 @@ public class CreatePosition extends LockeState {
                 Pipe.save("/HR/POS", position);
                 dispose();
                 JOptionPane.showMessageDialog(null, "Position succesfully created!");
-                desktop.put(new PositionView(position));
+                desktop.put(new ViewPosition(position));
             }
         });
     }

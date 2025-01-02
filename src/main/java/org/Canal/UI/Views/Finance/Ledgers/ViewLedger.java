@@ -20,17 +20,17 @@ import java.util.ArrayList;
 /**
  * /LGS/$[LEDGER_ID]
  */
-public class LedgerView extends LockeState implements RefreshListener {
+public class ViewLedger extends LockeState implements RefreshListener {
 
     private Ledger ledger;
     private DesktopState desktop;
     private CustomTable table;
 
-    public LedgerView(Ledger ledger, DesktopState desktop) {
+    public ViewLedger(Ledger ledger, DesktopState desktop) {
         super("Ledger", "/LGS/$", true, true, true, true);
         this.ledger = ledger;
         this.desktop = desktop;
-        setFrameIcon(new ImageIcon(LedgerView.class.getResource("/icons/distribution_centers.png")));
+        setFrameIcon(new ImageIcon(ViewLedger.class.getResource("/icons/distribution_centers.png")));
         JPanel tb = createToolBar();
         JPanel holder = new JPanel(new BorderLayout());
         table = createTable();

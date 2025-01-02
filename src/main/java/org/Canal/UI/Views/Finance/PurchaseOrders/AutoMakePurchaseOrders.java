@@ -2,14 +2,8 @@ package org.Canal.UI.Views.Finance.PurchaseOrders;
 
 import org.Canal.Models.BusinessUnits.PurchaseRequisition;
 import org.Canal.Models.SupplyChainUnits.Location;
-import org.Canal.UI.Elements.Copiable;
-import org.Canal.UI.Elements.DatePicker;
-import org.Canal.UI.Elements.Selectable;
-import org.Canal.UI.Elements.Selectables;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.*;
-import org.Canal.UI.Elements.Form;
-import org.Canal.UI.Elements.LockeState;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Pipe;

@@ -4,7 +4,6 @@ import org.Canal.Models.Objex;
 import org.Canal.Models.SupplyChainUnits.MaterialMovement;
 import org.Canal.Models.SupplyChainUnits.StockLine;
 import org.Canal.Start;
-import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Json;
 import org.Canal.Utils.LockeStatus;

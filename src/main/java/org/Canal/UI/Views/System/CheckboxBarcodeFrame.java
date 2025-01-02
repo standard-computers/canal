@@ -1,4 +1,4 @@
-package org.Canal.UI.Views.Controllers;
+package org.Canal.UI.Views.System;
 
 import javax.swing.*;
 import java.awt.*;

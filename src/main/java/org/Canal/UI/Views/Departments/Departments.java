@@ -41,7 +41,7 @@ public class Departments extends LockeState {
                         Department l = listModel.getElementAt(selectedIndex);
                         if (l != null) {
                             Department selected = Engine.getOrganization().getDepartment(l.getId());
-                            desktop.put(new DepartmentView(selected));
+                            desktop.put(new ViewDepartment(selected));
                         } else {
                             JOptionPane.showMessageDialog(null, "Department Not Found");
                         }

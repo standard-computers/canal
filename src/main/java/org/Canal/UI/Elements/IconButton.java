@@ -81,7 +81,7 @@ public class IconButton extends JButton {
     public Dimension getPreferredSize() {
         // Adjust preferred size to account for padding
         Dimension size = super.getPreferredSize();
-        size.width += 16; // Add padding to width
+        size.width += 8; // Add padding to width
         size.height += 8; // Add padding to height
         return size;
     }

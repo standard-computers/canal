@@ -47,7 +47,7 @@ public class Components extends LockeState implements RefreshListener {
                     int row = t.getSelectedRow();
                     if (row != -1) {
                         String v = String.valueOf(t.getValueAt(row, 1));
-                        desktop.put(new ComponentView(Engine.getComponent(v)));
+                        desktop.put(new ViewComponent(Engine.getComponent(v)));
                     }
                 }
             }

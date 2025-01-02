@@ -1,40 +1,28 @@
 package org.Canal.Models.SupplyChainUnits;
 
+import org.Canal.Models.Objex;
 import org.Canal.Start;
 import org.Canal.Utils.Json;
-import org.Canal.Utils.LockeStatus;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class Area {
+public class Area extends Objex {
 
-    private String id; //Area ID for system reference
     private String location; //Location ID this are belongs to
-    private String name; //Area name
-    private String widthUOM;
-    private String lengthUOM;
-    private String heightUOM;
-    private String weightUOM;
-    private String areaUOM;
-    private String volumeUOM;
     private double width;
+    private String widthUOM;
     private double length;
+    private String lengthUOM;
     private double height;
+    private String heightUOM;
     private double area;
+    private String areaUOM;
     private double volume;
+    private String volumeUOM;
     private Map<String, String> properties;
-    private ArrayList<Bin> bins = new ArrayList<Bin>();
-    private LockeStatus status;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
+    private ArrayList<Bin> bins = new ArrayList<>();
 
     public String getLocation() {
         return location;
@@ -42,14 +30,6 @@ public class Area {
 
     public void setLocation(String location) {
         this.location = location;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getWidthUOM() {
@@ -74,14 +54,6 @@ public class Area {
 
     public void setLengthUOM(String lengthUOM) {
         this.lengthUOM = lengthUOM;
-    }
-
-    public String getWeightUOM() {
-        return weightUOM;
-    }
-
-    public void setWeightUOM(String weightUOM) {
-        this.weightUOM = weightUOM;
     }
 
     public String getAreaUOM() {
@@ -160,14 +132,6 @@ public class Area {
         bins.add(newBin);
     }
 
-    public LockeStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(LockeStatus status) {
-        this.status = status;
-    }
-
     public void save() {
         File md = new File(Start.WINDOWS_SYSTEM_DIR + "\\.store\\AREAS\\");
         File[] mdf = md.listFiles();
@@ -177,7 +141,6 @@ public class Area {
                     Area forg = Json.load(file.getPath(), Area.class);
                     if (forg.getId().equals(getId())) {
                         Json.save(file.getPath(), this);
-                        break;
                     }
                 }
             }

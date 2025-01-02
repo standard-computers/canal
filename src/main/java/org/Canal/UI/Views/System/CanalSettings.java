@@ -13,12 +13,14 @@ import org.Canal.Utils.Engine;
 import org.Canal.Utils.Pipe;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * /CNL
@@ -26,7 +28,9 @@ import java.util.HashMap;
 public class CanalSettings extends LockeState {
 
     private Selectable themeOptions;
-    private JCheckBox showCanalCodes;
+    private JCheckBox saveLockeState;
+    private JCheckBox showLockeCodes;
+    private JCheckBox showButtonLabels;
 
     public CanalSettings(){
 
@@ -39,7 +43,7 @@ public class CanalSettings extends LockeState {
             public void mouseClicked(MouseEvent e) {
                 String selectedTheme = themeOptions.getSelectedValue();
                 Engine.getConfiguration().setTheme(selectedTheme);
-                Engine.getConfiguration().setShowCanalCodes(showCanalCodes.isSelected());
+                Engine.getConfiguration().setShowCanalCodes(showLockeCodes.isSelected());
                 Pipe.saveConfiguration();
                 dispose();
             }
@@ -48,7 +52,7 @@ public class CanalSettings extends LockeState {
         setLayout(new BorderLayout());
         JTabbedPane settings = new JTabbedPane();
         settings.add(generalSettings(), "General");
-        settings.add(instanceVars(), "Instace Vars");
+        settings.add(instanceVars(), "Instace Variables");
         settings.add(databaseConnection(), "Database");
 
         add(Elements.header("Canal Settings", SwingConstants.LEFT), BorderLayout.NORTH);
@@ -57,14 +61,11 @@ public class CanalSettings extends LockeState {
     }
 
     public JPanel generalSettings(){
+
         Form f = new Form();
         themeOptions = Selectables.themes();
         if(Engine.getConfiguration().getTheme() != null){
             themeOptions.setSelectedValue(Engine.getConfiguration().getTheme());
-        }
-        HashMap<String, String> codeoptsMap = new HashMap<>();
-        for(String t : Constants.getAllTransactions()){
-            codeoptsMap.put(t, t);
         }
         JButton backgroundChooser = Elements.button("Choose File");
         backgroundChooser.addMouseListener(new MouseAdapter() {
@@ -79,9 +80,11 @@ public class CanalSettings extends LockeState {
             }
         });
         JButton uploadTheme = Elements.button("Upload Theme");
-        showCanalCodes = new JCheckBox();
+        saveLockeState = new JCheckBox("Reopen windows");
+        showLockeCodes = new JCheckBox("Show locke codes in menus");
+        showButtonLabels = new JCheckBox("Effects icon buttons");
         if(Engine.getConfiguration().showCanalCodes()){
-            showCanalCodes.setSelected(true);
+            showLockeCodes.setSelected(true);
         }
         String assignedUser = "NOT_ASSIGNED/SIGN_IN";
         if(Engine.getAssignedUser() != null){
@@ -94,20 +97,43 @@ public class CanalSettings extends LockeState {
         f.addInput(new Label("Theme", Constants.colors[9]), themeOptions);
         f.addInput(new Label("Upload Theme", Constants.colors[8]), uploadTheme);
         f.addInput(new Label("Background", Constants.colors[7]), backgroundChooser);
-        f.addInput(new Label("Show Canal Codes", Constants.colors[6]), showCanalCodes);
+        f.addInput(new Label("Save Locke State", Constants.colors[6]), saveLockeState);
+        f.addInput(new Label("Show Locke Codes", Constants.colors[5]), showLockeCodes);
+        f.addInput(new Label("Show Button Labels", Constants.colors[4]), showButtonLabels);
         return f;
     }
 
     private JPanel instanceVars(){
+
         JPanel panel = new JPanel(new BorderLayout());
         ArrayList<Object[]> data = new ArrayList<>();
-        CustomTable table = new CustomTable(new String[]{"Var.", "Value"}, data);
-        add(table, BorderLayout.CENTER);
+        for(Map.Entry<String, HashMap<String, Object>> outerEntry : Engine.codex.getVariables().entrySet()){
+            String outerKey = outerEntry.getKey(); // Key of the outer HashMap (e.g., "/", "ORGS")
+            HashMap<String, Object> innerMap = outerEntry.getValue(); // Inner HashMap
+
+            // Iterate through the inner HashMap
+            for (Map.Entry<String, Object> innerEntry : innerMap.entrySet()) {
+                String innerKey = innerEntry.getKey(); // Key of the inner HashMap (e.g., "minumim_build")
+                Object value = innerEntry.getValue(); // Value of the inner HashMap (e.g., 1, "USD")
+
+                // Add a row to the data
+                data.add(new Object[]{outerKey, innerKey, value});
+            }
+        }
+        CustomTable table = new CustomTable(new String[]{"Objex", "Variable", "Value"}, data);
+        add(new JScrollPane(table), BorderLayout.CENTER);
         return panel;
     }
 
     private JPanel databaseConnection(){
-        JPanel panel = new JPanel(new BorderLayout());
+
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        if(Engine.getConfiguration().getEndpoint().equals("127.0.0.1")){
+            panel.add(Elements.h3("Local Canal Instance"));
+            JButton openFileLocation = Elements.button("Open File Location");
+            panel.add(openFileLocation);
+        }
+        panel.setBorder(new EmptyBorder(10, 10, 10, 10));
         return panel;
     }
 }

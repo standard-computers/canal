@@ -1,22 +1,15 @@
 package org.Canal.Models.SupplyChainUnits;
 
-public class AdvancedShippingNotification {
+import org.Canal.Models.Objex;
 
-    private String id;
+public class AdvancedShippingNotification extends Objex {
+
     private String shipmentId;
     private String carrier; //Carrier ID
     private String expectedDelivery;
     private String trackingNumber;
     private String purchaseOrder; //PO ID
     private double weight;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getShipmentId() {
         return shipmentId;

@@ -1,4 +1,4 @@
-package org.Canal.UI.Views.Distribution.InboundDeliveryOrders;
+package org.Canal.UI.Views.Distribution;
 
 import org.Canal.Models.SupplyChainUnits.Delivery;
 import org.Canal.UI.Elements.Elements;
@@ -13,11 +13,11 @@ import java.awt.*;
 /**
  * /TRANS/$[DLV_TYPE]/$[DELIVERY_ID]
  */
-public class DeliveryView extends LockeState {
+public class ViewDelivery extends LockeState {
 
     private Delivery delivery;
 
-    public DeliveryView(Delivery delivery) {
+    public ViewDelivery(Delivery delivery) {
 
         super("View Delivery", "/TRANS/" + delivery.getType(), false, true, false, true);
         this.delivery = delivery;

@@ -25,7 +25,7 @@ public class CreateDepartment extends LockeState {
         super("Create Department", "/DPTS/NEW", false, true, false, true);
         setFrameIcon(new ImageIcon(CreateDepartment.class.getResource("/icons/create.png")));
         Form f = new Form();
-        String genId = "D0" + Engine.getEmployees().size() + 1;
+        String genId = "D0" + (Engine.getOrganization().getDepartments().size() + 1);
         JTextField deptIdField = Elements.input(genId, 18);
         JTextField deptNameField = Elements.input(18);
         Selectable manager = Selectables.employees();

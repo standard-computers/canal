@@ -79,7 +79,7 @@ public class CreateCatalog extends LockeState {
                 Pipe.save("/CATS", c);
                 dispose();
                 JOptionPane.showMessageDialog(null, "Catalog Created");
-                desktop.put(new CatalogView(c));
+                desktop.put(new ViewCatalog(c));
             }
         });
     }

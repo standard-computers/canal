@@ -9,7 +9,7 @@ import org.Canal.UI.Views.Areas.AutoMakeAreas;
 import org.Canal.UI.Views.Bins.AutoMakeBins;
 import org.Canal.UI.Views.Bins.CreateBin;
 import org.Canal.UI.Views.Finance.SalesOrders.CreateSalesOrder;
-import org.Canal.UI.Views.Inventory.InventoryView;
+import org.Canal.UI.Views.Inventory.ViewInventory;
 import org.Canal.UI.Views.Areas.CreateArea;
 import org.Canal.Utils.*;
 
@@ -31,23 +31,23 @@ import java.util.concurrent.TimeUnit;
 /**
  * /$/$[DC_ID]
  */
-public class LocationView extends LockeState implements RefreshListener {
+public class ViewLocation extends LockeState implements RefreshListener {
 
     private Location location;
     private JTree dataTree;
     private DesktopState desktop;
 
-    public LocationView(Location location, DesktopState desktop) {
+    public ViewLocation(Location location, DesktopState desktop) {
         super(location.getId() + " – " + location.getName(), location.getType() + "/$", true, true, true, true);
         this.location = location;
         this.desktop = desktop;
-        setFrameIcon(new ImageIcon(LocationView.class.getResource("/icons/" + Engine.codex(location.getType().replace("/", ""), "icon") + ".png")));
+        setFrameIcon(new ImageIcon(ViewLocation.class.getResource("/icons/" + Engine.codex(location.getType().replace("/", ""), "icon") + ".png")));
         setLayout(new BorderLayout());
         JPanel tb = createToolBar();
         add(tb, BorderLayout.NORTH);
         JTabbedPane tabs = new JTabbedPane();
-        tabs.addTab("Inbound Deliveries", new ImageIcon(LocationView.class.getResource("/icons/inbound.png")), inboundDeliveries());
-        tabs.addTab("Outbound Deliveries", new ImageIcon(LocationView.class.getResource("/icons/outbound.png")), outboundDeliveries());
+        tabs.addTab("Inbound Deliveries", new ImageIcon(ViewLocation.class.getResource("/icons/inbound.png")), inboundDeliveries());
+        tabs.addTab("Outbound Deliveries", new ImageIcon(ViewLocation.class.getResource("/icons/outbound.png")), outboundDeliveries());
         tabs.addTab("Open Tasks", openTasks());
         tabs.addTab("Pending Tasks", pendingTasks());
         tabs.addTab("Events", events());
@@ -202,7 +202,7 @@ public class LocationView extends LockeState implements RefreshListener {
         IconButton addBin = new IconButton("+ Bin", "bins", "Add an area cost center");
         IconButton autoMakeAreas = new IconButton("AutoMake Areas", "automake", "Automate the creation of areas");
         IconButton autoMakeBins = new IconButton("AutoMake Bins", "automake", "Automate the creation of bins");
-        IconButton label = new IconButton("", "label", "Print labels for properties");
+        IconButton label = new IconButton("Labels", "label", "Print labels for properties");
         sell.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -214,7 +214,7 @@ public class LocationView extends LockeState implements RefreshListener {
         inventory.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                desktop.put(new InventoryView(desktop, location.getId()));
+                desktop.put(new ViewInventory(desktop, location.getId()));
             }
         });
         receive.addMouseListener(new MouseAdapter() {
@@ -229,12 +229,12 @@ public class LocationView extends LockeState implements RefreshListener {
         });
         areas.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new CreateArea(location.getId(), LocationView.this));
+                desktop.put(new CreateArea(location.getId(), ViewLocation.this));
             }
         });
         addBin.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new CreateBin(location.getId(), LocationView.this));
+                desktop.put(new CreateBin(location.getId(), ViewLocation.this));
             }
         });
         autoMakeAreas.addMouseListener(new MouseAdapter() {

@@ -3,7 +3,6 @@ package org.Canal.UI.Views.Finance.Catalogs;
 import org.Canal.Models.SupplyChainUnits.Catalog;
 import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.LockeState;
-import org.Canal.UI.Views.Employees.EmployeeView;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
@@ -41,7 +40,7 @@ public class Catalogs extends LockeState {
                     int row = target.getSelectedRow();
                     if (row != -1) {
                         String value = String.valueOf(target.getValueAt(row, 1));
-                        desktop.put(new CatalogView(Engine.getCatalog(value)));
+                        desktop.put(new ViewCatalog(Engine.getCatalog(value)));
                     }
                 }
             }

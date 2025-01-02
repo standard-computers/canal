@@ -44,7 +44,7 @@ public class Employees extends LockeState {
                     int row = target.getSelectedRow();
                     if (row != -1) {
                         String value = String.valueOf(target.getValueAt(row, 1));
-                        desktop.put(new EmployeeView(Engine.getEmployee(value)));
+                        desktop.put(new ViewEmployee(Engine.getEmployee(value)));
                     }
                 }
             }

@@ -1,8 +1,8 @@
 package org.Canal.UI.Views.Finance.Accounts;
 
-public class AccountView {
+public class ViewAccount {
 
-    public AccountView() {
+    public ViewAccount() {
 
         super();
 

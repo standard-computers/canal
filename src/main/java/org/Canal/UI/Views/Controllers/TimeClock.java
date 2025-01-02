@@ -1,10 +1,12 @@
 package org.Canal.UI.Views.Controllers;
 
+import org.Canal.Models.HumanResources.Employee;
+import org.Canal.Models.HumanResources.Position;
+import org.Canal.Models.HumanResources.Timesheet;
 import org.Canal.UI.Elements.*;
-import org.Canal.UI.Elements.Label;
-import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.Utils.DesktopState;
+import org.Canal.Utils.Engine;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -20,9 +22,21 @@ public class TimeClock extends LockeState {
     private DesktopState desktop;
 
     public TimeClock(DesktopState desktop) {
+
         super("Employee Time Clock", "/TM_CLCK", false, true, false, true);
-        this.desktop = desktop;
         setFrameIcon(new ImageIcon(TimeClock.class.getResource("/icons/timeclock.png")));
+        this.desktop = desktop;
+
+        Employee me = Engine.getEmployee(Engine.getAssignedUser().getEmployee());
+        if(me.getPosition() != null){
+            Position p = Engine.getPosition(me.getPosition());
+            if(!p.isHourly()){
+                JOptionPane.showMessageDialog(this, "Your position is salary and does not require clocking in and out.");
+            }
+        }
+
+        Timesheet ts = Engine.getTimesheet(me.getId());
+
         JPanel main = new JPanel(new GridLayout(1, 2));
         JPanel dayControl = new JPanel(new GridLayout(2, 1));
         dayControl.setBorder(new TitledBorder("Hello!"));
@@ -32,12 +46,18 @@ public class TimeClock extends LockeState {
         dayControl.add(outForDay);
         inForDay.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                getEmployeeID("/DAY_IN");
+                ts.clockIn();
+                ts.save();
+                JOptionPane.showMessageDialog(TimeClock.this, "In for day has been recorded.");
+                dispose();
             }
         });
         outForDay.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                getEmployeeID("/DAY_OUT");
+                ts.clockOut();
+                ts.save();
+                JOptionPane.showMessageDialog(TimeClock.this, "Out for day has been recorded.");
+                dispose();
             }
         });
         JPanel breakControl = new JPanel(new GridLayout(2, 1));
@@ -48,12 +68,12 @@ public class TimeClock extends LockeState {
         breakControl.add(inForBreak);
         outForBreak.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                getEmployeeID("/BREAK_IN");
+
             }
         });
         inForBreak.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                getEmployeeID("/BREAK_OUT");
+
             }
         });
         main.add(dayControl);
@@ -64,17 +84,5 @@ public class TimeClock extends LockeState {
         header.add(welcome);
         add(header, BorderLayout.NORTH);
         add(main, BorderLayout.CENTER);
-    }
-
-    private void getEmployeeID(String control){
-        JInternalFrame frame = new JInternalFrame("Employee ID", false, true, false, false);
-        frame.setFrameIcon(new ImageIcon(TimeClock.class.getResource("/icons/employees.png")));
-        frame.setLayout(new BorderLayout());
-        Form f = new Form();
-        f.addInput(new Label("Employee ID", UIManager.getColor("Label.foreground")), new JTextField(10));
-        frame.add(f, BorderLayout.CENTER);
-        JButton in = new JButton("Continue");
-        frame.add(in, BorderLayout.SOUTH);
-        desktop.put(frame);
     }
 }

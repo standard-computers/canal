@@ -1,5 +1,6 @@
 package org.Canal.Models.BusinessUnits;
 
+import org.Canal.Models.Objex;
 import org.Canal.Start;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Json;
@@ -7,19 +8,14 @@ import org.Canal.Utils.LockeStatus;
 
 import java.io.File;
 
-public class PurchaseRequisition {
+public class PurchaseRequisition extends Objex {
 
-    private String id;
-    private String created;
-    private String name;
-    private String owner;
     private String number;
     private String supplier;
     private String buyer;
     private double maxSpend;
     private boolean isSingleOrder;
     private String start, end;
-    private LockeStatus status;
     private String notes;
 
     public PurchaseRequisition(String id, String name, String owner, String supplier, String buyer, String number, double maxSpend, String start, String end, String notes) {
@@ -35,38 +31,6 @@ public class PurchaseRequisition {
         this.end = end;
         this.status = LockeStatus.NEW;
         this.notes = notes;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getCreated() {
-        return created;
-    }
-
-    public void setCreated(String created) {
-        this.created = created;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
     }
 
     public String getSupplier() {
@@ -125,14 +89,6 @@ public class PurchaseRequisition {
         this.end = end;
     }
 
-    public LockeStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(LockeStatus status) {
-        this.status = status;
-    }
-
     public String getNotes() {
         return notes;
     }
@@ -150,7 +106,6 @@ public class PurchaseRequisition {
                     PurchaseRequisition forg = Json.load(file.getPath(), PurchaseRequisition.class);
                     if (forg.getId().equals(getId())) {
                         Json.save(file.getPath(), this);
-                        break;
                     }
                 }
             }

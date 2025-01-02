@@ -12,14 +12,14 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class PositionView extends LockeState {
+public class ViewPosition extends LockeState {
 
     private Position position;
 
-    public PositionView(Position position) {
+    public ViewPosition(Position position) {
 
         super("", "/HR/POS/$", false, true, false, true);
-        setFrameIcon(new ImageIcon(PositionView.class.getResource("/icons/positions.png")));
+        setFrameIcon(new ImageIcon(ViewPosition.class.getResource("/icons/positions.png")));
         this.position = position;
 
         setLayout(new BorderLayout());

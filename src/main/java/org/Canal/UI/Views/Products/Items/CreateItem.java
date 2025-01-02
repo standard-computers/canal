@@ -225,7 +225,7 @@ public class CreateItem extends LockeState implements Includer {
         Pipe.save("/ITS", item);
         dispose();
         JOptionPane.showMessageDialog(this, "Item has been created");
-        desktop.put(new ItemView(item));
+        desktop.put(new ViewItem(item));
     }
 
     @Override

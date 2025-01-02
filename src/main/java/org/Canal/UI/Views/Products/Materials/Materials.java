@@ -47,7 +47,7 @@ public class Materials extends LockeState implements RefreshListener {
                     int row = t.getSelectedRow();
                     if (row != -1) {
                         String v = String.valueOf(t.getValueAt(row, 1));
-                        desktop.put(new MaterialView(Engine.getMaterial(v)));
+                        desktop.put(new ViewMaterial(Engine.getMaterial(v)));
                     }
                 }
             }

@@ -14,11 +14,11 @@ import java.awt.event.MouseEvent;
 /**
  * /EMPS/$[EMPLOYEE_ID]
  */
-public class EmployeeView extends LockeState {
+public class ViewEmployee extends LockeState {
 
     private Employee employee;
 
-    public EmployeeView(Employee employee) {
+    public ViewEmployee(Employee employee) {
         super(employee.getId() + " - " + employee.getName(), "/EMPS/$", false, true, false, true);
         this.employee = employee;
         setFrameIcon(new ImageIcon(Employees.class.getResource("/icons/employees.png")));

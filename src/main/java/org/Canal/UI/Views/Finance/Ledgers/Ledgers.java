@@ -51,7 +51,7 @@ public class Ledgers extends LockeState {
                     if (row != -1) {
                         String value = String.valueOf(target.getValueAt(row, 1));
                         Ledger l = Engine.getLedger(value);
-                        desktop.put(new LedgerView(l, desktop));
+                        desktop.put(new ViewLedger(l, desktop));
                     }
                 }
             }

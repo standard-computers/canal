@@ -5,8 +5,8 @@ import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
-import org.Canal.UI.Views.Controllers.CheckboxBarcodeFrame;
-import org.Canal.UI.Views.Distribution.InboundDeliveryOrders.DeliveryView;
+import org.Canal.UI.Views.System.CheckboxBarcodeFrame;
+import org.Canal.UI.Views.Distribution.ViewDelivery;
 import org.Canal.UI.Views.Finance.PurchaseOrders.CreatePurchaseOrder;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -47,7 +47,7 @@ public class OutboundDeliveries extends LockeState {
                     int row = target.getSelectedRow(); // Get the clicked row
                     if (row != -1) {
                         String value = String.valueOf(target.getValueAt(row, 1));
-                        desktop.put(new DeliveryView(Engine.getOutboundDelivery(value)));
+                        desktop.put(new ViewDelivery(Engine.getOutboundDelivery(value)));
                     }
                 }
             }

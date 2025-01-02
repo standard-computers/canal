@@ -20,16 +20,16 @@ import java.awt.event.MouseEvent;
  * View User provided User ID
  * User Controller
  */
-public class UserView extends LockeState {
+public class ViewUser extends LockeState {
 
     private User user;
     private DesktopState desktop;
 
-    public UserView(DesktopState desktop, User user) {
+    public ViewUser(DesktopState desktop, User user) {
         super("Users / " + user.getId(), "/USRS/$", false, true, false, true);
         this.desktop = desktop;
         this.user = user;
-        setFrameIcon(new ImageIcon(UserView.class.getResource("/icons/employees.png")));
+        setFrameIcon(new ImageIcon(ViewUser.class.getResource("/icons/employees.png")));
         setLayout(new BorderLayout());
         JPanel userInfo = new JPanel(new GridLayout(4, 1));
         Employee emp = Engine.getEmployee(user.getEmployee());

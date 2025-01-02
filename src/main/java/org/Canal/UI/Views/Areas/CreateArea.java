@@ -29,17 +29,15 @@ public class CreateArea extends LockeState {
         super("New Area", "/AREAS/NEW", false, true, false, true);
         setFrameIcon(new ImageIcon(CreateArea.class.getResource("/icons/areas.png")));
 
-        String generatedId;
         JTextField areaIdField = Elements.input();
         Selectable availableLocations = Selectables.allLocations();
         if(location == null){
-            generatedId = "A-" + Engine.getAreas().size();
+            areaIdField.setText("A-" + Engine.getAreas().size());
         }else{
-            generatedId = "A-" + (Engine.getAreas(location).size() + 1) + "-" + location;
+            areaIdField.setText("A-" + (Engine.getAreas(location).size() + 1) + "-" + location);
             availableLocations.setSelectedValue(location);
         }
-        areaIdField.setText(generatedId);
-        JTextField areaNameField = Elements.input(generatedId, 20);
+        JTextField areaNameField = Elements.input(areaIdField.getText(), 20);
         UOMField widthField = new UOMField();
         UOMField lengthField = new UOMField();
         UOMField heightField = new UOMField();
@@ -55,19 +53,9 @@ public class CreateArea extends LockeState {
         f.addInput(new Label("Area", Constants.colors[6]), areaField);
         f.addInput(new Label("Volume", Constants.colors[6]), volumeField);
 
-        JButton addBins = Elements.button("Add Bins");
         JButton make = Elements.button("Make");
-        JPanel areaOptions = new JPanel();
-        areaOptions.add(addBins);
-        areaOptions.add(make);
-
-        add(areaOptions, BorderLayout.SOUTH);
-        JPanel main = new JPanel(new GridLayout(1, 2));
-        main.add(f);
-        JPanel binner = new JPanel();
-
-        main.add(binner);
-        add(main, BorderLayout.CENTER);
+        add(make, BorderLayout.SOUTH);
+        add(f, BorderLayout.CENTER);
         make.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

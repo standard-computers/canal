@@ -6,7 +6,7 @@ import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
-import org.Canal.UI.Views.Controllers.CheckboxBarcodeFrame;
+import org.Canal.UI.Views.System.CheckboxBarcodeFrame;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -21,17 +21,17 @@ import java.util.ArrayList;
 /**
  * /STK
  */
-public class InventoryView extends LockeState implements RefreshListener {
+public class ViewInventory extends LockeState implements RefreshListener {
 
     private String title, location;
     private CustomTable table;
     private DesktopState desktop;
 
-    public InventoryView(DesktopState desktop, String location) {
+    public ViewInventory(DesktopState desktop, String location) {
         super("Location Inventory", "/STK", true, true, true, true);
         this.location = location;
         this.desktop = desktop;
-        setFrameIcon(new ImageIcon(InventoryView.class.getResource("/icons/purchasereqs.png")));
+        setFrameIcon(new ImageIcon(ViewInventory.class.getResource("/icons/purchasereqs.png")));
         JPanel tb = createToolBar();
         JPanel holder = new JPanel(new BorderLayout());
         table = createTable();
@@ -123,7 +123,7 @@ public class InventoryView extends LockeState implements RefreshListener {
         move.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new MoveStock(location, InventoryView.this));
+                desktop.put(new MoveStock(location, ViewInventory.this));
             }
         });
         movements.addMouseListener(new MouseAdapter() {

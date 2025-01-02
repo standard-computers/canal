@@ -12,16 +12,16 @@ import java.awt.event.MouseEvent;
 /**
  * /CATS/$[CATALOG_ID]
  */
-public class CatalogView extends LockeState {
+public class ViewCatalog extends LockeState {
 
     private Catalog catalog;
     private int currentPage = 1;
     private JTextField pageIndicator;
 
-    public CatalogView(Catalog catalog) {
+    public ViewCatalog(Catalog catalog) {
 
         super("Catalog", "/CATS/$", true, true, true, true);
-        setFrameIcon(new ImageIcon(CatalogView.class.getResource("/icons/catalogs.png")));
+        setFrameIcon(new ImageIcon(ViewCatalog.class.getResource("/icons/catalogs.png")));
         this.catalog = catalog;
 
         setLayout(new BorderLayout());

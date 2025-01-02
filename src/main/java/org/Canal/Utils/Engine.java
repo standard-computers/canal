@@ -4,6 +4,7 @@ import org.Canal.Models.BusinessUnits.*;
 import org.Canal.Models.BusinessUnits.Inventory;
 import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.HumanResources.Position;
+import org.Canal.Models.HumanResources.Timesheet;
 import org.Canal.Models.HumanResources.User;
 import org.Canal.Models.SupplyChainUnits.*;
 import org.Canal.Start;
@@ -17,17 +18,18 @@ import org.Canal.UI.Views.Finance.PurchaseOrders.*;
 import org.Canal.UI.Views.Positions.Positions;
 import org.Canal.UI.Views.Productivity.Flows.CreateFlow;
 import org.Canal.UI.Views.Productivity.Waves.CreateWave;
+import org.Canal.UI.Views.Productivity.WorkOrders.CreateWorkOrder;
 import org.Canal.UI.Views.Products.Components.Components;
 import org.Canal.UI.Views.Products.Components.CreateComponent;
 import org.Canal.UI.Views.Controllers.*;
 import org.Canal.UI.Views.Employees.CreateEmployee;
-import org.Canal.UI.Views.Employees.EmployeeView;
+import org.Canal.UI.Views.Employees.ViewEmployee;
 import org.Canal.UI.Views.Employees.Employees;
 import org.Canal.UI.Views.Finance.Catalogs.Catalogs;
 import org.Canal.UI.Views.Finance.Catalogs.CreateCatalog;
 import org.Canal.UI.Views.Finance.GoodsReceipts.GoodsReceipts;
 import org.Canal.UI.Views.Finance.Ledgers.CreateLedger;
-import org.Canal.UI.Views.Finance.Ledgers.LedgerView;
+import org.Canal.UI.Views.Finance.Ledgers.ViewLedger;
 import org.Canal.UI.Views.Finance.Ledgers.Ledgers;
 import org.Canal.UI.Views.Departments.CreateDepartment;
 import org.Canal.UI.Views.Departments.Departments;
@@ -39,7 +41,7 @@ import org.Canal.UI.Views.Distribution.OutboundDeliveryOrders.CreateOutboundDeli
 import org.Canal.UI.Views.Distribution.OutboundDeliveryOrders.OutboundDeliveries;
 import org.Canal.UI.Views.Positions.CreatePosition;
 import org.Canal.UI.Views.Products.Items.CreateItem;
-import org.Canal.UI.Views.Products.Items.ItemView;
+import org.Canal.UI.Views.Products.Items.ViewItem;
 import org.Canal.UI.Views.Products.Items.Items;
 import org.Canal.UI.Views.System.CanalSettings;
 import org.Canal.UI.Views.Teams.CreateTeam;
@@ -263,6 +265,28 @@ public class Engine {
 
     public static Employee getEmployee(String id){
         return getEmployees().stream().filter(e -> e.getId().equals(id)).toList().stream().findFirst().orElse(null);
+    }
+
+    public static ArrayList<Timesheet> getTimesheets() {
+        ArrayList<Timesheet> timesheets = new ArrayList<>();
+        File[] d = Pipe.list("HR/TMSH");
+        for (File file : d) {
+            if (!file.isDirectory()) {
+                Timesheet a = Json.load(file.getPath(), Timesheet.class);
+                timesheets.add(a);
+            }
+        }
+        timesheets.sort(Comparator.comparing(Timesheet::getId));
+        return timesheets;
+    }
+
+    public static Timesheet getTimesheet(String employeeId){
+        var i = getTimesheets().stream().filter(e -> e.getEmployee().equals(employeeId)).toList().stream().findFirst().orElse(null);
+        if(i == null){
+            i = new Timesheet(employeeId);
+            Pipe.save("/HR/TMSH", i);
+        }
+        return i;
     }
 
     public static ArrayList<Catalog> getCatalogs() {
@@ -612,7 +636,7 @@ public class Engine {
                 return new CreateUser();
             }
             case "/STK" -> {
-                return new InventoryView(desktop, Engine.getOrganization().getId());
+                return new ViewInventory(desktop, Engine.getOrganization().getId());
             }
             case "/STK/MOD/MV" -> {
                 return new MoveStock("", null);
@@ -696,7 +720,7 @@ public class Engine {
                 return new CreateWave();
             }
             case "/MVMT/WO/NEW" -> {
-                return new TaskList(null, desktop);
+                return new CreateWorkOrder(desktop);
             }
             case "/MVMT/TSKS/NEW" -> {
                 return new CreateTask();
@@ -751,7 +775,7 @@ public class Engine {
                 ProcessBuilder builder = new ProcessBuilder(command.split(" "));
                 builder.inheritIO(); // Inherit standard IO from the current process
                 try {
-                    Process process = builder.start();
+                    builder.start();
                     System.exit(0);
                 } catch (IOException e) {
                     JOptionPane.showMessageDialog(null, "Failed to restart Canal");
@@ -775,7 +799,7 @@ public class Engine {
         switch (t) {
             case "ORGS" -> {
                 for (Location org : Engine.getLocations("ORGS")) {
-                    new LocationView(org, desktop);
+                    new ViewLocation(org, desktop);
                 }
             }
             case "AREAS" -> {
@@ -788,7 +812,7 @@ public class Engine {
             case "CCS" -> {
                 for(Location l : Engine.getLocations("CCS")){
                     if(l.getId().equals(oid)){
-                        return new LocationView(l, desktop);
+                        return new ViewLocation(l, desktop);
                     }
                 }
             }
@@ -802,33 +826,33 @@ public class Engine {
             case "DCSS" -> {
                 for(Location l : Engine.getLocations("DCSS")){
                     if(l.getId().equals(oid)){
-                        return new LocationView(l, desktop);
+                        return new ViewLocation(l, desktop);
                     }
                 }
             }
             case "VEND" -> {
                 for(Location l : Engine.getLocations("VEND")){
                     if(l.getId().equals(oid)){
-                        return new LocationView(l, desktop);
+                        return new ViewLocation(l, desktop);
                     }
                 }
             }
             case "ITS" -> {
                 Item i = Engine.getItem(oid);
                 if(i != null){
-                    return new ItemView(i);
+                    return new ViewItem(i);
                 }
             }
             case "USRS" -> {
                 User u = Engine.getUser(oid);
                 if(u != null){
-                    return new UserView(desktop, u);
+                    return new ViewUser(desktop, u);
                 }
             }
             case "EMPS" -> {
                 for(Employee e : Engine.getEmployees()){
                     if(e.getId().equals(oid)){
-                        return new EmployeeView(e);
+                        return new ViewEmployee(e);
                     }
                 }
             }
@@ -838,7 +862,7 @@ public class Engine {
             case "LGS" -> {
                 for(Ledger l : getLedgers()){
                     if(l.getId().equals(oid)){
-                        return new LedgerView(l, desktop);
+                        return new ViewLedger(l, desktop);
                     }
                 }
                 return new Ledgers(desktop);
@@ -846,7 +870,7 @@ public class Engine {
             case "WHS" -> {
                 for(Location l : getLocations("WHS")){
                     if(l.getId().equals(oid)){
-                        return new LocationView(l, desktop);
+                        return new ViewLocation(l, desktop);
                     }
                 }
                 return new Locations("/WHS", desktop);
@@ -854,7 +878,7 @@ public class Engine {
             case "ORDS" -> {
                 for(PurchaseOrder l : Engine.orderProcessing.getPurchaseOrder()){
                     if(l.getOrderId().equals(oid)){
-                        return new PurchaseOrderView(l);
+                        return new ViewPurchaseOrder(l);
                     }
                 }
                 return new PurchaseOrders(desktop);

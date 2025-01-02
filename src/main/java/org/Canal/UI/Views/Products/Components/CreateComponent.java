@@ -1,7 +1,6 @@
 package org.Canal.UI.Views.Products.Components;
 
 import org.Canal.Models.SupplyChainUnits.Item;
-import org.Canal.UI.Elements.Copiable;
 import org.Canal.UI.Elements.Selectable;
 import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.*;
@@ -52,7 +51,7 @@ public class CreateComponent extends LockeState {
         JButton selectPhoto = Elements.button("Select Photo");
         selectedVendor = Selectables.vendors();
         selectedVendor.editable();
-        materialIdField = Elements.input("XI0" + (1000 + (Engine.getItems().size() + 1)));
+        materialIdField = Elements.input("XI0" + (1000 + (Engine.getComponents().size() + 1)));
         organizations = Selectables.organizations();
         materialNameField = Elements.input("Black Shirt");
         materialPriceField = Elements.input("1.00");
@@ -141,6 +140,6 @@ public class CreateComponent extends LockeState {
         Pipe.save("/CMPS", component);
         dispose();
         JOptionPane.showMessageDialog(this, "Component has been created");
-        desktop.put(new ComponentView(component));
+        desktop.put(new ViewComponent(component));
     }
 }

@@ -1,10 +1,10 @@
-package org.Canal.UI.Views.Products.Items;
+package org.Canal.UI.Views.Products.Components;
 
 import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.Models.SupplyChainUnits.Location;
-import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Copiable;
 import org.Canal.UI.Elements.Label;
+import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.Utils.Locke;
@@ -21,17 +21,43 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class ItemView extends LockeState {
+/**
+ * /CMPS/$[COMPONENT_ID]
+ */
+public class ViewComponent extends LockeState {
 
     private Item item;
     private JTree dataTree;
-    private Copiable idField, orgField, nameField, vendorField, colorField, batchedField, rentableField, skudField, consumableField, priceField, widthField, lengthField, heightField, weightField, taxField, exciseTaxfield;
-    private Copiable vendorIdField, vendorNameField, vendorStreetField, vendorCityField, vendorStateField, vendorPostalField, vendorCountryField, vendorTaxExemptField, vendorStatusField;
+    private Copiable idField;
+    private Copiable orgField;
+    private Copiable nameField;
+    private Copiable vendorField;
+    private Copiable colorField;
+    private Copiable batchedField;
+    private Copiable rentableField;
+    private Copiable skudField;
+    private Copiable consumableField;
+    private Copiable priceField;
+    private Copiable widthField;
+    private Copiable lengthField;
+    private Copiable heightField;
+    private Copiable weightField;
+    private Copiable taxField;
+    private Copiable exciseTaxfield;
+    private Copiable vendorIdField;
+    private Copiable vendorNameField;
+    private Copiable vendorStreetField;
+    private Copiable vendorCityField;
+    private Copiable vendorStateField;
+    private Copiable vendorPostalField;
+    private Copiable vendorCountryField;
+    private Copiable vendorTaxExemptField;
+    private Copiable vendorStatusField;
 
-    public ItemView(Item item) {
+    public ViewComponent(Item item) {
 
-        super("Item / " + item.getId() + " - " + item.getName(), "/ITS/$", true, true, true, true);
-        setFrameIcon(new ImageIcon(ItemView.class.getResource("/icons/items.png")));
+        super("Component / " + item.getId() + " - " + item.getName(), "/CMPS/$", true, true, true, true);
+        setFrameIcon(new ImageIcon(ViewComponent.class.getResource("/icons/components.png")));
         this.item = item;
 
         setLayout(new BorderLayout());
@@ -88,7 +114,6 @@ public class ItemView extends LockeState {
                 vendorCountryField.setText(selectedVendor.getCountry());
                 vendorTaxExemptField.setText(String.valueOf(selectedVendor.isTaxExempt()));
                 vendorStatusField.setText(String.valueOf(selectedVendor.getStatus()));
-
             }
         });
         JScrollPane treeScrollPane = new JScrollPane(dataTree);
