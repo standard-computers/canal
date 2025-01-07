@@ -243,7 +243,7 @@ public class CreatePurchaseOrder extends LockeState {
         selectShipTo.editable();
         selectVendor = Selectables.allLocations();
         selectVendor.editable();
-        orderId = Elements.input(((String) Engine.codex("ORDS/PO", "prefix")) + (70000000 + (Engine.getOrders().size() + 1)));
+        orderId = Elements.input(((String) Engine.codex("ORDS/PO", "prefix")) + (70000000 + (Engine.getPurchaseOrders().size() + 1)));
         f.addInput(new Label("*Order ID", Constants.colors[0]), orderId);
         f.addInput(new Label("Supplier/Vendor", Constants.colors[1]), selectVendor);
         f.addInput(new Label("Bill To Location", Constants.colors[2]), selectBillTo);

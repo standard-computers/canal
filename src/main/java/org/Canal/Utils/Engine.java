@@ -44,6 +44,7 @@ import org.Canal.UI.Views.Products.Items.CreateItem;
 import org.Canal.UI.Views.Products.Items.ViewItem;
 import org.Canal.UI.Views.Products.Items.Items;
 import org.Canal.UI.Views.System.CanalSettings;
+import org.Canal.UI.Views.System.QuickExplorer;
 import org.Canal.UI.Views.Teams.CreateTeam;
 import org.Canal.UI.Views.Teams.Teams;
 import org.Canal.UI.Views.Inventory.*;
@@ -323,7 +324,7 @@ public class Engine {
         return getUsers().stream().filter(u -> u.getId().equals(id)).toList().stream().findFirst().orElse(null);
     }
 
-    public static ArrayList<PurchaseOrder> getOrders() {
+    public static ArrayList<PurchaseOrder> getPurchaseOrders() {
         ArrayList<PurchaseOrder> orders = new ArrayList<>();
         File[] ordsDir = Pipe.list("ORDS/PO");
         for (File file : ordsDir) {
@@ -336,12 +337,12 @@ public class Engine {
         return orders;
     }
 
-    public static List<PurchaseOrder> getOrders(String shipTo) {
-        return getOrders().stream().filter(order -> order.getShipTo().equals(shipTo)).collect(Collectors.toList());
+    public static List<PurchaseOrder> getPurchaseOrders(String shipTo) {
+        return getPurchaseOrders().stream().filter(order -> order.getShipTo().equals(shipTo)).collect(Collectors.toList());
     }
 
-    public static List<PurchaseOrder> getOrders(String shipTo, LockeStatus status) {
-        return getOrders().stream().filter(order -> order.getShipTo().equals(shipTo) && order.getStatus().equals(status)).collect(Collectors.toList());
+    public static List<PurchaseOrder> getPurchaseOrders(String shipTo, LockeStatus status) {
+        return getPurchaseOrders().stream().filter(order -> order.getShipTo().equals(shipTo) && order.getStatus().equals(status)).collect(Collectors.toList());
     }
 
     public static ArrayList<Ledger> getLedgers() {
@@ -757,6 +758,7 @@ public class Engine {
             }
             case "/CLEAR_DSK" -> desktop.clean();
             case "/CLOSE_DSK" -> desktop.purge();
+            case "/N" -> new QuickExplorer();
             case "/CNL/EXIT" -> System.exit(-1);
             case "/CNL/RSTRT" -> {
 

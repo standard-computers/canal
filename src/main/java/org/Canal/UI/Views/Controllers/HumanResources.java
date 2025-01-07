@@ -10,6 +10,7 @@ import org.Canal.UI.Views.Employees.Employees;
 import org.Canal.UI.Views.Positions.CreatePosition;
 import org.Canal.UI.Views.Users.ChangeUserPassword;
 import org.Canal.UI.Views.Users.CreateUser;
+import org.Canal.UI.Views.ViewLocation;
 import org.Canal.Utils.DesktopState;
 
 import javax.swing.*;
@@ -26,60 +27,24 @@ public class HumanResources extends LockeState {
     private DesktopState desktop;
 
     public HumanResources(DesktopState desktop) {
-        super("ERM / Human Resources", "/CNL/HR", false, true, false, true);
+
+        super("ERM / Human Resources", "/CNL/HR", true, true, true, true);
         setFrameIcon(new ImageIcon(HumanResources.class.getResource("/icons/humanresources.png")));
         this.desktop = desktop;
 
         JTabbedPane tabbedPane = new JTabbedPane();
-        tabbedPane.addTab("Employees", employees());
+        tabbedPane.addTab("Users", new ImageIcon(ViewLocation.class.getResource("/icons/users.png")), users());
+        tabbedPane.addTab("Employees", new ImageIcon(ViewLocation.class.getResource("/icons/employees.png")), employees());
+        tabbedPane.addTab("Positions", new ImageIcon(ViewLocation.class.getResource("/icons/positions.png")), positions());
+        tabbedPane.addTab("Departments", new ImageIcon(ViewLocation.class.getResource("/icons/departments.png")), departments());
+        tabbedPane.addTab("Timesheets", timesheets());
 
-        JPanel positionOptions = new JPanel();
-        positionOptions.setBorder(new EmptyBorder(5, 5, 5, 5));
-        JButton openPositions = Elements.button("Open Positions");
-        openPositions.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
+        setLayout(new BorderLayout());
+        add(Elements.header("Human Resource Center", SwingConstants.LEFT), BorderLayout.NORTH);
+        add(tabbedPane, BorderLayout.CENTER);
+    }
 
-            }
-        });
-        positionOptions.add(openPositions);
-        JButton createPosition = Elements.button("Create Positions");
-        createPosition.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                desktop.put(new CreatePosition(desktop));
-            }
-        });
-        positionOptions.add(createPosition);
-        tabbedPane.addTab("Positions", positionOptions);
-
-        JPanel departmentOptions = new JPanel(new GridLayout(2, 2, 5, 5));
-        departmentOptions.setBorder(new EmptyBorder(5, 5, 5, 5));
-        JButton viewDepartments = Elements.button("View Departments");
-        viewDepartments.addMouseListener(new MouseAdapter() {
-           @Override
-           public void mouseClicked(MouseEvent e) {
-               desktop.put(new Departments(desktop));
-           }
-        });
-        departmentOptions.add(viewDepartments);
-        JButton createDepartment = Elements.button("Create Department");
-        createDepartment.addMouseListener(new MouseAdapter() {
-           @Override
-           public void mouseClicked(MouseEvent e) {
-               desktop.put(new CreateDepartment(desktop));
-           }
-        });
-        departmentOptions.add(createDepartment);
-        JButton findDepartment = Elements.button("Find Department");
-        findDepartment.addMouseListener(new MouseAdapter() {
-           @Override
-           public void mouseClicked(MouseEvent e) {
-               desktop.put(new Finder("/DPTS", desktop));
-           }
-        });
-        departmentOptions.add(findDepartment);
-        tabbedPane.addTab("Departments", departmentOptions);
+    private JPanel users() {
 
         JPanel userOptions = new JPanel(new GridLayout(2, 2, 5, 5));
         userOptions.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -99,14 +64,65 @@ public class HumanResources extends LockeState {
             }
         });
         userOptions.add(resetPassword);
-        tabbedPane.addTab("Users", userOptions);
+        return userOptions;
+    }
 
-        setLayout(new BorderLayout());
-        add(Elements.header("Human Resources Center", SwingConstants.LEFT), BorderLayout.NORTH);
-        add(tabbedPane, BorderLayout.CENTER);
+    private JPanel positions() {
+
+        JPanel positionOptions = new JPanel();
+        positionOptions.setBorder(new EmptyBorder(5, 5, 5, 5));
+        JButton openPositions = Elements.button("Open Positions");
+        openPositions.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+            }
+        });
+        positionOptions.add(openPositions);
+        JButton createPosition = Elements.button("Create Positions");
+        createPosition.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                desktop.put(new CreatePosition(desktop));
+            }
+        });
+        positionOptions.add(createPosition);
+        return positionOptions;
+    }
+
+    private JPanel departments() {
+
+        JPanel departmentOptions = new JPanel(new GridLayout(2, 2, 5, 5));
+        departmentOptions.setBorder(new EmptyBorder(5, 5, 5, 5));
+        JButton viewDepartments = Elements.button("View Departments");
+        viewDepartments.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                desktop.put(new Departments(desktop));
+            }
+        });
+        departmentOptions.add(viewDepartments);
+        JButton createDepartment = Elements.button("Create Department");
+        createDepartment.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                desktop.put(new CreateDepartment(desktop));
+            }
+        });
+        departmentOptions.add(createDepartment);
+        JButton findDepartment = Elements.button("Find Department");
+        findDepartment.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                desktop.put(new Finder("/DPTS", desktop));
+            }
+        });
+        departmentOptions.add(findDepartment);
+        return departmentOptions;
     }
 
     private JPanel employees(){
+
         JPanel p = new JPanel(new GridLayout(2, 1));
         JPanel employeeOptions = new JPanel(new GridLayout(2, 2, 5, 5));
         employeeOptions.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -135,6 +151,12 @@ public class HumanResources extends LockeState {
         });
         employeeOptions.add(findEmployee);
         p.add(employeeOptions);
+        return p;
+    }
+
+    private JPanel timesheets(){
+        JPanel p = new JPanel();
+
         return p;
     }
 }

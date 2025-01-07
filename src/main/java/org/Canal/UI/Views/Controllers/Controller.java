@@ -49,17 +49,15 @@ public class Controller extends JPanel implements RefreshListener {
         dataTree.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    e.consume();
-                    TreePath path = dataTree.getPathForLocation(e.getX(), e.getY());
-                    if (path != null) {
-                        DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
-                        Locke orgNode = (Locke) node.getUserObject();
-                        if(me != null && !me.hasAccess(orgNode.getTransaction())) {
-                            JOptionPane.showMessageDialog(Controller.this, "Not authorized to use this locke!", "Unauthorized", JOptionPane.ERROR_MESSAGE);
-                        }else{
-                            desktop.put(Engine.router(orgNode.getTransaction(), desktop));
-                        }
+                e.consume();
+                TreePath path = dataTree.getPathForLocation(e.getX(), e.getY());
+                if (path != null) {
+                    DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
+                    Locke orgNode = (Locke) node.getUserObject();
+                    if(me != null && !me.hasAccess(orgNode.getTransaction())) {
+                        JOptionPane.showMessageDialog(Controller.this, "Not authorized to use this locke!", "Unauthorized", JOptionPane.ERROR_MESSAGE);
+                    }else{
+                        desktop.put(Engine.router(orgNode.getTransaction(), desktop));
                     }
                 }
             }

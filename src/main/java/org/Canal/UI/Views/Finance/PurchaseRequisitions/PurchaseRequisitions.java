@@ -33,11 +33,24 @@ public class PurchaseRequisitions extends LockeState {
         JPanel holder = new JPanel(new BorderLayout());
         table = createTable();
         JScrollPane tableScrollPane = new JScrollPane(table);
-        holder.add(Elements.header("All Purchase Requisitions", SwingConstants.LEFT), BorderLayout.NORTH);
+        holder.add(Elements.header("Purchase Requisitions", SwingConstants.LEFT), BorderLayout.NORTH);
         holder.add(tb, BorderLayout.SOUTH);
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);
         add(tableScrollPane, BorderLayout.CENTER);
+        table.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    JTable t = (JTable) e.getSource();
+                    int row = t.getSelectedRow();
+                    if (row != -1) {
+                        String v = String.valueOf(t.getValueAt(row, 1));
+                        PurchaseRequisition pr = Engine.orderProcessing.getPurchaseRequisition(v);
+                        desktop.put(new ViewPurchaseRequisition(pr));
+                    }
+                }
+            }
+        });
     }
 
     private CustomTable createTable() {
@@ -45,13 +58,13 @@ public class PurchaseRequisitions extends LockeState {
         ArrayList<Object[]> prs = new ArrayList<>();
         for (PurchaseRequisition pr : Engine.orderProcessing.getPurchaseRequisitions()) {
             double consumption = 0;
-            for(PurchaseOrder po : Engine.getOrders()){
+            for(PurchaseOrder po : Engine.getPurchaseOrders()){
                 if(po.getPurchaseRequisition().equals(pr.getId())){
                     consumption += po.getTotal();
                 }
             }
             double remaining = pr.getMaxSpend() - consumption;
-            prs.add(new String[]{
+            prs.add(new Object[]{
                     pr.getId(),
                     pr.getCreated(),
                     pr.getName(),
@@ -59,9 +72,9 @@ public class PurchaseRequisitions extends LockeState {
                     pr.getNumber(),
                     pr.getSupplier(),
                     pr.getBuyer(),
-                    String.valueOf(pr.getMaxSpend()),
-                    String.valueOf(consumption),
-                    String.valueOf(remaining),
+                    pr.getMaxSpend(),
+                    consumption,
+                    remaining,
                     String.valueOf(pr.isSingleOrder()),
                     pr.getStart(),
                     pr.getEnd(),
@@ -82,7 +95,6 @@ public class PurchaseRequisitions extends LockeState {
         IconButton archivePo = new IconButton("Archive", "archive", "Archive PO, removes");
         IconButton autoMake = new IconButton("AutoMake", "automake", "AutoMake Purchase Requisitions");
         IconButton label = new IconButton("Barcodes", "label", "Print labels for org properties");
-        JTextField filterValue = Elements.input("Search", 10);
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(createPurchaseReq);
@@ -98,8 +110,6 @@ public class PurchaseRequisitions extends LockeState {
         tb.add(autoMake);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(label);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(filterValue);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));
         createPurchaseReq.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {

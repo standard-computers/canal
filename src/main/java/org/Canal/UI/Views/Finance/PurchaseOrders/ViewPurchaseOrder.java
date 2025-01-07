@@ -93,7 +93,7 @@ public class ViewPurchaseOrder extends LockeState {
         selectBillTo = new Copiable(po.getBillTo());
         selectShipTo = new Copiable(po.getShipTo());
         selectVendor = new Copiable(po.getVendor());
-        orderId = new Copiable("OR" + (70000000 + (Engine.getOrders().size() + 1)));
+        orderId = new Copiable("OR" + (70000000 + (Engine.getPurchaseOrders().size() + 1)));
         f.addInput(new Label("*Order ID", Constants.colors[0]), orderId);
         f.addInput(new Label("Supplier/Vendor", Constants.colors[1]), selectVendor);
         f.addInput(new Label("Bill To", Constants.colors[2]), selectBillTo);

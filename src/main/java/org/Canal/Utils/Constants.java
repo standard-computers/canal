@@ -90,7 +90,7 @@ public class Constants {
                         new Locke("Restart Canal", getIcon("locke"), "/CNL/RSTRT", null),
                         new Locke("Leave Canal", getIcon("locke"), "/CNL/EXIT", null),
                 }),
-                new Locke("Organizations", getIcon("organizations"), "/ORGS", new Locke[]{
+                new Locke("Organizations", getIcon("folder"), "/ORGS", new Locke[]{
                         new Locke("Find Organization", getIcon("find"), "/ORGS/F", null),
                         new Locke("Create an Organization", getIcon("create"), "/ORGS/NEW", null),
                         new Locke("Modify an Organization", getIcon("modify"), "/ORGS/MOD", null),

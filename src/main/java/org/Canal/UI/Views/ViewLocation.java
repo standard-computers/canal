@@ -1,5 +1,6 @@
 package org.Canal.UI.Views;
 
+import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.SupplyChainUnits.*;
 import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
@@ -310,6 +311,11 @@ public class ViewLocation extends LockeState implements RefreshListener {
             Location l = Engine.getLocations(location.getOrganization(), "DCSS").get(i);
             vendors[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/VEND/" + l.getId(), Constants.colors[3], null);
         }
+        Locke[] employees = new Locke[Engine.getEmployees(location.getId()).size()];
+        for (int i = 0; i < Engine.getEmployees(location.getId()).size(); i++) {
+            Employee e = Engine.getEmployees(location.getId()).get(i);
+            employees[i] = new Locke(e.getId() + " - " + e.getName(), UIManager.getIcon("FileView.fileIcon"), "/VEND/" + e.getId(), Constants.colors[3], null);
+        }
         Locke[] items = new Locke[Engine.getItems(location.getOrganization()).size()];
         for (int i = 0; i < Engine.getItems(location.getOrganization()).size(); i++) {
             Item l = Engine.getItems(location.getOrganization()).get(i);
@@ -318,11 +324,12 @@ public class ViewLocation extends LockeState implements RefreshListener {
         return new Locke(location.getName(), UIManager.getIcon("FileView.fileIcon"), "/DCSS/" + location.getId(), new Locke[]{
                 new Locke("Areas", UIManager.getIcon("FileView.fileIcon"), "/AREAS", areas),
                 new Locke("Bins", UIManager.getIcon("FileView.fileIcon"), "/BNS", bins),
-                new Locke("Items", UIManager.getIcon("FileView.fileIcon"), "/ITS", items),
                 new Locke("Customers", UIManager.getIcon("FileView.fileIcon"), "/CSTS", customers),
-                new Locke("Materials", UIManager.getIcon("FileView.fileIcon"), "/MTS", null),
                 new Locke("Orders", UIManager.getIcon("FileView.fileIcon"), "/ORDS", null),
-                new Locke("Vendors", UIManager.getIcon("FileView.fileIcon"), "/VEND", vendors),
+                new Locke("Vendors", UIManager.getIcon("FileView.fileIcon"), "/VEND", employees),
+                new Locke("Employees", UIManager.getIcon("FileView.fileIcon"), "/EMPS", employees),
+                new Locke("Items", UIManager.getIcon("FileView.fileIcon"), "/ITS", items),
+                new Locke("Materials", UIManager.getIcon("FileView.fileIcon"), "/MTS", null),
         });
     }
 

@@ -126,7 +126,7 @@ public class CreateSalesOrder extends LockeState {
 
                     if(createPurchaseOrder.isSelected()){
                         PurchaseOrder associatedPurchaseOrder = new PurchaseOrder();
-                        String npoid = "OR" + (70000000 + (Engine.getOrders().size() + 1));
+                        String npoid = "OR" + (70000000 + (Engine.getPurchaseOrders().size() + 1));
                         newSalesOrder.setPurchaseOrder(npoid);
                         newSalesOrder.save();
                         associatedPurchaseOrder.setId(npoid);
