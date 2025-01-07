@@ -5,7 +5,6 @@ import org.Canal.Models.HumanResources.User;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Selectable;
 import org.Canal.UI.Elements.Selectables;
-import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.Utils.Constants;
@@ -50,9 +49,9 @@ public class CreateUser extends LockeState {
         Form f = new Form();
         String puid = "U" + (10000 + (Engine.getUsers().size() + 1));
         JTextField userIdField = Elements.input(puid);
-        f.addInput(new Label("New User ID", new Color(178, 255, 102)), userIdField);
+        f.addInput(Elements.coloredLabel("New User ID", new Color(178, 255, 102)), userIdField);
         Selectable empsOpts = Selectables.employees();
-        f.addInput(new Label("Employee", new Color(102, 255, 178)), empsOpts);
+        f.addInput(Elements.coloredLabel("Employee", new Color(102, 255, 178)), empsOpts);
         JTextArea pastAccess = new JTextArea();
         pastAccess.getDocument().addDocumentListener(new DocumentListener() {
             @Override

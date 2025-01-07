@@ -12,7 +12,6 @@ import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Copiable;
 import org.Canal.UI.Elements.DatePicker;
 import org.Canal.UI.Elements.Selectables;
-import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.Selectable;
 import org.Canal.UI.Elements.LockeState;
@@ -49,7 +48,7 @@ public class ReceiveOrder extends LockeState {
 
         Form f = new Form();
         poField = Elements.input(12);
-        f.addInput(new Label("Purchase Order #", Constants.colors[0]), poField);
+        f.addInput(Elements.coloredLabel("Purchase Order #", Constants.colors[0]), poField);
         HashMap<String, String> putAwayOptions = new HashMap<>();
         for(Area a : Engine.getAreas(receivingLocation)){
             putAwayOptions.put(a.getId(), a.getId());
@@ -109,16 +108,16 @@ public class ReceiveOrder extends LockeState {
             }
         }
         availablePutawayBin = new Selectable(putawayBinOptions);
-        f.addInput(new Label("Receiving Location", Constants.colors[1]), availRcvLocations);
-        f.addInput(new Label("Putaway Bin", Constants.colors[2]), availablePutawayBin);
-        f.addInput(new Label("Expected Delivery", Constants.colors[3]), expDelivery);
+        f.addInput(Elements.coloredLabel("Receiving Location", Constants.colors[1]), availRcvLocations);
+        f.addInput(Elements.coloredLabel("Putaway Bin", Constants.colors[2]), availablePutawayBin);
+        f.addInput(Elements.coloredLabel("Expected Delivery", Constants.colors[3]), expDelivery);
         String timestampFormat = "yyyy-MM-dd HH:mm:ss";
         DatePicker deliveryDate = new DatePicker();
         SimpleDateFormat sdf = new SimpleDateFormat(timestampFormat);
         try {
             Date currentDate = sdf.parse(Constants.now());
             deliveryDate.setSelectedDate(currentDate);
-            f.addInput(new Label("Delivery Date", UIManager.getColor("Label.foreground")), deliveryDate);
+            f.addInput(Elements.coloredLabel("Delivery Date", UIManager.getColor("Label.foreground")), deliveryDate);
         } catch (ParseException e) {
             e.printStackTrace();
         }

@@ -1,6 +1,8 @@
 package org.Canal.UI.Elements;
 
 import com.formdev.flatlaf.ui.FlatBorder;
+import org.Canal.Utils.Engine;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
@@ -18,7 +20,7 @@ public class Elements {
         JTextField textField = new JTextField();
         Border outerBorder = new FlatBorder();
         Border innerPadding = new EmptyBorder(2, 2, 2, 2);
-        textField.setFont(new Font(UIManager.getFont("Label.font").getName(), Font.PLAIN, 12));
+        textField.setFont(new Font(UIManager.getFont("Label.font").getName(), Font.PLAIN, Engine.getConfiguration().getFontSize()));
         textField.setBorder(new CompoundBorder(outerBorder, innerPadding));
         return textField;
     }
@@ -27,7 +29,7 @@ public class Elements {
         JTextField textField = new JTextField(preset);
         Border outerBorder = new FlatBorder();
         Border innerPadding = new EmptyBorder(2, 2, 2, 2);
-        textField.setFont(new Font(UIManager.getFont("Label.font").getName(), Font.PLAIN, 12));
+        textField.setFont(new Font(UIManager.getFont("Label.font").getName(), Font.PLAIN, Engine.getConfiguration().getFontSize()));
         textField.setBorder(new CompoundBorder(outerBorder, innerPadding));
         return textField;
     }
@@ -36,7 +38,7 @@ public class Elements {
         JTextField textField = new JTextField(length);
         Border outerBorder = new FlatBorder();
         Border innerPadding = new EmptyBorder(2, 2, 2, 2);
-        textField.setFont(new Font(UIManager.getFont("Label.font").getName(), Font.PLAIN, 12));
+        textField.setFont(new Font(UIManager.getFont("Label.font").getName(), Font.PLAIN, Engine.getConfiguration().getFontSize()));
         textField.setBorder(new CompoundBorder(outerBorder, innerPadding));
         return textField;
     }
@@ -45,7 +47,7 @@ public class Elements {
         JTextField textField = new JTextField(preset, length);
         Border outerBorder = new FlatBorder();
         Border innerPadding = new EmptyBorder(2, 2, 2, 2);
-        textField.setFont(new Font(UIManager.getFont("Label.font").getName(), Font.PLAIN, 12));
+        textField.setFont(new Font(UIManager.getFont("Label.font").getName(), Font.PLAIN, Engine.getConfiguration().getFontSize()));
         textField.setBorder(new CompoundBorder(outerBorder, innerPadding));
         return textField;
     }
@@ -53,6 +55,18 @@ public class Elements {
     public static JLabel label(String text){
         JLabel l = new JLabel(text);
         l.setBorder(new EmptyBorder(0, 10, 10, 0));
+        return l;
+    }
+
+    public static JLabel coloredLabel(String text, Color color){
+        JLabel l = new JLabel(text);
+        l.setFont(new Font(UIManager.getFont("Label.font").getName(), Font.PLAIN, Engine.getConfiguration().getFontSize()));
+        l.setMinimumSize(new Dimension(120, 25));
+        l.setMaximumSize(new Dimension(200, 25));
+        l.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createMatteBorder(0, 2, 1, 0, color),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)
+        ));
         return l;
     }
 
@@ -107,7 +121,7 @@ public class Elements {
 
     public static JButton button(String text) {
         JButton b = new JButton(text);
-        b.setFont(new Font(UIManager.getFont("Label.font").getName(), Font.PLAIN, 14));
+        b.setFont(new Font(UIManager.getFont("Label.font").getName(), Font.PLAIN, Engine.getConfiguration().getFontSize()));
         b.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         b.setPreferredSize(new Dimension(190, 35));
         b.addMouseListener(new java.awt.event.MouseAdapter() {

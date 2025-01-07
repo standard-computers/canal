@@ -32,7 +32,7 @@ public class PurchaseOrders extends LockeState {
         JPanel holder = new JPanel(new BorderLayout());
         table = createTable();
         JScrollPane tableScrollPane = new JScrollPane(table);
-        holder.add(Elements.header("All Purchase Orders", SwingConstants.LEFT), BorderLayout.CENTER);
+        holder.add(Elements.header("Purchase Orders", SwingConstants.LEFT), BorderLayout.CENTER);
         holder.add(tb, BorderLayout.SOUTH);
         add(holder);
         setLayout(new BorderLayout());
@@ -44,30 +44,39 @@ public class PurchaseOrders extends LockeState {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV");
-        IconButton createPurchaseOrder = new IconButton("New PO", "order", "Build an item", "/ORDS/PO/NEW");
-        IconButton blockPo = new IconButton("Block", "block", "Block/Pause PO, can't be used");
-        IconButton suspendPo = new IconButton("Suspend", "suspend", "Suspend PO, can't be used");
+        IconButton openSelected = new IconButton("Open", "open", "Open selected");
+        IconButton createPurchaseOrder = new IconButton("New PO", "create", "Build an item", "/ORDS/PO/NEW");
+        IconButton blockPO = new IconButton("Block", "block", "Block/Pause PO, can't be used");
+        IconButton suspendPO = new IconButton("Suspend", "suspend", "Suspend PO, can't be used");
         IconButton activatePO = new IconButton("Start", "start", "Resume/Activate PO");
-        IconButton archivePo = new IconButton("Archive", "archive", "Archive PO, removes", "/ORDS/PO/ARCHV");
-        IconButton find = new IconButton("Find", "find", "Find by values", "/ORDS/PO/F");
-        IconButton label = new IconButton("Labels", "label", "Print labels for org properties");
+        IconButton archivePO = new IconButton("Archive", "archive", "Archive PO, removes", "/ORDS/PO/ARCHV");
+        IconButton findPO = new IconButton("Find", "find", "Find by values", "/ORDS/PO/F");
+        IconButton labels = new IconButton("Labels", "label", "Print labels for org properties");
+        IconButton print = new IconButton("Print", "print", "Print selectes");
+        IconButton refresh = new IconButton("Refresh", "refresh", "Refresh data");
         tb.add(export);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(openSelected);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(createPurchaseOrder);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(blockPo);
+        tb.add(blockPO);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(suspendPo);
+        tb.add(suspendPO);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(activatePO);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(archivePo);
+        tb.add(archivePO);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(find);
+        tb.add(findPO);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(label);
+        tb.add(labels);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(print);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(refresh);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));
-        label.addMouseListener(new MouseAdapter() {
+        labels.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 String[] printables = new String[Engine.orderProcessing.getPurchaseOrder().size()];
                 for (int i = 0; i < Engine.orderProcessing.getPurchaseOrder().size(); i++) {

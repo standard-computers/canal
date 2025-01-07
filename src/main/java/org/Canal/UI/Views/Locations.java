@@ -71,6 +71,8 @@ public class Locations extends LockeState implements RefreshListener {
         IconButton archiveLocation = new IconButton("Archive", "archive", "Archive a Location", objexType + "/ARCHV");
         IconButton removeLocation = new IconButton("Remove", "delete", "Delete a Location", objexType + "/DEL");
         IconButton findLocation = new IconButton("Find", "find", "Find by Values", objexType + "/F");
+        IconButton labels = new IconButton("Labels", "label", "Print labels for selected");
+        IconButton print = new IconButton("Print", "print", "Print selected");
         IconButton refresh = new IconButton("Refresh", "refresh", "Refresh Data");
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));
@@ -85,6 +87,10 @@ public class Locations extends LockeState implements RefreshListener {
         tb.add(removeLocation);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(findLocation);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(labels);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(print);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(refresh);
         tb.setBorder(new EmptyBorder(0, 5, 0, 5));

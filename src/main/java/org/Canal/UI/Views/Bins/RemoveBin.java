@@ -1,7 +1,6 @@
 package org.Canal.UI.Views.Bins;
 
 import org.Canal.UI.Elements.Elements;
-import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.Utils.Constants;
@@ -23,7 +22,7 @@ public class RemoveBin extends LockeState {
 
         Form f = new Form();
         JTextField binIdField = Elements.input("", 15);
-        f.addInput(new Label("Bin ID to Delete", Constants.colors[0]), binIdField);
+        f.addInput(Elements.coloredLabel("Bin ID to Delete", Constants.colors[0]), binIdField);
         setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.RED));
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);

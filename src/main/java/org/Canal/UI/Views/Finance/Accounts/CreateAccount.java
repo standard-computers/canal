@@ -2,7 +2,6 @@ package org.Canal.UI.Views.Finance.Accounts;
 
 import org.Canal.Models.BusinessUnits.Account;
 import org.Canal.UI.Elements.*;
-import org.Canal.UI.Elements.Label;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Pipe;
 
@@ -27,12 +26,12 @@ public class CreateAccount extends LockeState {
         DatePicker closeDate = new DatePicker();
         JTextField agreementField = Elements.input();
         Form f = new Form();
-        f.addInput(new Label("*New Account ID (Account #/Payer #)", UIManager.getColor("Label.foreground")), accountIdField);
-        f.addInput(new Label("Owning Location", Constants.colors[10]), locations);
-        f.addInput(new Label("Customer", Constants.colors[9]), customers);
-        f.addInput(new Label("Open Date", Constants.colors[8]), openDate);
-        f.addInput(new Label("Close Date", Constants.colors[7]), closeDate);
-        f.addInput(new Label("Attach Agreement ID", Constants.colors[7]), agreementField);
+        f.addInput(Elements.coloredLabel("*New Account ID (Account #/Payer #)", UIManager.getColor("Label.foreground")), accountIdField);
+        f.addInput(Elements.coloredLabel("Owning Location", Constants.colors[10]), locations);
+        f.addInput(Elements.coloredLabel("Customer", Constants.colors[9]), customers);
+        f.addInput(Elements.coloredLabel("Open Date", Constants.colors[8]), openDate);
+        f.addInput(Elements.coloredLabel("Close Date", Constants.colors[7]), closeDate);
+        f.addInput(Elements.coloredLabel("Attach Agreement ID", Constants.colors[7]), agreementField);
 
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);

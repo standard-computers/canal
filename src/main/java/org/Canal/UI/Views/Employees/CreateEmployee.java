@@ -5,7 +5,6 @@ import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.DatePicker;
 import org.Canal.UI.Elements.Selectable;
 import org.Canal.UI.Elements.Selectables;
-import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.Utils.*;
@@ -89,14 +88,14 @@ public class CreateEmployee extends LockeState {
         supervisor = new Selectable(availableSupervisors);
         supervisor.editable();
         startDatePicker = new DatePicker();
-        f.addInput(new Label("New Employee ID", UIManager.getColor("Label.foreground")), empIdField);
-        f.addInput(new Label("Organization", Constants.colors[10]), orgIdField);
+        f.addInput(Elements.coloredLabel("New Employee ID", UIManager.getColor("Label.foreground")), empIdField);
+        f.addInput(Elements.coloredLabel("Organization", Constants.colors[10]), orgIdField);
         locations = Selectables.allLocations();
-        f.addInput(new Label("Location (optional)", Constants.colors[9]), locations);
-        f.addInput(new Label("Full Name", Constants.colors[9]), empNameField);
-        f.addInput(new Label("Position", Constants.colors[8]), position);
-        f.addInput(new Label("Supervisor", Constants.colors[7]), supervisor);
-        f.addInput(new Label("Start Date", Constants.colors[6]), startDatePicker);
+        f.addInput(Elements.coloredLabel("Location (optional)", Constants.colors[9]), locations);
+        f.addInput(Elements.coloredLabel("Full Name", Constants.colors[9]), empNameField);
+        f.addInput(Elements.coloredLabel("Position", Constants.colors[8]), position);
+        f.addInput(Elements.coloredLabel("Supervisor", Constants.colors[7]), supervisor);
+        f.addInput(Elements.coloredLabel("Start Date", Constants.colors[6]), startDatePicker);
         return f;
     }
 
@@ -108,12 +107,12 @@ public class CreateEmployee extends LockeState {
         empAddressState = Elements.input(15);
         empAddressPostal = Elements.input(15);
         countries = Selectables.countries();
-        f2.addInput(new Label("Street Line 1", UIManager.getColor("Label.foreground")), empAddressL1);
-        f2.addInput(new Label("Street Line 2", UIManager.getColor("Label.foreground")), empAddressL2);
-        f2.addInput(new Label("City", UIManager.getColor("Label.foreground")), empAddressCity);
-        f2.addInput(new Label("State", UIManager.getColor("Label.foreground")), empAddressState);
-        f2.addInput(new Label("Postal", UIManager.getColor("Label.foreground")), empAddressPostal);
-        f2.addInput(new Label("Country", UIManager.getColor("Label.foreground")), Selectables.countries());
+        f2.addInput(Elements.coloredLabel("Street Line 1", UIManager.getColor("Label.foreground")), empAddressL1);
+        f2.addInput(Elements.coloredLabel("Street Line 2", UIManager.getColor("Label.foreground")), empAddressL2);
+        f2.addInput(Elements.coloredLabel("City", UIManager.getColor("Label.foreground")), empAddressCity);
+        f2.addInput(Elements.coloredLabel("State", UIManager.getColor("Label.foreground")), empAddressState);
+        f2.addInput(Elements.coloredLabel("Postal", UIManager.getColor("Label.foreground")), empAddressPostal);
+        f2.addInput(Elements.coloredLabel("Country", UIManager.getColor("Label.foreground")), Selectables.countries());
         return f2;
     }
 
@@ -124,11 +123,11 @@ public class CreateEmployee extends LockeState {
         ethnicities = Selectables.ethnicities();
         genders = Selectables.genders();
         isVeteran = new JCheckBox();
-        f.addInput(new Label("Phone", UIManager.getColor("Label.foreground")), empPhone);
-        f.addInput(new Label("Email", UIManager.getColor("Label.foreground")), empEmail);
-        f.addInput(new Label("Ethnicity", UIManager.getColor("Label.foreground")), ethnicities);
-        f.addInput(new Label("Gender", UIManager.getColor("Label.foreground")), genders);
-        f.addInput(new Label("Veteran?", UIManager.getColor("Label.foreground")), isVeteran);
+        f.addInput(Elements.coloredLabel("Phone", UIManager.getColor("Label.foreground")), empPhone);
+        f.addInput(Elements.coloredLabel("Email", UIManager.getColor("Label.foreground")), empEmail);
+        f.addInput(Elements.coloredLabel("Ethnicity", UIManager.getColor("Label.foreground")), ethnicities);
+        f.addInput(Elements.coloredLabel("Gender", UIManager.getColor("coloredLabel.foreground")), genders);
+        f.addInput(Elements.coloredLabel("Veteran?", UIManager.getColor("coloredLabel.foreground")), isVeteran);
         return f;
     }
 }

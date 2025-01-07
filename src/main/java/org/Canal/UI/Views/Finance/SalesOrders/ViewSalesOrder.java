@@ -2,7 +2,6 @@ package org.Canal.UI.Views.Finance.SalesOrders;
 
 import org.Canal.Models.BusinessUnits.*;
 import org.Canal.Models.SupplyChainUnits.Item;
-import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.Constants;
@@ -84,10 +83,10 @@ public class ViewSalesOrder extends LockeState {
         selectSupplier = Selectables.allLocations();
         selectSupplier.editable();
         orderId = new Copiable("SO" + (60000000 + (Engine.orderProcessing.getSalesOrders().size() + 1)));
-        f.addInput(new Label("*Order ID", Constants.colors[0]), orderId);
-        f.addInput(new Label("Supplier", Constants.colors[1]), selectSupplier);
-        f.addInput(new Label("Bill To", Constants.colors[2]), selectBillTo);
-        f.addInput(new Label("Ship To", Constants.colors[3]), selectShipTo);
+        f.addInput(Elements.coloredLabel("*Order ID", Constants.colors[0]), orderId);
+        f.addInput(Elements.coloredLabel("Supplier", Constants.colors[1]), selectSupplier);
+        f.addInput(Elements.coloredLabel("Bill To", Constants.colors[2]), selectBillTo);
+        f.addInput(Elements.coloredLabel("Ship To", Constants.colors[3]), selectShipTo);
         return f;
     }
 
@@ -95,9 +94,9 @@ public class ViewSalesOrder extends LockeState {
         Form f = new Form();
         JTextField ordered = new Copiable(LocalDate.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy")));
         expectedDelivery = new DatePicker();
-        f.addInput(new Label("*Ordered", UIManager.getColor("Label.foreground")), ordered);
-        f.addInput(new Label("Expected Delivery", UIManager.getColor("Label.foreground")), expectedDelivery);
-        f.addInput(new Label("Status", UIManager.getColor("Label.foreground")), new Copiable("DRAFT"));
+        f.addInput(Elements.coloredLabel("*Ordered", UIManager.getColor("Label.foreground")), ordered);
+        f.addInput(Elements.coloredLabel("Expected Delivery", UIManager.getColor("Label.foreground")), expectedDelivery);
+        f.addInput(Elements.coloredLabel("Status", UIManager.getColor("coloredLabel.foreground")), new Copiable("DRAFT"));
         return f;
     }
 
@@ -175,9 +174,9 @@ public class ViewSalesOrder extends LockeState {
         }
         outboundCarriers = Selectables.carriers();
         outboundTruckId = Elements.input();
-        p.addInput(new Label("Create Outbound Delivery (ODO) for Supplier", Constants.colors[9]), createOutboundDelivery);
-        p.addInput(new Label("Carrier", Constants.colors[8]), outboundCarriers);
-        p.addInput(new Label("Truck ID/Number", Constants.colors[7]), outboundTruckId);
+        p.addInput(Elements.coloredLabel("Create Outbound Delivery (ODO) for Supplier", Constants.colors[9]), createOutboundDelivery);
+        p.addInput(Elements.coloredLabel("Carrier", Constants.colors[8]), outboundCarriers);
+        p.addInput(Elements.coloredLabel("Truck ID/Number", Constants.colors[7]), outboundTruckId);
         return p;
     }
 
@@ -191,10 +190,10 @@ public class ViewSalesOrder extends LockeState {
         organizations = Selectables.organizations();
         buyerObjexType = Selectables.locationObjex("/CCS");
         ledgers = Selectables.ledgers();
-        f.addInput(new Label("Commit to Ledger", Constants.colors[9]), commitToLedger);
-        f.addInput(new Label("Trans. Type (Receiving location type)", Constants.colors[8]), buyerObjexType);
-        f.addInput(new Label("Purchasing Org.", Constants.colors[7]), organizations);
-        f.addInput(new Label("Ledger", Constants.colors[6]), ledgers);
+        f.addInput(Elements.coloredLabel("Commit to Ledger", Constants.colors[9]), commitToLedger);
+        f.addInput(Elements.coloredLabel("Trans. Type (Receiving location type)", Constants.colors[8]), buyerObjexType);
+        f.addInput(Elements.coloredLabel("Purchasing Org.", Constants.colors[7]), organizations);
+        f.addInput(Elements.coloredLabel("Ledger", Constants.colors[6]), ledgers);
         return f;
     }
 
@@ -218,11 +217,11 @@ public class ViewSalesOrder extends LockeState {
         }
         inboundCarriers = Selectables.carriers();
         inboundTruckId = Elements.input();
-        f.addInput(new Label("Create Purchase Order?", Constants.colors[9]), createPurchaseOrder);
-        f.addInput(new Label("Purchase Requisition", Constants.colors[8]), availablePurchaseRequisitions);
-        f.addInput(new Label("Create IDO", Constants.colors[7]), createInboundDelivery);
-        f.addInput(new Label("Transporation Carrier", Constants.colors[6]), inboundCarriers);
-        f.addInput(new Label("Truck ID/Number", Constants.colors[5]), inboundTruckId);
+        f.addInput(Elements.coloredLabel("Create Purchase Order?", Constants.colors[9]), createPurchaseOrder);
+        f.addInput(Elements.coloredLabel("Purchase Requisition", Constants.colors[8]), availablePurchaseRequisitions);
+        f.addInput(Elements.coloredLabel("Create IDO", Constants.colors[7]), createInboundDelivery);
+        f.addInput(Elements.coloredLabel("Transporation Carrier", Constants.colors[6]), inboundCarriers);
+        f.addInput(Elements.coloredLabel("Truck ID/Number", Constants.colors[5]), inboundTruckId);
         return f;
     }
 }

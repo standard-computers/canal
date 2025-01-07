@@ -1,12 +1,7 @@
 package org.Canal.UI.Views;
 
 import org.Canal.Models.BusinessUnits.PurchaseOrder;
-import org.Canal.UI.Elements.Elements;
-import org.Canal.UI.Elements.Selectables;
-import org.Canal.UI.Elements.Form;
-import org.Canal.UI.Elements.Label;
-import org.Canal.UI.Elements.Selectable;
-import org.Canal.UI.Elements.LockeState;
+import org.Canal.UI.Elements.*;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -32,11 +27,11 @@ public class ReturnOrder extends LockeState {
         Form f = new Form();
         poField = Elements.input(12);
         onField = Elements.input(12);
-        f.addInput(new Label("Purchase Order #", Constants.colors[0]), poField);
-        f.addInput(new Label("[or] Order #", Constants.colors[1]), onField);
+        f.addInput(Elements.coloredLabel("Purchase Order #", Constants.colors[0]), poField);
+        f.addInput(Elements.coloredLabel("[or] Order #", Constants.colors[1]), onField);
         ats = Selectables.allLocations();
-        f.addInput(new Label("Receiving Location", Constants.colors[2]), ats);
-        f.addInput(new Label("Putaway Area", Constants.colors[3]), availablePutaway);
+        f.addInput(Elements.coloredLabel("Receiving Location", Constants.colors[2]), ats);
+        f.addInput(Elements.coloredLabel("Putaway Area", Constants.colors[3]), availablePutaway);
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);
         JButton receive = Elements.button("Receive Order");

@@ -1,14 +1,7 @@
 package org.Canal.UI.Views.Finance.PurchaseRequisitions;
 
 import org.Canal.Models.BusinessUnits.PurchaseRequisition;
-import org.Canal.UI.Elements.Elements;
-import org.Canal.UI.Elements.Copiable;
-import org.Canal.UI.Elements.DatePicker;
-import org.Canal.UI.Elements.Selectable;
-import org.Canal.UI.Elements.Selectables;
-import org.Canal.UI.Elements.Label;
-import org.Canal.UI.Elements.Form;
-import org.Canal.UI.Elements.LockeState;
+import org.Canal.UI.Elements.*;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Pipe;
@@ -47,17 +40,17 @@ public class CreatePurchaseRequisition extends LockeState {
         JTextArea prNotesField = new JTextArea();
         JCheckBox singleOrder = new JCheckBox();
         Form f = new Form();
-        f.addInput(new Label("*New ID", UIManager.getColor("Label.foreground")), prIdField);
-        f.addInput(new Label("*Created", UIManager.getColor("Label.foreground")), new Copiable(Constants.now()));
-        f.addInput(new Label("*Creator (Owner)", UIManager.getColor("Label.foreground")), prOwnerField);
-        f.addInput(new Label("Purchase Req. #", UIManager.getColor("Label.foreground")), prNumberField);
-        f.addInput(new Label("Supplier ID", Constants.colors[9]), availableVendors);
-        f.addInput(new Label("Customer (Buyer/Ship To)", Constants.colors[8]), availableBuyers);
-        f.addInput(new Label("Max Spend", Constants.colors[7]), prSpendAmount);
-        f.addInput(new Label("[or] Single Order", Constants.colors[6]), singleOrder);
-        f.addInput(new Label("Valid From", Constants.colors[5]), prStartDateField);
-        f.addInput(new Label("To", Constants.colors[4]), prEndDateField);
-        f.addInput(new Label("Notes", Constants.colors[3]), prNotesField);
+        f.addInput(Elements.coloredLabel("*New ID", UIManager.getColor("Label.foreground")), prIdField);
+        f.addInput(Elements.coloredLabel("*Created", UIManager.getColor("Label.foreground")), new Copiable(Constants.now()));
+        f.addInput(Elements.coloredLabel("*Creator (Owner)", UIManager.getColor("Label.foreground")), prOwnerField);
+        f.addInput(Elements.coloredLabel("Purchase Req. #", UIManager.getColor("Label.foreground")), prNumberField);
+        f.addInput(Elements.coloredLabel("Supplier ID", Constants.colors[9]), availableVendors);
+        f.addInput(Elements.coloredLabel("Customer (Buyer/Ship To)", Constants.colors[8]), availableBuyers);
+        f.addInput(Elements.coloredLabel("Max Spend", Constants.colors[7]), prSpendAmount);
+        f.addInput(Elements.coloredLabel("[or] Single Order", Constants.colors[6]), singleOrder);
+        f.addInput(Elements.coloredLabel("Valid From", Constants.colors[5]), prStartDateField);
+        f.addInput(Elements.coloredLabel("To", Constants.colors[4]), prEndDateField);
+        f.addInput(Elements.coloredLabel("Notes", Constants.colors[3]), prNotesField);
         singleOrder.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 if(singleOrder.isSelected()){

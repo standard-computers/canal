@@ -7,6 +7,7 @@ public class Configuration {
     private String product_key = "";
     private String theme = "/com/formdev/flatlaf/intellijthemes/themes/SolarizedDark.theme.json";
     private String assignedUser; //ID of User this instance of Canal is assigned to
+    private int fontSize = 14;
     private boolean saveLockeState = false;
     private boolean showCanalCodes = false;
     private boolean showButtonLabels = true;
@@ -57,6 +58,14 @@ public class Configuration {
 
     public void setAssignedUser(String assignedUser) {
         this.assignedUser = assignedUser;
+    }
+
+    public int getFontSize() {
+        return fontSize;
+    }
+
+    public void setFontSize(int fontSize) {
+        this.fontSize = fontSize;
     }
 
     @Override

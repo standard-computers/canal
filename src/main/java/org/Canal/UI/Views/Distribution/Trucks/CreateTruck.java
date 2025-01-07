@@ -2,7 +2,6 @@ package org.Canal.UI.Views.Distribution.Trucks;
 
 import org.Canal.Models.SupplyChainUnits.Truck;
 import org.Canal.UI.Elements.*;
-import org.Canal.UI.Elements.Label;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -34,13 +33,13 @@ public class CreateTruck extends LockeState {
         JTextField yearNameField = Elements.input(15);
         JTextField makeNameField = Elements.input(15);
         JTextField modelNameField = Elements.input(15);
-        f.addInput(new Label("*New Truck ID", UIManager.getColor("Label.foreground")), truckIdField);
-        f.addInput(new Label("Truck Number", Constants.colors[0]), truckNumberField);
-        f.addInput(new Label("Carrier", Constants.colors[1]), carriers);
-        f.addInput(new Label("Driver (Name)", Constants.colors[2]), driverNameField);
-        f.addInput(new Label("Vehicle Year", Constants.colors[3]), yearNameField);
-        f.addInput(new Label("Vehicle Make", Constants.colors[4]), makeNameField);
-        f.addInput(new Label("Vehicle Model", Constants.colors[5]), modelNameField);
+        f.addInput(Elements.coloredLabel("*New Truck ID", UIManager.getColor("Label.foreground")), truckIdField);
+        f.addInput(Elements.coloredLabel("Truck Number", Constants.colors[0]), truckNumberField);
+        f.addInput(Elements.coloredLabel("Carrier", Constants.colors[1]), carriers);
+        f.addInput(Elements.coloredLabel("Driver (Name)", Constants.colors[2]), driverNameField);
+        f.addInput(Elements.coloredLabel("Vehicle Year", Constants.colors[3]), yearNameField);
+        f.addInput(Elements.coloredLabel("Vehicle Make", Constants.colors[4]), makeNameField);
+        f.addInput(Elements.coloredLabel("Vehicle Model", Constants.colors[5]), modelNameField);
 
         setLayout(new BorderLayout());
         add(Elements.header("Create a Truck", SwingConstants.LEFT), BorderLayout.NORTH);

@@ -29,10 +29,10 @@ public class IconButton extends JButton {
 
     private void configureButton(String text, String icon, String toolTip) {
         ImageIcon originalIcon = new ImageIcon(IconButton.class.getResource("/icons/" + icon + ".png"));
-        Image scaledImage = originalIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        Image scaledImage = originalIcon.getImage().getScaledInstance(18, 18, Image.SCALE_SMOOTH);
         setIcon(new ImageIcon(scaledImage));
         setText(text);
-        setFont(new Font(UIManager.getFont("Label.font").getName(), Font.PLAIN, 14));
+        setFont(new Font(UIManager.getFont("Label.font").getName(), Font.PLAIN, Engine.getConfiguration().getFontSize()));
         setToolTipText(toolTip);
         setContentAreaFilled(false); // Disable default background painting
         setFocusPainted(false); // Remove focus painting

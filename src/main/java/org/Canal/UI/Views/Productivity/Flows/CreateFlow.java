@@ -1,7 +1,6 @@
 package org.Canal.UI.Views.Productivity.Flows;
 
 import org.Canal.UI.Elements.*;
-import org.Canal.UI.Elements.Label;
 import org.Canal.Utils.Constants;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
@@ -27,8 +26,8 @@ public class CreateFlow extends LockeState {
         Form f = new Form();
         flowIdField = Elements.input();
         flowNameField = Elements.input();
-        f.addInput(new Label("*New Flow ID", UIManager.getColor("Label.foreground")), flowIdField);
-        f.addInput(new Label("Flow Name", Constants.colors[0]), flowNameField);
+        f.addInput(Elements.coloredLabel("*New Flow ID", UIManager.getColor("Label.foreground")), flowIdField);
+        f.addInput(Elements.coloredLabel("Flow Name", Constants.colors[0]), flowNameField);
 
 
         setLayout(new BorderLayout());

@@ -2,11 +2,7 @@ package org.Canal.UI.Views.Areas;
 
 import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.Models.SupplyChainUnits.Location;
-import org.Canal.UI.Elements.Elements;
-import org.Canal.UI.Elements.UOMField;
-import org.Canal.UI.Elements.Form;
-import org.Canal.UI.Elements.Label;
-import org.Canal.UI.Elements.LockeState;
+import org.Canal.UI.Elements.*;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Pipe;
@@ -107,13 +103,13 @@ public class AutoMakeAreas extends LockeState {
         heightField = new UOMField();
         areaField = new UOMField();
         volumeField = new UOMField();
-        f.addInput(new Label("*New Area ID (current: LOC_ID-001)", UIManager.getColor("Label.foreground")), areaIdField);
-        f.addInput(new Label("Area Name (current: LOC_ID-001", UIManager.getColor("Label.foreground")), areaNameField);
-        f.addInput(new Label("Width", Constants.colors[10]), widthField);
-        f.addInput(new Label("Length", Constants.colors[9]), lengthField);
-        f.addInput(new Label("Height", Constants.colors[8]), heightField);
-        f.addInput(new Label("Area", Constants.colors[7]), areaField);
-        f.addInput(new Label("Volume", Constants.colors[6]), volumeField);
+        f.addInput(Elements.coloredLabel("*New Area ID (current: LOC_ID-001)", UIManager.getColor("Label.foreground")), areaIdField);
+        f.addInput(Elements.coloredLabel("Area Name (current: LOC_ID-001", UIManager.getColor("Label.foreground")), areaNameField);
+        f.addInput(Elements.coloredLabel("Width", Constants.colors[10]), widthField);
+        f.addInput(Elements.coloredLabel("Length", Constants.colors[9]), lengthField);
+        f.addInput(Elements.coloredLabel("Height", Constants.colors[8]), heightField);
+        f.addInput(Elements.coloredLabel("Area", Constants.colors[7]), areaField);
+        f.addInput(Elements.coloredLabel("Volume", Constants.colors[6]), volumeField);
         return f;
     }
 

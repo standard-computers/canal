@@ -72,8 +72,8 @@ public class CustomTable extends JTable {
         }) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                // Make all columns except the "Select" column editable
-                return column > 0; // Column 0 is the "Select" checkbox
+                // Make the "Select" column editable
+                return column == 0 || column > 0; // Allow all columns, including the first one
             }
 
             @Override

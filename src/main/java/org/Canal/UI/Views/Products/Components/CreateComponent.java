@@ -2,7 +2,6 @@ package org.Canal.UI.Views.Products.Components;
 
 import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.UI.Elements.Selectable;
-import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.LockeState;
@@ -58,15 +57,15 @@ public class CreateComponent extends LockeState {
         isBatched = new JCheckBox("Component expires");
         isSkud = new JCheckBox("Component has unique SKU");
         upc = Elements.input();
-        f1.addInput(new Label("*Component ID", new Color(240, 240, 240)), materialIdField);
-        f1.addInput(new Label("*Organization ID", new Color(240, 240, 240)), organizations);
-        f1.addInput(new Label("Component Photo", Constants.colors[0]), selectPhoto);
-        f1.addInput(new Label("Component Name", Constants.colors[1]), materialNameField);
-        f1.addInput(new Label("Vendor", Constants.colors[2]), selectedVendor);
-        f1.addInput(new Label("Batched", Constants.colors[3]), isBatched);
-        f1.addInput(new Label("Price", Constants.colors[4]), materialPriceField);
-        f1.addInput(new Label("SKU'd Product", Constants.colors[5]), isSkud);
-        f1.addInput(new Label("UPC", Constants.colors[6]), upc);
+        f1.addInput(Elements.coloredLabel("*Component ID", new Color(240, 240, 240)), materialIdField);
+        f1.addInput(Elements.coloredLabel("*Organization ID", new Color(240, 240, 240)), organizations);
+        f1.addInput(Elements.coloredLabel("Component Photo", Constants.colors[0]), selectPhoto);
+        f1.addInput(Elements.coloredLabel("Component Name", Constants.colors[1]), materialNameField);
+        f1.addInput(Elements.coloredLabel("Vendor", Constants.colors[2]), selectedVendor);
+        f1.addInput(Elements.coloredLabel("Batched", Constants.colors[3]), isBatched);
+        f1.addInput(Elements.coloredLabel("Price", Constants.colors[4]), materialPriceField);
+        f1.addInput(Elements.coloredLabel("SKU'd Product", Constants.colors[5]), isSkud);
+        f1.addInput(Elements.coloredLabel("UPC", Constants.colors[6]), upc);
 
         Form f2 = new Form();
         baseQtyField = Elements.input();
@@ -78,15 +77,15 @@ public class CreateComponent extends LockeState {
         tax = Elements.input("0");
         exciseTax = Elements.input("0");
         materialColor = Elements.input("Black");
-        f2.addInput(new Label("Packaging Base Quantity", Constants.colors[10]), baseQtyField);
-        f2.addInput(new Label("Packaging UOM", Constants.colors[9]), packagingUnits);
-        f2.addInput(new Label("Color", Constants.colors[8]), materialColor);
-        f2.addInput(new Label("Width", Constants.colors[7]), itemWidth);
-        f2.addInput(new Label("Length", Constants.colors[6]), itemLength);
-        f2.addInput(new Label("Height", Constants.colors[5]), itemHeight);
-        f2.addInput(new Label("Weight", Constants.colors[4]), itemWeight);
-        f2.addInput(new Label("Tax (0.05 as 5%)", Constants.colors[3]), tax);
-        f2.addInput(new Label("Excise Tax (0.05 as 5%)", Constants.colors[2]), exciseTax);
+        f2.addInput(Elements.coloredLabel("Packaging Base Quantity", Constants.colors[10]), baseQtyField);
+        f2.addInput(Elements.coloredLabel("Packaging UOM", Constants.colors[9]), packagingUnits);
+        f2.addInput(Elements.coloredLabel("Color", Constants.colors[8]), materialColor);
+        f2.addInput(Elements.coloredLabel("Width", Constants.colors[7]), itemWidth);
+        f2.addInput(Elements.coloredLabel("Length", Constants.colors[6]), itemLength);
+        f2.addInput(Elements.coloredLabel("Height", Constants.colors[5]), itemHeight);
+        f2.addInput(Elements.coloredLabel("Weight", Constants.colors[4]), itemWeight);
+        f2.addInput(Elements.coloredLabel("Tax (0.05 as 5%)", Constants.colors[3]), tax);
+        f2.addInput(Elements.coloredLabel("Excise Tax (0.05 as 5%)", Constants.colors[2]), exciseTax);
 
         JPanel biPanel = new JPanel(new GridLayout(1, 2));
         f1.setBorder(new EmptyBorder(5, 5, 5, 5));

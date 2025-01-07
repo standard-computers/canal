@@ -2,12 +2,7 @@ package org.Canal.UI.Views.Bins;
 
 import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.Models.SupplyChainUnits.Bin;
-import org.Canal.UI.Elements.Elements;
-import org.Canal.UI.Elements.Selectable;
-import org.Canal.UI.Elements.Label;
-import org.Canal.UI.Elements.UOMField;
-import org.Canal.UI.Elements.Form;
-import org.Canal.UI.Elements.LockeState;
+import org.Canal.UI.Elements.*;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.RefreshListener;
@@ -46,15 +41,15 @@ public class CreateBin extends LockeState {
         JButton make = Elements.button("Make");
 
         Form f = new Form();
-        f.addInput(new Label("*New Bin ID", UIManager.getColor("Label.foreground")), binIdField);
-        f.addInput(new Label("*Area", UIManager.getColor("Label.foreground")), binAreaId);
-        f.addInput(new Label("Bin Name", Constants.colors[10]), binNameField);
-        f.addInput(new Label("Width", Constants.colors[9]), widthField);
-        f.addInput(new Label("Length", Constants.colors[8]), lengthField);
-        f.addInput(new Label("Height", Constants.colors[7]), heightField);
-        f.addInput(new Label("Volume", Constants.colors[7]), areaName);
-        f.addInput(new Label("Min Qty", UIManager.getColor("Label.foreground")), Elements.input(5));
-        f.addInput(new Label("Max Qty", UIManager.getColor("Label.foreground")), Elements.input(5));
+        f.addInput(Elements.coloredLabel("*New Bin ID", UIManager.getColor("Label.foreground")), binIdField);
+        f.addInput(Elements.coloredLabel("*Area", UIManager.getColor("Label.foreground")), binAreaId);
+        f.addInput(Elements.coloredLabel("Bin Name", Constants.colors[10]), binNameField);
+        f.addInput(Elements.coloredLabel("Width", Constants.colors[9]), widthField);
+        f.addInput(Elements.coloredLabel("Length", Constants.colors[8]), lengthField);
+        f.addInput(Elements.coloredLabel("Height", Constants.colors[7]), heightField);
+        f.addInput(Elements.coloredLabel("Volume", Constants.colors[7]), areaName);
+        f.addInput(Elements.coloredLabel("Min Qty", UIManager.getColor("Label.foreground")), Elements.input(5));
+        f.addInput(Elements.coloredLabel("Max Qty", UIManager.getColor("Label.foreground")), Elements.input(5));
         JCheckBox autoReplenish = new JCheckBox("Auto Replenish");
         autoReplenish.setToolTipText("Bin will be automatically replenished based on set replenishments");
         JCheckBox fixedBin = new JCheckBox("Fixed Bin");

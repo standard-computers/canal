@@ -5,7 +5,6 @@ import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Copiable;
 import org.Canal.UI.Elements.Selectable;
 import org.Canal.UI.Elements.Selectables;
-import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.Utils.Constants;
@@ -28,6 +27,7 @@ import java.util.Map;
 public class CanalSettings extends LockeState {
 
     private Selectable themeOptions;
+    private JTextField fontSizeField;
     private JCheckBox saveLockeState;
     private JCheckBox showLockeCodes;
     private JCheckBox showButtonLabels;
@@ -42,6 +42,7 @@ public class CanalSettings extends LockeState {
             @Override
             public void mouseClicked(MouseEvent e) {
                 String selectedTheme = themeOptions.getSelectedValue();
+                Engine.getConfiguration().setFontSize(Integer.parseInt(fontSizeField.getText()));
                 Engine.getConfiguration().setTheme(selectedTheme);
                 Engine.getConfiguration().setShowCanalCodes(showLockeCodes.isSelected());
                 Pipe.saveConfiguration();
@@ -63,6 +64,7 @@ public class CanalSettings extends LockeState {
     public JPanel generalSettings(){
 
         Form f = new Form();
+        fontSizeField = Elements.input(String.valueOf(Engine.getConfiguration().getFontSize()), 5);
         themeOptions = Selectables.themes();
         if(Engine.getConfiguration().getTheme() != null){
             themeOptions.setSelectedValue(Engine.getConfiguration().getTheme());
@@ -90,16 +92,16 @@ public class CanalSettings extends LockeState {
         if(Engine.getAssignedUser() != null){
             assignedUser = Engine.getAssignedUser().getId();
         }
-        f.addInput(new Label("Instance Name", UIManager.getColor("Label.foreground")), new Copiable(Engine.getConfiguration().getInstance_name()));
-        f.addInput(new Label("Endpoint", UIManager.getColor("Label.foreground")), new Copiable(Engine.getConfiguration().getEndpoint()));
-        f.addInput(new Label("Assigned User", UIManager.getColor("Label.foreground")), new Copiable(assignedUser));
-        f.addInput(new Label("Font Size", Constants.colors[10]), Elements.input("12", 5));
-        f.addInput(new Label("Theme", Constants.colors[9]), themeOptions);
-        f.addInput(new Label("Upload Theme", Constants.colors[8]), uploadTheme);
-        f.addInput(new Label("Background", Constants.colors[7]), backgroundChooser);
-        f.addInput(new Label("Save Locke State", Constants.colors[6]), saveLockeState);
-        f.addInput(new Label("Show Locke Codes", Constants.colors[5]), showLockeCodes);
-        f.addInput(new Label("Show Button Labels", Constants.colors[4]), showButtonLabels);
+        f.addInput(Elements.coloredLabel("Instance Name", UIManager.getColor("Label.foreground")), new Copiable(Engine.getConfiguration().getInstance_name()));
+        f.addInput(Elements.coloredLabel("Endpoint", UIManager.getColor("Label.foreground")), new Copiable(Engine.getConfiguration().getEndpoint()));
+        f.addInput(Elements.coloredLabel("Assigned User", UIManager.getColor("Label.foreground")), new Copiable(assignedUser));
+        f.addInput(Elements.coloredLabel("Font Size", Constants.colors[10]), fontSizeField);
+        f.addInput(Elements.coloredLabel("Theme", Constants.colors[9]), themeOptions);
+        f.addInput(Elements.coloredLabel("Upload Theme", Constants.colors[8]), uploadTheme);
+        f.addInput(Elements.coloredLabel("Background", Constants.colors[7]), backgroundChooser);
+        f.addInput(Elements.coloredLabel("Save Locke State", Constants.colors[6]), saveLockeState);
+        f.addInput(Elements.coloredLabel("Show Locke Codes", Constants.colors[5]), showLockeCodes);
+        f.addInput(Elements.coloredLabel("Show Button Labels", Constants.colors[4]), showButtonLabels);
         return f;
     }
 

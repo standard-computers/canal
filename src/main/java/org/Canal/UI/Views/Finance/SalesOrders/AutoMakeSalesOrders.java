@@ -2,14 +2,7 @@ package org.Canal.UI.Views.Finance.SalesOrders;
 
 import org.Canal.Models.BusinessUnits.PurchaseRequisition;
 import org.Canal.Models.SupplyChainUnits.Location;
-import org.Canal.UI.Elements.Elements;
-import org.Canal.UI.Elements.Copiable;
-import org.Canal.UI.Elements.DatePicker;
-import org.Canal.UI.Elements.Selectable;
-import org.Canal.UI.Elements.Selectables;
-import org.Canal.UI.Elements.Label;
-import org.Canal.UI.Elements.Form;
-import org.Canal.UI.Elements.LockeState;
+import org.Canal.UI.Elements.*;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Pipe;
@@ -82,13 +75,13 @@ public class AutoMakeSalesOrders extends LockeState {
         DatePicker prStartDateField = new DatePicker();
         DatePicker prEndDateField = new DatePicker();
         JTextArea prNotesField = new JTextArea();
-        addtlInfo.addInput(new Label("*Created", UIManager.getColor("Label.foreground")), new Copiable(Constants.now()));
-        addtlInfo.addInput(new Label("Max Spend", Constants.colors[9]), maxSpendField);
-        addtlInfo.addInput(new Label("[or] Single Order", UIManager.getColor("Label.foreground")), isSingleOrder);
-        addtlInfo.addInput(new Label("Supplier/Vendor", Constants.colors[7]), supplier);
-        addtlInfo.addInput(new Label("Valid From", Constants.colors[6]), prStartDateField);
-        addtlInfo.addInput(new Label("To", Constants.colors[5]), prEndDateField);
-        addtlInfo.addInput(new Label("Notes", Constants.colors[4]), prNotesField);
+        addtlInfo.addInput(Elements.coloredLabel("*Created", UIManager.getColor("Label.foreground")), new Copiable(Constants.now()));
+        addtlInfo.addInput(Elements.coloredLabel("Max Spend", Constants.colors[9]), maxSpendField);
+        addtlInfo.addInput(Elements.coloredLabel("[or] Single Order", UIManager.getColor("Label.foreground")), isSingleOrder);
+        addtlInfo.addInput(Elements.coloredLabel("Supplier/Vendor", Constants.colors[7]), supplier);
+        addtlInfo.addInput(Elements.coloredLabel("Valid From", Constants.colors[6]), prStartDateField);
+        addtlInfo.addInput(Elements.coloredLabel("To", Constants.colors[5]), prEndDateField);
+        addtlInfo.addInput(Elements.coloredLabel("Notes", Constants.colors[4]), prNotesField);
         return addtlInfo;
     }
 

@@ -3,7 +3,6 @@ package org.Canal.UI.Views.Users;
 import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.HumanResources.User;
 import org.Canal.UI.Elements.Elements;
-import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -79,7 +78,7 @@ public class Users extends LockeState {
 
         public UserRenderer() {
             setLayout(new GridLayout(3, 1));
-            employeeName = new Label("", new Color(83, 83, 83));
+            employeeName = Elements.coloredLabel("", new Color(83, 83, 83));
             userId = new JLabel();
             employeeId = new JLabel();
             add(employeeName);

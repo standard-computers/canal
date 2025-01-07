@@ -2,11 +2,7 @@ package org.Canal.UI.Views.Bins;
 
 import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.Models.SupplyChainUnits.Bin;
-import org.Canal.UI.Elements.Elements;
-import org.Canal.UI.Elements.Label;
-import org.Canal.UI.Elements.UOMField;
-import org.Canal.UI.Elements.Form;
-import org.Canal.UI.Elements.LockeState;
+import org.Canal.UI.Elements.*;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 
@@ -124,14 +120,14 @@ public class AutoMakeBins extends LockeState {
         volumeField = new UOMField();
 
         binCount = Elements.input("1");
-        f.addInput(new Label("Bin ID (current: BN1-IBD1)", Constants.colors[10]), binIdField);
-        f.addInput(new Label("Bin Name (current: BIN1-IBD1)", Constants.colors[9]), binNameField);
+        f.addInput(Elements.coloredLabel("Bin ID (current: BN1-IBD1)", Constants.colors[10]), binIdField);
+        f.addInput(Elements.coloredLabel("Bin Name (current: BIN1-IBD1)", Constants.colors[9]), binNameField);
 
-        f.addInput(new Label("Width", Constants.colors[9]), widthField);
-        f.addInput(new Label("Length", Constants.colors[9]), lengthField);
-        f.addInput(new Label("Height", Constants.colors[9]), heightField);
-        f.addInput(new Label("Area", Constants.colors[9]), areaField);
-        f.addInput(new Label("Volume", Constants.colors[9]), volumeField);
+        f.addInput(Elements.coloredLabel("Width", Constants.colors[9]), widthField);
+        f.addInput(Elements.coloredLabel("Length", Constants.colors[9]), lengthField);
+        f.addInput(Elements.coloredLabel("Height", Constants.colors[9]), heightField);
+        f.addInput(Elements.coloredLabel("Area", Constants.colors[9]), areaField);
+        f.addInput(Elements.coloredLabel("Volume", Constants.colors[9]), volumeField);
         lengthField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -156,7 +152,7 @@ public class AutoMakeBins extends LockeState {
                 volumeField.setValue(String.valueOf(volume));
             }
         });
-        f.addInput(new Label("Bin Create Count", Constants.colors[8]), binCount);
+        f.addInput(Elements.coloredLabel("Bin Create Count", Constants.colors[8]), binCount);
         p.add(f, BorderLayout.CENTER);
         p.add(Elements.link("Need Help?", "@ is the Area ID, + is Bin #, "), BorderLayout.SOUTH);
         return p;

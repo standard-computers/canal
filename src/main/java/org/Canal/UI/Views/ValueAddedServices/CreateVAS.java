@@ -3,7 +3,6 @@ package org.Canal.UI.Views.ValueAddedServices;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Selectable;
 import org.Canal.UI.Elements.Selectables;
-import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.UI.Views.Controllers.Controller;
@@ -31,12 +30,12 @@ public class CreateVAS extends LockeState {
         JTextField vasAmount = Elements.input("10.00");
 
         Form f = new Form();
-        f.addInput(new Label("*New VAS ID", UIManager.getColor("Label.foreground")), vasIdField);
-        f.addInput(new Label("Organization", UIManager.getColor("Label.foreground")), organizations);
-        f.addInput(new Label("Name", Constants.colors[10]), vasNameField);
-        f.addInput(new Label("Amount", Constants.colors[9]), vasAmount);
-        f.addInput(new Label("Recurring", Constants.colors[8]), isRecurring);
-        f.addInput(new Label("Taxable", Constants.colors[7]), isTaxable);
+        f.addInput(Elements.coloredLabel("*New VAS ID", UIManager.getColor("Label.foreground")), vasIdField);
+        f.addInput(Elements.coloredLabel("Organization", UIManager.getColor("Label.foreground")), organizations);
+        f.addInput(Elements.coloredLabel("Name", Constants.colors[10]), vasNameField);
+        f.addInput(Elements.coloredLabel("Amount", Constants.colors[9]), vasAmount);
+        f.addInput(Elements.coloredLabel("Recurring", Constants.colors[8]), isRecurring);
+        f.addInput(Elements.coloredLabel("Taxable", Constants.colors[7]), isTaxable);
 
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);

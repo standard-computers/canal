@@ -1,12 +1,7 @@
 package org.Canal.UI.Views.Positions;
 
 import org.Canal.Models.HumanResources.Position;
-import org.Canal.UI.Elements.Elements;
-import org.Canal.UI.Elements.Selectable;
-import org.Canal.UI.Elements.Selectables;
-import org.Canal.UI.Elements.Label;
-import org.Canal.UI.Elements.Form;
-import org.Canal.UI.Elements.LockeState;
+import org.Canal.UI.Elements.*;
 import org.Canal.Utils.*;
 
 import javax.swing.*;
@@ -39,17 +34,17 @@ public class CreatePosition extends LockeState {
         JCheckBox autoPost = new JCheckBox("Post position as open?");
 
         Form f = new Form();
-        f.addInput(new Label("*New Position ID", UIManager.getColor("Label.foreground")), positionIdField);
-        f.addInput(new Label("*Organization", UIManager.getColor("Label.foreground")), organizations);
-        f.addInput(new Label("Position Name", Constants.colors[0]), positionNameField);
-        f.addInput(new Label("Short Description", Constants.colors[1]), descriptionField);
-        f.addInput(new Label("Department", Constants.colors[2]), departments);
-        f.addInput(new Label("Compensation", Constants.colors[3]), compensationField);
-        f.addInput(new Label("Comp. Class", Constants.colors[4]), countries);
-        f.addInput(new Label("Hourly?", Constants.colors[5]), isHourly);
-        f.addInput(new Label("Earns Bonuses", Constants.colors[6]), isBonusable);
-        f.addInput(new Label("Earns Commission", Constants.colors[7]), isCommissionable);
-        f.addInput(new Label("Auto Post", UIManager.getColor("Label.foreground")), autoPost);
+        f.addInput(Elements.coloredLabel("*New Position ID", UIManager.getColor("Label.foreground")), positionIdField);
+        f.addInput(Elements.coloredLabel("*Organization", UIManager.getColor("Label.foreground")), organizations);
+        f.addInput(Elements.coloredLabel("Position Name", Constants.colors[0]), positionNameField);
+        f.addInput(Elements.coloredLabel("Short Description", Constants.colors[1]), descriptionField);
+        f.addInput(Elements.coloredLabel("Department", Constants.colors[2]), departments);
+        f.addInput(Elements.coloredLabel("Compensation", Constants.colors[3]), compensationField);
+        f.addInput(Elements.coloredLabel("Comp. Class", Constants.colors[4]), countries);
+        f.addInput(Elements.coloredLabel("Hourly?", Constants.colors[5]), isHourly);
+        f.addInput(Elements.coloredLabel("Earns Bonuses", Constants.colors[6]), isBonusable);
+        f.addInput(Elements.coloredLabel("Earns Commission", Constants.colors[7]), isCommissionable);
+        f.addInput(Elements.coloredLabel("Auto Post", UIManager.getColor("Label.foreground")), autoPost);
 
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);

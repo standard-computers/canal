@@ -1,7 +1,6 @@
 package org.Canal.UI.Views.Productivity.Waves;
 
 import org.Canal.UI.Elements.*;
-import org.Canal.UI.Elements.Label;
 import org.Canal.Utils.Constants;
 
 import javax.swing.*;
@@ -29,10 +28,10 @@ public class CreateWave extends LockeState {
         waveDescriptionField = Elements.input();
         taskType = Selectables.taskTypes();
         workOrderIdField = Elements.input();
-        f.addInput(new Label("*New Task ID", UIManager.getColor("Label.foreground")), waveIdField);
-        f.addInput(new Label("Task Type", Constants.colors[0]), taskType);
-        f.addInput(new Label("Task Description", Constants.colors[1]), waveDescriptionField);
-        f.addInput(new Label("Work Order ID (If Attaching)", Constants.colors[2]), workOrderIdField);
+        f.addInput(Elements.coloredLabel("*New Task ID", UIManager.getColor("Label.foreground")), waveIdField);
+        f.addInput(Elements.coloredLabel("Task Type", Constants.colors[0]), taskType);
+        f.addInput(Elements.coloredLabel("Task Description", Constants.colors[1]), waveDescriptionField);
+        f.addInput(Elements.coloredLabel("Work Order ID (If Attaching)", Constants.colors[2]), workOrderIdField);
 
         setLayout(new BorderLayout());
         add(Elements.header("Create a Task", SwingConstants.LEFT), BorderLayout.NORTH);

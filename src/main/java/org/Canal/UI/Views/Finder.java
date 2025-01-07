@@ -5,7 +5,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Form;
-import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
@@ -31,7 +30,7 @@ public class Finder extends LockeState {
             String propertyName = entry.getKey();
             if(!propertyName.equals("TYPE") && !propertyName.equals("HPV")) {
                 JTextField textField = Elements.input(20);
-                formPanel.addInput(new Label(propertyName, Constants.colors[ci]), textField);
+                formPanel.addInput(Elements.coloredLabel(propertyName, Constants.colors[ci]), textField);
                 ci = (ci + 1) % Constants.colors.length;
             }
         }

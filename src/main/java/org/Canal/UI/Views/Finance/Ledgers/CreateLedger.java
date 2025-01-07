@@ -1,13 +1,7 @@
 package org.Canal.UI.Views.Finance.Ledgers;
 
 import org.Canal.Models.BusinessUnits.Ledger;
-import org.Canal.UI.Elements.Elements;
-import org.Canal.UI.Elements.DatePicker;
-import org.Canal.UI.Elements.Selectable;
-import org.Canal.UI.Elements.Selectables;
-import org.Canal.UI.Elements.Label;
-import org.Canal.UI.Elements.Form;
-import org.Canal.UI.Elements.LockeState;
+import org.Canal.UI.Elements.*;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.LockeStatus;
@@ -39,12 +33,12 @@ public class CreateLedger extends LockeState {
         DatePicker ledgerStartPicker = new DatePicker();
         DatePicker ledgerEndPicker = new DatePicker();
 
-        f.addInput(new Label("*New Ledger ID", UIManager.getColor("Label.foreground")), ledgerIdField);
-        f.addInput(new Label("Organization", Constants.colors[0]), organizations);
-        f.addInput(new Label("Ledger Name", Constants.colors[1]), ledgerNameField);
-        f.addInput(new Label("Period", Constants.colors[2]), periods);
-        f.addInput(new Label("Start Date", Constants.colors[3]), ledgerStartPicker);
-        f.addInput(new Label("Close Date", Constants.colors[4]), ledgerEndPicker);
+        f.addInput(Elements.coloredLabel("*New Ledger ID", UIManager.getColor("Label.foreground")), ledgerIdField);
+        f.addInput(Elements.coloredLabel("Organization", Constants.colors[0]), organizations);
+        f.addInput(Elements.coloredLabel("Ledger Name", Constants.colors[1]), ledgerNameField);
+        f.addInput(Elements.coloredLabel("Period", Constants.colors[2]), periods);
+        f.addInput(Elements.coloredLabel("Start Date", Constants.colors[3]), ledgerStartPicker);
+        f.addInput(Elements.coloredLabel("Close Date", Constants.colors[4]), ledgerEndPicker);
 
         JButton create = Elements.button("Create");
         setLayout(new BorderLayout());

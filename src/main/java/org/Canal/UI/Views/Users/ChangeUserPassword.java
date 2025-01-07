@@ -1,10 +1,6 @@
 package org.Canal.UI.Views.Users;
 
-import org.Canal.UI.Elements.Elements;
-import org.Canal.UI.Elements.Copiable;
-import org.Canal.UI.Elements.Label;
-import org.Canal.UI.Elements.Form;
-import org.Canal.UI.Elements.LockeState;
+import org.Canal.UI.Elements.*;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;
@@ -33,10 +29,10 @@ public class ChangeUserPassword extends LockeState {
         JPasswordField newPasswordField = new JPasswordField(15);
         JPasswordField repeatNewPasswordField = new JPasswordField(15);
         Form f = new Form();
-        f.addInput(new Label("User ID", UIManager.getColor("Label.foreground")), new Copiable(Engine.getAssignedUser().getId()));
-        f.addInput(new Label("Current Password", UIManager.getColor("Label.foreground")), currentPasswordField);
-        f.addInput(new Label("New Password", UIManager.getColor("Label.foreground")), newPasswordField);
-        f.addInput(new Label("Repeat New Password", UIManager.getColor("Label.foreground")), repeatNewPasswordField);
+        f.addInput(Elements.coloredLabel("User ID", UIManager.getColor("Label.foreground")), new Copiable(Engine.getAssignedUser().getId()));
+        f.addInput(Elements.coloredLabel("Current Password", UIManager.getColor("Label.foreground")), currentPasswordField);
+        f.addInput(Elements.coloredLabel("New Password", UIManager.getColor("Label.foreground")), newPasswordField);
+        f.addInput(Elements.coloredLabel("Repeat New Password", UIManager.getColor("Label.foreground")), repeatNewPasswordField);
         JButton updateUserPassword = Elements.button("Update Password");
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);

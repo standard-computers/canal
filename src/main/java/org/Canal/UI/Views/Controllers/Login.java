@@ -3,7 +3,6 @@ package org.Canal.UI.Views.Controllers;
 import org.Canal.Models.HumanResources.User;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Form;
-import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
@@ -25,8 +24,8 @@ public class Login extends LockeState {
         Form f = new Form();
         JTextField userIdField = Elements.input(10);
         JPasswordField passwordField = new JPasswordField(10);
-        f.addInput(new Label("User ID", UIManager.getColor("Label.foreground")), userIdField);
-        f.addInput(new Label("Password", UIManager.getColor("Label.foreground")), passwordField);
+        f.addInput(Elements.coloredLabel("User ID", UIManager.getColor("Label.foreground")), userIdField);
+        f.addInput(Elements.coloredLabel("Password", UIManager.getColor("Label.foreground")), passwordField);
         JButton login = Elements.button("Login");
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);

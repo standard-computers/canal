@@ -1,7 +1,6 @@
 package org.Canal.UI.Views.Products;
 
 import org.Canal.UI.Elements.Elements;
-import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.UOMField;
 import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.LockeState;
@@ -20,8 +19,8 @@ public class CreateInclusion extends LockeState {
         Form f = new Form();
         JTextField inclusionId = Elements.input();
         UOMField usage = new UOMField();
-        f.addInput(new Label("Material/Component ID", Constants.colors[9]), inclusionId);
-        f.addInput(new Label("Usage", Constants.colors[8]), usage);
+        f.addInput(Elements.coloredLabel("Material/Component ID", Constants.colors[9]), inclusionId);
+        f.addInput(Elements.coloredLabel("Usage", Constants.colors[8]), usage);
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);
         JButton create = Elements.button("Include");

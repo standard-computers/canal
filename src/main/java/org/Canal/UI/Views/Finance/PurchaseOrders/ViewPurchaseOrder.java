@@ -6,7 +6,6 @@ import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Copiable;
 import org.Canal.UI.Elements.DatePicker;
-import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.UI.Views.Controllers.Controller;
@@ -94,11 +93,11 @@ public class ViewPurchaseOrder extends LockeState {
         selectShipTo = new Copiable(po.getShipTo());
         selectVendor = new Copiable(po.getVendor());
         orderId = new Copiable("OR" + (70000000 + (Engine.getPurchaseOrders().size() + 1)));
-        f.addInput(new Label("*Order ID", Constants.colors[0]), orderId);
-        f.addInput(new Label("Supplier/Vendor", Constants.colors[1]), selectVendor);
-        f.addInput(new Label("Bill To", Constants.colors[2]), selectBillTo);
-        f.addInput(new Label("Ship To", Constants.colors[3]), selectShipTo);
-        f.addInput(new Label("Trans. Type", Constants.colors[3]), new Copiable("/DCSS"));
+        f.addInput(Elements.coloredLabel("*Order ID", Constants.colors[0]), orderId);
+        f.addInput(Elements.coloredLabel("Supplier/Vendor", Constants.colors[1]), selectVendor);
+        f.addInput(Elements.coloredLabel("Bill To", Constants.colors[2]), selectBillTo);
+        f.addInput(Elements.coloredLabel("Ship To", Constants.colors[3]), selectShipTo);
+        f.addInput(Elements.coloredLabel("Trans. Type", Constants.colors[3]), new Copiable("/DCSS"));
         return f;
     }
 
@@ -111,11 +110,11 @@ public class ViewPurchaseOrder extends LockeState {
         }
         poPurchaseReq = new Copiable(po.getPurchaseRequisition());
         expectedDelivery = new DatePicker();
-        f.addInput(new Label("*Ordered", Constants.colors[4]), ordered);
-        f.addInput(new Label("Purchase Requisition", Constants.colors[5]), poPurchaseReq);
-        f.addInput(new Label("Expected Delivery", Constants.colors[6]), expectedDelivery);
-        f.addInput(new Label("Due Date", Constants.colors[7]), new JTextField());
-        f.addInput(new Label("Status", Constants.colors[8]), new Copiable("DRAFT"));
+        f.addInput(Elements.coloredLabel("*Ordered", Constants.colors[4]), ordered);
+        f.addInput(Elements.coloredLabel("Purchase Requisition", Constants.colors[5]), poPurchaseReq);
+        f.addInput(Elements.coloredLabel("Expected Delivery", Constants.colors[6]), expectedDelivery);
+        f.addInput(Elements.coloredLabel("Due Date", Constants.colors[7]), new JTextField());
+        f.addInput(Elements.coloredLabel("Status", Constants.colors[8]), new Copiable("DRAFT"));
         return f;
     }
 

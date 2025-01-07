@@ -1,12 +1,7 @@
 package org.Canal.UI.Views;
 
 import org.Canal.Models.SupplyChainUnits.Location;
-import org.Canal.UI.Elements.Elements;
-import org.Canal.UI.Elements.Selectable;
-import org.Canal.UI.Elements.Selectables;
-import org.Canal.UI.Elements.Label;
-import org.Canal.UI.Elements.Form;
-import org.Canal.UI.Elements.LockeState;
+import org.Canal.UI.Elements.*;
 import org.Canal.Utils.*;
 
 import javax.swing.*;
@@ -89,17 +84,17 @@ public class CreateLocation extends LockeState {
         postalField = Elements.input(15);
         countries = Selectables.countries();
         Form f = new Form();
-        f.addInput(new Label("Type",  UIManager.getColor("Label.foreground")), objexSelection);
-        f.addInput(new Label("*New ID", UIManager.getColor("Label.foreground")), locationIdField);
+        f.addInput(Elements.coloredLabel("Type",  UIManager.getColor("Label.foreground")), objexSelection);
+        f.addInput(Elements.coloredLabel("*New ID", UIManager.getColor("Label.foreground")), locationIdField);
         if(!objexType.equals("/ORGS")) {
-            f.addInput(new Label("*Organization", UIManager.getColor("Label.foreground")), organizations);
+            f.addInput(Elements.coloredLabel("*Organization", UIManager.getColor("Label.foreground")), organizations);
         }
-        f.addInput(new Label("Name", Constants.colors[0]), locationNameField);
-        f.addInput(new Label("Street", Constants.colors[1]), streetField);
-        f.addInput(new Label("City", Constants.colors[2]), cityField);
-        f.addInput(new Label("State", Constants.colors[3]), stateField);
-        f.addInput(new Label("Postal", Constants.colors[4]), postalField);
-        f.addInput(new Label("Country", Constants.colors[5]), countries);
+        f.addInput(Elements.coloredLabel("Name", Constants.colors[0]), locationNameField);
+        f.addInput(Elements.coloredLabel("Street", Constants.colors[1]), streetField);
+        f.addInput(Elements.coloredLabel("City", Constants.colors[2]), cityField);
+        f.addInput(Elements.coloredLabel("State", Constants.colors[3]), stateField);
+        f.addInput(Elements.coloredLabel("Postal", Constants.colors[4]), postalField);
+        f.addInput(Elements.coloredLabel("Country", Constants.colors[5]), countries);
         return f;
     }
 

@@ -5,9 +5,7 @@ import org.Canal.Models.BusinessUnits.OrderLineItem;
 import org.Canal.Models.BusinessUnits.PurchaseOrder;
 import org.Canal.Models.BusinessUnits.SalesOrder;
 import org.Canal.Models.SupplyChainUnits.Delivery;
-import org.Canal.Models.SupplyChainUnits.StockLine;
 import org.Canal.UI.Elements.*;
-import org.Canal.UI.Elements.Label;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.LockeStatus;
@@ -56,10 +54,10 @@ public class FulfillOrder extends LockeState {
         poNumber = Elements.input(8);
         soNumber = Elements.input(8);
         assignTasks = new JCheckBox();
-        f.addInput(new Label("Outbound Delivery ID", Constants.colors[10]), odoId);
-        f.addInput(new Label("[or] Purchase Order", Constants.colors[9]), poNumber);
-        f.addInput(new Label("[or] Sales Order", Constants.colors[8]), soNumber);
-        f.addInput(new Label("Assign Tasks", Constants.colors[7]), assignTasks);
+        f.addInput(Elements.coloredLabel("Outbound Delivery ID", Constants.colors[10]), odoId);
+        f.addInput(Elements.coloredLabel("[or] Purchase Order", Constants.colors[9]), poNumber);
+        f.addInput(Elements.coloredLabel("[or] Sales Order", Constants.colors[8]), soNumber);
+        f.addInput(Elements.coloredLabel("Assign Tasks", Constants.colors[7]), assignTasks);
         poNumber.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -216,10 +214,10 @@ public class FulfillOrder extends LockeState {
         createGoodsIssue = new JCheckBox("If no tasks, create GI");
         individualizeGoodsIssue = new JCheckBox("Create GI for each stock pick also");
         createConfirmTasks = new JCheckBox("Create/confirm associated tasks in background?");
-        f.addInput(new Label("Note", UIManager.getColor("Label.foreground")), new JLabel("GI Material Movements still created"));
-        f.addInput(new Label("Create Goods Issue", Constants.colors[6]), createGoodsIssue);
-        f.addInput(new Label("Individualize GIs", Constants.colors[5]), individualizeGoodsIssue);
-        f.addInput(new Label("Create & Cofirm Tasks", Constants.colors[4]), createConfirmTasks);
+        f.addInput(Elements.coloredLabel("Note", UIManager.getColor("Label.foreground")), new JLabel("GI Material Movements still created"));
+        f.addInput(Elements.coloredLabel("Create Goods Issue", Constants.colors[6]), createGoodsIssue);
+        f.addInput(Elements.coloredLabel("Individualize GIs", Constants.colors[5]), individualizeGoodsIssue);
+        f.addInput(Elements.coloredLabel("Create & Cofirm Tasks", Constants.colors[4]), createConfirmTasks);
         return f;
     }
 

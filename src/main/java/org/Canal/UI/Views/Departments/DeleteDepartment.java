@@ -3,7 +3,6 @@ package org.Canal.UI.Views.Departments;
 import org.Canal.Models.HumanResources.Department;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.*;
-import org.Canal.UI.Elements.Label;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 
@@ -27,8 +26,8 @@ public class DeleteDepartment extends LockeState {
         Form f = new Form();
         Selectable organizations = Selectables.organizations();
         JTextField departmentIdField = Elements.input(15);
-        f.addInput(new Label("Organization", UIManager.getColor("Label.foreground")), organizations);
-        f.addInput(new Label("Department ID", Constants.colors[10]), departmentIdField);
+        f.addInput(Elements.coloredLabel("Organization", UIManager.getColor("Label.foreground")), organizations);
+        f.addInput(Elements.coloredLabel("Department ID", Constants.colors[10]), departmentIdField);
         setLayout(new BorderLayout());
         add(Elements.header("Delete Department", SwingConstants.LEFT), BorderLayout.NORTH);
         add(f, BorderLayout.CENTER);

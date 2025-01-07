@@ -9,7 +9,6 @@ import org.Canal.UI.Elements.Copiable;
 import org.Canal.UI.Elements.DatePicker;
 import org.Canal.UI.Elements.Selectable;
 import org.Canal.UI.Elements.Selectables;
-import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.UI.Views.Controllers.Controller;
@@ -244,10 +243,10 @@ public class CreatePurchaseOrder extends LockeState {
         selectVendor = Selectables.allLocations();
         selectVendor.editable();
         orderId = Elements.input(((String) Engine.codex("ORDS/PO", "prefix")) + (70000000 + (Engine.getPurchaseOrders().size() + 1)));
-        f.addInput(new Label("*Order ID", Constants.colors[0]), orderId);
-        f.addInput(new Label("Supplier/Vendor", Constants.colors[1]), selectVendor);
-        f.addInput(new Label("Bill To Location", Constants.colors[2]), selectBillTo);
-        f.addInput(new Label("Ship To Location", Constants.colors[3]), selectShipTo);
+        f.addInput(Elements.coloredLabel("*Order ID", Constants.colors[0]), orderId);
+        f.addInput(Elements.coloredLabel("Supplier/Vendor", Constants.colors[1]), selectVendor);
+        f.addInput(Elements.coloredLabel("Bill To Location", Constants.colors[2]), selectBillTo);
+        f.addInput(Elements.coloredLabel("Ship To Location", Constants.colors[3]), selectShipTo);
         return f;
     }
 
@@ -263,10 +262,10 @@ public class CreatePurchaseOrder extends LockeState {
         availablePrs.editable();
         expectedDelivery = new DatePicker();
         statuses = Selectables.statusTypes();
-        f.addInput(new Label("*Ordered On", Constants.colors[10]), ordered);
-        f.addInput(new Label("Purchase Requisition", Constants.colors[9]), availablePrs);
-        f.addInput(new Label("Expected Delivery", Constants.colors[8]), expectedDelivery);
-        f.addInput(new Label("Status", Constants.colors[7]), statuses);
+        f.addInput(Elements.coloredLabel("*Ordered On", Constants.colors[10]), ordered);
+        f.addInput(Elements.coloredLabel("Purchase Requisition", Constants.colors[9]), availablePrs);
+        f.addInput(Elements.coloredLabel("Expected Delivery", Constants.colors[8]), expectedDelivery);
+        f.addInput(Elements.coloredLabel("Status", Constants.colors[7]), statuses);
         return f;
     }
 
@@ -275,14 +274,14 @@ public class CreatePurchaseOrder extends LockeState {
         Form f = new Form();
         DecimalFormat df = new DecimalFormat("#0.00");
         netAmount = Elements.label("$" + model.getTotalPrice());
-        f.addInput(new Label("Net Amount", UIManager.getColor("Label.foreground")), netAmount);
+        f.addInput(Elements.coloredLabel("Net Amount", UIManager.getColor("Label.foreground")), netAmount);
         taxAmount = Elements.label("$" + df.format(taxRate * Double.parseDouble(model.getTotalPrice())));
 
         JTextField taxRateField = Elements.input("0.05");
-        f.addInput(new Label("Tax Rate", UIManager.getColor("Label.foreground")), taxRateField);
-        f.addInput(new Label("Tax Amount", UIManager.getColor("Label.foreground")), taxAmount);
+        f.addInput(Elements.coloredLabel("Tax Rate", UIManager.getColor("Label.foreground")), taxRateField);
+        f.addInput(Elements.coloredLabel("Tax Amount", UIManager.getColor("Label.foreground")), taxAmount);
         totalAmount = Elements.label("$" + df.format(Double.parseDouble(taxRateField.getText()) * Double.parseDouble(model.getTotalPrice()) + Double.parseDouble(model.getTotalPrice())));
-        f.addInput(new Label("Total Amount", Constants.colors[5]), totalAmount);
+        f.addInput(Elements.coloredLabel("Total Amount", Constants.colors[5]), totalAmount);
         return f;
     }
 
@@ -348,9 +347,9 @@ public class CreatePurchaseOrder extends LockeState {
         }
         carriers = Selectables.carriers();
         JButton selectTruck = Elements.button("Select Truck");
-        p.addInput(new Label("Create Inbound Delivery (IDO) for Ship-To", Constants.colors[9]), createDelivery);
-        p.addInput(new Label("Carrier", Constants.colors[8]), carriers);
-        p.addInput(new Label("Truck (If Empty, makes new)", Constants.colors[9]), selectTruck);
+        p.addInput(Elements.coloredLabel("Create Inbound Delivery (IDO) for Ship-To", Constants.colors[9]), createDelivery);
+        p.addInput(Elements.coloredLabel("Carrier", Constants.colors[8]), carriers);
+        p.addInput(Elements.coloredLabel("Truck (If Empty, makes new)", Constants.colors[9]), selectTruck);
         return p;
     }
 
@@ -365,10 +364,10 @@ public class CreatePurchaseOrder extends LockeState {
         organizations = Selectables.organizations();
         buyerObjexType = Selectables.locationObjex("/DCSS");
         ledgerId = Selectables.ledgers();
-        f.addInput(new Label("Commit to Ledger", UIManager.getColor("Label.foreground")), commitToLedger);
-        f.addInput(new Label("Trans. Type (Receiving location type)", UIManager.getColor("Label.foreground")), buyerObjexType);
-        f.addInput(new Label("Purchasing Org.", UIManager.getColor("Label.foreground")), organizations);
-        f.addInput(new Label("Ledger", UIManager.getColor("Label.foreground")), ledgerId);
+        f.addInput(Elements.coloredLabel("Commit to Ledger", UIManager.getColor("Label.foreground")), commitToLedger);
+        f.addInput(Elements.coloredLabel("Trans. Type (Receiving location type)", UIManager.getColor("Label.foreground")), buyerObjexType);
+        f.addInput(Elements.coloredLabel("Purchasing Org.", UIManager.getColor("Label.foreground")), organizations);
+        f.addInput(Elements.coloredLabel("Ledger", UIManager.getColor("Label.foreground")), ledgerId);
         return f;
     }
 

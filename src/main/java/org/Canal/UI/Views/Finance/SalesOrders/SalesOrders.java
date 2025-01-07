@@ -30,7 +30,7 @@ public class SalesOrders extends LockeState {
         JPanel holder = new JPanel(new BorderLayout());
         table = createTable();
         JScrollPane tableScrollPane = new JScrollPane(table);
-        holder.add(Elements.header("All Sales Orders", SwingConstants.LEFT), BorderLayout.CENTER);
+        holder.add(Elements.header("Sales Orders", SwingConstants.LEFT), BorderLayout.CENTER);
         holder.add(tb, BorderLayout.SOUTH);
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);
@@ -41,30 +41,39 @@ public class SalesOrders extends LockeState {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV");
-        IconButton addPo = new IconButton("New", "order", "Build an item");
-        IconButton blockPo = new IconButton("Block", "block", "Block/Pause SO, can't be used");
-        IconButton suspendPo = new IconButton("Suspend", "suspend", "Suspend SO, can't be used");
-        IconButton activatePO = new IconButton("Activate", "start", "Resume/Activate SO");
-        IconButton archivePo = new IconButton("Archive", "archive", "Archive SO, removes");
-        IconButton find = new IconButton("Find", "find", "Find by values", "/ORDS/SO/F");
+        IconButton openSelected = new IconButton("Open", "open", "Open selected");
+        IconButton createSO = new IconButton("New", "order", "Build an item");
+        IconButton blockSO = new IconButton("Block", "block", "Block/Pause SO, can't be used");
+        IconButton suspendSO = new IconButton("Suspend", "suspend", "Suspend SO, can't be used");
+        IconButton activateSO = new IconButton("Activate", "start", "Resume/Activate SO");
+        IconButton archiveSO = new IconButton("Archive", "archive", "Archive SO, removes");
+        IconButton findSO = new IconButton("Find", "find", "Find by values", "/ORDS/SO/F");
         IconButton label = new IconButton("Labels", "label", "Print labels for org properties");
+        IconButton print = new IconButton("Print", "print", "Print selected");
+        IconButton refresh = new IconButton("Refresh", "refresh", "Refresh data");
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(addPo);
+        tb.add(openSelected);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(blockPo);
+        tb.add(createSO);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(suspendPo);
+        tb.add(blockSO);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(activatePO);
+        tb.add(suspendSO);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(archivePo);
+        tb.add(activateSO);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(find);
+        tb.add(archiveSO);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(findSO);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(label);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(print);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(refresh);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));
-        addPo.addMouseListener(new MouseAdapter() {
+        openSelected.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 new CreatePurchaseRequisition();
             }

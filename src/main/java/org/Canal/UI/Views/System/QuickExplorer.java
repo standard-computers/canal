@@ -2,6 +2,7 @@ package org.Canal.UI.Views.System;
 
 import org.Canal.Models.HumanResources.Employee;
 import org.Canal.UI.Elements.DesktopInterface;
+import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.UI.Views.Controllers.Controller;
@@ -25,11 +26,13 @@ import java.beans.PropertyVetoException;
  */
 public class QuickExplorer extends JFrame implements DesktopState {
 
+    private String statusText = "OK", openLockes = "0";
     private JDesktopPane desktopPane;
     private Controller controller;
 
     public QuickExplorer() {
-        setTitle("Canal – Enterprise Resource Planner – 2024");
+
+        setTitle("Canal – Enterprise Resource Planner – 2025");
         setIconImage(new ImageIcon(ViewLocation.class.getResource("/icons/canal.png")).getImage());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         desktopPane = new DesktopInterface();
@@ -40,6 +43,7 @@ public class QuickExplorer extends JFrame implements DesktopState {
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLayout(new BorderLayout());
         add(toolbar(), BorderLayout.NORTH);
+        add(statusBar(), BorderLayout.SOUTH);
         add(splitPane, BorderLayout.CENTER);
         setVisible(true);
         if(Engine.assignedUser == null){
@@ -53,6 +57,7 @@ public class QuickExplorer extends JFrame implements DesktopState {
     }
 
     private JPanel toolbar() {
+
         JPanel panel = new JPanel(new BorderLayout());
         JPanel employee = new JPanel(new FlowLayout(FlowLayout.LEFT));
         Employee e = Engine.getEmployee(Engine.getAssignedUser().getEmployee());
@@ -85,6 +90,15 @@ public class QuickExplorer extends JFrame implements DesktopState {
         panel.add(employee, BorderLayout.WEST);
         panel.add(buttons, BorderLayout.EAST);
         return panel;
+    }
+
+    private JPanel statusBar(){
+        JPanel statusPanel = new JPanel(new BorderLayout());
+        JLabel statusLabel = Elements.label(statusText);
+        JLabel openLockesLabel = Elements.label(openLockes);
+        statusPanel.add(statusLabel, BorderLayout.WEST);
+        statusPanel.add(openLockesLabel, BorderLayout.CENTER);
+        return statusPanel;
     }
 
     private void installShortcuts() {

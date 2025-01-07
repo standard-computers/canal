@@ -1,7 +1,6 @@
 package org.Canal.UI.Views.Controllers;
 
 import org.Canal.Start;
-import org.Canal.UI.Elements.Label;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Views.CreateLocation;
 import org.Canal.UI.Views.Employees.CreateEmployee;
@@ -60,11 +59,11 @@ public class CustomSetup extends JFrame {
         JTextField pkf = new JTextField("A#A#-X#AA-A#A#-AAAA-A#A#-AAAA-A#A#");
         showCanalCodes = new JCheckBox();
         themes = Selectables.themes();
-        l.addInput(new Label("Client CustomSetup?", Constants.colors[0]), isClient);
-        l.addInput(new Label("From Import?", Constants.colors[1]), Elements.link("Import *.zip",""));
-        l.addInput(new Label("Product Key", Constants.colors[2]), pkf);
-        l.addInput(new Label("Show Canal Codes?", Constants.colors[3]), showCanalCodes);
-        l.addInput(new Label("Theme", Constants.colors[4]), themes);
+        l.addInput(Elements.coloredLabel("Client CustomSetup?", Constants.colors[0]), isClient);
+        l.addInput(Elements.coloredLabel("From Import?", Constants.colors[1]), Elements.link("Import *.zip",""));
+        l.addInput(Elements.coloredLabel("Product Key", Constants.colors[2]), pkf);
+        l.addInput(Elements.coloredLabel("Show Canal Codes?", Constants.colors[3]), showCanalCodes);
+        l.addInput(Elements.coloredLabel("Theme", Constants.colors[4]), themes);
         panel.add(l);
         return panel;
     }
@@ -79,13 +78,13 @@ public class CustomSetup extends JFrame {
         JTextField awsUsername = Elements.input(15);
         JTextField awsKey = Elements.input(15);
         JTextField awsDir = Elements.input(15);
-        l.addInput(new Label("Server Address", Constants.colors[10]), srvAdd);
-        l.addInput(new Label("Canal Instance Name", Constants.colors[9]), instanceName);
-        l.addInput(new Label("Runs AWS", Constants.colors[8]), isOnAWS);
-        l.addInput(new Label("AWS Address", Constants.colors[7]), awsAddress);
-        l.addInput(new Label("AWS Username", Constants.colors[6]), awsUsername);
-        l.addInput(new Label("AWS Key", Constants.colors[5]), awsKey);
-        l.addInput(new Label("AWS Directory", Constants.colors[4]), awsDir);
+        l.addInput(Elements.coloredLabel("Server Address", Constants.colors[10]), srvAdd);
+        l.addInput(Elements.coloredLabel("Canal Instance Name", Constants.colors[9]), instanceName);
+        l.addInput(Elements.coloredLabel("Runs AWS", Constants.colors[8]), isOnAWS);
+        l.addInput(Elements.coloredLabel("AWS Address", Constants.colors[7]), awsAddress);
+        l.addInput(Elements.coloredLabel("AWS Username", Constants.colors[6]), awsUsername);
+        l.addInput(Elements.coloredLabel("AWS Key", Constants.colors[5]), awsKey);
+        l.addInput(Elements.coloredLabel("AWS Directory", Constants.colors[4]), awsDir);
         panel.add(l);
         return panel;
     }
