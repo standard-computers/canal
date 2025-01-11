@@ -21,23 +21,26 @@ import java.util.ArrayList;
  */
 public class SalesOrders extends LockeState {
 
+    private DesktopState desktop;
     private CustomTable table;
 
     public SalesOrders(DesktopState desktop) {
+
         super("Sales Orders", "/ORDS/SO", true, true, true, true);
         setFrameIcon(new ImageIcon(SalesOrders.class.getResource("/icons/salesorders.png")));
-        JPanel tb = createToolBar();
+        this.desktop = desktop;
+
         JPanel holder = new JPanel(new BorderLayout());
-        table = createTable();
+        table = table();
         JScrollPane tableScrollPane = new JScrollPane(table);
         holder.add(Elements.header("Sales Orders", SwingConstants.LEFT), BorderLayout.CENTER);
-        holder.add(tb, BorderLayout.SOUTH);
+        holder.add( toolbar(), BorderLayout.SOUTH);
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);
         add(tableScrollPane, BorderLayout.CENTER);
     }
 
-    private JPanel createToolBar() {
+    private JScrollPane toolbar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV");
@@ -78,10 +81,10 @@ public class SalesOrders extends LockeState {
                 new CreatePurchaseRequisition();
             }
         });
-        return tb;
+        return Elements.scrollPane(tb);
     }
 
-    private CustomTable createTable() {
+    private CustomTable table() {
         String[] columns = new String[]{
                 "ID",
                 "Owner",

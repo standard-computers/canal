@@ -22,12 +22,12 @@ import java.util.ArrayList;
 public class ViewPurchaseOrder extends LockeState {
 
     private DesktopState desktop;
-    private PurchaseRequisition requisition;
+    private PurchaseOrder requisition;
 
-    public ViewPurchaseOrder(PurchaseRequisition requisition, DesktopState desktop) {
+    public ViewPurchaseOrder(PurchaseOrder requisition, DesktopState desktop) {
 
         super("Purchase Requisitions", "/ORDS/PO/$", true, true, true, true);
-        setFrameIcon(new ImageIcon(CreatePurchaseRequisition.class.getResource("/icons/purchasereqs.png")));
+        setFrameIcon(new ImageIcon(ViewPurchaseOrder.class.getResource("/icons/purchasereqs.png")));
         this.requisition = requisition;
         this.desktop = desktop;
 
@@ -47,14 +47,12 @@ public class ViewPurchaseOrder extends LockeState {
         f.addInput(Elements.coloredLabel("ID", UIManager.getColor("Label.foreground")), new Copiable(requisition.getId()));
         f.addInput(Elements.coloredLabel("Created", UIManager.getColor("Label.foreground")), new Copiable(requisition.getCreated()));
         f.addInput(Elements.coloredLabel("Creator (Owner)", UIManager.getColor("Label.foreground")),  new Copiable(requisition.getOwner()));
-        f.addInput(Elements.coloredLabel("Purchase Req. #", UIManager.getColor("Label.foreground")),  new Copiable(requisition.getNumber()));
-        f.addInput(Elements.coloredLabel("Supplier ID", UIManager.getColor("Label.foreground")),  new Copiable(requisition.getSupplier()));
-        f.addInput(Elements.coloredLabel("Buyer", UIManager.getColor("Label.foreground")),  new Copiable(requisition.getBuyer()));
-        f.addInput(Elements.coloredLabel("Max Spend", UIManager.getColor("Label.foreground")),  new Copiable(String.valueOf(requisition.getMaxSpend())));
-        f.addInput(Elements.coloredLabel("Single Order?", UIManager.getColor("Label.foreground")),  new Copiable(String.valueOf(requisition.isSingleOrder())));
-        f.addInput(Elements.coloredLabel("Valid From", UIManager.getColor("Label.foreground")),  new Copiable(requisition.getStart()));
-        f.addInput(Elements.coloredLabel("To", UIManager.getColor("Label.foreground")),  new Copiable(requisition.getEnd()));
-        f.addInput(Elements.coloredLabel("Notes", UIManager.getColor("Label.foreground")),  new Copiable(requisition.getNotes()));
+        f.addInput(Elements.coloredLabel("Purchase Req. #", UIManager.getColor("Label.foreground")),  new Copiable(requisition.getOrderId()));
+        f.addInput(Elements.coloredLabel("Vendor ID", UIManager.getColor("Label.foreground")),  new Copiable(requisition.getVendor()));
+        f.addInput(Elements.coloredLabel("Bill To", UIManager.getColor("Label.foreground")),  new Copiable(requisition.getBillTo()));
+        f.addInput(Elements.coloredLabel("Ship To", UIManager.getColor("Label.foreground")),  new Copiable(requisition.getBillTo()));
+        f.addInput(Elements.coloredLabel("Total", UIManager.getColor("Label.foreground")),  new Copiable(String.valueOf(requisition.getTotal())));
+        f.addInput(Elements.coloredLabel("Created", UIManager.getColor("Label.foreground")),  new Copiable(requisition.getCreated()));
         f.addInput(Elements.coloredLabel("Status", UIManager.getColor("Label.foreground")),  new Copiable(String.valueOf(requisition.getStatus())));
         f.addInput(Elements.coloredLabel("Created", UIManager.getColor("Label.foreground")),  new Copiable(requisition.getCreated()));
         return f;
@@ -83,7 +81,7 @@ public class ViewPurchaseOrder extends LockeState {
         };
         ArrayList<Object[]> data = new ArrayList<>();
         for (PurchaseOrder po : Engine.getPurchaseOrders()) {
-            if(po.getPurchaseRequisition().equals(requisition.getNumber())) {
+            if(po.getPurchaseRequisition().equals(requisition.getOrderId())) {
                 data.add(new Object[]{
                         po.getId(),
                         po.getName(),
@@ -126,7 +124,7 @@ public class ViewPurchaseOrder extends LockeState {
     private JPanel toolbar(){
 
         JPanel buttons = new JPanel(new BorderLayout());
-        buttons.add(Elements.header("Viewing Purchase Order " + requisition.getNumber(), SwingConstants.LEFT), BorderLayout.NORTH);
+        buttons.add(Elements.header("Viewing Purchase Order " + requisition.getOrderId(), SwingConstants.LEFT), BorderLayout.NORTH);
 
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));

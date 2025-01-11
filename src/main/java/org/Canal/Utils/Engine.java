@@ -826,7 +826,7 @@ public class Engine {
             case "ORDS" -> {
                 for(PurchaseOrder l : orders.getPurchaseOrder()){
                     if(l.getOrderId().equals(oid)){
-                        return new ViewPurchaseOrder(l);
+                        return new ViewPurchaseOrder(l, desktop);
                     }
                 }
                 return new PurchaseOrders(desktop);
