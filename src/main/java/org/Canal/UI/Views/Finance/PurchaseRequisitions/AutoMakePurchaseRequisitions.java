@@ -62,7 +62,7 @@ public class AutoMakePurchaseRequisitions extends LockeState {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             for (JCheckBox checkbox : checkboxes) {
                 if (checkbox.isSelected()) {
-                    String genId = "PR" + (10000000 + (Engine.orderProcessing.getPurchaseRequisitions().size() + 1));
+                    String genId = "PR" + (10000000 + (Engine.orders.getPurchaseRequisitions().size() + 1));
                     PurchaseRequisition newPr = new PurchaseRequisition(genId, genId, "U10001", supplier.getSelectedValue(), checkbox.getActionCommand(), genId, Double.valueOf(maxSpendField.getText()), dateFormat.format(prStartDateField.getSelectedDate()), dateFormat.format(prEndDateField.getSelectedDate()), prNotesField.getText());
                     Pipe.save("/PR", newPr);
                 }

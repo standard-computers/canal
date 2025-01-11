@@ -91,7 +91,7 @@ public class ProductMovements extends LockeState implements RefreshListener {
     }
 
     @Override
-    public void onRefresh() {
+    public void refresh() {
         CustomTable newTable = createTable();
         JScrollPane scrollPane = (JScrollPane) table.getParent().getParent();
         scrollPane.setViewportView(newTable);

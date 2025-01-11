@@ -28,6 +28,7 @@ public class Locations extends LockeState implements RefreshListener {
     private CustomTable table;
 
     public Locations(String objexType, DesktopState desktop) {
+
         super("Locations", objexType, true, true, true, true);
         this.objexType = objexType;
         this.desktop = desktop;
@@ -50,11 +51,11 @@ public class Locations extends LockeState implements RefreshListener {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    JTable target = (JTable) e.getSource();
-                    int row = target.getSelectedRow();
-                    if (row != -1) {
-                        String value = String.valueOf(target.getValueAt(row, 1));
-                        desktop.put(Engine.router(objexType + "/" + value, desktop));
+                    JTable t = (JTable) e.getSource();
+                    int r = t.getSelectedRow();
+                    if (r != -1) {
+                        String v = String.valueOf(t.getValueAt(r, 1));
+                        desktop.put(Engine.router(objexType + "/" + v, desktop));
                     }
                 }
             }
@@ -62,11 +63,12 @@ public class Locations extends LockeState implements RefreshListener {
     }
 
     private JPanel createToolBar() {
+
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV");
         IconButton importLocations = new IconButton("Import", "export", "Import as CSV");
-        IconButton createLocation = new IconButton("New", "order", "Create a Location", objexType + "/NEW");
+        IconButton createLocation = new IconButton("New", "create", "Create a Location", objexType + "/NEW");
         IconButton modifyLocation = new IconButton("Modify", "modify", "Modify a Location", objexType + "/MOD");
         IconButton archiveLocation = new IconButton("Archive", "archive", "Archive a Location", objexType + "/ARCHV");
         IconButton removeLocation = new IconButton("Remove", "delete", "Delete a Location", objexType + "/DEL");
@@ -110,7 +112,7 @@ public class Locations extends LockeState implements RefreshListener {
         refresh.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                onRefresh();
+                refresh();
             }
         });
         super.addKeyListener(new KeyListener() {
@@ -131,6 +133,7 @@ public class Locations extends LockeState implements RefreshListener {
     }
 
     private CustomTable createTable() {
+
         String[] columns = new String[]{"ID", "Org", "Name", "Street", "City", "State", "Postal", "Country", "Status", "Tax Exempt", "Phone", "Email"};
         ArrayList<Object[]> data = new ArrayList<>();
         for (Location location : Engine.getLocations(objexType)) {
@@ -144,6 +147,7 @@ public class Locations extends LockeState implements RefreshListener {
                     location.getPostal(),
                     location.getCountry(),
                     location.getStatus(),
+                    location.getEin(),
                     location.isTaxExempt(),
                     location.getPhone(),
                     location.getEmail(),
@@ -153,7 +157,8 @@ public class Locations extends LockeState implements RefreshListener {
     }
 
     @Override
-    public void onRefresh() {
+    public void refresh() {
+
         CustomTable newTable = createTable();
         JScrollPane scrollPane = (JScrollPane) table.getParent().getParent();
         scrollPane.setViewportView(newTable);

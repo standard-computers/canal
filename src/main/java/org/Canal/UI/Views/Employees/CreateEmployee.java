@@ -28,7 +28,7 @@ public class CreateEmployee extends LockeState {
     private DatePicker startDatePicker = new DatePicker();
     private JCheckBox isVeteran;
 
-    public CreateEmployee(DesktopState desktop){
+    public CreateEmployee(DesktopState desktop, boolean autoMakeUser){
         super("Create Employee", "/EMPS/NEW", false, true, false, true);
         setFrameIcon(new ImageIcon(CreateEmployee.class.getResource("/icons/create.png")));
 

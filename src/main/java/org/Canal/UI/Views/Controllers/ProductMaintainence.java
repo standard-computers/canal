@@ -13,12 +13,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
- * /CNL/PROD_MTN
+ * /PROD_MTN
  */
 public class ProductMaintainence extends LockeState {
 
     public ProductMaintainence(DesktopState desktop) {
-        super("Product Maintainence", "/CNL/PROD_MTN", false, true, false, true);
+        super("Product Maintainence", "/PROD_MTN", false, true, false, true);
         JButton items = Elements.button("Items");
         JButton materials = Elements.button("Materials");
         JButton components = Elements.button("Components");

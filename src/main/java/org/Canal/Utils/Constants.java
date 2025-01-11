@@ -78,19 +78,19 @@ public class Constants {
     public static Locke allModules() {
         return new Locke("Canal – All Actions", getIcon("controller"), "/ORGS", new Locke[]{
                 new Locke("Quick Accesses", getIcon("controllers"), "/", new Locke[]{
-                        new Locke("My Profile", getIcon("locke"), "/CNL/ME", null),
-                        new Locke("Finance", getIcon("finance"), "/CNL/FI", null),
+                        new Locke("My Profile", getIcon("locke"), "/ME", null),
+                        new Locke("Finance", getIcon("finance"), "/FI", null),
                         new Locke("Inventory", getIcon("locke"), "/INV", null),
-                        new Locke("Human Resources", getIcon("humanresources"), "/CNL/HR", null),
+                        new Locke("Human Resources", getIcon("humanresources"), "/HR", null),
                         new Locke("Time Clock", getIcon("timeclock"), "/TM_CLCK", null),
                         new Locke("Clear Desk", getIcon("locke"), "/CLEAR_DSK", null),
                         new Locke("Close Desk", getIcon("locke"), "/CLOSE_DSK", null),
                         new Locke("Canal Settings", getIcon("settings"), "/CNL", null),
-                        new Locke("Data Center", getIcon("datacenter"), "/CNL/DATA_CNTR", null),
-                        new Locke("Restart Canal", getIcon("locke"), "/CNL/RSTRT", null),
-                        new Locke("Leave Canal", getIcon("locke"), "/CNL/EXIT", null),
+                        new Locke("Data Center", getIcon("datacenter"), "/DATA_CNTR", null),
+                        new Locke("Restart Canal", getIcon("locke"), "/RSTRT", null),
+                        new Locke("Leave Canal", getIcon("locke"), "/EXIT", null),
                 }),
-                new Locke("Organizations", getIcon("folder"), "/ORGS", new Locke[]{
+                new Locke("Organizations", getIcon("organizations"), "/ORGS", new Locke[]{
                         new Locke("Find Organization", getIcon("find"), "/ORGS/F", null),
                         new Locke("Create an Organization", getIcon("create"), "/ORGS/NEW", null),
                         new Locke("Modify an Organization", getIcon("modify"), "/ORGS/MOD", null),
@@ -142,7 +142,7 @@ public class Constants {
                 }),
                 new Locke("Areas", getIcon("areas"), "/AREAS", new Locke[]{
                         new Locke("Find Area", getIcon("find"), "/AREAS/F", null),
-                        new Locke("AutoMake Areas", getIcon("locke"), "/AREAS/AUTO_MK", null),
+                        new Locke("AutoMake Areas", getIcon("automake"), "/AREAS/AUTO_MK", null),
                         new Locke("Create Area", getIcon("create"), "/AREAS/NEW", null),
                         new Locke("Modify Area", getIcon("modify"), "/AREAS/MOD", null),
                         new Locke("Archive Area", getIcon("archive"), "/AREAS/ARCHV", null),
@@ -191,6 +191,10 @@ public class Constants {
                                 new Locke("Suspend", getIcon("locke"), "/USRS/MOD/SP", null),
                                 new Locke("Change Access", getIcon("locke"), "/USRS/MOD/CHGAC", null),
                         }),
+                }),
+                new Locke("Records", getIcon("folder"), "/RCS", new Locke[]{
+                        new Locke("Find Record", getIcon("locke"), "/RCS/F", null),
+                        new Locke("Export Records", getIcon("locke"), "/RCS/EXPORT", null),
                 }),
                 new Locke("Vendors", getIcon("vendors"), "/VEND", new Locke[]{
                         new Locke("Find Vendor", getIcon("find"), "/VEND/F", null),
@@ -346,6 +350,13 @@ public class Constants {
                                 new Locke("Modify Outbound Delivery", getIcon("modify"), "/TRANS/ODO/MOD", null),
                                 new Locke("Archive Outbound Delivery", getIcon("archive"), "/TRANS/ODO/ARCHV", null),
                                 new Locke("Remove Outbound Delivery", getIcon("delete"), "/TRANS/ODO/DEL", null),
+                        }),
+                        new Locke("Advanced Shipping Notices", getIcon("folder"), "/TRANS/ASN", new Locke[]{
+                                new Locke("Find ASN", getIcon("find"), "/TRANS/ASN/F", null),
+                                new Locke("Create ASN", getIcon("create"), "/TRANS/ASN/NEW", null),
+                                new Locke("Modify ASN", getIcon("modify"), "/TRANS/ASN/MOD", null),
+                                new Locke("Archive ASN", getIcon("archive"), "/TRANS/ASN/ARCHV", null),
+                                new Locke("Remove ASN", getIcon("delete"), "/TRANS/ASN/DEL", null),
                         }),
                 }),
                 new Locke("Ledgers", getIcon("ledgers"), "/LGS", new Locke[]{

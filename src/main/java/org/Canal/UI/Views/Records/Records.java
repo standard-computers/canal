@@ -1,8 +1,11 @@
-package org.Canal.UI.Views.Departments;
+package org.Canal.UI.Views.Records;
 
 import org.Canal.Models.HumanResources.Department;
-import org.Canal.UI.Elements.*;
-import org.Canal.UI.Views.Deleter;
+import org.Canal.UI.Elements.CustomTable;
+import org.Canal.UI.Elements.Elements;
+import org.Canal.UI.Elements.IconButton;
+import org.Canal.UI.Elements.LockeState;
+import org.Canal.UI.Views.Departments.ViewDepartment;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.RefreshListener;
@@ -15,17 +18,17 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 /**
- * /DPTS
+ * /RCS
  */
-public class Departments extends LockeState implements RefreshListener {
+public class Records extends LockeState implements RefreshListener {
 
     private DesktopState desktop;
     private CustomTable table;
 
-    public Departments(DesktopState desktop) {
+    public Records(DesktopState desktop) {
 
-        super("Departments", "/DPTS", false, true, false, true);
-        setFrameIcon(new ImageIcon(Departments.class.getResource("/icons/departments.png")));
+        super("Records", "/RCS", false, true, false, true);
+        setFrameIcon(new ImageIcon(Records.class.getResource("/icons/locke.png")));
         this.desktop = desktop;
 
         table = table();
@@ -37,7 +40,7 @@ public class Departments extends LockeState implements RefreshListener {
         table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
+                if (e.getClickCount() == 1) {
                     JTable t = (JTable) e.getSource();
                     int r = t.getSelectedRow();
                     if (r != -1) {
@@ -60,23 +63,8 @@ public class Departments extends LockeState implements RefreshListener {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV");
-        IconButton importDepartments = new IconButton("Import", "export", "Import as CSV");
-        IconButton createDepartment = new IconButton("New", "create", "Create a Department", "/DPTS/NEW");
-        IconButton modifyDepartment = new IconButton("Modify", "modify", "Modify a Department", "/DPTS/MOD");
-        IconButton archiveDepartment = new IconButton("Archive", "archive", "Archive a Department", "/DPTS/ARCHV");
-        IconButton removeDepartment = new IconButton("Remove", "delete", "Delete a Department");
         IconButton refresh = new IconButton("Refresh", "refresh", "Refresh Data");
         tb.add(export);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(importDepartments);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(createDepartment);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(modifyDepartment);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(archiveDepartment);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(removeDepartment);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(refresh);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -84,19 +72,6 @@ public class Departments extends LockeState implements RefreshListener {
             @Override
             public void mouseClicked(MouseEvent e) {
                 table.exportToCSV();
-            }
-        });
-        importDepartments.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                JFileChooser fc = new JFileChooser();
-
-            }
-        });
-        removeDepartment.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                desktop.put(new Deleter("/DPTS", Departments.this));
             }
         });
         refresh.addMouseListener(new MouseAdapter() {
@@ -110,32 +85,22 @@ public class Departments extends LockeState implements RefreshListener {
     }
 
     private CustomTable table() {
-        String[] columns = new String[]{
+        String[] c = new String[]{
                 "ID",
-                "Name",
-                "Organization",
-                "Location",
-                "Department",
-                "Supervisor",
-                "Positions",
+                "Description",
+                "Type",
+                "Reference",
+                "Notes",
+                "Modified",
                 "Status",
                 "Created",
         };
-        ArrayList<Object[]> data = new ArrayList<>();
-        for (Department department : Engine.getOrganization().getDepartments()) {
-            data.add(new Object[]{
-                    department.getId(),
-                    department.getName(),
-                    department.getOrganization(),
-                    department.getLocation(),
-                    department.getDepartment(),
-                    department.getSupervisor(),
-                    department.getPositions().size(),
-                    department.getStatus(),
-                    department.getCreated(),
+        ArrayList<Object[]> d = new ArrayList<>();
+        for (Department r : Engine.getOrganization().getDepartments()) {
+            d.add(new Object[]{
             });
         }
-        return new CustomTable(columns, data);
+        return new CustomTable(c, d);
     }
 
     @Override

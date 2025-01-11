@@ -11,7 +11,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * /CNL/ME
+ * /ME
  */
 public class MyProfile extends LockeState {
 
@@ -19,7 +19,7 @@ public class MyProfile extends LockeState {
 
     public MyProfile(DesktopState desktop) {
 
-        super("My Profile", "/CNL/ME", true, true, true, true);
+        super("My Profile", "/ME", true, true, true, true);
         //TODO Check that user is assigned
         me = Engine.getEmployee(Engine.getAssignedUser().getEmployee());
 

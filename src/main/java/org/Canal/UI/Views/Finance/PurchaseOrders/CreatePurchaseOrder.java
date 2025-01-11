@@ -71,9 +71,9 @@ public class CreatePurchaseOrder extends LockeState {
 
         JTabbedPane tabs = new JTabbedPane();
         tabs.addTab("Item Details", itemDetails());
-        tabs.addTab("Delivery", deliveryDetails());
-        tabs.addTab("Ledger", ledgerDetails());
-        tabs.addTab("Note", noteMaker());
+        tabs.addTab("Delivery", delivery());
+        tabs.addTab("Ledger", ledger());
+        tabs.addTab("Note", notes());
 
         JPanel coreValues = orderInfoPanel();
         JPanel moreInfo = moreOrderInfoPanel();
@@ -128,7 +128,7 @@ public class CreatePurchaseOrder extends LockeState {
                     addToQueue(new String[]{"WARNING", "Status COMPLETED will prevent further actions!"});
                 }
                 if(availablePrs.getSelectedValue() != null){
-                    PurchaseRequisition pr = Engine.orderProcessing.getPurchaseRequisition(availablePrs.getSelectedValue());
+                    PurchaseRequisition pr = Engine.orders.getPurchaseRequisition(availablePrs.getSelectedValue());
                     if(pr == null){
                         addToQueue(new String[]{"ERROR", "Selected Purchase Requisition was not found!!!"});
                     }else{
@@ -156,7 +156,7 @@ public class CreatePurchaseOrder extends LockeState {
                     JOptionPane.showMessageDialog(null, "Must select a delivery date.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                PurchaseRequisition assignedPR = Engine.orderProcessing.getPurchaseRequisitions(availablePrs.getSelectedValue());
+                PurchaseRequisition assignedPR = Engine.orders.getPurchaseRequisitions(availablePrs.getSelectedValue());
                 if(!selectVendor.getSelectedValue().equals(assignedPR.getSupplier())){
                     JOptionPane.showMessageDialog(null, "Selected PO is not for this vendor.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
@@ -255,7 +255,7 @@ public class CreatePurchaseOrder extends LockeState {
         Form f = new Form();
         JTextField ordered = new Copiable(LocalDate.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy")));
         HashMap<String, String> prs = new HashMap<>();
-        for(PurchaseRequisition pr1 : Engine.orderProcessing.getPurchaseRequisitions()){
+        for(PurchaseRequisition pr1 : Engine.orders.getPurchaseRequisitions()){
             prs.put(pr1.getId(), pr1.getId());
         }
         availablePrs = new Selectable(prs);
@@ -296,7 +296,7 @@ public class CreatePurchaseOrder extends LockeState {
     private JPanel itemDetails(){
 
         JPanel p = new JPanel(new BorderLayout());
-        ArrayList<Item> items = Engine.getProducts();
+        ArrayList<Item> items = Engine.products.getProducts();
         if(items.isEmpty()){
             JOptionPane.showMessageDialog(this, "No products found", "Error", JOptionPane.ERROR_MESSAGE);
             dispose();
@@ -337,8 +337,9 @@ public class CreatePurchaseOrder extends LockeState {
         return p;
     }
 
-    private JPanel deliveryDetails(){
+    private JPanel delivery(){
 
+        JPanel delivery = new JPanel(new FlowLayout(FlowLayout.LEFT));
         Form p = new Form();
         createDelivery = new JCheckBox();
         if((boolean) Engine.codex("ORDS/PO", "use_deliveries")){
@@ -350,10 +351,11 @@ public class CreatePurchaseOrder extends LockeState {
         p.addInput(Elements.coloredLabel("Create Inbound Delivery (IDO) for Ship-To", Constants.colors[9]), createDelivery);
         p.addInput(Elements.coloredLabel("Carrier", Constants.colors[8]), carriers);
         p.addInput(Elements.coloredLabel("Truck (If Empty, makes new)", Constants.colors[9]), selectTruck);
-        return p;
+        delivery.add(p);
+        return delivery;
     }
 
-    private JPanel ledgerDetails(){
+    private JPanel ledger(){
 
         Form f = new Form();
         commitToLedger = new JCheckBox();
@@ -371,7 +373,7 @@ public class CreatePurchaseOrder extends LockeState {
         return f;
     }
 
-    private JPanel noteMaker(){
+    private JPanel notes(){
         JPanel p = new JPanel(new BorderLayout());
         RSyntaxTextArea textArea = new RSyntaxTextArea(20, 60);
         textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_MARKDOWN);

@@ -47,7 +47,7 @@ public class Components extends LockeState implements RefreshListener {
                     int row = t.getSelectedRow();
                     if (row != -1) {
                         String v = String.valueOf(t.getValueAt(row, 1));
-                        desktop.put(new ViewComponent(Engine.getComponent(v)));
+                        desktop.put(new ViewComponent(Engine.products.getComponent(v)));
                     }
                 }
             }
@@ -117,7 +117,7 @@ public class Components extends LockeState implements RefreshListener {
             "Excise Tax"
         };
         ArrayList<Object[]> d = new ArrayList<>();
-        for (Item component : Engine.getComponents()) {
+        for (Item component : Engine.products.getComponents()) {
             Location vendor = Engine.getLocation(component.getVendor(), "VEND");
             d.add(new Object[]{
                     component.getId(),
@@ -150,7 +150,7 @@ public class Components extends LockeState implements RefreshListener {
     }
 
     @Override
-    public void onRefresh() {
+    public void refresh() {
 
     }
 }

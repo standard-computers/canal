@@ -6,7 +6,7 @@ import org.Canal.Utils.DesktopState;
 import javax.swing.*;
 
 /**
- * /CNL/INB, /INBOX
+ * /INBOX
  */
 public class Inbox extends LockeState {
 

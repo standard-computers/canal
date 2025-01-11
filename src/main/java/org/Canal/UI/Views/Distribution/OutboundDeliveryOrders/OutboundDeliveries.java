@@ -58,7 +58,7 @@ public class OutboundDeliveries extends LockeState {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV");
-        IconButton createPurchaseOrder = new IconButton("New PO", "order", "Build an item");
+        IconButton createPurchaseOrder = new IconButton("Create ODO", "create", "Build an item");
         IconButton blockPo = new IconButton("Block", "block", "Block/Pause PO, can't be used");
         IconButton suspendPo = new IconButton("Suspend", "suspend", "Suspend PO, can't be used");
         IconButton activatePO = new IconButton("Start", "start", "Resume/Activate PO");
@@ -88,9 +88,9 @@ public class OutboundDeliveries extends LockeState {
         });
         label.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                String[] printables = new String[Engine.orderProcessing.getPurchaseOrder().size()];
-                for (int i = 0; i < Engine.orderProcessing.getPurchaseOrder().size(); i++) {
-                    printables[i] = Engine.orderProcessing.getPurchaseOrder().get(i).getOrderId();
+                String[] printables = new String[Engine.orders.getPurchaseOrder().size()];
+                for (int i = 0; i < Engine.orders.getPurchaseOrder().size(); i++) {
+                    printables[i] = Engine.orders.getPurchaseOrder().get(i).getOrderId();
                 }
                 new CheckboxBarcodeFrame(printables);
             }

@@ -91,7 +91,7 @@ public class CreateBin extends LockeState {
                     foundArea.save();
                     dispose();
                     JOptionPane.showMessageDialog(null, "Bin '" + binName + "' created in '" + binArea + "'");
-                    refreshListener.onRefresh();
+                    refreshListener.refresh();
                 }else{
                     JOptionPane.showMessageDialog(null, "Bin '" + binName + "' could not be created in '" + binArea + "'");
                 }

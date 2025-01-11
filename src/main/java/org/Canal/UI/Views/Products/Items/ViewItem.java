@@ -59,7 +59,7 @@ public class ViewItem extends LockeState {
                 TreePath path = dataTree.getPathForLocation(e.getX(), e.getY());
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
                 Locke orgNode = (Locke) node.getUserObject();
-                Item selectedItem  = Engine.getItem(orgNode.getTransaction());
+                Item selectedItem  = Engine.products.getItem(orgNode.getTransaction());
                 idField.setText(selectedItem.getId());
                 orgField.setText(selectedItem.getOrg());
                 nameField.setText(selectedItem.getName());
@@ -201,9 +201,9 @@ public class ViewItem extends LockeState {
 
     private Locke createRootNode() {
 
-        Locke[] items = new Locke[Engine.getItems(Engine.getOrganization().getId()).size()];
-        for (int i = 0; i < Engine.getItems(Engine.getOrganization().getId()).size(); i++) {
-            Item l = Engine.getItems(Engine.getOrganization().getId()).get(i);
+        Locke[] items = new Locke[Engine.products.getItems(Engine.getOrganization().getId()).size()];
+        for (int i = 0; i < Engine.products.getItems(Engine.getOrganization().getId()).size(); i++) {
+            Item l = Engine.products.getItems(Engine.getOrganization().getId()).get(i);
             items[i] = new Locke(l.getId() + " - " + l.getName() + " / Items", UIManager.getIcon("FileView.fileIcon"), l.getId(), new Color(147, 70, 3), null);
         }
         return new Locke(Engine.getOrganization().getId() + " - " + Engine.getOrganization().getName(), UIManager.getIcon("FileView.fileIcon"), "/ITS", items);

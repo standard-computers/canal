@@ -77,7 +77,7 @@ public class ViewLocation extends LockeState implements RefreshListener {
         add(splitPane, BorderLayout.CENTER);
         isMaximized();
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-        Runnable task = () -> onRefresh();
+        Runnable task = () -> refresh();
         scheduler.scheduleAtFixedRate(task, 60, 30, TimeUnit.SECONDS);
     }
 
@@ -316,9 +316,9 @@ public class ViewLocation extends LockeState implements RefreshListener {
             Employee e = Engine.getEmployees(location.getId()).get(i);
             employees[i] = new Locke(e.getId() + " - " + e.getName(), UIManager.getIcon("FileView.fileIcon"), "/VEND/" + e.getId(), Constants.colors[3], null);
         }
-        Locke[] items = new Locke[Engine.getItems(location.getOrganization()).size()];
-        for (int i = 0; i < Engine.getItems(location.getOrganization()).size(); i++) {
-            Item l = Engine.getItems(location.getOrganization()).get(i);
+        Locke[] items = new Locke[Engine.products.getItems(location.getOrganization()).size()];
+        for (int i = 0; i < Engine.products.getItems(location.getOrganization()).size(); i++) {
+            Item l = Engine.products.getItems(location.getOrganization()).get(i);
             items[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/ITS/" + l.getId(), Constants.colors[4], null);
         }
         return new Locke(location.getName(), UIManager.getIcon("FileView.fileIcon"), "/DCSS/" + location.getId(), new Locke[]{
@@ -344,7 +344,7 @@ public class ViewLocation extends LockeState implements RefreshListener {
     }
 
     @Override
-    public void onRefresh() {
+    public void refresh() {
         Locke rootNode = createRootNode();
         DefaultMutableTreeNode rootTreeNode = createTreeNodes(rootNode);
         DefaultTreeModel model = (DefaultTreeModel) dataTree.getModel();

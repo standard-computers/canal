@@ -26,15 +26,16 @@ public class PurchaseRequisitions extends LockeState {
     private DesktopState desktop;
 
     public PurchaseRequisitions(DesktopState desktop) {
+
         super("Purchase Requisitions", "/ORDS/PR", true, true, true, true);
-        this.desktop = desktop;
         setFrameIcon(new ImageIcon(PurchaseRequisitions.class.getResource("/icons/purchasereqs.png")));
-        JPanel tb = createToolBar();
+        this.desktop = desktop;
+
         JPanel holder = new JPanel(new BorderLayout());
         table = createTable();
         JScrollPane tableScrollPane = new JScrollPane(table);
         holder.add(Elements.header("Purchase Requisitions", SwingConstants.LEFT), BorderLayout.NORTH);
-        holder.add(tb, BorderLayout.SOUTH);
+        holder.add(createToolBar(), BorderLayout.SOUTH);
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);
         add(tableScrollPane, BorderLayout.CENTER);
@@ -45,7 +46,7 @@ public class PurchaseRequisitions extends LockeState {
                     int row = t.getSelectedRow();
                     if (row != -1) {
                         String v = String.valueOf(t.getValueAt(row, 1));
-                        PurchaseRequisition pr = Engine.orderProcessing.getPurchaseRequisition(v);
+                        PurchaseRequisition pr = Engine.orders.getPurchaseRequisition(v);
                         desktop.put(new ViewPurchaseRequisition(pr, desktop));
                     }
                 }
@@ -76,7 +77,7 @@ public class PurchaseRequisitions extends LockeState {
                 "Status"
         };
         ArrayList<Object[]> prs = new ArrayList<>();
-        for (PurchaseRequisition pr : Engine.orderProcessing.getPurchaseRequisitions()) {
+        for (PurchaseRequisition pr : Engine.orders.getPurchaseRequisitions()) {
             if(!pr.getStatus().equals("ARCHIVED") && !pr.getStatus().equals("REMOVED")) {
                 double consumption = 0;
                 for(PurchaseOrder po : Engine.getPurchaseOrders()){
@@ -110,7 +111,7 @@ public class PurchaseRequisitions extends LockeState {
      * Action buttons for PR list
      * @return JPanel of buttons with a title element
      */
-    private JPanel createToolBar() {
+    private JScrollPane createToolBar() {
 
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
@@ -169,13 +170,13 @@ public class PurchaseRequisitions extends LockeState {
         });
         labels.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                String[] printables = new String[Engine.orderProcessing.getPurchaseOrder().size()];
-                for (int i = 0; i < Engine.orderProcessing.getPurchaseOrder().size(); i++) {
-                    printables[i] = Engine.orderProcessing.getPurchaseOrder().get(i).getOrderId();
+                String[] printables = new String[Engine.orders.getPurchaseOrder().size()];
+                for (int i = 0; i < Engine.orders.getPurchaseOrder().size(); i++) {
+                    printables[i] = Engine.orders.getPurchaseOrder().get(i).getOrderId();
                 }
                 new CheckboxBarcodeFrame(printables);
             }
         });
-        return tb;
+        return Elements.scrollPane(tb);
     }
 }

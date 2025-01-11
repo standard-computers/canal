@@ -3,11 +3,11 @@ package org.Canal.UI.Views.Controllers;
 import org.Canal.UI.Elements.LockeState;
 
 /**
- * /CNL/POS
+ * /POS
  */
 public class PointOfSale extends LockeState {
 
     public PointOfSale() {
-        super("Canal POS", "/CNL/POS", true, true, true, true);
+        super("Canal POS", "/POS", true, true, true, true);
     }
 }

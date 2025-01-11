@@ -7,10 +7,12 @@ import org.Canal.Models.HumanResources.Position;
 import org.Canal.Models.HumanResources.Timesheet;
 import org.Canal.Models.HumanResources.User;
 import org.Canal.Models.SupplyChainUnits.*;
+import org.Canal.Models.Record;
 import org.Canal.Start;
 import org.Canal.UI.Views.*;
 import org.Canal.UI.Views.Areas.*;
 import org.Canal.UI.Views.Bins.*;
+import org.Canal.UI.Views.Customers.ViewCustomer;
 import org.Canal.UI.Views.Departments.DeleteDepartment;
 import org.Canal.UI.Views.Finance.Accounts.Accounts;
 import org.Canal.UI.Views.Finance.Accounts.CreateAccount;
@@ -82,7 +84,7 @@ import java.util.stream.Collectors;
  */
 public class Engine {
 
-    private static Configuration configuration;
+    private static Configuration configuration = new Configuration();
     public static Codex codex;
     public static Location organization;
     public static User assignedUser;
@@ -153,77 +155,6 @@ public class Engine {
             }
         }
         return null;
-    }
-
-    public static ArrayList<Item> getProducts() {
-        ArrayList<Item> products = new ArrayList<>();
-        String[] ps = new String[]{"ITS", "MTS", "CMPS"};
-        for(String p : ps) {
-            File[] d = Pipe.list(p);
-            for (File file : d) {
-                if (!file.isDirectory() && file.getPath().endsWith("." + p.toLowerCase())) {
-                    Item loc = Json.load(file.getPath(), Item.class);
-                    products.add(loc);
-                }
-            }
-        }
-        products.sort(Comparator.comparing(Item::getId));
-        return products;
-    }
-
-    public static ArrayList<Item> getItems() {
-        ArrayList<Item> items = new ArrayList<>();
-        File[] d = Pipe.list("ITS");
-        for (File file : d) {
-            if (!file.isDirectory()) {
-                Item l = Json.load(file.getPath(), Item.class);
-                items.add(l);
-            }
-        }
-        items.sort(Comparator.comparing(Item::getId));
-        return items;
-    }
-
-    public static List<Item> getItems(String id) {
-        return getItems().stream().filter(item -> item.getOrg().equals(id)).collect(Collectors.toList());
-    }
-
-    public static Item getItem(String id) {
-        return getItems().stream().filter(i -> i.getId().equals(id)).toList().stream().findFirst().orElse(null);
-    }
-
-    public static ArrayList<Item> getMaterials() {
-        ArrayList<Item> materials = new ArrayList<>();
-        File[] d = Pipe.list("MTS");
-        for (File file : d) {
-            if (!file.isDirectory()) {
-                Item a = Json.load(file.getPath(), Item.class);
-                materials.add(a);
-            }
-        }
-        materials.sort(Comparator.comparing(Item::getId));
-        return materials;
-    }
-
-    public static Item getMaterial(String id) {
-        return getMaterials().stream().filter(m -> m.getId().equals(id)).toList().stream().findFirst().orElse(null);
-    }
-
-    public static ArrayList<Item> getComponents() {
-        ArrayList<Item> components = new ArrayList<>();
-        File[] d = Pipe.list("CMPS");
-        for (File file : d) {
-            if (!file.isDirectory()) {
-                Item a = Json.load(file.getPath(), Item.class);
-                components.add(a);
-            }
-        }
-        components.sort(Comparator.comparing(Item::getId));
-        return components;
-    }
-
-    public static Item getComponent(String id) {
-        return getComponents().stream().filter(c -> c.getId().equals(id)).toList().stream().findFirst().orElse(null);
     }
 
     public static ArrayList<Area> getAreas() {
@@ -457,16 +388,16 @@ public class Engine {
     }
 
     public static ArrayList<Inventory> getInventories() {
-        ArrayList<Inventory> inventories = new ArrayList<>();
-        File[] empDir = Pipe.list("STK");
-        for (File file : empDir) {
-            if (!file.isDirectory()) {
-                Inventory a = Json.load(file.getPath(), Inventory.class);
-                inventories.add(a);
+        ArrayList<Inventory> is = new ArrayList<>();
+        File[] d = Pipe.list("STK");
+        for (File f : d) {
+            if (!f.isDirectory()) {
+                Inventory a = Json.load(f.getPath(), Inventory.class);
+                is.add(a);
             }
         }
-        inventories.sort(Comparator.comparing(Inventory::getLocation));
-        return inventories;
+        is.sort(Comparator.comparing(Inventory::getLocation));
+        return is;
     }
 
     public static Inventory getInventory(String location){
@@ -480,6 +411,29 @@ public class Engine {
 
     public static List<Ledger> getLedgers(String id) {
         return getLedgers().stream().filter(location -> location.getOrganization().equals(id)).collect(Collectors.toList());
+    }
+
+    public static ArrayList<Record> getRecords(String objex, String id) {
+        File[] d = Pipe.list("RCS");
+        for (File f : d) {
+            if (!f.isDirectory()) {
+                if(f.getPath().endsWith(id + "." + objex.toLowerCase().replaceAll("/", "."))){
+                    return Json.load(f.getPath(), ArrayList.class);
+                }
+            }
+        }
+        return null;
+    }
+
+    public static ArrayList<ArrayList<Record>> getRecords() {
+        ArrayList<ArrayList<Record>> all = new ArrayList<>();
+        File[] d = Pipe.list("RCS");
+        for (File f : d) {
+            if (!f.isDirectory()) {
+                all.add(Json.load(f.getPath(), ArrayList.class));
+            }
+        }
+        return all;
     }
 
     public static Object codex(String objex, String key){
@@ -514,7 +468,7 @@ public class Engine {
                 return new AutoMakeAreas();
             }
             case "/BNS" -> {
-                return new Bins();
+                return new Bins(desktop);
             }
             case "/BNS/F" -> {
                 return new Finder("/BNS", desktop);
@@ -565,7 +519,7 @@ public class Engine {
                 return new CreateLocation("/TRANS/CRRS", desktop, null);
             }
             case "/TRANS/TRCKS" -> {
-                return new Trucks();
+                return new Trucks(desktop);
             }
             case "/TRANS/TRCKS/NEW" -> {
                 return new CreateTruck(desktop);
@@ -610,7 +564,7 @@ public class Engine {
                 return new Employees(desktop);
             }
             case "/EMPS/NEW" -> {
-                return new CreateEmployee(desktop);
+                return new CreateEmployee(desktop, false);
             }
             case "/DPTS" -> {
                 return new Departments(desktop);
@@ -636,7 +590,7 @@ public class Engine {
             case "/USRS/NEW" -> {
                 return new CreateUser();
             }
-            case "/STK" -> {
+            case "/STK", "/INV" -> {
                 return new ViewInventory(desktop, Engine.getOrganization().getId());
             }
             case "/STK/MOD/MV" -> {
@@ -732,19 +686,19 @@ public class Engine {
             case "/HR/POS/NEW" -> {
                 return new CreatePosition(desktop);
             }
-            case "/CNL/DATA_CNTR" -> {
+            case "/DATA_CNTR" -> {
                 return new DataCenter();
             }
-            case "/CNL/HR" -> {
+            case "/HR" -> {
                 return new HumanResources(desktop);
             }
-            case "/CNL/FI" -> {
+            case "/FI" -> {
                 return new Finance(desktop);
             }
-            case "/CNL/ME" -> {
+            case "/ME" -> {
                 return new MyProfile(desktop);
             }
-            case "/CNL/PROD_MTN" -> {
+            case "/PROD_MTN" -> {
                 return new ProductMaintainence(desktop);
             }
             case "/TM_CLCK" -> {
@@ -759,23 +713,15 @@ public class Engine {
             case "/CLEAR_DSK" -> desktop.clean();
             case "/CLOSE_DSK" -> desktop.purge();
             case "/N" -> new QuickExplorer();
-            case "/CNL/EXIT" -> System.exit(-1);
-            case "/CNL/RSTRT" -> {
+            case "/EXIT" -> System.exit(-1);
+            case "/RSTRT" -> {
 
                 String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
-
-                // Get the current JVM arguments
                 String vmArguments = String.join(" ", ManagementFactory.getRuntimeMXBean().getInputArguments());
-
-                // Get the current JAR or classpath
                 String currentJar = System.getProperty("java.class.path");
-
-                // Construct the restart command
                 String command = javaBin + " " + vmArguments + " -cp " + currentJar + " " + Start.class.getName();
-
-                // Launch a new process
                 ProcessBuilder builder = new ProcessBuilder(command.split(" "));
-                builder.inheritIO(); // Inherit standard IO from the current process
+                builder.inheritIO();
                 try {
                     builder.start();
                     System.exit(0);
@@ -788,11 +734,11 @@ public class Engine {
         if(transactionCode.endsWith("/F")){
             return new Finder(transactionCode.replace("/F", ""), desktop);
         }else if(transactionCode.endsWith("/MOD")){
-            return new Modifier(transactionCode.replace("/F", ""), null, null);
+            return new Modifier(transactionCode.replace("/MOD", ""), null, null);
         }else if(transactionCode.endsWith("/ARCHV")){
-            return new Archiver(transactionCode.replace("/F", ""));
+            return new Archiver(transactionCode.replace("/ARCHV", ""));
         }else if(transactionCode.endsWith("/DEL")){
-            return new Deleter(transactionCode.replace("/F", ""));
+            return new Deleter(transactionCode.replace("/DEL", ""), null);
         }
 
         String[] chs = transactionCode.split("/");
@@ -821,7 +767,7 @@ public class Engine {
             case "CSTS" -> {
                 for(Location l : Engine.getLocations("CSTS")){
                     if(l.getId().equals(oid)){
-                        return new CustomerView(l);
+                        return new ViewCustomer(l);
                     }
                 }
             }
@@ -840,7 +786,7 @@ public class Engine {
                 }
             }
             case "ITS" -> {
-                Item i = Engine.getItem(oid);
+                Item i = Engine.products.getItem(oid);
                 if(i != null){
                     return new ViewItem(i);
                 }
@@ -878,7 +824,7 @@ public class Engine {
                 return new Locations("/WHS", desktop);
             }
             case "ORDS" -> {
-                for(PurchaseOrder l : Engine.orderProcessing.getPurchaseOrder()){
+                for(PurchaseOrder l : orders.getPurchaseOrder()){
                     if(l.getOrderId().equals(oid)){
                         return new ViewPurchaseOrder(l);
                     }
@@ -912,7 +858,80 @@ public class Engine {
         }
     }
 
-    public static class orderProcessing {
+    public static class products {
+        public static ArrayList<Item> getProducts() {
+            ArrayList<Item> products = new ArrayList<>();
+            String[] ps = new String[]{"ITS", "MTS", "CMPS"};
+            for(String p : ps) {
+                File[] d = Pipe.list(p);
+                for (File file : d) {
+                    if (!file.isDirectory() && file.getPath().endsWith("." + p.toLowerCase())) {
+                        Item loc = Json.load(file.getPath(), Item.class);
+                        products.add(loc);
+                    }
+                }
+            }
+            products.sort(Comparator.comparing(Item::getId));
+            return products;
+        }
+
+        public static ArrayList<Item> getItems() {
+            ArrayList<Item> items = new ArrayList<>();
+            File[] d = Pipe.list("ITS");
+            for (File file : d) {
+                if (!file.isDirectory()) {
+                    Item l = Json.load(file.getPath(), Item.class);
+                    items.add(l);
+                }
+            }
+            items.sort(Comparator.comparing(Item::getId));
+            return items;
+        }
+
+        public static List<Item> getItems(String id) {
+            return getItems().stream().filter(item -> item.getOrg().equals(id)).collect(Collectors.toList());
+        }
+
+        public static Item getItem(String id) {
+            return getItems().stream().filter(i -> i.getId().equals(id)).toList().stream().findFirst().orElse(null);
+        }
+
+        public static ArrayList<Item> getMaterials() {
+            ArrayList<Item> materials = new ArrayList<>();
+            File[] d = Pipe.list("MTS");
+            for (File file : d) {
+                if (!file.isDirectory()) {
+                    Item a = Json.load(file.getPath(), Item.class);
+                    materials.add(a);
+                }
+            }
+            materials.sort(Comparator.comparing(Item::getId));
+            return materials;
+        }
+
+        public static Item getMaterial(String id) {
+            return getMaterials().stream().filter(m -> m.getId().equals(id)).toList().stream().findFirst().orElse(null);
+        }
+
+        public static ArrayList<Item> getComponents() {
+            ArrayList<Item> components = new ArrayList<>();
+            File[] d = Pipe.list("CMPS");
+            for (File file : d) {
+                if (!file.isDirectory()) {
+                    Item a = Json.load(file.getPath(), Item.class);
+                    components.add(a);
+                }
+            }
+            components.sort(Comparator.comparing(Item::getId));
+            return components;
+        }
+
+        public static Item getComponent(String id) {
+            return getComponents().stream().filter(c -> c.getId().equals(id)).toList().stream().findFirst().orElse(null);
+        }
+    }
+
+    public static class orders {
 
         public static PurchaseRequisition getPurchaseRequisitions(String prNumber) {
             File[] posDir = Pipe.list("PR");

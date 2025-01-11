@@ -13,14 +13,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * /CNL/INV
+ * /INV
  */
 public class Inventory extends LockeState {
 
     private JTable table;
 
     public Inventory() {
-        super("Inventory Control", "/CNL/INV", true, true, true, true);
+        super("Inventory Control", "/INV", true, true, true, true);
         setLayout(new BorderLayout());
         add(toolbar(), BorderLayout.NORTH);
         table = createTable();

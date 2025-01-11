@@ -18,13 +18,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
- * /CNL/FI
+ * /FI
  */
 public class Finance extends LockeState {
 
     public Finance(DesktopState desktop) {
 
-        super("Finance", "/CNL/FI", true, true, true, true);
+        super("Finance", "/FI", true, true, true, true);
         setFrameIcon(new ImageIcon(TimeClock.class.getResource("/icons/finance.png")));
 
         JPanel main = new JPanel(new GridLayout(1, 4));

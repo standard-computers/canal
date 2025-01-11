@@ -74,7 +74,7 @@ public class Controller extends JPanel implements RefreshListener {
     }
 
     @Override
-    public void onRefresh() {
+    public void refresh() {
         reloadStore();
     }
 

@@ -68,7 +68,7 @@ public class ViewInventory extends LockeState implements RefreshListener {
         };
         ArrayList<Object[]> stks = new ArrayList<>();
         for (StockLine sl : Engine.getInventory(location).getStockLines()) {
-            Item i = Engine.getItem(sl.getId());
+            Item i = Engine.products.getItem(sl.getId());
             stks.add(new Object[]{
                     location,
                     sl.getObjex(),
@@ -135,9 +135,9 @@ public class ViewInventory extends LockeState implements RefreshListener {
         label.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                String[] printables = new String[Engine.orderProcessing.getPurchaseOrder().size()];
-                for (int i = 0; i < Engine.orderProcessing.getPurchaseOrder().size(); i++) {
-                    printables[i] = Engine.orderProcessing.getPurchaseOrder().get(i).getOrderId();
+                String[] printables = new String[Engine.orders.getPurchaseOrder().size()];
+                for (int i = 0; i < Engine.orders.getPurchaseOrder().size(); i++) {
+                    printables[i] = Engine.orders.getPurchaseOrder().get(i).getOrderId();
                 }
                 new CheckboxBarcodeFrame(printables);
             }
@@ -158,7 +158,7 @@ public class ViewInventory extends LockeState implements RefreshListener {
         String[] columns = new String[]{"Location", "Type", "HU", "ID", "Name", "Org. Qty.", "Qty.", "Price", "Value", "Area", "Bin", "Receipt", "Status"};
         ArrayList<Object[]> stks = new ArrayList<>();
         for (StockLine sl : Engine.getInventory(id).getStockLines()) {
-            Item i = Engine.getItem(sl.getId());
+            Item i = Engine.products.getItem(sl.getId());
             stks.add(new String[]{
                     id,
                     sl.getObjex(),
@@ -185,7 +185,7 @@ public class ViewInventory extends LockeState implements RefreshListener {
     }
 
     @Override
-    public void onRefresh() {
+    public void refresh() {
         CustomTable newTable = createTable();
         JScrollPane scrollPane = (JScrollPane) table.getParent().getParent();
         scrollPane.setViewportView(newTable);

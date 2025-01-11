@@ -58,39 +58,42 @@ public class InboundDeliveries extends LockeState {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV");
-        IconButton createPurchaseOrder = new IconButton("New PO", "order", "Build an item");
-        IconButton blockPo = new IconButton("Block", "block", "Block/Pause PO, can't be used");
-        IconButton suspendPo = new IconButton("Suspend", "suspend", "Suspend PO, can't be used");
-        IconButton activatePO = new IconButton("Start", "start", "Resume/Activate PO");
-        IconButton archivePo = new IconButton("Archive", "archive", "Archive PO, removes");
-        IconButton label = new IconButton("Barcodes", "label", "Print labels for org properties");
+        IconButton createIDO = new IconButton("Create IDO", "create", "Build an Inbound Delivery");
+        IconButton blockIDO = new IconButton("Block", "block", "Block/Pause IDO, can't be used");
+        IconButton suspendIDO = new IconButton("Suspend", "suspend", "Suspend IDO, can't be used");
+        IconButton activateIDO = new IconButton("Start", "start", "Resume/Activate IDO");
+        IconButton archiveIDO = new IconButton("Archive", "archive", "Archive IDO");
+        IconButton label = new IconButton("Labels", "label", "Print labels for selected");
+        IconButton print = new IconButton("Print", "print", "Print selected");
         tb.add(Box.createHorizontalStrut(5));
         tb.add(Elements.h3("Inbound Deliveries"));
         tb.add(Box.createHorizontalStrut(5));
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(createPurchaseOrder);
+        tb.add(createIDO);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(blockPo);
+        tb.add(blockIDO);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(suspendPo);
+        tb.add(suspendIDO);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(activatePO);
+        tb.add(activateIDO);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(archivePo);
+        tb.add(archiveIDO);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(label);
         tb.add(Box.createHorizontalStrut(5));
-        createPurchaseOrder.addMouseListener(new MouseAdapter() {
+        tb.add(print);
+        tb.add(Box.createHorizontalStrut(5));
+        createIDO.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 desktop.put(new CreatePurchaseOrder(desktop));
             }
         });
         label.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                String[] printables = new String[Engine.orderProcessing.getPurchaseOrder().size()];
-                for (int i = 0; i < Engine.orderProcessing.getPurchaseOrder().size(); i++) {
-                    printables[i] = Engine.orderProcessing.getPurchaseOrder().get(i).getOrderId();
+                String[] printables = new String[Engine.orders.getPurchaseOrder().size()];
+                for (int i = 0; i < Engine.orders.getPurchaseOrder().size(); i++) {
+                    printables[i] = Engine.orders.getPurchaseOrder().get(i).getOrderId();
                 }
                 new CheckboxBarcodeFrame(printables);
             }

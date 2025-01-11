@@ -47,7 +47,7 @@ public class Materials extends LockeState implements RefreshListener {
                     int row = t.getSelectedRow();
                     if (row != -1) {
                         String v = String.valueOf(t.getValueAt(row, 1));
-                        desktop.put(new ViewMaterial(Engine.getMaterial(v)));
+                        desktop.put(new ViewMaterial(Engine.products.getMaterial(v)));
                     }
                 }
             }
@@ -118,7 +118,7 @@ public class Materials extends LockeState implements RefreshListener {
             "Created",
         };
         ArrayList<Object[]> d = new ArrayList<>();
-        for (Item material : Engine.getMaterials()) {
+        for (Item material : Engine.products.getMaterials()) {
             Location vendor = Engine.getLocation(material.getVendor(), "VEND");
             d.add(new Object[]{
                     material.getId(),
@@ -152,7 +152,7 @@ public class Materials extends LockeState implements RefreshListener {
     }
 
     @Override
-    public void onRefresh() {
+    public void refresh() {
 
     }
 }

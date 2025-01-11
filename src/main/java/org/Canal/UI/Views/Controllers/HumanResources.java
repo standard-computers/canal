@@ -20,7 +20,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
- * /CNL/HR
+ * /HR
  */
 public class HumanResources extends LockeState {
 
@@ -28,7 +28,7 @@ public class HumanResources extends LockeState {
 
     public HumanResources(DesktopState desktop) {
 
-        super("ERM / Human Resources", "/CNL/HR", true, true, true, true);
+        super("ERM / Human Resources", "/HR", true, true, true, true);
         setFrameIcon(new ImageIcon(HumanResources.class.getResource("/icons/humanresources.png")));
         this.desktop = desktop;
 
@@ -138,7 +138,7 @@ public class HumanResources extends LockeState {
         createEmployee.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new CreateEmployee(desktop));
+                desktop.put(new CreateEmployee(desktop, false));
             }
         });
         employeeOptions.add(createEmployee);

@@ -56,7 +56,7 @@ public class ViewPurchaseOrder extends LockeState {
         orderInfo.add(moreInfo, BorderLayout.EAST);
         setLayout(new BorderLayout());
         add(orderInfo, BorderLayout.NORTH);
-        ArrayList<Item> items = Engine.getItems();
+        ArrayList<Item> items = Engine.products.getItems();
         if(items.isEmpty()){
             JOptionPane.showMessageDialog(this, "No items found", "Error", JOptionPane.ERROR_MESSAGE);
             dispose();
@@ -105,7 +105,7 @@ public class ViewPurchaseOrder extends LockeState {
         Form f = new Form();
         JTextField ordered = new Copiable(LocalDate.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy")));
         HashMap<String, String> prs = new HashMap<>();
-        for(PurchaseRequisition pr1 : Engine.orderProcessing.getPurchaseRequisitions()){
+        for(PurchaseRequisition pr1 : Engine.orders.getPurchaseRequisitions()){
             prs.put(pr1.getId(), pr1.getId());
         }
         poPurchaseReq = new Copiable(po.getPurchaseRequisition());

@@ -50,7 +50,7 @@ public class CreateComponent extends LockeState {
         JButton selectPhoto = Elements.button("Select Photo");
         selectedVendor = Selectables.vendors();
         selectedVendor.editable();
-        materialIdField = Elements.input("XI0" + (1000 + (Engine.getComponents().size() + 1)));
+        materialIdField = Elements.input("XI0" + (1000 + (Engine.products.getComponents().size() + 1)));
         organizations = Selectables.organizations();
         materialNameField = Elements.input("Black Shirt");
         materialPriceField = Elements.input("1.00");

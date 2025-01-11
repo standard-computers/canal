@@ -6,6 +6,7 @@ import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
+import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;
@@ -20,11 +21,15 @@ import java.util.ArrayList;
  */
 public class Bins extends LockeState {
 
+    private DesktopState desktop;
     private CustomTable table;
 
-    public Bins() {
+    public Bins(DesktopState desktop) {
+
         super("Bins", "/BNS", true, true, true, true);
         setFrameIcon(new ImageIcon(Bins.class.getResource("/icons/bins.png")));
+        this.desktop = desktop;
+
         JPanel tb = createToolBar();
         JPanel holder = new JPanel(new BorderLayout());
         table = createTable();
@@ -37,14 +42,16 @@ public class Bins extends LockeState {
     }
 
     private JPanel createToolBar() {
+
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV", "");
-        IconButton createBin = new IconButton("New Bin", "order", "Create a Bin", "/BNS/NEW");
+        IconButton createBin = new IconButton("Create Bin", "create", "Create a Bin", "/BNS/NEW");
         IconButton autoMakeBins = new IconButton("AutoMake Bins", "automake", "Automate the creation of Bin(s)", "/BNS/AUTO_MK");
         IconButton modifyBin = new IconButton("Modify", "modify", "Modify an Bin", "/BNS/MOD");
-        IconButton removeBin = new IconButton("Remove", "delete", "Delete an Bin", "/BNS/DEL");
-        JTextField filterValue = Elements.input("Search", 10);
+        IconButton removeBin = new IconButton("Remove", "delete", "Delete an Bin");
+        IconButton labels = new IconButton("Labels", "label", "Delete an Bin");
+        IconButton print = new IconButton("Print", "print", "Delete an Bin");
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(createBin);
@@ -55,12 +62,20 @@ public class Bins extends LockeState {
         tb.add(Box.createHorizontalStrut(5));
         tb.add(removeBin);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(filterValue);
+        tb.add(labels);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(print);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));
         export.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 table.exportToCSV();
+            }
+        });
+        removeBin.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                desktop.put(new RemoveBin());
             }
         });
         return tb;

@@ -42,11 +42,11 @@ public class SalesOrders extends LockeState {
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV");
         IconButton openSelected = new IconButton("Open", "open", "Open selected");
-        IconButton createSO = new IconButton("New", "order", "Build an item");
+        IconButton createSO = new IconButton("New", "create", "Build an item", "/ORDS/SO/NEW");
         IconButton blockSO = new IconButton("Block", "block", "Block/Pause SO, can't be used");
         IconButton suspendSO = new IconButton("Suspend", "suspend", "Suspend SO, can't be used");
         IconButton activateSO = new IconButton("Activate", "start", "Resume/Activate SO");
-        IconButton archiveSO = new IconButton("Archive", "archive", "Archive SO, removes");
+        IconButton archiveSO = new IconButton("Archive", "archive", "Archive SO, removes", "/ORDS/SO/ARCHV");
         IconButton findSO = new IconButton("Find", "find", "Find by values", "/ORDS/SO/F");
         IconButton label = new IconButton("Labels", "label", "Print labels for org properties");
         IconButton print = new IconButton("Print", "print", "Print selected");
@@ -96,7 +96,7 @@ public class SalesOrders extends LockeState {
                 "Status"
         };
         ArrayList<Object[]> sos = new ArrayList<>();
-        for (SalesOrder so : Engine.orderProcessing.getSalesOrders()) {
+        for (SalesOrder so : Engine.orders.getSalesOrders()) {
             sos.add(new Object[]{
                     so.getOrderId(),
                     so.getOwner(),

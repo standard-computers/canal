@@ -31,8 +31,8 @@ public class CreatePurchaseRequisition extends LockeState {
 
         availableVendors = Selectables.vendors();
         availableBuyers = Selectables.allLocations();
-        JTextField prIdField = Elements.input("PR" + (10000000 + (Engine.orderProcessing.getPurchaseRequisitions().size() + 1)));
-        JTextField prNumberField = Elements.input("PR" + (10000000 + (Engine.orderProcessing.getPurchaseRequisitions().size() + 1)));
+        JTextField prIdField = Elements.input("PR" + (10000000 + (Engine.orders.getPurchaseRequisitions().size() + 1)));
+        JTextField prNumberField = Elements.input("PR" + (10000000 + (Engine.orders.getPurchaseRequisitions().size() + 1)));
         prOwnerField = new Copiable("U100001");
         JTextField prSpendAmount = Elements.input("500.00");
         prStartDateField = new DatePicker();

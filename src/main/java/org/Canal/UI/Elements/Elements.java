@@ -229,4 +229,20 @@ public class Elements {
         parentFrame.add(container); // Or add the container to the appropriate parent panel
         return textField;
     }
+
+    public static JScrollPane scrollPane(JComponent content) {
+        // Create JScrollPane with the content
+        JScrollPane scrollPane = new JScrollPane(content);
+
+        // Set the vertical scroll bar policy to NEVER
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+
+        // Set the horizontal scroll bar policy to ALWAYS
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+
+        // Optional: Adjust the viewport's layout for better horizontal scrolling
+        scrollPane.getViewport().setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+
+        return scrollPane;
+    }
 }

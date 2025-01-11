@@ -26,7 +26,7 @@ public class CreateCatalog extends LockeState {
         super("Build a Catalog", "/CATS/NEW", true, true, true, true);
         setFrameIcon(new ImageIcon(CreateCatalog.class.getResource("/icons/create.png")));
 
-        if(Engine.getItems().isEmpty() && Engine.getMaterials().isEmpty()){
+        if(Engine.products.getItems().isEmpty() && Engine.products.getMaterials().isEmpty()){
             JOptionPane.showMessageDialog(null, "No materials or items.");
             dispose();
             return;

@@ -75,7 +75,7 @@ public class CreateArea extends LockeState {
                 Pipe.save("/AREAS", newArea);
                 dispose();
                 JOptionPane.showMessageDialog(CreateArea.this, "Area Created");
-                refreshListener.onRefresh();
+                refreshListener.refresh();
             }
         });
     }

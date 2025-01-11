@@ -51,7 +51,7 @@ public class CreateItem extends LockeState implements Includer {
         Form f1 = new Form();
         JButton selectPhoto = Elements.button("Select Photo");
         selectedVendor = Selectables.vendors();
-        itemIdField = Elements.input(((String) Engine.codex("ITS", "prefix")) + (1000 + (Engine.getItems().size() + 1)));
+        itemIdField = Elements.input(((String) Engine.codex("ITS", "prefix")) + (1000 + (Engine.products.getItems().size() + 1)));
         orgIdField = Selectables.organizations();
         itemNameField = Elements.input("Black Shirt");
         itemPriceField = Elements.input("1.00");

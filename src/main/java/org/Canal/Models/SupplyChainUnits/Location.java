@@ -19,8 +19,9 @@ public class Location extends Objex {
     private String postal;
     private String country;
     private boolean taxExempt = false;
-    private String email;
-    private String phone;
+    private String ein = "UNKNOWN";
+    private String email = "UNKNOWN";
+    private String phone = "UNKNOWN";
     private double area; //Square area of warehouse
     private String areaUOM;
     private ArrayList<Department> departments = new ArrayList<>();
@@ -95,6 +96,14 @@ public class Location extends Objex {
 
     public void setTaxExempt(boolean taxExempt) {
         this.taxExempt = taxExempt;
+    }
+
+    public String getEin() {
+        return ein;
+    }
+
+    public void setEin(String ein) {
+        this.ein = ein;
     }
 
     public String getEmail() {

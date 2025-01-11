@@ -22,7 +22,7 @@ public class CustomSetup extends JFrame {
     private JCheckBox showCanalCodes;
 
     public CustomSetup(){
-        setTitle("Install Canal");
+        setTitle("Setup Canal");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JTabbedPane settings = new JTabbedPane();
         settings.add(generalSettings(), "General");
@@ -45,7 +45,7 @@ public class CustomSetup extends JFrame {
                 dispose();
                 QuickExplorer q = new QuickExplorer();
                 q.put(new CreateLocation("/ORGS", q, null));
-                q.put(new CreateEmployee(q));
+                q.put(new CreateEmployee(q, true));
                 q.put(new CreateUser());
                 Start.q = q;
             }

@@ -118,7 +118,7 @@ public class Items extends LockeState implements RefreshListener {
             "Excise Tax"
         };
         ArrayList<Object[]> d = new ArrayList<>();
-        for (Item item : Engine.getItems()) {
+        for (Item item : Engine.products.getItems()) {
             Location vendor = Engine.getLocation(item.getVendor(), "VEND");
             d.add(new Object[]{
                     item.getId(),
@@ -151,7 +151,7 @@ public class Items extends LockeState implements RefreshListener {
     }
 
     @Override
-    public void onRefresh() {
+    public void refresh() {
 
     }
 }

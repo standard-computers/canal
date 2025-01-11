@@ -94,7 +94,7 @@ public class CreateSalesOrder extends LockeState {
                     JOptionPane.showMessageDialog(null, "Must select a delivery date.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                PurchaseRequisition assignedPR = Engine.orderProcessing.getPurchaseRequisitions(availablePurchaseRequisitions.getSelectedValue());
+                PurchaseRequisition assignedPR = Engine.orders.getPurchaseRequisitions(availablePurchaseRequisitions.getSelectedValue());
                 int ccc = JOptionPane.showConfirmDialog(null, "Confirm order?", "You have selected the Org ID as the charge account. Are you sure you want to charge the corp account?",JOptionPane.YES_NO_CANCEL_OPTION);
                 if(ccc == JOptionPane.YES_OPTION){
                     SalesOrder newSalesOrder = new SalesOrder();
@@ -249,7 +249,7 @@ public class CreateSalesOrder extends LockeState {
         selectShipTo.editable();
         selectSupplier = Selectables.allLocations();
         selectSupplier.editable();
-        orderId = new Copiable("SO" + (60000000 + (Engine.orderProcessing.getSalesOrders().size() + 1)));
+        orderId = new Copiable("SO" + (60000000 + (Engine.orders.getSalesOrders().size() + 1)));
         f.addInput(Elements.coloredLabel("*Order ID", Constants.colors[0]), orderId);
         f.addInput(Elements.coloredLabel("Supplier", Constants.colors[1]), selectSupplier);
         f.addInput(Elements.coloredLabel("Bill To", Constants.colors[2]), selectBillTo);
@@ -291,7 +291,7 @@ public class CreateSalesOrder extends LockeState {
 
     private JPanel itemDetails(){
         JPanel p = new JPanel(new BorderLayout());
-        ArrayList<Item> items = Engine.getProducts();
+        ArrayList<Item> items = Engine.products.getProducts();
         if(items.isEmpty()){
             JOptionPane.showMessageDialog(this, "No products found", "Error", JOptionPane.ERROR_MESSAGE);
             dispose();
@@ -372,7 +372,7 @@ public class CreateSalesOrder extends LockeState {
             createPurchaseOrder.setEnabled(false);
         }
         HashMap<String, String> prs = new HashMap<>();
-        for(PurchaseRequisition pr1 : Engine.orderProcessing.getPurchaseRequisitions()){
+        for(PurchaseRequisition pr1 : Engine.orders.getPurchaseRequisitions()){
             prs.put(pr1.getId(), pr1.getId());
         }
         availablePurchaseRequisitions = new Selectable(prs);

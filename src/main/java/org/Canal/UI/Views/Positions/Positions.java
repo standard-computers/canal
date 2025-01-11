@@ -104,7 +104,7 @@ public class Positions extends LockeState implements RefreshListener {
         refresh.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                onRefresh();
+                refresh();
             }
         });
         super.addKeyListener(new KeyListener() {
@@ -164,7 +164,7 @@ public class Positions extends LockeState implements RefreshListener {
     }
 
     @Override
-    public void onRefresh() {
+    public void refresh() {
         CustomTable newTable = createTable();
         JScrollPane scrollPane = (JScrollPane) table.getParent().getParent();
         scrollPane.setViewportView(newTable);

@@ -46,13 +46,6 @@ public class QuickExplorer extends JFrame implements DesktopState {
         add(statusBar(), BorderLayout.SOUTH);
         add(splitPane, BorderLayout.CENTER);
         setVisible(true);
-        if(Engine.assignedUser == null){
-            putCenter(new Login(false));
-        }
-        if(Engine.getUsers().isEmpty()){
-            JOptionPane.showMessageDialog(desktopPane, "Please make and assign a user to this Canal");
-            put(Engine.router("/USRS/NEW", this));
-        }
         installShortcuts();
     }
 
@@ -60,8 +53,11 @@ public class QuickExplorer extends JFrame implements DesktopState {
 
         JPanel panel = new JPanel(new BorderLayout());
         JPanel employee = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        Employee e = Engine.getEmployee(Engine.getAssignedUser().getEmployee());
-        JLabel myName = new JLabel(e.getName());
+        JLabel myName = new JLabel("PLEASE LOGIN");
+        if(Engine.getAssignedUser() != null){
+            Employee e = Engine.getEmployee(Engine.getAssignedUser().getEmployee());
+            myName.setText(e.getName());
+        }
         myName.setFont(UIManager.getFont("h2.font"));
         myName.setBorder(BorderFactory.createEmptyBorder(5, 2, 2, 2));
         employee.add(myName);

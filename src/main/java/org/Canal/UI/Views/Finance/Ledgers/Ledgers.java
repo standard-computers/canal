@@ -26,7 +26,7 @@ public class Ledgers extends LockeState {
     public Ledgers(DesktopState desktop) {
         super("Ledgers", "/LGS", true, true, true, true);
         setFrameIcon(new ImageIcon(Ledgers.class.getResource("/icons/ledgers.png")));
-        if(Engine.orderProcessing.getGoodsReceipts().isEmpty()){
+        if(Engine.orders.getGoodsReceipts().isEmpty()){
             dispose();
             JOptionPane.showMessageDialog(this, "No Ledgers");
         }

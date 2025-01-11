@@ -1,4 +1,4 @@
-package org.Canal.UI.Views;
+package org.Canal.UI.Views.Customers;
 
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.IconButton;
@@ -14,14 +14,14 @@ import java.awt.event.MouseEvent;
 /**
  * /CSTS/$[CUSTOMER_ID]
  */
-public class CustomerView extends LockeState {
+public class ViewCustomer extends LockeState {
 
     private Location customer;
 
-    public CustomerView(Location customer) {
+    public ViewCustomer(Location customer) {
 
         super("Customer / " + customer.getId() + " - " + customer.getName(), "/CSTS/$", false, true, false, true);
-        setFrameIcon(new ImageIcon(CustomerView.class.getResource("/icons/customers.png")));
+        setFrameIcon(new ImageIcon(ViewCustomer.class.getResource("/icons/customers.png")));
 
         this.customer = customer;
         JTabbedPane tabbedPane = new JTabbedPane();

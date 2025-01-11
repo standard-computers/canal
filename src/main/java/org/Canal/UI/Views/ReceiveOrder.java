@@ -79,7 +79,7 @@ public class ReceiveOrder extends LockeState {
             }
             private void onChange() {
                 String poId = poField.getText();
-                PurchaseOrder foundPo = Engine.orderProcessing.getPurchaseOrder(poId);
+                PurchaseOrder foundPo = Engine.orders.getPurchaseOrder(poId);
                 if(foundPo != null){
                     ArrayList<Object[]> its = new ArrayList<>();
                     ArrayList<OrderLineItem> items = foundPo.getItems();
@@ -146,7 +146,7 @@ public class ReceiveOrder extends LockeState {
                     if(po.isEmpty()){
                         JOptionPane.showMessageDialog(null, "Purchase Order Number Required!", "Error", JOptionPane.ERROR_MESSAGE);
                     }else{
-                        PurchaseOrder spo = Engine.orderProcessing.getPurchaseOrder(po);
+                        PurchaseOrder spo = Engine.orders.getPurchaseOrder(po);
                         if(spo != null){
                             if(!receivingLocationId.equals(spo.getShipTo())){
                                 int override = JOptionPane.showConfirmDialog(null, "The receiving location and ship to do not match. Override?");

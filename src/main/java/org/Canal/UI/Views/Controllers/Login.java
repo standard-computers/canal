@@ -19,7 +19,6 @@ public class Login extends LockeState {
 
     public Login(boolean closable) {
         super("Login", "/LOGIN", false, closable, false, false);
-        Constants.checkLocke(this, false, true);
         setFrameIcon(new ImageIcon(Login.class.getResource("/icons/login.png")));
         Form f = new Form();
         JTextField userIdField = Elements.input(10);

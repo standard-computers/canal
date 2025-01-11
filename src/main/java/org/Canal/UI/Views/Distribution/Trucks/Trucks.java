@@ -6,6 +6,7 @@ import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
+import org.Canal.UI.Views.Deleter;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.RefreshListener;
@@ -25,14 +26,15 @@ public class Trucks extends LockeState implements RefreshListener {
     private DesktopState desktop;
     private CustomTable table;
 
-    public Trucks() {
+    public Trucks(DesktopState desktop) {
 
         super("Trucks", "/TRANS/TRCKS", true, true, true, true);
         setFrameIcon(new ImageIcon(Trucks.class.getResource("/icons/trucks.png")));
+        this.desktop = desktop;
 
-        JPanel tb = createToolBar();
+        JPanel tb = toolbar();
         JPanel holder = new JPanel(new BorderLayout());
-        table = createTable();
+        table = table();
         JScrollPane tableScrollPane = new JScrollPane(table);
         tableScrollPane.setPreferredSize(new Dimension(900, 700));
         holder.add(Elements.header("Available Transportation (Trucks)", SwingConstants.LEFT), BorderLayout.CENTER);
@@ -55,20 +57,19 @@ public class Trucks extends LockeState implements RefreshListener {
         });
     }
 
-    private JPanel createToolBar() {
+    private JPanel toolbar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV");
-        IconButton importLocations = new IconButton("Import", "export", "Import as CSV");
-        IconButton createTruck = new IconButton("New", "order", "Create a Truck", "/TRANS/TRCKS/NEW");
+        IconButton importTrucks = new IconButton("Import", "export", "Import as CSV");
+        IconButton createTruck = new IconButton("New", "create", "Create a Truck", "/TRANS/TRCKS/NEW");
         IconButton modifyTruck = new IconButton("Modify", "modify", "Modify a Truck", "/TRANS/TRCKS/MOD");
         IconButton archiveTruck = new IconButton("Archive", "archive", "Archive a Truck", "/TRANS/TRCKS/ARCHV");
-        IconButton removeTruck = new IconButton("Remove", "delete", "Delete a Truck", "/TRANS/TRCKS/DEL");
+        IconButton removeTruck = new IconButton("Remove", "delete", "Delete a Truck");
         IconButton refresh = new IconButton("Refresh", "refresh", "Refresh Data");
-        JTextField filterValue = Elements.input("Search", 10);
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(importLocations);
+        tb.add(importTrucks);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(createTruck);
         tb.add(Box.createHorizontalStrut(5));
@@ -79,8 +80,6 @@ public class Trucks extends LockeState implements RefreshListener {
         tb.add(removeTruck);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(refresh);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(filterValue);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));
         export.addMouseListener(new MouseAdapter() {
             @Override
@@ -88,23 +87,29 @@ public class Trucks extends LockeState implements RefreshListener {
                 table.exportToCSV();
             }
         });
-        importLocations.addMouseListener(new MouseAdapter() {
+        importTrucks.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 JFileChooser fc = new JFileChooser();
 
             }
         });
+        removeTruck.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                desktop.put(new Deleter("/TRANS/TRCKS", Trucks.this));
+            }
+        });
         refresh.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                onRefresh();
+                refresh();
             }
         });
         return tb;
     }
 
-    private CustomTable createTable() {
+    private CustomTable table() {
         String[] columns = new String[]{
                 "ID",
                 "Name",
@@ -112,6 +117,10 @@ public class Trucks extends LockeState implements RefreshListener {
                 "Carrier",
                 "Carrier Name",
                 "Driver",
+                "Pallets",
+                "Value",
+                "Est Weight",
+                "wUOM",
                 "Notes",
                 "Status",
                 "Created"
@@ -126,6 +135,10 @@ public class Trucks extends LockeState implements RefreshListener {
                     truck.getCarrier(),
                     carrier.getName(),
                     truck.getDriver(),
+                    0,
+                    "0.0",
+                    "",
+                    "LBS",
                     truck.getNotes(),
                     truck.getStatus(),
                     truck.getCreated()
@@ -135,8 +148,8 @@ public class Trucks extends LockeState implements RefreshListener {
     }
 
     @Override
-    public void onRefresh() {
-        CustomTable newTable = createTable();
+    public void refresh() {
+        CustomTable newTable = table();
         JScrollPane scrollPane = (JScrollPane) table.getParent().getParent();
         scrollPane.setViewportView(newTable);
         table = newTable;

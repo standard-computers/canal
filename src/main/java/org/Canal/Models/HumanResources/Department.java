@@ -8,8 +8,9 @@ public class Department extends Objex {
 
     private String organization; //Org this Department belongs too
     private String location;
-    private String department; //If child Department, Parent Department ID
-    private ArrayList<Position> positions;
+    private String department = "UNKNOWN"; //If child Department, Parent Department ID
+    private String supervisor = "UNKNOWN";
+    private ArrayList<Position> positions = new ArrayList<>();
 
     public String getOrganization() {
         return organization;
@@ -33,6 +34,14 @@ public class Department extends Objex {
 
     public void setDepartment(String department) {
         this.department = department;
+    }
+
+    public String getSupervisor() {
+        return supervisor;
+    }
+
+    public void setSupervisor(String supervisor) {
+        this.supervisor = supervisor;
     }
 
     public ArrayList<Position> getPositions() {

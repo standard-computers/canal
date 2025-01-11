@@ -53,7 +53,7 @@ public class CreateMaterial extends LockeState {
         JButton selectPhoto = Elements.button("Select Photo");
         selectedVendor = Selectables.vendors();
         selectedVendor.editable();
-        materialIdField = Elements.input(((String) Engine.codex("MTS", "prefix")) + (1000 + (Engine.getMaterials().size() + 1)));
+        materialIdField = Elements.input(((String) Engine.codex("MTS", "prefix")) + (1000 + (Engine.products.getMaterials().size() + 1)));
         organizations = Selectables.organizations();
         materialNameField = Elements.input("Black Shirt");
         materialPriceField = Elements.input("1.00");

@@ -113,7 +113,7 @@ public class MoveStock extends LockeState {
                 i.save();
                 JOptionPane.showMessageDialog(MoveStock.this, "Moving Stock Complete!");
                 if (success) {
-                    refreshListener.onRefresh();
+                    refreshListener.refresh();
                 }
             }
         });
