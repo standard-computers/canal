@@ -25,22 +25,23 @@ public class PurchaseOrders extends LockeState {
     private DesktopState desktop;
 
     public PurchaseOrders(DesktopState desktop) {
+
         super("Purchase Orders", "/ORDS/PO", true, true, true, true);
-        this.desktop = desktop;
         setFrameIcon(new ImageIcon(PurchaseOrders.class.getResource("/icons/purchaseorders.png")));
-        JPanel tb = createToolBar();
+        this.desktop = desktop;
+
         JPanel holder = new JPanel(new BorderLayout());
         table = createTable();
         JScrollPane tableScrollPane = new JScrollPane(table);
         holder.add(Elements.header("Purchase Orders", SwingConstants.LEFT), BorderLayout.CENTER);
-        holder.add(tb, BorderLayout.SOUTH);
+        holder.add(toolbar(), BorderLayout.SOUTH);
         add(holder);
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);
         add(tableScrollPane, BorderLayout.CENTER);
     }
 
-    private JPanel createToolBar() {
+    private JScrollPane toolbar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV");
@@ -85,7 +86,7 @@ public class PurchaseOrders extends LockeState {
                 new CheckboxBarcodeFrame(printables);
             }
         });
-        return tb;
+        return Elements.scrollPane(tb);
     }
 
     private CustomTable createTable() {

@@ -60,13 +60,18 @@ public class Items extends LockeState implements RefreshListener {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV", "");
-        IconButton createItem = new IconButton("New", "order", "Create a Item", "/ITS/NEW");
-        IconButton modifyItem = new IconButton("Modify", "modify", "Modify a Item", "/ITS/MOD");
-        IconButton archiveItem = new IconButton("Archive", "archive", "Archive a Item", "/ITS/ARCHV");
-        IconButton removeItem = new IconButton("Remove", "delete", "Delete a Item", "/ITS/DEL");
+        IconButton importItems = new IconButton("Import", "export", "Import as CSV", "");
+        IconButton createItem = new IconButton("Create", "create", "Create an Item", "/ITS/NEW");
+        IconButton modifyItem = new IconButton("Modify", "modify", "Modify an Item", "/ITS/MOD");
+        IconButton archiveItem = new IconButton("Archive", "archive", "Archive an Item", "/ITS/ARCHV");
+        IconButton removeItem = new IconButton("Remove", "delete", "Delete an Item", "/ITS/DEL");
+        IconButton findItem = new IconButton("Find", "find", "Find by Values", "/ITS/F");
+        IconButton labels = new IconButton("Labels", "label", "Print labels for selected..");
+        IconButton print = new IconButton("Print", "print", "Print Selected...");
         IconButton refresh = new IconButton("Refresh", "refresh", "Refresh Data");
-        JTextField filterValue = Elements.input("Search", 10);
         tb.add(export);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(importItems);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(createItem);
         tb.add(Box.createHorizontalStrut(5));
@@ -76,9 +81,14 @@ public class Items extends LockeState implements RefreshListener {
         tb.add(Box.createHorizontalStrut(5));
         tb.add(removeItem);
         tb.add(Box.createHorizontalStrut(5));
+        tb.add(findItem);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(labels);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(print);
+        tb.add(Box.createHorizontalStrut(5));
         tb.add(refresh);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(filterValue);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));
         export.addMouseListener(new MouseAdapter() {
             @Override

@@ -126,8 +126,8 @@ public class CreateEmployee extends LockeState {
         f.addInput(Elements.coloredLabel("Phone", UIManager.getColor("Label.foreground")), empPhone);
         f.addInput(Elements.coloredLabel("Email", UIManager.getColor("Label.foreground")), empEmail);
         f.addInput(Elements.coloredLabel("Ethnicity", UIManager.getColor("Label.foreground")), ethnicities);
-        f.addInput(Elements.coloredLabel("Gender", UIManager.getColor("coloredLabel.foreground")), genders);
-        f.addInput(Elements.coloredLabel("Veteran?", UIManager.getColor("coloredLabel.foreground")), isVeteran);
+        f.addInput(Elements.coloredLabel("Gender", UIManager.getColor("Label.foreground")), genders);
+        f.addInput(Elements.coloredLabel("Veteran?", UIManager.getColor("Label.foreground")), isVeteran);
         return f;
     }
 }

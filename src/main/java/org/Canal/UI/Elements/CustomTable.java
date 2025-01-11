@@ -4,6 +4,7 @@ import ca.odell.glazedlists.BasicEventList;
 import ca.odell.glazedlists.EventList;
 import ca.odell.glazedlists.gui.TableFormat;
 import ca.odell.glazedlists.swing.EventTableModel;
+import org.Canal.UI.ColorUtil;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -160,7 +161,7 @@ public class CustomTable extends JTable {
             if (!isSelected) {
                 Color background = (row % 2 == 0) ? UIManager.getColor("Table.background") : UIManager.getColor("Table.alternateRowColor");
                 if (background == null) {
-                    background = UIManager.getColor("Panel.background").darker();
+                    background = ColorUtil.adjustBrightness(UIManager.getColor("Panel.background"), 0.90f);
                 }
                 c.setBackground(background);
                 if (value instanceof Number) {

@@ -61,11 +61,11 @@ public class CreateSalesOrder extends LockeState {
         Constants.checkLocke(this, true, true);
 
         JTabbedPane tabs = new JTabbedPane();
-        tabs.addTab("Item Details", itemDetails());
-        tabs.addTab("Delivery", deliveryDetails());
-        tabs.addTab("Ledger", ledgerDetails());
-        tabs.addTab("Purchase Order", purchaseOrderDetails());
-        tabs.addTab("Note", noteMaker());
+        tabs.addTab("Item Details", items());
+        tabs.addTab("Delivery", delivery());
+        tabs.addTab("Ledger", ledger());
+        tabs.addTab("Purchase Order", purchaseOrder());
+        tabs.addTab("Notes", notes());
 
         JPanel coreValues = orderInfoPanel();
         JPanel moreInfo = moreOrderInfoPanel();
@@ -262,8 +262,8 @@ public class CreateSalesOrder extends LockeState {
         JTextField ordered = new Copiable(LocalDate.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy")));
         expectedDelivery = new DatePicker();
         f.addInput(Elements.coloredLabel("*Ordered", UIManager.getColor("Label.foreground")), ordered);
-        f.addInput(Elements.coloredLabel("Expected Delivery", UIManager.getColor("coloredLabel.foreground")), expectedDelivery);
-        f.addInput(Elements.coloredLabel("Status", UIManager.getColor("coloredLabel.foreground")), new Copiable("DRAFT"));
+        f.addInput(Elements.coloredLabel("Expected Delivery", UIManager.getColor("Label.foreground")), expectedDelivery);
+        f.addInput(Elements.coloredLabel("Status", UIManager.getColor("Label.foreground")), new Copiable("DRAFT"));
         return f;
     }
 
@@ -289,7 +289,7 @@ public class CreateSalesOrder extends LockeState {
         totalAmount.setText("$" + df.format(taxRate * Double.parseDouble(model.getTotalPrice()) + Double.parseDouble(model.getTotalPrice())));
     }
 
-    private JPanel itemDetails(){
+    private JPanel items(){
         JPanel p = new JPanel(new BorderLayout());
         ArrayList<Item> items = Engine.products.getProducts();
         if(items.isEmpty()){
@@ -312,13 +312,13 @@ public class CreateSalesOrder extends LockeState {
         table.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(itemComboBox));
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         buttonPanel.setBackground(UIManager.getColor("Panel.background"));
-        IconButton addButton = new IconButton("", "add_rows", "Add products");
+        IconButton addButton = new IconButton("Add Product", "add_rows", "Add products");
         addButton.addActionListener((ActionEvent _) -> {
             if (!items.isEmpty()) {
                 model.addRow(items.getFirst());
             }
         });
-        IconButton removeButton = new IconButton("", "delete_rows", "Remove selected product");
+        IconButton removeButton = new IconButton("Remove Product", "delete_rows", "Remove selected product");
         removeButton.addActionListener((ActionEvent _) -> {
             int selectedRow = table.getSelectedRow();
             if (selectedRow != -1) {
@@ -332,7 +332,7 @@ public class CreateSalesOrder extends LockeState {
         return p;
     }
 
-    private JPanel deliveryDetails(){
+    private JPanel delivery(){
         Form p = new Form();
         createOutboundDelivery = new JCheckBox();
         if((boolean) Engine.codex("ORDS/SO", "use_deliveries")){
@@ -347,7 +347,7 @@ public class CreateSalesOrder extends LockeState {
         return p;
     }
 
-    private JPanel ledgerDetails(){
+    private JPanel ledger(){
         Form f = new Form();
         commitToLedger = new JCheckBox();
         if((boolean) Engine.codex("ORDS/SO", "commit_to_ledger")){
@@ -364,7 +364,7 @@ public class CreateSalesOrder extends LockeState {
         return f;
     }
 
-    private JPanel purchaseOrderDetails(){
+    private JPanel purchaseOrder(){
         Form f = new Form();
         createPurchaseOrder = new JCheckBox();
         if((boolean) Engine.codex("ORDS/SO", "auto_create_po")){
@@ -392,7 +392,7 @@ public class CreateSalesOrder extends LockeState {
         return f;
     }
 
-    private JPanel noteMaker(){
+    private JPanel notes(){
         JPanel p = new JPanel(new BorderLayout());
         RSyntaxTextArea textArea = new RSyntaxTextArea(20, 60);
         textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_MARKDOWN);

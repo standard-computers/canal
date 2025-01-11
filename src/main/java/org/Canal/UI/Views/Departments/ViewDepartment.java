@@ -45,7 +45,7 @@ public class ViewDepartment extends LockeState {
     private JPanel createToolBar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-        IconButton performReview = new IconButton("Perform Review", "invoice", "Invoice customer");
+        IconButton performReview = new IconButton("Perform Review", "invoices", "Invoice customer");
         IconButton writeup = new IconButton("Writeup", "delinquent", "Customer in dunning");
         IconButton suspend = new IconButton("+ Docs", "documents", "Add documents for department");
         IconButton label = new IconButton("", "label", "Print labels for properties");

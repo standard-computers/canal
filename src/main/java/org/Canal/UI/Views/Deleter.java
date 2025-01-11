@@ -19,7 +19,7 @@ public class Deleter extends LockeState {
         super("Single Objex Deleter", objex + "/DEL", false, true, false, true);
         setFrameIcon(new ImageIcon(Deleter.class.getResource("/icons/delete.png")));
 
-        JTextField objexIdField = Elements.input();
+        JTextField objexIdField = Elements.input(20);
         Form f = new Form();
         f.addInput(Elements.coloredLabel("Objex ID", Constants.colors[0]), objexIdField);
         setLayout(new BorderLayout());

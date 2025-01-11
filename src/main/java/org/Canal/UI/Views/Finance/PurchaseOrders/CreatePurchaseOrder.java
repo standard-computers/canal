@@ -12,12 +12,10 @@ import org.Canal.UI.Elements.Selectables;
 import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.UI.Views.Controllers.Controller;
-import org.Canal.UI.Views.Productivity.Flows.CreateFlow;
 import org.Canal.UI.Views.System.LockeMessages;
 import org.Canal.Utils.*;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
-import org.fife.ui.rsyntaxtextarea.Theme;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
@@ -110,6 +108,13 @@ public class CreatePurchaseOrder extends LockeState {
         p.add(Box.createHorizontalStrut(5));
         p.add(create);
         p.setBorder(new EmptyBorder(5, 5, 5, 5));
+        copyFrom.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                String copyPOId = JOptionPane.showInputDialog("Enter Purchase Order ID");
+
+            }
+        });
         review.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -317,13 +322,13 @@ public class CreatePurchaseOrder extends LockeState {
         table.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(itemComboBox));
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         buttonPanel.setBackground(UIManager.getColor("Panel.background"));
-        IconButton addButton = new IconButton("", "add_rows", "Add products");
+        IconButton addButton = new IconButton("Add Product", "add_rows", "Add products");
         addButton.addActionListener((ActionEvent _) -> {
             if (!items.isEmpty()) {
                 model.addRow(items.getFirst());
             }
         });
-        IconButton removeButton = new IconButton("", "delete_rows", "Remove selected product");
+        IconButton removeButton = new IconButton("Remove Product", "delete_rows", "Remove selected product");
         removeButton.addActionListener((ActionEvent _) -> {
             int selectedRow = table.getSelectedRow();
             if (selectedRow != -1) {
@@ -341,22 +346,43 @@ public class CreatePurchaseOrder extends LockeState {
 
         JPanel delivery = new JPanel(new FlowLayout(FlowLayout.LEFT));
         Form p = new Form();
+        final JComponent[] jc = {Elements.button("Select Truck")};
         createDelivery = new JCheckBox();
         if((boolean) Engine.codex("ORDS/PO", "use_deliveries")){
             createDelivery.setSelected(true);
             createDelivery.setEnabled(false);
         }
         carriers = Selectables.carriers();
-        JButton selectTruck = Elements.button("Select Truck");
+        jc[0].addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                String truckId = JOptionPane.showInputDialog("Enter Truck ID");
+                Truck t = null;
+                ArrayList<Truck> ts = Engine.getTrucks();
+                for(Truck tr : ts){
+                    if(tr.getId().equals(truckId)){
+                        t = tr;
+                    }
+                }
+                if(t != null){
+                    jc[0] = Elements.label(t.getId());
+                    repaint();
+                    revalidate();
+                }else{
+                    JOptionPane.showMessageDialog(null, "Truck does not exist", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
         p.addInput(Elements.coloredLabel("Create Inbound Delivery (IDO) for Ship-To", Constants.colors[9]), createDelivery);
         p.addInput(Elements.coloredLabel("Carrier", Constants.colors[8]), carriers);
-        p.addInput(Elements.coloredLabel("Truck (If Empty, makes new)", Constants.colors[9]), selectTruck);
+        p.addInput(Elements.coloredLabel("Truck (If Empty, makes new)", Constants.colors[9]), jc[0]);
         delivery.add(p);
         return delivery;
     }
 
     private JPanel ledger(){
 
+        JPanel ledger = new JPanel(new FlowLayout(FlowLayout.LEFT));
         Form f = new Form();
         commitToLedger = new JCheckBox();
         if((boolean) Engine.codex("ORDS/PO", "commit_to_ledger")){
@@ -370,7 +396,8 @@ public class CreatePurchaseOrder extends LockeState {
         f.addInput(Elements.coloredLabel("Trans. Type (Receiving location type)", UIManager.getColor("Label.foreground")), buyerObjexType);
         f.addInput(Elements.coloredLabel("Purchasing Org.", UIManager.getColor("Label.foreground")), organizations);
         f.addInput(Elements.coloredLabel("Ledger", UIManager.getColor("Label.foreground")), ledgerId);
-        return f;
+        ledger.add(f);
+        return ledger;
     }
 
     private JPanel notes(){
@@ -379,12 +406,6 @@ public class CreatePurchaseOrder extends LockeState {
         textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_MARKDOWN);
         textArea.setCodeFoldingEnabled(true);
         textArea.setLineWrap(false);
-        try {
-            Theme theme = Theme.load(CreateFlow.class.getResourceAsStream("/org/fife/ui/rsyntaxtextarea/themes/dark.xml"));
-            theme.apply(textArea);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         RTextScrollPane scrollPane = new RTextScrollPane(textArea);
         p.add(scrollPane, BorderLayout.CENTER);
         return p;

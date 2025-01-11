@@ -146,8 +146,8 @@ public class ViewComponent extends LockeState {
         vi.addInput(Elements.coloredLabel("State", UIManager.getColor("Label.foreground")), vendorStateField);
         vi.addInput(Elements.coloredLabel("Postal", UIManager.getColor("Label.foreground")), vendorPostalField);
         vi.addInput(Elements.coloredLabel("Country", UIManager.getColor("Label.foreground")), vendorCountryField);
-        vi.addInput(Elements.coloredLabel("Tax Exempt", UIManager.getColor("coloredLabel.foreground")), vendorTaxExemptField);
-        vi.addInput(Elements.coloredLabel("Status", UIManager.getColor("coloredLabel.foreground")), vendorStatusField);
+        vi.addInput(Elements.coloredLabel("Tax Exempt", UIManager.getColor("Label.foreground")), vendorTaxExemptField);
+        vi.addInput(Elements.coloredLabel("Status", UIManager.getColor("Label.foreground")), vendorStatusField);
         vi.setBorder(new EmptyBorder(10, 10, 10, 10));
         return vi;
     }

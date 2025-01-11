@@ -78,7 +78,7 @@ public class ViewCustomer extends LockeState {
     private JPanel createToolBar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-        IconButton invoice = new IconButton("Invoice", "invoice", "Invoice customer");
+        IconButton invoice = new IconButton("Invoice", "invoices", "Invoice customer");
         IconButton addPerson = new IconButton("+ Person", "add_person", "Add person to customer");
         IconButton delinquent = new IconButton("Delinquent", "delinquent", "Customer in dunning");
         IconButton blocked = new IconButton("Block", "blocked", "Customer is blocked. No transactions.");

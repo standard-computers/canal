@@ -52,10 +52,10 @@ public class ViewPurchaseRequisition extends LockeState {
         f.addInput(Elements.coloredLabel("Max Spend", UIManager.getColor("Label.foreground")),  new Copiable(String.valueOf(requisition.getMaxSpend())));
         f.addInput(Elements.coloredLabel("Single Order?", UIManager.getColor("Label.foreground")),  new Copiable(String.valueOf(requisition.isSingleOrder())));
         f.addInput(Elements.coloredLabel("Valid From", UIManager.getColor("Label.foreground")),  new Copiable(requisition.getStart()));
-        f.addInput(Elements.coloredLabel("To", UIManager.getColor("coloredLabel.foreground")),  new Copiable(requisition.getEnd()));
-        f.addInput(Elements.coloredLabel("Notes", UIManager.getColor("coloredLabel.foreground")),  new Copiable(requisition.getNotes()));
-        f.addInput(Elements.coloredLabel("Status", UIManager.getColor("coloredLabel.foreground")),  new Copiable(String.valueOf(requisition.getStatus())));
-        f.addInput(Elements.coloredLabel("Created", UIManager.getColor("coloredLabel.foreground")),  new Copiable(requisition.getCreated()));
+        f.addInput(Elements.coloredLabel("To", UIManager.getColor("Label.foreground")),  new Copiable(requisition.getEnd()));
+        f.addInput(Elements.coloredLabel("Notes", UIManager.getColor("Label.foreground")),  new Copiable(requisition.getNotes()));
+        f.addInput(Elements.coloredLabel("Status", UIManager.getColor("Label.foreground")),  new Copiable(String.valueOf(requisition.getStatus())));
+        f.addInput(Elements.coloredLabel("Created", UIManager.getColor("Label.foreground")),  new Copiable(requisition.getCreated()));
         return f;
     }
 

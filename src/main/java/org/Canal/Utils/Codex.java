@@ -39,7 +39,7 @@ public class Codex {
         }});
         variables.put("DCSS", new HashMap<>() {{
             put("name", "Distribution Centers");
-            put("icon", "distribution_centers");
+            put("icon", "distributioncenters");
             put("prefix", "DC");
             put("allow_archival", true);
             put("allow_deletion", true);
@@ -48,7 +48,7 @@ public class Codex {
         }});
         variables.put("CCS", new HashMap<>() {{
             put("name", "Cost Centers");
-            put("icon", "cost_centers");
+            put("icon", "costcenters");
             put("prefix", "CC");
             put("allow_archival", true);
             put("allow_deletion", true);

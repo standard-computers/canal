@@ -1,6 +1,7 @@
 package org.Canal.UI.Elements;
 
 import org.Canal.Start;
+import org.Canal.UI.ColorUtil;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;
@@ -15,14 +16,14 @@ public class IconButton extends JButton {
 
     public IconButton(String text, String icon, String toolTip, String locke) {
         this.radius = 8; // Adjust corner radius
-        this.borderColor = UIManager.getColor("Panel.background");
+        this.borderColor = ColorUtil.adjustBrightness(UIManager.getColor("Panel.background"), 0.85f);
         configureButton(text, icon, toolTip);
         addMouseListener(createMouseAdapter(locke));
     }
 
     public IconButton(String text, String icon, String toolTip) {
         this.radius = 8; // Adjust corner radius
-        this.borderColor = UIManager.getColor("Panel.background");
+        this.borderColor = ColorUtil.adjustBrightness(UIManager.getColor("Panel.background"), 0.85f);
         configureButton(text, icon, toolTip);
         addMouseListener(createMouseAdapter(null));
     }
@@ -36,7 +37,8 @@ public class IconButton extends JButton {
         setToolTipText(toolTip);
         setContentAreaFilled(false); // Disable default background painting
         setFocusPainted(false); // Remove focus painting
-        setBorderPainted(false); // Remove default border
+        setBorderPainted(true);
+        setBackground(UIManager.getColor("Button.background"));
     }
 
     private MouseAdapter createMouseAdapter(String locke) {
@@ -44,15 +46,18 @@ public class IconButton extends JButton {
             @Override
             public void mouseEntered(MouseEvent e) {
                 setCursor(new Cursor(Cursor.HAND_CURSOR));
+                setBackground(ColorUtil.adjustBrightness(UIManager.getColor("Panel.background"), 0.85f));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
                 setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                setBackground(UIManager.getColor("Button.background"));
             }
 
             @Override
             public void mouseClicked(MouseEvent e) {
+                setContentAreaFilled(false);
                 if (locke != null) {
                     Start.q.put(Engine.router(locke, Start.q));
                 }

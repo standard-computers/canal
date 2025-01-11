@@ -30,7 +30,7 @@ public class ViewLedger extends LockeState implements RefreshListener {
         super("Ledger", "/LGS/$", true, true, true, true);
         this.ledger = ledger;
         this.desktop = desktop;
-        setFrameIcon(new ImageIcon(ViewLedger.class.getResource("/icons/distribution_centers.png")));
+        setFrameIcon(new ImageIcon(ViewLedger.class.getResource("/icons/distributioncenters.png")));
         JPanel tb = createToolBar();
         JPanel holder = new JPanel(new BorderLayout());
         table = createTable();

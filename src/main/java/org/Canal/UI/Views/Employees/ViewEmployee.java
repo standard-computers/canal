@@ -53,7 +53,7 @@ public class ViewEmployee extends LockeState {
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton email = new IconButton("Email", "email", "Email Employee");
         IconButton giveFeedback = new IconButton("Feedback", "feedback", "Give Feedback");
-        IconButton performReview = new IconButton("Review", "invoice", "New Performance Review");
+        IconButton performReview = new IconButton("Review", "invoices", "New Performance Review");
         IconButton writeup = new IconButton("Writeup", "delinquent", "Writeup Employee");
         IconButton suspend = new IconButton("Suspend", "blocked", "Suspend Employee");
         IconButton label = new IconButton("Labels", "label", "Print labels for properties (like for badges)");

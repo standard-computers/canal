@@ -59,13 +59,18 @@ public class Components extends LockeState implements RefreshListener {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV");
-        IconButton createComponent = new IconButton("New", "order", "Create a Component", "/CMPS/NEW");
+        IconButton importComponents = new IconButton("Import", "export", "Import as CSV", "");
+        IconButton createComponent = new IconButton("Create", "create", "Create a Component", "/CMPS/NEW");
         IconButton modifyComponent = new IconButton("Modify", "modify", "Modify a Component", "/CMPS/MOD");
         IconButton archiveComponent = new IconButton("Archive", "archive", "Archive a Component", "/CMPS/ARCHV");
         IconButton removeComponent = new IconButton("Remove", "delete", "Delete a Component", "/CMPS/DEL");
+        IconButton findComponent = new IconButton("Find", "find", "Find by Values", "/CMPS/F");
+        IconButton labels = new IconButton("Labels", "label", "Print labels for selected..");
+        IconButton print = new IconButton("Print", "print", "Print Selected...");
         IconButton refresh = new IconButton("Refresh", "refresh", "Refresh Data");
-        JTextField filterValue = Elements.input("Search", 10);
         tb.add(export);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(importComponents);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(createComponent);
         tb.add(Box.createHorizontalStrut(5));
@@ -75,9 +80,14 @@ public class Components extends LockeState implements RefreshListener {
         tb.add(Box.createHorizontalStrut(5));
         tb.add(removeComponent);
         tb.add(Box.createHorizontalStrut(5));
+        tb.add(findComponent);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(labels);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(print);
+        tb.add(Box.createHorizontalStrut(5));
         tb.add(refresh);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(filterValue);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));
         export.addMouseListener(new MouseAdapter() {
             @Override

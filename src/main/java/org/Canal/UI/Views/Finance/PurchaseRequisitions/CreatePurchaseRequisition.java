@@ -62,6 +62,7 @@ public class CreatePurchaseRequisition extends LockeState {
             }
         });
         setLayout(new BorderLayout());
+        add(toolbar(), BorderLayout.NORTH);
         add(f, BorderLayout.CENTER);
         JButton make = Elements.button("Commit Purchase Requisition");
         add(make, BorderLayout.SOUTH);
@@ -82,5 +83,15 @@ public class CreatePurchaseRequisition extends LockeState {
                 dispose();
             }
         });
+    }
+
+    private JPanel toolbar() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.add(Elements.header("", SwingConstants.LEFT), BorderLayout.NORTH);
+        JPanel buttons = new JPanel();
+        IconButton copyFrom = new IconButton("Copy From", "open", "Copy Purchase Req");
+        buttons.add(copyFrom);
+        panel.add(buttons, BorderLayout.SOUTH);
+        return panel;
     }
 }

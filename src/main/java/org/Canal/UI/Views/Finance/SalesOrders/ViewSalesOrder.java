@@ -96,7 +96,7 @@ public class ViewSalesOrder extends LockeState {
         expectedDelivery = new DatePicker();
         f.addInput(Elements.coloredLabel("*Ordered", UIManager.getColor("Label.foreground")), ordered);
         f.addInput(Elements.coloredLabel("Expected Delivery", UIManager.getColor("Label.foreground")), expectedDelivery);
-        f.addInput(Elements.coloredLabel("Status", UIManager.getColor("coloredLabel.foreground")), new Copiable("DRAFT"));
+        f.addInput(Elements.coloredLabel("Status", UIManager.getColor("Label.foreground")), new Copiable("DRAFT"));
         return f;
     }
 

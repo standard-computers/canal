@@ -32,10 +32,10 @@ public class PurchaseRequisitions extends LockeState {
         this.desktop = desktop;
 
         JPanel holder = new JPanel(new BorderLayout());
-        table = createTable();
+        table = table();
         JScrollPane tableScrollPane = new JScrollPane(table);
         holder.add(Elements.header("Purchase Requisitions", SwingConstants.LEFT), BorderLayout.NORTH);
-        holder.add(createToolBar(), BorderLayout.SOUTH);
+        holder.add(toolbar(), BorderLayout.SOUTH);
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);
         add(tableScrollPane, BorderLayout.CENTER);
@@ -58,7 +58,7 @@ public class PurchaseRequisitions extends LockeState {
      * List of all Purchase Requisitions not _
      * @return CustomTable
      */
-    private CustomTable createTable() {
+    private CustomTable table() {
 
         String[] columns = new String[]{
                 "ID",
@@ -111,7 +111,7 @@ public class PurchaseRequisitions extends LockeState {
      * Action buttons for PR list
      * @return JPanel of buttons with a title element
      */
-    private JScrollPane createToolBar() {
+    private JScrollPane toolbar() {
 
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
