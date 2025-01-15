@@ -231,8 +231,8 @@ public class Constants {
                         new Locke("Archive Catalog", getIcon("archive"), "/CATS/ARCHV", null),
                         new Locke("Remove Catalog", getIcon("delete"), "/CATS", null),
                 }),
-                new Locke("Orders", getIcon("order"), "/ORDS/PO", new Locke[]{
-                        new Locke("Purchase Orders", getIcon("order"), "/ORDS/PO", new Locke[]{
+                new Locke("Orders", getIcon("orders"), "/ORDS/PO", new Locke[]{
+                        new Locke("Purchase Orders", getIcon("purchaseorders"), "/ORDS/PO", new Locke[]{
                                 new Locke("Find Purchase Order", getIcon("find"), "/ORDS/PO/F", null),
                                 new Locke("Create Purchase Order", getIcon("create"), "/ORDS/PO/NEW", null),
                                 new Locke("Modify Purchase Order", getIcon("modify"), "/ORDS/PO/MOD", null),
@@ -241,7 +241,7 @@ public class Constants {
                                 new Locke("Archive Purchase Order", getIcon("archive"), "/ORDS/PO/ARCHV", null),
                                 new Locke("Remove Purchase Order", getIcon("delete"), "/ORDS/PO/DEL", null),
                         }),
-                        new Locke("Purchase Reqs.", getIcon("order"), "/ORDS/PR", new Locke[]{
+                        new Locke("Purchase Reqs.", getIcon("purchasereqs"), "/ORDS/PR", new Locke[]{
                                 new Locke("AutoMake PRs", getIcon("automake"), "/ORDS/PR/AUTO_MK", null),
                                 new Locke("Find PR", getIcon("find"), "/ORDS/PR", null),
                                 new Locke("Create PR", getIcon("create"), "/ORDS/PR/NEW", null),

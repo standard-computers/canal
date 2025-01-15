@@ -1,5 +1,7 @@
 package org.Canal.UI.Elements;
 
+import org.Canal.Utils.Engine;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
@@ -9,7 +11,7 @@ import java.awt.event.MouseEvent;
 public class Copiable extends JTextField {
     public Copiable(String value) {
         super(value);
-        setFont(new Font(UIManager.getFont("Label.font").getName(), Font.PLAIN, 12));
+        setFont(new Font(UIManager.getFont("Label.font").getName(), Font.PLAIN, Engine.getConfiguration().getFontSize()));
         setEditable(false);
         addMouseListener(new MouseAdapter() {
             @Override

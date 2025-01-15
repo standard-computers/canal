@@ -31,7 +31,9 @@ public class Selectables {
         for(Location vndr : Engine.getLocations("VEND")){
             availableLocations.put(vndr.getId(), vndr.getId());
         }
-        return new Selectable(availableLocations);
+        Selectable s = new Selectable(availableLocations);
+        s.editable();
+        return s;
     }
 
     public static Selectable employees(){

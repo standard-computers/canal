@@ -18,6 +18,7 @@ public class Controller extends JPanel implements RefreshListener {
     private JTextField cmd;
 
     public Controller(DesktopState desktop) {
+
         User me = Engine.getAssignedUser();
         setLayout(new BorderLayout());
         JPanel dataView = new JPanel(new BorderLayout());
@@ -68,6 +69,7 @@ public class Controller extends JPanel implements RefreshListener {
     }
 
     public void setBar(String s){
+
         cmd.setText(s);
         repaint();
         revalidate();
@@ -79,6 +81,7 @@ public class Controller extends JPanel implements RefreshListener {
     }
 
     private void reloadStore(){
+
         Locke rootNode = Constants.allModules();
         DefaultMutableTreeNode rootTreeNode = createTreeNodes(rootNode);
         DefaultTreeModel model = (DefaultTreeModel) dataTree.getModel();
@@ -89,6 +92,7 @@ public class Controller extends JPanel implements RefreshListener {
     }
 
     private JTree createTree() {
+
         Locke rootNode = Constants.allModules();
         DefaultMutableTreeNode rootTreeNode = createTreeNodes(rootNode);
         DefaultTreeModel treeModel = new DefaultTreeModel(rootTreeNode);
@@ -105,6 +109,7 @@ public class Controller extends JPanel implements RefreshListener {
     }
 
     private DefaultMutableTreeNode createTreeNodes(Locke node) {
+
         DefaultMutableTreeNode treeNode = new DefaultMutableTreeNode(node);
         if (node.getChildren() != null) {
             for (Locke child : node.getChildren()) {

@@ -46,13 +46,16 @@ public class Bins extends LockeState {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV", "");
-        IconButton createBin = new IconButton("Create Bin", "create", "Create a Bin", "/BNS/NEW");
-        IconButton autoMakeBins = new IconButton("AutoMake Bins", "automake", "Automate the creation of Bin(s)", "/BNS/AUTO_MK");
+        IconButton importBins = new IconButton("Import", "export", "Import as CSV", "");
+        IconButton createBin = new IconButton("Create", "create", "Create a Bin", "/BNS/NEW");
+        IconButton autoMakeBins = new IconButton("AutoMake", "automake", "Automate the creation of Bin(s)", "/BNS/AUTO_MK");
         IconButton modifyBin = new IconButton("Modify", "modify", "Modify an Bin", "/BNS/MOD");
         IconButton removeBin = new IconButton("Remove", "delete", "Delete an Bin");
         IconButton labels = new IconButton("Labels", "label", "Delete an Bin");
         IconButton print = new IconButton("Print", "print", "Delete an Bin");
         tb.add(export);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(importBins);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(createBin);
         tb.add(Box.createHorizontalStrut(5));

@@ -3,6 +3,9 @@ package org.Canal.UI.Elements;
 import com.formdev.flatlaf.ui.FlatBorder;
 import org.Canal.UI.ColorUtil;
 import org.Canal.Utils.Engine;
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -160,6 +163,14 @@ public class Elements {
         panel.setBackground(ColorUtil.adjustBrightness(UIManager.getColor("Panel.background"), 0.90f));
         panel.setBorder(new EmptyBorder(5, 10, 5, 10));
         return panel;
+    }
+
+    public static RTextScrollPane simpleEditor(){
+        RSyntaxTextArea textArea = new RSyntaxTextArea(20, 60);
+        textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_MARKDOWN);
+        textArea.setCodeFoldingEnabled(true);
+        textArea.setLineWrap(false);
+        return new RTextScrollPane(textArea);
     }
 
     public static JTextField selector(String preset, HashMap<String, String> options, JInternalFrame parentFrame) {

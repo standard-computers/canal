@@ -8,6 +8,7 @@ import org.Canal.UI.Views.ViewLocation;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.LockeStatus;
+import org.Canal.Utils.RefreshListener;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -21,15 +22,17 @@ import java.util.ArrayList;
  */
 public class ViewPurchaseOrder extends LockeState {
 
-    private DesktopState desktop;
     private PurchaseOrder requisition;
+    private DesktopState desktop;
+    private RefreshListener refreshListener;
 
-    public ViewPurchaseOrder(PurchaseOrder requisition, DesktopState desktop) {
+    public ViewPurchaseOrder(PurchaseOrder requisition, DesktopState desktop, RefreshListener refreshListener) {
 
         super("Purchase Requisitions", "/ORDS/PO/$", true, true, true, true);
         setFrameIcon(new ImageIcon(ViewPurchaseOrder.class.getResource("/icons/purchasereqs.png")));
         this.requisition = requisition;
         this.desktop = desktop;
+        this.refreshListener = refreshListener;
 
         JTabbedPane tabs = new JTabbedPane();
         tabs.addTab("Header Information", new ImageIcon(ViewLocation.class.getResource("/icons/info.png")), headerInfo());
@@ -154,6 +157,9 @@ public class ViewPurchaseOrder extends LockeState {
                 if(cnf == JOptionPane.YES_OPTION) {
                     requisition.setStatus(LockeStatus.BLOCKED);
                     requisition.save();
+                    if(refreshListener != null){
+                        refreshListener.refresh();
+                    }
                 }
             }
         });
@@ -165,6 +171,9 @@ public class ViewPurchaseOrder extends LockeState {
                 if(cnf == JOptionPane.YES_OPTION) {
                     requisition.setStatus(LockeStatus.SUSPENDED);
                     requisition.save();
+                    if(refreshListener != null){
+                        refreshListener.refresh();
+                    }
                 }
 
             }
@@ -177,6 +186,9 @@ public class ViewPurchaseOrder extends LockeState {
                 if(cnf == JOptionPane.YES_OPTION) {
                     requisition.setStatus(LockeStatus.ACTIVE);
                     requisition.save();
+                    if(refreshListener != null){
+                        refreshListener.refresh();
+                    }
                 }
             }
         });
@@ -188,6 +200,9 @@ public class ViewPurchaseOrder extends LockeState {
                 if(cnf == JOptionPane.YES_OPTION) {
                     requisition.setStatus(LockeStatus.ARCHIVED);
                     requisition.save();
+                    if(refreshListener != null){
+                        refreshListener.refresh();
+                    }
                 }
             }
         });

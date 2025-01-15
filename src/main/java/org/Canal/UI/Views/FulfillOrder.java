@@ -24,8 +24,13 @@ import java.util.ArrayList;
 public class FulfillOrder extends LockeState {
 
     private String location;
-    private JTextField odoId, poNumber, soNumber;
-    private JCheckBox assignTasks, createGoodsIssue, individualizeGoodsIssue, createConfirmTasks;
+    private JTextField odoId;
+    private JTextField poNumber;
+    private JTextField soNumber;
+    private JCheckBox assignTasks;
+    private JCheckBox createGoodsIssue;
+    private JCheckBox individualizeGoodsIssue;
+    private JCheckBox createConfirmTasks;
     private CustomTable fulfillItems;
     private PurchaseOrder order;
 
@@ -210,6 +215,8 @@ public class FulfillOrder extends LockeState {
     }
 
     public JPanel goodsIssueInfo(){
+
+        JPanel goodsIssue = new JPanel(new FlowLayout(FlowLayout.LEFT));
         Form f = new Form();
         createGoodsIssue = new JCheckBox("If no tasks, create GI");
         individualizeGoodsIssue = new JCheckBox("Create GI for each stock pick also");
@@ -218,7 +225,8 @@ public class FulfillOrder extends LockeState {
         f.addInput(Elements.coloredLabel("Create Goods Issue", Constants.colors[6]), createGoodsIssue);
         f.addInput(Elements.coloredLabel("Individualize GIs", Constants.colors[5]), individualizeGoodsIssue);
         f.addInput(Elements.coloredLabel("Create & Cofirm Tasks", Constants.colors[4]), createConfirmTasks);
-        return f;
+        goodsIssue.add(f);
+        return goodsIssue;
     }
 
     public JPanel stockPickInfo(){

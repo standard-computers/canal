@@ -8,6 +8,8 @@ import org.Canal.UI.Elements.LockeState;
 import org.Canal.UI.Views.System.CheckboxBarcodeFrame;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
+import org.Canal.Utils.LockeStatus;
+import org.Canal.Utils.RefreshListener;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -19,7 +21,7 @@ import java.util.ArrayList;
 /**
  * /ORDS/PO
  */
-public class PurchaseOrders extends LockeState {
+public class PurchaseOrders extends LockeState implements RefreshListener {
 
     private CustomTable table;
     private DesktopState desktop;
@@ -31,7 +33,7 @@ public class PurchaseOrders extends LockeState {
         this.desktop = desktop;
 
         JPanel holder = new JPanel(new BorderLayout());
-        table = createTable();
+        table = table();
         JScrollPane tableScrollPane = new JScrollPane(table);
         holder.add(Elements.header("Purchase Orders", SwingConstants.LEFT), BorderLayout.CENTER);
         holder.add(toolbar(), BorderLayout.SOUTH);
@@ -42,9 +44,11 @@ public class PurchaseOrders extends LockeState {
     }
 
     private JScrollPane toolbar() {
+
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV");
+        IconButton importPOs = new IconButton("Import", "export", "Import as CSV");
         IconButton openSelected = new IconButton("Open", "open", "Open selected");
         IconButton createPurchaseOrder = new IconButton("New PO", "create", "Build an item", "/ORDS/PO/NEW");
         IconButton blockPO = new IconButton("Block", "block", "Block/Pause PO, can't be used");
@@ -56,6 +60,8 @@ public class PurchaseOrders extends LockeState {
         IconButton print = new IconButton("Print", "print", "Print selectes");
         IconButton refresh = new IconButton("Refresh", "refresh", "Refresh data");
         tb.add(export);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(importPOs);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(openSelected);
         tb.add(Box.createHorizontalStrut(5));
@@ -77,6 +83,39 @@ public class PurchaseOrders extends LockeState {
         tb.add(Box.createHorizontalStrut(5));
         tb.add(refresh);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));
+        blockPO.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                String prId = JOptionPane.showInputDialog("Enter Purchase Requision ID");
+                PurchaseOrder pr = Engine.orders.getPurchaseOrder(prId);
+                if(pr != null) {
+                    pr.setStatus(LockeStatus.BLOCKED);
+                    pr.save();
+                    refresh();
+                }
+            }
+        });
+        suspendPO.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                String prId = JOptionPane.showInputDialog("Enter Purchase Requision ID");
+                PurchaseOrder pr = Engine.orders.getPurchaseOrder(prId);
+                if(pr != null) {
+                    pr.setStatus(LockeStatus.BLOCKED);
+                    pr.save();
+                    refresh();
+                }
+            }
+        });
+        activatePO.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                String prId = JOptionPane.showInputDialog("Enter Purchase Requision ID");
+                PurchaseOrder pr = Engine.orders.getPurchaseOrder(prId);
+                if(pr != null) {
+                    pr.setStatus(LockeStatus.BLOCKED);
+                    pr.save();
+                    refresh();
+                }
+            }
+        });
         labels.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 String[] printables = new String[Engine.orders.getPurchaseOrder().size()];
@@ -89,7 +128,7 @@ public class PurchaseOrders extends LockeState {
         return Elements.scrollPane(tb);
     }
 
-    private CustomTable createTable() {
+    private CustomTable table() {
         String[] columns = new String[]{
                 "ID",
                 "Owner",
@@ -102,7 +141,9 @@ public class PurchaseOrders extends LockeState {
                 "Sold To",
                 "Customer",
                 "Total",
-                "Status"
+                "Items",
+                "Created",
+                "Status",
         };
         ArrayList<Object[]> pos = new ArrayList<>();
         for (PurchaseOrder po : Engine.orders.getPurchaseOrder()) {
@@ -118,9 +159,22 @@ public class PurchaseOrders extends LockeState {
                     po.getSoldTo(),
                     po.getCustomer(),
                     po.getTotal(),
+                    po.getItems().size(),
+                    po.getCreated(),
                     String.valueOf(po.getStatus())
             });
         }
         return new CustomTable(columns, pos);
+    }
+
+    @Override
+    public void refresh() {
+
+        CustomTable newTable = table();
+        JScrollPane scrollPane = (JScrollPane) table.getParent().getParent();
+        scrollPane.setViewportView(newTable);
+        table = newTable;
+        scrollPane.revalidate();
+        scrollPane.repaint();
     }
 }

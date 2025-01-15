@@ -165,6 +165,8 @@ public class Codex {
             put("allow_deletion", true);
             put("automake_enabled", true);
             put("allow_batch_create", true);
+            put("require_pr", true);
+            put("vendor_match", true);
         }});
         variables.put("ORDS/SO", new HashMap<>() {{
             put("name", "Sales Orders");

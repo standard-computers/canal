@@ -40,8 +40,8 @@ public class Areas extends LockeState {
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV", "");
         IconButton openSelected = new IconButton("Open", "open", "Open selected");
-        IconButton createArea = new IconButton("New Area", "order", "Create a Area", "/AREAS/NEW");
-        IconButton autoMakeAreas = new IconButton("AutoMake Areas", "automake", "Automate the creation of areas", "/AREAS/AUTO_MK");
+        IconButton createArea = new IconButton("Create", "create", "Create a Area", "/AREAS/NEW");
+        IconButton autoMakeAreas = new IconButton("AutoMake", "automake", "Automate the creation of areas", "/AREAS/AUTO_MK");
         IconButton modifyArea = new IconButton("Modify", "modify", "Modify an Area", "/AREAS/MOD");
         IconButton removeArea = new IconButton("Remove", "delete", "Delete an Area", "/AREAS/DEL");
         IconButton labels = new IconButton("Labels", "label", "Delete an Area");

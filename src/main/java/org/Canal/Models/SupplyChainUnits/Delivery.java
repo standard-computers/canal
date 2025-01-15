@@ -2,7 +2,9 @@ package org.Canal.Models.SupplyChainUnits;
 
 import org.Canal.Models.BusinessUnits.Ledger;
 import org.Canal.Models.Objex;
+import org.Canal.Models.Record;
 import org.Canal.Start;
+import org.Canal.Utils.Engine;
 import org.Canal.Utils.Json;
 
 import java.io.File;
@@ -119,6 +121,7 @@ public class Delivery extends Objex {
                     Ledger fl = Json.load(file.getPath(), Ledger.class);
                     if (fl.getId().equals(id)) {
                         Json.save(file.getPath(), this);
+                        Engine.assertRecord("TRANS", id, new Record());
                     }
                 }
             }

@@ -58,23 +58,24 @@ public class CreatePurchaseOrder extends LockeState {
     private JCheckBox commitToLedger;
     private JCheckBox createDelivery;
     private Truck truck;
+    private RSyntaxTextArea textArea;
 
     public CreatePurchaseOrder(DesktopState desktop) {
 
-        super("Create Purchase Order", "/ORDS/PO/NEW", false, true, false, true);
+        super("Create Purchase Order", "/ORDS/PO/NEW", true, true, true, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));
         Constants.checkLocke(this, true, true);
         this.desktop = desktop;
         newOrder = new PurchaseOrder();
 
         JTabbedPane tabs = new JTabbedPane();
-        tabs.addTab("Item Details", itemDetails());
+        tabs.addTab("Item Details", items());
         tabs.addTab("Delivery", delivery());
         tabs.addTab("Ledger", ledger());
-        tabs.addTab("Note", notes());
+        tabs.addTab("Notes", notes());
 
         JPanel coreValues = orderInfoPanel();
-        JPanel moreInfo = moreOrderInfoPanel();
+        JPanel moreInfo = orderInfo();
         selectBillTo.setSelectedValue(Engine.getOrganization().getId());
         selectShipTo.setSelectedValue(Engine.getOrganization().getId());
         coreValues.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -89,7 +90,7 @@ public class CreatePurchaseOrder extends LockeState {
 
         add(tabs, BorderLayout.CENTER);
         JPanel orderSummary = new JPanel(new BorderLayout());
-        JPanel genSummary = orderSummary();
+        JPanel genSummary = summary();
         orderSummary.add(genSummary, BorderLayout.CENTER);
         add(orderSummary, BorderLayout.SOUTH);
         model.addTableModelListener(_ -> updateTotal());
@@ -101,7 +102,7 @@ public class CreatePurchaseOrder extends LockeState {
         p.setLayout(new BoxLayout(p, BoxLayout.X_AXIS));
         IconButton copyFrom = new IconButton("Copy From","open", "Review for errors or warnings");
         IconButton review = new IconButton("Review","review", "Review for errors or warnings");
-        IconButton create = new IconButton("Create","start", "Create Purchase Order");
+        IconButton create = new IconButton("Create","execute", "Create Purchase Order");
         p.add(copyFrom);
         p.add(Box.createHorizontalStrut(5));
         p.add(review);
@@ -162,9 +163,17 @@ public class CreatePurchaseOrder extends LockeState {
                     return;
                 }
                 PurchaseRequisition assignedPR = Engine.orders.getPurchaseRequisitions(availablePrs.getSelectedValue());
-                if(!selectVendor.getSelectedValue().equals(assignedPR.getSupplier())){
-                    JOptionPane.showMessageDialog(null, "Selected PO is not for this vendor.", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
+                if((boolean) Engine.codex("ORDS/PO", "require_pr")){
+                    if(assignedPR == null){
+                        JOptionPane.showMessageDialog(null, "Configuration requires PR for PO", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                }
+                if((boolean) Engine.codex("ORDS/PO", "vendor_match")){
+                    if(!selectVendor.getSelectedValue().equals(assignedPR.getSupplier())){
+                        JOptionPane.showMessageDialog(null, "Selected PO is not for this vendor.", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
                 }
                 int ccc = JOptionPane.showConfirmDialog(null, "You have selected the Org ID as the charge account. Are you sure you want to charge the corp account?", "Confirm order?", JOptionPane.YES_NO_CANCEL_OPTION);
                 if(ccc == JOptionPane.YES_OPTION){
@@ -181,9 +190,9 @@ public class CreatePurchaseOrder extends LockeState {
                     for (int row = 0; row < model.getRowCount(); row++) {
                         String itemName = model.getValueAt(row, 0).toString();
                         String itemId = model.getValueAt(row, 1).toString();
-                        double itemQty = Double.parseDouble(model.getValueAt(row, 2).toString());
-                        double itemPrice = Double.parseDouble(model.getValueAt(row, 3).toString());
-                        double itemTotal = Double.parseDouble(model.getValueAt(row, 4).toString());
+                        double itemQty = Double.parseDouble(model.getValueAt(row, 4).toString());
+                        double itemPrice = Double.parseDouble(model.getValueAt(row, 5).toString());
+                        double itemTotal = Double.parseDouble(model.getValueAt(row, 6).toString());
                         lineitems.add(new OrderLineItem(itemName, itemId, itemQty, itemPrice, itemTotal));
                     }
                     newOrder.setItems(lineitems);
@@ -248,14 +257,14 @@ public class CreatePurchaseOrder extends LockeState {
         selectVendor = Selectables.allLocations();
         selectVendor.editable();
         orderId = Elements.input(((String) Engine.codex("ORDS/PO", "prefix")) + (70000000 + (Engine.getPurchaseOrders().size() + 1)));
-        f.addInput(Elements.coloredLabel("*Order ID", Constants.colors[0]), orderId);
+        f.addInput(Elements.coloredLabel("*New Order ID", Constants.colors[0]), orderId);
         f.addInput(Elements.coloredLabel("Supplier/Vendor", Constants.colors[1]), selectVendor);
         f.addInput(Elements.coloredLabel("Bill To Location", Constants.colors[2]), selectBillTo);
         f.addInput(Elements.coloredLabel("Ship To Location", Constants.colors[3]), selectShipTo);
         return f;
     }
 
-    private JPanel moreOrderInfoPanel(){
+    private JPanel orderInfo(){
 
         Form f = new Form();
         JTextField ordered = new Copiable(LocalDate.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy")));
@@ -274,7 +283,7 @@ public class CreatePurchaseOrder extends LockeState {
         return f;
     }
 
-    private JPanel orderSummary(){
+    private JPanel summary(){
 
         Form f = new Form();
         DecimalFormat df = new DecimalFormat("#0.00");
@@ -298,7 +307,7 @@ public class CreatePurchaseOrder extends LockeState {
         totalAmount.setText("$" + df.format(taxRate * Double.parseDouble(model.getTotalPrice()) + Double.parseDouble(model.getTotalPrice())));
     }
 
-    private JPanel itemDetails(){
+    private JPanel items(){
 
         JPanel p = new JPanel(new BorderLayout());
         ArrayList<Item> items = Engine.products.getProducts();
@@ -400,14 +409,11 @@ public class CreatePurchaseOrder extends LockeState {
         return ledger;
     }
 
-    private JPanel notes(){
-        JPanel p = new JPanel(new BorderLayout());
-        RSyntaxTextArea textArea = new RSyntaxTextArea(20, 60);
+    private RTextScrollPane notes(){
+        textArea = new RSyntaxTextArea(20, 60);
         textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_MARKDOWN);
         textArea.setCodeFoldingEnabled(true);
         textArea.setLineWrap(false);
-        RTextScrollPane scrollPane = new RTextScrollPane(textArea);
-        p.add(scrollPane, BorderLayout.CENTER);
-        return p;
+        return new RTextScrollPane(textArea);
     }
 }

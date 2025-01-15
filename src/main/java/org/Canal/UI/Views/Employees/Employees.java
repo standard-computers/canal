@@ -56,7 +56,7 @@ public class Employees extends LockeState {
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV", "");
         IconButton importEmployees = new IconButton("Import", "export", "Import as CSV", "");
-        IconButton createEmployee = new IconButton("New", "order", "Create Employee", "/EMPS/NEW");
+        IconButton createEmployee = new IconButton("New", "create", "Create Employee", "/EMPS/NEW");
         IconButton modifyEmployee = new IconButton("Modify", "modify", "Modify an Employee", "/EMPS/MOD");
         IconButton archiveEmployee = new IconButton("Archive", "archive", "Archive an Employee", "/EMPS/ARCHV");
         IconButton removeEmployee = new IconButton("Remove", "delete", "Delete an Employee", "/EMPS/DEL");

@@ -1,6 +1,7 @@
 package org.Canal.UI.Views.System;
 
 import org.Canal.Models.HumanResources.Employee;
+import org.Canal.UI.ColorUtil;
 import org.Canal.UI.Elements.DesktopInterface;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
@@ -34,7 +35,6 @@ public class QuickExplorer extends JFrame implements DesktopState {
 
         setTitle("Canal – Enterprise Resource Planner – 2025");
         setIconImage(new ImageIcon(ViewLocation.class.getResource("/icons/canal.png")).getImage());
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         desktopPane = new DesktopInterface();
         controller = new Controller(this);
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, controller, desktopPane);
@@ -52,8 +52,11 @@ public class QuickExplorer extends JFrame implements DesktopState {
     private JPanel toolbar() {
 
         JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(ColorUtil.adjustBrightness(UIManager.getColor("Panel.background"), 0.90f));
         JPanel employee = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        employee.setBackground(ColorUtil.adjustBrightness(UIManager.getColor("Panel.background"), 0.90f));
         JLabel myName = new JLabel("PLEASE LOGIN");
+        myName.setBackground(ColorUtil.adjustBrightness(UIManager.getColor("Panel.background"), 0.90f));
         if(Engine.getAssignedUser() != null){
             Employee e = Engine.getEmployee(Engine.getAssignedUser().getEmployee());
             myName.setText(e.getName());
@@ -69,6 +72,7 @@ public class QuickExplorer extends JFrame implements DesktopState {
         buttons.add(activity);
         buttons.add(inbox);
         buttons.add(me);
+        buttons.setBackground(ColorUtil.adjustBrightness(UIManager.getColor("Panel.background"), 0.90f));
 
         inbox.addMouseListener(new MouseAdapter() {
             @Override
@@ -85,6 +89,7 @@ public class QuickExplorer extends JFrame implements DesktopState {
 
         panel.add(employee, BorderLayout.WEST);
         panel.add(buttons, BorderLayout.EAST);
+//        panel.setBackground(ColorUtil.adjustBrightness(UIManager.getColor("Panel.background"), 0.90f));
         return panel;
     }
 

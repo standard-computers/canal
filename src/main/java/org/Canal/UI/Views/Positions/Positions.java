@@ -63,7 +63,7 @@ public class Positions extends LockeState implements RefreshListener {
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV");
         IconButton importPositions = new IconButton("Import", "export", "Import as CSV");
-        IconButton createPosition = new IconButton("New", "order", "Create a Position", "/HR/POS/NEW");
+        IconButton createPosition = new IconButton("New", "create", "Create a Position", "/HR/POS/NEW");
         IconButton postPosition = new IconButton("Post", "positions", "Post position as available", "/HR/POS/POST");
         IconButton modifyPosition = new IconButton("Modify", "modify", "Modify a Position", "/HR/POS/MOD");
         IconButton archivePosition = new IconButton("Archive", "archive", "Archive a Position", "/HR/POS/ARCHV");

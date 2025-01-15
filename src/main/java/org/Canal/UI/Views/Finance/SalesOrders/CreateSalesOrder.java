@@ -12,14 +12,10 @@ import org.Canal.UI.Elements.Selectables;
 import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.UI.Views.Controllers.Controller;
-import org.Canal.UI.Views.Productivity.Flows.CreateFlow;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.LockeStatus;
 import org.Canal.Utils.Pipe;
-import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
-import org.fife.ui.rsyntaxtextarea.Theme;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
@@ -48,15 +44,29 @@ public class CreateSalesOrder extends LockeState {
     private JLabel netValue;
     private JLabel taxAmount;
     private JLabel totalAmount;
-    private Selectable availablePurchaseRequisitions, selectSupplier, selectBillTo, selectShipTo, organizations, outboundCarriers, inboundCarriers, buyerObjexType, ledgers;
+    private Selectable availablePurchaseRequisitions;
+    private Selectable selectSupplier;
+    private Selectable selectBillTo;
+    private Selectable selectShipTo;
+    private Selectable organizations;
+    private Selectable outboundCarriers;
+    private Selectable inboundCarriers;
+    private Selectable buyerObjexType;
+    private Selectable ledgers;
     private Copiable orderId;
     private DatePicker expectedDelivery;
-    private JCheckBox commitToLedger, createOutboundDelivery, createPurchaseOrder, createInboundDelivery;
-    private JTextField outboundTruckId, inboundTruckId;
+    private JCheckBox commitToLedger;
+    private JCheckBox createOutboundDelivery;
+    private JCheckBox createPurchaseOrder;
+    private JCheckBox createInboundDelivery;
+    private JTextField descriptionField;
+    private JTextField outboundTruckId;
+    private JTextField inboundTruckId;
+    private RTextScrollPane notes;
 
     public CreateSalesOrder() {
 
-        super("Create Sales Order", "/ORDS/SO/NEW", false, true, false, true);
+        super("Create Sales Order", "/ORDS/SO/NEW", true, true, true, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));
         Constants.checkLocke(this, true, true);
 
@@ -260,14 +270,17 @@ public class CreateSalesOrder extends LockeState {
     private JPanel moreOrderInfoPanel(){
         Form f = new Form();
         JTextField ordered = new Copiable(LocalDate.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy")));
+        descriptionField = Elements.input();
         expectedDelivery = new DatePicker();
-        f.addInput(Elements.coloredLabel("*Ordered", UIManager.getColor("Label.foreground")), ordered);
-        f.addInput(Elements.coloredLabel("Expected Delivery", UIManager.getColor("Label.foreground")), expectedDelivery);
-        f.addInput(Elements.coloredLabel("Status", UIManager.getColor("Label.foreground")), new Copiable("DRAFT"));
+        f.addInput(Elements.coloredLabel("*Ordered", Constants.colors[10]), ordered);
+        f.addInput(Elements.coloredLabel("Description", Constants.colors[9]), descriptionField);
+        f.addInput(Elements.coloredLabel("Expected Delivery", Constants.colors[8]), expectedDelivery);
+        f.addInput(Elements.coloredLabel("Status", Constants.colors[7]), new Copiable("DRAFT"));
         return f;
     }
 
     private JPanel orderSummary(){
+
         Form f = new Form();
         DecimalFormat df = new DecimalFormat("#0.00");
         netValue = new JLabel("$" + model.getTotalPrice());
@@ -283,6 +296,7 @@ public class CreateSalesOrder extends LockeState {
     }
 
     private void updateTotal(){
+
         DecimalFormat df = new DecimalFormat("#0.00");
         netValue.setText("$" + model.getTotalPrice());
         taxAmount.setText("$" + df.format(taxRate * Double.parseDouble(model.getTotalPrice())));
@@ -290,6 +304,7 @@ public class CreateSalesOrder extends LockeState {
     }
 
     private JPanel items(){
+
         JPanel p = new JPanel(new BorderLayout());
         ArrayList<Item> items = Engine.products.getProducts();
         if(items.isEmpty()){
@@ -333,6 +348,8 @@ public class CreateSalesOrder extends LockeState {
     }
 
     private JPanel delivery(){
+
+        JPanel delivery = new JPanel(new FlowLayout(FlowLayout.LEFT));
         Form p = new Form();
         createOutboundDelivery = new JCheckBox();
         if((boolean) Engine.codex("ORDS/SO", "use_deliveries")){
@@ -344,10 +361,13 @@ public class CreateSalesOrder extends LockeState {
         p.addInput(Elements.coloredLabel("Create Outbound Delivery (ODO) for Supplier", Constants.colors[9]), createOutboundDelivery);
         p.addInput(Elements.coloredLabel("Carrier", Constants.colors[8]), outboundCarriers);
         p.addInput(Elements.coloredLabel("Truck ID/Number", Constants.colors[7]), outboundTruckId);
-        return p;
+        delivery.add(p);
+        return delivery;
     }
 
     private JPanel ledger(){
+
+        JPanel ledger = new JPanel(new FlowLayout(FlowLayout.LEFT));
         Form f = new Form();
         commitToLedger = new JCheckBox();
         if((boolean) Engine.codex("ORDS/SO", "commit_to_ledger")){
@@ -361,10 +381,13 @@ public class CreateSalesOrder extends LockeState {
         f.addInput(Elements.coloredLabel("Trans. Type (Receiving location type)", Constants.colors[8]), buyerObjexType);
         f.addInput(Elements.coloredLabel("Purchasing Org.", Constants.colors[7]), organizations);
         f.addInput(Elements.coloredLabel("Ledger", Constants.colors[6]), ledgers);
-        return f;
+        ledger.add(f);
+        return ledger;
     }
 
     private JPanel purchaseOrder(){
+
+        JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT));
         Form f = new Form();
         createPurchaseOrder = new JCheckBox();
         if((boolean) Engine.codex("ORDS/SO", "auto_create_po")){
@@ -389,23 +412,13 @@ public class CreateSalesOrder extends LockeState {
         f.addInput(Elements.coloredLabel("Create IDO", Constants.colors[7]), createInboundDelivery);
         f.addInput(Elements.coloredLabel("Transporation Carrier", Constants.colors[6]), inboundCarriers);
         f.addInput(Elements.coloredLabel("Truck ID/Number", Constants.colors[5]), inboundTruckId);
-        return f;
+        p.add(f);
+        return p;
     }
 
-    private JPanel notes(){
-        JPanel p = new JPanel(new BorderLayout());
-        RSyntaxTextArea textArea = new RSyntaxTextArea(20, 60);
-        textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_MARKDOWN);
-        textArea.setCodeFoldingEnabled(true);
-        textArea.setLineWrap(false);
-        try {
-            Theme theme = Theme.load(CreateFlow.class.getResourceAsStream("/org/fife/ui/rsyntaxtextarea/themes/dark.xml"));
-            theme.apply(textArea);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        RTextScrollPane scrollPane = new RTextScrollPane(textArea);
-        p.add(scrollPane, BorderLayout.CENTER);
-        return p;
+    private JScrollPane notes(){
+
+        notes = Elements.simpleEditor();
+        return notes;
     }
 }

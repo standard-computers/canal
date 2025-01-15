@@ -40,31 +40,32 @@ public class TaskList extends LockeState {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV");
-        IconButton createPurchaseOrder = new IconButton("New PO", "order", "Build an item");
-        IconButton blockPo = new IconButton("Block", "block", "Block/Pause PO, can't be used");
-        IconButton suspendPo = new IconButton("Suspend", "suspend", "Suspend PO, can't be used");
+        IconButton createPurchaseOrder = new IconButton("Create", "create", "Build an item");
+        IconButton blockPO = new IconButton("Block", "block", "Block/Pause PO, can't be used");
+        IconButton suspendPO = new IconButton("Suspend", "suspend", "Suspend PO, can't be used");
         IconButton activatePO = new IconButton("Start", "start", "Resume/Activate PO");
-        IconButton archivePo = new IconButton("Archive", "archive", "Archive PO, removes");
-        IconButton label = new IconButton("Barcodes", "label", "Print labels for org properties");
+        IconButton archivePO = new IconButton("Archive", "archive", "Archive PO, removes");
+        IconButton labels = new IconButton("Labels", "label", "Print labels for org properties");
+        IconButton print = new IconButton("Print", "print", "Print selected...");
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(createPurchaseOrder);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(blockPo);
+        tb.add(blockPO);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(suspendPo);
+        tb.add(suspendPO);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(activatePO);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(archivePo);
+        tb.add(archivePO);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(label);
+        tb.add(labels);
         createPurchaseOrder.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 desktop.put(new CreatePurchaseOrder(desktop));
             }
         });
-        label.addMouseListener(new MouseAdapter() {
+        labels.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 String[] printables = new String[Engine.orders.getPurchaseOrder().size()];
                 for (int i = 0; i < Engine.orders.getPurchaseOrder().size(); i++) {

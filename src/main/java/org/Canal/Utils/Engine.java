@@ -436,6 +436,22 @@ public class Engine {
         return all;
     }
 
+    public static void assertRecord(String objex, String id, Record record) {
+        ArrayList<Record> rcs = null;
+        File[] d = Pipe.list("RCS");
+        for (File f : d) {
+            if (!f.isDirectory()) {
+                if(f.getPath().endsWith(id + "." + objex.toLowerCase().replaceAll("/", "."))){
+                    rcs = Json.load(f.getPath(), ArrayList.class);
+                }
+            }
+        }
+        if(rcs != null){
+            rcs.add(record);
+        }
+        Json.save(Start.WINDOWS_SYSTEM_DIR + "\\.store\\RCS\\" + id + "." + objex.toLowerCase().replaceAll("/", "."), rcs);
+    }
+
     public static Object codex(String objex, String key){
         return (Engine.codex.getValue(objex, key) == null ? false : Engine.codex.getValue(objex, key));
     }
@@ -826,7 +842,7 @@ public class Engine {
             case "ORDS" -> {
                 for(PurchaseOrder l : orders.getPurchaseOrder()){
                     if(l.getOrderId().equals(oid)){
-                        return new ViewPurchaseOrder(l, desktop);
+                        return new ViewPurchaseOrder(l, desktop, null);
                     }
                 }
                 return new PurchaseOrders(desktop);
@@ -934,7 +950,7 @@ public class Engine {
     public static class orders {
 
         public static PurchaseRequisition getPurchaseRequisitions(String prNumber) {
-            File[] posDir = Pipe.list("PR");
+            File[] posDir = Pipe.list("ORDS/PR");
             for (File file : posDir) {
                 if (!file.isDirectory()) {
                     PurchaseRequisition a = Json.load(file.getPath(), PurchaseRequisition.class);
@@ -1004,7 +1020,7 @@ public class Engine {
 
         public static ArrayList<PurchaseRequisition> getPurchaseRequisitions() {
             ArrayList<PurchaseRequisition> prs = new ArrayList<>();
-            File[] d = Pipe.list("PR");
+            File[] d = Pipe.list("ORDS/PR");
             for (File f : d) {
                 if (!f.isDirectory()) {
                     PurchaseRequisition a = Json.load(f.getPath(), PurchaseRequisition.class);
