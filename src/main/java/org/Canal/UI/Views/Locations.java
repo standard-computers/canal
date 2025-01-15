@@ -134,7 +134,22 @@ public class Locations extends LockeState implements RefreshListener {
 
     private CustomTable createTable() {
 
-        String[] columns = new String[]{"ID", "Org", "Name", "Street", "City", "State", "Postal", "Country", "Status", "Tax Exempt", "Phone", "Email"};
+        String[] columns = new String[]{
+                "ID",
+                "Org",
+                "Name",
+                "Street",
+                "City",
+                "State",
+                "Postal",
+                "Country",
+                "Tax ID",
+                "Tax Exempt",
+                "Phone",
+                "Email",
+                "Status",
+                "Created",
+        };
         ArrayList<Object[]> data = new ArrayList<>();
         for (Location location : Engine.getLocations(objexType)) {
             data.add(new Object[]{
@@ -146,11 +161,12 @@ public class Locations extends LockeState implements RefreshListener {
                     location.getState(),
                     location.getPostal(),
                     location.getCountry(),
-                    location.getStatus(),
                     location.getEin(),
                     location.isTaxExempt(),
                     location.getPhone(),
                     location.getEmail(),
+                    location.getStatus(),
+                    location.getCreated(),
             });
         }
         return new CustomTable(columns, data);

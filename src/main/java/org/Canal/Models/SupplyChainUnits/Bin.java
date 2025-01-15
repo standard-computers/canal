@@ -1,5 +1,6 @@
 package org.Canal.Models.SupplyChainUnits;
 
+import org.Canal.Models.BusinessUnits.OrderLineItem;
 import org.Canal.Models.Objex;
 
 import java.util.ArrayList;
@@ -10,24 +11,25 @@ import java.util.ArrayList;
 public class Bin extends Objex {
 
     private String area; //Area ID this bin is in
+    private ArrayList<OrderLineItem> allowed_items;
+    private int[] coordinates = new int[3];
+    private double width;
+    private String widthUOM;
+    private double length;
+    private String lengthUOM;
+    private double height;
+    private String heightUOM;
+    private double weight;
+    private String weightUOM;
+    private String areaValue;
+    private String areaUOM;
+    private double volume;
+    private String volumeUOM;
     private boolean auto_replenish; //If this bin is on a flow, do not replenish if false
     private boolean fixed; //Only one item allowed
-    private ArrayList<String> allowed_items;
-    private int[] coordinates = new int[3];
-    private int min; //Min quantity of items before replenishment
-    private int max; //Quantity of items it may contain
-    private String widthUOM;
-    private String lengthUOM;
-    private String heightUOM;
-    private String weightUOM;
-    private String areaUOM;
-    private String volumeUOM;
-    private double width;
-    private double length;
-    private double height;
-    private double volume;
     private boolean picking;
     private boolean goodsissue;
+    private boolean holdsStock;
 
     public String getArea() {
         return area;
@@ -53,11 +55,11 @@ public class Bin extends Objex {
         this.fixed = fixed;
     }
 
-    public ArrayList<String> getAllowed_items() {
+    public ArrayList<OrderLineItem> getAllowed_items() {
         return allowed_items;
     }
 
-    public void setAllowed_items(ArrayList<String> allowed_items) {
+    public void setAllowed_items(ArrayList<OrderLineItem> allowed_items) {
         this.allowed_items = allowed_items;
     }
 
@@ -69,20 +71,12 @@ public class Bin extends Objex {
         this.coordinates = coordinates;
     }
 
-    public int getMin() {
-        return min;
+    public double getWidth() {
+        return width;
     }
 
-    public void setMin(int min) {
-        this.min = min;
-    }
-
-    public int getMax() {
-        return max;
-    }
-
-    public void setMax(int max) {
-        this.max = max;
+    public void setWidth(double width) {
+        this.width = width;
     }
 
     public String getWidthUOM() {
@@ -93,60 +87,20 @@ public class Bin extends Objex {
         this.widthUOM = widthUOM;
     }
 
-    public String getLengthUOM() {
-        return lengthUOM;
-    }
-
-    public void setLengthUOM(String lengthUOM) {
-        this.lengthUOM = lengthUOM;
-    }
-
-    public String getHeightUOM() {
-        return heightUOM;
-    }
-
-    public void setHeightUOM(String heightUOM) {
-        this.heightUOM = heightUOM;
-    }
-
-    public String getWeightUOM() {
-        return weightUOM;
-    }
-
-    public void setWeightUOM(String weightUOM) {
-        this.weightUOM = weightUOM;
-    }
-
-    public String getAreaUOM() {
-        return areaUOM;
-    }
-
-    public void setAreaUOM(String areaUOM) {
-        this.areaUOM = areaUOM;
-    }
-
-    public String getVolumeUOM() {
-        return volumeUOM;
-    }
-
-    public void setVolumeUOM(String volumeUOM) {
-        this.volumeUOM = volumeUOM;
-    }
-
-    public double getWidth() {
-        return width;
-    }
-
-    public void setWidth(double width) {
-        this.width = width;
-    }
-
     public double getLength() {
         return length;
     }
 
     public void setLength(double length) {
         this.length = length;
+    }
+
+    public String getLengthUOM() {
+        return lengthUOM;
+    }
+
+    public void setLengthUOM(String lengthUOM) {
+        this.lengthUOM = lengthUOM;
     }
 
     public double getHeight() {
@@ -157,11 +111,83 @@ public class Bin extends Objex {
         this.height = height;
     }
 
+    public String getHeightUOM() {
+        return heightUOM;
+    }
+
+    public void setHeightUOM(String heightUOM) {
+        this.heightUOM = heightUOM;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
+
+    public String getWeightUOM() {
+        return weightUOM;
+    }
+
+    public void setWeightUOM(String weightUOM) {
+        this.weightUOM = weightUOM;
+    }
+
+    public String getAreaValue() {
+        return areaValue;
+    }
+
+    public void setAreaValue(String areaValue) {
+        this.areaValue = areaValue;
+    }
+
+    public String getAreaUOM() {
+        return areaUOM;
+    }
+
+    public void setAreaUOM(String areaUOM) {
+        this.areaUOM = areaUOM;
+    }
+
     public double getVolume() {
         return volume;
     }
 
     public void setVolume(double volume) {
         this.volume = volume;
+    }
+
+    public String getVolumeUOM() {
+        return volumeUOM;
+    }
+
+    public void setVolumeUOM(String volumeUOM) {
+        this.volumeUOM = volumeUOM;
+    }
+
+    public boolean isPicking() {
+        return picking;
+    }
+
+    public void setPicking(boolean picking) {
+        this.picking = picking;
+    }
+
+    public boolean isGoodsissue() {
+        return goodsissue;
+    }
+
+    public void setGoodsissue(boolean goodsissue) {
+        this.goodsissue = goodsissue;
+    }
+
+    public boolean isHoldsStock() {
+        return holdsStock;
+    }
+
+    public void setHoldsStock(boolean holdsStock) {
+        this.holdsStock = holdsStock;
     }
 }

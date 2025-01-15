@@ -86,6 +86,7 @@ public class CreatePurchaseOrder extends LockeState {
         orderInfo.add(coreValues, BorderLayout.WEST);
         orderInfo.add(moreInfo, BorderLayout.EAST);
         orderInfo.add(buttons(), BorderLayout.SOUTH);
+        orderInfo.add(Elements.header("Create Purchase Order", SwingConstants.LEFT), BorderLayout.NORTH);
         add(orderInfo, BorderLayout.NORTH);
 
         add(tabs, BorderLayout.CENTER);
@@ -346,7 +347,9 @@ public class CreatePurchaseOrder extends LockeState {
         });
         buttonPanel.add(removeButton);
         buttonPanel.add(addButton);
-        p.add(new JScrollPane(table), BorderLayout.CENTER);
+        JScrollPane sp = new JScrollPane(table);
+        sp.setPreferredSize(new Dimension(600, 300));
+        p.add(sp, BorderLayout.CENTER);
         p.add(buttonPanel, BorderLayout.NORTH);
         return p;
     }
@@ -410,6 +413,7 @@ public class CreatePurchaseOrder extends LockeState {
     }
 
     private RTextScrollPane notes(){
+
         textArea = new RSyntaxTextArea(20, 60);
         textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_MARKDOWN);
         textArea.setCodeFoldingEnabled(true);

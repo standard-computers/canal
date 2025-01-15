@@ -88,6 +88,7 @@ public class CreateSalesOrder extends LockeState {
         JPanel orderInfo = new JPanel(new BorderLayout());
         orderInfo.add(coreValues, BorderLayout.WEST);
         orderInfo.add(moreInfo, BorderLayout.EAST);
+        orderInfo.add(Elements.header("Create Sales Order", SwingConstants.LEFT), BorderLayout.NORTH);
         add(orderInfo, BorderLayout.NORTH);
 
         add(tabs, BorderLayout.CENTER);
@@ -260,10 +261,10 @@ public class CreateSalesOrder extends LockeState {
         selectSupplier = Selectables.allLocations();
         selectSupplier.editable();
         orderId = new Copiable("SO" + (60000000 + (Engine.orders.getSalesOrders().size() + 1)));
-        f.addInput(Elements.coloredLabel("*Order ID", Constants.colors[0]), orderId);
-        f.addInput(Elements.coloredLabel("Supplier", Constants.colors[1]), selectSupplier);
-        f.addInput(Elements.coloredLabel("Bill To", Constants.colors[2]), selectBillTo);
-        f.addInput(Elements.coloredLabel("Ship To", Constants.colors[3]), selectShipTo);
+        f.addInput(Elements.coloredLabel("*New Order ID", Constants.colors[0]), orderId);
+        f.addInput(Elements.coloredLabel("Vendor/Supplier", Constants.colors[1]), selectSupplier);
+        f.addInput(Elements.coloredLabel("Bill To (Customer)", Constants.colors[2]), selectBillTo);
+        f.addInput(Elements.coloredLabel("Ship To Location", Constants.colors[3]), selectShipTo);
         return f;
     }
 

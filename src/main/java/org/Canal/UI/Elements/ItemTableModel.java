@@ -58,12 +58,14 @@ public class ItemTableModel extends AbstractTableModel {
             Item selectedItem = (Item) value;
             data.get(rowIndex)[columnIndex] = selectedItem;
             data.get(rowIndex)[0] = selectedItem.getName();
+            data.get(rowIndex)[2] = Engine.getLocation(selectedItem.getVendor(), "VEND").getId();
+            data.get(rowIndex)[3] = Engine.getLocation(selectedItem.getVendor(), "VEND").getName();
             data.get(rowIndex)[5] = selectedItem.getPrice();
             double price = Double.parseDouble(data.get(rowIndex)[5].toString());
-            int quantity = Integer.parseInt(data.get(rowIndex)[4].toString());
+            double quantity = Double.parseDouble(data.get(rowIndex)[4].toString());
             data.get(rowIndex)[6] = price * quantity;
-        } else if (columnIndex == 2) {
-            int quantity = Integer.parseInt(value.toString());
+        } else if (columnIndex == 4) {
+            double quantity = Double.parseDouble(value.toString());
             data.get(rowIndex)[4] = quantity;
             double price = Double.parseDouble(data.get(rowIndex)[5].toString());
             data.get(rowIndex)[6] = price * quantity;

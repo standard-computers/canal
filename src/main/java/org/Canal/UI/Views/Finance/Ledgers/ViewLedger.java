@@ -92,7 +92,20 @@ public class ViewLedger extends LockeState implements RefreshListener {
     }
 
     private CustomTable createTable() {
-        String[] columns = new String[]{"ID", "Description", "User", "Locke", "Type", "Location", "Reference", "Amount", "Committed", "Settled", "Status"};
+        String[] columns = new String[]{
+                "ID",
+                "Description",
+                "User",
+                "Locke",
+                "Type",
+                "Location",
+                "Reference",
+                "Amount",
+                "Committed",
+                "Settled",
+                "Status",
+                "Created",
+        };
         ArrayList<Object[]> data = new ArrayList<>();
         for (Transaction t : Engine.getLedger(ledger.getId()).getTransactions()) {
             data.add(new Object[]{
@@ -107,6 +120,7 @@ public class ViewLedger extends LockeState implements RefreshListener {
                     t.getCommitted(),
                     t.getSettled(),
                     t.getStatus(),
+                    t.getCreated(),
             });
         }
         return new CustomTable(columns, data);

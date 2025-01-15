@@ -106,6 +106,7 @@ public class QuickExplorer extends JFrame implements DesktopState {
         KeyStroke ctrlShiftTab = KeyStroke.getKeyStroke(KeyEvent.VK_T, KeyEvent.CTRL_DOWN_MASK);
         KeyStroke ctrlW = KeyStroke.getKeyStroke(KeyEvent.VK_W, KeyEvent.CTRL_DOWN_MASK);
         KeyStroke ctrlM = KeyStroke.getKeyStroke(KeyEvent.VK_M, KeyEvent.CTRL_DOWN_MASK);
+        KeyStroke ctrlU = KeyStroke.getKeyStroke(KeyEvent.VK_U, KeyEvent.CTRL_DOWN_MASK);
         KeyStroke ctrlH = KeyStroke.getKeyStroke(KeyEvent.VK_H, KeyEvent.CTRL_DOWN_MASK);
         desktopPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ctrlShiftTab, "cycleFrames");
         desktopPane.getActionMap().put("cycleFrames", new AbstractAction() {
@@ -139,6 +140,7 @@ public class QuickExplorer extends JFrame implements DesktopState {
         desktopPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ctrlW, "closeActiveFrame");
         desktopPane.getActionMap().put("closeActiveFrame", closeAction);
         desktopPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ctrlM, "minimizeActiveFrame");
+        desktopPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ctrlU, "maximizeActiveFrame");
         desktopPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ctrlH, "minimizeActiveFrame");
         desktopPane.getActionMap().put("minimizeActiveFrame", minimizeAction);
     }

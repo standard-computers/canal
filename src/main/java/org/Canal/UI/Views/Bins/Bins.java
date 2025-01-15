@@ -8,6 +8,7 @@ import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
+import org.Canal.Utils.RefreshListener;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 /**
  * /BNS
  */
-public class Bins extends LockeState {
+public class Bins extends LockeState implements RefreshListener {
 
     private DesktopState desktop;
     private CustomTable table;
@@ -30,9 +31,9 @@ public class Bins extends LockeState {
         setFrameIcon(new ImageIcon(Bins.class.getResource("/icons/bins.png")));
         this.desktop = desktop;
 
-        JPanel tb = createToolBar();
+        JPanel tb = toolbar();
         JPanel holder = new JPanel(new BorderLayout());
-        table = createTable();
+        table = table();
         JScrollPane tableScrollPane = new JScrollPane(table);
         holder.add(Elements.header("All Bins", SwingConstants.LEFT), BorderLayout.CENTER);
         holder.add(tb, BorderLayout.SOUTH);
@@ -41,7 +42,7 @@ public class Bins extends LockeState {
         add(tableScrollPane, BorderLayout.CENTER);
     }
 
-    private JPanel createToolBar() {
+    private JPanel toolbar() {
 
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
@@ -53,6 +54,7 @@ public class Bins extends LockeState {
         IconButton removeBin = new IconButton("Remove", "delete", "Delete an Bin");
         IconButton labels = new IconButton("Labels", "label", "Delete an Bin");
         IconButton print = new IconButton("Print", "print", "Delete an Bin");
+        IconButton refresh = new IconButton("Refresh", "refresh", "Refresh Data");
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(importBins);
@@ -68,6 +70,8 @@ public class Bins extends LockeState {
         tb.add(labels);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(print);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(refresh);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));
         export.addMouseListener(new MouseAdapter() {
             @Override
@@ -81,10 +85,16 @@ public class Bins extends LockeState {
                 desktop.put(new RemoveBin());
             }
         });
+        refresh.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                refresh();
+            }
+        });
         return tb;
     }
 
-    private CustomTable createTable() {
+    private CustomTable table() {
         String[] columns = new String[]{
             "ID",
             "Area",
@@ -99,7 +109,13 @@ public class Bins extends LockeState {
             "Area UOM",
             "Volume",
             "Volume UOM",
-            "Status"
+            "Auto Repl",
+            "Fixed",
+            "Picking",
+            "GI",
+            "Holds Stock",
+            "Status",
+            "Created",
         };
         ArrayList<Object[]> data = new ArrayList<>();
         for (Area area : Engine.getAreas()) {
@@ -114,14 +130,33 @@ public class Bins extends LockeState {
                         b.getLengthUOM(),
                         b.getHeight(),
                         b.getHeightUOM(),
-                        b.getArea(),
+                        b.getAreaValue(),
                         b.getAreaUOM(),
                         b.getVolume(),
                         b.getVolumeUOM(),
+                        b.isAuto_replenish(),
+                        b.isFixed(),
+                        b.isPicking(),
+                        b.isGoodsissue(),
+                        b.isHoldsStock(),
+                        b.getVolume(),
+                        b.getVolumeUOM(),
                         b.getStatus(),
+                        b.getCreated(),
                 });
             }
         }
         return new CustomTable(columns, data);
+    }
+
+    @Override
+    public void refresh() {
+
+        CustomTable newTable = table();
+        JScrollPane scrollPane = (JScrollPane) table.getParent().getParent();
+        scrollPane.setViewportView(newTable);
+        table = newTable;
+        scrollPane.revalidate();
+        scrollPane.repaint();
     }
 }

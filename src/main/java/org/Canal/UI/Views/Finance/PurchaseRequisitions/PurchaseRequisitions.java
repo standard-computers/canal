@@ -86,11 +86,11 @@ public class PurchaseRequisitions extends LockeState implements RefreshListener 
                 double consumption = 0;
                 for(PurchaseOrder po : Engine.getPurchaseOrders()){
                     if(po.getPurchaseRequisition().equals(pr.getId())){
-                        consumption += po.getTotal();
+                        consumption -= po.getTotal();
                     }
                 }
                 Location vendor = Engine.getLocation(pr.getSupplier(), "VEND");
-                double remaining = pr.getMaxSpend() - consumption;
+                double remaining = pr.getMaxSpend() + consumption;
                 prs.add(new Object[]{
                         pr.getId(),
                         pr.getCreated(),

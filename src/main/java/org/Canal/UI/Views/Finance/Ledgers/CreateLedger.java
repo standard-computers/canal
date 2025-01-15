@@ -42,7 +42,7 @@ public class CreateLedger extends LockeState {
 
         JButton create = Elements.button("Create");
         setLayout(new BorderLayout());
-        add(Elements.header("Create Ledger"), BorderLayout.NORTH);
+        add(Elements.header("Create Ledger", SwingConstants.LEFT), BorderLayout.NORTH);
         add(create, BorderLayout.SOUTH);
         add(f, BorderLayout.CENTER);
 

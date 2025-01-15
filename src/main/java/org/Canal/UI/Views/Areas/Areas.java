@@ -6,6 +6,7 @@ import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.Utils.Engine;
+import org.Canal.Utils.RefreshListener;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -17,16 +18,16 @@ import java.util.ArrayList;
 /**
  * /AREAS
  */
-public class Areas extends LockeState {
+public class Areas extends LockeState implements RefreshListener {
 
     private CustomTable table;
 
     public Areas() {
         super("Areas", "/AREAS", true, true, true, true);
         setFrameIcon(new ImageIcon(Areas.class.getResource("/icons/areas.png")));
-        JPanel tb = createToolBar();
+        JPanel tb = toolbar();
         JPanel holder = new JPanel(new BorderLayout());
-        table = createTable();
+        table = table();
         JScrollPane tableScrollPane = new JScrollPane(table);
         holder.add(Elements.header("Areas", SwingConstants.LEFT), BorderLayout.CENTER);
         holder.add(tb, BorderLayout.SOUTH);
@@ -35,13 +36,15 @@ public class Areas extends LockeState {
         add(tableScrollPane, BorderLayout.CENTER);
     }
 
-    private JPanel createToolBar() {
+    private JPanel toolbar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV", "");
         IconButton openSelected = new IconButton("Open", "open", "Open selected");
         IconButton createArea = new IconButton("Create", "create", "Create a Area", "/AREAS/NEW");
         IconButton autoMakeAreas = new IconButton("AutoMake", "automake", "Automate the creation of areas", "/AREAS/AUTO_MK");
+        IconButton makeBins = new IconButton("Make Bins", "bins", "Make Bins", "/BNS/NEW");
+        IconButton autoMakeBins = new IconButton("AutoMake Bins", "automake", "Automate Bins", "/BNS/AUTO_MK");
         IconButton modifyArea = new IconButton("Modify", "modify", "Modify an Area", "/AREAS/MOD");
         IconButton removeArea = new IconButton("Remove", "delete", "Delete an Area", "/AREAS/DEL");
         IconButton labels = new IconButton("Labels", "label", "Delete an Area");
@@ -54,6 +57,10 @@ public class Areas extends LockeState {
         tb.add(createArea);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(autoMakeAreas);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(makeBins);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(autoMakeBins);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(modifyArea);
         tb.add(Box.createHorizontalStrut(5));
@@ -74,7 +81,7 @@ public class Areas extends LockeState {
         return tb;
     }
 
-    private CustomTable createTable() {
+    private CustomTable table() {
         String[] columns = new String[]{
             "ID",
             "Location",
@@ -89,7 +96,9 @@ public class Areas extends LockeState {
             "Area UOM",
             "Volume",
             "Volume UOM",
-            "Status"
+            "Σ Bins",
+            "Status",
+            "Created"
         };
         ArrayList<Object[]> data = new ArrayList<>();
         for (Area area : Engine.getAreas()) {
@@ -107,9 +116,22 @@ public class Areas extends LockeState {
                     area.getAreaUOM(),
                     area.getVolume(),
                     area.getVolumeUOM(),
+                    area.getBins().size(),
                     area.getStatus(),
+                    area.getCreated(),
             });
         }
         return new CustomTable(columns, data);
+    }
+
+    @Override
+    public void refresh() {
+
+        CustomTable newTable = table();
+        JScrollPane scrollPane = (JScrollPane) table.getParent().getParent();
+        scrollPane.setViewportView(newTable);
+        table = newTable;
+        scrollPane.revalidate();
+        scrollPane.repaint();
     }
 }
