@@ -59,7 +59,12 @@ public class ReceiveOrder extends LockeState {
         }
         JPanel itemInput = new JPanel();
         ArrayList<Object[]> data = new ArrayList<>();
-        receivedItems = new CustomTable(new String[]{"Item Id", "Item", "Exp. Qty.", "Rcvd. Qty."}, data);
+        receivedItems = new CustomTable(new String[]{
+                "Item Id",
+                "Item",
+                "Exp. Qty.",
+                "Rcvd. Qty.",
+        }, data);
         JScrollPane p = new JScrollPane(receivedItems);
         Copiable expDelivery = new Copiable("");
         itemInput.add(p);

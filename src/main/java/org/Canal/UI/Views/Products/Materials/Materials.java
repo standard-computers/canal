@@ -1,6 +1,6 @@
 package org.Canal.UI.Views.Products.Materials;
 
-import org.Canal.Models.SupplyChainUnits.Item;
+import org.Canal.Models.SupplyChainUnits.OrderLineItem;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
@@ -29,13 +29,12 @@ public class Materials extends LockeState implements RefreshListener {
         super("Materials", "/MTS", true, true, true, true);
         setFrameIcon(new ImageIcon(Materials.class.getResource("/icons/materials.png")));
 
-        JPanel tb = createToolBar();
         JPanel holder = new JPanel(new BorderLayout());
-        table = createTable();
+        table = table();
         JScrollPane tableScrollPane = new JScrollPane(table);
         tableScrollPane.setPreferredSize(new Dimension(1300, 600));
         holder.add(Elements.header("Materials", SwingConstants.LEFT), BorderLayout.CENTER);
-        holder.add(tb, BorderLayout.SOUTH);
+        holder.add(toolbar(), BorderLayout.SOUTH);
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);
         add(tableScrollPane, BorderLayout.CENTER);
@@ -54,7 +53,7 @@ public class Materials extends LockeState implements RefreshListener {
         });
     }
 
-    private JPanel createToolBar() {
+    private JScrollPane toolbar() {
 
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
@@ -94,10 +93,10 @@ public class Materials extends LockeState implements RefreshListener {
                 table.exportToCSV();
             }
         });
-        return tb;
+        return Elements.scrollPane(tb);
     }
 
-    private CustomTable createTable() {
+    private CustomTable table() {
 
         String[] columns = new String[]{
             "ID",
@@ -127,7 +126,7 @@ public class Materials extends LockeState implements RefreshListener {
             "Created",
         };
         ArrayList<Object[]> d = new ArrayList<>();
-        for (Item material : Engine.products.getMaterials()) {
+        for (OrderLineItem material : Engine.products.getMaterials()) {
             Location vendor = Engine.getLocation(material.getVendor(), "VEND");
             d.add(new Object[]{
                     material.getId(),
@@ -162,6 +161,11 @@ public class Materials extends LockeState implements RefreshListener {
 
     @Override
     public void refresh() {
-
+        CustomTable newTable = table();
+        JScrollPane scrollPane = (JScrollPane) table.getParent().getParent();
+        scrollPane.setViewportView(newTable);
+        table = newTable;
+        scrollPane.revalidate();
+        scrollPane.repaint();
     }
 }

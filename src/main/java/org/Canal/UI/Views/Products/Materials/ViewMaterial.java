@@ -1,6 +1,6 @@
 package org.Canal.UI.Views.Products.Materials;
 
-import org.Canal.Models.SupplyChainUnits.Item;
+import org.Canal.Models.SupplyChainUnits.OrderLineItem;
 import org.Canal.UI.Elements.LockeState;
 
 import javax.swing.*;
@@ -10,9 +10,9 @@ import javax.swing.*;
  */
 public class ViewMaterial extends LockeState {
 
-    private Item material;
+    private OrderLineItem material;
 
-    public ViewMaterial(Item material) {
+    public ViewMaterial(OrderLineItem material) {
 
         super("Material / " + material.getName(), "/MTS/$", true, true, true, true);
         setFrameIcon(new ImageIcon(ViewMaterial.class.getResource("/icons/materials.png")));

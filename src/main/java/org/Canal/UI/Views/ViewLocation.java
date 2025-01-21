@@ -318,7 +318,7 @@ public class ViewLocation extends LockeState implements RefreshListener {
         }
         Locke[] items = new Locke[Engine.products.getItems(location.getOrganization()).size()];
         for (int i = 0; i < Engine.products.getItems(location.getOrganization()).size(); i++) {
-            Item l = Engine.products.getItems(location.getOrganization()).get(i);
+            OrderLineItem l = Engine.products.getItems(location.getOrganization()).get(i);
             items[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/ITS/" + l.getId(), Constants.colors[4], null);
         }
         return new Locke(location.getName(), UIManager.getIcon("FileView.fileIcon"), "/DCSS/" + location.getId(), new Locke[]{

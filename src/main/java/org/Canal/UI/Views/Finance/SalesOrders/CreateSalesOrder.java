@@ -2,7 +2,6 @@ package org.Canal.UI.Views.Finance.SalesOrders;
 
 import org.Canal.Models.BusinessUnits.*;
 import org.Canal.Models.SupplyChainUnits.Delivery;
-import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.Models.SupplyChainUnits.Truck;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Copiable;
@@ -116,14 +115,14 @@ public class CreateSalesOrder extends LockeState {
                     newSalesOrder.setShipTo(selectShipTo.getSelectedValue());
                     newSalesOrder.setExpectedDelivery(expectedDelivery.getSelectedDateString());
                     newSalesOrder.setStatus(LockeStatus.NEW);
-                    ArrayList<OrderLineItem> lineitems = new ArrayList<>();
+                    ArrayList<org.Canal.Models.BusinessUnits.OrderLineItem> lineitems = new ArrayList<>();
                     for (int row = 0; row < model.getRowCount(); row++) {
                         String itemName = model.getValueAt(row, 0).toString();
                         String itemId = model.getValueAt(row, 1).toString();
                         double itemQty = Double.parseDouble(model.getValueAt(row, 2).toString());
                         double itemPrice = Double.parseDouble(model.getValueAt(row, 3).toString());
                         double itemTotal = Double.parseDouble(model.getValueAt(row, 4).toString());
-                        lineitems.add(new OrderLineItem(itemName, itemId, itemQty, itemPrice, itemTotal));
+                        lineitems.add(new org.Canal.Models.BusinessUnits.OrderLineItem(itemName, itemId, itemQty, itemPrice, itemTotal));
                     }
                     newSalesOrder.setItems(lineitems);
                     newSalesOrder.setNetValue(Double.parseDouble(model.getTotalPrice()));
@@ -148,14 +147,14 @@ public class CreateSalesOrder extends LockeState {
                         associatedPurchaseOrder.setPurchaseRequisition(availablePurchaseRequisitions.getSelectedValue());
                         associatedPurchaseOrder.setExpectedDelivery(expectedDelivery.getSelectedDateString());
                         associatedPurchaseOrder.setStatus(LockeStatus.NEW);
-                        ArrayList<OrderLineItem> li = new ArrayList<>();
+                        ArrayList<org.Canal.Models.BusinessUnits.OrderLineItem> li = new ArrayList<>();
                         for (int row = 0; row < model.getRowCount(); row++) {
                             String itemName = model.getValueAt(row, 0).toString();
                             String itemId = model.getValueAt(row, 1).toString();
                             double itemQty = Double.parseDouble(model.getValueAt(row, 2).toString());
                             double itemPrice = Double.parseDouble(model.getValueAt(row, 3).toString());
                             double itemTotal = Double.parseDouble(model.getValueAt(row, 4).toString());
-                            li.add(new OrderLineItem(itemName, itemId, itemQty, itemPrice, itemTotal));
+                            li.add(new org.Canal.Models.BusinessUnits.OrderLineItem(itemName, itemId, itemQty, itemPrice, itemTotal));
                         }
                         associatedPurchaseOrder.setItems(lineitems);
                         associatedPurchaseOrder.setNetValue(Double.parseDouble(model.getTotalPrice()));
@@ -307,7 +306,7 @@ public class CreateSalesOrder extends LockeState {
     private JPanel items(){
 
         JPanel p = new JPanel(new BorderLayout());
-        ArrayList<Item> items = Engine.products.getProducts();
+        ArrayList<org.Canal.Models.SupplyChainUnits.OrderLineItem> items = Engine.products.getProducts();
         if(items.isEmpty()){
             JOptionPane.showMessageDialog(this, "No products found", "Error", JOptionPane.ERROR_MESSAGE);
             dispose();
@@ -324,7 +323,7 @@ public class CreateSalesOrder extends LockeState {
         col2.setCellRenderer(centerRenderer);
         col3.setCellRenderer(centerRenderer);
         col4.setCellRenderer(centerRenderer);
-        JComboBox<Item> itemComboBox = new JComboBox<>(items.toArray(new Item[0]));
+        JComboBox<org.Canal.Models.SupplyChainUnits.OrderLineItem> itemComboBox = new JComboBox<>(items.toArray(new org.Canal.Models.SupplyChainUnits.OrderLineItem[0]));
         table.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(itemComboBox));
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         buttonPanel.setBackground(UIManager.getColor("Panel.background"));

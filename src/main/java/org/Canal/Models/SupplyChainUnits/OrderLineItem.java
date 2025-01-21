@@ -4,7 +4,7 @@ import org.Canal.Models.Objex;
 
 import java.util.ArrayList;
 
-public class Item extends Objex {
+public class OrderLineItem extends Objex {
 
     private String org;
     private String vendor;
@@ -29,7 +29,7 @@ public class Item extends Objex {
     private String initialVolumeUOM;
     private double tax;
     private double exciseTax;
-    private ArrayList<Item> components = new ArrayList<>();
+    private ArrayList<OrderLineItem> components = new ArrayList<>();
 
     public String getOrg() {
         return org;
@@ -215,11 +215,11 @@ public class Item extends Objex {
         this.exciseTax = exciseTax;
     }
 
-    public ArrayList<Item> getComponents() {
+    public ArrayList<OrderLineItem> getComponents() {
         return components;
     }
 
-    public void setComponents(ArrayList<Item> components) {
+    public void setComponents(ArrayList<OrderLineItem> components) {
         this.components = components;
     }
 

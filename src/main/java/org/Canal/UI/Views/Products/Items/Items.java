@@ -1,6 +1,6 @@
 package org.Canal.UI.Views.Products.Items;
 
-import org.Canal.Models.SupplyChainUnits.Item;
+import org.Canal.Models.SupplyChainUnits.OrderLineItem;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
@@ -30,13 +30,12 @@ public class Items extends LockeState implements RefreshListener {
         super("Items", "/ITS", true, true, true, true);
         setFrameIcon(new ImageIcon(Items.class.getResource("/icons/items.png")));
 
-        JPanel tb = createToolBar();
         JPanel holder = new JPanel(new BorderLayout());
-        table = createTable();
+        table = table();
         JScrollPane tableScrollPane = new JScrollPane(table);
         tableScrollPane.setPreferredSize(new Dimension(1300, 600));
         holder.add(Elements.header("Items", SwingConstants.LEFT), BorderLayout.CENTER);
-        holder.add(tb, BorderLayout.SOUTH);
+        holder.add(toolbar(), BorderLayout.SOUTH);
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);
         add(tableScrollPane, BorderLayout.CENTER);
@@ -55,7 +54,7 @@ public class Items extends LockeState implements RefreshListener {
         });
     }
 
-    private JPanel createToolBar() {
+    private JScrollPane toolbar() {
 
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
@@ -96,10 +95,10 @@ public class Items extends LockeState implements RefreshListener {
                 table.exportToCSV();
             }
         });
-        return tb;
+        return Elements.scrollPane(tb);
     }
 
-    private CustomTable createTable() {
+    private CustomTable table() {
 
         String[] columns = new String[]{
             "ID",
@@ -128,7 +127,7 @@ public class Items extends LockeState implements RefreshListener {
             "Excise Tax"
         };
         ArrayList<Object[]> d = new ArrayList<>();
-        for (Item item : Engine.products.getItems()) {
+        for (OrderLineItem item : Engine.products.getItems()) {
             Location vendor = Engine.getLocation(item.getVendor(), "VEND");
             d.add(new Object[]{
                     item.getId(),
@@ -162,6 +161,11 @@ public class Items extends LockeState implements RefreshListener {
 
     @Override
     public void refresh() {
-
+        CustomTable newTable = table();
+        JScrollPane scrollPane = (JScrollPane) table.getParent().getParent();
+        scrollPane.setViewportView(newTable);
+        table = newTable;
+        scrollPane.revalidate();
+        scrollPane.repaint();
     }
 }

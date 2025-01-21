@@ -1,6 +1,6 @@
 package org.Canal.UI.Views.Products.Materials;
 
-import org.Canal.Models.SupplyChainUnits.Item;
+import org.Canal.Models.SupplyChainUnits.OrderLineItem;
 import org.Canal.UI.Elements.Selectable;
 import org.Canal.UI.Elements.Selectables;
 import org.Canal.UI.Elements.*;
@@ -57,13 +57,13 @@ public class CreateMaterial extends LockeState {
         organizations = Selectables.organizations();
         materialNameField = Elements.input("Black Shirt");
         materialPriceField = Elements.input("1.00");
-        isBatched = new JCheckBox("Item expires");
-        isSkud = new JCheckBox("Item has unique SKU");
+        isBatched = new JCheckBox("Material expires");
+        isSkud = new JCheckBox("Material has unique SKU");
         upc = Elements.input();
-        f1.addInput(Elements.coloredLabel("*Item ID", UIManager.getColor("Label.foreground")), materialIdField);
-        f1.addInput(Elements.coloredLabel("*Organization ID", UIManager.getColor("Label.foreground")), organizations);
-        f1.addInput(Elements.coloredLabel("Item Photo", Constants.colors[0]), selectPhoto);
-        f1.addInput(Elements.coloredLabel("Item Name", Constants.colors[1]), materialNameField);
+        f1.addInput(Elements.coloredLabel("*New Material ID", UIManager.getColor("Label.foreground")), materialIdField);
+        f1.addInput(Elements.coloredLabel("Organization", UIManager.getColor("Label.foreground")), organizations);
+        f1.addInput(Elements.coloredLabel("Material Photo", Constants.colors[0]), selectPhoto);
+        f1.addInput(Elements.coloredLabel("Material Name", Constants.colors[1]), materialNameField);
         f1.addInput(Elements.coloredLabel("Vendor", Constants.colors[2]), selectedVendor);
         f1.addInput(Elements.coloredLabel("Batched", Constants.colors[3]), isBatched);
         f1.addInput(Elements.coloredLabel("Price", Constants.colors[4]), materialPriceField);
@@ -116,6 +116,7 @@ public class CreateMaterial extends LockeState {
                 createMaterial();
             }
         });
+        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
         tb.add(review);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));
         tb.add(saveitem);
@@ -124,7 +125,7 @@ public class CreateMaterial extends LockeState {
     }
 
     protected void createMaterial() {
-        Item material = new Item();
+        OrderLineItem material = new OrderLineItem();
         material.setId(materialIdField.getText());
         material.setOrg(organizations.getSelectedValue());
         material.setName(materialNameField.getText());

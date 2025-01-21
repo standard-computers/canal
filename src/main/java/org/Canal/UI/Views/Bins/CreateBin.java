@@ -1,7 +1,5 @@
 package org.Canal.UI.Views.Bins;
 
-import org.Canal.Models.BusinessUnits.OrderLineItem;
-import org.Canal.Models.BusinessUnits.PurchaseOrder;
 import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.Models.SupplyChainUnits.Bin;
 import org.Canal.Models.SupplyChainUnits.Location;
@@ -18,7 +16,6 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -175,7 +172,7 @@ public class CreateBin extends LockeState {
         autoReplenish = new JCheckBox("Auto Replenish");
         autoReplenish.setToolTipText("Bin will be automatically replenished based on set replenishments");
         fixedBin = new JCheckBox("Fixed Bin");
-        fixedBin.setToolTipText("Bin can only contain one Item ID");
+        fixedBin.setToolTipText("Bin can only contain one OrderLineItem ID");
         holdsStock = new JCheckBox("Bin can hold inventory");
         f.addInput(Elements.coloredLabel("*New Bin ID", UIManager.getColor("Label.foreground")), idField);
         f.addInput(Elements.coloredLabel("Location ID", UIManager.getColor("Label.foreground")), locationField);

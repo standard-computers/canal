@@ -8,6 +8,7 @@ import org.Canal.Models.HumanResources.Timesheet;
 import org.Canal.Models.HumanResources.User;
 import org.Canal.Models.SupplyChainUnits.*;
 import org.Canal.Models.Record;
+import org.Canal.Models.SupplyChainUnits.OrderLineItem;
 import org.Canal.Start;
 import org.Canal.UI.Views.*;
 import org.Canal.UI.Views.Areas.*;
@@ -802,7 +803,7 @@ public class Engine {
                 }
             }
             case "ITS" -> {
-                Item i = Engine.products.getItem(oid);
+                OrderLineItem i = Engine.products.getItem(oid);
                 if(i != null){
                     return new ViewItem(i);
                 }
@@ -875,74 +876,74 @@ public class Engine {
     }
 
     public static class products {
-        public static ArrayList<Item> getProducts() {
-            ArrayList<Item> products = new ArrayList<>();
+        public static ArrayList<OrderLineItem> getProducts() {
+            ArrayList<OrderLineItem> products = new ArrayList<>();
             String[] ps = new String[]{"ITS", "MTS", "CMPS"};
             for(String p : ps) {
                 File[] d = Pipe.list(p);
                 for (File file : d) {
                     if (!file.isDirectory() && file.getPath().endsWith("." + p.toLowerCase())) {
-                        Item loc = Json.load(file.getPath(), Item.class);
+                        OrderLineItem loc = Json.load(file.getPath(), OrderLineItem.class);
                         products.add(loc);
                     }
                 }
             }
-            products.sort(Comparator.comparing(Item::getId));
+            products.sort(Comparator.comparing(OrderLineItem::getId));
             return products;
         }
 
-        public static ArrayList<Item> getItems() {
-            ArrayList<Item> items = new ArrayList<>();
+        public static ArrayList<OrderLineItem> getItems() {
+            ArrayList<OrderLineItem> items = new ArrayList<>();
             File[] d = Pipe.list("ITS");
             for (File file : d) {
                 if (!file.isDirectory()) {
-                    Item l = Json.load(file.getPath(), Item.class);
+                    OrderLineItem l = Json.load(file.getPath(), OrderLineItem.class);
                     items.add(l);
                 }
             }
-            items.sort(Comparator.comparing(Item::getId));
+            items.sort(Comparator.comparing(OrderLineItem::getId));
             return items;
         }
 
-        public static List<Item> getItems(String id) {
+        public static List<OrderLineItem> getItems(String id) {
             return getItems().stream().filter(item -> item.getOrg().equals(id)).collect(Collectors.toList());
         }
 
-        public static Item getItem(String id) {
+        public static OrderLineItem getItem(String id) {
             return getItems().stream().filter(i -> i.getId().equals(id)).toList().stream().findFirst().orElse(null);
         }
 
-        public static ArrayList<Item> getMaterials() {
-            ArrayList<Item> materials = new ArrayList<>();
+        public static ArrayList<OrderLineItem> getMaterials() {
+            ArrayList<OrderLineItem> materials = new ArrayList<>();
             File[] d = Pipe.list("MTS");
             for (File file : d) {
                 if (!file.isDirectory()) {
-                    Item a = Json.load(file.getPath(), Item.class);
+                    OrderLineItem a = Json.load(file.getPath(), OrderLineItem.class);
                     materials.add(a);
                 }
             }
-            materials.sort(Comparator.comparing(Item::getId));
+            materials.sort(Comparator.comparing(OrderLineItem::getId));
             return materials;
         }
 
-        public static Item getMaterial(String id) {
+        public static OrderLineItem getMaterial(String id) {
             return getMaterials().stream().filter(m -> m.getId().equals(id)).toList().stream().findFirst().orElse(null);
         }
 
-        public static ArrayList<Item> getComponents() {
-            ArrayList<Item> components = new ArrayList<>();
+        public static ArrayList<OrderLineItem> getComponents() {
+            ArrayList<OrderLineItem> components = new ArrayList<>();
             File[] d = Pipe.list("CMPS");
             for (File file : d) {
                 if (!file.isDirectory()) {
-                    Item a = Json.load(file.getPath(), Item.class);
+                    OrderLineItem a = Json.load(file.getPath(), OrderLineItem.class);
                     components.add(a);
                 }
             }
-            components.sort(Comparator.comparing(Item::getId));
+            components.sort(Comparator.comparing(OrderLineItem::getId));
             return components;
         }
 
-        public static Item getComponent(String id) {
+        public static OrderLineItem getComponent(String id) {
             return getComponents().stream().filter(c -> c.getId().equals(id)).toList().stream().findFirst().orElse(null);
         }
     }

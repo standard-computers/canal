@@ -232,7 +232,7 @@ public class FulfillOrder extends LockeState {
     public JPanel stockPickInfo(){
         JPanel panel = new JPanel(new BorderLayout());
         ArrayList<Object[]> data = new ArrayList<>();
-        fulfillItems = new CustomTable(new String[]{"Pick", "Item Id", "Item", "Exp Qty", "Src Qty", "Src HU", "Src Avl Qty", "Src Bin"}, data);
+        fulfillItems = new CustomTable(new String[]{"Pick", "OrderLineItem Id", "OrderLineItem", "Exp Qty", "Src Qty", "Src HU", "Src Avl Qty", "Src Bin"}, data);
         JScrollPane sp = new JScrollPane(fulfillItems);
         sp.setPreferredSize(new Dimension(400, 400));
         panel.add(sp, BorderLayout.CENTER);
@@ -242,7 +242,7 @@ public class FulfillOrder extends LockeState {
     public JPanel deliveryInfo(){
         JPanel panel = new JPanel(new BorderLayout());
         ArrayList<Object[]> data = new ArrayList<>();
-        CustomTable palletize = new CustomTable(new String[]{"Pallet", "Item Id", "Item", "Qty", "Src HU"}, data);
+        CustomTable palletize = new CustomTable(new String[]{"Pallet", "OrderLineItem Id", "OrderLineItem", "Qty", "Src HU"}, data);
         JScrollPane sp = new JScrollPane(palletize);
         sp.setPreferredSize(new Dimension(400, 400));
         panel.add(sp, BorderLayout.CENTER);

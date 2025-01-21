@@ -23,7 +23,7 @@ public class CreateInclusion extends LockeState {
         f.addInput(Elements.coloredLabel("Usage", Constants.colors[8]), usage);
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);
-        JButton create = Elements.button("Include");
-        add(create, BorderLayout.SOUTH);
+        JButton submit = Elements.button("Include");
+        add(submit, BorderLayout.SOUTH);
     }
 }

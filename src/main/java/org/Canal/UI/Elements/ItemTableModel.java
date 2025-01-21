@@ -1,6 +1,6 @@
 package org.Canal.UI.Elements;
 
-import org.Canal.Models.SupplyChainUnits.Item;
+import org.Canal.Models.SupplyChainUnits.OrderLineItem;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.Utils.Engine;
 
@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ItemTableModel extends AbstractTableModel {
 
-    private final List<Item> items;
+    private final List<OrderLineItem> items;
     private final String[] columnNames = {
             "Item Name",
             "Item",
@@ -24,14 +24,14 @@ public class ItemTableModel extends AbstractTableModel {
             "wUOM"
     };
     private final Class<?>[] columnTypes = {
-            String.class, Item.class, String.class, String.class, Integer.class, Double.class, Double.class, Double.class, String.class
+            String.class, OrderLineItem.class, String.class, String.class, Integer.class, Double.class, Double.class, Double.class, String.class
     };
     private final List<Object[]> data;
 
-    public ItemTableModel(List<Item> items) {
+    public ItemTableModel(List<OrderLineItem> items) {
         this.items = items;
         data = new ArrayList<>();
-        for (Item item : items) {
+        for (OrderLineItem item : items) {
             Location v = Engine.getLocation(item.getVendor(), "VEND");
             data.add(new Object[]{item.getName(), item, item.getVendor(), v.getName(), 1, item.getPrice(), item.getPrice(), item.getWeight(), item.getWeightUOM()});
         }
@@ -55,11 +55,12 @@ public class ItemTableModel extends AbstractTableModel {
     @Override
     public void setValueAt(Object value, int rowIndex, int columnIndex) {
         if (columnIndex == 1) {
-            Item selectedItem = (Item) value;
+            OrderLineItem selectedItem = (OrderLineItem) value;
+            Location vendor = Engine.getLocation(selectedItem.getVendor(), "VEND");
             data.get(rowIndex)[columnIndex] = selectedItem;
             data.get(rowIndex)[0] = selectedItem.getName();
-            data.get(rowIndex)[2] = Engine.getLocation(selectedItem.getVendor(), "VEND").getId();
-            data.get(rowIndex)[3] = Engine.getLocation(selectedItem.getVendor(), "VEND").getName();
+            data.get(rowIndex)[2] = vendor.getId();
+            data.get(rowIndex)[3] = vendor.getName();
             data.get(rowIndex)[5] = selectedItem.getPrice();
             double price = Double.parseDouble(data.get(rowIndex)[5].toString());
             double quantity = Double.parseDouble(data.get(rowIndex)[4].toString());
@@ -90,7 +91,7 @@ public class ItemTableModel extends AbstractTableModel {
         return columnIndex != 0;
     }
 
-    public void addRow(Item item) {
+    public void addRow(OrderLineItem item) {
         Location v = Engine.getLocation(item.getVendor(), "VEND");
         data.add(new Object[]{item.getName(), item, item.getVendor(), v.getName(), 1, item.getPrice(), item.getPrice(), item.getWeight(), item.getWeightUOM()});
         fireTableRowsInserted(data.size() - 1, data.size() - 1);

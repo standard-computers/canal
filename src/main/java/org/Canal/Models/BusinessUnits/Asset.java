@@ -12,7 +12,7 @@ public class Asset extends Objex {
     private String party; //Employee ID
     private String partyEntitledToDispose;
     private String description; //Asset (item) description
-    private String item; //Associated Item ID if any
+    private String item; //Associated OrderLineItem ID if any
     private double value; //Value of item or price paid
     private double tax; //Tax paid on item
     private double annualDepreciation; //As percent (5% = 0.05)

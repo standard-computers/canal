@@ -1,6 +1,6 @@
 package org.Canal.UI.Views.Products.Components;
 
-import org.Canal.Models.SupplyChainUnits.Item;
+import org.Canal.Models.SupplyChainUnits.OrderLineItem;
 import org.Canal.UI.Elements.Selectable;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Form;
@@ -46,58 +46,16 @@ public class CreateComponent extends LockeState {
         Constants.checkLocke(this, true, true);
         this.desktop = desktop;
 
-        Form f1 = new Form();
-        JButton selectPhoto = Elements.button("Select Photo");
-        selectedVendor = Selectables.vendors();
-        selectedVendor.editable();
-        materialIdField = Elements.input("XI0" + (1000 + (Engine.products.getComponents().size() + 1)));
-        organizations = Selectables.organizations();
-        materialNameField = Elements.input("Black Shirt");
-        materialPriceField = Elements.input("1.00");
-        isBatched = new JCheckBox("Component expires");
-        isSkud = new JCheckBox("Component has unique SKU");
-        upc = Elements.input();
-        f1.addInput(Elements.coloredLabel("*Component ID", new Color(240, 240, 240)), materialIdField);
-        f1.addInput(Elements.coloredLabel("*Organization ID", new Color(240, 240, 240)), organizations);
-        f1.addInput(Elements.coloredLabel("Component Photo", Constants.colors[0]), selectPhoto);
-        f1.addInput(Elements.coloredLabel("Component Name", Constants.colors[1]), materialNameField);
-        f1.addInput(Elements.coloredLabel("Vendor", Constants.colors[2]), selectedVendor);
-        f1.addInput(Elements.coloredLabel("Batched", Constants.colors[3]), isBatched);
-        f1.addInput(Elements.coloredLabel("Price", Constants.colors[4]), materialPriceField);
-        f1.addInput(Elements.coloredLabel("SKU'd Product", Constants.colors[5]), isSkud);
-        f1.addInput(Elements.coloredLabel("UPC", Constants.colors[6]), upc);
-
-        Form f2 = new Form();
-        baseQtyField = Elements.input();
-        packagingUnits = Selectables.packagingUoms();
-        itemWidth = new UOMField();
-        itemLength = new UOMField();
-        itemHeight = new UOMField();
-        itemWeight = new UOMField();
-        tax = Elements.input("0");
-        exciseTax = Elements.input("0");
-        materialColor = Elements.input("Black");
-        f2.addInput(Elements.coloredLabel("Packaging Base Quantity", Constants.colors[10]), baseQtyField);
-        f2.addInput(Elements.coloredLabel("Packaging UOM", Constants.colors[9]), packagingUnits);
-        f2.addInput(Elements.coloredLabel("Color", Constants.colors[8]), materialColor);
-        f2.addInput(Elements.coloredLabel("Width", Constants.colors[7]), itemWidth);
-        f2.addInput(Elements.coloredLabel("Length", Constants.colors[6]), itemLength);
-        f2.addInput(Elements.coloredLabel("Height", Constants.colors[5]), itemHeight);
-        f2.addInput(Elements.coloredLabel("Weight", Constants.colors[4]), itemWeight);
-        f2.addInput(Elements.coloredLabel("Tax (0.05 as 5%)", Constants.colors[3]), tax);
-        f2.addInput(Elements.coloredLabel("Excise Tax (0.05 as 5%)", Constants.colors[2]), exciseTax);
-
-        JPanel biPanel = new JPanel(new GridLayout(1, 2));
-        f1.setBorder(new EmptyBorder(5, 5, 5, 5));
-        f2.setBorder(new EmptyBorder(5, 5, 5, 5));
-        biPanel.add(f1);
-        biPanel.add(f2);
+        JTabbedPane tabs = new JTabbedPane();
+        tabs.addTab("General", general());
+        tabs.addTab("Dimensional", dimensional());
 
         JPanel main = new JPanel(new BorderLayout());
-        main.add(Elements.header("Create Component", SwingConstants.LEFT), BorderLayout.NORTH);
-        main.add(biPanel, BorderLayout.CENTER);
-        main.add(actionsBar(), BorderLayout.SOUTH);
-
+        JPanel b = new JPanel(new BorderLayout());
+        b.add(actionsBar(), BorderLayout.SOUTH);
+        b.add(Elements.header("Create Component", SwingConstants.LEFT), BorderLayout.NORTH);
+        main.add(b, BorderLayout.NORTH);
+        main.add(tabs, BorderLayout.CENTER);
         add(main);
     }
 
@@ -105,7 +63,7 @@ public class CreateComponent extends LockeState {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton review = new IconButton("Review", "review", "Review for warnings or potential errors");
-        IconButton saveitem = new IconButton("Create Component", "start", "Commit Item");
+        IconButton saveitem = new IconButton("Create Component", "execute", "Commit Item");
         saveitem.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 createComponent();
@@ -120,7 +78,7 @@ public class CreateComponent extends LockeState {
     }
 
     protected void createComponent() {
-        Item component = new Item();
+        OrderLineItem component = new OrderLineItem();
         component.setId(materialIdField.getText());
         component.setOrg(organizations.getSelectedValue());
         component.setName(materialNameField.getText());
@@ -140,5 +98,58 @@ public class CreateComponent extends LockeState {
         dispose();
         JOptionPane.showMessageDialog(this, "Component has been created");
         desktop.put(new ViewComponent(component));
+    }
+
+    private JPanel general(){
+
+        JPanel general = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        Form f1 = new Form();
+        JButton selectPhoto = Elements.button("Select Photo");
+        selectedVendor = Selectables.vendors();
+        selectedVendor.editable();
+        materialIdField = Elements.input("XI0" + (1000 + (Engine.products.getComponents().size() + 1)));
+        organizations = Selectables.organizations();
+        materialNameField = Elements.input("Black Shirt");
+        materialPriceField = Elements.input("1.00");
+        isBatched = new JCheckBox("Component expires");
+        isSkud = new JCheckBox("Component has unique SKU");
+        upc = Elements.input();
+        f1.addInput(Elements.coloredLabel("*New Component ID", UIManager.getColor("Label.foreground")), materialIdField);
+        f1.addInput(Elements.coloredLabel("Organization", UIManager.getColor("Label.foreground")), organizations);
+        f1.addInput(Elements.coloredLabel("Component Photo", Constants.colors[0]), selectPhoto);
+        f1.addInput(Elements.coloredLabel("Component Name", Constants.colors[1]), materialNameField);
+        f1.addInput(Elements.coloredLabel("Vendor", Constants.colors[2]), selectedVendor);
+        f1.addInput(Elements.coloredLabel("Batched", Constants.colors[3]), isBatched);
+        f1.addInput(Elements.coloredLabel("Price", Constants.colors[4]), materialPriceField);
+        f1.addInput(Elements.coloredLabel("SKU'd Product", Constants.colors[5]), isSkud);
+        f1.addInput(Elements.coloredLabel("UPC", Constants.colors[6]), upc);
+        general.add(f1);
+        return general;
+    }
+
+    private JPanel dimensional(){
+
+        JPanel dimensional = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        Form f2 = new Form();
+        baseQtyField = Elements.input();
+        packagingUnits = Selectables.packagingUoms();
+        itemWidth = new UOMField();
+        itemLength = new UOMField();
+        itemHeight = new UOMField();
+        itemWeight = new UOMField();
+        tax = Elements.input("0");
+        exciseTax = Elements.input("0");
+        materialColor = Elements.input("Black");
+        f2.addInput(Elements.coloredLabel("Packaging Base Quantity", Constants.colors[10]), baseQtyField);
+        f2.addInput(Elements.coloredLabel("Packaging UOM", Constants.colors[9]), packagingUnits);
+        f2.addInput(Elements.coloredLabel("Color", Constants.colors[8]), materialColor);
+        f2.addInput(Elements.coloredLabel("Width", Constants.colors[7]), itemWidth);
+        f2.addInput(Elements.coloredLabel("Length", Constants.colors[6]), itemLength);
+        f2.addInput(Elements.coloredLabel("Height", Constants.colors[5]), itemHeight);
+        f2.addInput(Elements.coloredLabel("Weight", Constants.colors[4]), itemWeight);
+        f2.addInput(Elements.coloredLabel("Tax (0.05 as 5%)", Constants.colors[3]), tax);
+        f2.addInput(Elements.coloredLabel("Excise Tax (0.05 as 5%)", Constants.colors[2]), exciseTax);
+        dimensional.add(f2);
+        return dimensional;
     }
 }
