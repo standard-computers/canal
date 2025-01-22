@@ -28,7 +28,7 @@ public class AutoMakeAreas extends LockeState {
         super("AutoMake Areas", "/AREAS/AUTO_MK", true, true, false, true);
         setFrameIcon(new ImageIcon(AutoMakeAreas.class.getResource("/icons/automake.png")));
 
-        JTabbedPane tabs = new JTabbedPane();
+        CustomTabbedPane tabs = new CustomTabbedPane();
         locations = Engine.getLocations();
         this.checkboxes = new ArrayList<>();
         checkboxPanel = new JPanel();

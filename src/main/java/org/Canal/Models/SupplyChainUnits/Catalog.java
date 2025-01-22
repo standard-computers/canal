@@ -16,7 +16,7 @@ public class Catalog extends Objex {
     private ArrayList<String> costCenters;
     private ArrayList<String> customers;
     private ArrayList<String> vendors;
-    private ArrayList<OrderLineItem> items = new ArrayList<>();
+    private ArrayList<Item> items = new ArrayList<>();
 
     public String getDescription() {
         return description;
@@ -74,11 +74,11 @@ public class Catalog extends Objex {
         this.vendors = vendors;
     }
 
-    public ArrayList<OrderLineItem> getItems() {
+    public ArrayList<Item> getItems() {
         return items;
     }
 
-    public void setItems(ArrayList<OrderLineItem> items) {
+    public void setItems(ArrayList<Item> items) {
         this.items = items;
     }
 }

@@ -1,9 +1,12 @@
 package org.Canal.UI.Elements;
 
+import org.Canal.Utils.Engine;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 
 public class DesktopInterface extends JDesktopPane {
@@ -12,9 +15,14 @@ public class DesktopInterface extends JDesktopPane {
 
     public DesktopInterface() {
         try {
-            backgroundImage = ImageIO.read(DesktopInterface.class.getResource("/interfaceBackground.jpg"));
+            String backgroundPath = Engine.getConfiguration().getBackground();
+            if (backgroundPath == null || backgroundPath.trim().isEmpty()) {
+                backgroundImage = ImageIO.read(DesktopInterface.class.getResource("/interfaceBackground.jpg"));
+            } else {
+                backgroundImage = ImageIO.read(new File(backgroundPath));
+            }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to load background image.", e);
         }
     }
 

@@ -37,7 +37,7 @@ public class CreatePurchaseRequisition extends LockeState {
         setFrameIcon(new ImageIcon(CreatePurchaseRequisition.class.getResource("/icons/create.png")));
         Constants.checkLocke(this, true, true);
 
-        JTabbedPane tabs = new JTabbedPane();
+        CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.addTab("General", general());
         tabs.addTab("Notes", notes());
 
@@ -93,7 +93,6 @@ public class CreatePurchaseRequisition extends LockeState {
                    String prNotes = notes.getTextArea().getText();
                    PurchaseRequisition po = new PurchaseRequisition(prId, prName, prOwner, forVendor, forBuyer, prNumber, poAmount, dateFormat.format(startDateField.getSelectedDate()), dateFormat.format(endDateField.getSelectedDate()), prNotes);
                    Pipe.save("/ORDS/PR", po);
-                   JOptionPane.showMessageDialog(CreatePurchaseRequisition.this, "Purchase Order Created");
                    dispose();
                }
            }

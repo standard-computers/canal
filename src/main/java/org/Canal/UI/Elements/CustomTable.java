@@ -176,7 +176,7 @@ public class CustomTable extends JTable {
                 c.setBackground(table.getSelectionBackground()); // Use selection background for selected rows
             }
             if (c instanceof JComponent) {
-                ((JComponent) c).setBorder(BorderFactory.createLineBorder(ColorUtil.adjustBrightness(UIManager.getColor("Panel.background"), 0.85f), 1)); // Light gray border
+                ((JComponent) c).setBorder(BorderFactory.createMatteBorder(1, 0, 0, 1, ColorUtil.adjustBrightness(UIManager.getColor("Panel.background"), 0.85f)));
             }
             return c;
         }

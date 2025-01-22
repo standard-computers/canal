@@ -2,7 +2,7 @@ package org.Canal.UI.Views.Finance.PurchaseOrders;
 
 import org.Canal.Models.BusinessUnits.*;
 import org.Canal.Models.SupplyChainUnits.Delivery;
-import org.Canal.Models.SupplyChainUnits.OrderLineItem;
+import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.Models.SupplyChainUnits.Truck;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Copiable;
@@ -25,7 +25,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -68,7 +67,7 @@ public class CreatePurchaseOrder extends LockeState {
         this.desktop = desktop;
         newOrder = new PurchaseOrder();
 
-        JTabbedPane tabs = new JTabbedPane();
+        CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.addTab("Item Details", items());
         tabs.addTab("Delivery", delivery());
         tabs.addTab("Ledger", ledger());
@@ -268,7 +267,7 @@ public class CreatePurchaseOrder extends LockeState {
     private JPanel orderInfo(){
 
         Form f = new Form();
-        JTextField ordered = new Copiable(LocalDate.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy")));
+        JTextField ordered = new Copiable(Constants.now());
         HashMap<String, String> prs = new HashMap<>();
         for(PurchaseRequisition pr1 : Engine.orders.getPurchaseRequisitions()){
             prs.put(pr1.getId(), pr1.getId());
@@ -311,7 +310,7 @@ public class CreatePurchaseOrder extends LockeState {
     private JPanel items(){
 
         JPanel p = new JPanel(new BorderLayout());
-        ArrayList<OrderLineItem> items = Engine.products.getProducts();
+        ArrayList<Item> items = Engine.products.getProducts();
         if(items.isEmpty()){
             JOptionPane.showMessageDialog(this, "No products found", "Error", JOptionPane.ERROR_MESSAGE);
             dispose();
@@ -328,10 +327,11 @@ public class CreatePurchaseOrder extends LockeState {
         table.getColumnModel().getColumn(6).setCellRenderer(centerRenderer);
         table.getColumnModel().getColumn(7).setCellRenderer(centerRenderer);
         table.getColumnModel().getColumn(8).setCellRenderer(centerRenderer);
-        JComboBox<org.Canal.Models.SupplyChainUnits.OrderLineItem> itemComboBox = new JComboBox<>(items.toArray(new org.Canal.Models.SupplyChainUnits.OrderLineItem[0]));
+        JComboBox<Item> itemComboBox = new JComboBox<>(items.toArray(new Item[0]));
         table.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(itemComboBox));
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        buttonPanel.setBackground(UIManager.getColor("Panel.background"));
+        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        buttons.setLayout(new BoxLayout(buttons, BoxLayout.X_AXIS));
+        buttons.setBackground(UIManager.getColor("Panel.background"));
         IconButton addButton = new IconButton("Add Product", "add_rows", "Add products");
         addButton.addActionListener((ActionEvent _) -> {
             if (!items.isEmpty()) {
@@ -345,12 +345,13 @@ public class CreatePurchaseOrder extends LockeState {
                 model.removeRow(selectedRow);
             }
         });
-        buttonPanel.add(removeButton);
-        buttonPanel.add(addButton);
+        buttons.add(removeButton);
+        buttons.add(Box.createHorizontalStrut(5));
+        buttons.add(addButton);
         JScrollPane sp = new JScrollPane(table);
         sp.setPreferredSize(new Dimension(600, 300));
         p.add(sp, BorderLayout.CENTER);
-        p.add(buttonPanel, BorderLayout.NORTH);
+        p.add(buttons, BorderLayout.NORTH);
         return p;
     }
 

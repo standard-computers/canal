@@ -33,7 +33,7 @@ public class ViewPurchaseRequisition extends LockeState {
         this.desktop = desktop;
         this.refreshListener = refreshListener;
 
-        JTabbedPane tabs = new JTabbedPane();
+        CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.addTab("Header Information", new ImageIcon(ViewLocation.class.getResource("/icons/info.png")), headerInfo());
         tabs.addTab("Purchase Orders", new ImageIcon(ViewLocation.class.getResource("/icons/purchaseorders.png")), purchaseOrders());
         tabs.addTab("Activity", new ImageIcon(ViewLocation.class.getResource("/icons/activity.png")), activity());

@@ -1,6 +1,6 @@
 package org.Canal.UI.Views.Products.Components;
 
-import org.Canal.Models.SupplyChainUnits.OrderLineItem;
+import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.Copiable;
 import org.Canal.UI.Elements.*;
@@ -25,7 +25,7 @@ import java.awt.event.MouseEvent;
  */
 public class ViewComponent extends LockeState {
 
-    private OrderLineItem item;
+    private Item item;
     private JTree dataTree;
     private Copiable idField;
     private Copiable orgField;
@@ -53,7 +53,7 @@ public class ViewComponent extends LockeState {
     private Copiable vendorTaxExemptField;
     private Copiable vendorStatusField;
 
-    public ViewComponent(OrderLineItem item) {
+    public ViewComponent(Item item) {
 
         super("Component / " + item.getId() + " - " + item.getName(), "/CMPS/$", true, true, true, true);
         setFrameIcon(new ImageIcon(ViewComponent.class.getResource("/icons/components.png")));
@@ -64,7 +64,7 @@ public class ViewComponent extends LockeState {
         add(tb, BorderLayout.NORTH);
 
         JPanel iic = new JPanel(new BorderLayout());
-        iic.add(Elements.h2("OrderLineItem Information"), BorderLayout.NORTH);
+        iic.add(Elements.h2("Item Information"), BorderLayout.NORTH);
         iic.add(itemInfo(), BorderLayout.CENTER);
 
         JScrollPane itemScrollPane = new JScrollPane(iic);
@@ -85,7 +85,7 @@ public class ViewComponent extends LockeState {
                 TreePath path = dataTree.getPathForLocation(e.getX(), e.getY());
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
                 Locke orgNode = (Locke) node.getUserObject();
-                OrderLineItem selectedItem  = Engine.products.getItem(orgNode.getTransaction());
+                Item selectedItem  = Engine.products.getItem(orgNode.getTransaction());
                 idField.setText(selectedItem.getId());
                 orgField.setText(selectedItem.getOrg());
                 nameField.setText(selectedItem.getName());
@@ -228,7 +228,7 @@ public class ViewComponent extends LockeState {
 
         Locke[] items = new Locke[Engine.products.getItems(Engine.getOrganization().getId()).size()];
         for (int i = 0; i < Engine.products.getItems(Engine.getOrganization().getId()).size(); i++) {
-            OrderLineItem l = Engine.products.getItems(Engine.getOrganization().getId()).get(i);
+            Item l = Engine.products.getItems(Engine.getOrganization().getId()).get(i);
             items[i] = new Locke(l.getId() + " - " + l.getName() + " / Items", UIManager.getIcon("FileView.fileIcon"), l.getId(), new Color(147, 70, 3), null);
         }
         return new Locke(Engine.getOrganization().getId() + " - " + Engine.getOrganization().getName(), UIManager.getIcon("FileView.fileIcon"), "/ITS", items);

@@ -1,6 +1,7 @@
 package org.Canal.UI.Views.Employees;
 
 import org.Canal.Models.HumanResources.Employee;
+import org.Canal.UI.Elements.CustomTabbedPane;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.Copiable;
 import org.Canal.UI.Elements.LockeState;
@@ -22,7 +23,7 @@ public class ViewEmployee extends LockeState {
         super(employee.getId() + " - " + employee.getName(), "/EMPS/$", false, true, false, true);
         this.employee = employee;
         setFrameIcon(new ImageIcon(Employees.class.getResource("/icons/employees.png")));
-        JTabbedPane tabbedPane = new JTabbedPane();
+        CustomTabbedPane tabbedPane = new CustomTabbedPane();
 
         JScrollPane positionsHeld = new JScrollPane();
         tabbedPane.addTab("Positions", positionsHeld);

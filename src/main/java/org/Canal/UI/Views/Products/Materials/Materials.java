@@ -1,6 +1,6 @@
 package org.Canal.UI.Views.Products.Materials;
 
-import org.Canal.Models.SupplyChainUnits.OrderLineItem;
+import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
@@ -93,6 +93,11 @@ public class Materials extends LockeState implements RefreshListener {
                 table.exportToCSV();
             }
         });
+        refresh.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                refresh();
+            }
+        });
         return Elements.scrollPane(tb);
     }
 
@@ -126,7 +131,7 @@ public class Materials extends LockeState implements RefreshListener {
             "Created",
         };
         ArrayList<Object[]> d = new ArrayList<>();
-        for (OrderLineItem material : Engine.products.getMaterials()) {
+        for (Item material : Engine.products.getMaterials()) {
             Location vendor = Engine.getLocation(material.getVendor(), "VEND");
             d.add(new Object[]{
                     material.getId(),

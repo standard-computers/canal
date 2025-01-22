@@ -2,10 +2,7 @@ package org.Canal.UI.Views;
 
 import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.SupplyChainUnits.*;
-import org.Canal.UI.Elements.CustomTable;
-import org.Canal.UI.Elements.Elements;
-import org.Canal.UI.Elements.IconButton;
-import org.Canal.UI.Elements.LockeState;
+import org.Canal.UI.Elements.*;
 import org.Canal.UI.Views.Areas.AutoMakeAreas;
 import org.Canal.UI.Views.Bins.AutoMakeBins;
 import org.Canal.UI.Views.Bins.CreateBin;
@@ -46,7 +43,7 @@ public class ViewLocation extends LockeState implements RefreshListener {
         setLayout(new BorderLayout());
         JPanel tb = createToolBar();
         add(tb, BorderLayout.NORTH);
-        JTabbedPane tabs = new JTabbedPane();
+        CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.addTab("Inbound Deliveries", new ImageIcon(ViewLocation.class.getResource("/icons/inbound.png")), inboundDeliveries());
         tabs.addTab("Outbound Deliveries", new ImageIcon(ViewLocation.class.getResource("/icons/outbound.png")), outboundDeliveries());
         tabs.addTab("Open Tasks", openTasks());
@@ -318,7 +315,7 @@ public class ViewLocation extends LockeState implements RefreshListener {
         }
         Locke[] items = new Locke[Engine.products.getItems(location.getOrganization()).size()];
         for (int i = 0; i < Engine.products.getItems(location.getOrganization()).size(); i++) {
-            OrderLineItem l = Engine.products.getItems(location.getOrganization()).get(i);
+            Item l = Engine.products.getItems(location.getOrganization()).get(i);
             items[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/ITS/" + l.getId(), Constants.colors[4], null);
         }
         return new Locke(location.getName(), UIManager.getIcon("FileView.fileIcon"), "/DCSS/" + location.getId(), new Locke[]{

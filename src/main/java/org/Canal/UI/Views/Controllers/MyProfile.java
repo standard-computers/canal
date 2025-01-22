@@ -1,6 +1,7 @@
 package org.Canal.UI.Views.Controllers;
 
 import org.Canal.Models.HumanResources.Employee;
+import org.Canal.UI.Elements.CustomTabbedPane;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.UI.Views.ViewLocation;
@@ -23,7 +24,7 @@ public class MyProfile extends LockeState {
         //TODO Check that user is assigned
         me = Engine.getEmployee(Engine.getAssignedUser().getEmployee());
 
-        JTabbedPane tabs = new JTabbedPane();
+        CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.addTab("Summary", summary());
         tabs.addTab("Pay", new ImageIcon(ViewLocation.class.getResource("/icons/payment.png")), pay());
         tabs.addTab("Time", new ImageIcon(ViewLocation.class.getResource("/icons/timeclock.png")), time());

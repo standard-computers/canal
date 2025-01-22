@@ -1,5 +1,6 @@
 package org.Canal.UI.Views.Controllers;
 
+import org.Canal.UI.Elements.CustomTabbedPane;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.UI.Views.Finder;
@@ -32,7 +33,7 @@ public class HumanResources extends LockeState {
         setFrameIcon(new ImageIcon(HumanResources.class.getResource("/icons/humanresources.png")));
         this.desktop = desktop;
 
-        JTabbedPane tabbedPane = new JTabbedPane();
+        CustomTabbedPane tabbedPane = new CustomTabbedPane();
         tabbedPane.addTab("Users", new ImageIcon(ViewLocation.class.getResource("/icons/users.png")), users());
         tabbedPane.addTab("Employees", new ImageIcon(ViewLocation.class.getResource("/icons/employees.png")), employees());
         tabbedPane.addTab("Positions", new ImageIcon(ViewLocation.class.getResource("/icons/positions.png")), positions());

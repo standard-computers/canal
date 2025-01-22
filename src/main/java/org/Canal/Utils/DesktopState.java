@@ -6,4 +6,5 @@ public interface DesktopState {
     void put(JInternalFrame frame);
     void clean();
     void purge();
+    void force();
 }

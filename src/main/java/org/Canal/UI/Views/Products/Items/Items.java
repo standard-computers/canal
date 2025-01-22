@@ -1,6 +1,6 @@
 package org.Canal.UI.Views.Products.Items;
 
-import org.Canal.Models.SupplyChainUnits.OrderLineItem;
+import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
@@ -95,6 +95,11 @@ public class Items extends LockeState implements RefreshListener {
                 table.exportToCSV();
             }
         });
+        refresh.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                refresh();
+            }
+        });
         return Elements.scrollPane(tb);
     }
 
@@ -127,7 +132,7 @@ public class Items extends LockeState implements RefreshListener {
             "Excise Tax"
         };
         ArrayList<Object[]> d = new ArrayList<>();
-        for (OrderLineItem item : Engine.products.getItems()) {
+        for (Item item : Engine.products.getItems()) {
             Location vendor = Engine.getLocation(item.getVendor(), "VEND");
             d.add(new Object[]{
                     item.getId(),

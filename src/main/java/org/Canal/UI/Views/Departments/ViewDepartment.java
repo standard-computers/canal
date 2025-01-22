@@ -2,6 +2,7 @@ package org.Canal.UI.Views.Departments;
 
 import org.Canal.Models.HumanResources.Department;
 import org.Canal.UI.Elements.Copiable;
+import org.Canal.UI.Elements.CustomTabbedPane;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
 
@@ -14,7 +15,7 @@ public class ViewDepartment extends LockeState {
     public ViewDepartment(Department department) {
         super("Department " + department.getId(), "/DPTS/$", true, true, true, true);
         setFrameIcon(new ImageIcon(ViewDepartment.class.getResource("/icons/departments.png")));
-        JTabbedPane tabbedPane = new JTabbedPane();
+        CustomTabbedPane tabbedPane = new CustomTabbedPane();
 
         JScrollPane positionsList = new JScrollPane();
         tabbedPane.addTab("Positions", positionsList);

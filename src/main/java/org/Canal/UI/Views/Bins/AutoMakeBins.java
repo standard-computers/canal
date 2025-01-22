@@ -37,7 +37,7 @@ public class AutoMakeBins extends LockeState {
     public AutoMakeBins() {
         super("AutoMake Bins", "/BNS/AUTO_MK", false, true, false, true);
         setFrameIcon(new ImageIcon(AutoMakeBins.class.getResource("/icons/automake.png")));
-        JTabbedPane tabs = new JTabbedPane();
+        CustomTabbedPane tabs = new CustomTabbedPane();
         areas = Engine.getAreas();
         areas.addAll(Engine.getAreas());
         this.checkboxes = new ArrayList<>();

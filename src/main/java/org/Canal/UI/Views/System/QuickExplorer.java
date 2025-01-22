@@ -8,7 +8,6 @@ import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.UI.Views.Controllers.Inbox;
-import org.Canal.UI.Views.Controllers.Login;
 import org.Canal.UI.Views.Controllers.MyProfile;
 import org.Canal.UI.Views.ViewLocation;
 import org.Canal.Utils.DesktopState;
@@ -33,7 +32,7 @@ public class QuickExplorer extends JFrame implements DesktopState {
 
     public QuickExplorer() {
 
-        setTitle("Canal – Enterprise Resource Planner – 2025");
+        setTitle("Canal – 2025");
         setIconImage(new ImageIcon(ViewLocation.class.getResource("/icons/canal.png")).getImage());
         desktopPane = new DesktopInterface();
         controller = new Controller(this);
@@ -202,6 +201,14 @@ public class QuickExplorer extends JFrame implements DesktopState {
         } catch (PropertyVetoException e) {
             e.printStackTrace();
         }
+        repaint();
+    }
+
+    @Override
+    public void force(){
+        super.revalidate();
+        super.repaint();
+        revalidate();
         repaint();
     }
 

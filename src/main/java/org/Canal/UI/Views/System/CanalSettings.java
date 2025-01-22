@@ -1,13 +1,8 @@
 package org.Canal.UI.Views.System;
 
-import org.Canal.UI.Elements.CustomTable;
-import org.Canal.UI.Elements.Elements;
-import org.Canal.UI.Elements.Copiable;
-import org.Canal.UI.Elements.Selectable;
-import org.Canal.UI.Elements.Selectables;
-import org.Canal.UI.Elements.Form;
-import org.Canal.UI.Elements.LockeState;
+import org.Canal.UI.Elements.*;
 import org.Canal.Utils.Constants;
+import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Pipe;
 
@@ -26,16 +21,18 @@ import java.util.Map;
  */
 public class CanalSettings extends LockeState {
 
+    private DesktopState desktop;
     private Selectable themeOptions;
     private JTextField fontSizeField;
     private JCheckBox saveLockeState;
     private JCheckBox showLockeCodes;
     private JCheckBox showButtonLabels;
 
-    public CanalSettings(){
+    public CanalSettings(DesktopState desktop) {
 
         super("Canal Settings", "/CNL", false, true, false, false);
         setFrameIcon(new ImageIcon(CanalSettings.class.getResource("/icons/settings.png")));
+        this.desktop = desktop;
 
         JButton cr = Elements.button("Save");
         cr.addMouseListener(new MouseAdapter() {
@@ -51,7 +48,7 @@ public class CanalSettings extends LockeState {
         });
 
         setLayout(new BorderLayout());
-        JTabbedPane settings = new JTabbedPane();
+        CustomTabbedPane settings = new CustomTabbedPane();
         settings.add(generalSettings(), "General");
         settings.add(instanceVars(), "Instace Variables");
         settings.add(databaseConnection(), "Database");
@@ -77,7 +74,9 @@ public class CanalSettings extends LockeState {
                 int returnVal = chooser.showOpenDialog(null);
                 if(returnVal == JFileChooser.APPROVE_OPTION){
                     File file = chooser.getSelectedFile();
-
+                    Engine.getConfiguration().setBackground(file.getAbsolutePath());
+                    Pipe.saveConfiguration();
+                    desktop.force();
                 }
             }
         });

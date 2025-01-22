@@ -24,7 +24,7 @@ public class CustomSetup extends JFrame {
     public CustomSetup(){
         setTitle("Setup Canal");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        JTabbedPane settings = new JTabbedPane();
+        CustomTabbedPane settings = new CustomTabbedPane();
         settings.add(generalSettings(), "General");
         settings.add(serverInformation(), "Server");
         setLayout(new BorderLayout());

@@ -1,10 +1,7 @@
 package org.Canal.UI.Views.Areas;
 
 import org.Canal.Models.SupplyChainUnits.Area;
-import org.Canal.UI.Elements.CustomTable;
-import org.Canal.UI.Elements.Elements;
-import org.Canal.UI.Elements.IconButton;
-import org.Canal.UI.Elements.LockeState;
+import org.Canal.UI.Elements.*;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.RefreshListener;
 
@@ -33,7 +30,10 @@ public class Areas extends LockeState implements RefreshListener {
         holder.add(tb, BorderLayout.SOUTH);
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);
-        add(tableScrollPane, BorderLayout.CENTER);
+        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tableScrollPane, details());
+        splitPane.setDividerLocation(250);
+        splitPane.setResizeWeight(0.5);
+        add(splitPane, BorderLayout.CENTER);
     }
 
     private JPanel toolbar() {
@@ -122,6 +122,12 @@ public class Areas extends LockeState implements RefreshListener {
             });
         }
         return new CustomTable(columns, data);
+    }
+
+    private CustomTabbedPane details(){
+        CustomTabbedPane tabs = new CustomTabbedPane();
+        tabs.addTab("Bins", new JPanel());
+        return tabs;
     }
 
     @Override

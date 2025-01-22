@@ -1,6 +1,7 @@
 package org.Canal.UI.Views.Customers;
 
 import org.Canal.Models.SupplyChainUnits.Location;
+import org.Canal.UI.Elements.CustomTabbedPane;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.UI.Views.Finance.Invoices.CreateInvoice;
@@ -24,7 +25,7 @@ public class ViewCustomer extends LockeState {
         setFrameIcon(new ImageIcon(ViewCustomer.class.getResource("/icons/customers.png")));
 
         this.customer = customer;
-        JTabbedPane tabbedPane = new JTabbedPane();
+        CustomTabbedPane tabbedPane = new CustomTabbedPane();
         JPanel formPanel = new JPanel();
         formPanel.setLayout(new GridLayout(2, 2));
         formPanel.add(new JTextField());

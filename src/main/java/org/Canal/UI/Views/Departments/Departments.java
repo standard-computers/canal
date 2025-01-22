@@ -24,16 +24,21 @@ public class Departments extends LockeState implements RefreshListener {
 
     public Departments(DesktopState desktop) {
 
-        super("Departments", "/DPTS", false, true, false, true);
+        super("Departments", "/DPTS", true, true, true, true);
         setFrameIcon(new ImageIcon(Departments.class.getResource("/icons/departments.png")));
         this.desktop = desktop;
 
         table = table();
         JScrollPane tableScrollPane = new JScrollPane(table);
-        tableScrollPane.setPreferredSize(new Dimension(900, 700));
+        tableScrollPane.setPreferredSize(new Dimension(900, 600));
         setLayout(new BorderLayout());
         add(toolbar(), BorderLayout.NORTH);
-        add(tableScrollPane, BorderLayout.CENTER);
+
+        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tableScrollPane, details());
+        splitPane.setDividerLocation(250);
+        splitPane.setResizeWeight(0.5);
+
+        add(splitPane, BorderLayout.CENTER);
         table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -136,6 +141,17 @@ public class Departments extends LockeState implements RefreshListener {
             });
         }
         return new CustomTable(columns, data);
+    }
+
+    private CustomTabbedPane details() {
+
+        JPanel p = new JPanel(new BorderLayout());
+        CustomTabbedPane tabs = new CustomTabbedPane();
+        tabs.addTab("Departments", new JPanel());
+        tabs.addTab("Teams", new JPanel());
+        tabs.addTab("Positions", new JPanel());
+        tabs.addTab("Employees", new JPanel());
+        return tabs;
     }
 
     @Override

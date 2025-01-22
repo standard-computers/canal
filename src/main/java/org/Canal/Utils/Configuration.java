@@ -6,6 +6,7 @@ public class Configuration {
     private String instance_name = "Canal";
     private String product_key = "";
     private String theme = "/com/formdev/flatlaf/intellijthemes/themes/SolarizedDark.theme.json";
+    private String background;
     private String assignedUser; //ID of User this instance of Canal is assigned to
     private int fontSize = 14;
     private boolean saveLockeState = false;
@@ -26,6 +27,14 @@ public class Configuration {
 
     public void setTheme(String theme) {
         this.theme = theme;
+    }
+
+    public String getBackground() {
+        return background;
+    }
+
+    public void setBackground(String background) {
+        this.background = background;
     }
 
     public boolean saveLockeState() {

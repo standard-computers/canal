@@ -38,7 +38,7 @@ public class CreateLocation extends LockeState {
         setFrameIcon(new ImageIcon(CreateLocation.class.getResource("/icons/create.png")));
         this.objexType = objexType;
 
-        JTabbedPane tabs = new JTabbedPane();
+        CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.add("General", general());
         tabs.add("Contact Info", contact());
         tabs.add("Dimensional", dimensional());

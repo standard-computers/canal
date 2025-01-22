@@ -30,7 +30,7 @@ public class AutoMakeSalesOrders extends LockeState {
     public AutoMakeSalesOrders() {
         super("AutoMake Sales Orders", "/ORDS/SO/AUTO_MK", false, true, false, true);
         setFrameIcon(new ImageIcon(AutoMakeSalesOrders.class.getResource("/icons/automake.png")));
-        JTabbedPane tabbedPane = new JTabbedPane();
+        CustomTabbedPane tabbedPane = new CustomTabbedPane();
         tabbedPane.add(buyers(), "Buyers");
         tabbedPane.add(salesOrderData(), "SO Data");
         tabbedPane.add(itemData(), "Items");

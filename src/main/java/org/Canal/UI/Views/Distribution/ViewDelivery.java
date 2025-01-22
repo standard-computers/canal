@@ -1,6 +1,7 @@
 package org.Canal.UI.Views.Distribution;
 
 import org.Canal.Models.SupplyChainUnits.Delivery;
+import org.Canal.UI.Elements.CustomTabbedPane;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.LockeState;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -22,7 +23,7 @@ public class ViewDelivery extends LockeState {
         super("View Delivery", "/TRANS/" + delivery.getType(), false, true, false, true);
         this.delivery = delivery;
 
-        JTabbedPane tabs = new JTabbedPane();
+        CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.add("Receipt", receipt());
         tabs.add("Pallets", pallets());
         tabs.add("Items", items());

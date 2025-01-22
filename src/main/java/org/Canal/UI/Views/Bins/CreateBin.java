@@ -48,7 +48,7 @@ public class CreateBin extends LockeState {
         this.location = location;
         this.refreshListener = refreshListener;
 
-        JTabbedPane tabs = new JTabbedPane();
+        CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.addTab("General", new ImageIcon(ViewLocation.class.getResource("/icons/info.png")), general());
         tabs.addTab("Dimensional", new ImageIcon(ViewLocation.class.getResource("/icons/dimensional.png")), dimensional());
         tabs.addTab("Item Restrictions", new ImageIcon(ViewLocation.class.getResource("/icons/items.png")), restrictions());
@@ -172,7 +172,7 @@ public class CreateBin extends LockeState {
         autoReplenish = new JCheckBox("Auto Replenish");
         autoReplenish.setToolTipText("Bin will be automatically replenished based on set replenishments");
         fixedBin = new JCheckBox("Fixed Bin");
-        fixedBin.setToolTipText("Bin can only contain one OrderLineItem ID");
+        fixedBin.setToolTipText("Bin can only contain one Item ID");
         holdsStock = new JCheckBox("Bin can hold inventory");
         f.addInput(Elements.coloredLabel("*New Bin ID", UIManager.getColor("Label.foreground")), idField);
         f.addInput(Elements.coloredLabel("Location ID", UIManager.getColor("Label.foreground")), locationField);

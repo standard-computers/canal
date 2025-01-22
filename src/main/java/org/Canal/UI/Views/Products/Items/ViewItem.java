@@ -1,6 +1,6 @@
 package org.Canal.UI.Views.Products.Items;
 
-import org.Canal.Models.SupplyChainUnits.OrderLineItem;
+import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Copiable;
@@ -22,14 +22,14 @@ import java.awt.event.MouseEvent;
 
 public class ViewItem extends LockeState {
 
-    private OrderLineItem item;
+    private Item item;
     private JTree dataTree;
     private Copiable idField, orgField, nameField, vendorField, colorField, batchedField, rentableField, skudField, consumableField, priceField, widthField, lengthField, heightField, weightField, taxField, exciseTaxfield;
     private Copiable vendorIdField, vendorNameField, vendorStreetField, vendorCityField, vendorStateField, vendorPostalField, vendorCountryField, vendorTaxExemptField, vendorStatusField;
 
-    public ViewItem(OrderLineItem item) {
+    public ViewItem(Item item) {
 
-        super("OrderLineItem / " + item.getId() + " - " + item.getName(), "/ITS/$", true, true, true, true);
+        super("Item / " + item.getId() + " - " + item.getName(), "/ITS/$", true, true, true, true);
         setFrameIcon(new ImageIcon(ViewItem.class.getResource("/icons/items.png")));
         this.item = item;
 
@@ -59,7 +59,7 @@ public class ViewItem extends LockeState {
                 TreePath path = dataTree.getPathForLocation(e.getX(), e.getY());
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
                 Locke orgNode = (Locke) node.getUserObject();
-                OrderLineItem selectedItem  = Engine.products.getItem(orgNode.getTransaction());
+                Item selectedItem  = Engine.products.getItem(orgNode.getTransaction());
                 idField.setText(selectedItem.getId());
                 orgField.setText(selectedItem.getOrg());
                 nameField.setText(selectedItem.getName());
@@ -203,7 +203,7 @@ public class ViewItem extends LockeState {
 
         Locke[] items = new Locke[Engine.products.getItems(Engine.getOrganization().getId()).size()];
         for (int i = 0; i < Engine.products.getItems(Engine.getOrganization().getId()).size(); i++) {
-            OrderLineItem l = Engine.products.getItems(Engine.getOrganization().getId()).get(i);
+            Item l = Engine.products.getItems(Engine.getOrganization().getId()).get(i);
             items[i] = new Locke(l.getId() + " - " + l.getName() + " / Items", UIManager.getIcon("FileView.fileIcon"), l.getId(), new Color(147, 70, 3), null);
         }
         return new Locke(Engine.getOrganization().getId() + " - " + Engine.getOrganization().getName(), UIManager.getIcon("FileView.fileIcon"), "/ITS", items);

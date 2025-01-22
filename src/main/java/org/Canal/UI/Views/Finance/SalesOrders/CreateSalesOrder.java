@@ -2,6 +2,7 @@ package org.Canal.UI.Views.Finance.SalesOrders;
 
 import org.Canal.Models.BusinessUnits.*;
 import org.Canal.Models.SupplyChainUnits.Delivery;
+import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.Models.SupplyChainUnits.Truck;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Copiable;
@@ -69,7 +70,7 @@ public class CreateSalesOrder extends LockeState {
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));
         Constants.checkLocke(this, true, true);
 
-        JTabbedPane tabs = new JTabbedPane();
+        CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.addTab("Item Details", items());
         tabs.addTab("Delivery", delivery());
         tabs.addTab("Ledger", ledger());
@@ -306,7 +307,7 @@ public class CreateSalesOrder extends LockeState {
     private JPanel items(){
 
         JPanel p = new JPanel(new BorderLayout());
-        ArrayList<org.Canal.Models.SupplyChainUnits.OrderLineItem> items = Engine.products.getProducts();
+        ArrayList<Item> items = Engine.products.getProducts();
         if(items.isEmpty()){
             JOptionPane.showMessageDialog(this, "No products found", "Error", JOptionPane.ERROR_MESSAGE);
             dispose();
@@ -323,7 +324,7 @@ public class CreateSalesOrder extends LockeState {
         col2.setCellRenderer(centerRenderer);
         col3.setCellRenderer(centerRenderer);
         col4.setCellRenderer(centerRenderer);
-        JComboBox<org.Canal.Models.SupplyChainUnits.OrderLineItem> itemComboBox = new JComboBox<>(items.toArray(new org.Canal.Models.SupplyChainUnits.OrderLineItem[0]));
+        JComboBox<Item> itemComboBox = new JComboBox<>(items.toArray(new Item[0]));
         table.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(itemComboBox));
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         buttonPanel.setBackground(UIManager.getColor("Panel.background"));

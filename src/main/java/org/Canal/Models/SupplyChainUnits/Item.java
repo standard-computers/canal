@@ -1,10 +1,11 @@
 package org.Canal.Models.SupplyChainUnits;
 
+import org.Canal.Models.BusinessUnits.OrderLineItem;
 import org.Canal.Models.Objex;
 
 import java.util.ArrayList;
 
-public class OrderLineItem extends Objex {
+public class Item extends Objex {
 
     private String org;
     private String vendor;
@@ -221,6 +222,10 @@ public class OrderLineItem extends Objex {
 
     public void setComponents(ArrayList<OrderLineItem> components) {
         this.components = components;
+    }
+
+    public void addComponent(OrderLineItem component) {
+        this.components.add(component);
     }
 
     @Override

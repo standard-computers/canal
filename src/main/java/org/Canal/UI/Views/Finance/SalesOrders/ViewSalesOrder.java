@@ -1,7 +1,7 @@
 package org.Canal.UI.Views.Finance.SalesOrders;
 
 import org.Canal.Models.BusinessUnits.*;
-import org.Canal.Models.SupplyChainUnits.OrderLineItem;
+import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.Constants;
@@ -43,8 +43,8 @@ public class ViewSalesOrder extends LockeState {
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));
         this.salesOrder = salesOrder;
 
-        JTabbedPane tabs = new JTabbedPane();
-        tabs.addTab("OrderLineItem Details", itemDetails());
+        CustomTabbedPane tabs = new CustomTabbedPane();
+        tabs.addTab("Item Details", itemDetails());
         tabs.addTab("Delivery", deliveryDetails());
         tabs.addTab("Ledger", ledgerDetails());
         tabs.addTab("Purchase Order", purchaseOrderDetails());
@@ -124,7 +124,7 @@ public class ViewSalesOrder extends LockeState {
 
     private JPanel itemDetails(){
         JPanel p = new JPanel(new BorderLayout());
-        ArrayList<OrderLineItem> items = Engine.products.getProducts();
+        ArrayList<Item> items = Engine.products.getProducts();
         if(items.isEmpty()){
             JOptionPane.showMessageDialog(this, "No products found", "Error", JOptionPane.ERROR_MESSAGE);
             dispose();
@@ -141,7 +141,7 @@ public class ViewSalesOrder extends LockeState {
         col2.setCellRenderer(centerRenderer);
         col3.setCellRenderer(centerRenderer);
         col4.setCellRenderer(centerRenderer);
-        JComboBox<OrderLineItem> itemComboBox = new JComboBox<>(items.toArray(new OrderLineItem[0]));
+        JComboBox<Item> itemComboBox = new JComboBox<>(items.toArray(new Item[0]));
         table.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(itemComboBox));
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         buttonPanel.setBackground(UIManager.getColor("Panel.background"));

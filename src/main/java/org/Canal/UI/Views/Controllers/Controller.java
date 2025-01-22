@@ -62,6 +62,16 @@ public class Controller extends JPanel implements RefreshListener {
                     }
                 }
             }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                dataTree.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                dataTree.setCursor(Cursor.getDefaultCursor());
+            }
         });
         JScrollPane treeScrollPane = new JScrollPane(dataTree);
         add(cmd, BorderLayout.NORTH);
