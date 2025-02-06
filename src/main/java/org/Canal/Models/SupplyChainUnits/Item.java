@@ -31,6 +31,7 @@ public class Item extends Objex {
     private double tax;
     private double exciseTax;
     private ArrayList<OrderLineItem> components = new ArrayList<>();
+    private ArrayList<Object[]> uoms = new ArrayList<>();
 
     public String getOrg() {
         return org;
@@ -226,6 +227,14 @@ public class Item extends Objex {
 
     public void addComponent(OrderLineItem component) {
         this.components.add(component);
+    }
+
+    public ArrayList<Object[]> getUoms() {
+        return uoms;
+    }
+
+    public void setUoms(ArrayList<Object[]> uoms) {
+        this.uoms = uoms;
     }
 
     @Override

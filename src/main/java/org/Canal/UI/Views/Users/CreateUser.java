@@ -11,18 +11,16 @@ import org.Canal.Utils.Constants;
 import org.Canal.Utils.Crypter;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Pipe;
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyVetoException;
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -31,7 +29,11 @@ import java.util.ArrayList;
 public class CreateUser extends LockeState {
 
     private JPanel canalAccess;
+    private JTextField userIdField;
+    private Selectable employees;
     private ArrayList<JCheckBox> checkboxes;
+    private RSyntaxTextArea textArea;
+    private JLabel accessCount;
 
     public CreateUser(){
 
@@ -45,60 +47,79 @@ public class CreateUser extends LockeState {
                 throw new RuntimeException(e);
             }
         }
-        JPanel l = new JPanel(new BorderLayout());
         Form f = new Form();
         String puid = "U" + (10000 + (Engine.getUsers().size() + 1));
-        JTextField userIdField = Elements.input(puid);
-        f.addInput(Elements.coloredLabel("New User ID", new Color(178, 255, 102)), userIdField);
-        Selectable empsOpts = Selectables.employees();
-        f.addInput(Elements.coloredLabel("Employee", new Color(102, 255, 178)), empsOpts);
-        JTextArea pastAccess = new JTextArea();
-        pastAccess.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                handlePaste();
-            }
+        userIdField = Elements.input(puid);
+        employees = Selectables.employees();
+        f.addInput(Elements.coloredLabel("New User ID", Constants.colors[10]), userIdField);
+        f.addInput(Elements.coloredLabel("Employee", Constants.colors[9]), employees);
 
-            @Override
-            public void removeUpdate(DocumentEvent e) {}
+        JPanel again = new JPanel(new BorderLayout());
+        again.add(Elements.header("Create New User", SwingConstants.LEFT), BorderLayout.NORTH);
+        again.add(f, BorderLayout.CENTER);
+        again.add(toolbar(), BorderLayout.SOUTH);
+        add(again, BorderLayout.NORTH);
 
-            @Override
-            public void changedUpdate(DocumentEvent e) {}
+        CustomTabbedPane accessControl = new CustomTabbedPane();
+        accessControl.addTab("Checklist", accessList());
+        accessControl.addTab("Paste Access", pasteAccess());
+        add(accessControl, BorderLayout.CENTER);
+    }
 
-            private void handlePaste() {
-                String clipboardText = getClipboardText();
-                if (clipboardText != null && pastAccess.getText().contains(clipboardText)) {
-                    canalAccess.removeAll();
-                    checkboxes.clear();
-                    String[] lines = clipboardText.split("\n");
-                    for (String line : lines) {
-                        JCheckBox checkBox = new JCheckBox(line.trim());
-                        checkboxes.add(checkBox);
-                        canalAccess.add(checkBox);
+    private JPanel toolbar() {
+        JPanel tb = new JPanel();
+        tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        IconButton copy = new IconButton("Copy From", "open", "Export as CSV", "");
+        IconButton review = new IconButton("Review", "review", "Review User");
+        IconButton executed = new IconButton("Create User", "execute", "Create User");
+        accessCount = Elements.link("0 Accesses", "Total number of Locked Codes user has access to");
+        tb.add(copy);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(review);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(executed);
+        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+        executed.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                User newUser = new User();
+                newUser.setId(userIdField.getText().trim());
+                newUser.setEmployee(employees.getSelectedValue());
+                ArrayList<String> accesses = new ArrayList<>();
+                for(JCheckBox c : checkboxes){
+                    if(c.isSelected()){
+                        accesses.add(c.getText());
                     }
-                    canalAccess.revalidate();
-                    canalAccess.repaint();
+                }
+                newUser.setAccesses(accesses);
+                Employee emp = Engine.getEmployee(employees.getSelectedValue());
+                try {
+                    String genHpv = Crypter.md5(emp.getName().split(" ")[emp.getName().split(" ").length - 1].toLowerCase() + "1234");
+                    newUser.setHpv(genHpv);
+                    Pipe.save("/USRS", newUser);
+                    dispose();
+                    JOptionPane.showMessageDialog(null, "User create for ORG " + Engine.getOrganization().getId());
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "User creation failed because password encryption was not implemented.");
                 }
             }
         });
-        f.addInput(Elements.label("Paste Access"), pastAccess);
-        JButton make = Elements.button("Create User");
+        return tb;
+    }
+
+    private JPanel accessList(){
+
+        JPanel p = new JPanel(new BorderLayout());
         canalAccess = prepareAccesses();
-        JPanel again = new JPanel(new BorderLayout());
-        again.add(f, BorderLayout.NORTH);
         JScrollPane scrollPane = new JScrollPane(canalAccess);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setPreferredSize(new Dimension(400, 300));
-        again.add(scrollPane, BorderLayout.CENTER);
         JPanel ctrls = new JPanel(new GridLayout(1, 2));
         JButton sa = Elements.button("Select All");
         JButton dsa = Elements.button("Deselect All");
         ctrls.add(sa);
         ctrls.add(dsa);
-        again.add(ctrls, BorderLayout.SOUTH);
-        l.add(again, BorderLayout.CENTER);
-        l.add(make, BorderLayout.SOUTH);
-        add(l);
+        p.add(ctrls, BorderLayout.SOUTH);
         sa.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 checkboxes.forEach(cb -> cb.setSelected(true));
@@ -111,40 +132,17 @@ public class CreateUser extends LockeState {
                 repaint();
             }
         });
-        make.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                User newUser = new User();
-                newUser.setId(userIdField.getText().trim());
-                newUser.setEmployee(empsOpts.getSelectedValue());
-                ArrayList<String> accesses = new ArrayList<>();
-                for(JCheckBox c : checkboxes){
-                    if(c.isSelected()){
-                        accesses.add(c.getText());
-                    }
-                }
-                newUser.setAccesses(accesses);
-                Employee emp = Engine.getEmployee(empsOpts.getSelectedValue());
-                try {
-                    String genHpv = Crypter.md5(emp.getName().split(" ")[emp.getName().split(" ").length - 1].toLowerCase() + "1234");
-                    newUser.setHpv(genHpv);
-                    Pipe.save("/USRS", newUser);
-                    dispose();
-                    JOptionPane.showMessageDialog(null, "User create for ORG " + Engine.getOrganization().getId());
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "User creation failed because password encryption was not implemented.");
-                }
-            }
-        });
+        p.add(scrollPane, BorderLayout.CENTER);
+        return p;
     }
 
-    private String getClipboardText() {
-        try {
-            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-            return (String) clipboard.getData(DataFlavor.stringFlavor);
-        } catch (UnsupportedFlavorException | IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+    private RTextScrollPane pasteAccess(){
+
+        textArea = new RSyntaxTextArea(20, 60);
+        textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_MARKDOWN);
+        textArea.setCodeFoldingEnabled(true);
+        textArea.setLineWrap(false);
+        return new RTextScrollPane(textArea);
     }
 
     private JPanel prepareAccesses() {

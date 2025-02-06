@@ -764,7 +764,9 @@ public class Engine {
         switch (t) {
             case "ORGS" -> {
                 for (Location org : Engine.getLocations("ORGS")) {
-                    new ViewLocation(org, desktop);
+                    if(org.getId().equals(oid)){
+                        return new ViewLocation(org, desktop);
+                    }
                 }
             }
             case "AREAS" -> {

@@ -127,6 +127,9 @@ public class Areas extends LockeState implements RefreshListener {
     private CustomTabbedPane details(){
         CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.addTab("Bins", new JPanel());
+        tabs.addTab("Inventory", new JPanel());
+        tabs.addTab("Activity", new JPanel());
+        tabs.addTab("Tasks", new JPanel());
         return tabs;
     }
 

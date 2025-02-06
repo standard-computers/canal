@@ -22,8 +22,16 @@ public class Location extends Objex {
     private String ein = "UNKNOWN";
     private String email = "UNKNOWN";
     private String phone = "UNKNOWN";
+    private double width;
+    private String widthUOM;
+    private double length;
+    private String lengthUOM;
+    private double height;
+    private String heightUOM;
     private double area; //Square area of warehouse
     private String areaUOM;
+    private double volume;
+    private String volumeUOM;
     private ArrayList<Department> departments = new ArrayList<>();
 
     public String getType() {
@@ -122,6 +130,54 @@ public class Location extends Objex {
         this.phone = phone;
     }
 
+    public double getWidth() {
+        return width;
+    }
+
+    public void setWidth(double width) {
+        this.width = width;
+    }
+
+    public String getWidthUOM() {
+        return widthUOM;
+    }
+
+    public void setWidthUOM(String widthUOM) {
+        this.widthUOM = widthUOM;
+    }
+
+    public double getLength() {
+        return length;
+    }
+
+    public void setLength(double length) {
+        this.length = length;
+    }
+
+    public String getLengthUOM() {
+        return lengthUOM;
+    }
+
+    public void setLengthUOM(String lengthUOM) {
+        this.lengthUOM = lengthUOM;
+    }
+
+    public double getHeight() {
+        return height;
+    }
+
+    public void setHeight(double height) {
+        this.height = height;
+    }
+
+    public String getHeightUOM() {
+        return heightUOM;
+    }
+
+    public void setHeightUOM(String heightUOM) {
+        this.heightUOM = heightUOM;
+    }
+
     public double getArea() {
         return area;
     }
@@ -136,6 +192,22 @@ public class Location extends Objex {
 
     public void setAreaUOM(String areaUOM) {
         this.areaUOM = areaUOM;
+    }
+
+    public double getVolume() {
+        return volume;
+    }
+
+    public void setVolume(double volume) {
+        this.volume = volume;
+    }
+
+    public String getVolumeUOM() {
+        return volumeUOM;
+    }
+
+    public void setVolumeUOM(String volumeUOM) {
+        this.volumeUOM = volumeUOM;
     }
 
     public ArrayList<Department> getDepartments() {

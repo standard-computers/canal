@@ -39,6 +39,7 @@ public class CreatePurchaseRequisition extends LockeState {
 
         CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.addTab("General", general());
+        tabs.addTab("Products", products());
         tabs.addTab("Notes", notes());
 
         setLayout(new BorderLayout());
@@ -137,6 +138,24 @@ public class CreatePurchaseRequisition extends LockeState {
             }
         });
         return f;
+    }
+
+    private JPanel products(){
+
+        JPanel products = new JPanel(new BorderLayout());
+        JPanel buttons = new JPanel();
+        buttons.setLayout(new BoxLayout(buttons, BoxLayout.X_AXIS));
+        IconButton add = new IconButton("Add Product", "add_rows", "Add Product");
+        IconButton remove = new IconButton("Remove Selected", "delete_rows", "Remove Selected Product");
+        JTextField autoAdd = new JTextField(5);
+        buttons.add(Box.createHorizontalStrut(5));
+        buttons.add(add);
+        buttons.add(Box.createHorizontalStrut(5));
+        buttons.add(remove);
+        buttons.add(Box.createHorizontalStrut(5));
+        buttons.add(autoAdd);
+        products.add(buttons, BorderLayout.SOUTH);
+        return products;
     }
 
     private RTextScrollPane notes(){

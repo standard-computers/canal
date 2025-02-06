@@ -26,7 +26,7 @@ public class CreateItem extends LockeState implements Includer {
     private JTextField itemIdField;
     private JTextField itemNameField;
     private JTextField itemPriceField;
-    private JTextField itemColor;
+    private JTextField itemColorField;
     private JTextField tax;
     private JTextField exciseTax;
     private JTextField upc;
@@ -46,8 +46,8 @@ public class CreateItem extends LockeState implements Includer {
     private Selectable packagingUnits;
     private DesktopState desktop;
     private ArrayList<Object[]> components = new ArrayList<>();
+    private ArrayList<Object[]> uomsData = new ArrayList<>();
     private CustomTable boms;
-    private JPanel bomPanel;
     private JScrollPane scrollPane;
 
     public CreateItem(DesktopState desktop){
@@ -61,8 +61,7 @@ public class CreateItem extends LockeState implements Includer {
         tabs.addTab("General", general());
         tabs.addTab("Dimensional", dimensional());
         tabs.addTab("Units of Measure", unitsOfMeasure());
-        bomPanel = billOfMaterials();
-        tabs.addTab("Bill of Materials", bomPanel);
+        tabs.addTab("Packaging", packaging());
 
         JPanel topBar = new JPanel(new BorderLayout());
         topBar.add(Elements.header("Create New Item", SwingConstants.LEFT), BorderLayout.CENTER);
@@ -94,6 +93,12 @@ public class CreateItem extends LockeState implements Includer {
                 super.mouseClicked(e);
                 if(Double.parseDouble(itemPriceField.getText()) <= 1){
                     addToQueue(new String[]{"WARNING", "Item price is less than or equal to 1."});
+                }
+                if(itemNameField.getText().isEmpty()){
+                    addToQueue(new String[]{"CRITICAL", "Item NAME is blank"});
+                }
+                if(itemColorField.getText().isEmpty()){
+                    addToQueue(new String[]{"CRITICAL", "Item COLOR is blank"});
                 }
                 double estPrice = 0.0;
                 for(Object[] o : components){
@@ -155,7 +160,7 @@ public class CreateItem extends LockeState implements Includer {
         item.setBaseQuantity(Double.parseDouble(baseQtyField.getText().trim()));
         item.setPackagingUnit(packagingUnits.getSelectedValue());
         item.setVendor(selectedVendor.getSelectedValue());
-        item.setColor(itemColor.getText());
+        item.setColor(itemColorField.getText());
         item.setBatched(isBatched.isSelected());
         item.setRentable(isRentable.isSelected());
         item.setSkud(isSkud.isSelected());
@@ -189,7 +194,7 @@ public class CreateItem extends LockeState implements Includer {
         selectedVendor = Selectables.vendors();
         itemIdField = Elements.input(((String) Engine.codex("ITS", "prefix")) + (1000 + (Engine.products.getItems().size() + 1)));
         orgIdField = Selectables.organizations();
-        itemNameField = Elements.input("Black Shirt");
+        itemNameField = Elements.input();
         itemPriceField = Elements.input("1.00");
         isBatched = new JCheckBox(" Item expires");
         isRentable = new JCheckBox(" Item can be rented");
@@ -221,12 +226,12 @@ public class CreateItem extends LockeState implements Includer {
         itemWeight = new UOMField();
         tax = Elements.input("0");
         exciseTax = Elements.input("0");
-        itemColor = Elements.input("Black");
+        itemColorField = Elements.input();
         isConsumable = new JCheckBox();
         f2.addInput(Elements.coloredLabel("Packaging Base Quantity", Constants.colors[10]), baseQtyField);
         f2.addInput(Elements.coloredLabel("Packaging UOM", Constants.colors[9]), packagingUnits);
         f2.addInput(Elements.coloredLabel("Consumable?", Constants.colors[8]), isConsumable);
-        f2.addInput(Elements.coloredLabel("Color", Constants.colors[7]), itemColor);
+        f2.addInput(Elements.coloredLabel("Color", Constants.colors[7]), itemColorField);
         f2.addInput(Elements.coloredLabel("Width", Constants.colors[6]), itemWidth);
         f2.addInput(Elements.coloredLabel("Length", Constants.colors[5]), itemLength);
         f2.addInput(Elements.coloredLabel("Height", Constants.colors[4]), itemHeight);
@@ -239,7 +244,45 @@ public class CreateItem extends LockeState implements Includer {
 
     private JPanel unitsOfMeasure(){
         JPanel unitsOfMeasure = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel tb = new JPanel();
+        tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        IconButton addUoM = new IconButton("Add", "add_rows", "Add Unit of Measure");
+        IconButton removeUoM = new IconButton("Remove Selected", "delete_rows", "Remove Uunit of Measure");
+        IconButton automakeUoM = new IconButton("AutoMake", "automake", "Remove Uunit of Measure");
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(addUoM);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(removeUoM);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(automakeUoM);
+        unitsOfMeasure.setLayout(new BorderLayout());
+        unitsOfMeasure.add(tb, BorderLayout.NORTH);
+        CustomTable uoms = new CustomTable(new String[]{
+                "Qty", "Packaging", "Base Qty", "Qty UOM", "Cost", "Price", "Weight", "Weight UOM"
+        }, uomsData);
+        unitsOfMeasure.add(new JScrollPane(uoms));
+        return unitsOfMeasure;
+    }
 
+    private JPanel packaging(){
+        JPanel unitsOfMeasure = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel tb = new JPanel();
+        tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        IconButton addUoM = new IconButton("Add", "add_rows", "Add Unit of Measure");
+        IconButton removeUoM = new IconButton("Remove Selected", "delete_rows", "Remove Uunit of Measure");
+        IconButton automakeUoM = new IconButton("AutoMake", "automake", "Remove Uunit of Measure");
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(addUoM);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(removeUoM);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(automakeUoM);
+        unitsOfMeasure.setLayout(new BorderLayout());
+        unitsOfMeasure.add(tb, BorderLayout.NORTH);
+        CustomTable uoms = new CustomTable(new String[]{
+                "Qty", "Packaging", "Base Qty", "Qty UOM", "Cost", "Price", "Weight", "Weight UOM"
+        }, uomsData);
+        unitsOfMeasure.add(new JScrollPane(uoms));
         return unitsOfMeasure;
     }
 

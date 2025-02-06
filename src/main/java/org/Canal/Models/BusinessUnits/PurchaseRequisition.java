@@ -7,6 +7,7 @@ import org.Canal.Utils.Json;
 import org.Canal.Utils.LockeStatus;
 
 import java.io.File;
+import java.util.ArrayList;
 
 public class PurchaseRequisition extends Objex {
 
@@ -17,6 +18,7 @@ public class PurchaseRequisition extends Objex {
     private boolean isSingleOrder;
     private String start, end;
     private String notes;
+    private ArrayList<OrderLineItem> products = new ArrayList<>();
 
     public PurchaseRequisition(String id, String name, String owner, String supplier, String buyer, String number, double maxSpend, String start, String end, String notes) {
         this.id = id;
@@ -95,6 +97,14 @@ public class PurchaseRequisition extends Objex {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public ArrayList<OrderLineItem> getProducts() {
+        return products;
+    }
+
+    public void setProducts(ArrayList<OrderLineItem> products) {
+        this.products = products;
     }
 
     public void save(){
