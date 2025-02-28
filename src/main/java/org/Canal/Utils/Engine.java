@@ -18,6 +18,8 @@ import org.Canal.UI.Views.Departments.DeleteDepartment;
 import org.Canal.UI.Views.Finance.Accounts.Accounts;
 import org.Canal.UI.Views.Finance.Accounts.CreateAccount;
 import org.Canal.UI.Views.Finance.PurchaseOrders.*;
+import org.Canal.UI.Views.People.CreatePerson;
+import org.Canal.UI.Views.People.People;
 import org.Canal.UI.Views.Positions.Positions;
 import org.Canal.UI.Views.Productivity.Flows.CreateFlow;
 import org.Canal.UI.Views.Productivity.Waves.CreateWave;
@@ -156,6 +158,19 @@ public class Engine {
             }
         }
         return null;
+    }
+
+    public static ArrayList<Employee> getPeople() {
+        ArrayList<Employee> areas = new ArrayList<>();
+        File[] areasDir = Pipe.list("PPL");
+        for (File file : areasDir) {
+            if (!file.isDirectory()) {
+                Employee e = Json.load(file.getPath(), Employee.class);
+                areas.add(e);
+            }
+        }
+        areas.sort(Comparator.comparing(Employee::getId));
+        return areas;
     }
 
     public static ArrayList<Area> getAreas() {
@@ -582,6 +597,12 @@ public class Engine {
             }
             case "/EMPS/NEW" -> {
                 return new CreateEmployee(desktop, false);
+            }
+            case "/PPL" -> {
+                return new People(desktop);
+            }
+            case "/PPL/NEW" -> {
+                return new CreatePerson(desktop, false);
             }
             case "/DPTS" -> {
                 return new Departments(desktop);

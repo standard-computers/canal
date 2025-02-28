@@ -1,4 +1,4 @@
-package org.Canal.UI.Views.Employees;
+package org.Canal.UI.Views.People;
 
 import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.HumanResources.Position;
@@ -6,6 +6,7 @@ import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
+import org.Canal.UI.Views.Employees.ViewEmployee;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
@@ -17,15 +18,15 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 /**
- * /EMPS
+ * /PPL
  */
-public class Employees extends LockeState {
+public class People extends LockeState {
 
     private CustomTable table;
 
-    public Employees(DesktopState desktop) {
-        super("People", "/EMPS", true, true, true, true);
-        setFrameIcon(new ImageIcon(Employees.class.getResource("/icons/employees.png")));
+    public People(DesktopState desktop) {
+        super("People", "/PPL", true, true, true, true);
+        setFrameIcon(new ImageIcon(People.class.getResource("/icons/employees.png")));
 
         JPanel holder = new JPanel(new BorderLayout());
         table = table();
@@ -106,7 +107,7 @@ public class Employees extends LockeState {
             "Status"
         };
         ArrayList<Object[]> data = new ArrayList<>();
-        for (Employee employee : Engine.getEmployees()) {
+        for (Employee employee : Engine.getPeople()) {
             Position p = Engine.getPosition(employee.getPosition());
             data.add(new Object[]{
                     employee.getId(),

@@ -32,19 +32,19 @@ public class GoodsIssues extends LockeState {
         }
 
         this.desktop = desktop;
-        JPanel tb = createToolBar();
         JPanel holder = new JPanel(new BorderLayout());
-        table = createTable();
+        table = table();
         JScrollPane tableScrollPane = new JScrollPane(table);
         holder.add(Elements.header("All Goods Receipts", SwingConstants.LEFT), BorderLayout.CENTER);
-        holder.add(tb, BorderLayout.SOUTH);
+        holder.add(toolbar(), BorderLayout.SOUTH);
         add(holder);
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);
         add(tableScrollPane, BorderLayout.CENTER);
     }
 
-    private JPanel createToolBar() {
+    private JPanel toolbar() {
+
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV");
@@ -68,7 +68,8 @@ public class GoodsIssues extends LockeState {
         return tb;
     }
 
-    private JTable createTable() {
+    private JTable table() {
+
         String[] columns = new String[]{
                 "ID",
                 "Purchase Order",

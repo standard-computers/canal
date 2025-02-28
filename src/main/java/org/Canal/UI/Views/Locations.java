@@ -37,9 +37,9 @@ public class Locations extends LockeState implements RefreshListener {
             oo = oo.substring(1);
         }
         setFrameIcon(new ImageIcon(Locations.class.getResource("/icons/" + Engine.codex(objexType, "icon") + ".png")));
-        JPanel tb = createToolBar();
+        JPanel tb = toolbar();
         JPanel holder = new JPanel(new BorderLayout());
-        table = createTable();
+        table = table();
         JScrollPane tableScrollPane = new JScrollPane(table);
         tableScrollPane.setPreferredSize(new Dimension(900, 700));
         holder.add(Elements.header(((String) Engine.codex.getValue(oo, "name")), SwingConstants.LEFT), BorderLayout.CENTER);
@@ -62,7 +62,7 @@ public class Locations extends LockeState implements RefreshListener {
         });
     }
 
-    private JPanel createToolBar() {
+    private JPanel toolbar() {
 
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
@@ -132,7 +132,7 @@ public class Locations extends LockeState implements RefreshListener {
         return tb;
     }
 
-    private CustomTable createTable() {
+    private CustomTable table() {
 
         String[] columns = new String[]{
                 "ID",
@@ -197,7 +197,7 @@ public class Locations extends LockeState implements RefreshListener {
     @Override
     public void refresh() {
 
-        CustomTable newTable = createTable();
+        CustomTable newTable = table();
         JScrollPane scrollPane = (JScrollPane) table.getParent().getParent();
         scrollPane.setViewportView(newTable);
         table = newTable;

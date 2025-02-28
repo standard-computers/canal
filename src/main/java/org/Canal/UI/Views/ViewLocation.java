@@ -41,7 +41,7 @@ public class ViewLocation extends LockeState implements RefreshListener {
         this.desktop = desktop;
         setFrameIcon(new ImageIcon(ViewLocation.class.getResource("/icons/" + Engine.codex(location.getType().replace("/", ""), "icon") + ".png")));
         setLayout(new BorderLayout());
-        JPanel tb = createToolBar();
+        JPanel tb = toolbar();
         add(tb, BorderLayout.NORTH);
         CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.addTab("Inbound Deliveries", new ImageIcon(ViewLocation.class.getResource("/icons/inbound.png")), inboundDeliveries());
@@ -188,7 +188,7 @@ public class ViewLocation extends LockeState implements RefreshListener {
         return p;
     }
 
-    private JPanel createToolBar() {
+    private JPanel toolbar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton order = new IconButton("Order", "create", "Order from a vendor", "/ORDS/PO/NEW");
@@ -324,7 +324,7 @@ public class ViewLocation extends LockeState implements RefreshListener {
                 new Locke("Customers", UIManager.getIcon("FileView.fileIcon"), "/CSTS", customers),
                 new Locke("Orders", UIManager.getIcon("FileView.fileIcon"), "/ORDS", null),
                 new Locke("Vendors", UIManager.getIcon("FileView.fileIcon"), "/VEND", employees),
-                new Locke("Employees", UIManager.getIcon("FileView.fileIcon"), "/EMPS", employees),
+                new Locke("People", UIManager.getIcon("FileView.fileIcon"), "/EMPS", employees),
                 new Locke("Items", UIManager.getIcon("FileView.fileIcon"), "/ITS", items),
                 new Locke("Materials", UIManager.getIcon("FileView.fileIcon"), "/MTS", null),
         });

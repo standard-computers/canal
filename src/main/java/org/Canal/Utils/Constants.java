@@ -171,6 +171,13 @@ public class Constants {
                         new Locke("Archive Account", getIcon("archive"), "/ACCS/ARCHV", null),
                         new Locke("Remove Account", getIcon("delete"), "/ACCS/DEL", null),
                 }),
+                new Locke("People", getIcon("folder"), "/PPL", new Locke[]{
+                        new Locke("Find Person", getIcon("find"), "/PPL/F", null),
+                        new Locke("Create Person", getIcon("create"), "/PPL/NEW", null),
+                        new Locke("Modify Person", getIcon("modify"), "/PPL/MOD", null),
+                        new Locke("Archive Person", getIcon("archive"), "/PPL/ARCHV", null),
+                        new Locke("Remove Person", getIcon("delete"), "/PPL/DEL", null),
+                }),
                 new Locke("Invoices", getIcon("folder"), "/INVS", new Locke[]{
                         new Locke("Find an Invoice", getIcon("find"), "/INVS/F", null),
                         new Locke("Create an Invoice", getIcon("create"), "/INVS/NEW", null),
@@ -217,7 +224,7 @@ public class Constants {
                         new Locke("Archive VAS", getIcon("archive"), "/VAS/ARCHV", null),
                         new Locke("Remove VAS", getIcon("delete"), "/VAS/DEL", null),
                 }),
-                new Locke("Employees", getIcon("folder"), "/EMPS", new Locke[]{
+                new Locke("People", getIcon("folder"), "/EMPS", new Locke[]{
                         new Locke("Find Employee", getIcon("find"), "/EMPS/F", null),
                         new Locke("Create Employee", getIcon("create"), "/EMPS/NEW", null),
                         new Locke("Modify Employee", getIcon("modify"), "/EMPS/MOD", null),

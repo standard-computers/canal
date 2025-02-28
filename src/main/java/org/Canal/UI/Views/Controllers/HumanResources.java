@@ -35,7 +35,7 @@ public class HumanResources extends LockeState {
 
         CustomTabbedPane tabbedPane = new CustomTabbedPane();
         tabbedPane.addTab("Users", new ImageIcon(ViewLocation.class.getResource("/icons/users.png")), users());
-        tabbedPane.addTab("Employees", new ImageIcon(ViewLocation.class.getResource("/icons/employees.png")), employees());
+        tabbedPane.addTab("People", new ImageIcon(ViewLocation.class.getResource("/icons/employees.png")), employees());
         tabbedPane.addTab("Positions", new ImageIcon(ViewLocation.class.getResource("/icons/positions.png")), positions());
         tabbedPane.addTab("Departments", new ImageIcon(ViewLocation.class.getResource("/icons/departments.png")), departments());
         tabbedPane.addTab("Timesheets", timesheets());
@@ -127,7 +127,7 @@ public class HumanResources extends LockeState {
         JPanel p = new JPanel(new GridLayout(2, 1));
         JPanel employeeOptions = new JPanel(new GridLayout(2, 2, 5, 5));
         employeeOptions.setBorder(new EmptyBorder(5, 5, 5, 5));
-        JButton viewEmployees = Elements.button("View Employees");
+        JButton viewEmployees = Elements.button("View People");
         viewEmployees.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

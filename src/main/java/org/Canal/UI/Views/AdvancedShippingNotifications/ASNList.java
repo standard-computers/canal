@@ -27,16 +27,15 @@ public class ASNList extends LockeState {
     public ASNList(DesktopState desktop) {
         super("Open ASNs", "/", false, true, false, true);
         this.desktop = desktop;
-        JPanel tb = createToolBar();
         JPanel holder = new JPanel(new BorderLayout());
-        table = createTable();
+        table = table();
         JScrollPane tableScrollPane = new JScrollPane(table);
         holder.add(tableScrollPane, BorderLayout.CENTER);
-        holder.add(tb, BorderLayout.NORTH);
+        holder.add(toolbar(), BorderLayout.NORTH);
         add(holder);
     }
 
-    private JPanel createToolBar() {
+    private JPanel toolbar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV");
@@ -80,7 +79,7 @@ public class ASNList extends LockeState {
         return tb;
     }
 
-    private JTable createTable() {
+    private JTable table() {
         String[] columns = new String[]{"ID", "Owner", "Supplier", "Ship To", "Bill To", "Sold To", "Customer", "Status"};
         ArrayList<String[]> pos = new ArrayList<>();
         for (PurchaseOrder po : Engine.orders.getPurchaseOrder()) {

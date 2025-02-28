@@ -27,17 +27,18 @@ public class ViewLedger extends LockeState implements RefreshListener {
     private CustomTable table;
 
     public ViewLedger(Ledger ledger, DesktopState desktop) {
+
         super("Ledger", "/LGS/$", true, true, true, true);
         this.ledger = ledger;
         this.desktop = desktop;
+
         setFrameIcon(new ImageIcon(ViewLedger.class.getResource("/icons/distributioncenters.png")));
-        JPanel tb = createToolBar();
         JPanel holder = new JPanel(new BorderLayout());
-        table = createTable();
+        table = table();
         JScrollPane tableScrollPane = new JScrollPane(table);
         tableScrollPane.setPreferredSize(new Dimension(900, 700));
         holder.add(Elements.header(ledger.getName() + " / " + ledger.getId(), SwingConstants.LEFT), BorderLayout.CENTER);
-        holder.add(tb, BorderLayout.SOUTH);
+        holder.add(toolbar(), BorderLayout.SOUTH);
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);
         add(tableScrollPane, BorderLayout.CENTER);
@@ -55,7 +56,8 @@ public class ViewLedger extends LockeState implements RefreshListener {
         });
     }
 
-    private JPanel createToolBar() {
+    private JPanel toolbar() {
+
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV");
@@ -91,7 +93,8 @@ public class ViewLedger extends LockeState implements RefreshListener {
         return tb;
     }
 
-    private CustomTable createTable() {
+    private CustomTable table() {
+
         String[] columns = new String[]{
                 "ID",
                 "Description",
@@ -128,7 +131,8 @@ public class ViewLedger extends LockeState implements RefreshListener {
 
     @Override
     public void refresh() {
-        CustomTable newTable = createTable();
+
+        CustomTable newTable = table();
         JScrollPane scrollPane = (JScrollPane) table.getParent().getParent();
         scrollPane.setViewportView(newTable);
         table = newTable;

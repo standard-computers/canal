@@ -44,12 +44,12 @@ public class ViewEmployee extends LockeState {
         infoLabels.add(vnl);
         infoLabels.add(vil);
         info.add(infoLabels, BorderLayout.CENTER);
-        info.add(createToolBar(), BorderLayout.SOUTH);
+        info.add(toolbar(), BorderLayout.SOUTH);
         add(info, BorderLayout.NORTH);
         add(tabbedPane, BorderLayout.CENTER);
     }
 
-    private JPanel createToolBar() {
+    private JPanel toolbar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton email = new IconButton("Email", "email", "Email Employee");

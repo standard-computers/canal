@@ -11,6 +11,7 @@ import org.Canal.UI.Views.Finance.PurchaseOrders.CreatePurchaseOrder;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.LockeStatus;
+import org.Canal.Utils.RefreshListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 /**
  * /TRANS/IDO
  */
-public class InboundDeliveries extends LockeState {
+public class InboundDeliveries extends LockeState implements RefreshListener {
 
     private CustomTable table;
     private DesktopState desktop;
@@ -32,9 +33,9 @@ public class InboundDeliveries extends LockeState {
         setFrameIcon(new ImageIcon(InboundDeliveries.class.getResource("/icons/inbound.png")));
 
         this.desktop = desktop;
-        JPanel tb = createToolBar();
+        JPanel tb = toolbar();
         JPanel holder = new JPanel(new BorderLayout());
-        table = createTable();
+        table = table();
         JScrollPane tableScrollPane = new JScrollPane(table);
         holder.add(tableScrollPane, BorderLayout.CENTER);
         holder.add(tb, BorderLayout.NORTH);
@@ -54,7 +55,7 @@ public class InboundDeliveries extends LockeState {
         });
     }
 
-    private JPanel createToolBar() {
+    private JPanel toolbar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV");
@@ -101,7 +102,7 @@ public class InboundDeliveries extends LockeState {
         return tb;
     }
 
-    private CustomTable createTable() {
+    private CustomTable table() {
         String[] columns = new String[]{
                 "ID",
                 "Description",
@@ -144,5 +145,10 @@ public class InboundDeliveries extends LockeState {
             }
         }
         return new CustomTable(columns, data);
+    }
+
+    @Override
+    public void refresh() {
+
     }
 }

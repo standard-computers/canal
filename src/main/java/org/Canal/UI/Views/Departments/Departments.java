@@ -150,7 +150,7 @@ public class Departments extends LockeState implements RefreshListener {
         tabs.addTab("Departments", new JPanel());
         tabs.addTab("Teams", new JPanel());
         tabs.addTab("Positions", new JPanel());
-        tabs.addTab("Employees", new JPanel());
+        tabs.addTab("People", new JPanel());
         return tabs;
     }
 

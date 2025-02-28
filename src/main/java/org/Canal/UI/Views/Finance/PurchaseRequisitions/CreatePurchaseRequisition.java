@@ -147,13 +147,10 @@ public class CreatePurchaseRequisition extends LockeState {
         buttons.setLayout(new BoxLayout(buttons, BoxLayout.X_AXIS));
         IconButton add = new IconButton("Add Product", "add_rows", "Add Product");
         IconButton remove = new IconButton("Remove Selected", "delete_rows", "Remove Selected Product");
-        JTextField autoAdd = new JTextField(5);
         buttons.add(Box.createHorizontalStrut(5));
         buttons.add(add);
         buttons.add(Box.createHorizontalStrut(5));
         buttons.add(remove);
-        buttons.add(Box.createHorizontalStrut(5));
-        buttons.add(autoAdd);
         products.add(buttons, BorderLayout.SOUTH);
         return products;
     }

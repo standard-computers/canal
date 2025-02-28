@@ -27,7 +27,7 @@ public class Catalogs extends LockeState {
         this.desktop = desktop;
 
         setLayout(new BorderLayout());
-        table = createTable();
+        table = table();
         JScrollPane tableScrollPane = new JScrollPane(table);
         tableScrollPane.setPreferredSize(new Dimension(900, 700));
         add(tableScrollPane, BorderLayout.CENTER);
@@ -47,7 +47,7 @@ public class Catalogs extends LockeState {
         });
     }
 
-    private CustomTable createTable() {
+    private CustomTable table() {
         String[] columns = new String[]{
                 "ID",
                 "Name",

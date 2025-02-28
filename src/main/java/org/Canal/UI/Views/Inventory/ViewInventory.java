@@ -28,27 +28,26 @@ public class ViewInventory extends LockeState implements RefreshListener {
     private DesktopState desktop;
 
     public ViewInventory(DesktopState desktop, String location) {
+
         super("Location Inventory", "/STK", true, true, true, true);
+        setFrameIcon(new ImageIcon(ViewInventory.class.getResource("/icons/purchasereqs.png")));
         this.location = location;
         this.desktop = desktop;
-        setFrameIcon(new ImageIcon(ViewInventory.class.getResource("/icons/purchasereqs.png")));
-        JPanel tb = createToolBar();
+
         JPanel holder = new JPanel(new BorderLayout());
-        table = createTable();
+        table = table();
         JScrollPane tableScrollPane = new JScrollPane(table);
         tableScrollPane.setPreferredSize(new Dimension(1000, 800));
         title = location + " Inventory";
         holder.add(Elements.header(title, SwingConstants.LEFT), BorderLayout.NORTH);
-        holder.add(tb, BorderLayout.SOUTH);
+        holder.add(toolbar(), BorderLayout.SOUTH);
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);
         add(tableScrollPane, BorderLayout.CENTER);
-        isMaximized();
-        repaint();
-        revalidate();
     }
 
-    private CustomTable createTable() {
+    private CustomTable table() {
+
         String[] columns = new String[]{
                 "Location",
                 "Type",
@@ -90,7 +89,8 @@ public class ViewInventory extends LockeState implements RefreshListener {
         return new CustomTable(columns, stks);
     }
 
-    private JPanel createToolBar() {
+    private JPanel toolbar() {
+
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV");
@@ -155,7 +155,22 @@ public class ViewInventory extends LockeState implements RefreshListener {
     }
 
     private void filterTableById(String id) {
-        String[] columns = new String[]{"Location", "Type", "HU", "ID", "Name", "Org. Qty.", "Qty.", "Price", "Value", "Area", "Bin", "Receipt", "Status"};
+
+        String[] columns = new String[]{
+                "Location",
+                "Type",
+                "HU",
+                "ID",
+                "Name",
+                "Org. Qty.",
+                "Qty.",
+                "Price",
+                "Value",
+                "Area",
+                "Bin",
+                "Receipt",
+                "Status"
+        };
         ArrayList<Object[]> stks = new ArrayList<>();
         for (StockLine sl : Engine.getInventory(id).getStockLines()) {
             Item i = Engine.products.getItem(sl.getId());
@@ -186,7 +201,8 @@ public class ViewInventory extends LockeState implements RefreshListener {
 
     @Override
     public void refresh() {
-        CustomTable newTable = createTable();
+
+        CustomTable newTable = table();
         JScrollPane scrollPane = (JScrollPane) table.getParent().getParent();
         scrollPane.setViewportView(newTable);
         table = newTable;

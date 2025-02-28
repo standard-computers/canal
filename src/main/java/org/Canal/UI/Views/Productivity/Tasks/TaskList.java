@@ -27,16 +27,16 @@ public class TaskList extends LockeState {
     public TaskList(Location location, DesktopState desktop) {
         super("Task List", "/MVMT/TSKS", true, true, true, true);
         this.desktop = desktop;
-        JPanel tb = createToolBar();
+        JPanel tb = toolbar();
         JPanel holder = new JPanel(new BorderLayout());
-        table = createTable();
+        table = table();
         JScrollPane tableScrollPane = new JScrollPane(table);
         holder.add(tableScrollPane, BorderLayout.CENTER);
         holder.add(tb, BorderLayout.NORTH);
         add(holder);
     }
 
-    private JPanel createToolBar() {
+    private JPanel toolbar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV");
@@ -77,7 +77,7 @@ public class TaskList extends LockeState {
         return tb;
     }
 
-    private JTable createTable() {
+    private JTable table() {
         String[] columns = new String[]{
                 "ID",
                 "Owner",

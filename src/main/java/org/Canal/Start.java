@@ -28,8 +28,7 @@ public class Start {
             appDataPath.mkdirs();
             new Setup();
         }else{
-            File md = new File(WINDOWS_SYSTEM_DIR);
-            File[] mdf = md.listFiles();
+            File[] mdf = appDataPath.listFiles();
             if (mdf != null && mdf.length > 0) {
                 boolean hasConfiguration = false;
                 for (int i = 0; i < mdf.length; i++) {

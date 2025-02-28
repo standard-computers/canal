@@ -31,13 +31,12 @@ public class Ledgers extends LockeState {
             JOptionPane.showMessageDialog(this, "No Ledgers");
         }
         this.desktop = desktop;
-        JPanel tb = createToolBar();
         JPanel holder = new JPanel(new BorderLayout());
-        table = createTable();
+        table = table();
         JScrollPane tableScrollPane = new JScrollPane(table);
         tableScrollPane.setPreferredSize(new Dimension(900, 600));
         holder.add(Elements.header("Ledgers", SwingConstants.LEFT), BorderLayout.CENTER);
-        holder.add(tb, BorderLayout.SOUTH);
+        holder.add(toolbar(), BorderLayout.SOUTH);
         add(holder);
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);
@@ -58,7 +57,7 @@ public class Ledgers extends LockeState {
         });
     }
 
-    private JPanel createToolBar() {
+    private JPanel toolbar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV");
@@ -82,7 +81,7 @@ public class Ledgers extends LockeState {
         return tb;
     }
 
-    private CustomTable createTable() {
+    private CustomTable table() {
         String[] columns = new String[]{
                 "ID",
                 "Name",

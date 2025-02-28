@@ -49,9 +49,9 @@ public class CreateBin extends LockeState {
         this.refreshListener = refreshListener;
 
         CustomTabbedPane tabs = new CustomTabbedPane();
-        tabs.addTab("General", new ImageIcon(ViewLocation.class.getResource("/icons/info.png")), general());
-        tabs.addTab("Dimensional", new ImageIcon(ViewLocation.class.getResource("/icons/dimensional.png")), dimensional());
-        tabs.addTab("Item Restrictions", new ImageIcon(ViewLocation.class.getResource("/icons/items.png")), restrictions());
+        tabs.addTab("General", general());
+        tabs.addTab("Dimensional", dimensional());
+        tabs.addTab("Item Restrictions", restrictions());
 
         add(toolbar(), BorderLayout.NORTH);
         add(tabs, BorderLayout.CENTER);

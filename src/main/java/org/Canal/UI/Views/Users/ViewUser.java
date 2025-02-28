@@ -26,10 +26,12 @@ public class ViewUser extends LockeState {
     private DesktopState desktop;
 
     public ViewUser(DesktopState desktop, User user) {
+
         super("Users / " + user.getId(), "/USRS/$", false, true, false, true);
+        setFrameIcon(new ImageIcon(ViewUser.class.getResource("/icons/employees.png")));
         this.desktop = desktop;
         this.user = user;
-        setFrameIcon(new ImageIcon(ViewUser.class.getResource("/icons/employees.png")));
+
         setLayout(new BorderLayout());
         JPanel userInfo = new JPanel(new GridLayout(4, 1));
         Employee emp = Engine.getEmployee(user.getEmployee());
@@ -42,12 +44,13 @@ public class ViewUser extends LockeState {
         p.add(Elements.header(emp.getName(), SwingConstants.LEFT), BorderLayout.NORTH);
         p.add(userInfo, BorderLayout.CENTER);
         add(p, BorderLayout.NORTH);
-        JTable table = createTable();
+        JTable table = table();
         JScrollPane accessHolder = new JScrollPane(table);
         add(accessHolder, BorderLayout.CENTER);
     }
 
     private JPanel buttonBar(){
+
         JPanel buttonBar = new JPanel();
         buttonBar.setLayout(new FlowLayout(FlowLayout.LEFT));
         IconButton modify = new IconButton("Modify", "modify", "Modify User");
@@ -70,7 +73,8 @@ public class ViewUser extends LockeState {
         return buttonBar;
     }
 
-    private JTable createTable() {
+    private JTable table() {
+
         String[] columns = new String[]{"Locke Code"};
         String[][] data = new String[user.getAccesses().size()][columns.length];
         for(int i = 0; i < user.getAccesses().size(); i++) {

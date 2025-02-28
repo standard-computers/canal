@@ -54,13 +54,13 @@ public class Items extends LockeState implements RefreshListener {
         });
     }
 
-    private JScrollPane toolbar() {
+    private JPanel toolbar() {
 
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV", "");
         IconButton importItems = new IconButton("Import", "export", "Import as CSV", "");
-        IconButton createItem = new IconButton("Create", "create", "Create an Item", "/ITS/NEW");
+        IconButton createItem = new IconButton("New", "create", "Create an Item", "/ITS/NEW");
         IconButton modifyItem = new IconButton("Modify", "modify", "Modify an Item", "/ITS/MOD");
         IconButton archiveItem = new IconButton("Archive", "archive", "Archive an Item", "/ITS/ARCHV");
         IconButton removeItem = new IconButton("Remove", "delete", "Delete an Item", "/ITS/DEL");
@@ -100,7 +100,7 @@ public class Items extends LockeState implements RefreshListener {
                 refresh();
             }
         });
-        return Elements.scrollPane(tb);
+        return tb;
     }
 
     private CustomTable table() {

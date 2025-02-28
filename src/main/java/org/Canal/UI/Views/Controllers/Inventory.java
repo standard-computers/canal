@@ -20,15 +20,18 @@ public class Inventory extends LockeState {
     private JTable table;
 
     public Inventory() {
+
         super("Inventory Control", "/INV", true, true, true, true);
+
         setLayout(new BorderLayout());
         add(toolbar(), BorderLayout.NORTH);
-        table = createTable();
+        table = table();
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
     }
 
     private JPanel toolbar() {
+
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as XLSX");
@@ -60,8 +63,17 @@ public class Inventory extends LockeState {
         return tb;
     }
 
-    private JTable createTable() {
-        String[] columns = new String[]{"ID", "Name", "Price", "Qty", "Value", "Location", "Batch"};
+    private JTable table() {
+
+        String[] columns = new String[]{
+                "ID",
+                "Name",
+                "Price",
+                "Qty",
+                "Value",
+                "Location",
+                "Batch"
+        };
         ArrayList<String[]> pos = new ArrayList<>();
         String[][] data = new String[pos.size()][columns.length];
         for (int i = 0; i < pos.size(); i++) {

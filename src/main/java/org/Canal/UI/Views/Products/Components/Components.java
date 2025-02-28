@@ -59,7 +59,7 @@ public class Components extends LockeState implements RefreshListener {
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV");
         IconButton importComponents = new IconButton("Import", "export", "Import as CSV", "");
-        IconButton createComponent = new IconButton("Create", "create", "Create a Component", "/CMPS/NEW");
+        IconButton createComponent = new IconButton("New", "create", "Create a Component", "/CMPS/NEW");
         IconButton modifyComponent = new IconButton("Modify", "modify", "Modify a Component", "/CMPS/MOD");
         IconButton archiveComponent = new IconButton("Archive", "archive", "Archive a Component", "/CMPS/ARCHV");
         IconButton removeComponent = new IconButton("Remove", "delete", "Delete a Component", "/CMPS/DEL");

@@ -59,7 +59,7 @@ public class Materials extends LockeState implements RefreshListener {
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV", "");
         IconButton importMaterials = new IconButton("Import", "export", "Import as CSV", "");
-        IconButton createMaterial = new IconButton("Create", "create", "Create a Material", "/MTS/NEW");
+        IconButton createMaterial = new IconButton("New", "create", "Create a Material", "/MTS/NEW");
         IconButton modifyMaterial = new IconButton("Modify", "modify", "Modify a Material", "/MTS/MOD");
         IconButton archiveMaterial = new IconButton("Archive", "archive", "Archive a Material", "/MTS/ARCHV");
         IconButton removeMaterial = new IconButton("Remove", "delete", "Delete a Material", "/MTS/DEL");

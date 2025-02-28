@@ -26,11 +26,11 @@ public class CreateCatalog extends LockeState {
         super("Build a Catalog", "/CATS/NEW", true, true, true, true);
         setFrameIcon(new ImageIcon(CreateCatalog.class.getResource("/icons/create.png")));
 
-        if(Engine.products.getItems().isEmpty() && Engine.products.getMaterials().isEmpty()){
-            JOptionPane.showMessageDialog(null, "No materials or items.");
-            dispose();
-            return;
-        }
+//        if(Engine.products.getItems().isEmpty() && Engine.products.getMaterials().isEmpty()){
+//            JOptionPane.showMessageDialog(null, "No materials or items.");
+//            dispose();
+//            return;
+//        }
 
         Form f = new Form();
         String cid = ((String) Engine.codex("CATS", "preix")) + (Engine.getCatalogs().size() + 1);

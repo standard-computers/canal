@@ -32,9 +32,9 @@ public class OutboundDeliveries extends LockeState {
         setFrameIcon(new ImageIcon(OutboundDeliveries.class.getResource("/icons/outbound.png")));
 
         this.desktop = desktop;
-        JPanel tb = createToolBar();
+        JPanel tb = toolbar();
         JPanel holder = new JPanel(new BorderLayout());
-        table = createTable();
+        table = table();
         JScrollPane tableScrollPane = new JScrollPane(table);
         holder.add(tableScrollPane, BorderLayout.CENTER);
         holder.add(tb, BorderLayout.NORTH);
@@ -54,7 +54,7 @@ public class OutboundDeliveries extends LockeState {
         });
     }
 
-    private JPanel createToolBar() {
+    private JPanel toolbar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV");
@@ -98,7 +98,7 @@ public class OutboundDeliveries extends LockeState {
         return tb;
     }
 
-    private CustomTable createTable() {
+    private CustomTable table() {
         String[] columns = new String[]{
                 "ID",
                 "Description",

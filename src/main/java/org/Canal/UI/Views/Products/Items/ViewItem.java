@@ -34,7 +34,7 @@ public class ViewItem extends LockeState {
         this.item = item;
 
         setLayout(new BorderLayout());
-        JPanel tb = createToolBar();
+        JPanel tb = toolbar();
         add(tb, BorderLayout.NORTH);
 
         JPanel iic = new JPanel(new BorderLayout());
@@ -164,7 +164,7 @@ public class ViewItem extends LockeState {
         return f;
     }
 
-    private JPanel createToolBar() {
+    private JPanel toolbar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton inventory = new IconButton("Inventory", "inventory", "Check stock of item");

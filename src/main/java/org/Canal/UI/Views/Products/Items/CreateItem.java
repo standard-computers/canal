@@ -52,7 +52,7 @@ public class CreateItem extends LockeState implements Includer {
 
     public CreateItem(DesktopState desktop){
 
-        super("Item Builder", "/ITS/NEW", true, true, true, true);
+        super("Create an Item", "/ITS/NEW", true, true, true, true);
         setFrameIcon(new ImageIcon(CreateItem.class.getResource("/icons/create.png")));
         Constants.checkLocke(this, true, true);
         this.desktop = desktop;
@@ -60,19 +60,20 @@ public class CreateItem extends LockeState implements Includer {
         CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.addTab("General", general());
         tabs.addTab("Dimensional", dimensional());
+        tabs.addTab("Bill of Materials (BoM)", billOfMaterials());
         tabs.addTab("Units of Measure", unitsOfMeasure());
         tabs.addTab("Packaging", packaging());
 
         JPanel topBar = new JPanel(new BorderLayout());
-        topBar.add(Elements.header("Create New Item", SwingConstants.LEFT), BorderLayout.CENTER);
-        topBar.add(actionsBar(), BorderLayout.SOUTH);
+        topBar.add(Elements.header("New Item", SwingConstants.LEFT), BorderLayout.CENTER);
+        topBar.add(toolbar(), BorderLayout.SOUTH);
 
         setLayout(new BorderLayout());
         add(topBar, BorderLayout.NORTH);
         add(tabs, BorderLayout.CENTER);
     }
 
-    private JPanel actionsBar() {
+    private JPanel toolbar() {
 
         JPanel toolbar = new JPanel();
         toolbar.setLayout(new BoxLayout(toolbar, BoxLayout.X_AXIS));

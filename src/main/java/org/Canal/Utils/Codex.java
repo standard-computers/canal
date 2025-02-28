@@ -129,7 +129,7 @@ public class Codex {
             put("allow_batch_create", true);
         }});
         variables.put("EMPS", new HashMap<>() {{
-            put("name", "Employees");
+            put("name", "People");
             put("icon", "employees");
             put("prefix", "E");
             put("allow_archival", true);

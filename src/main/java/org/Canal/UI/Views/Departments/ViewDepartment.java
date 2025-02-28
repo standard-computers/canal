@@ -21,7 +21,7 @@ public class ViewDepartment extends LockeState {
         tabbedPane.addTab("Positions", positionsList);
 
         JScrollPane employeesList = new JScrollPane();
-        tabbedPane.addTab("Employees", employeesList);
+        tabbedPane.addTab("People", employeesList);
 
         JScrollPane heirarchy = new JScrollPane();
         tabbedPane.addTab("Heirarchy", heirarchy);
@@ -37,13 +37,13 @@ public class ViewDepartment extends LockeState {
         infoLabels.add(vnl);
         infoLabels.add(vil);
         info.add(infoLabels, BorderLayout.CENTER);
-        info.add(createToolBar(), BorderLayout.SOUTH);
+        info.add(toolbar(), BorderLayout.SOUTH);
         info.setBorder(new EmptyBorder(10, 10, 10, 10));
         add(info, BorderLayout.NORTH);
         add(tabbedPane, BorderLayout.CENTER);
     }
 
-    private JPanel createToolBar() {
+    private JPanel toolbar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton performReview = new IconButton("Perform Review", "invoices", "Invoice customer");

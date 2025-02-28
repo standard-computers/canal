@@ -32,12 +32,12 @@ public class Positions extends LockeState implements RefreshListener {
         setFrameIcon(new ImageIcon(Positions.class.getResource("/icons/positions.png")));
         this.desktop = desktop;
 
-        JPanel tb = createToolBar();
+        JPanel tb = toolbar();
         JPanel holder = new JPanel(new BorderLayout());
-        table = createTable();
+        table = table();
         JScrollPane tableScrollPane = new JScrollPane(table);
         tableScrollPane.setPreferredSize(new Dimension(900, 700));
-        holder.add(Elements.header("All Positions", SwingConstants.LEFT), BorderLayout.CENTER);
+        holder.add(Elements.header("Positions", SwingConstants.LEFT), BorderLayout.CENTER);
         holder.add(tb, BorderLayout.SOUTH);
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);
@@ -58,7 +58,7 @@ public class Positions extends LockeState implements RefreshListener {
         });
     }
 
-    private JPanel createToolBar() {
+    private JPanel toolbar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV");
@@ -124,7 +124,7 @@ public class Positions extends LockeState implements RefreshListener {
         return tb;
     }
 
-    private CustomTable createTable() {
+    private CustomTable table() {
         String[] columns = new String[]{
                 "ID",
                 "Org",
@@ -165,7 +165,8 @@ public class Positions extends LockeState implements RefreshListener {
 
     @Override
     public void refresh() {
-        CustomTable newTable = createTable();
+
+        CustomTable newTable = table();
         JScrollPane scrollPane = (JScrollPane) table.getParent().getParent();
         scrollPane.setViewportView(newTable);
         table = newTable;

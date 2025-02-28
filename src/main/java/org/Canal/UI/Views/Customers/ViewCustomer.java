@@ -66,7 +66,7 @@ public class ViewCustomer extends LockeState {
         infoLabels.add(vl1l);
         infoLabels.add(val);
         info.add(infoLabels, BorderLayout.CENTER);
-        info.add(createToolBar(), BorderLayout.SOUTH);
+        info.add(toolbar(), BorderLayout.SOUTH);
         info.setBorder(new EmptyBorder(10, 10, 10, 10));
         add(info, BorderLayout.NORTH);
         add(tabbedPane, BorderLayout.CENTER);
@@ -76,7 +76,7 @@ public class ViewCustomer extends LockeState {
         setClosable(true);
     }
 
-    private JPanel createToolBar() {
+    private JPanel toolbar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton invoice = new IconButton("Invoice", "invoices", "Invoice customer");

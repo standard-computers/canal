@@ -6,6 +6,7 @@ import org.Canal.UI.Elements.*;
 import org.Canal.Utils.*;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -36,12 +37,20 @@ public class CreateDepartment extends LockeState {
         setLayout(new BorderLayout());
         JPanel header = new JPanel(new BorderLayout());
         header.add(Elements.header("New Department", SwingConstants.LEFT), BorderLayout.NORTH);
+        header.add(toolbar(), BorderLayout.SOUTH);
         add(header, BorderLayout.NORTH);
         add(tabs, BorderLayout.CENTER);
+    }
 
-        JButton cr = Elements.button("Process");
-        add(cr, BorderLayout.SOUTH);
-        cr.addMouseListener(new MouseAdapter() {
+    private JPanel toolbar() {
+
+        JPanel tb = new JPanel();
+        tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        IconButton execute = new IconButton("Create", "execute", "Create Position");
+        tb.add(execute);
+        tb.setBorder(new EmptyBorder(0, 5, 0, 5));
+        execute.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
                 Department newDepartment = new Department();
                 newDepartment.setId(deptIdField.getText());
@@ -56,6 +65,7 @@ public class CreateDepartment extends LockeState {
                 Engine.router("/DPTS/" + deptIdField.getText(), desktop);
             }
         });
+        return tb;
     }
 
     private JPanel general(){
@@ -85,15 +95,22 @@ public class CreateDepartment extends LockeState {
         JPanel positions = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel buttons = new JPanel();
         buttons.setLayout(new BoxLayout(buttons, BoxLayout.X_AXIS));
-        IconButton add = new IconButton("Add Position", "add_rows", "Add Position");
+        IconButton add = new IconButton("Assign Position", "add_rows", "Add Position");
         IconButton remove = new IconButton("Remove Selected", "delete_rows", "Remove Selected Position");
-        JTextField autoAdd = new JTextField(5);
-        buttons.add(Box.createHorizontalStrut(5));
         buttons.add(add);
         buttons.add(Box.createHorizontalStrut(5));
         buttons.add(remove);
-        buttons.add(Box.createHorizontalStrut(5));
-        buttons.add(autoAdd);
+        add.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+
+            }
+        });
+        remove.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+
+            }
+        });
+
         positions.add(buttons, BorderLayout.SOUTH);
         return positions;
     }

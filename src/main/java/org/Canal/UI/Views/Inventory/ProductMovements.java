@@ -21,27 +21,30 @@ import java.util.ArrayList;
  */
 public class ProductMovements extends LockeState implements RefreshListener {
 
+    private DesktopState desktop;
     private String location;
     private CustomTable table;
 
     public ProductMovements(DesktopState desktop, String location) {
+
         super("Product Movements in Stock", "/STK", true, true, true, true);
-        this.location = location;
         setFrameIcon(new ImageIcon(ProductMovements.class.getResource("/icons/purchasereqs.png")));
-        JPanel tb = createToolBar();
+        this.desktop = desktop;
+        this.location = location;
+
         JPanel holder = new JPanel(new BorderLayout());
-        table = createTable();
+        table = table();
         JScrollPane tableScrollPane = new JScrollPane(table);
         tableScrollPane.setPreferredSize(new Dimension(900, 700));
         holder.add(Elements.header(location + " Product Movements", SwingConstants.LEFT), BorderLayout.NORTH);
-        holder.add(tb, BorderLayout.SOUTH);
+        holder.add(toolbar(), BorderLayout.SOUTH);
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);
         add(tableScrollPane, BorderLayout.CENTER);
         isMaximized();
     }
 
-    private CustomTable createTable() {
+    private CustomTable table() {
         String[] columns = new String[]{
                 "Objex",
                 "user",
@@ -72,7 +75,8 @@ public class ProductMovements extends LockeState implements RefreshListener {
         return new CustomTable(columns, stks);
     }
 
-    private JPanel createToolBar() {
+    private JPanel toolbar() {
+
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV");
@@ -92,7 +96,8 @@ public class ProductMovements extends LockeState implements RefreshListener {
 
     @Override
     public void refresh() {
-        CustomTable newTable = createTable();
+
+        CustomTable newTable = table();
         JScrollPane scrollPane = (JScrollPane) table.getParent().getParent();
         scrollPane.setViewportView(newTable);
         table = newTable;
