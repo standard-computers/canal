@@ -10,6 +10,7 @@ import java.io.File;
 public class Employee extends Objex {
 
     private String org; //Org ID
+    private String firstName, middleName, lastName;
     private String location; //Location ID if any
     private String supervisor; //Employee ID of Supervisor
     private String position;
@@ -36,6 +37,30 @@ public class Employee extends Objex {
 
     public void setOrg(String org) {
         this.org = org;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getMiddleName() {
+        return middleName;
+    }
+
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getLocation() {

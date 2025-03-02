@@ -77,7 +77,7 @@ public class CreateLocation extends LockeState {
         copyFrom.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                String prId = JOptionPane.showInputDialog(CreateLocation.this, "Enter Purchase Requisition ID");
+                String prId = JOptionPane.showInputDialog(CreateLocation.this, "Enter Location ID");
             }
         });
         review.addMouseListener(new MouseAdapter() {

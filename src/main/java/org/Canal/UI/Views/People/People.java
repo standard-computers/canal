@@ -57,11 +57,11 @@ public class People extends LockeState {
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton export = new IconButton("Export", "export", "Export as CSV", "");
         IconButton importEmployees = new IconButton("Import", "export", "Import as CSV", "");
-        IconButton createEmployee = new IconButton("New", "create", "Create Employee", "/EMPS/NEW");
-        IconButton modifyEmployee = new IconButton("Modify", "modify", "Modify an Employee", "/EMPS/MOD");
-        IconButton archiveEmployee = new IconButton("Archive", "archive", "Archive an Employee", "/EMPS/ARCHV");
-        IconButton removeEmployee = new IconButton("Remove", "delete", "Delete an Employee", "/EMPS/DEL");
-        IconButton advancedFine = new IconButton("Find", "find", "Find by Values", "/EMPS/F");
+        IconButton createEmployee = new IconButton("New", "create", "Create Employee", "/PPL/NEW");
+        IconButton modifyEmployee = new IconButton("Modify", "modify", "Modify an Employee", "/PPL/MOD");
+        IconButton archiveEmployee = new IconButton("Archive", "archive", "Archive an Employee", "/PPL/ARCHV");
+        IconButton removeEmployee = new IconButton("Remove", "delete", "Delete an Employee", "/PPL/DEL");
+        IconButton advancedFine = new IconButton("Find", "find", "Find by Values", "/PPL/F");
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(importEmployees);
@@ -91,7 +91,9 @@ public class People extends LockeState {
             "ID",
             "Org",
             "Location",
-            "Name",
+            "First",
+            "Middle",
+            "Last",
             "Supervisor",
             "Position",
             "Pos. Name",
@@ -107,26 +109,28 @@ public class People extends LockeState {
             "Status"
         };
         ArrayList<Object[]> data = new ArrayList<>();
-        for (Employee employee : Engine.getPeople()) {
-            Position p = Engine.getPosition(employee.getPosition());
+        for (Employee person : Engine.getPeople()) {
+            Position p = Engine.getPosition(person.getPosition());
             data.add(new Object[]{
-                    employee.getId(),
-                    employee.getOrg(),
-                    employee.getLocation(),
-                    employee.getName(),
-                    employee.getSupervisor(),
-                    employee.getPosition(),
+                    person.getId(),
+                    person.getOrg(),
+                    person.getLocation(),
+                    person.getFirstName(),
+                    person.getMiddleName(),
+                    person.getLastName(),
+                    person.getSupervisor(),
+                    person.getPosition(),
                     (p != null ? p.getName() : ""),
-                    employee.getGender(),
-                    employee.getLine1(),
-                    employee.getLine2(),
-                    employee.getCity(),
-                    employee.getState(),
-                    employee.getPostal(),
-                    employee.getCountry(),
-                    employee.getEmail(),
-                    employee.getPhone(),
-                    employee.getStatus()
+                    person.getGender(),
+                    person.getLine1(),
+                    person.getLine2(),
+                    person.getCity(),
+                    person.getState(),
+                    person.getPostal(),
+                    person.getCountry(),
+                    person.getEmail(),
+                    person.getPhone(),
+                    person.getStatus()
             });
         }
         return new CustomTable(columns, data);

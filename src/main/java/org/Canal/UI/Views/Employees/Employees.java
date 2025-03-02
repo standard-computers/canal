@@ -24,14 +24,14 @@ public class Employees extends LockeState {
     private CustomTable table;
 
     public Employees(DesktopState desktop) {
-        super("People", "/EMPS", true, true, true, true);
+        super("Employees", "/EMPS", true, true, true, true);
         setFrameIcon(new ImageIcon(Employees.class.getResource("/icons/employees.png")));
 
         JPanel holder = new JPanel(new BorderLayout());
         table = table();
         JScrollPane tableScrollPane = new JScrollPane(table);
         tableScrollPane.setPreferredSize(new Dimension(750, 600));
-        holder.add(Elements.header("People", SwingConstants.LEFT), BorderLayout.CENTER);
+        holder.add(Elements.header("Employees", SwingConstants.LEFT), BorderLayout.CENTER);
         holder.add(toolbar(), BorderLayout.SOUTH);
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);

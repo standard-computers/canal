@@ -19,7 +19,9 @@ import java.util.HashMap;
 public class CreatePerson extends LockeState {
 
     private JTextField empIdField;
-    private JTextField empNameField;
+    private JTextField firstNameField;
+    private JTextField middleNameField;
+    private JTextField lastNameField;
     private JTextField empAddressL1;
     private JTextField empAddressL2;
     private JTextField empAddressCity;
@@ -55,33 +57,37 @@ public class CreatePerson extends LockeState {
                 String empId = empIdField.getText().trim();
                 String orgId = orgIdField.getSelectedValue().trim();
                 String location = locations.getSelectedValue();
-                String empName = empNameField.getText().trim();
+                String firstname = firstNameField.getText().trim();
+                String middlename = middleNameField.getText().trim();
+                String lastname = lastNameField.getText().trim();
                 String empSupervisor = supervisor.getSelectedValue();
-                Employee newEmployee = new Employee();
-                newEmployee.setId(empId);
-                newEmployee.setOrg(orgId);
-                newEmployee.setLocation(location);
-                newEmployee.setName(empName);
-                newEmployee.setSupervisor(empSupervisor);
-                newEmployee.setStartDate(startDatePicker.getSelectedDateString());
-                newEmployee.setCreateDate(Constants.now());
-                newEmployee.setStatus(LockeStatus.NEW);
+                Employee employee = new Employee();
+                employee.setId(empId);
+                employee.setOrg(orgId);
+                employee.setLocation(location);
+                employee.setFirstName(firstname);
+                employee.setMiddleName(middlename);
+                employee.setLastName(lastname);
+                employee.setSupervisor(empSupervisor);
+                employee.setStartDate(startDatePicker.getSelectedDateString());
+                employee.setCreateDate(Constants.now());
+                employee.setStatus(LockeStatus.NEW);
 
-                newEmployee.setLine1(empAddressL1.getText());
-                newEmployee.setLine2(empAddressL2.getText());
-                newEmployee.setCity(empAddressCity.getText());
-                newEmployee.setState(empAddressState.getText());
-                newEmployee.setPostal(empAddressPostal.getText());
-                newEmployee.setCountry(countries.getSelectedValue());
-                newEmployee.setPhone(empPhone.getText());
-                newEmployee.setEmail(empEmail.getText());
-                newEmployee.setDisability(disabled.isSelected());
-                newEmployee.setVeteran(veteren.isSelected());
+                employee.setLine1(empAddressL1.getText());
+                employee.setLine2(empAddressL2.getText());
+                employee.setCity(empAddressCity.getText());
+                employee.setState(empAddressState.getText());
+                employee.setPostal(empAddressPostal.getText());
+                employee.setCountry(countries.getSelectedValue());
+                employee.setPhone(empPhone.getText());
+                employee.setEmail(empEmail.getText());
+                employee.setDisability(disabled.isSelected());
+                employee.setVeteran(veteren.isSelected());
 
-                Pipe.save("/PPL", newEmployee);
+                Pipe.save("/PPL", employee);
                 dispose();
                 JOptionPane.showMessageDialog(null, "Person Created");
-                desktop.put(new ViewEmployee(newEmployee));
+                desktop.put(new ViewEmployee(employee));
             }
         });
     }
@@ -90,10 +96,12 @@ public class CreatePerson extends LockeState {
 
         JPanel general = new JPanel(new FlowLayout(FlowLayout.LEFT));
         Form f = new Form();
-        String genId = "E" + (10000 + (Engine.getEmployees().size() + 1));
+        String genId = "1-" + (10000 + (Engine.getPeople().size() + 1));
         empIdField = Elements.input(genId, 15);
         orgIdField = Selectables.organizations();
-        empNameField = Elements.input(15);
+        firstNameField = Elements.input(15);
+        middleNameField = Elements.input(15);
+        lastNameField = Elements.input(15);
         HashMap<String, String> availablePositions = new HashMap<>();
         Selectable position = new Selectable(availablePositions);
         position.editable();
@@ -105,7 +113,9 @@ public class CreatePerson extends LockeState {
         f.addInput(Elements.coloredLabel("Organization", Constants.colors[10]), orgIdField);
         locations = Selectables.allLocations();
         f.addInput(Elements.coloredLabel("Location (optional)", Constants.colors[9]), locations);
-        f.addInput(Elements.coloredLabel("Full Name", Constants.colors[9]), empNameField);
+        f.addInput(Elements.coloredLabel("First Name", Constants.colors[9]), firstNameField);
+        f.addInput(Elements.coloredLabel("Middle Name", Constants.colors[9]), middleNameField);
+        f.addInput(Elements.coloredLabel("Last Name", Constants.colors[9]), lastNameField);
         f.addInput(Elements.coloredLabel("Position", Constants.colors[8]), position);
         f.addInput(Elements.coloredLabel("Supervisor", Constants.colors[7]), supervisor);
         f.addInput(Elements.coloredLabel("Start Date", Constants.colors[6]), startDatePicker);
