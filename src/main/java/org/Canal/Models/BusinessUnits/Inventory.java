@@ -112,7 +112,7 @@ public class Inventory extends Objex {
     }
 
     public void save(){
-        File md = new File(Start.WINDOWS_SYSTEM_DIR + "\\.store\\STK\\");
+        File md = new File(Start.DIR + "\\.store\\STK\\");
         File[] mdf = md.listFiles();
         if (mdf != null) {
             for (File file : mdf) {

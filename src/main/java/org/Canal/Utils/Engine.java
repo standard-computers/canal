@@ -24,8 +24,6 @@ import org.Canal.UI.Views.Positions.Positions;
 import org.Canal.UI.Views.Productivity.Flows.CreateFlow;
 import org.Canal.UI.Views.Productivity.Waves.CreateWave;
 import org.Canal.UI.Views.Productivity.WorkOrders.CreateWorkOrder;
-import org.Canal.UI.Views.Products.Components.Components;
-import org.Canal.UI.Views.Products.Components.CreateComponent;
 import org.Canal.UI.Views.Controllers.*;
 import org.Canal.UI.Views.Employees.CreateEmployee;
 import org.Canal.UI.Views.Employees.ViewEmployee;
@@ -53,8 +51,6 @@ import org.Canal.UI.Views.System.QuickExplorer;
 import org.Canal.UI.Views.Teams.CreateTeam;
 import org.Canal.UI.Views.Teams.Teams;
 import org.Canal.UI.Views.Inventory.*;
-import org.Canal.UI.Views.Products.Materials.Materials;
-import org.Canal.UI.Views.Products.Materials.CreateMaterial;
 import org.Canal.UI.Views.Finance.Invoices.CreateInvoice;
 import org.Canal.UI.Views.Finance.PurchaseRequisitions.AutoMakePurchaseRequisitions;
 import org.Canal.UI.Views.Finance.PurchaseRequisitions.CreatePurchaseRequisition;
@@ -465,7 +461,7 @@ public class Engine {
         if(rcs != null){
             rcs.add(record);
         }
-        Json.save(Start.WINDOWS_SYSTEM_DIR + "\\.store\\RCS\\" + id + "." + objex.toLowerCase().replaceAll("/", "."), rcs);
+        Json.save(Start.DIR + "\\.store\\RCS\\" + id + "." + objex.toLowerCase().replaceAll("/", "."), rcs);
     }
 
     public static Object codex(String objex, String key){
@@ -567,18 +563,6 @@ public class Engine {
             }
             case "/VEND/NEW" -> {
                 return new CreateLocation("/VEND", desktop, null);
-            }
-            case "/MTS" -> {
-                return new Materials(desktop);
-            }
-            case "/MTS/NEW" -> {
-                return new CreateMaterial(desktop);
-            }
-            case "/CMPS" -> {
-                return new Components(desktop);
-            }
-            case "/CMPS/NEW" -> {
-                return new CreateComponent(desktop);
             }
             case "/VAS" -> {
                 return new ValueAddedServices();
@@ -844,9 +828,6 @@ public class Engine {
                     }
                 }
             }
-            case "MTS" -> {
-                return new Materials(desktop);
-            }
             case "LGS" -> {
                 for(Ledger l : getLedgers()){
                     if(l.getId().equals(oid)){
@@ -901,7 +882,7 @@ public class Engine {
     public static class products {
         public static ArrayList<Item> getProducts() {
             ArrayList<Item> products = new ArrayList<>();
-            String[] ps = new String[]{"ITS", "MTS", "CMPS"};
+            String[] ps = new String[]{"ITS"};
             for(String p : ps) {
                 File[] d = Pipe.list(p);
                 for (File file : d) {
@@ -934,40 +915,6 @@ public class Engine {
 
         public static Item getItem(String id) {
             return getItems().stream().filter(i -> i.getId().equals(id)).toList().stream().findFirst().orElse(null);
-        }
-
-        public static ArrayList<Item> getMaterials() {
-            ArrayList<Item> materials = new ArrayList<>();
-            File[] d = Pipe.list("MTS");
-            for (File file : d) {
-                if (!file.isDirectory()) {
-                    Item a = Json.load(file.getPath(), Item.class);
-                    materials.add(a);
-                }
-            }
-            materials.sort(Comparator.comparing(Item::getId));
-            return materials;
-        }
-
-        public static Item getMaterial(String id) {
-            return getMaterials().stream().filter(m -> m.getId().equals(id)).toList().stream().findFirst().orElse(null);
-        }
-
-        public static ArrayList<Item> getComponents() {
-            ArrayList<Item> components = new ArrayList<>();
-            File[] d = Pipe.list("CMPS");
-            for (File file : d) {
-                if (!file.isDirectory()) {
-                    Item a = Json.load(file.getPath(), Item.class);
-                    components.add(a);
-                }
-            }
-            components.sort(Comparator.comparing(Item::getId));
-            return components;
-        }
-
-        public static Item getComponent(String id) {
-            return getComponents().stream().filter(c -> c.getId().equals(id)).toList().stream().findFirst().orElse(null);
         }
     }
 

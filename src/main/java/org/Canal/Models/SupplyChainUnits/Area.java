@@ -133,7 +133,7 @@ public class Area extends Objex {
     }
 
     public void save() {
-        File md = new File(Start.WINDOWS_SYSTEM_DIR + "\\.store\\AREAS\\");
+        File md = new File(Start.DIR + "\\.store\\AREAS\\");
         File[] mdf = md.listFiles();
         if (mdf != null) {
             for (File file : mdf) {

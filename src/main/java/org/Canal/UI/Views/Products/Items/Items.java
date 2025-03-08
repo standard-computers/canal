@@ -107,10 +107,10 @@ public class Items extends LockeState implements RefreshListener {
 
         String[] columns = new String[]{
             "ID",
+            "Name",
             "Org",
             "Vendor",
             "Vendor Name",
-            "Name",
             "Color",
             "UPC",
             "Base Qty",
@@ -136,10 +136,10 @@ public class Items extends LockeState implements RefreshListener {
             Location vendor = Engine.getLocation(item.getVendor(), "VEND");
             d.add(new Object[]{
                     item.getId(),
+                    item.getName(),
                     item.getOrg(),
                     item.getVendor(),
                     vendor.getName(),
-                    item.getName(),
                     item.getColor(),
                     item.getUpc(),
                     item.getBaseQuantity(),

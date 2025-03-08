@@ -1,107 +1,140 @@
 package org.Canal.UI.Views.Finance.Accounts;
 
-import org.Canal.Models.SupplyChainUnits.Catalog;
+import org.Canal.Models.HumanResources.Department;
+import org.Canal.Models.HumanResources.Employee;
+import org.Canal.Models.HumanResources.Position;
+import org.Canal.UI.Elements.CustomTable;
+import org.Canal.UI.Elements.Elements;
+import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
+import org.Canal.UI.Views.Departments.ViewDepartment;
+import org.Canal.UI.Views.Employees.ViewEmployee;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
+import org.Canal.Utils.RefreshListener;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 /**
- * /ACCS
+ * /EMPS
  */
-public class Accounts extends LockeState {
+public class Accounts extends LockeState implements RefreshListener {
 
-    private DefaultListModel<Catalog> listModel;
+    private DesktopState desktop;
+    private CustomTable table;
 
     public Accounts(DesktopState desktop) {
-        super("Accounts", "/ACCS", false, true, false, true);
-        setFrameIcon(new ImageIcon(Accounts.class.getResource("/icons/catalogs.png")));
-        listModel = new DefaultListModel<>();
-        JList<Catalog> list = new JList<>(listModel);
-        list.setCellRenderer(new CatalogRenderer());
-        JScrollPane scrollPane = new JScrollPane(list);
-        scrollPane.setPreferredSize(new Dimension(300, 400));
-        list.addMouseListener(new MouseAdapter() {
+
+        super("Accounts", "/ACCS", true, true, true, true);
+        setFrameIcon(new ImageIcon(Accounts.class.getResource("/icons/employees.png")));
+        this.desktop = desktop;
+
+        JPanel holder = new JPanel(new BorderLayout());
+        table = table();
+        JScrollPane tableScrollPane = new JScrollPane(table);
+        tableScrollPane.setPreferredSize(new Dimension(750, 600));
+        holder.add(Elements.header("Accounts", SwingConstants.LEFT), BorderLayout.CENTER);
+        holder.add(toolbar(), BorderLayout.SOUTH);
+        setLayout(new BorderLayout());
+        add(holder, BorderLayout.NORTH);
+        add(tableScrollPane, BorderLayout.CENTER);
+        table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    int selectedIndex = list.locationToIndex(e.getPoint());
-                    if (selectedIndex != -1) {
-                        Catalog l = listModel.getElementAt(selectedIndex);
-                        if (l != null) {
-                            Engine.router("/ACCS/" + l.getId(), desktop);
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Account Not Found");
+                    JTable target = (JTable) e.getSource();
+                    int row = target.getSelectedRow();
+                    if (row != -1) {
+                        String value = String.valueOf(target.getValueAt(row, 1));
+                        desktop.put(new ViewEmployee(Engine.getEmployee(value)));
+                    }
+                }
+            }
+        });
+    }
+
+    private JPanel toolbar() {
+        JPanel tb = new JPanel();
+        tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        IconButton export = new IconButton("Export", "export", "Export as CSV", "");
+        IconButton importEmployees = new IconButton("Import", "export", "Import as CSV", "");
+        IconButton createEmployee = new IconButton("New", "create", "Create Employee", "/EMPS/NEW");
+        IconButton modifyEmployee = new IconButton("Modify", "modify", "Modify an Employee", "/EMPS/MOD");
+        IconButton archiveEmployee = new IconButton("Archive", "archive", "Archive an Employee", "/EMPS/ARCHV");
+        IconButton removeEmployee = new IconButton("Remove", "delete", "Delete an Employee", "/EMPS/DEL");
+        IconButton advancedFine = new IconButton("Find", "find", "Find by Values", "/EMPS/F");
+        IconButton refresh = new IconButton("Refresh", "refresh", "Refresh data");
+        tb.add(export);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(importEmployees);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(createEmployee);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(modifyEmployee);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(archiveEmployee);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(removeEmployee);
+        tb.add(removeEmployee);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(advancedFine);
+        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
+        export.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                table.exportToCSV();
+            }
+        });
+        refresh.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                refresh();
+            }
+        });
+        return tb;
+    }
+
+    private CustomTable table() {
+        String[] columns = new String[]{
+        };
+        ArrayList<Object[]> data = new ArrayList<>();
+        for (Employee employee : Engine.getEmployees()) {
+            Position p = Engine.getPosition(employee.getPosition());
+            data.add(new Object[]{
+            });
+        }
+        return new CustomTable(columns, data);
+    }
+
+    @Override
+    public void refresh() {
+        CustomTable newTable = table();
+        JScrollPane scrollPane = (JScrollPane) table.getParent().getParent();
+        scrollPane.setViewportView(newTable);
+        table = newTable;
+        scrollPane.revalidate();
+        scrollPane.repaint();
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    JTable t = (JTable) e.getSource();
+                    int r = t.getSelectedRow();
+                    if (r != -1) {
+                        String v = String.valueOf(t.getValueAt(r, 1));
+                        for(Department d : Engine.getOrganization().getDepartments()){
+                            if(d.getId().equals(v)){
+                                desktop.put(new ViewDepartment(d));
+                            }
                         }
                     }
                 }
             }
         });
-        JTextField direct = new JTextField();
-        direct.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    String inputText = direct.getText().trim();
-                    if (!inputText.isEmpty()) {
-                        Engine.router("/ACCS/" + inputText, desktop);
-                    }
-                }
-            }
-        });
-        setLayout(new BorderLayout());
-        add(direct, BorderLayout.NORTH);
-        add(scrollPane, BorderLayout.CENTER);
-        loadCatalogs();
-    }
-
-    private void loadCatalogs(){
-        listModel.removeAllElements();
-        for (Catalog loc : Engine.getCatalogs()) {
-            listModel.addElement(loc);
-        }
-    }
-
-    static class CatalogRenderer extends JPanel implements ListCellRenderer<Catalog> {
-
-        private JLabel catalogName;
-        private JLabel catalogId;
-        private JLabel itemcount;
-
-        public CatalogRenderer() {
-            setLayout(new GridLayout(4, 1));
-            catalogName = new JLabel();
-            catalogId = new JLabel();
-            itemcount = new JLabel();
-            catalogName.setFont(new Font("Arial", Font.BOLD, 16));
-            catalogId.setFont(new Font("Arial", Font.PLAIN, 12));
-            itemcount.setFont(new Font("Arial", Font.PLAIN, 12));
-            add(catalogName);
-            add(catalogId);
-            add(itemcount);
-            setBorder(new EmptyBorder(5, 5, 5, 5));
-        }
-
-        @Override
-        public Component getListCellRendererComponent(JList<? extends Catalog> list, Catalog catalog, int index, boolean isSelected, boolean cellHasFocus) {
-            catalogName.setText(catalog.getName());
-            catalogId.setText(catalog.getId());
-            itemcount.setText(catalog.getItems().size() + " Available Items");
-            if (isSelected) {
-                setBackground(list.getSelectionBackground());
-                setForeground(list.getSelectionForeground());
-            } else {
-                setBackground(list.getBackground());
-                setForeground(list.getForeground());
-            }
-            return this;
-        }
     }
 }

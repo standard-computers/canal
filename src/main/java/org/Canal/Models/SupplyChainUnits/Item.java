@@ -32,6 +32,7 @@ public class Item extends Objex {
     private double exciseTax;
     private ArrayList<OrderLineItem> components = new ArrayList<>();
     private ArrayList<Object[]> uoms = new ArrayList<>();
+    private ArrayList<Object[]> packaging = new ArrayList<>();
 
     public String getOrg() {
         return org;
@@ -235,6 +236,14 @@ public class Item extends Objex {
 
     public void setUoms(ArrayList<Object[]> uoms) {
         this.uoms = uoms;
+    }
+
+    public ArrayList<Object[]> getPackaging() {
+        return packaging;
+    }
+
+    public void setPackaging(ArrayList<Object[]> packaging) {
+        this.packaging = packaging;
     }
 
     @Override

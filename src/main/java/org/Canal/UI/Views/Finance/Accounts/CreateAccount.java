@@ -21,7 +21,7 @@ public class CreateAccount extends LockeState {
 
         JTextField accountIdField = Elements.input();
         Selectable locations = Selectables.allLocations();
-        Selectable customers = Selectables.allLocations();
+        Selectable customers = Selectables.allLocationsAndPeople();
         DatePicker openDate = new DatePicker();
         DatePicker closeDate = new DatePicker();
         JTextField agreementField = Elements.input();

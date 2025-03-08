@@ -236,7 +236,7 @@ public class Location extends Objex {
     }
 
     public void save(){
-        File md = new File(Start.WINDOWS_SYSTEM_DIR + "\\.store\\" + type + "\\");
+        File md = new File(Start.DIR + "\\.store\\" + type + "\\");
         File[] mdf = md.listFiles();
         if (mdf != null) {
             for (File file : mdf) {

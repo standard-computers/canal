@@ -9,7 +9,7 @@ import java.util.UUID;
 public class Pipe {
 
     public static File[] list(String dir){
-        File f = new File(Start.WINDOWS_SYSTEM_DIR + "\\.store\\" + dir);
+        File f = new File(Start.DIR + "\\.store\\" + dir);
         if(!f.exists()){
             f.mkdirs();
         }
@@ -17,11 +17,11 @@ public class Pipe {
     }
 
     public static void save(String dir, Object o){
-        File f = new File(Start.WINDOWS_SYSTEM_DIR + "\\.store\\" + dir);
+        File f = new File(Start.DIR + "\\.store\\" + dir);
         if(!f.exists()){
             f.mkdirs();
         }
-        Json.save(Start.WINDOWS_SYSTEM_DIR + "\\.store\\" + dir + "\\" + UUID.randomUUID() + dir.replace("/", ".").toLowerCase(), o);
+        Json.save(Start.DIR + "\\.store\\" + dir + "\\" + UUID.randomUUID() + dir.replace("/", ".").toLowerCase(), o);
     }
 
     public static boolean delete(String objex, String id){
@@ -39,7 +39,7 @@ public class Pipe {
     }
 
     public static void saveConfiguration() {
-        File md = new File(Start.WINDOWS_SYSTEM_DIR);
+        File md = new File(Start.DIR);
         if(!md.exists()){
             md.mkdirs();
         }
@@ -54,7 +54,7 @@ public class Pipe {
             }
         }
         if (!existed) {
-            Json.save(Start.WINDOWS_SYSTEM_DIR + UUID.randomUUID() + ".cnl.mfg", Engine.getConfiguration());
+            Json.save(Start.DIR + UUID.randomUUID() + ".cnl.mfg", Engine.getConfiguration());
         }
     }
 

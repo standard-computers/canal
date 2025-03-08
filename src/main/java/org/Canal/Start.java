@@ -14,7 +14,7 @@ import java.io.File;
 
 public class Start {
 
-    public static String WINDOWS_SYSTEM_DIR = System.getenv("APPDATA") + "\\Canal\\";
+    public static String DIR = System.getenv("APPDATA") + "\\Canal\\";
     public static QuickExplorer q;
 
     public static void main(String[] args) {
@@ -23,7 +23,7 @@ public class Start {
         } catch (Exception e) {
             System.err.println("Failed FlatLaf dark theme.");
         }
-        File appDataPath = new File(WINDOWS_SYSTEM_DIR);
+        File appDataPath = new File(DIR);
         if(!appDataPath.exists()) {
             appDataPath.mkdirs();
             new Setup();
@@ -61,7 +61,7 @@ public class Start {
                 if(Engine.codex == null){
                     Codex cdx = new Codex();
                     Engine.codex = cdx;
-                    Json.save(WINDOWS_SYSTEM_DIR + "\\codex.cdx", cdx);
+                    Json.save(DIR + "\\codex.cdx", cdx);
                 }
             }else{
                 new Setup();

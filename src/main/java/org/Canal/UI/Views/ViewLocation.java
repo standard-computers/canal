@@ -358,7 +358,6 @@ public class ViewLocation extends LockeState implements RefreshListener {
             DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) value;
             Locke orgNode = (Locke) treeNode.getUserObject();
             setIcon(orgNode.getIcon());
-            setForeground(orgNode.getColor());
             return component;
         }
     }

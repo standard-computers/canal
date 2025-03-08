@@ -162,10 +162,10 @@ public class CreatePurchaseOrder extends LockeState {
                     JOptionPane.showMessageDialog(null, "Must select a delivery date.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                PurchaseRequisition assignedPR = Engine.orders.getPurchaseRequisitions(availablePrs.getSelectedValue());
+                PurchaseRequisition assignedPR = Engine.orders.getPurchaseRequisition(availablePrs.getSelectedValue());
                 if((boolean) Engine.codex("ORDS/PO", "require_pr")){
                     if(assignedPR == null){
-                        JOptionPane.showMessageDialog(null, "Configuration requires PR for PO", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Purchase Req required for PO", "Error", JOptionPane.ERROR_MESSAGE);
                         return;
                     }
                 }

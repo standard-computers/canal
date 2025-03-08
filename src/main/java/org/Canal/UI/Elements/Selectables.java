@@ -36,6 +36,31 @@ public class Selectables {
         return s;
     }
 
+    public static Selectable allLocationsAndPeople(){
+        HashMap<String, String> options = new HashMap<>();
+        for(Location orgs : Engine.getLocations("ORGS")){
+            options.put(orgs.getId(), orgs.getId());
+        }
+        for(Location cs : Engine.getLocations("CCS")){
+            options.put(cs.getId(), cs.getId());
+        }
+        for(Location dcs : Engine.getLocations("DCSS")){
+            options.put(dcs.getId(), dcs.getId());
+        }
+        for(Location whs : Engine.getLocations("WHS")){
+            options.put(whs.getId(), whs.getId());
+        }
+        for(Location vndr : Engine.getLocations("VEND")){
+            options.put(vndr.getId(), vndr.getId());
+        }
+        for(Employee vndr : Engine.getPeople()){
+            options.put(vndr.getId(), vndr.getId());
+        }
+        Selectable s = new Selectable(options);
+        s.editable();
+        return s;
+    }
+
     public static Selectable employees(){
         HashMap<String, String> employees = new HashMap<>();
         for(Employee emp : Engine.getEmployees()){

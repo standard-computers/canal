@@ -113,7 +113,7 @@ public class Delivery extends Objex {
     }
 
     public void save(){
-        File md = new File(Start.WINDOWS_SYSTEM_DIR + "\\.store\\TRANS\\" + type + "\\");
+        File md = new File(Start.DIR + "\\.store\\TRANS\\" + type + "\\");
         File[] mdf = md.listFiles();
         if (mdf != null) {
             for (File file : mdf) {

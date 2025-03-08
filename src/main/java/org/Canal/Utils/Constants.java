@@ -78,7 +78,7 @@ public class Constants {
     public static Locke allModules() {
         return new Locke("Canal – All Actions", getIcon("controller"), "/ORGS", new Locke[]{
                 new Locke("Quick Accesses", getIcon("controllers"), "/", new Locke[]{
-                        new Locke("My Profile", getIcon("locke"), "/ME", null),
+                        new Locke("My Profile", getIcon("me"), "/ME", null),
                         new Locke("Finance", getIcon("finance"), "/FI", null),
                         new Locke("Inventory", getIcon("locke"), "/INV", null),
                         new Locke("Human Resources", getIcon("humanresources"), "/HR", null),
@@ -127,13 +127,6 @@ public class Constants {
                         new Locke("Modify Customer", getIcon("modify"), "/CSTS/MOD", null),
                         new Locke("Archive Customer", getIcon("archive"), "/CSTS/ARCHV", null),
                         new Locke("Remove Customer", getIcon("delete"), "/CSTS/DEL", null),
-                }),
-                new Locke("Components", getIcon("folder"), "/CMPS", new Locke[]{
-                        new Locke("Find Component", getIcon("find"), "/CMPS/F", null),
-                        new Locke("Create Component", getIcon("create"), "/CMPS/NEW", null),
-                        new Locke("Modify Component", getIcon("modify"), "/CMPS/MOD", null),
-                        new Locke("Archive Component", getIcon("archive"), "/CMPS/ARCHV", null),
-                        new Locke("Remove Component", getIcon("delete"), "/CMPS/DEL", null),
                 }),
                 new Locke("Cost Centers", getIcon("folder"), "/CCS", new Locke[]{
                         new Locke("Find Cost Center", getIcon("find"), "/CCS/F", null),
@@ -198,13 +191,6 @@ public class Constants {
                         new Locke("Audit Ledger", getIcon("locke"), "/LGS/AUDIT", null),
                         new Locke("Archive Ledger", getIcon("archive"), "/LGS/ARCHV", null),
                         new Locke("Remove Ledger", getIcon("delete"), "/LGS/DEL", null),
-                }),
-                new Locke("Materials", getIcon("folder"), "/MTS", new Locke[]{
-                        new Locke("Find Material", getIcon("find"), "/MTS/F", null),
-                        new Locke("Create Material", getIcon("create"), "/MTS/NEW", null),
-                        new Locke("Modify Material", getIcon("modify"), "/MTS/MOD", null),
-                        new Locke("Archive Material", getIcon("archive"), "/MTS/ARCHV", null),
-                        new Locke("Remove Material", getIcon("delete"), "/MTS/DEL", null),
                 }),
                 new Locke("Movements", getIcon("folder"), "/MVMT", new Locke[]{ //Controller
                         new Locke("Waves", getIcon("folder"), "/MVMT/WVS", new Locke[]{

@@ -1,6 +1,7 @@
 package org.Canal.UI.Views.Controllers;
 
 import org.Canal.UI.Elements.CustomTabbedPane;
+import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.UI.Views.ViewLocation;
 
@@ -19,12 +20,16 @@ public class DataCenter extends LockeState {
         setFrameIcon(new ImageIcon(ViewLocation.class.getResource("/icons/datacenter.png")));
         super.isMaximized();
         CustomTabbedPane main = new CustomTabbedPane();
+        main.addTab("Configuration", codex());
         main.addTab("CODEX", codex());
         main.addTab("Locations", locations());
         main.addTab("Stock", stock());
         main.addTab("/LGS", ledgers());
         main.addTab("/INV", invoices());
+        main.addTab("XFunctionality (/X)", invoices());
+        main.addTab("EDI", invoices());
         setLayout(new BorderLayout());
+        add(Elements.header("Data Center", SwingConstants.LEFT), BorderLayout.NORTH);
         add(main, BorderLayout.CENTER);
     }
 

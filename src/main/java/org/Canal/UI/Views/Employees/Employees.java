@@ -1,13 +1,16 @@
 package org.Canal.UI.Views.Employees;
 
+import org.Canal.Models.HumanResources.Department;
 import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.HumanResources.Position;
 import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
+import org.Canal.UI.Views.Departments.ViewDepartment;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
+import org.Canal.Utils.RefreshListener;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -19,13 +22,16 @@ import java.util.ArrayList;
 /**
  * /EMPS
  */
-public class Employees extends LockeState {
+public class Employees extends LockeState implements RefreshListener {
 
+    private DesktopState desktop;
     private CustomTable table;
 
     public Employees(DesktopState desktop) {
+
         super("Employees", "/EMPS", true, true, true, true);
         setFrameIcon(new ImageIcon(Employees.class.getResource("/icons/employees.png")));
+        this.desktop = desktop;
 
         JPanel holder = new JPanel(new BorderLayout());
         table = table();
@@ -61,6 +67,7 @@ public class Employees extends LockeState {
         IconButton archiveEmployee = new IconButton("Archive", "archive", "Archive an Employee", "/EMPS/ARCHV");
         IconButton removeEmployee = new IconButton("Remove", "delete", "Delete an Employee", "/EMPS/DEL");
         IconButton advancedFine = new IconButton("Find", "find", "Find by Values", "/EMPS/F");
+        IconButton refresh = new IconButton("Refresh", "refresh", "Refresh data");
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(importEmployees);
@@ -80,6 +87,12 @@ public class Employees extends LockeState {
             @Override
             public void mouseClicked(MouseEvent e) {
                 table.exportToCSV();
+            }
+        });
+        refresh.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                refresh();
             }
         });
         return tb;
@@ -129,5 +142,32 @@ public class Employees extends LockeState {
             });
         }
         return new CustomTable(columns, data);
+    }
+
+    @Override
+    public void refresh() {
+        CustomTable newTable = table();
+        JScrollPane scrollPane = (JScrollPane) table.getParent().getParent();
+        scrollPane.setViewportView(newTable);
+        table = newTable;
+        scrollPane.revalidate();
+        scrollPane.repaint();
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    JTable t = (JTable) e.getSource();
+                    int r = t.getSelectedRow();
+                    if (r != -1) {
+                        String v = String.valueOf(t.getValueAt(r, 1));
+                        for(Department d : Engine.getOrganization().getDepartments()){
+                            if(d.getId().equals(v)){
+                                desktop.put(new ViewDepartment(d));
+                            }
+                        }
+                    }
+                }
+            }
+        });
     }
 }

@@ -54,7 +54,7 @@ public class Timesheet extends Objex {
     }
 
     public void save(){
-        File md = new File(Start.WINDOWS_SYSTEM_DIR + "\\.store\\HR\\TMSH\\");
+        File md = new File(Start.DIR + "\\.store\\HR\\TMSH\\");
         File[] mdf = md.listFiles();
         if (mdf != null) {
             for (File file : mdf) {

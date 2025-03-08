@@ -21,6 +21,7 @@ public class MyProfile extends LockeState {
     public MyProfile(DesktopState desktop) {
 
         super("My Profile", "/ME", true, true, true, true);
+        setFrameIcon(new ImageIcon(MyProfile.class.getResource("/icons/me.png")));
         //TODO Check that user is assigned
         me = Engine.getEmployee(Engine.getAssignedUser().getEmployee());
 
@@ -32,7 +33,8 @@ public class MyProfile extends LockeState {
         tabs.addTab("Positions", new ImageIcon(ViewLocation.class.getResource("/icons/positions.png")), positions());
         tabs.addTab("Learning", learning());
         setLayout(new BorderLayout());
-        add(tabs,BorderLayout.NORTH);
+        add(Elements.header("My Profile", SwingConstants.LEFT), BorderLayout.NORTH);
+        add(tabs,BorderLayout.CENTER);
     }
 
     private JPanel summary(){

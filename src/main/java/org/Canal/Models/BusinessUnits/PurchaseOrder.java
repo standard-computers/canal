@@ -143,7 +143,7 @@ public class PurchaseOrder extends Objex {
     }
 
     public void save(){
-        File md = new File(Start.WINDOWS_SYSTEM_DIR + "\\.store\\ORDS\\SO\\");
+        File md = new File(Start.DIR + "\\.store\\ORDS\\SO\\");
         File[] mdf = md.listFiles();
         if (mdf != null) {
             for (File file : mdf) {

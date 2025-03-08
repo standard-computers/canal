@@ -47,7 +47,7 @@ public class CreatePosition extends LockeState {
 
         CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.addTab("General", general());
-        tabs.addTab("Assign People", employees());
+        tabs.addTab("Assign Employees", employees());
 
         setLayout(new BorderLayout());
         JPanel header = new JPanel(new BorderLayout());
@@ -137,7 +137,7 @@ public class CreatePosition extends LockeState {
 
         JPanel buttons = new JPanel();
         buttons.setLayout(new BoxLayout(buttons, BoxLayout.X_AXIS));
-        IconButton add = new IconButton("Add Product", "add_rows", "Add Product");
+        IconButton add = new IconButton("Add Employee", "add_rows", "Add Product");
         IconButton remove = new IconButton("Remove Selected", "delete_rows", "Remove Selected Product");
         buttons.add(Box.createHorizontalStrut(5));
         buttons.add(add);

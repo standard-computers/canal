@@ -28,7 +28,7 @@ public class Setup extends JFrame {
         if(Engine.codex == null){
             Codex cdx = new Codex();
             Engine.codex = cdx;
-            Json.save(Start.WINDOWS_SYSTEM_DIR + "\\codex.cdx", cdx);
+            Json.save(Start.DIR + "\\codex.cdx", cdx);
         }
 
         JButton small = Elements.button("Single Location");

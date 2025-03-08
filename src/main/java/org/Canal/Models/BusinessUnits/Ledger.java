@@ -65,7 +65,7 @@ public class Ledger extends Objex {
     }
 
     public void save(){
-        File md = new File(Start.WINDOWS_SYSTEM_DIR + "\\.store\\LGS\\");
+        File md = new File(Start.DIR + "\\.store\\LGS\\");
         File[] mdf = md.listFiles();
         if (mdf != null) {
             for (File file : mdf) {
