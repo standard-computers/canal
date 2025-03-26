@@ -35,6 +35,7 @@ public class MyProfile extends LockeState {
         setLayout(new BorderLayout());
         add(Elements.header("My Profile", SwingConstants.LEFT), BorderLayout.NORTH);
         add(tabs,BorderLayout.CENTER);
+        setMaximized(true);
     }
 
     private JPanel summary(){

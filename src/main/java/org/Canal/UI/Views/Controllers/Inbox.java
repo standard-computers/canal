@@ -12,9 +12,9 @@ public class Inbox extends LockeState {
 
     public Inbox(DesktopState desktop) {
 
-        super("Inbox", "/INBOX", false, true, false, true);
+        super("Inbox", "/INBOX", true, true, true, true);
         setFrameIcon(new ImageIcon(Inbox.class.getResource("/icons/inbox.png")));
 
-
+        setMaximized(true);
     }
 }

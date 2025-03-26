@@ -6,24 +6,19 @@ import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Copiable;
 import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.LockeState;
-import org.Canal.Utils.Locke;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreePath;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
+/**
+ * /ITS/$[ITEM_ID]
+ */
 public class ViewItem extends LockeState {
 
     private Item item;
-    private JTree dataTree;
     private Copiable idField, orgField, nameField, vendorField, colorField, batchedField, rentableField, skudField, consumableField, priceField, widthField, lengthField, heightField, weightField, taxField, exciseTaxfield;
     private Copiable vendorIdField, vendorNameField, vendorStreetField, vendorCityField, vendorStateField, vendorPostalField, vendorCountryField, vendorTaxExemptField, vendorStatusField;
 
@@ -34,73 +29,27 @@ public class ViewItem extends LockeState {
         this.item = item;
 
         setLayout(new BorderLayout());
-        JPanel tb = toolbar();
-        add(tb, BorderLayout.NORTH);
-
         JPanel iic = new JPanel(new BorderLayout());
-        iic.add(Elements.h2("Item Information"), BorderLayout.NORTH);
-        iic.add(itemInfo(), BorderLayout.CENTER);
+        iic.add(Elements.header(item.getId() + " – " + item.getName(), SwingConstants.LEFT), BorderLayout.NORTH);
+        iic.add(toolbar(), BorderLayout.SOUTH);
+        add(iic, BorderLayout.NORTH);
 
-        JScrollPane itemScrollPane = new JScrollPane(iic);
-        JScrollPane vendorScrollPane = new JScrollPane(vendorInfo(Engine.getLocation(item.getVendor(), "VEND")));
+        CustomTabbedPane tabs = new CustomTabbedPane();
+        tabs.addTab("Vendor Information", vendorInfo());
+        tabs.addTab("Dimensional", dimensional());
+        tabs.addTab("Batch Data", batchData());
+        tabs.addTab("Bill of Materials", billOfMaterials());
+        tabs.addTab("Units of Measure", unitsOfMeasure());
+        tabs.addTab("Packaging", packaging());
+        tabs.addTab("Variants", variants());
 
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, itemScrollPane, vendorScrollPane);
-        splitPane.setResizeWeight(0.5);
-        splitPane.setDividerLocation(0.5);
-        JPanel dataView = new JPanel(new BorderLayout());
-
-        JTextField cmd = new JTextField("/ITS/" + item.getId());
-        dataView.add(cmd, BorderLayout.NORTH);
-        dataView.add(splitPane, BorderLayout.CENTER);
-        dataTree = createTree();
-        dataTree.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                TreePath path = dataTree.getPathForLocation(e.getX(), e.getY());
-                DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
-                Locke orgNode = (Locke) node.getUserObject();
-                Item selectedItem  = Engine.products.getItem(orgNode.getTransaction());
-                idField.setText(selectedItem.getId());
-                orgField.setText(selectedItem.getOrg());
-                nameField.setText(selectedItem.getName());
-                vendorField.setText(selectedItem.getVendor());
-                colorField.setText(selectedItem.getColor());
-                batchedField.setText(String.valueOf(selectedItem.isBatched()));
-                rentableField.setText(String.valueOf(selectedItem.isRentable()));
-                skudField.setText(String.valueOf(selectedItem.isSkud()));
-                consumableField.setText(String.valueOf(selectedItem.isConsumable()));
-                priceField.setText(String.valueOf(selectedItem.getPrice()));
-                widthField.setText(String.valueOf(selectedItem.getWidth()));
-                lengthField.setText(String.valueOf(selectedItem.getLength()));
-                heightField.setText(String.valueOf(selectedItem.getHeight()));
-                weightField.setText(String.valueOf(selectedItem.getWidth()));
-                taxField.setText(String.valueOf(selectedItem.getTax()));
-                exciseTaxfield.setText(String.valueOf(selectedItem.getExciseTax()));
-
-                Location selectedVendor = Engine.getLocation(selectedItem.getVendor(), "VEND");
-                vendorIdField.setText(selectedVendor.getId());
-                vendorNameField.setText(selectedVendor.getName());
-                vendorStreetField.setText(selectedVendor.getLine1());
-                vendorCityField.setText(selectedVendor.getCity());
-                vendorStateField.setText(selectedVendor.getState());
-                vendorPostalField.setText(selectedVendor.getPostal());
-                vendorCountryField.setText(selectedVendor.getCountry());
-                vendorTaxExemptField.setText(String.valueOf(selectedVendor.isTaxExempt()));
-                vendorStatusField.setText(String.valueOf(selectedVendor.getStatus()));
-
-            }
-        });
-        JScrollPane treeScrollPane = new JScrollPane(dataTree);
-        JSplitPane infoSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, treeScrollPane, dataView);
-        infoSplitPane.setDividerLocation(250);
-        infoSplitPane.setResizeWeight(0.2);
-        add(infoSplitPane, BorderLayout.CENTER);
-        setIconifiable(true);
-        setClosable(true);
-        setResizable(true);
+        add(tabs, BorderLayout.CENTER);
+        setMaximized(true);
     }
 
-    private JPanel vendorInfo(Location vendor) {
+    private JPanel vendorInfo(){
+        JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        Location vendor = Engine.getLocation(item.getVendor(), "VEND");
         if (vendor == null) {
             JOptionPane.showMessageDialog(null, "A Vendor has not been allocated for this item. Please contact the data team.");
         }
@@ -123,8 +72,51 @@ public class ViewItem extends LockeState {
         vi.addInput(Elements.coloredLabel("Country", UIManager.getColor("Label.foreground")), vendorCountryField);
         vi.addInput(Elements.coloredLabel("Tax Exempt", UIManager.getColor("Label.foreground")), vendorTaxExemptField);
         vi.addInput(Elements.coloredLabel("Status", UIManager.getColor("Label.foreground")), vendorStatusField);
-        vi.setBorder(new EmptyBorder(10, 10, 10, 10));
-        return vi;
+        p.add(vi);
+        return p;
+    }
+
+    private JPanel dimensional(){
+        JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        Form f2 = new Form();
+        f2.addInput(Elements.coloredLabel("Packaging Base Quantity", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(item.getBaseQuantity())));
+        f2.addInput(Elements.coloredLabel("Packaging UOM", UIManager.getColor("Label.foreground")), new Copiable(item.getPackagingUnit()));
+        f2.addInput(Elements.coloredLabel("Consumable?", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(item.isConsumable())));
+        f2.addInput(Elements.coloredLabel("Color", UIManager.getColor("Label.foreground")), new Copiable(item.getColor()));
+        f2.addInput(Elements.coloredLabel("Width", UIManager.getColor("Label.foreground")), new Copiable(item.getWidth() + " " + item.getWidthUOM()));
+        f2.addInput(Elements.coloredLabel("Length", UIManager.getColor("Label.foreground")), new Copiable(item.getLength() + " " + item.getLengthUOM()));
+        f2.addInput(Elements.coloredLabel("Height", UIManager.getColor("Label.foreground")), new Copiable(item.getHeight() + " " + item.getHeightUOM()));
+        f2.addInput(Elements.coloredLabel("Weight", UIManager.getColor("Label.foreground")), new Copiable(item.getWeight() + " " + item.getWeightUOM()));
+        f2.addInput(Elements.coloredLabel("Tax (0.05 as 5%)", UIManager.getColor("Label.foreground")), new Copiable(""));
+        f2.addInput(Elements.coloredLabel("Excise Tax (0.05 as 5%)", UIManager.getColor("Label.foreground")), new Copiable(""));
+        p.add(f2);
+        return p;
+    }
+
+    private JPanel batchData(){
+        JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        return p;
+    }
+
+    private JPanel billOfMaterials(){
+        JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        return p;
+    }
+
+
+    private JPanel unitsOfMeasure(){
+        JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        return p;
+    }
+
+    private JPanel packaging(){
+        JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        return p;
+    }
+
+    private JPanel variants(){
+        JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        return p;
     }
 
     private JPanel itemInfo() {
@@ -169,71 +161,9 @@ public class ViewItem extends LockeState {
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton inventory = new IconButton("Inventory", "inventory", "Check stock of item");
         IconButton label = new IconButton("", "label", "Print labels for properties");
-        IconButton refresh = new IconButton("", "refresh", "Reload from store");
-        refresh.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                Locke rootNode = createRootNode();
-                DefaultMutableTreeNode rootTreeNode = createTreeNodes(rootNode);
-                DefaultTreeModel model = (DefaultTreeModel) dataTree.getModel();
-                model.setRoot(rootTreeNode);
-                expandAllNodes(dataTree);
-                revalidate();
-                repaint();
-            }
-        });
         tb.add(inventory);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(label);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(refresh);
         return tb;
-    }
-
-    private JTree createTree() {
-        Locke rootNode = createRootNode();
-        DefaultMutableTreeNode rootTreeNode = createTreeNodes(rootNode);
-        DefaultTreeModel treeModel = new DefaultTreeModel(rootTreeNode);
-        JTree tree = new JTree(treeModel);
-        tree.setCellRenderer(new CustomTreeCellRenderer());
-        expandAllNodes(tree);
-        return tree;
-    }
-
-    private Locke createRootNode() {
-
-        Locke[] items = new Locke[Engine.products.getItems(Engine.getOrganization().getId()).size()];
-        for (int i = 0; i < Engine.products.getItems(Engine.getOrganization().getId()).size(); i++) {
-            Item l = Engine.products.getItems(Engine.getOrganization().getId()).get(i);
-            items[i] = new Locke(l.getId() + " - " + l.getName() + " / Items", UIManager.getIcon("FileView.fileIcon"), l.getId(), new Color(147, 70, 3), null);
-        }
-        return new Locke(Engine.getOrganization().getId() + " - " + Engine.getOrganization().getName(), UIManager.getIcon("FileView.fileIcon"), "/ITS", items);
-    }
-
-    private DefaultMutableTreeNode createTreeNodes(Locke node) {
-        DefaultMutableTreeNode treeNode = new DefaultMutableTreeNode(node);
-        if (node.getChildren() != null) {
-            for (Locke child : node.getChildren()) {
-                treeNode.add(createTreeNodes(child));
-            }
-        }
-        return treeNode;
-    }
-
-    static class CustomTreeCellRenderer extends DefaultTreeCellRenderer {
-        @Override
-        public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus) {
-            Component component = super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
-            DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) value;
-            Locke orgNode = (Locke) treeNode.getUserObject();
-            setIcon(orgNode.getIcon());
-            setForeground(orgNode.getColor());
-            return component;
-        }
-    }
-
-    private void expandAllNodes(JTree tree) {
-        for (int i = 0; i < tree.getRowCount(); i++) {
-            tree.expandRow(i);
-        }
     }
 }

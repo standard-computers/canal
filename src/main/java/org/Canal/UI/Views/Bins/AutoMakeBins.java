@@ -3,11 +3,11 @@ package org.Canal.UI.Views.Bins;
 import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.Models.SupplyChainUnits.Bin;
 import org.Canal.UI.Elements.*;
-import org.Canal.UI.Views.ViewLocation;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -68,9 +68,9 @@ public class AutoMakeBins extends LockeState {
         opts.add(sa);
         opts.add(dsa);
         selector.add(opts, BorderLayout.SOUTH);
-        tabs.addTab("Areas", new ImageIcon(ViewLocation.class.getResource("/icons/areas.png")), selector);
-        tabs.addTab("General", new ImageIcon(ViewLocation.class.getResource("/icons/info.png")), general());
-        tabs.addTab("Dimensional", new ImageIcon(ViewLocation.class.getResource("/icons/dimensional.png")), dimensional());
+        tabs.addTab("Areas", selector);
+        tabs.addTab("General", general());
+        tabs.addTab("Dimensional", dimensional());
         setLayout(new BorderLayout());
         add(Elements.header("AutoMake Bins", SwingConstants.LEFT), BorderLayout.NORTH);
         add(tabs, BorderLayout.CENTER);
@@ -114,6 +114,22 @@ public class AutoMakeBins extends LockeState {
         });
     }
 
+    private JPanel toolbar() {
+        JPanel tb = new JPanel();
+        tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        IconButton copyFrom = new IconButton("Labels", "label", "Delete an Area");
+        IconButton review = new IconButton("Print", "print", "Print selected");
+        IconButton execute = new IconButton("Refresh", "refresh", "Refresh data");
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(copyFrom);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(review);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(execute);
+        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
+        return tb;
+    }
+
     private JPanel general(){
 
         JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -130,16 +146,16 @@ public class AutoMakeBins extends LockeState {
 
     private void addCheckboxes() {
 
-        Set<String> addedIds = new HashSet<>(); // To track unique IDs
+        Set<String> addedIds = new HashSet<>();
         for (Area location : areas) {
             String id = location.getId();
-            if (!addedIds.contains(id)) { // Check if the ID is already added
+            if (!addedIds.contains(id)) {
                 String displayText = id + " - " + location.getName();
                 JCheckBox checkbox = new JCheckBox(displayText);
-                checkbox.setActionCommand(id); // Set the value as ID
+                checkbox.setActionCommand(id);
                 checkboxes.add(checkbox);
                 checkboxPanel.add(checkbox);
-                addedIds.add(id); // Mark this ID as added
+                addedIds.add(id);
             }
         }
     }

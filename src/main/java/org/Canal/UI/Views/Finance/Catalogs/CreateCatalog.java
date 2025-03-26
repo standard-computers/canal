@@ -33,7 +33,7 @@ public class CreateCatalog extends LockeState {
 //        }
 
         Form f = new Form();
-        String cid = ((String) Engine.codex("CATS", "preix")) + (Engine.getCatalogs().size() + 1);
+        String cid = ((String) Engine.codex("CATS", "prefix")) + (Engine.getCatalogs().size() + 1);
         JTextField catalogIdField = new Copiable(cid);
         JTextField catalogNameField = Elements.input();
         JTextField descriptionField = Elements.input();

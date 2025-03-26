@@ -47,7 +47,6 @@ public class IconButton extends JButton {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                setContentAreaFilled(false);
                 if (locke != null) {
                     Start.q.put(Engine.router(locke, Start.q));
                 }

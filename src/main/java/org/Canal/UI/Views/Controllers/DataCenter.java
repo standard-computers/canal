@@ -23,14 +23,20 @@ public class DataCenter extends LockeState {
         main.addTab("Configuration", codex());
         main.addTab("CODEX", codex());
         main.addTab("Locations", locations());
-        main.addTab("Stock", stock());
+        main.addTab("/ORDS", orders());
         main.addTab("/LGS", ledgers());
+        main.addTab("/AREAS", ledgers());
+        main.addTab("/ITS", ledgers());
         main.addTab("/INV", invoices());
-        main.addTab("XFunctionality (/X)", invoices());
-        main.addTab("EDI", invoices());
+        main.addTab("/USRS", invoices());
+        main.addTab("/EMPS", invoices());
+        main.addTab("/PPL", invoices());
+        main.addTab("/X", invoices());
+        main.addTab("/RCS", invoices());
         setLayout(new BorderLayout());
         add(Elements.header("Data Center", SwingConstants.LEFT), BorderLayout.NORTH);
         add(main, BorderLayout.CENTER);
+        setMaximized(true);
     }
 
     private CustomTabbedPane codex() {
@@ -41,12 +47,20 @@ public class DataCenter extends LockeState {
 
     private CustomTabbedPane locations() {
         CustomTabbedPane locations = new CustomTabbedPane();
-        locations.addTab("/ORGS (Orgs)", null);
-        locations.addTab("/CCS (Cost Centers)", null);
-        locations.addTab("/DCSS (Dist Centers)", null);
-        locations.addTab("/WHS (Warehouses)", null);
-        locations.addTab("/VEND (Vendors)", null);
-        locations.addTab("/CSTS (Customers)", null);
+        locations.addTab("/ORGS", null);
+        locations.addTab("/CCS", null);
+        locations.addTab("/DCSS", null);
+        locations.addTab("/WHS", null);
+        locations.addTab("/VEND", null);
+        locations.addTab("/CSTS", null);
+        return locations;
+    }
+
+    private CustomTabbedPane orders() {
+        CustomTabbedPane locations = new CustomTabbedPane();
+        locations.addTab("/PR", null);
+        locations.addTab("/PO", null);
+        locations.addTab("/SO", null);
         return locations;
     }
 

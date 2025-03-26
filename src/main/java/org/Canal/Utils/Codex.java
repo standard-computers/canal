@@ -159,7 +159,7 @@ public class Codex {
             put("name", "Purchase Orders");
             put("icon", "orders");
             put("prefix", "PO");
-            put("commit_to_ledger", true);
+            put("commit_to_ledger", false);
             put("use_deliveries", true);
             put("allow_archival", true);
             put("allow_deletion", true);

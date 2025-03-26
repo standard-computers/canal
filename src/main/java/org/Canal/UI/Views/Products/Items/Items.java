@@ -6,7 +6,6 @@ import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
-import org.Canal.UI.Views.Employees.ViewEmployee;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.RefreshListener;
@@ -47,7 +46,7 @@ public class Items extends LockeState implements RefreshListener {
                     int row = t.getSelectedRow();
                     if (row != -1) {
                         String v = String.valueOf(t.getValueAt(row, 1));
-                        desktop.put(new ViewEmployee(Engine.getEmployee(v)));
+                        desktop.put(new ViewItem(Engine.products.getItem(v)));
                     }
                 }
             }
@@ -63,10 +62,7 @@ public class Items extends LockeState implements RefreshListener {
         IconButton createItem = new IconButton("New", "create", "Create an Item", "/ITS/NEW");
         IconButton modifyItem = new IconButton("Modify", "modify", "Modify an Item", "/ITS/MOD");
         IconButton archiveItem = new IconButton("Archive", "archive", "Archive an Item", "/ITS/ARCHV");
-        IconButton removeItem = new IconButton("Remove", "delete", "Delete an Item", "/ITS/DEL");
         IconButton findItem = new IconButton("Find", "find", "Find by Values", "/ITS/F");
-        IconButton labels = new IconButton("Labels", "label", "Print labels for selected..");
-        IconButton print = new IconButton("Print", "print", "Print Selected...");
         IconButton refresh = new IconButton("Refresh", "refresh", "Refresh Data");
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));
@@ -78,13 +74,7 @@ public class Items extends LockeState implements RefreshListener {
         tb.add(Box.createHorizontalStrut(5));
         tb.add(archiveItem);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(removeItem);
-        tb.add(Box.createHorizontalStrut(5));
         tb.add(findItem);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(labels);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(print);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(refresh);
         tb.add(Box.createHorizontalStrut(5));
@@ -120,6 +110,7 @@ public class Items extends LockeState implements RefreshListener {
             "SKU'd",
             "Consumable",
             "Price",
+            "Components",
             "Width",
             "wUOM",
             "Length",
@@ -149,6 +140,7 @@ public class Items extends LockeState implements RefreshListener {
                     item.isSkud(),
                     item.isConsumable(),
                     item.getPrice(),
+                    item.getComponents().size(),
                     item.getWidth(),
                     item.getWidthUOM(),
                     item.getLength(),

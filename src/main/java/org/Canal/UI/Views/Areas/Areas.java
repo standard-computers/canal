@@ -22,12 +22,12 @@ public class Areas extends LockeState implements RefreshListener {
     public Areas() {
         super("Areas", "/AREAS", true, true, true, true);
         setFrameIcon(new ImageIcon(Areas.class.getResource("/icons/areas.png")));
-        JPanel tb = toolbar();
         JPanel holder = new JPanel(new BorderLayout());
         table = table();
         JScrollPane tableScrollPane = new JScrollPane(table);
         holder.add(Elements.header("Areas", SwingConstants.LEFT), BorderLayout.CENTER);
-        holder.add(tb, BorderLayout.SOUTH);
+        JScrollPane hs = new JScrollPane(toolbar());
+        holder.add(hs, BorderLayout.SOUTH);
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tableScrollPane, details());
@@ -43,7 +43,7 @@ public class Areas extends LockeState implements RefreshListener {
         IconButton openSelected = new IconButton("Open", "open", "Open selected");
         IconButton createArea = new IconButton("Create", "create", "Create a Area", "/AREAS/NEW");
         IconButton autoMakeAreas = new IconButton("AutoMake", "automake", "Automate the creation of areas", "/AREAS/AUTO_MK");
-        IconButton makeBins = new IconButton("Make Bins", "bins", "Make Bins", "/BNS/NEW");
+        IconButton makeBin = new IconButton("Make a Bin", "bins", "Make a single Bin", "/BNS/NEW");
         IconButton autoMakeBins = new IconButton("AutoMake Bins", "automake", "Automate Bins", "/BNS/AUTO_MK");
         IconButton modifyArea = new IconButton("Modify", "modify", "Modify an Area", "/AREAS/MOD");
         IconButton removeArea = new IconButton("Remove", "delete", "Delete an Area", "/AREAS/DEL");
@@ -58,7 +58,7 @@ public class Areas extends LockeState implements RefreshListener {
         tb.add(Box.createHorizontalStrut(5));
         tb.add(autoMakeAreas);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(makeBins);
+        tb.add(makeBin);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(autoMakeBins);
         tb.add(Box.createHorizontalStrut(5));

@@ -30,6 +30,7 @@ public class Item extends Objex {
     private String initialVolumeUOM;
     private double tax;
     private double exciseTax;
+    private double shelfLife;
     private ArrayList<OrderLineItem> components = new ArrayList<>();
     private ArrayList<Object[]> uoms = new ArrayList<>();
     private ArrayList<Object[]> packaging = new ArrayList<>();
@@ -216,6 +217,14 @@ public class Item extends Objex {
 
     public void setExciseTax(double exciseTax) {
         this.exciseTax = exciseTax;
+    }
+
+    public double getShelfLife() {
+        return shelfLife;
+    }
+
+    public void setShelfLife(double shelfLife) {
+        this.shelfLife = shelfLife;
     }
 
     public ArrayList<OrderLineItem> getComponents() {

@@ -36,16 +36,18 @@ public class ViewLocation extends LockeState implements RefreshListener {
     private DesktopState desktop;
 
     public ViewLocation(Location location, DesktopState desktop) {
+
         super(location.getId() + " – " + location.getName(), location.getType() + "/$", true, true, true, true);
+        setFrameIcon(new ImageIcon(ViewLocation.class.getResource("/icons/" + Engine.codex(location.getType().replace("/", ""), "icon") + ".png")));
         this.location = location;
         this.desktop = desktop;
-        setFrameIcon(new ImageIcon(ViewLocation.class.getResource("/icons/" + Engine.codex(location.getType().replace("/", ""), "icon") + ".png")));
+
         setLayout(new BorderLayout());
         JPanel tb = toolbar();
         add(tb, BorderLayout.NORTH);
         CustomTabbedPane tabs = new CustomTabbedPane();
-        tabs.addTab("Inbound Deliveries", new ImageIcon(ViewLocation.class.getResource("/icons/inbound.png")), inboundDeliveries());
-        tabs.addTab("Outbound Deliveries", new ImageIcon(ViewLocation.class.getResource("/icons/outbound.png")), outboundDeliveries());
+        tabs.addTab("Inbound Deliveries", inboundDeliveries());
+        tabs.addTab("Outbound Deliveries", outboundDeliveries());
         tabs.addTab("Open Tasks", openTasks());
         tabs.addTab("Pending Tasks", pendingTasks());
         tabs.addTab("Events", events());
@@ -72,10 +74,10 @@ public class ViewLocation extends LockeState implements RefreshListener {
         splitPane.setDividerLocation(200);
         splitPane.setResizeWeight(0.2);
         add(splitPane, BorderLayout.CENTER);
-        isMaximized();
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         Runnable task = () -> refresh();
         scheduler.scheduleAtFixedRate(task, 60, 30, TimeUnit.SECONDS);
+        setMaximized(true);
     }
 
     private JScrollPane inboundDeliveries(){

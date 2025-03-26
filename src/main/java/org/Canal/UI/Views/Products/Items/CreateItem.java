@@ -8,6 +8,7 @@ import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.UI.Views.Products.CreateInclusion;
+import org.Canal.UI.Views.Products.CreateUoM;
 import org.Canal.UI.Views.System.LockeMessages;
 import org.Canal.Utils.*;
 
@@ -40,7 +41,7 @@ public class CreateItem extends LockeState implements Includer {
     private JCheckBox isSkud;
     private JCheckBox isConsumable;
     private JCheckBox createBom;
-    private JCheckBox allowProduction;
+    private JTextField shelfLifeField;
     private Selectable orgIdField;
     private Selectable selectedVendor;
     private Selectable packagingUnits;
@@ -62,6 +63,7 @@ public class CreateItem extends LockeState implements Includer {
         CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.addTab("General", general());
         tabs.addTab("Dimensional", dimensional());
+        tabs.addTab("Batch Data", batching());
         tabs.addTab("Bill of Materials", billOfMaterials());
         tabs.addTab("Units of Measure", unitsOfMeasure());
         tabs.addTab("Packaging", packaging());
@@ -74,6 +76,7 @@ public class CreateItem extends LockeState implements Includer {
         setLayout(new BorderLayout());
         add(topBar, BorderLayout.NORTH);
         add(tabs, BorderLayout.CENTER);
+        setMaximized(true);
     }
 
     private JPanel toolbar() {
@@ -121,6 +124,11 @@ public class CreateItem extends LockeState implements Includer {
                 }
                 if(itemColorField.getText().isEmpty()){
                     addToQueue(new String[]{"CRITICAL", "Item COLOR is blank"});
+                }
+                if(createBom.isSelected()){
+                    if(componentsData.isEmpty()){
+                        addToQueue(new String[]{"CRITICAL", "BoM creation selected but no components!!!"});
+                    }
                 }
                 double estPrice = 0.0;
                 for(Object[] o : componentsData){
@@ -191,10 +199,12 @@ public class CreateItem extends LockeState implements Includer {
         item.setWeightUOM(itemWeight.getUOM());
         item.setTax(Double.parseDouble(tax.getText()));
         item.setExciseTax(Double.parseDouble(exciseTax.getText()));
+        item.setShelfLife(Double.parseDouble(shelfLifeField.getText()));
         for(Object[] o : componentsData){
             OrderLineItem ol = new OrderLineItem(o[0].toString(), o[1].toString(), Double.parseDouble(o[2].toString()), Double.parseDouble(o[2].toString()));
             item.addComponent(ol);
         }
+        item.setUoms(uomsData);
         Pipe.save("/ITS", item);
         dispose();
         JOptionPane.showMessageDialog(this, "Item has been created");
@@ -257,23 +267,39 @@ public class CreateItem extends LockeState implements Includer {
         return dimensional;
     }
 
+    private JPanel batching(){
+
+        JPanel batching = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        Form f = new Form();
+        shelfLifeField = Elements.input("0");
+        f.addInput(Elements.coloredLabel("Shelf Life (Days)", UIManager.getColor("Label.foreground")), shelfLifeField);
+//        f.addInput(Elements.coloredLabel("", Constants.colors[9]), );
+//        f.addInput(Elements.coloredLabel("", Constants.colors[8]), );
+//        f.addInput(Elements.coloredLabel("", Constants.colors[7]), );
+//        f.addInput(Elements.coloredLabel("", Constants.colors[6]), );
+        batching.add(f);
+        return batching;
+    }
+
     private JPanel unitsOfMeasure(){
         JPanel unitsOfMeasure = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-        IconButton addUoM = new IconButton("Add", "add_rows", "Add Unit of Measure");
-        IconButton removeUoM = new IconButton("Remove Selected", "delete_rows", "Remove Uunit of Measure");
-        IconButton automakeUoM = new IconButton("AutoMake", "automake", "Remove Uunit of Measure");
+        IconButton addUoM = new IconButton("Add UoM", "add_rows", "Add Unit of Measure");
+        IconButton removeUoM = new IconButton("Remove Selected", "delete_rows", "Remove Selected");
         tb.add(Box.createHorizontalStrut(5));
         tb.add(addUoM);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(removeUoM);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(automakeUoM);
         unitsOfMeasure.setLayout(new BorderLayout());
         unitsOfMeasure.add(tb, BorderLayout.NORTH);
+        addUoM.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                desktop.put(new CreateUoM(CreateItem.this));
+            }
+        });
         uomsView = new CustomTable(new String[]{
-                "UOM", "Base Qty", "Base Qty UOM", "Cost", "Price", "Weight", "Weight UOM"
+                "UOM", "Base Qty", "Base Qty UOM"
         }, uomsData);
         unitsOfMeasure.add(new JScrollPane(uomsView));
         return unitsOfMeasure;
@@ -334,19 +360,17 @@ public class CreateItem extends LockeState implements Includer {
         IconButton addComponents = new IconButton("Add", "add_rows", "Add Component");
         IconButton removeUoM = new IconButton("Remove Selected", "delete_rows", "Remove Selected Component");
         createBom = new JCheckBox("Create BoM");
-        allowProduction = new JCheckBox("Allow Production");
+        createBom.setToolTipText("Create a separate Objex as /BOM, required for production");
         tb.add(Box.createHorizontalStrut(5));
         tb.add(addComponents);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(removeUoM);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(createBom);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(allowProduction);
         addComponents.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new CreateInclusion("Include Component", CreateItem.this));
+                desktop.put(new CreateInclusion(CreateItem.this));
             }
         });
         bom.add(tb, BorderLayout.NORTH);
@@ -376,5 +400,23 @@ public class CreateItem extends LockeState implements Includer {
         bomsView = newBoms;
         scrollPane.revalidate();
         scrollPane.repaint();
+    }
+
+    @Override
+    public void commitUoM(String uom, String qty, String baseQtyUom) {
+        uomsData.add(new Object[]{ uom, qty, baseQtyUom });
+        CustomTable newUoms = new CustomTable(new String[]{
+                "UOM", "Base Qty", "Base Qty UOM"
+        }, uomsData);
+        JScrollPane scrollPane = (JScrollPane) uomsView.getParent().getParent();
+        scrollPane.setViewportView(newUoms);
+        uomsView = newUoms;
+        scrollPane.revalidate();
+        scrollPane.repaint();
+    }
+
+    @Override
+    public void commitVariant(String id, String price) {
+
     }
 }

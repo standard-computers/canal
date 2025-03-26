@@ -43,6 +43,7 @@ public class HumanResources extends LockeState {
         setLayout(new BorderLayout());
         add(Elements.header("Human Resource Center", SwingConstants.LEFT), BorderLayout.NORTH);
         add(tabbedPane, BorderLayout.CENTER);
+        setMaximized(true);
     }
 
     private JPanel users() {
