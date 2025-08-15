@@ -1,21 +1,15 @@
 package org.Canal.UI.Views.Areas;
 
 import org.Canal.Models.SupplyChainUnits.Area;
-import org.Canal.UI.Elements.Elements;
-import org.Canal.UI.Elements.Selectable;
-import org.Canal.UI.Elements.Selectables;
-import org.Canal.UI.Elements.UOMField;
-import org.Canal.UI.Elements.Form;
-import org.Canal.UI.Elements.LockeState;
+import org.Canal.UI.Elements.*;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Pipe;
 import org.Canal.Utils.RefreshListener;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 /**
  * /AREAS/NEW
@@ -23,25 +17,89 @@ import java.awt.event.MouseEvent;
  */
 public class CreateArea extends LockeState {
 
+    private String location;
+    private RefreshListener refreshListener;
+    private JTextField areaIdField;
+    private Selectable availableLocations;
+    private JTextField areaNameField;
+    private UOMField widthField;
+    private UOMField lengthField;
+    private UOMField heightField;
+
     public CreateArea(String location, RefreshListener refreshListener) {
 
         super("New Area", "/AREAS/NEW", false, true, false, true);
         setFrameIcon(new ImageIcon(CreateArea.class.getResource("/icons/areas.png")));
+        this.location = location;
+        this.refreshListener = refreshListener;
 
-        JTextField areaIdField = Elements.input();
-        Selectable availableLocations = Selectables.allLocations();
+        add(Elements.header("New Area", SwingConstants.LEFT), BorderLayout.NORTH);
+        add(content(), BorderLayout.CENTER);
+    }
+
+    public JPanel toolbar() {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel tb = new JPanel();
+        tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        IconButton copyFrom = new IconButton("Copy From", "open", "Copy from Area");
+        copyFrom.addActionListener(e -> {
+            String areaId = JOptionPane.showInputDialog(CreateArea.this, "Enter Area ID", "Copy Area", JOptionPane.QUESTION_MESSAGE);
+            if(!areaId.isEmpty()){
+                Area a = Engine.getArea(areaId);
+                areaIdField.setText(a.getId());
+                availableLocations.setSelectedValue(a.getLocation());
+                areaNameField.setText(a.getName());
+                //TODO Set UOM
+                widthField.setValue(String.valueOf(a.getWidth()));
+                lengthField.setValue(String.valueOf(a.getLength()));
+                heightField.setValue(String.valueOf(a.getHeight()));
+            }
+        });
+        IconButton review = new IconButton("Review", "review", "Review Area Data");
+        IconButton create = new IconButton("Create", "execute", "Refresh Data");
+        create.addActionListener(e -> {
+            Area newArea = new Area();
+            newArea.setId(areaIdField.getText().trim());
+            newArea.setLocation(availableLocations.getSelectedValue());
+            newArea.setName(areaNameField.getText());
+            newArea.setWidth(Double.parseDouble(widthField.getValue()));
+            newArea.setWidthUOM(widthField.getUOM());
+            newArea.setLength(Double.parseDouble(lengthField.getValue()));
+            newArea.setLengthUOM(lengthField.getUOM());
+            newArea.setHeight(Double.parseDouble(heightField.getValue()));
+            newArea.setHeightUOM(heightField.getUOM());
+            Pipe.save("/AREAS", newArea);
+            dispose();
+            JOptionPane.showMessageDialog(CreateArea.this, "Area Created");
+            if(refreshListener != null){
+                refreshListener.refresh();
+            }
+        });
+        tb.add(copyFrom);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(review);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(create);
+        tb.setBorder(new EmptyBorder(0, 5, 0, 5));
+        panel.add(tb, BorderLayout.SOUTH);
+        return panel;
+    }
+
+    public JPanel content() {
+        JPanel panel = new JPanel(new BorderLayout());
+
+        areaIdField = Elements.input();
+        availableLocations = Selectables.allLocations();
         if(location == null){
             areaIdField.setText("A-" + Engine.getAreas().size());
         }else{
             areaIdField.setText("A-" + (Engine.getAreas(location).size() + 1) + "-" + location);
             availableLocations.setSelectedValue(location);
         }
-        JTextField areaNameField = Elements.input(areaIdField.getText(), 20);
-        UOMField widthField = new UOMField();
-        UOMField lengthField = new UOMField();
-        UOMField heightField = new UOMField();
-        UOMField areaField = new UOMField();
-        UOMField volumeField = new UOMField();
+        areaNameField = Elements.input(areaIdField.getText(), 20);
+        widthField = new UOMField();
+        lengthField = new UOMField();
+        heightField = new UOMField();
         Form f = new Form();
         f.addInput(Elements.coloredLabel("*New ID", UIManager.getColor("Label.foreground")), areaIdField);
         f.addInput(Elements.coloredLabel("*Location", UIManager.getColor("Label.foreground")), availableLocations);
@@ -49,34 +107,10 @@ public class CreateArea extends LockeState {
         f.addInput(Elements.coloredLabel("Width", Constants.colors[9]), widthField);
         f.addInput(Elements.coloredLabel("Length", Constants.colors[8]), lengthField);
         f.addInput(Elements.coloredLabel("Height", Constants.colors[7]), heightField);
-        f.addInput(Elements.coloredLabel("Area", Constants.colors[6]), areaField);
-        f.addInput(Elements.coloredLabel("Volume", Constants.colors[6]), volumeField);
 
-        JButton make = Elements.button("Make");
-        add(make, BorderLayout.SOUTH);
-        add(f, BorderLayout.CENTER);
-        make.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                Area newArea = new Area();
-                newArea.setId(areaIdField.getText().trim());
-                newArea.setLocation(availableLocations.getSelectedValue());
-                newArea.setName(areaNameField.getText());
-                newArea.setWidth(Double.parseDouble(widthField.getValue()));
-                newArea.setWidthUOM(widthField.getUOM());
-                newArea.setLength(Double.parseDouble(lengthField.getValue()));
-                newArea.setLengthUOM(lengthField.getUOM());
-                newArea.setHeight(Double.parseDouble(heightField.getValue()));
-                newArea.setHeightUOM(heightField.getUOM());
-                newArea.setArea(Double.parseDouble(areaField.getValue()));
-                newArea.setAreaUOM(areaField.getUOM());
-                newArea.setVolume(Double.parseDouble(volumeField.getValue()));
-                newArea.setVolumeUOM(volumeField.getUOM());
-                Pipe.save("/AREAS", newArea);
-                dispose();
-                JOptionPane.showMessageDialog(CreateArea.this, "Area Created");
-                refreshListener.refresh();
-            }
-        });
+        panel.add(toolbar(), BorderLayout.NORTH);
+        panel.add(f, BorderLayout.CENTER);
+
+        return panel;
     }
 }

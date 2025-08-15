@@ -17,18 +17,20 @@ import java.awt.event.MouseEvent;
 public class CreateDepartment extends LockeState {
 
     private DesktopState desktop;
+    private RefreshListener refreshListener;
     private JTextField deptIdField;
     private JTextField deptNameField;
     private Selectable manager;
     private DatePicker openedDatePicker;
-    private Selectable locations;
+    private JTextField locations;
     private Selectable orgs;
 
-    public CreateDepartment(DesktopState desktop){
+    public CreateDepartment(DesktopState desktop, RefreshListener refreshListener) {
 
         super("Create a Department", "/DPTS/NEW", false, true, false, true);
         setFrameIcon(new ImageIcon(CreateDepartment.class.getResource("/icons/create.png")));
         this.desktop = desktop;
+        this.refreshListener = refreshListener;
 
         CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.addTab("General", general());
@@ -46,25 +48,38 @@ public class CreateDepartment extends LockeState {
 
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-        IconButton execute = new IconButton("Create", "execute", "Create Position");
-        tb.add(execute);
-        tb.setBorder(new EmptyBorder(0, 5, 0, 5));
-        execute.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                Department newDepartment = new Department();
-                newDepartment.setId(deptIdField.getText());
-                newDepartment.setOrganization(orgs.getSelectedValue());
-                newDepartment.setLocation(locations.getSelectedValue());
-                newDepartment.setName(deptNameField.getText());
-                Location selectedOrg = Engine.getLocation(orgs.getSelectedValue(), "ORGS");
-                selectedOrg.addDepartment(newDepartment);
-                selectedOrg.save();
-                dispose();
+
+        IconButton create = new IconButton("Create", "execute", "Create Department");
+        create.addActionListener(_ -> {
+
+            Department newDepartment = new Department();
+            newDepartment.setId(deptIdField.getText());
+            newDepartment.setOrganization(orgs.getSelectedValue());
+            newDepartment.setLocation(locations.getText());
+            newDepartment.setName(deptNameField.getText());
+            newDepartment.setSupervisor(manager.getSelectedValue());
+
+            Location selectedOrg = Engine.getLocation(orgs.getSelectedValue(), "ORGS");
+            selectedOrg.addDepartment(newDepartment);
+            selectedOrg.save();
+            Engine.setOrganization(selectedOrg);
+
+            if((boolean) Engine.codex.getValue("DPTS", "item_created_alert")){
                 JOptionPane.showMessageDialog(null, "Department Created in ORG " + orgs.getSelectedValue());
+            }
+            dispose();
+
+            if(refreshListener != null){
+                refreshListener.refresh();
+            }
+
+            if((boolean) Engine.codex.getValue("DPTS", "auto_open_new")){
                 Engine.router("/DPTS/" + deptIdField.getText(), desktop);
             }
         });
+        tb.add(create);
+
+        tb.setBorder(new EmptyBorder(0, 5, 0, 5));
         return tb;
     }
 
@@ -78,7 +93,7 @@ public class CreateDepartment extends LockeState {
         manager = Selectables.employees();
         manager.editable();
         openedDatePicker = new DatePicker();
-        locations = Selectables.allLocations();
+        locations = Elements.input();
         orgs = Selectables.organizations();
         f.addInput(Elements.coloredLabel("*New Department ID", UIManager.getColor("Label.foreground")), deptIdField);
         f.addInput(Elements.coloredLabel("*Organization", UIManager.getColor("Label.foreground")), orgs);

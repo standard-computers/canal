@@ -13,7 +13,8 @@ import java.awt.*;
 public class ViewDepartment extends LockeState {
 
     public ViewDepartment(Department department) {
-        super("Department " + department.getId(), "/DPTS/$", true, true, true, true);
+
+        super("Department " + department.getId(), "/DPTS/" + department.getId(), true, true, true, true);
         setFrameIcon(new ImageIcon(ViewDepartment.class.getResource("/icons/departments.png")));
         CustomTabbedPane tabbedPane = new CustomTabbedPane();
 
@@ -49,7 +50,6 @@ public class ViewDepartment extends LockeState {
         IconButton performReview = new IconButton("Perform Review", "invoices", "Invoice customer");
         IconButton writeup = new IconButton("Writeup", "delinquent", "Customer in dunning");
         IconButton suspend = new IconButton("+ Docs", "documents", "Add documents for department");
-        IconButton label = new IconButton("", "label", "Print labels for properties");
         IconButton refresh = new IconButton("", "refresh", "Reload from store");
         tb.add(Box.createHorizontalStrut(5));
         tb.add(performReview);
@@ -57,8 +57,6 @@ public class ViewDepartment extends LockeState {
         tb.add(writeup);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(suspend);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(label);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(refresh);
         return tb;

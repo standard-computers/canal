@@ -21,14 +21,13 @@ public class Bin extends Objex {
     private String heightUOM;
     private double weight;
     private String weightUOM;
-    private String areaValue;
-    private String areaUOM;
-    private double volume;
-    private String volumeUOM;
     private boolean auto_replenish; //If this bin is on a flow, do not replenish if false
     private boolean fixed; //Only one item allowed
+    private boolean putaway;
     private boolean picking;
     private boolean goodsissue;
+    private boolean goodsreceipt;
+
     private boolean holdsStock;
 
     public String getArea() {
@@ -135,36 +134,20 @@ public class Bin extends Objex {
         this.weightUOM = weightUOM;
     }
 
-    public String getAreaValue() {
-        return areaValue;
-    }
-
-    public void setAreaValue(String areaValue) {
-        this.areaValue = areaValue;
+    public double getAreaValue() {
+        return width * height;
     }
 
     public String getAreaUOM() {
-        return areaUOM;
-    }
-
-    public void setAreaUOM(String areaUOM) {
-        this.areaUOM = areaUOM;
+        return widthUOM + "2";
     }
 
     public double getVolume() {
-        return volume;
-    }
-
-    public void setVolume(double volume) {
-        this.volume = volume;
+        return width * length * height;
     }
 
     public String getVolumeUOM() {
-        return volumeUOM;
-    }
-
-    public void setVolumeUOM(String volumeUOM) {
-        this.volumeUOM = volumeUOM;
+        return heightUOM + "3";
     }
 
     public boolean isPicking() {
@@ -175,12 +158,28 @@ public class Bin extends Objex {
         this.picking = picking;
     }
 
-    public boolean isGoodsissue() {
+    public boolean isPutaway() {
+        return putaway;
+    }
+
+    public void setPutaway(boolean putaway) {
+        this.putaway = putaway;
+    }
+
+    public boolean doesGI() {
         return goodsissue;
     }
 
     public void setGoodsissue(boolean goodsissue) {
         this.goodsissue = goodsissue;
+    }
+
+    public boolean doesGR() {
+        return goodsreceipt;
+    }
+
+    public void setGoodsreceipt(boolean goodsreceipt) {
+        this.goodsreceipt = goodsreceipt;
     }
 
     public boolean isHoldsStock() {

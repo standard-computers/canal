@@ -38,7 +38,7 @@ public class ASNList extends LockeState {
     private JPanel toolbar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-        IconButton export = new IconButton("Export", "export", "Export as CSV");
+        IconButton export = new IconButton("", "export", "Export as CSV");
         IconButton createPurchaseOrder = new IconButton("New PO", "orders", "Build an item");
         IconButton blockPo = new IconButton("Block", "block", "Block/Pause PO, can't be used");
         IconButton suspendPo = new IconButton("Suspend", "suspend", "Suspend PO, can't be used");

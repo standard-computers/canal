@@ -7,10 +7,7 @@ import org.Canal.UI.Elements.Selectable;
 import org.Canal.UI.Elements.Selectables;
 import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.LockeState;
-import org.Canal.Utils.Constants;
-import org.Canal.Utils.Crypter;
-import org.Canal.Utils.Engine;
-import org.Canal.Utils.Pipe;
+import org.Canal.Utils.*;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.RTextScrollPane;
@@ -28,6 +25,8 @@ import java.util.ArrayList;
  */
 public class CreateUser extends LockeState {
 
+    private DesktopState desktop;
+    private RefreshListener refreshListener;
     private JPanel canalAccess;
     private JTextField userIdField;
     private Selectable employees;
@@ -35,10 +34,12 @@ public class CreateUser extends LockeState {
     private RSyntaxTextArea textArea;
     private JLabel accessCount;
 
-    public CreateUser(){
+    public CreateUser(DesktopState desktop, RefreshListener refreshListener) {
 
         super("Create User", "/USRS/NEW", false, true, false, true);
         setFrameIcon(new ImageIcon(CreateUser.class.getResource("/icons/create.png")));
+        this.desktop = desktop;
+        this.refreshListener = refreshListener;
         if(Engine.getEmployees().isEmpty()){
             JOptionPane.showMessageDialog(null, "No employees to attach to!");
             try {
@@ -71,16 +72,16 @@ public class CreateUser extends LockeState {
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton copy = new IconButton("Copy From", "open", "Export as CSV", "");
         IconButton review = new IconButton("Review", "review", "Review User");
-        IconButton executed = new IconButton("Create User", "execute", "Create User");
+        IconButton create = new IconButton("Create User", "execute", "Create User");
         accessCount = Elements.link("0 Accesses", "Total number of Locked Codes user has access to");
         tb.add(copy);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(review);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(executed);
+        tb.add(create);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-        executed.addMouseListener(new MouseAdapter() {
+        create.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 User newUser = new User();
                 newUser.setId(userIdField.getText().trim());
@@ -99,6 +100,11 @@ public class CreateUser extends LockeState {
                     Pipe.save("/USRS", newUser);
                     dispose();
                     JOptionPane.showMessageDialog(null, "User create for ORG " + Engine.getOrganization().getId());
+
+                    if(refreshListener != null){
+                        refreshListener.refresh();
+                    }
+
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, "User creation failed because password encryption was not implemented.");
                 }

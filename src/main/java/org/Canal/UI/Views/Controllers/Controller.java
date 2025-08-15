@@ -15,37 +15,13 @@ import java.awt.event.*;
 public class Controller extends JPanel implements RefreshListener {
 
     private JTree dataTree;
-    private JTextField cmd;
+    private DesktopState desktop;
 
     public Controller(DesktopState desktop) {
 
+        this.desktop = desktop;
         User me = Engine.getAssignedUser();
         setLayout(new BorderLayout());
-        JPanel dataView = new JPanel(new BorderLayout());
-        cmd = Elements.input("/");
-        cmd.addActionListener(_ -> {
-            if(me != null && !me.hasAccess(cmd.getText().replaceAll("\\.", ""))) {
-                JOptionPane.showMessageDialog(this, "Not authorized to use this locke!", "Unauthorized", JOptionPane.ERROR_MESSAGE);
-            }else{
-                try{
-                    desktop.put(Engine.router(cmd.getText(), desktop));
-                }catch(NullPointerException | ArrayIndexOutOfBoundsException e){
-                    JOptionPane.showMessageDialog(this, "Locke not found!", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        });
-        InputMap inputMap = cmd.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-        ActionMap actionMap = cmd.getActionMap();
-        KeyStroke keyStroke = KeyStroke.getKeyStroke("ctrl shift C");
-        inputMap.put(keyStroke, "focusTextField");
-        actionMap.put("focusTextField", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cmd.requestFocusInWindow();
-                cmd.selectAll();
-            }
-        });
-        dataView.add(cmd, BorderLayout.NORTH);
         dataTree = createTree();
         dataTree.addMouseListener(new MouseAdapter() {
             @Override
@@ -74,13 +50,12 @@ public class Controller extends JPanel implements RefreshListener {
             }
         });
         JScrollPane treeScrollPane = new JScrollPane(dataTree);
-        add(cmd, BorderLayout.NORTH);
         add(treeScrollPane, BorderLayout.CENTER);
     }
 
     public void setBar(String s){
 
-        cmd.setText(s);
+        desktop.setCommander(s);
         repaint();
         revalidate();
     }

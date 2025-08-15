@@ -1,8 +1,8 @@
 package org.Canal.UI.Views.Departments;
 
 import org.Canal.Models.HumanResources.Department;
+import org.Canal.Models.HumanResources.Position;
 import org.Canal.UI.Elements.*;
-import org.Canal.UI.Views.Deleter;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.RefreshListener;
@@ -39,23 +39,6 @@ public class Departments extends LockeState implements RefreshListener {
         splitPane.setResizeWeight(0.5);
 
         add(splitPane, BorderLayout.CENTER);
-        table.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    JTable t = (JTable) e.getSource();
-                    int r = t.getSelectedRow();
-                    if (r != -1) {
-                        String v = String.valueOf(t.getValueAt(r, 1));
-                        for(Department d : Engine.getOrganization().getDepartments()){
-                            if(d.getId().equals(v)){
-                                desktop.put(new ViewDepartment(d));
-                            }
-                        }
-                    }
-                }
-            }
-        });
     }
 
     private JPanel toolbar() {
@@ -64,52 +47,43 @@ public class Departments extends LockeState implements RefreshListener {
         toolbar.add(Elements.header("Departments", SwingConstants.LEFT), BorderLayout.NORTH);
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-        IconButton export = new IconButton("Export", "export", "Export as CSV");
-        IconButton importDepartments = new IconButton("Import", "export", "Import as CSV");
+
+        if((boolean) Engine.codex.getValue("DPTS", "import_enabled")){
+            IconButton importDepartments = new IconButton("Import", "export", "Import as CSV");
+            importDepartments.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    JFileChooser fc = new JFileChooser();
+
+                }
+            });
+            tb.add(importDepartments);
+            tb.add(Box.createHorizontalStrut(5));
+        }
+
+        if((boolean) Engine.codex.getValue("DPTS", "export_enabled")){
+            IconButton export = new IconButton("Export", "export", "Export as CSV");
+            export.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    table.exportToCSV();
+                }
+            });
+            tb.add(export);
+            tb.add(Box.createHorizontalStrut(5));
+        }
+
+
         IconButton createDepartment = new IconButton("New", "create", "Create a Department", "/DPTS/NEW");
-        IconButton modifyDepartment = new IconButton("Modify", "modify", "Modify a Department", "/DPTS/MOD");
-        IconButton archiveDepartment = new IconButton("Archive", "archive", "Archive a Department", "/DPTS/ARCHV");
-        IconButton removeDepartment = new IconButton("Remove", "delete", "Delete a Department");
-        IconButton refresh = new IconButton("Refresh", "refresh", "Refresh Data");
-        tb.add(export);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(importDepartments);
-        tb.add(Box.createHorizontalStrut(5));
+        createDepartment.addActionListener(_ -> desktop.put(new CreateDepartment(desktop, this)));
         tb.add(createDepartment);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(modifyDepartment);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(archiveDepartment);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(removeDepartment);
-        tb.add(Box.createHorizontalStrut(5));
+
+        IconButton refresh = new IconButton("", "refresh", "Refresh Data");
+        refresh.addActionListener(_ -> refresh());
         tb.add(refresh);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));
-        export.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                table.exportToCSV();
-            }
-        });
-        importDepartments.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                JFileChooser fc = new JFileChooser();
 
-            }
-        });
-        removeDepartment.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                desktop.put(new Deleter("/DPTS", Departments.this));
-            }
-        });
-        refresh.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                refresh();
-            }
-        });
         toolbar.add(tb, BorderLayout.SOUTH);
         return toolbar;
     }
@@ -128,6 +102,13 @@ public class Departments extends LockeState implements RefreshListener {
         };
         ArrayList<Object[]> data = new ArrayList<>();
         for (Department department : Engine.getOrganization().getDepartments()) {
+            ArrayList<Position> positions = Engine.getPositions();
+            int posCount = 0;
+            for(Position position : positions){
+                if(position.getDepartment().equals(department.getId())){
+                    posCount++;
+                }
+            }
             data.add(new Object[]{
                     department.getId(),
                     department.getName(),
@@ -135,12 +116,30 @@ public class Departments extends LockeState implements RefreshListener {
                     department.getLocation(),
                     department.getDepartment(),
                     department.getSupervisor(),
-                    department.getPositions().size(),
+                    posCount,
                     department.getStatus(),
                     department.getCreated(),
             });
         }
-        return new CustomTable(columns, data);
+        CustomTable ct = new CustomTable(columns, data);
+        ct.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    JTable t = (JTable) e.getSource();
+                    int r = t.getSelectedRow();
+                    if (r != -1) {
+                        String v = String.valueOf(t.getValueAt(r, 1));
+                        for(Department d : Engine.getOrganization().getDepartments()){
+                            if(d.getId().equals(v)){
+                                desktop.put(new ViewDepartment(d));
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        return ct;
     }
 
     private CustomTabbedPane details() {
@@ -162,22 +161,5 @@ public class Departments extends LockeState implements RefreshListener {
         table = newTable;
         scrollPane.revalidate();
         scrollPane.repaint();
-        table.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    JTable t = (JTable) e.getSource();
-                    int r = t.getSelectedRow();
-                    if (r != -1) {
-                        String v = String.valueOf(t.getValueAt(r, 1));
-                        for(Department d : Engine.getOrganization().getDepartments()){
-                            if(d.getId().equals(v)){
-                                desktop.put(new ViewDepartment(d));
-                            }
-                        }
-                    }
-                }
-            }
-        });
     }
 }

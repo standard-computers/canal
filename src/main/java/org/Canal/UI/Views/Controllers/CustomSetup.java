@@ -44,10 +44,10 @@ public class CustomSetup extends JFrame {
                 Pipe.saveConfiguration();
                 dispose();
                 QuickExplorer q = new QuickExplorer();
-                q.put(new CreateLocation("/ORGS", q, null));
-                q.put(new CreateEmployee(q, true));
-                q.put(new CreateUser());
                 Start.q = q;
+                q.put(new CreateLocation("/ORGS", q, null));
+                q.put(new CreateEmployee(q, null));
+                q.put(new CreateUser(q, null));
             }
         });
     }

@@ -28,7 +28,7 @@ public class ViewLedger extends LockeState implements RefreshListener {
 
     public ViewLedger(Ledger ledger, DesktopState desktop) {
 
-        super("Ledger", "/LGS/$", true, true, true, true);
+        super("Ledger", "/LGS/" + ledger.getId(), true, true, true, true);
         this.ledger = ledger;
         this.desktop = desktop;
 

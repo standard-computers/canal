@@ -27,7 +27,7 @@ public class ViewUser extends LockeState {
 
     public ViewUser(DesktopState desktop, User user) {
 
-        super("Users / " + user.getId(), "/USRS/$", false, true, false, true);
+        super("Users / " + user.getId(), "/USRS/" + user.getId(), false, true, false, true);
         setFrameIcon(new ImageIcon(ViewUser.class.getResource("/icons/employees.png")));
         this.desktop = desktop;
         this.user = user;
@@ -51,7 +51,7 @@ public class ViewUser extends LockeState {
 
     private JPanel buttonBar(){
 
-        JPanel buttonBar = new JPanel();
+        JPanel buttonBar = new JPanel(new FlowLayout(FlowLayout.LEFT));
         buttonBar.setLayout(new FlowLayout(FlowLayout.LEFT));
         IconButton modify = new IconButton("Modify", "modify", "Modify User");
         IconButton viewEmployee = new IconButton("View Employee", "employees", "View Attached Employee");

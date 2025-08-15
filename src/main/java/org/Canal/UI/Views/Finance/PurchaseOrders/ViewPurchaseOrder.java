@@ -1,9 +1,7 @@
 package org.Canal.UI.Views.Finance.PurchaseOrders;
 
 import org.Canal.Models.BusinessUnits.PurchaseOrder;
-import org.Canal.Models.BusinessUnits.PurchaseRequisition;
 import org.Canal.UI.Elements.*;
-import org.Canal.UI.Views.Finance.PurchaseRequisitions.CreatePurchaseRequisition;
 import org.Canal.UI.Views.ViewLocation;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -18,26 +16,31 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 /**
- * /ORDS/PO/$[PR_ID]
+ * /ORDS/PO/$[PO_ID]
  */
 public class ViewPurchaseOrder extends LockeState {
 
-    private PurchaseOrder requisition;
+    private PurchaseOrder purchaseOrder;
     private DesktopState desktop;
     private RefreshListener refreshListener;
 
-    public ViewPurchaseOrder(PurchaseOrder requisition, DesktopState desktop, RefreshListener refreshListener) {
+    public ViewPurchaseOrder(PurchaseOrder purchaseOrder, DesktopState desktop, RefreshListener refreshListener) {
 
-        super("Purchase Requisitions", "/ORDS/PO/$", true, true, true, true);
+        super("Purchase Order", "/ORDS/PO/" + purchaseOrder.getOrderId(), true, true, true, true);
         setFrameIcon(new ImageIcon(ViewPurchaseOrder.class.getResource("/icons/purchasereqs.png")));
-        this.requisition = requisition;
+        this.purchaseOrder = purchaseOrder;
         this.desktop = desktop;
         this.refreshListener = refreshListener;
 
         CustomTabbedPane tabs = new CustomTabbedPane();
-        tabs.addTab("Header Information", new ImageIcon(ViewLocation.class.getResource("/icons/info.png")), headerInfo());
-        tabs.addTab("Items", purchaseOrders());
+        tabs.addTab("General", new ImageIcon(ViewLocation.class.getResource("/icons/info.png")), headerInfo());
         tabs.addTab("Activity", activity());
+        tabs.addTab("Items", purchaseOrders());
+        tabs.addTab("Delivery", delivery());
+        tabs.addTab("Ledger", ledger());
+        tabs.addTab("Shipping", shipping());
+        tabs.addTab("Packaging", packaging());
+        tabs.addTab("Notes", notes());
 
         setLayout(new BorderLayout());
         add(tabs, BorderLayout.CENTER);
@@ -47,17 +50,17 @@ public class ViewPurchaseOrder extends LockeState {
     private JPanel headerInfo() {
 
         Form f = new Form();
-        f.addInput(Elements.coloredLabel("ID", UIManager.getColor("Label.foreground")), new Copiable(requisition.getId()));
-        f.addInput(Elements.coloredLabel("Created", UIManager.getColor("Label.foreground")), new Copiable(requisition.getCreated()));
-        f.addInput(Elements.coloredLabel("Creator (Owner)", UIManager.getColor("Label.foreground")),  new Copiable(requisition.getOwner()));
-        f.addInput(Elements.coloredLabel("Purchase Req. #", UIManager.getColor("Label.foreground")),  new Copiable(requisition.getOrderId()));
-        f.addInput(Elements.coloredLabel("Vendor ID", UIManager.getColor("Label.foreground")),  new Copiable(requisition.getVendor()));
-        f.addInput(Elements.coloredLabel("Bill To", UIManager.getColor("Label.foreground")),  new Copiable(requisition.getBillTo()));
-        f.addInput(Elements.coloredLabel("Ship To", UIManager.getColor("Label.foreground")),  new Copiable(requisition.getBillTo()));
-        f.addInput(Elements.coloredLabel("Total", UIManager.getColor("Label.foreground")),  new Copiable(String.valueOf(requisition.getTotal())));
-        f.addInput(Elements.coloredLabel("Created", UIManager.getColor("Label.foreground")),  new Copiable(requisition.getCreated()));
-        f.addInput(Elements.coloredLabel("Status", UIManager.getColor("Label.foreground")),  new Copiable(String.valueOf(requisition.getStatus())));
-        f.addInput(Elements.coloredLabel("Created", UIManager.getColor("Label.foreground")),  new Copiable(requisition.getCreated()));
+        f.addInput(Elements.coloredLabel("ID", UIManager.getColor("Label.foreground")), new Copiable(purchaseOrder.getId()));
+        f.addInput(Elements.coloredLabel("Created", UIManager.getColor("Label.foreground")), new Copiable(purchaseOrder.getCreated()));
+        f.addInput(Elements.coloredLabel("Creator (Owner)", UIManager.getColor("Label.foreground")),  new Copiable(purchaseOrder.getOwner()));
+        f.addInput(Elements.coloredLabel("Purchase Req. #", UIManager.getColor("Label.foreground")),  new Copiable(purchaseOrder.getOrderId()));
+        f.addInput(Elements.coloredLabel("Vendor ID", UIManager.getColor("Label.foreground")),  new Copiable(purchaseOrder.getVendor()));
+        f.addInput(Elements.coloredLabel("Bill To", UIManager.getColor("Label.foreground")),  new Copiable(purchaseOrder.getBillTo()));
+        f.addInput(Elements.coloredLabel("Ship To", UIManager.getColor("Label.foreground")),  new Copiable(purchaseOrder.getBillTo()));
+        f.addInput(Elements.coloredLabel("Total", UIManager.getColor("Label.foreground")),  new Copiable(String.valueOf(purchaseOrder.getTotal())));
+        f.addInput(Elements.coloredLabel("Created", UIManager.getColor("Label.foreground")),  new Copiable(purchaseOrder.getCreated()));
+        f.addInput(Elements.coloredLabel("Status", UIManager.getColor("Label.foreground")),  new Copiable(String.valueOf(purchaseOrder.getStatus())));
+        f.addInput(Elements.coloredLabel("Created", UIManager.getColor("Label.foreground")),  new Copiable(purchaseOrder.getCreated()));
         return f;
     }
 
@@ -84,7 +87,7 @@ public class ViewPurchaseOrder extends LockeState {
         };
         ArrayList<Object[]> data = new ArrayList<>();
         for (PurchaseOrder po : Engine.getPurchaseOrders()) {
-            if(po.getPurchaseRequisition().equals(requisition.getOrderId())) {
+            if(po.getPurchaseRequisition().equals(purchaseOrder.getOrderId())) {
                 data.add(new Object[]{
                         po.getId(),
                         po.getName(),
@@ -124,29 +127,59 @@ public class ViewPurchaseOrder extends LockeState {
         return new JScrollPane();
     }
 
+    private JScrollPane delivery(){
+
+        return new JScrollPane();
+    }
+
+    private JScrollPane ledger(){
+
+        return new JScrollPane();
+    }
+
+    private JScrollPane shipping(){
+
+        return new JScrollPane();
+    }
+
+    private JScrollPane packaging(){
+
+        return new JScrollPane();
+    }
+
+    private JScrollPane notes(){
+
+        return new JScrollPane();
+    }
+
     private JPanel toolbar(){
 
         JPanel buttons = new JPanel(new BorderLayout());
-        buttons.add(Elements.header("Viewing Purchase Order " + requisition.getOrderId(), SwingConstants.LEFT), BorderLayout.NORTH);
+        buttons.add(Elements.header("Viewing Purchase Order " + purchaseOrder.getOrderId(), SwingConstants.LEFT), BorderLayout.NORTH);
 
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton block = new IconButton("Block", "block", "Block/Pause PO, can't be used");
-        IconButton suspend = new IconButton("Suspend", "suspend", "Suspend PO, can't be used");
-        IconButton activate = new IconButton("Start", "start", "Resume/Activate PO");
-        IconButton archive = new IconButton("Archive", "archive", "Archive PO");
-        IconButton label = new IconButton("Barcodes", "label", "Print labels");
-        IconButton print = new IconButton("Print", "print", "Print Pururchase Order");
         tb.add(block);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton suspend = new IconButton("Suspend", "suspend", "Suspend PO, can't be used");
         tb.add(suspend);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton activate = new IconButton("Start", "start", "Resume/Activate PO");
         tb.add(activate);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton archive = new IconButton("Archive", "archive", "Archive PO");
         tb.add(archive);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton label = new IconButton("", "label", "Print labels");
         tb.add(label);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton print = new IconButton("", "print", "Print Pururchase Order");
         tb.add(print);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));
         block.addMouseListener(new MouseAdapter() {
@@ -155,8 +188,8 @@ public class ViewPurchaseOrder extends LockeState {
 
                 int cnf = JOptionPane.showConfirmDialog(null, "Set Purchase Requisision Status to BLOCKED?", "Confirm status change?", JOptionPane.YES_NO_OPTION);
                 if(cnf == JOptionPane.YES_OPTION) {
-                    requisition.setStatus(LockeStatus.BLOCKED);
-                    requisition.save();
+                    purchaseOrder.setStatus(LockeStatus.BLOCKED);
+                    purchaseOrder.save();
                     if(refreshListener != null){
                         refreshListener.refresh();
                     }
@@ -169,8 +202,8 @@ public class ViewPurchaseOrder extends LockeState {
 
                 int cnf = JOptionPane.showConfirmDialog(null, "Set Purchase Requisision Status to SUSPENDED?", "Confirm status change?", JOptionPane.YES_NO_OPTION);
                 if(cnf == JOptionPane.YES_OPTION) {
-                    requisition.setStatus(LockeStatus.SUSPENDED);
-                    requisition.save();
+                    purchaseOrder.setStatus(LockeStatus.SUSPENDED);
+                    purchaseOrder.save();
                     if(refreshListener != null){
                         refreshListener.refresh();
                     }
@@ -184,8 +217,8 @@ public class ViewPurchaseOrder extends LockeState {
 
                 int cnf = JOptionPane.showConfirmDialog(null, "Set Purchase Requisision Status to ACTIVE?", "Confirm status change?", JOptionPane.YES_NO_OPTION);
                 if(cnf == JOptionPane.YES_OPTION) {
-                    requisition.setStatus(LockeStatus.ACTIVE);
-                    requisition.save();
+                    purchaseOrder.setStatus(LockeStatus.ACTIVE);
+                    purchaseOrder.save();
                     if(refreshListener != null){
                         refreshListener.refresh();
                     }
@@ -198,8 +231,8 @@ public class ViewPurchaseOrder extends LockeState {
 
                 int cnf = JOptionPane.showConfirmDialog(null, "If you archive this purchase requisition, it will no longer be able to be used.", "Confirm archival?", JOptionPane.YES_NO_OPTION);
                 if(cnf == JOptionPane.YES_OPTION) {
-                    requisition.setStatus(LockeStatus.ARCHIVED);
-                    requisition.save();
+                    purchaseOrder.setStatus(LockeStatus.ARCHIVED);
+                    purchaseOrder.save();
                     if(refreshListener != null){
                         refreshListener.refresh();
                     }

@@ -1,14 +1,10 @@
 package org.Canal.UI.Views.System;
 
-import org.Canal.Models.HumanResources.Employee;
 import org.Canal.UI.ColorUtil;
 import org.Canal.UI.Elements.DesktopInterface;
 import org.Canal.UI.Elements.Elements;
-import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.UI.Views.Controllers.Controller;
-import org.Canal.UI.Views.Controllers.Inbox;
-import org.Canal.UI.Views.Controllers.MyProfile;
 import org.Canal.UI.Views.ViewLocation;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -17,8 +13,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.beans.PropertyVetoException;
 
 /**
@@ -28,6 +22,7 @@ public class QuickExplorer extends JFrame implements DesktopState {
 
     private String statusText = "OK", openLockes = "0";
     private JDesktopPane desktopPane;
+    private JTextField commander;
     private Controller controller;
 
     public QuickExplorer() {
@@ -42,7 +37,6 @@ public class QuickExplorer extends JFrame implements DesktopState {
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLayout(new BorderLayout());
         add(toolbar(), BorderLayout.NORTH);
-        add(statusBar(), BorderLayout.SOUTH);
         add(splitPane, BorderLayout.CENTER);
         setVisible(true);
         installShortcuts();
@@ -52,53 +46,24 @@ public class QuickExplorer extends JFrame implements DesktopState {
 
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(ColorUtil.adjustBrightness(UIManager.getColor("Panel.background"), 0.90f));
-        JPanel employee = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        employee.setBackground(ColorUtil.adjustBrightness(UIManager.getColor("Panel.background"), 0.90f));
-        JLabel myName = new JLabel("PLEASE LOGIN");
-        myName.setBackground(ColorUtil.adjustBrightness(UIManager.getColor("Panel.background"), 0.90f));
-        if(Engine.getAssignedUser() != null){
-            Employee e = Engine.getEmployee(Engine.getAssignedUser().getEmployee());
-            myName.setText(e.getName());
-        }
-        myName.setFont(UIManager.getFont("h2.font"));
-        myName.setBorder(BorderFactory.createEmptyBorder(5, 2, 2, 2));
-        employee.add(myName);
 
-        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        IconButton activity = new IconButton("", "activity", "Recent Activity");
-        IconButton inbox = new IconButton("", "inbox", "Message Inbox");
-        IconButton me = new IconButton("", "me", "Your Profile");
-        buttons.add(activity);
-        buttons.add(inbox);
-        buttons.add(me);
-        buttons.setBackground(ColorUtil.adjustBrightness(UIManager.getColor("Panel.background"), 0.90f));
-
-        inbox.addMouseListener(new MouseAdapter() {
+        commander = Elements.input();
+        commander.addActionListener(_ -> {
+            put(Engine.router(commander.getText(), this));
+        });
+        InputMap inputMap = commander.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = commander.getActionMap();
+        KeyStroke keyStroke = KeyStroke.getKeyStroke("ctrl SLASH");
+        inputMap.put(keyStroke, "focusTextField");
+        actionMap.put("focusTextField", new AbstractAction() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                put(new Inbox(QuickExplorer.this));
+            public void actionPerformed(ActionEvent e) {
+                commander.requestFocusInWindow();
+                commander.selectAll();
             }
         });
-        me.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                put(new MyProfile(QuickExplorer.this));
-            }
-        });
-
-        panel.add(employee, BorderLayout.WEST);
-        panel.add(buttons, BorderLayout.EAST);
-//        panel.setBackground(ColorUtil.adjustBrightness(UIManager.getColor("Panel.background"), 0.90f));
+        panel.add(commander, BorderLayout.CENTER);
         return panel;
-    }
-
-    private JPanel statusBar(){
-        JPanel statusPanel = new JPanel(new BorderLayout());
-        JLabel statusLabel = Elements.label(statusText);
-        JLabel openLockesLabel = Elements.label(openLockes);
-        statusPanel.add(statusLabel, BorderLayout.WEST);
-        statusPanel.add(openLockesLabel, BorderLayout.CENTER);
-        return statusPanel;
     }
 
     private void installShortcuts() {
@@ -210,6 +175,11 @@ public class QuickExplorer extends JFrame implements DesktopState {
         super.repaint();
         revalidate();
         repaint();
+    }
+
+    @Override
+    public void setCommander(String text) {
+        commander.setText(text);
     }
 
     @Override

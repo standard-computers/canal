@@ -3,7 +3,6 @@ package org.Canal.UI.Views.System;
 import org.Canal.Start;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Views.Controllers.CustomSetup;
-import org.Canal.UI.Views.CreateLocation;
 import org.Canal.Utils.Codex;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Json;
@@ -21,7 +20,7 @@ public class Setup extends JFrame {
 
     public Setup(){
 
-        setTitle("Setup Canal");
+        setTitle("Setup Ratio");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridLayout(5, 1));
 
@@ -49,11 +48,10 @@ public class Setup extends JFrame {
 
         small.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
+
                 dispose();
-                JOptionPane.showMessageDialog(Setup.this, "Creating files...");
                 Pipe.saveConfiguration();
-                QuickExplorer q = new QuickExplorer();
-                q.put(new CreateLocation("/ORGS", q, null));
+                new IniSystem();
             }
         });
         medium.addMouseListener(new MouseAdapter() {

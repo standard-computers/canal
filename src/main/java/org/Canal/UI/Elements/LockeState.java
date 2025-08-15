@@ -19,6 +19,10 @@ public class LockeState extends JInternalFrame {
         setBorder(BorderFactory.createLineBorder(UIManager.getColor("Button.darkShadow"), 1));
     }
 
+    public LockeState(String title, String locke) {
+        this(title, locke, true, true, true, true);
+    }
+
     public String getLocke() {
         return locke;
     }

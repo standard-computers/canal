@@ -17,10 +17,6 @@ public class Area extends Objex {
     private String lengthUOM;
     private double height;
     private String heightUOM;
-    private double area;
-    private String areaUOM;
-    private double volume;
-    private String volumeUOM;
     private Map<String, String> properties;
     private ArrayList<Bin> bins = new ArrayList<>();
 
@@ -57,19 +53,11 @@ public class Area extends Objex {
     }
 
     public String getAreaUOM() {
-        return areaUOM;
-    }
-
-    public void setAreaUOM(String areaUOM) {
-        this.areaUOM = areaUOM;
+        return widthUOM + "2";
     }
 
     public String getVolumeUOM() {
-        return volumeUOM;
-    }
-
-    public void setVolumeUOM(String volumUOM) {
-        this.volumeUOM = volumUOM;
+        return heightUOM + "3";
     }
 
     public double getWidth() {
@@ -97,19 +85,11 @@ public class Area extends Objex {
     }
 
     public double getArea() {
-        return area;
-    }
-
-    public void setArea(double area) {
-        this.area = area;
+        return width * length;
     }
 
     public double getVolume() {
-        return volume;
-    }
-
-    public void setVolume(double volume) {
-        this.volume = volume;
+        return width * length * height;
     }
 
     public Map<String, String> getProperties() {

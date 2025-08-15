@@ -118,10 +118,10 @@ public class Delivery extends Objex {
         if (mdf != null) {
             for (File file : mdf) {
                 if (file.getPath().endsWith("." + type.toLowerCase())) {
-                    Ledger fl = Json.load(file.getPath(), Ledger.class);
+                    Delivery fl = Json.load(file.getPath(), Delivery.class);
                     if (fl.getId().equals(id)) {
                         Json.save(file.getPath(), this);
-                        Engine.assertRecord("TRANS", id, new Record());
+//                        Engine.assertRecord("TRANS", id, new Record());
                     }
                 }
             }

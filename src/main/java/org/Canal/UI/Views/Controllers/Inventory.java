@@ -34,7 +34,7 @@ public class Inventory extends LockeState {
 
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-        IconButton export = new IconButton("Export", "export", "Export as XLSX");
+        IconButton export = new IconButton("", "export", "Export as XLSX");
         JButton performSTO = Elements.button("Stock Transfer Order");
         JButton stockCheck = Elements.button("Stock Check");
         JButton blockImc = Elements.button("Block Stock");

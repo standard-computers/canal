@@ -37,7 +37,7 @@ public class ViewLocation extends LockeState implements RefreshListener {
 
     public ViewLocation(Location location, DesktopState desktop) {
 
-        super(location.getId() + " – " + location.getName(), location.getType() + "/$", true, true, true, true);
+        super(location.getId() + " – " + location.getName(), location.getType() + "/" + location.getId());
         setFrameIcon(new ImageIcon(ViewLocation.class.getResource("/icons/" + Engine.codex(location.getType().replace("/", ""), "icon") + ".png")));
         this.location = location;
         this.desktop = desktop;
@@ -46,6 +46,7 @@ public class ViewLocation extends LockeState implements RefreshListener {
         JPanel tb = toolbar();
         add(tb, BorderLayout.NORTH);
         CustomTabbedPane tabs = new CustomTabbedPane();
+        tabs.addTab("Dashboard", dashboard());
         tabs.addTab("Inbound Deliveries", inboundDeliveries());
         tabs.addTab("Outbound Deliveries", outboundDeliveries());
         tabs.addTab("Open Tasks", openTasks());
@@ -78,6 +79,12 @@ public class ViewLocation extends LockeState implements RefreshListener {
         Runnable task = () -> refresh();
         scheduler.scheduleAtFixedRate(task, 60, 30, TimeUnit.SECONDS);
         setMaximized(true);
+    }
+
+    private JScrollPane dashboard(){
+        JScrollPane scrollPane = new JScrollPane();
+
+        return scrollPane;
     }
 
     private JScrollPane inboundDeliveries(){
@@ -193,86 +200,86 @@ public class ViewLocation extends LockeState implements RefreshListener {
     private JPanel toolbar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+
         IconButton order = new IconButton("Order", "create", "Order from a vendor", "/ORDS/PO/NEW");
-        IconButton sell = new IconButton("Sell", "create", "Sell from this DC");
-        IconButton inventory = new IconButton("Inventory", "inventory", "Inventory of items in cost center");
-        IconButton receive = new IconButton("Receive", "receive", "Receive an Inbound Delivery");
-        IconButton fulfill = new IconButton("Fulfill", "fulfill", "Fulfill Order");
-        IconButton areas = new IconButton("+ Areas", "areas", "Add an area cost center");
-        IconButton addBin = new IconButton("+ Bin", "bins", "Add an area cost center");
-        IconButton autoMakeAreas = new IconButton("AutoMake Areas", "automake", "Automate the creation of areas");
-        IconButton autoMakeBins = new IconButton("AutoMake Bins", "automake", "Automate the creation of bins");
-        IconButton label = new IconButton("Labels", "label", "Print labels for properties");
-        sell.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                CreateSalesOrder cso = new CreateSalesOrder();
-                cso.setSelectedSupplier(location.getId());
-                desktop.put(cso);
-            }
+        tb.add(order);
+        tb.add(Box.createHorizontalStrut(5));
+
+        IconButton sell = new IconButton("Sell", "create", "Sell from this DC", "/ORDS/SO/NEW");
+        sell.addActionListener(_ -> {
+            CreateSalesOrder cso = new CreateSalesOrder();
+            cso.setSelectedSupplier(location.getId());
+            desktop.put(cso);
         });
+        tb.add(sell);
+        tb.add(Box.createHorizontalStrut(5));
+
+        IconButton inventory = new IconButton("Inventory", "inventory", "Inventory of items in cost center");
         inventory.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 desktop.put(new ViewInventory(desktop, location.getId()));
             }
         });
-        receive.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                desktop.put(new ReceiveOrder(location.getId(), desktop));
-            }
-        });
+        tb.add(inventory);
+        tb.add(Box.createHorizontalStrut(5));
+
+        IconButton receive = new IconButton("Receive", "receive", "Receive an Inbound Delivery");
+        receive.addActionListener(_ -> desktop.put(new ReceiveOrder(location.getId(), desktop, this)));
+        tb.add(receive);
+        tb.add(Box.createHorizontalStrut(5));
+
+        IconButton fulfill = new IconButton("Fulfill", "fulfill", "Fulfill Order");
         fulfill.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 desktop.put(new FulfillOrder(location.getId()));
             }
         });
-        areas.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                desktop.put(new CreateArea(location.getId(), ViewLocation.this));
-            }
-        });
+        tb.add(fulfill);
+        tb.add(Box.createHorizontalStrut(5));
+
+        IconButton areas = new IconButton("+ Areas", "areas", "Add an area cost center", "/AREAS/NEW");
+        areas.addActionListener(_ -> desktop.put(new CreateArea(location.getId(), ViewLocation.this)));
+        tb.add(areas);
+        tb.add(Box.createHorizontalStrut(5));
+
+        IconButton addBin = new IconButton("+ Bin", "bins", "Add an area cost center");
         addBin.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 desktop.put(new CreateBin(location.getId(), ViewLocation.this));
             }
         });
+        tb.add(addBin);
+        tb.add(Box.createHorizontalStrut(5));
+
+        IconButton autoMakeAreas = new IconButton("AutoMake Areas", "automake", "Automate the creation of areas", "/AREAS/AUTO_MK");
         autoMakeAreas.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 desktop.put(new AutoMakeAreas());
             }
         });
-        autoMakeBins.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                desktop.put(new AutoMakeBins());
-            }
-        });
-        tb.add(order);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(sell);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(inventory);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(receive);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(fulfill);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(areas);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(addBin);
-        tb.add(Box.createHorizontalStrut(5));
         tb.add(autoMakeAreas);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton autoMakeBins = new IconButton("AutoMake Bins", "automake", "Automate the creation of bins", "/BNS/AUTO_MK");
+        autoMakeBins.addActionListener(_ -> desktop.put(new AutoMakeBins()));
         tb.add(autoMakeBins);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton label = new IconButton("Labels", "label", "Print labels for properties");
         tb.add(label);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+        IconButton refresh = new IconButton("Refresh", "refresh", "Refresh data");
+        tb.add(refresh);
+        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
+
         return tb;
     }
 
     private JTree createTree() {
+
         Locke rootNode = createRootNode();
         DefaultMutableTreeNode rootTreeNode = createTreeNodes(rootNode);
         DefaultTreeModel treeModel = new DefaultTreeModel(rootTreeNode);
@@ -282,6 +289,7 @@ public class ViewLocation extends LockeState implements RefreshListener {
     }
 
     private Locke createRootNode() {
+
         Locke[] areas = new Locke[Engine.getAreas(location.getId()).size()];
         for (int i = 0; i < Engine.getAreas(location.getId()).size(); i++) {
             Area l = Engine.getAreas(location.getId()).get(i);
@@ -333,6 +341,7 @@ public class ViewLocation extends LockeState implements RefreshListener {
     }
 
     private DefaultMutableTreeNode createTreeNodes(Locke node) {
+
         DefaultMutableTreeNode treeNode = new DefaultMutableTreeNode(node);
         if (node.getChildren() != null) {
             for (Locke child : node.getChildren()) {
@@ -344,6 +353,7 @@ public class ViewLocation extends LockeState implements RefreshListener {
 
     @Override
     public void refresh() {
+
         Locke rootNode = createRootNode();
         DefaultMutableTreeNode rootTreeNode = createTreeNodes(rootNode);
         DefaultTreeModel model = (DefaultTreeModel) dataTree.getModel();

@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class AutoMakeAreas extends LockeState {
 
     private JTextField areaIdField, areaNameField;
-    private UOMField widthField, lengthField, heightField, areaField, volumeField;
+    private UOMField widthField, lengthField, heightField;
     private JPanel checkboxPanel;
     private ArrayList<Location> locations;
     private ArrayList<JCheckBox> checkboxes;
@@ -81,10 +81,6 @@ public class AutoMakeAreas extends LockeState {
                         newArea.setLengthUOM(lengthField.getUOM());
                         newArea.setHeight(Double.parseDouble(heightField.getValue()));
                         newArea.setHeightUOM(heightField.getUOM());
-                        newArea.setArea(Double.parseDouble(areaField.getValue()));
-                        newArea.setAreaUOM(areaField.getUOM());
-                        newArea.setVolume(Double.parseDouble(volumeField.getValue()));
-                        newArea.setVolumeUOM(volumeField.getUOM());
                         Pipe.save("/AREAS", newArea);
                     }
                 }
@@ -101,15 +97,11 @@ public class AutoMakeAreas extends LockeState {
         widthField = new UOMField();
         lengthField = new UOMField();
         heightField = new UOMField();
-        areaField = new UOMField();
-        volumeField = new UOMField();
         f.addInput(Elements.coloredLabel("*New Area ID (current: LOC_ID-001)", UIManager.getColor("Label.foreground")), areaIdField);
         f.addInput(Elements.coloredLabel("Area Name (current: LOC_ID-001", UIManager.getColor("Label.foreground")), areaNameField);
         f.addInput(Elements.coloredLabel("Width", Constants.colors[10]), widthField);
         f.addInput(Elements.coloredLabel("Length", Constants.colors[9]), lengthField);
         f.addInput(Elements.coloredLabel("Height", Constants.colors[8]), heightField);
-        f.addInput(Elements.coloredLabel("Area", Constants.colors[7]), areaField);
-        f.addInput(Elements.coloredLabel("Volume", Constants.colors[6]), volumeField);
         return f;
     }
 

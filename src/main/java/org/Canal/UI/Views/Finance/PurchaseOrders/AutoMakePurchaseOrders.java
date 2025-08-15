@@ -63,8 +63,16 @@ public class AutoMakePurchaseOrders extends LockeState {
             for (JCheckBox checkbox : checkboxes) {
                 if (checkbox.isSelected()) {
                     String genId = "PR" + (10000000 + (Engine.orders.getPurchaseRequisitions().size() + 1));
-                    PurchaseRequisition newPr = new PurchaseRequisition(genId, genId, "U10001", supplier.getSelectedValue(), checkbox.getActionCommand(), genId, Double.valueOf(maxSpendField.getText()), dateFormat.format(prStartDateField.getSelectedDate()), dateFormat.format(prEndDateField.getSelectedDate()), prNotesField.getText());
-                    Pipe.save("/PR", newPr);
+                    PurchaseRequisition preq = new PurchaseRequisition();
+                    preq.setId(genId);
+                    preq.setName(genId);
+                    preq.setOwner("ORDS/PR/AUTO_MK");
+                    preq.setSupplier(supplier.getSelectedValue());
+                    preq.setMaxSpend(Double.valueOf(maxSpendField.getText()));
+                    preq.setStart(dateFormat.format(prStartDateField.getSelectedDate()));
+                    preq.setEnd(dateFormat.format(prEndDateField.getSelectedDate()));
+                    preq.setNotes(prNotesField.getText());
+                    Pipe.save("/PR", preq);
                 }
             }
             dispose();

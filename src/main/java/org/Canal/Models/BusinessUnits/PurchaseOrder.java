@@ -110,6 +110,14 @@ public class PurchaseOrder extends Objex {
         this.items = items;
     }
 
+    public double getTotalItems() {
+        double total = 0;
+        for (OrderLineItem item : items) {
+            total += item.getQuantity();
+        }
+        return total;
+    }
+
     public double getNetValue() {
         return netValue;
     }

@@ -62,7 +62,7 @@ public class Records extends LockeState implements RefreshListener {
         toolbar.add(Elements.header("Departments", SwingConstants.LEFT), BorderLayout.NORTH);
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-        IconButton export = new IconButton("Export", "export", "Export as CSV");
+        IconButton export = new IconButton("", "export", "Export as CSV");
         IconButton refresh = new IconButton("Refresh", "refresh", "Refresh Data");
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));

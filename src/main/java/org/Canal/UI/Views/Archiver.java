@@ -25,10 +25,10 @@ public class Archiver extends LockeState {
         f.addInput(Elements.coloredLabel("Objex ID", Constants.colors[0]), objexIdField);
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);
-        JButton confirmDeletion = Elements.button("Confirm Objex Archival");
-        add(confirmDeletion, BorderLayout.SOUTH);
-        add(Elements.header("Delete a " + objex, SwingConstants.LEFT), BorderLayout.NORTH);
-        confirmDeletion.addMouseListener(new MouseAdapter() {
+        JButton confirmArchival = Elements.button("Confirm Objex Archival");
+        add(confirmArchival, BorderLayout.SOUTH);
+        add(Elements.header("Archive a " + objex, SwingConstants.LEFT), BorderLayout.NORTH);
+        confirmArchival.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 File[] fs = Pipe.list(objex);

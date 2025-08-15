@@ -87,7 +87,7 @@ public class CreatePerson extends LockeState {
                 Pipe.save("/PPL", employee);
                 dispose();
                 JOptionPane.showMessageDialog(null, "Person Created");
-                desktop.put(new ViewEmployee(employee));
+                desktop.put(new ViewEmployee(employee, desktop, null));
             }
         });
     }

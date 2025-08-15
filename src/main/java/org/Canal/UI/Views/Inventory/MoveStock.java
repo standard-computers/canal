@@ -57,7 +57,6 @@ public class MoveStock extends LockeState {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 dispose();
-                JOptionPane.showMessageDialog(MoveStock.this, "Moving Stock");
                 Inventory i = Engine.getInventory(location);
                 String hu = mvHu.getText();
                 boolean success = false;

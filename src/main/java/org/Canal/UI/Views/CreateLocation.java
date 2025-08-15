@@ -22,7 +22,6 @@ public class CreateLocation extends LockeState {
     private Selectable objexSelection;
     private Selectable organizations;
     private Selectable countries;
-    private JTextField locationIdField;
     private JTextField locationNameField;
     private JTextField line1Field;
     private JTextField line2Field;
@@ -36,8 +35,6 @@ public class CreateLocation extends LockeState {
     private UOMField widthUOM = new UOMField();
     private UOMField lengthUOM = new UOMField();
     private UOMField heightUOM = new UOMField();
-    private UOMField areaUOM = new UOMField();
-    private UOMField volumUOM = new UOMField();
 
     public CreateLocation(String objexType, DesktopState desktop, RefreshListener refreshListener) {
 
@@ -65,21 +62,18 @@ public class CreateLocation extends LockeState {
 
         JPanel buttons = new JPanel(new FlowLayout());
         buttons.setLayout(new BoxLayout(buttons, BoxLayout.X_AXIS));
+
         IconButton copyFrom = new IconButton("Copy From", "open", "Copy From Location");
-        IconButton review = new IconButton("Review", "review", "Review Location Information");
-        IconButton execute = new IconButton("Execute", "execute", "Create Location");
-        buttons.add(Box.createHorizontalStrut(5));
-        buttons.add(copyFrom);
-        buttons.add(Box.createHorizontalStrut(5));
-        buttons.add(review);
-        buttons.add(Box.createHorizontalStrut(5));
-        buttons.add(execute);
         copyFrom.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 String prId = JOptionPane.showInputDialog(CreateLocation.this, "Enter Location ID");
             }
         });
+        buttons.add(Box.createHorizontalStrut(5));
+        buttons.add(copyFrom);
+
+        IconButton review = new IconButton("Review", "review", "Review Location Information");
         review.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -87,12 +81,20 @@ public class CreateLocation extends LockeState {
 
             }
         });
+        buttons.add(Box.createHorizontalStrut(5));
+        buttons.add(review);
+
+        IconButton execute = new IconButton("Execute", "execute", "Create Location");
         execute.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+
                 int ccc = JOptionPane.showConfirmDialog(null, "Confirm Location creation?", "Confirm Execution", JOptionPane.YES_NO_OPTION);
                 if(ccc == JOptionPane.YES_OPTION){
-                    String locationId = locationIdField.getText().trim();
+
+                    System.out.println(Engine.codex.getValue(objexType, "prefix"));
+                    ArrayList<Location> ls = Engine.getLocations(objexType);
+                    String locationId = ((String) Engine.codex.getValue(objexType, "prefix")) + (1000 + (ls.size() + 1));;
                     String organizationId = organizations.getSelectedValue();
                     String locationName = locationNameField.getText().trim();
                     String line1 = line1Field.getText().trim();
@@ -125,19 +127,19 @@ public class CreateLocation extends LockeState {
                     location.setLengthUOM(lengthUOM.getUOM());
                     location.setHeight(Double.parseDouble(heightUOM.getValue()));
                     location.setHeightUOM(heightUOM.getUOM());
-                    location.setArea(Double.parseDouble(areaUOM.getValue()));
-                    location.setAreaUOM(areaUOM.getUOM());
-                    location.setVolume(Double.parseDouble(volumUOM.getValue()));
-                    location.setVolumeUOM(volumUOM.getUOM());
                     Pipe.save(objexType, location);
                     dispose();
                     if(refreshListener != null) {
                         refreshListener.refresh();
                     }
-                    desktop.put(Engine.router(objexType + "/" + locationId, desktop));
+
+                    //TODO auto_open_new
+//                    desktop.put(Engine.router(objexType + "/" + locationId, desktop));
                 }
             }
         });
+        buttons.add(Box.createHorizontalStrut(5));
+        buttons.add(execute);
         return buttons;
     }
 
@@ -145,7 +147,6 @@ public class CreateLocation extends LockeState {
 
         Form f1 = new Form();
         f1.addInput(Elements.coloredLabel("Type",  UIManager.getColor("Label.foreground")), objexSelection);
-        f1.addInput(Elements.coloredLabel("*New ID", UIManager.getColor("Label.foreground")), locationIdField);
         if(!objexType.equals("/ORGS")) {
             f1.addInput(Elements.coloredLabel("*Organization", UIManager.getColor("Label.foreground")), organizations);
         }
@@ -159,10 +160,7 @@ public class CreateLocation extends LockeState {
         if(oo.startsWith("/")){
             oo = oo.substring(1);
         }
-        ArrayList<Location> ls = Engine.getLocations(oo);
-        String generatedId = ((String) Engine.codex.getValue(oo, "prefix")) + (100000 + (ls.size() + 1));
         objexSelection = Selectables.locationObjex(objexType);
-        locationIdField = new JTextField(generatedId);
         organizations = Selectables.organizations();
         locationNameField = Elements.input(15);
         line1Field = Elements.input();
@@ -207,8 +205,6 @@ public class CreateLocation extends LockeState {
         f.addInput(Elements.coloredLabel("Width", Constants.colors[0]), widthUOM);
         f.addInput(Elements.coloredLabel("Length", Constants.colors[1]), lengthUOM);
         f.addInput(Elements.coloredLabel("Height", Constants.colors[2]), heightUOM);
-        f.addInput(Elements.coloredLabel("Area", Constants.colors[3]), areaUOM);
-        f.addInput(Elements.coloredLabel("Volume", Constants.colors[4]), volumUOM);
         dimensional.add(f);
         return dimensional;
     }

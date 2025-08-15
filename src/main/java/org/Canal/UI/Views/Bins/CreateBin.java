@@ -33,12 +33,12 @@ public class CreateBin extends LockeState {
     private UOMField lengthField;
     private UOMField heightField;
     private UOMField weightField;
-    private UOMField areaField;
-    private UOMField volumeField;
     private JCheckBox autoReplenish;
     private JCheckBox fixedBin;
     private JCheckBox doesGoodsIssue;
+    private JCheckBox doesGoodsReceipt;
     private JCheckBox pickingEnabled;
+    private JCheckBox putawayEnabled;
     private JCheckBox holdsStock;
 
     public CreateBin(String location, RefreshListener refreshListener) {
@@ -92,8 +92,6 @@ public class CreateBin extends LockeState {
                 String binLengthUom = lengthField.getUOM();
                 double binHeight = Double.parseDouble(heightField.getValue());
                 String binHeightUom = heightField.getUOM();
-                double binVolume = Double.parseDouble(areaField.getValue());
-                String binVolumeUom = areaField.getUOM();
                 Bin newBin = new Bin();
                 newBin.setId(binId);
                 newBin.setName(binName);
@@ -103,14 +101,12 @@ public class CreateBin extends LockeState {
                 newBin.setLengthUOM(binLengthUom);
                 newBin.setHeight(binHeight);
                 newBin.setHeightUOM(binHeightUom);
-                newBin.setAreaValue(areaField.getValue());
-                newBin.setAreaUOM(areaField.getUOM());
-                newBin.setVolume(binVolume);
-                newBin.setVolumeUOM(binVolumeUom);
                 newBin.setAuto_replenish(autoReplenish.isSelected());
                 newBin.setFixed(fixedBin.isSelected());
                 newBin.setPicking(pickingEnabled.isSelected());
+                newBin.setPutaway(putawayEnabled.isSelected());
                 newBin.setGoodsissue(doesGoodsIssue.isSelected());
+                newBin.setGoodsreceipt(doesGoodsReceipt.isSelected());
                 newBin.setHoldsStock(holdsStock.isSelected());
                 Area foundArea = Engine.getArea(binArea);
                 if(foundArea != null){
@@ -141,6 +137,7 @@ public class CreateBin extends LockeState {
             areas.put(a.getName(), a.getId());
         }
         this.areas = new Selectable(areas);
+        this.areas.editable();
         generatedId = "BN" + (Engine.getAreas(location).size() + 1) + "-" + this.areas.getSelectedValue();
         this.areas.setSelectedValue(location);
         locationField.getDocument().addDocumentListener(new DocumentListener() {
@@ -167,8 +164,10 @@ public class CreateBin extends LockeState {
         });
         idField.setText(generatedId);
         nameField = Elements.input(generatedId, 20);
-        doesGoodsIssue = new JCheckBox("GI on put away to this bin");
+        doesGoodsIssue = new JCheckBox("GI on stock removal from this bin");
+        doesGoodsReceipt = new JCheckBox("GR on put away to this bin");
         pickingEnabled = new JCheckBox("Allow picks from this bin");
+        putawayEnabled = new JCheckBox("Allow picks from this bin");
         autoReplenish = new JCheckBox("Auto Replenish");
         autoReplenish.setToolTipText("Bin will be automatically replenished based on set replenishments");
         fixedBin = new JCheckBox("Fixed Bin");
@@ -178,8 +177,10 @@ public class CreateBin extends LockeState {
         f.addInput(Elements.coloredLabel("Location ID", UIManager.getColor("Label.foreground")), locationField);
         f.addInput(Elements.coloredLabel("*Area", UIManager.getColor("Label.foreground")), this.areas);
         f.addInput(Elements.coloredLabel("Bin Name", Constants.colors[10]), nameField);
-        f.addInput(Elements.coloredLabel("Goods Issue Enabled", Constants.colors[10]), doesGoodsIssue);
+        f.addInput(Elements.coloredLabel("Goods Issue", Constants.colors[10]), doesGoodsIssue);
+        f.addInput(Elements.coloredLabel("Goods Receipt", Constants.colors[10]), doesGoodsReceipt);
         f.addInput(Elements.coloredLabel("Picking Enabled", Constants.colors[9]), pickingEnabled);
+        f.addInput(Elements.coloredLabel("Putaway Enabled", Constants.colors[9]), putawayEnabled);
         f.addInput(Elements.coloredLabel("Auto Replenish", Constants.colors[8]), autoReplenish);
         f.addInput(Elements.coloredLabel("Fixed Bin", Constants.colors[7]), fixedBin);
         f.addInput(Elements.coloredLabel("Holds Stock", Constants.colors[7]), holdsStock);
@@ -195,14 +196,10 @@ public class CreateBin extends LockeState {
         lengthField = new UOMField();
         heightField = new UOMField();
         weightField = new UOMField();
-        areaField = new UOMField();
-        volumeField = new UOMField();
         f.addInput(Elements.coloredLabel("Width", Constants.colors[10]), widthField);
         f.addInput(Elements.coloredLabel("Length", Constants.colors[9]), lengthField);
         f.addInput(Elements.coloredLabel("Height", Constants.colors[8]), heightField);
         f.addInput(Elements.coloredLabel("Weight", Constants.colors[7]), weightField);
-        f.addInput(Elements.coloredLabel("Area", Constants.colors[6]), areaField);
-        f.addInput(Elements.coloredLabel("Volume", Constants.colors[5]), volumeField);
         dimensional.add(f);
         return dimensional;
     }

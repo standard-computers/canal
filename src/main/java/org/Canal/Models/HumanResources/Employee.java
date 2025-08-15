@@ -10,7 +10,9 @@ import java.io.File;
 public class Employee extends Objex {
 
     private String org; //Org ID
-    private String firstName, middleName, lastName;
+    private String firstName; //Nickname or Reference Name of Employee (first + last)
+    private String middleName;
+    private String lastName;
     private String location; //Location ID if any
     private String supervisor; //Employee ID of Supervisor
     private String position;

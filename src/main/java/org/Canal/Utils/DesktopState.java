@@ -7,4 +7,5 @@ public interface DesktopState {
     void clean();
     void purge();
     void force();
+    void setCommander(String text);
 }

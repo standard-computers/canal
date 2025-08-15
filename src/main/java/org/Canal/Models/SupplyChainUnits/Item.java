@@ -2,7 +2,10 @@ package org.Canal.Models.SupplyChainUnits;
 
 import org.Canal.Models.BusinessUnits.OrderLineItem;
 import org.Canal.Models.Objex;
+import org.Canal.Start;
+import org.Canal.Utils.Json;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class Item extends Objex {
@@ -11,6 +14,7 @@ public class Item extends Objex {
     private String vendor;
     private String color;
     private String upc;
+    private String vendorNumber;
     private double baseQuantity;
     private String packagingUnit;
     private boolean batched;
@@ -31,6 +35,7 @@ public class Item extends Objex {
     private double tax;
     private double exciseTax;
     private double shelfLife;
+    private String link;
     private ArrayList<OrderLineItem> components = new ArrayList<>();
     private ArrayList<Object[]> uoms = new ArrayList<>();
     private ArrayList<Object[]> packaging = new ArrayList<>();
@@ -65,6 +70,14 @@ public class Item extends Objex {
 
     public void setUpc(String upc) {
         this.upc = upc;
+    }
+
+    public String getVendorNumber() {
+        return vendorNumber;
+    }
+
+    public void setVendorNumber(String vendorNumber) {
+        this.vendorNumber = vendorNumber;
     }
 
     public double getBaseQuantity() {
@@ -171,6 +184,22 @@ public class Item extends Objex {
         this.heightUOM = heightUOM;
     }
 
+    public double getVolume(){
+        return width * length * height;
+    }
+
+    public String getVolumeUOM(){
+        return heightUOM + 3;
+    }
+
+    public double getSurfaceArea(){
+        return 2 * (width * length + width * height + length * height);
+    }
+
+    public String getSurfaceAreaUOM(){
+        return widthUOM + 2;
+    }
+
     public double getWeight() {
         return weight;
     }
@@ -227,6 +256,14 @@ public class Item extends Objex {
         this.shelfLife = shelfLife;
     }
 
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
     public ArrayList<OrderLineItem> getComponents() {
         return components;
     }
@@ -253,6 +290,21 @@ public class Item extends Objex {
 
     public void setPackaging(ArrayList<Object[]> packaging) {
         this.packaging = packaging;
+    }
+
+    public void save(){
+        File md = new File(Start.DIR + "\\.store\\ITS\\");
+        File[] mdf = md.listFiles();
+        if (mdf != null) {
+            for (File file : mdf) {
+                if (file.getPath().endsWith(".its")) {
+                    Item fl = Json.load(file.getPath(), Item.class);
+                    if (fl.getId().equals(id)) {
+                        Json.save(file.getPath(), this);
+                    }
+                }
+            }
+        }
     }
 
     @Override

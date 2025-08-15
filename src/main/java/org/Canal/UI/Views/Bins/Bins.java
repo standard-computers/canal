@@ -24,18 +24,20 @@ public class Bins extends LockeState implements RefreshListener {
 
     private DesktopState desktop;
     private CustomTable table;
+    private String binCountString = "All Bins";
 
     public Bins(DesktopState desktop) {
 
         super("Bins", "/BNS", true, true, true, true);
         setFrameIcon(new ImageIcon(Bins.class.getResource("/icons/bins.png")));
         this.desktop = desktop;
+        setMaximized(true);
 
         JPanel tb = toolbar();
         JPanel holder = new JPanel(new BorderLayout());
         table = table();
         JScrollPane tableScrollPane = new JScrollPane(table);
-        holder.add(Elements.header("All Bins", SwingConstants.LEFT), BorderLayout.CENTER);
+        holder.add(Elements.header(binCountString, SwingConstants.LEFT), BorderLayout.CENTER);
         holder.add(tb, BorderLayout.SOUTH);
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);
@@ -46,57 +48,53 @@ public class Bins extends LockeState implements RefreshListener {
 
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-        IconButton export = new IconButton("Export", "export", "Export as CSV", "");
+
         IconButton importBins = new IconButton("Import", "export", "Import as CSV", "");
-        IconButton createBin = new IconButton("Create", "create", "Create a Bin", "/BNS/NEW");
-        IconButton autoMakeBins = new IconButton("AutoMake", "automake", "Automate the creation of Bin(s)", "/BNS/AUTO_MK");
-        IconButton modifyBin = new IconButton("Modify", "modify", "Modify an Bin", "/BNS/MOD");
-        IconButton removeBin = new IconButton("Remove", "delete", "Delete an Bin");
-        IconButton labels = new IconButton("Labels", "label", "Delete an Bin");
-        IconButton print = new IconButton("Print", "print", "Delete an Bin");
-        IconButton refresh = new IconButton("Refresh", "refresh", "Refresh Data");
-        tb.add(export);
-        tb.add(Box.createHorizontalStrut(5));
         tb.add(importBins);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(createBin);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(autoMakeBins);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(modifyBin);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(removeBin);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(labels);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(print);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(refresh);
-        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+        IconButton export = new IconButton("Export", "export", "Export as CSV", "");
         export.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 table.exportToCSV();
             }
         });
-        removeBin.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                desktop.put(new RemoveBin());
-            }
-        });
-        refresh.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                refresh();
-            }
-        });
+        tb.add(export);
+        tb.add(Box.createHorizontalStrut(5));
+
+        IconButton open = new IconButton("Open", "open", "Open Bin");
+        tb.add(open);
+        tb.add(Box.createHorizontalStrut(5));
+
+        IconButton create = new IconButton("Create", "create", "Create a Bin", "/BNS/NEW");
+        tb.add(create);
+        tb.add(Box.createHorizontalStrut(5));
+
+        IconButton autoMakeBins = new IconButton("AutoMake", "automake", "Automate the creation of Bin(s)", "/BNS/AUTO_MK");
+        tb.add(autoMakeBins);
+        tb.add(Box.createHorizontalStrut(5));
+
+        IconButton labels = new IconButton("Labels", "label", "Delete an Bin");
+        tb.add(labels);
+        tb.add(Box.createHorizontalStrut(5));
+
+        IconButton print = new IconButton("Print", "print", "Delete an Bin");
+        tb.add(print);
+        tb.add(Box.createHorizontalStrut(5));
+
+
+        IconButton refresh = new IconButton("Refresh", "refresh", "Refresh Data");
+        refresh.addActionListener(e -> refresh());
+        tb.add(refresh);
+        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
         return tb;
     }
 
     private CustomTable table() {
         String[] columns = new String[]{
             "ID",
+            "Location",
             "Area",
             "Name",
             "Width",
@@ -112,17 +110,31 @@ public class Bins extends LockeState implements RefreshListener {
             "Auto Repl",
             "Fixed",
             "Picking",
+            "Putaway",
             "GI",
+            "GR",
             "Holds Stock",
             "Status",
             "Created",
         };
+        int bin_count = 0;
         ArrayList<Object[]> data = new ArrayList<>();
         for (Area area : Engine.getAreas()) {
             for(Bin b : area.getBins()){
+                bin_count++;
+                Area a = new Area();
+                ArrayList<Area> areas = Engine.getAreas();
+                for(int i = 0; i < areas.size(); i++){
+                    for(int g = 0; g < areas.get(i).getBins().size(); g++){
+                        if(areas.get(i).getBins().get(g).getId().equals(b.getId())) {
+                            a = areas.get(i);
+                        }
+                    }
+                }
                 data.add(new Object[]{
                         b.getId(),
-                        b.getArea(),
+                        a.getLocation(),
+                        a.getId(),
                         b.getName(),
                         b.getWidth(),
                         b.getWidthUOM(),
@@ -137,16 +149,37 @@ public class Bins extends LockeState implements RefreshListener {
                         b.isAuto_replenish(),
                         b.isFixed(),
                         b.isPicking(),
-                        b.isGoodsissue(),
+                        b.isPutaway(),
+                        b.doesGI(),
+                        b.doesGR(),
                         b.isHoldsStock(),
-                        b.getVolume(),
-                        b.getVolumeUOM(),
                         b.getStatus(),
                         b.getCreated(),
                 });
             }
         }
-        return new CustomTable(columns, data);
+        binCountString = "All Bins (" + bin_count + ")";
+        CustomTable t = new CustomTable(columns, data);
+        t.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    JTable t = (JTable) e.getSource();
+                    int r = t.getSelectedRow();
+                    if (r != -1) {
+                        String v = String.valueOf(t.getValueAt(r, 1));
+                        for(Area d : Engine.getAreas()){
+                            for(Bin b : d.getBins()){
+                                if(v.equals(b.getId())){
+                                    desktop.put(new ViewBin(b));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        return t;
     }
 
     @Override

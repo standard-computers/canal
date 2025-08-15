@@ -20,21 +20,6 @@ public class PurchaseRequisition extends Objex {
     private String notes;
     private ArrayList<OrderLineItem> products = new ArrayList<>();
 
-    public PurchaseRequisition(String id, String name, String owner, String supplier, String buyer, String number, double maxSpend, String start, String end, String notes) {
-        this.id = id;
-        this.created = Constants.now();
-        this.name = name;
-        this.owner = owner;
-        this.supplier = supplier;
-        this.buyer = buyer;
-        this.number = number;
-        this.maxSpend = maxSpend;
-        this.start = start;
-        this.end = end;
-        this.status = LockeStatus.NEW;
-        this.notes = notes;
-    }
-
     public String getSupplier() {
         return supplier;
     }

@@ -48,7 +48,7 @@ public class IconButton extends JButton {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (locke != null) {
-                    Start.q.put(Engine.router(locke, Start.q));
+//                    Start.q.put(Engine.router(locke, Start.q));
                 }
             }
         };
@@ -56,8 +56,8 @@ public class IconButton extends JButton {
 
     public Dimension getPreferredSize() {
         Dimension size = super.getPreferredSize();
-        size.width += 8;
-        size.height += 8;
+        size.width += 6;
+        size.height += 6;
         return size;
     }
 }

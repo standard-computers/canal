@@ -5,6 +5,7 @@ import org.Canal.UI.Elements.*;
 import org.Canal.Utils.*;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -17,17 +18,20 @@ import java.util.HashMap;
  */
 public class CreateEmployee extends LockeState {
 
-    private JTextField empIdField;
-    private JTextField empNameField;
-    private JTextField empAddressL1;
-    private JTextField empAddressL2;
-    private JTextField empAddressCity;
-    private JTextField empAddressState;
-    private JTextField empAddressPostal;
-    private JTextField empPhone;
-    private JTextField empEmail;
+    private DesktopState desktop;
+    private RefreshListener refreshListener;
+    private JTextField firstNameField;
+    private JTextField middleNameField;
+    private JTextField lastNameField;
+    private JTextField addressL1Field;
+    private JTextField addressL2Field;
+    private JTextField cityField;
+    private JTextField stateField;
+    private JTextField postalField;
+    private JTextField phoneField;
+    private JTextField emailField;
     private Selectable orgIdField;
-    private Selectable locations;
+    private JTextField locations;
     private Selectable supervisor;
     private Selectable countries;
     private Selectable ethnicities;
@@ -36,63 +40,101 @@ public class CreateEmployee extends LockeState {
     private JCheckBox disabled;
     private JCheckBox veteren;
 
-    public CreateEmployee(DesktopState desktop, boolean autoMakeUser){
+    public CreateEmployee(DesktopState desktop, RefreshListener refreshListener){
+
         super("Create Employee", "/EMPS/NEW", false, true, false, true);
         setFrameIcon(new ImageIcon(CreateEmployee.class.getResource("/icons/create.png")));
+        this.desktop = desktop;
+        this.refreshListener = refreshListener;
 
+        JPanel main = new JPanel(new BorderLayout());
         CustomTabbedPane tabbedPane = new CustomTabbedPane();
         tabbedPane.addTab("General", general());
         tabbedPane.addTab("Address", locationInfo());
         tabbedPane.addTab("Personal", personalInfo());
+        main.add(toolbar(), BorderLayout.NORTH);
+        main.add(tabbedPane, BorderLayout.CENTER);
+
         setLayout(new BorderLayout());
         add(Elements.header("New Employee", SwingConstants.LEFT), BorderLayout.NORTH);
-        add(tabbedPane, BorderLayout.CENTER);
-        JButton createEmployee = Elements.button("Process");
-        add(createEmployee, BorderLayout.SOUTH);
-        createEmployee.addMouseListener(new MouseAdapter() {
+        add(main, BorderLayout.CENTER);
+    }
+
+    private JPanel toolbar() {
+        JPanel tb = new JPanel();
+        tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+
+        IconButton review = new IconButton("Review", "review", "Review Area Data");
+        tb.add(review);
+        tb.add(Box.createHorizontalStrut(5));
+
+        IconButton create = new IconButton("Create", "execute", "Refresh Data");
+        create.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                String empId = empIdField.getText().trim();
+
+                String empId = "E" + (10000 + (Engine.getEmployees().size() + 1));
                 String orgId = orgIdField.getSelectedValue().trim();
-                String location = locations.getSelectedValue();
-                String empName = empNameField.getText().trim();
+                String location = locations.getText().trim();
+                String firstName = firstNameField.getText().trim();
+                String lastName = lastNameField.getText().trim();
                 String empSupervisor = supervisor.getSelectedValue();
+
                 Employee newEmployee = new Employee();
                 newEmployee.setId(empId);
                 newEmployee.setOrg(orgId);
                 newEmployee.setLocation(location);
-                newEmployee.setName(empName);
+                newEmployee.setName(firstName + " " + lastName);
+                newEmployee.setFirstName(firstName);
+                newEmployee.setLastName(lastName);
                 newEmployee.setSupervisor(empSupervisor);
                 newEmployee.setStartDate(startDatePicker.getSelectedDateString());
                 newEmployee.setCreateDate(Constants.now());
                 newEmployee.setStatus(LockeStatus.NEW);
 
-                newEmployee.setLine1(empAddressL1.getText());
-                newEmployee.setLine2(empAddressL2.getText());
-                newEmployee.setCity(empAddressCity.getText());
-                newEmployee.setState(empAddressState.getText());
-                newEmployee.setPostal(empAddressPostal.getText());
+                newEmployee.setLine1(addressL1Field.getText());
+                newEmployee.setLine2(addressL2Field.getText());
+                newEmployee.setCity(cityField.getText());
+                newEmployee.setState(stateField.getText());
+                newEmployee.setPostal(postalField.getText());
                 newEmployee.setCountry(countries.getSelectedValue());
-                newEmployee.setPhone(empPhone.getText());
-                newEmployee.setEmail(empEmail.getText());
+                newEmployee.setPhone(phoneField.getText());
+                newEmployee.setEmail(emailField.getText());
+                newEmployee.setEthnicity(ethnicities.getSelectedValue());
+                newEmployee.setGender(genders.getSelectedValue());
                 newEmployee.setDisability(disabled.isSelected());
                 newEmployee.setVeteran(veteren.isSelected());
 
                 Pipe.save("/EMPS", newEmployee);
+
+                if((boolean) Engine.codex.getValue("EMPS", "item_created_alert")){
+                    JOptionPane.showMessageDialog(null, "Employee Created");
+                }
                 dispose();
-                JOptionPane.showMessageDialog(null, "Employee Created");
-                desktop.put(new ViewEmployee(newEmployee));
+
+                if(refreshListener != null){
+                    refreshListener.refresh();
+                }
+
+                if((boolean) Engine.codex.getValue("EMPS", "auto_open_new")){
+                    desktop.put(new ViewEmployee(newEmployee, desktop, refreshListener));
+                }
             }
         });
+        tb.add(create);
+        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
+        return tb;
     }
 
     private JPanel general(){
 
         JPanel general = new JPanel(new FlowLayout(FlowLayout.LEFT));
         Form f = new Form();
-        String genId = "E" + (10000 + (Engine.getEmployees().size() + 1));
-        empIdField = Elements.input(genId, 15);
+
         orgIdField = Selectables.organizations();
-        empNameField = Elements.input(15);
+        locations = Elements.input();
+        firstNameField = Elements.input();
+        middleNameField = Elements.input();
+        lastNameField = Elements.input();
         HashMap<String, String> availablePositions = new HashMap<>();
         Selectable position = new Selectable(availablePositions);
         position.editable();
@@ -100,15 +142,17 @@ public class CreateEmployee extends LockeState {
         supervisor = new Selectable(availableSupervisors);
         supervisor.editable();
         startDatePicker = new DatePicker();
-        f.addInput(Elements.coloredLabel("New Employee ID", UIManager.getColor("Label.foreground")), empIdField);
+
         f.addInput(Elements.coloredLabel("Organization", Constants.colors[10]), orgIdField);
-        locations = Selectables.allLocations();
         f.addInput(Elements.coloredLabel("Location (optional)", Constants.colors[9]), locations);
-        f.addInput(Elements.coloredLabel("Full Name", Constants.colors[9]), empNameField);
-        f.addInput(Elements.coloredLabel("Position", Constants.colors[8]), position);
-        f.addInput(Elements.coloredLabel("Supervisor", Constants.colors[7]), supervisor);
-        f.addInput(Elements.coloredLabel("Start Date", Constants.colors[6]), startDatePicker);
+        f.addInput(Elements.coloredLabel("First Name", Constants.colors[8]), firstNameField);
+        f.addInput(Elements.coloredLabel("Middle Name", Constants.colors[7]), middleNameField);
+        f.addInput(Elements.coloredLabel("Last Name", Constants.colors[7]), lastNameField);
+        f.addInput(Elements.coloredLabel("Position", Constants.colors[6]), position);
+        f.addInput(Elements.coloredLabel("Supervisor", Constants.colors[5]), supervisor);
+        f.addInput(Elements.coloredLabel("Start Date", Constants.colors[4]), startDatePicker);
         general.add(f);
+
         return general;
     }
 
@@ -116,19 +160,22 @@ public class CreateEmployee extends LockeState {
 
         JPanel locationInfo = new JPanel(new FlowLayout(FlowLayout.LEFT));
         Form f2 = new Form();
-        empAddressL1 = Elements.input(15);
-        empAddressL2 = Elements.input(15);
-        empAddressCity = Elements.input(15);
-        empAddressState = Elements.input(15);
-        empAddressPostal = Elements.input(15);
+
+        addressL1Field = Elements.input(15);
+        addressL2Field = Elements.input();
+        cityField = Elements.input();
+        stateField = Elements.input();
+        postalField = Elements.input();
         countries = Selectables.countries();
-        f2.addInput(Elements.coloredLabel("Street Line 1", UIManager.getColor("Label.foreground")), empAddressL1);
-        f2.addInput(Elements.coloredLabel("Street Line 2", UIManager.getColor("Label.foreground")), empAddressL2);
-        f2.addInput(Elements.coloredLabel("City", UIManager.getColor("Label.foreground")), empAddressCity);
-        f2.addInput(Elements.coloredLabel("State", UIManager.getColor("Label.foreground")), empAddressState);
-        f2.addInput(Elements.coloredLabel("Postal", UIManager.getColor("Label.foreground")), empAddressPostal);
+
+        f2.addInput(Elements.coloredLabel("Street Line 1", UIManager.getColor("Label.foreground")), addressL1Field);
+        f2.addInput(Elements.coloredLabel("Line 2", UIManager.getColor("Label.foreground")), addressL2Field);
+        f2.addInput(Elements.coloredLabel("City", UIManager.getColor("Label.foreground")), cityField);
+        f2.addInput(Elements.coloredLabel("State", UIManager.getColor("Label.foreground")), stateField);
+        f2.addInput(Elements.coloredLabel("Postal", UIManager.getColor("Label.foreground")), postalField);
         f2.addInput(Elements.coloredLabel("Country", UIManager.getColor("Label.foreground")), Selectables.countries());
         locationInfo.add(f2);
+
         return locationInfo;
     }
 
@@ -136,19 +183,22 @@ public class CreateEmployee extends LockeState {
 
         JPanel personalInfo = new JPanel(new FlowLayout(FlowLayout.LEFT));
         Form f = new Form();
-        empPhone = Elements.input(15);
-        empEmail = Elements.input(15);
+
+        emailField = Elements.input(15);
+        phoneField = Elements.input();
         ethnicities = Selectables.ethnicities();
         genders = Selectables.genders();
         disabled = new JCheckBox();
         veteren = new JCheckBox();
-        f.addInput(Elements.coloredLabel("Phone", UIManager.getColor("Label.foreground")), empPhone);
-        f.addInput(Elements.coloredLabel("Email", UIManager.getColor("Label.foreground")), empEmail);
+
+        f.addInput(Elements.coloredLabel("Email", UIManager.getColor("Label.foreground")), emailField);
+        f.addInput(Elements.coloredLabel("Phone", UIManager.getColor("Label.foreground")), phoneField);
         f.addInput(Elements.coloredLabel("Ethnicity", UIManager.getColor("Label.foreground")), ethnicities);
         f.addInput(Elements.coloredLabel("Gender", UIManager.getColor("Label.foreground")), genders);
-        f.addInput(Elements.coloredLabel("Disabled?", UIManager.getColor("Label.foreground")), veteren);
+        f.addInput(Elements.coloredLabel("Disabled?", UIManager.getColor("Label.foreground")), disabled);
         f.addInput(Elements.coloredLabel("Veteran?", UIManager.getColor("Label.foreground")), veteren);
         personalInfo.add(f);
+
         return personalInfo;
     }
 }

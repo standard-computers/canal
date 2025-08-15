@@ -1,6 +1,8 @@
 package org.Canal;
 
 import com.formdev.flatlaf.IntelliJTheme;
+import org.Canal.Models.SupplyChainUnits.Location;
+import org.Canal.UI.Views.System.IniSystem;
 import org.Canal.UI.Views.System.Setup;
 import org.Canal.Utils.Codex;
 import org.Canal.UI.Views.System.QuickExplorer;
@@ -11,6 +13,7 @@ import org.Canal.Utils.Json;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.util.ArrayList;
 
 public class Start {
 
@@ -46,11 +49,18 @@ public class Start {
                             System.err.println("Failed self assigned theme.");
                         }
                         i = mdf.length + 1;
-                        Engine.setOrganization(Engine.getLocations("ORGS").get(0));
-                        if(Engine.getConfiguration().getAssignedUser() != null){
-                            Engine.assignUser(Engine.getUser(Engine.getConfiguration().getAssignedUser()));
+                        ArrayList<Location> orgs = Engine.getLocations("ORGS");
+                        if(orgs.isEmpty()){
+
+                            new IniSystem();
+                        } else {
+
+                            Engine.setOrganization(orgs.getFirst());
+                            if(Engine.getConfiguration().getAssignedUser() != null){
+                                Engine.assignUser(Engine.getUser(Engine.getConfiguration().getAssignedUser()));
+                            }
+                            q = new QuickExplorer();
                         }
-                        q = new QuickExplorer();
                     }else if(file.getPath().endsWith(".cdx")){
                         Engine.codex = Json.load(file.getPath(), Codex.class);
                     }

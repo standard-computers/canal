@@ -55,7 +55,7 @@ public class HumanResources extends LockeState {
         createUser.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new CreateUser());
+                desktop.put(new CreateUser(desktop, null));
             }
         });
         JButton resetPassword = Elements.button("Reset Password");
@@ -85,7 +85,7 @@ public class HumanResources extends LockeState {
         createPosition.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new CreatePosition(desktop));
+                desktop.put(new CreatePosition(desktop, null));
             }
         });
         positionOptions.add(createPosition);
@@ -108,7 +108,7 @@ public class HumanResources extends LockeState {
         createDepartment.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new CreateDepartment(desktop));
+                desktop.put(new CreateDepartment(desktop, null));
             }
         });
         departmentOptions.add(createDepartment);
@@ -140,7 +140,7 @@ public class HumanResources extends LockeState {
         createEmployee.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new CreateEmployee(desktop, false));
+                desktop.put(new CreateEmployee(desktop, null));
             }
         });
         employeeOptions.add(createEmployee);

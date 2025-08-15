@@ -61,52 +61,51 @@ public class Positions extends LockeState implements RefreshListener {
     private JPanel toolbar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-        IconButton export = new IconButton("Export", "export", "Export as CSV");
-        IconButton importPositions = new IconButton("Import", "export", "Import as CSV");
+
+        if((boolean) Engine.codex.getValue("HR/POS", "import_enabled")){
+            IconButton importPositions = new IconButton("Import", "export", "Import as CSV");
+            importPositions.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    JFileChooser fc = new JFileChooser();
+
+                }
+            });
+            tb.add(importPositions);
+            tb.add(Box.createHorizontalStrut(5));
+        }
+
+        if((boolean) Engine.codex.getValue("HR/POS", "export_enabled")){
+            IconButton export = new IconButton("Export", "export", "Export as CSV");
+            export.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    table.exportToCSV();
+                }
+            });
+            tb.add(export);
+            tb.add(Box.createHorizontalStrut(5));
+        }
+
+
         IconButton createPosition = new IconButton("New", "create", "Create a Position", "/HR/POS/NEW");
-        IconButton postPosition = new IconButton("Post", "positions", "Post position as available", "/HR/POS/POST");
-        IconButton modifyPosition = new IconButton("Modify", "modify", "Modify a Position", "/HR/POS/MOD");
-        IconButton archivePosition = new IconButton("Archive", "archive", "Archive a Position", "/HR/POS/ARCHV");
-        IconButton removePosition = new IconButton("Remove", "delete", "Delete a Position", "/HR/POS/DEL");
-        IconButton findPosition = new IconButton("Find", "find", "Find by Values", "/HR/POS/F");
-        IconButton refresh = new IconButton("Refresh", "refresh", "Refresh Data");
-        tb.add(export);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(importPositions);
-        tb.add(Box.createHorizontalStrut(5));
+        createPosition.addActionListener(_ -> desktop.put(new CreatePosition(desktop, this)));
         tb.add(createPosition);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton postPosition = new IconButton("Post", "positions", "Post position as available", "/HR/POS/POST");
         tb.add(postPosition);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(modifyPosition);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(archivePosition);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(removePosition);
-        tb.add(Box.createHorizontalStrut(5));
+
+        IconButton findPosition = new IconButton("Find", "find", "Find by Values", "/HR/POS/F");
         tb.add(findPosition);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton refresh = new IconButton("", "refresh", "Refresh Data");
+        refresh.addActionListener(_ -> refresh());
         tb.add(refresh);
         tb.setBorder(new EmptyBorder(0, 5, 0, 5));
-        export.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                table.exportToCSV();
-            }
-        });
-        importPositions.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                JFileChooser fc = new JFileChooser();
 
-            }
-        });
-        refresh.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                refresh();
-            }
-        });
         super.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {}

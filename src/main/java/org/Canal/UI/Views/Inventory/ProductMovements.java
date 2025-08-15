@@ -46,7 +46,6 @@ public class ProductMovements extends LockeState implements RefreshListener {
 
     private CustomTable table() {
         String[] columns = new String[]{
-                "Objex",
                 "user",
                 "Src. Bin",
                 "Dest. Bin",
@@ -60,7 +59,6 @@ public class ProductMovements extends LockeState implements RefreshListener {
         ArrayList<Object[]> stks = new ArrayList<>();
         for (MaterialMovement mm : Engine.getInventory(location).getMaterialMovements()) {
             stks.add(new Object[]{
-                    mm.getObjex(),
                     mm.getUser(),
                     mm.getSourceBin(),
                     mm.getDestinationBin(),
@@ -79,7 +77,7 @@ public class ProductMovements extends LockeState implements RefreshListener {
 
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-        IconButton export = new IconButton("Export", "export", "Export as CSV");
+        IconButton export = new IconButton("", "export", "Export as CSV");
         JTextField filterValue = Elements.input(location, 10);
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));

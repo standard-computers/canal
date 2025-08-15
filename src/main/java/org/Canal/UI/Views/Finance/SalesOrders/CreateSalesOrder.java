@@ -44,10 +44,10 @@ public class CreateSalesOrder extends LockeState {
     private JLabel netValue;
     private JLabel taxAmount;
     private JLabel totalAmount;
-    private Selectable availablePurchaseRequisitions;
-    private Selectable selectSupplier;
-    private Selectable selectBillTo;
-    private Selectable selectShipTo;
+    private JTextField availablePurchaseRequisitions;
+    private JTextField selectSupplier;
+    private JTextField selectBillTo;
+    private JTextField selectShipTo;
     private Selectable organizations;
     private Selectable outboundCarriers;
     private Selectable inboundCarriers;
@@ -75,12 +75,11 @@ public class CreateSalesOrder extends LockeState {
         tabs.addTab("Delivery", delivery());
         tabs.addTab("Ledger", ledger());
         tabs.addTab("Purchase Order", purchaseOrder());
+        tabs.addTab("Shipping", shipping());
         tabs.addTab("Notes", notes());
 
         JPanel coreValues = orderInfoPanel();
         JPanel moreInfo = moreOrderInfoPanel();
-        selectBillTo.setSelectedValue(Engine.getOrganization().getId());
-        selectShipTo.setSelectedValue(Engine.getOrganization().getId());
         coreValues.setBorder(new EmptyBorder(10, 10, 10, 10));
         moreInfo.setBorder(new EmptyBorder(10, 10, 10, 10));
 
@@ -105,15 +104,15 @@ public class CreateSalesOrder extends LockeState {
                     JOptionPane.showMessageDialog(null, "Must select a delivery date.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                PurchaseRequisition assignedPR = Engine.orders.getPurchaseRequisitions(availablePurchaseRequisitions.getSelectedValue());
+                PurchaseRequisition assignedPR = Engine.orders.getPurchaseRequisitions(availablePurchaseRequisitions.getText());
                 int ccc = JOptionPane.showConfirmDialog(null, "Confirm order?", "You have selected the Org ID as the charge account. Are you sure you want to charge the corp account?",JOptionPane.YES_NO_CANCEL_OPTION);
                 if(ccc == JOptionPane.YES_OPTION){
                     SalesOrder newSalesOrder = new SalesOrder();
                     newSalesOrder.setOwner((Engine.getAssignedUser().getId()));
                     newSalesOrder.setOrderId(orderId.value());
-                    newSalesOrder.setVendor(selectSupplier.getSelectedValue());
-                    newSalesOrder.setBillTo(selectBillTo.getSelectedValue());
-                    newSalesOrder.setShipTo(selectShipTo.getSelectedValue());
+                    newSalesOrder.setVendor(selectSupplier.getText());
+                    newSalesOrder.setBillTo(selectBillTo.getText());
+                    newSalesOrder.setShipTo(selectShipTo.getText());
                     newSalesOrder.setExpectedDelivery(expectedDelivery.getSelectedDateString());
                     newSalesOrder.setStatus(LockeStatus.NEW);
                     ArrayList<org.Canal.Models.BusinessUnits.OrderLineItem> lineitems = new ArrayList<>();
@@ -142,10 +141,10 @@ public class CreateSalesOrder extends LockeState {
                         associatedPurchaseOrder.setId(npoid);
                         associatedPurchaseOrder.setOwner((Engine.getAssignedUser().getId()));
                         associatedPurchaseOrder.setOrderId(npoid);
-                        associatedPurchaseOrder.setVendor(selectSupplier.getSelectedValue());
-                        associatedPurchaseOrder.setBillTo(selectBillTo.getSelectedValue());
-                        associatedPurchaseOrder.setShipTo(selectShipTo.getSelectedValue());
-                        associatedPurchaseOrder.setPurchaseRequisition(availablePurchaseRequisitions.getSelectedValue());
+                        associatedPurchaseOrder.setVendor(selectSupplier.getText());
+                        associatedPurchaseOrder.setBillTo(selectBillTo.getText());
+                        associatedPurchaseOrder.setShipTo(selectShipTo.getText());
+                        associatedPurchaseOrder.setPurchaseRequisition(availablePurchaseRequisitions.getText());
                         associatedPurchaseOrder.setExpectedDelivery(expectedDelivery.getSelectedDateString());
                         associatedPurchaseOrder.setStatus(LockeStatus.NEW);
                         ArrayList<org.Canal.Models.BusinessUnits.OrderLineItem> li = new ArrayList<>();
@@ -173,7 +172,7 @@ public class CreateSalesOrder extends LockeState {
                                 t.setOwner(Engine.getAssignedUser().getId());
                                 t.setLocke(getLocke());
                                 t.setObjex(buyerObjexType.getSelectedValue());
-                                t.setLocation(selectBillTo.getSelectedValue());
+                                t.setLocation(selectBillTo.getText());
                                 t.setReference(orderId.value());
                                 t.setAmount(-1 * Double.parseDouble(model.getTotalPrice()));
                                 t.setCommitted(Constants.now());
@@ -194,12 +193,12 @@ public class CreateSalesOrder extends LockeState {
                         Delivery d = new Delivery();
                         d.setId(((String) Engine.codex("TRANS/ODO", "prefix") + 1000 + (Engine.getInboundDeliveries().size() + 1)));
                         d.setType("ODO");
-                        d.setName("Sales Order from " + selectBillTo.getSelectedValue());
+                        d.setName("Sales Order from " + selectBillTo.getText());
                         d.setSalesOrder(newSalesOrder.getOrderId());
                         d.setPurchaseOrder(newSalesOrder.getPurchaseOrder());
                         d.setExpectedDelivery(newSalesOrder.getExpectedDelivery());
-                        d.setOrigin(selectSupplier.getSelectedValue());
-                        d.setDestination(selectShipTo.getSelectedValue());
+                        d.setOrigin(selectSupplier.getText());
+                        d.setDestination(selectShipTo.getText());
                         d.setStatus(LockeStatus.PROCESSING);
                         Pipe.save("/TRANS/ODO", d);
                     }
@@ -215,8 +214,8 @@ public class CreateSalesOrder extends LockeState {
                         d.setSalesOrder(newSalesOrder.getOrderId());
                         d.setPurchaseOrder(newSalesOrder.getPurchaseOrder());
                         d.setExpectedDelivery(newSalesOrder.getExpectedDelivery());
-                        d.setOrigin(selectSupplier.getSelectedValue());
-                        d.setDestination(selectShipTo.getSelectedValue());
+                        d.setOrigin(selectSupplier.getText());
+                        d.setDestination(selectShipTo.getText());
                         d.setStatus(LockeStatus.PROCESSING);
                         Pipe.save("/TRANS/IDO", d);
                     }
@@ -229,7 +228,7 @@ public class CreateSalesOrder extends LockeState {
                             t.setOwner(Engine.getAssignedUser().getId());
                             t.setLocke(getLocke());
                             t.setObjex(buyerObjexType.getSelectedValue());
-                            t.setLocation(selectSupplier.getSelectedValue());
+                            t.setLocation(selectSupplier.getText());
                             t.setReference(orderId.value());
                             t.setAmount(Double.parseDouble(model.getTotalPrice()));
                             t.setCommitted(Constants.now());
@@ -249,17 +248,14 @@ public class CreateSalesOrder extends LockeState {
     }
 
     public void setSelectedSupplier(String supplierId){
-        selectSupplier.setSelectedValue(supplierId);
+        selectSupplier.setText(supplierId);
     }
 
     private JPanel orderInfoPanel(){
         Form f = new Form();
-        selectBillTo = Selectables.allLocations();
-        selectBillTo.editable();
-        selectShipTo = Selectables.allLocations();
-        selectShipTo.editable();
-        selectSupplier = Selectables.allLocations();
-        selectSupplier.editable();
+        selectBillTo = Elements.input(15);
+        selectShipTo = Elements.input();
+        selectSupplier = Elements.input();
         orderId = new Copiable("SO" + (60000000 + (Engine.orders.getSalesOrders().size() + 1)));
         f.addInput(Elements.coloredLabel("*New Order ID", Constants.colors[0]), orderId);
         f.addInput(Elements.coloredLabel("Vendor/Supplier", Constants.colors[1]), selectSupplier);
@@ -270,7 +266,7 @@ public class CreateSalesOrder extends LockeState {
 
     private JPanel moreOrderInfoPanel(){
         Form f = new Form();
-        JTextField ordered = new Copiable(LocalDate.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy")));
+        JTextField ordered = new Copiable(Constants.now());
         descriptionField = Elements.input();
         expectedDelivery = new DatePicker();
         f.addInput(Elements.coloredLabel("*Ordered", Constants.colors[10]), ordered);
@@ -399,8 +395,7 @@ public class CreateSalesOrder extends LockeState {
         for(PurchaseRequisition pr1 : Engine.orders.getPurchaseRequisitions()){
             prs.put(pr1.getId(), pr1.getId());
         }
-        availablePurchaseRequisitions = new Selectable(prs);
-        availablePurchaseRequisitions.editable();
+        availablePurchaseRequisitions = Elements.input();
         createInboundDelivery = new JCheckBox();
         if((boolean) Engine.codex("ORDS/SO", "create_buyer_inbound")){
             createInboundDelivery.setSelected(true);
@@ -415,6 +410,11 @@ public class CreateSalesOrder extends LockeState {
         f.addInput(Elements.coloredLabel("Truck ID/Number", Constants.colors[5]), inboundTruckId);
         p.add(f);
         return p;
+    }
+
+    private JPanel shipping(){
+        JPanel shipping = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        return shipping;
     }
 
     private JScrollPane notes(){

@@ -5,6 +5,7 @@ import ca.odell.glazedlists.EventList;
 import ca.odell.glazedlists.gui.TableFormat;
 import ca.odell.glazedlists.swing.EventTableModel;
 import org.Canal.UI.ColorUtil;
+import org.Canal.Utils.Engine;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -158,6 +159,8 @@ public class CustomTable extends JTable {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            Font defaultFont = UIManager.getFont("defaultFont");
+            c.setFont(defaultFont.deriveFont(Engine.getConfiguration().getFontSize() + 2));
             if (!isSelected) {
                 Color background = (row % 2 == 0) ? UIManager.getColor("Table.background") : UIManager.getColor("Table.alternateRowColor");
                 if (background == null) {
@@ -172,11 +175,24 @@ public class CustomTable extends JTable {
                         c.setForeground(new Color(243, 55, 55)); // Light red
                     }
                 }
+                if (value instanceof Boolean) {
+                    if ((boolean) value) {
+                        c.setForeground(new Color(9, 143, 14));
+                    } else {
+                        c.setForeground(new Color(243, 55, 55)); // Light red
+                    }
+                }
             } else {
                 c.setBackground(table.getSelectionBackground()); // Use selection background for selected rows
             }
             if (c instanceof JComponent) {
-                ((JComponent) c).setBorder(BorderFactory.createMatteBorder(1, 0, 0, 1, ColorUtil.adjustBrightness(UIManager.getColor("Panel.background"), 0.85f)));
+                ((JComponent) c).setBorder(
+                        BorderFactory.createCompoundBorder(
+                                ((JComponent) c).getBorder(), // Keep existing border
+                                BorderFactory.createEmptyBorder(5, 10, 5, 10) // top, left, bottom, right padding
+                        )
+//                        BorderFactory.createMatteBorder(1, 0, 0, 1, ColorUtil.adjustBrightness(UIManager.getColor("Panel.background"), 0.85f))
+                );
             }
             return c;
         }

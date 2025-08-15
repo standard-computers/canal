@@ -180,10 +180,16 @@ public class Selectables {
 
     public static Selectable ethnicities(){
         HashMap<String, String> statusTypes = new HashMap<>();
-        statusTypes.put("CAUCASION", "CAUCASION");
         statusTypes.put("AFRICAN", "AFRICAN");
-        statusTypes.put("NATIVE AMERICAN", "NATIVE AMERICAN");
         statusTypes.put("ASIAN", "ASIAN");
+        statusTypes.put("CAUCASIAN", "CAUCASIAN");
+        statusTypes.put("HISPANIC", "HISPANIC");
+        statusTypes.put("INDIAN", "INDIAN");
+        statusTypes.put("LATINO", "LATINO");
+        statusTypes.put("MIDDLE EASTERN", "MIDDLE EASTERN");
+        statusTypes.put("NATIVE AMERICAN", "NATIVE AMERICAN");
+        statusTypes.put("PACIFIC ISLANDER", "PACIFIC ISLANDER");
+        statusTypes.put("OTHER", "OTHER");
         return new Selectable(statusTypes);
     }
 
@@ -352,6 +358,7 @@ public class Selectables {
         statusTypes.put("Distribution Center", "/DCSS");
         statusTypes.put("Warehouse", "/WHS");
         statusTypes.put("Organization", "/ORGS");
+        statusTypes.put("Office", "/OFFS");
         Selectable s = new Selectable(statusTypes);
         s.setSelectedValue(preset);
         return s;

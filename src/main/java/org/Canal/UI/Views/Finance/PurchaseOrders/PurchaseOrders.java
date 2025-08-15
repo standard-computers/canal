@@ -8,7 +8,6 @@ import org.Canal.UI.Elements.LockeState;
 import org.Canal.UI.Views.System.CheckboxBarcodeFrame;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
-import org.Canal.Utils.LockeStatus;
 import org.Canal.Utils.RefreshListener;
 
 import javax.swing.*;
@@ -43,89 +42,69 @@ public class PurchaseOrders extends LockeState implements RefreshListener {
         add(tableScrollPane, BorderLayout.CENTER);
     }
 
-    private JScrollPane toolbar() {
+    private JPanel toolbar() {
 
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-        IconButton export = new IconButton("Export", "export", "Export as CSV");
-        IconButton importPOs = new IconButton("Import", "export", "Import as CSV");
+
+        if((boolean) Engine.codex.getValue("ORDS/PO", "import_enabled")){
+            IconButton importPOs = new IconButton("Import", "export", "Import as CSV");
+            tb.add(importPOs);
+            tb.add(Box.createHorizontalStrut(5));
+        }
+
+        if((boolean) Engine.codex.getValue("ORDS/PO", "export_enabled")){
+            IconButton export = new IconButton("Export", "export", "Export as CSV");
+            tb.add(export);
+            tb.add(Box.createHorizontalStrut(5));
+        }
+
         IconButton openSelected = new IconButton("Open", "open", "Open selected");
-        IconButton createPurchaseOrder = new IconButton("New PO", "create", "Build an item", "/ORDS/PO/NEW");
-        IconButton blockPO = new IconButton("Block", "block", "Block/Pause PO, can't be used");
-        IconButton suspendPO = new IconButton("Suspend", "suspend", "Suspend PO, can't be used");
-        IconButton activatePO = new IconButton("Start", "start", "Resume/Activate PO");
-        IconButton archivePO = new IconButton("Archive", "archive", "Archive PO, removes", "/ORDS/PO/ARCHV");
-        IconButton findPO = new IconButton("Find", "find", "Find by values", "/ORDS/PO/F");
-        IconButton labels = new IconButton("Labels", "label", "Print labels for org properties");
-        IconButton print = new IconButton("Print", "print", "Print selectes");
-        IconButton refresh = new IconButton("Refresh", "refresh", "Refresh data");
-        tb.add(export);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(importPOs);
-        tb.add(Box.createHorizontalStrut(5));
         tb.add(openSelected);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton createPurchaseOrder = new IconButton("New PO", "create", "Build an item", "/ORDS/PO/NEW");
         tb.add(createPurchaseOrder);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton blockPO = new IconButton("Block", "block", "Block/Pause PO, can't be used");
         tb.add(blockPO);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton suspendPO = new IconButton("Suspend", "suspend", "Suspend PO, can't be used");
         tb.add(suspendPO);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton activatePO = new IconButton("Start", "start", "Resume/Activate PO");
         tb.add(activatePO);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(archivePO);
-        tb.add(Box.createHorizontalStrut(5));
+
+        IconButton findPO = new IconButton("Find", "find", "Find by values", "/ORDS/PO/F");
         tb.add(findPO);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton labels = new IconButton("Labels", "label", "Print labels for org properties");
         tb.add(labels);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton print = new IconButton("Print", "print", "Print selectes");
+        labels.addActionListener(_ -> {
+            String[] printables = new String[Engine.orders.getPurchaseOrder().size()];
+            for (int i = 0; i < Engine.orders.getPurchaseOrder().size(); i++) {
+                printables[i] = Engine.orders.getPurchaseOrder().get(i).getOrderId();
+            }
+            new CheckboxBarcodeFrame(printables);
+        });
         tb.add(print);
         tb.add(Box.createHorizontalStrut(5));
+
+
+        IconButton refresh = new IconButton("Refresh", "refresh", "Refresh data");
+        refresh.addActionListener(e -> refresh());
         tb.add(refresh);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));
-        blockPO.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                String prId = JOptionPane.showInputDialog("Enter Purchase Requision ID");
-                PurchaseOrder pr = Engine.orders.getPurchaseOrder(prId);
-                if(pr != null) {
-                    pr.setStatus(LockeStatus.BLOCKED);
-                    pr.save();
-                    refresh();
-                }
-            }
-        });
-        suspendPO.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                String prId = JOptionPane.showInputDialog("Enter Purchase Requision ID");
-                PurchaseOrder pr = Engine.orders.getPurchaseOrder(prId);
-                if(pr != null) {
-                    pr.setStatus(LockeStatus.BLOCKED);
-                    pr.save();
-                    refresh();
-                }
-            }
-        });
-        activatePO.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                String prId = JOptionPane.showInputDialog("Enter Purchase Requision ID");
-                PurchaseOrder pr = Engine.orders.getPurchaseOrder(prId);
-                if(pr != null) {
-                    pr.setStatus(LockeStatus.BLOCKED);
-                    pr.save();
-                    refresh();
-                }
-            }
-        });
-        labels.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                String[] printables = new String[Engine.orders.getPurchaseOrder().size()];
-                for (int i = 0; i < Engine.orders.getPurchaseOrder().size(); i++) {
-                    printables[i] = Engine.orders.getPurchaseOrder().get(i).getOrderId();
-                }
-                new CheckboxBarcodeFrame(printables);
-            }
-        });
-        return Elements.scrollPane(tb);
+
+        return tb;
     }
 
     private CustomTable table() {
@@ -141,6 +120,7 @@ public class PurchaseOrders extends LockeState implements RefreshListener {
                 "Sold To",
                 "Customer",
                 "Total",
+                "Lines",
                 "Items",
                 "Created",
                 "Status",
@@ -160,11 +140,26 @@ public class PurchaseOrders extends LockeState implements RefreshListener {
                     po.getCustomer(),
                     po.getTotal(),
                     po.getItems().size(),
+                    po.getTotalItems(),
                     po.getCreated(),
                     String.valueOf(po.getStatus())
             });
         }
-        return new CustomTable(columns, pos);
+        CustomTable nt = new CustomTable(columns, pos);
+        nt.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    JTable t = (JTable) e.getSource();
+                    int row = t.getSelectedRow();
+                    if (row != -1) {
+                        String v = String.valueOf(t.getValueAt(row, 1));
+                        desktop.put(new ViewPurchaseOrder(Engine.orders.getPurchaseOrder(v), desktop, PurchaseOrders.this));
+                    }
+                }
+            }
+        });
+        return nt;
     }
 
     @Override

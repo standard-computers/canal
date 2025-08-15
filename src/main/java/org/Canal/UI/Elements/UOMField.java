@@ -34,4 +34,8 @@ public class UOMField extends JPanel {
     public String getUOM(){
         return uom.getSelectedValue();
     }
+
+    public void setUOM(String value){
+        uom.setSelectedValue(value);
+    }
 }

@@ -28,10 +28,6 @@ public class Location extends Objex {
     private String lengthUOM;
     private double height;
     private String heightUOM;
-    private double area; //Square area of warehouse
-    private String areaUOM;
-    private double volume;
-    private String volumeUOM;
     private ArrayList<Department> departments = new ArrayList<>();
 
     public String getType() {
@@ -179,35 +175,19 @@ public class Location extends Objex {
     }
 
     public double getArea() {
-        return area;
-    }
-
-    public void setArea(double area) {
-        this.area = area;
+        return width * length;
     }
 
     public String getAreaUOM() {
-        return areaUOM;
-    }
-
-    public void setAreaUOM(String areaUOM) {
-        this.areaUOM = areaUOM;
+        return widthUOM + "2";
     }
 
     public double getVolume() {
-        return volume;
-    }
-
-    public void setVolume(double volume) {
-        this.volume = volume;
+        return width * length * height;
     }
 
     public String getVolumeUOM() {
-        return volumeUOM;
-    }
-
-    public void setVolumeUOM(String volumeUOM) {
-        this.volumeUOM = volumeUOM;
+        return heightUOM + "3";
     }
 
     public ArrayList<Department> getDepartments() {

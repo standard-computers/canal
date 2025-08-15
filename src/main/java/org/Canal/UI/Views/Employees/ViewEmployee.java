@@ -5,12 +5,13 @@ import org.Canal.UI.Elements.CustomTabbedPane;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.Copiable;
 import org.Canal.UI.Elements.LockeState;
+import org.Canal.Utils.DesktopState;
+import org.Canal.Utils.Engine;
 import org.Canal.Utils.LockeStatus;
+import org.Canal.Utils.RefreshListener;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 /**
  * /EMPS/$[EMPLOYEE_ID]
@@ -18,11 +19,17 @@ import java.awt.event.MouseEvent;
 public class ViewEmployee extends LockeState {
 
     private Employee employee;
+    private DesktopState desktop;
+    private RefreshListener refreshListener;
 
-    public ViewEmployee(Employee employee) {
-        super(employee.getId() + " - " + employee.getName(), "/EMPS/$", false, true, false, true);
-        this.employee = employee;
+    public ViewEmployee(Employee employee, DesktopState desktop, RefreshListener refreshListener) {
+
+        super(employee.getId() + " - " + employee.getName(), "/EMPS/" + employee.getId(), false, true, false, true);
         setFrameIcon(new ImageIcon(Employees.class.getResource("/icons/employees.png")));
+        this.employee = employee;
+        this.desktop = desktop;
+        this.refreshListener = refreshListener;
+
         CustomTabbedPane tabbedPane = new CustomTabbedPane();
 
         JScrollPane positionsHeld = new JScrollPane();
@@ -52,66 +59,53 @@ public class ViewEmployee extends LockeState {
     private JPanel toolbar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-        IconButton email = new IconButton("Email", "email", "Email Employee");
+
+        if((boolean) Engine.codex.getValue("EMPS", "enable_email_option")) {
+            if(!employee.getEmail().isEmpty()){
+
+                IconButton email = new IconButton("Email", "email", "Email Employee");
+                email.addActionListener(e -> {
+                    try {
+                        String mailto = "mailto:" + employee.getEmail();
+                        Desktop.getDesktop().mail(new java.net.URI(mailto));
+                    } catch (Exception d) {
+                        d.printStackTrace();
+                        JOptionPane.showMessageDialog(null, "Unable to open the email client.", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                });
+                tb.add(email);
+                tb.add(Box.createHorizontalStrut(5));
+            }
+        }
+
         IconButton giveFeedback = new IconButton("Feedback", "feedback", "Give Feedback");
-        IconButton performReview = new IconButton("Review", "invoices", "New Performance Review");
-        IconButton writeup = new IconButton("Writeup", "delinquent", "Writeup Employee");
-        IconButton suspend = new IconButton("Suspend", "blocked", "Suspend Employee");
-        IconButton label = new IconButton("Labels", "label", "Print labels for properties (like for badges)");
-        tb.add(email);
-        tb.add(Box.createHorizontalStrut(5));
         tb.add(giveFeedback);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton performReview = new IconButton("Review", "invoices", "New Performance Review");
         tb.add(performReview);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton writeup = new IconButton("Writeup", "delinquent", "Writeup Employee");
         tb.add(writeup);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton modify = new IconButton("Modify", "modify", "Modify Employee");
+        modify.addActionListener(e -> {
+            dispose();
+            desktop.put(new ModifyEmployee(employee, desktop, refreshListener));
+        });
+        tb.add(modify);
+        tb.add(Box.createHorizontalStrut(5));
+
+        IconButton suspend = new IconButton("Suspend", "blocked", "Suspend Employee");
+        suspend.addActionListener(e -> {
+            employee.setStatus(LockeStatus.SUSPENDED);
+            employee.save();
+        });
         tb.add(suspend);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(label);
-        email.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e){
-                try {
-                    String mailto = "mailto:" + employee.getEmail();
-                    Desktop.getDesktop().mail(new java.net.URI(mailto));
-                } catch (Exception d) {
-                    d.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Unable to open the email client.", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        });
-        giveFeedback.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e){
 
-            }
-        });
-        performReview.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-
-            }
-        });
-        writeup.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-
-            }
-        });
-        suspend.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                employee.setStatus(LockeStatus.SUSPENDED);
-                employee.save();
-            }
-        });
-        label.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-
-            }
-        });
         return tb;
     }
 }

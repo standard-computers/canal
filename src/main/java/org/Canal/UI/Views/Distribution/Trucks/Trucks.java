@@ -60,12 +60,11 @@ public class Trucks extends LockeState implements RefreshListener {
     private JPanel toolbar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-        IconButton export = new IconButton("Export", "export", "Export as CSV");
+        IconButton export = new IconButton("", "export", "Export as CSV");
         IconButton importTrucks = new IconButton("Import", "export", "Import as CSV");
         IconButton createTruck = new IconButton("New", "create", "Create a Truck", "/TRANS/TRCKS/NEW");
         IconButton modifyTruck = new IconButton("Modify", "modify", "Modify a Truck", "/TRANS/TRCKS/MOD");
         IconButton archiveTruck = new IconButton("Archive", "archive", "Archive a Truck", "/TRANS/TRCKS/ARCHV");
-        IconButton removeTruck = new IconButton("Remove", "delete", "Delete a Truck");
         IconButton refresh = new IconButton("Refresh", "refresh", "Refresh Data");
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));
@@ -76,8 +75,6 @@ public class Trucks extends LockeState implements RefreshListener {
         tb.add(modifyTruck);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(archiveTruck);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(removeTruck);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(refresh);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -92,12 +89,6 @@ public class Trucks extends LockeState implements RefreshListener {
             public void mouseClicked(MouseEvent e) {
                 JFileChooser fc = new JFileChooser();
 
-            }
-        });
-        removeTruck.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                desktop.put(new Deleter("/TRANS/TRCKS", Trucks.this));
             }
         });
         refresh.addMouseListener(new MouseAdapter() {
@@ -133,7 +124,8 @@ public class Trucks extends LockeState implements RefreshListener {
                     truck.getName(),
                     truck.getNumber(),
                     truck.getCarrier(),
-                    carrier.getName(),
+                    "",
+//                    (!carrier.getName().isEmpty() ? carrier.getName() : ""),
                     truck.getDriver(),
                     0,
                     "0.0",

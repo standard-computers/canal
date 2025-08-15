@@ -18,6 +18,7 @@ import org.Canal.UI.Views.Departments.DeleteDepartment;
 import org.Canal.UI.Views.Finance.Accounts.Accounts;
 import org.Canal.UI.Views.Finance.Accounts.CreateAccount;
 import org.Canal.UI.Views.Finance.PurchaseOrders.*;
+import org.Canal.UI.Views.Items.ModifyItem;
 import org.Canal.UI.Views.People.CreatePerson;
 import org.Canal.UI.Views.People.People;
 import org.Canal.UI.Views.Positions.Positions;
@@ -43,10 +44,10 @@ import org.Canal.UI.Views.Notes.Notes;
 import org.Canal.UI.Views.Distribution.OutboundDeliveryOrders.CreateOutboundDeliveryOrder;
 import org.Canal.UI.Views.Distribution.OutboundDeliveryOrders.OutboundDeliveries;
 import org.Canal.UI.Views.Positions.CreatePosition;
-import org.Canal.UI.Views.Products.Items.CreateItem;
-import org.Canal.UI.Views.Products.Items.ViewItem;
-import org.Canal.UI.Views.Products.Items.Items;
-import org.Canal.UI.Views.System.CanalSettings;
+import org.Canal.UI.Views.Items.CreateItem;
+import org.Canal.UI.Views.Items.ViewItem;
+import org.Canal.UI.Views.Items.Items;
+import org.Canal.UI.Views.System.RatioSettings;
 import org.Canal.UI.Views.System.QuickExplorer;
 import org.Canal.UI.Views.Teams.CreateTeam;
 import org.Canal.UI.Views.Teams.Teams;
@@ -188,6 +189,18 @@ public class Engine {
 
     public static Area getArea(String id) {
         return getAreas().stream().filter(c -> c.getId().equals(id)).toList().stream().findFirst().orElse(null);
+    }
+
+    public static Bin getBin(String id) {
+        ArrayList<Area> areas = getAreas();
+        for (Area area : areas) {
+            for(Bin b : area.getBins()) {
+                if(b.getId().equals(id)) {
+                    return b;
+                }
+            }
+        }
+        return null;
     }
 
     public static ArrayList<Employee> getEmployees() {
@@ -487,7 +500,7 @@ public class Engine {
                 return new CreateLocation("/CCS", desktop, null);
             }
             case "/AREAS" -> {
-                return new Areas();
+                return new Areas(desktop);
             }
             case "/AREAS/NEW" -> {
                 return new CreateArea(null, null);
@@ -527,6 +540,9 @@ public class Engine {
             }
             case "/DCSS/NEW" -> {
                 return new CreateLocation("/DCSS", desktop, null);
+            }
+            case "/OFFS" -> {
+                return new Locations("/OFFS", desktop);
             }
             case "/TRANS/ODO" -> {
                 return new OutboundDeliveries(desktop);
@@ -579,11 +595,21 @@ public class Engine {
             case "/EMPS" -> {
                 return new Employees(desktop);
             }
+            case "/EMPS/O" -> {
+                String eid = JOptionPane.showInputDialog(null, "Enter Employee ID", "Employee ID", JOptionPane.QUESTION_MESSAGE);
+                Employee e = Engine.getEmployee(eid);
+                return new ViewEmployee(e, desktop, null);
+            }
             case "/EMPS/NEW" -> {
-                return new CreateEmployee(desktop, false);
+                return new CreateEmployee(desktop, null);
             }
             case "/PPL" -> {
                 return new People(desktop);
+            }
+            case "/PPL/O" -> {
+                String pid = JOptionPane.showInputDialog(null, "Enter Person ID", "Person ID", JOptionPane.QUESTION_MESSAGE);
+                Employee e = Engine.getEmployee(pid);
+                return new ViewEmployee(e, desktop, null);
             }
             case "/PPL/NEW" -> {
                 return new CreatePerson(desktop, false);
@@ -592,7 +618,7 @@ public class Engine {
                 return new Departments(desktop);
             }
             case "/DPTS/NEW" -> {
-                return new CreateDepartment(desktop);
+                return new CreateDepartment(desktop, null);
             }
             case "/DPTS/DEL" -> {
                 return new DeleteDepartment();
@@ -606,11 +632,16 @@ public class Engine {
             case "/USRS" -> {
                 return new Users(desktop);
             }
+            case "/USRS/O" -> {
+                String uid = JOptionPane.showInputDialog(null, "Enter User ID", "User ID", JOptionPane.QUESTION_MESSAGE);
+                User e = Engine.getUser(uid);
+                return new ViewUser(desktop, e);
+            }
             case "/USRS/CHG_PSSWD" -> {
                 return new ChangeUserPassword();
             }
             case "/USRS/NEW" -> {
-                return new CreateUser();
+                return new CreateUser(desktop, null);
             }
             case "/STK", "/INV" -> {
                 return new ViewInventory(desktop, Engine.getOrganization().getId());
@@ -630,8 +661,21 @@ public class Engine {
             case "/ITS" -> {
                 return new Items(desktop);
             }
+            case "/ITS/O" -> {
+                String eid = JOptionPane.showInputDialog(null, "Enter Item ID", "Item ID", JOptionPane.QUESTION_MESSAGE);
+                Item i = Engine.products.getItem(eid);
+                return new ViewItem(i, desktop, null);
+            }
+            case "/ITS/F" -> {
+                return new Items(desktop);
+            }
             case "/ITS/NEW" -> {
-                return new CreateItem(desktop);
+                return new CreateItem(desktop, null);
+            }
+            case "/ITS/MOD" -> {
+                String eid = JOptionPane.showInputDialog(null, "Enter Item ID", "Item ID", JOptionPane.QUESTION_MESSAGE);
+                Item i = Engine.products.getItem(eid);
+                return new ModifyItem(i, null);
             }
             case "/ORDS/PO" -> {
                 return new PurchaseOrders(desktop);
@@ -642,8 +686,13 @@ public class Engine {
             case "/ORDS/PO/AUTO_MK" -> {
                 return new AutoMakePurchaseOrders();
             }
+            case "/ORDS/PO/O" -> {
+                String poId = JOptionPane.showInputDialog(null, "Enter Purchase Order ID", "Purchase Order ID", JOptionPane.QUESTION_MESSAGE);
+                PurchaseOrder e = Engine.orders.getPurchaseOrder(poId);
+                return new ViewPurchaseOrder(e, desktop, null);
+            }
             case "/ORDS/RCV" -> {
-                return new ReceiveOrder(Engine.getOrganization().getId(), desktop);
+                return new ReceiveOrder(Engine.getOrganization().getId(), desktop, null);
             }
             case "/ORDS/RTRN" -> {
                 return new ReturnOrder(desktop);
@@ -679,7 +728,7 @@ public class Engine {
                 return new InventoryForMaterial();
             }
             case "/SHPS/RCV" -> {
-                return new ReceiveOrder("", desktop);
+                return new ReceiveOrder("", desktop, null);
             }
             case "/NTS" -> {
                 return new Notes();
@@ -706,7 +755,7 @@ public class Engine {
                 return new Positions(desktop);
             }
             case "/HR/POS/NEW" -> {
-                return new CreatePosition(desktop);
+                return new CreatePosition(desktop, null);
             }
             case "/DATA_CNTR" -> {
                 return new DataCenter();
@@ -727,7 +776,7 @@ public class Engine {
                 return new TimeClock(desktop);
             }
             case "/CNL" -> {
-                return new CanalSettings(desktop);
+                return new RatioSettings(desktop);
             }
             case "/LOGIN" -> {
                 return new Login(true);
@@ -812,7 +861,7 @@ public class Engine {
             case "ITS" -> {
                 Item i = Engine.products.getItem(oid);
                 if(i != null){
-                    return new ViewItem(i);
+                    return new ViewItem(i, desktop, null);
                 }
             }
             case "USRS" -> {
@@ -824,7 +873,7 @@ public class Engine {
             case "EMPS" -> {
                 for(Employee e : Engine.getEmployees()){
                     if(e.getId().equals(oid)){
-                        return new ViewEmployee(e);
+                        return new ViewEmployee(e, desktop, null);
                     }
                 }
             }

@@ -29,7 +29,7 @@ public class InboundDeliveries extends LockeState implements RefreshListener {
 
     public InboundDeliveries(DesktopState desktop) {
 
-        super("Inbound Deliveries", "/TRANS/IDO", false, true, false, true);
+        super("Inbound Deliveries", "/TRANS/IDO", true, true, true, true);
         setFrameIcon(new ImageIcon(InboundDeliveries.class.getResource("/icons/inbound.png")));
 
         this.desktop = desktop;
@@ -58,7 +58,7 @@ public class InboundDeliveries extends LockeState implements RefreshListener {
     private JPanel toolbar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-        IconButton export = new IconButton("Export", "export", "Export as CSV");
+        IconButton export = new IconButton("", "export", "Export as CSV");
         IconButton createIDO = new IconButton("Create IDO", "create", "Build an Inbound Delivery");
         IconButton blockIDO = new IconButton("Block", "block", "Block/Pause IDO, can't be used");
         IconButton suspendIDO = new IconButton("Suspend", "suspend", "Suspend IDO, can't be used");
@@ -123,7 +123,7 @@ public class InboundDeliveries extends LockeState implements RefreshListener {
         };
         ArrayList<Object[]> data = new ArrayList<>();
         for (Delivery delivery : Engine.getInboundDeliveries()) {
-            if(!delivery.getStatus().equals(LockeStatus.DELIVERED)) {
+            if(!delivery.getStatus().equals(LockeStatus.ARCHIVED)) {
                 data.add(new Object[]{
                         delivery.getId(),
                         delivery.getName(),
@@ -133,7 +133,8 @@ public class InboundDeliveries extends LockeState implements RefreshListener {
                         delivery.getExpectedDelivery(),
                         delivery.getOrigin(),
                         delivery.getDestination(),
-                        Engine.getLocation(delivery.getDestination(), "CCS").getName(),
+//                        Engine.getLocation(delivery.getDestination(), "CCS").getName(),
+                        "",
                         delivery.getDestinationArea(),
                         delivery.getDestinationDoor(),
                         delivery.getTotal(),

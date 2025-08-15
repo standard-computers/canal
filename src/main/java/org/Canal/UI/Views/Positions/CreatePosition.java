@@ -25,6 +25,7 @@ import java.util.ArrayList;
 public class CreatePosition extends LockeState {
 
     private DesktopState desktop;
+    private RefreshListener refreshListener;
     private JTextField positionIdField;
     private Selectable organizations;
     private JTextField positionNameField;
@@ -39,11 +40,12 @@ public class CreatePosition extends LockeState {
     private ArrayList<Employee> employees = new ArrayList<>();
     private CustomTable employeesTable;
 
-    public CreatePosition(DesktopState desktop) {
+    public CreatePosition(DesktopState desktop, RefreshListener refreshListener) {
 
         super("Create a Position", "/HR/POS/NEW", false, true, false, true);
         setFrameIcon(new ImageIcon(CreatePosition.class.getResource("/icons/create.png")));
         this.desktop = desktop;
+        this.refreshListener = refreshListener;
 
         CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.addTab("General", general());
@@ -79,9 +81,19 @@ public class CreatePosition extends LockeState {
                 position.setCommission(isCommissionable.isSelected());
                 position.setStatus(LockeStatus.NEW);
                 Pipe.save("/HR/POS", position);
+
+                if((boolean) Engine.codex.getValue("HR/POS", "item_created_alert")){
+                    JOptionPane.showMessageDialog(null, "Position succesfully created!");
+                }
                 dispose();
-                JOptionPane.showMessageDialog(null, "Position succesfully created!");
-                desktop.put(new ViewPosition(position));
+
+                if(refreshListener != null){
+                    refreshListener.refresh();
+                }
+
+                if((boolean) Engine.codex.getValue("HR/POS", "auto_open_new")){
+                    desktop.put(new ViewPosition(position));
+                }
             }
         });
         return tb;

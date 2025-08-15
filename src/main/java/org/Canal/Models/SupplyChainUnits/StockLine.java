@@ -1,19 +1,20 @@
 package org.Canal.Models.SupplyChainUnits;
 
+import org.Canal.Models.Objex;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.LockeStatus;
 
-public class StockLine {
+public class StockLine extends Objex {
 
     private String objex; //Items, MTS, or CMPS ID
     private String hu;
-    private String id;
+    private String sku;
     private double quantity;
     private String unitOfMeasure;
+    private String batch;
     private String area;
     private String bin;
     private String receipt;
-    private LockeStatus status;
 
     public StockLine(String objex, String id, double quantity, String area, String bin) {
         this.objex = objex;
@@ -42,12 +43,12 @@ public class StockLine {
         this.hu = hu;
     }
 
-    public String getId() {
-        return id;
+    public String getSku() {
+        return sku;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setSku(String sku) {
+        this.sku = sku;
     }
 
     public double getQuantity() {
@@ -64,6 +65,14 @@ public class StockLine {
 
     public void setUnitOfMeasure(String unitOfMeasure) {
         this.unitOfMeasure = unitOfMeasure;
+    }
+
+    public String getBatch() {
+        return batch;
+    }
+
+    public void setBatch(String batch) {
+        this.batch = batch;
     }
 
     public String getArea() {
@@ -88,13 +97,5 @@ public class StockLine {
 
     public void setReceipt(String receipt) {
         this.receipt = receipt;
-    }
-
-    public LockeStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(LockeStatus status) {
-        this.status = status;
     }
 }

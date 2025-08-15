@@ -21,7 +21,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 /**
- * /EMPS
+ * /ACCS
  */
 public class Accounts extends LockeState implements RefreshListener {
 
@@ -51,7 +51,7 @@ public class Accounts extends LockeState implements RefreshListener {
                     int row = target.getSelectedRow();
                     if (row != -1) {
                         String value = String.valueOf(target.getValueAt(row, 1));
-                        desktop.put(new ViewEmployee(Engine.getEmployee(value)));
+                        desktop.put(new ViewEmployee(Engine.getEmployee(value), desktop, Accounts.this));
                     }
                 }
             }
@@ -59,49 +59,46 @@ public class Accounts extends LockeState implements RefreshListener {
     }
 
     private JPanel toolbar() {
+
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-        IconButton export = new IconButton("Export", "export", "Export as CSV", "");
-        IconButton importEmployees = new IconButton("Import", "export", "Import as CSV", "");
-        IconButton createEmployee = new IconButton("New", "create", "Create Employee", "/EMPS/NEW");
-        IconButton modifyEmployee = new IconButton("Modify", "modify", "Modify an Employee", "/EMPS/MOD");
-        IconButton archiveEmployee = new IconButton("Archive", "archive", "Archive an Employee", "/EMPS/ARCHV");
-        IconButton removeEmployee = new IconButton("Remove", "delete", "Delete an Employee", "/EMPS/DEL");
-        IconButton advancedFine = new IconButton("Find", "find", "Find by Values", "/EMPS/F");
-        IconButton refresh = new IconButton("Refresh", "refresh", "Refresh data");
-        tb.add(export);
+
+        IconButton open = new IconButton("Open", "open", "Open Account", "/ACCS/O");
+        tb.add(open);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(importEmployees);
+
+        IconButton create = new IconButton("New", "create", "Create Account", "/ACCS/NEW");
+        tb.add(create);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(createEmployee);
+
+        IconButton find = new IconButton("Find", "find", "Find by Account", "/ACCS/F");
+        tb.add(find);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(modifyEmployee);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(archiveEmployee);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(removeEmployee);
-        tb.add(removeEmployee);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(advancedFine);
-        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+        IconButton export = new IconButton("", "export", "Export as CSV", "");
         export.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 table.exportToCSV();
             }
         });
+        tb.add(export);
+        tb.add(Box.createHorizontalStrut(5));
+
+        IconButton refresh = new IconButton("", "refresh", "Refresh data");
         refresh.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 refresh();
             }
         });
+        tb.add(refresh);
+        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
         return tb;
     }
 
     private CustomTable table() {
-        String[] columns = new String[]{
-        };
+        String[] columns = new String[]{};
         ArrayList<Object[]> data = new ArrayList<>();
         for (Employee employee : Engine.getEmployees()) {
             Position p = Engine.getPosition(employee.getPosition());

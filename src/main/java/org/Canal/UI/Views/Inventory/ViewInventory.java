@@ -50,7 +50,6 @@ public class ViewInventory extends LockeState implements RefreshListener {
 
         String[] columns = new String[]{
                 "Location",
-                "Type",
                 "HU",
                 "ID",
                 "Name",
@@ -70,7 +69,6 @@ public class ViewInventory extends LockeState implements RefreshListener {
             Item i = Engine.products.getItem(sl.getId());
             stks.add(new Object[]{
                     location,
-                    sl.getObjex(),
                     sl.getHu(),
                     sl.getId(),
                     i.getName(),
@@ -93,22 +91,22 @@ public class ViewInventory extends LockeState implements RefreshListener {
 
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-        IconButton export = new IconButton("Export", "export", "Export as CSV");
         IconButton blockPo = new IconButton("Block", "block", "Block/Pause PO, can't be used");
         IconButton move = new IconButton("Move", "start", "Move Inventory (Internally)");
         IconButton movements = new IconButton("Movements", "movements", "View stock movements");
-        IconButton archivePo = new IconButton("Archive", "archive", "Archive PO, removes");
+        IconButton inventoryValuation = new IconButton("Valuation", "autoprice", "Valuate this inventory");
+        IconButton export = new IconButton("", "export", "Export as CSV");
         IconButton label = new IconButton("Barcodes", "label", "Print labels for org properties");
         JTextField filterValue = Elements.input(location, 10);
-        tb.add(export);
-        tb.add(Box.createHorizontalStrut(5));
         tb.add(blockPo);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(move);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(movements);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(archivePo);
+        tb.add(inventoryValuation);
+        tb.add(Box.createHorizontalStrut(5));
+        tb.add(export);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(label);
         tb.add(Box.createHorizontalStrut(5));
@@ -158,7 +156,6 @@ public class ViewInventory extends LockeState implements RefreshListener {
 
         String[] columns = new String[]{
                 "Location",
-                "Type",
                 "HU",
                 "ID",
                 "Name",
@@ -176,7 +173,6 @@ public class ViewInventory extends LockeState implements RefreshListener {
             Item i = Engine.products.getItem(sl.getId());
             stks.add(new String[]{
                     id,
-                    sl.getObjex(),
                     sl.getHu(),
                     sl.getId(),
                     i.getName(),

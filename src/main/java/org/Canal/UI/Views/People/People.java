@@ -9,6 +9,7 @@ import org.Canal.UI.Elements.LockeState;
 import org.Canal.UI.Views.Employees.ViewEmployee;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
+import org.Canal.Utils.RefreshListener;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 /**
  * /PPL
  */
-public class People extends LockeState {
+public class People extends LockeState implements RefreshListener {
 
     private CustomTable table;
 
@@ -45,7 +46,7 @@ public class People extends LockeState {
                     int row = target.getSelectedRow();
                     if (row != -1) {
                         String value = String.valueOf(target.getValueAt(row, 1));
-                        desktop.put(new ViewEmployee(Engine.getEmployee(value)));
+                        desktop.put(new ViewEmployee(Engine.getEmployee(value), desktop, People.this));
                     }
                 }
             }
@@ -55,12 +56,11 @@ public class People extends LockeState {
     private JPanel toolbar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-        IconButton export = new IconButton("Export", "export", "Export as CSV", "");
+        IconButton export = new IconButton("", "export", "Export as CSV", "");
         IconButton importEmployees = new IconButton("Import", "export", "Import as CSV", "");
         IconButton createEmployee = new IconButton("New", "create", "Create Employee", "/PPL/NEW");
         IconButton modifyEmployee = new IconButton("Modify", "modify", "Modify an Employee", "/PPL/MOD");
         IconButton archiveEmployee = new IconButton("Archive", "archive", "Archive an Employee", "/PPL/ARCHV");
-        IconButton removeEmployee = new IconButton("Remove", "delete", "Delete an Employee", "/PPL/DEL");
         IconButton advancedFine = new IconButton("Find", "find", "Find by Values", "/PPL/F");
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));
@@ -71,9 +71,6 @@ public class People extends LockeState {
         tb.add(modifyEmployee);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(archiveEmployee);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(removeEmployee);
-        tb.add(removeEmployee);
         tb.add(Box.createHorizontalStrut(5));
         tb.add(advancedFine);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -134,5 +131,10 @@ public class People extends LockeState {
             });
         }
         return new CustomTable(columns, data);
+    }
+
+    @Override
+    public void refresh() {
+
     }
 }
