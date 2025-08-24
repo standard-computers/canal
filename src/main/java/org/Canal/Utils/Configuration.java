@@ -2,9 +2,8 @@ package org.Canal.Utils;
 
 public class Configuration {
 
-    private String endpoint = "127.0.0.1";
-    private String instance_name = "Canal";
-    private String product_key = "";
+    private String endpoint = "127.0.0.1"; //Server endpoint connection string
+    private String mongodb = "mongodb://localhost:27017"; //MongoDB Server connection string
     private String theme = "/com/formdev/flatlaf/intellijthemes/themes/SolarizedDark.theme.json";
     private String background;
     private String assignedUser; //ID of User this instance of Canal is assigned to
@@ -17,8 +16,16 @@ public class Configuration {
         return endpoint;
     }
 
-    public String getInstance_name() {
-        return instance_name;
+    public void setEndpoint(String endpoint) {
+        this.endpoint = endpoint;
+    }
+
+    public String getMongodb() {
+        return mongodb;
+    }
+
+    public void setMongodb(String mongodb) {
+        this.mongodb = mongodb;
     }
 
     public String getTheme() {
@@ -79,6 +86,6 @@ public class Configuration {
 
     @Override
     public String toString() {
-        return instance_name;
+        return endpoint;
     }
 }

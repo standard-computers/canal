@@ -1,7 +1,6 @@
 package org.Canal.UI.Views.Controllers;
 
 import org.Canal.Models.HumanResources.User;
-import org.Canal.UI.Elements.Elements;
 import org.Canal.Utils.*;
 
 import javax.swing.*;
@@ -16,11 +15,11 @@ public class Controller extends JPanel implements RefreshListener {
 
     private JTree dataTree;
     private DesktopState desktop;
+    private User me = Engine.getAssignedUser();
 
     public Controller(DesktopState desktop) {
 
         this.desktop = desktop;
-        User me = Engine.getAssignedUser();
         setLayout(new BorderLayout());
         dataTree = createTree();
         dataTree.addMouseListener(new MouseAdapter() {
@@ -98,7 +97,9 @@ public class Controller extends JPanel implements RefreshListener {
         DefaultMutableTreeNode treeNode = new DefaultMutableTreeNode(node);
         if (node.getChildren() != null) {
             for (Locke child : node.getChildren()) {
-                treeNode.add(createTreeNodes(child));
+                if(me.hasAccess(child.getTransaction())) {
+                    treeNode.add(createTreeNodes(child));
+                }
             }
         }
         return treeNode;

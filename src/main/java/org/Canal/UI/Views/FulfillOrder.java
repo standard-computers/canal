@@ -78,7 +78,7 @@ public class FulfillOrder extends LockeState {
             }
             private void onChange() {
                 String poId = poNumber.getText();
-                PurchaseOrder foundPo = Engine.orders.getPurchaseOrder(poId);
+                PurchaseOrder foundPo = Engine.getPurchaseOrder(poId);
                 if(foundPo != null){
                     order = foundPo;
                     ArrayList<Object[]> its = new ArrayList<>();
@@ -113,7 +113,7 @@ public class FulfillOrder extends LockeState {
             }
             private void onChange() {
                 String poId = soNumber.getText();
-                SalesOrder foundSalesOrder = Engine.orders.getSalesOrder(poId);
+                SalesOrder foundSalesOrder = Engine.getSalesOrder(poId);
                 if(foundSalesOrder != null){
                     ArrayList<Object[]> its = new ArrayList<>();
                     ArrayList<OrderLineItem> items = foundSalesOrder.getItems();
@@ -187,8 +187,8 @@ public class FulfillOrder extends LockeState {
                                         d.save();
                                     }
                                 }
-                                order = Engine.orders.getPurchaseOrder(poNum);
-                                SalesOrder so = Engine.orders.getSalesOrder(soNum);
+                                order = Engine.getPurchaseOrder(poNum);
+                                SalesOrder so = Engine.getSalesOrder(soNum);
                                 if(od != null){
                                     od.setStatus(LockeStatus.FULFILLED);
                                     od.save();

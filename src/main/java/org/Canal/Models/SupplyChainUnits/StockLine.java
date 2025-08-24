@@ -2,12 +2,14 @@ package org.Canal.Models.SupplyChainUnits;
 
 import org.Canal.Models.Objex;
 import org.Canal.Utils.Constants;
+import org.Canal.Utils.Engine;
 import org.Canal.Utils.LockeStatus;
 
 public class StockLine extends Objex {
 
     private String objex; //Items, MTS, or CMPS ID
     private String hu;
+    private String item;
     private String sku;
     private double quantity;
     private String unitOfMeasure;
@@ -16,10 +18,12 @@ public class StockLine extends Objex {
     private String bin;
     private String receipt;
 
-    public StockLine(String objex, String id, double quantity, String area, String bin) {
+    public StockLine(String objex, String item, String sku, double quantity, String area, String bin) {
         this.objex = objex;
         this.hu = Constants.generateId(10);
-        this.id = id;
+        this.item = item;
+        this.sku = sku;
+        this.id = Constants.generateId((Integer) Engine.codex.getValue("STL", "length"));
         this.quantity = quantity;
         this.area = area;
         this.bin = bin;
@@ -41,6 +45,10 @@ public class StockLine extends Objex {
 
     public void setHu(String hu) {
         this.hu = hu;
+    }
+
+    public String getItem() {
+        return item;
     }
 
     public String getSku() {

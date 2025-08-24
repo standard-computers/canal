@@ -18,6 +18,7 @@ public enum LockeStatus {
     ERRORED, //Errorer out in processing, saving, transmission, etc.
     IN_TRANSIT,
     IN_USE,
+    IN_PROGRESS,
     NEW, //Brand new, just made, not touched
     OPEN, //Just open, typically first stage
     PENDING, //From pending, pending first major action

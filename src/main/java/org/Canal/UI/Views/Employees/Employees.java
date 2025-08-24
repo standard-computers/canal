@@ -95,7 +95,7 @@ public class Employees extends LockeState implements RefreshListener {
         tb.add(labels);
         tb.add(Box.createHorizontalStrut(5));
 
-        IconButton print = new IconButton("Refresh", "print", "Print selected");
+        IconButton print = new IconButton("Print", "print", "Print selected");
         tb.add(print);
         tb.add(Box.createHorizontalStrut(5));
 

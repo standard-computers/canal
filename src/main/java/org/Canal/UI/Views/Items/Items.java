@@ -6,15 +6,19 @@ import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
-import org.Canal.Utils.DesktopState;
-import org.Canal.Utils.Engine;
-import org.Canal.Utils.RefreshListener;
+import org.Canal.Utils.*;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FileReader;
+import java.io.Reader;
 import java.util.ArrayList;
 
 /**
@@ -49,8 +53,62 @@ public class Items extends LockeState implements RefreshListener {
 
         if((boolean) Engine.codex.getValue("ITS", "import_enabled")) {
             IconButton importItems = new IconButton("Import", "export", "Import from CSV", "");
-            importItems.addActionListener(e -> {
+            importItems.addActionListener(_ -> {
+                JFileChooser fc = new JFileChooser();
+                int result = fc.showOpenDialog(null);
 
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    File file = fc.getSelectedFile();
+                    try (Reader reader = new FileReader(file);
+                         CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader())) {
+
+                        for (CSVRecord record : csvParser) {
+
+                            Item i = new Item();
+
+                            ArrayList<Item> ls = Engine.getItems();
+                            String prefix = (String)  Engine.codex.getValue("ITS", "prefix");
+                            int leadingZeros = (Integer) Engine.codex.getValue("ITS", "leading_zeros");
+                            int nextId = ls.size() + 1;
+                            int width = Math.max(0, leadingZeros);
+                            String numberPart = String.format("%0" + width + "d", nextId); // zero-pad to width
+                            String itemId = prefix + numberPart;
+
+                            i.setId(itemId);
+                            i.setName(record.get("Name"));
+                            i.setOrg(record.get("Org"));
+                            i.setVendor(record.get("Vendor"));
+                            i.setColor(record.get("Color"));
+                            i.setUpc(record.get("UPC"));
+                            i.setVendorNumber(record.get("Vendor Number"));
+
+                            i.setBaseQuantity(Double.parseDouble(record.get("Base Qty")));
+                            i.setBatched(Boolean.parseBoolean(record.get("Batched")));
+                            i.setRentable(Boolean.parseBoolean(record.get("Rentable")));
+                            i.setSkud(Boolean.parseBoolean(record.get("Skud")));
+                            i.setConsumable(Boolean.parseBoolean(record.get("Consumable")));
+                            i.setPrice(Double.parseDouble(record.get("Price")));
+
+                            i.setWidth(Double.parseDouble(record.get("Width")));
+                            i.setWidthUOM(record.get("wUOM"));
+                            i.setLength(Double.parseDouble(record.get("Length")));
+                            i.setLengthUOM(record.get("lUOM"));
+                            i.setHeight(Double.parseDouble(record.get("Height")));
+                            i.setHeightUOM(record.get("hUOM"));
+                            i.setWeight(Double.parseDouble(record.get("Weight")));
+                            i.setWeightUOM(record.get("wtUOM"));
+                            i.setStatus(LockeStatus.valueOf(record.get("Status")));
+                            i.setTax(Double.parseDouble(record.get("Tax")));
+                            i.setExciseTax(Double.parseDouble(record.get("Excise Tax")));
+                            Pipe.save("ITS", i);
+                        }
+                        refresh();
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        JOptionPane.showMessageDialog(null, "Failed to import CSV: " + ex.getMessage());
+                    }
+                }
             });
             tb.add(importItems);
             tb.add(Box.createHorizontalStrut(5));
@@ -136,7 +194,7 @@ public class Items extends LockeState implements RefreshListener {
             "Excise Tax"
         };
         ArrayList<Object[]> d = new ArrayList<>();
-        for (Item item : Engine.products.getItems()) {
+        for (Item item : Engine.getItems()) {
             Location vendor = Engine.getLocation(item.getVendor(), "VEND");
             d.add(new Object[]{
                     item.getId(),
@@ -180,7 +238,7 @@ public class Items extends LockeState implements RefreshListener {
                     int row = t.getSelectedRow();
                     if (row != -1) {
                         String v = String.valueOf(t.getValueAt(row, 1));
-                        desktop.put(new ViewItem(Engine.products.getItem(v), desktop, Items.this));
+                        desktop.put(new ViewItem(Engine.getItem(v), desktop, Items.this));
                     }
                 }
             }

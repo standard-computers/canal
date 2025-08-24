@@ -7,8 +7,6 @@ public class Record extends Objex {
     private String notes;
     private String modified;
 
-
-
     public String getType() {
         return type;
     }

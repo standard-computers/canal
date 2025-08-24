@@ -3,7 +3,8 @@ package org.Canal.Models.HumanResources;
 import org.Canal.Models.BusinessUnits.Ledger;
 import org.Canal.Models.Objex;
 import org.Canal.Start;
-import org.Canal.Utils.Json;
+import org.Canal.Utils.Engine;
+import org.Canal.Utils.Pipe;
 
 import java.io.File;
 
@@ -217,18 +218,24 @@ public class Employee extends Objex {
         this.disability = disability;
     }
 
-    public void save(){
-        File md = new File(Start.DIR + "\\.store\\EMPS\\");
-        File[] mdf = md.listFiles();
-        if (mdf != null) {
-            for (File file : mdf) {
-                if (file.getPath().endsWith(".emps")) {
-                    Ledger fl = Json.load(file.getPath(), Ledger.class);
-                    if (fl.getId().equals(id)) {
-                        Json.save(file.getPath(), this);
+    public void save() {
+
+        if (Engine.getConfiguration().getMongodb().isEmpty()) {
+
+            File md = new File(Start.DIR + "\\.store\\EMPS\\");
+            File[] mdf = md.listFiles();
+            if (mdf != null) {
+                for (File file : mdf) {
+                    if (file.getPath().endsWith(".emps")) {
+                        Ledger fl = Pipe.load(file.getPath(), Ledger.class);
+                        if (fl.getId().equals(id)) {
+                            Pipe.export(file.getPath(), this);
+                        }
                     }
                 }
             }
+        } else {
+            Pipe.save("EMPS", this);
         }
     }
 }

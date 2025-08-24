@@ -43,7 +43,7 @@ public class AutoMakeSalesOrders extends LockeState {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             for (JCheckBox checkbox : checkboxes) {
                 if (checkbox.isSelected()) {
-                    String genId = "PR" + (10000000 + (Engine.orders.getPurchaseRequisitions().size() + 1));
+                    String genId = "PR" + (10000000 + (Engine.getPurchaseRequisitions().size() + 1));
                     PurchaseRequisition preq = new PurchaseRequisition();
                     preq.setId(genId);
                     preq.setName(genId);

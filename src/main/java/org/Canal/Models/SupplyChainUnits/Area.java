@@ -2,7 +2,8 @@ package org.Canal.Models.SupplyChainUnits;
 
 import org.Canal.Models.Objex;
 import org.Canal.Start;
-import org.Canal.Utils.Json;
+import org.Canal.Utils.Engine;
+import org.Canal.Utils.Pipe;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -19,6 +20,10 @@ public class Area extends Objex {
     private String heightUOM;
     private Map<String, String> properties;
     private ArrayList<Bin> bins = new ArrayList<>();
+    private boolean allowsInventory = true;
+    private boolean allowsProduction = false;
+    private boolean allowsSales = true;
+    private boolean allowsPurchasing = true;
 
     public String getLocation() {
         return location;
@@ -112,18 +117,56 @@ public class Area extends Objex {
         bins.add(newBin);
     }
 
+    public boolean allowsInventory() {
+        return allowsInventory;
+    }
+
+    public void setAllowsInventory(boolean allowsInventory) {
+        this.allowsInventory = allowsInventory;
+    }
+
+    public boolean allowsProduction() {
+        return allowsProduction;
+    }
+
+    public void setAllowsProduction(boolean allowsProduction) {
+        this.allowsProduction = allowsProduction;
+    }
+
+    public boolean allowsSales() {
+        return allowsSales;
+    }
+
+    public void setAllowsSales(boolean allowsSales) {
+        this.allowsSales = allowsSales;
+    }
+
+    public boolean allowsPurchasing() {
+        return allowsPurchasing;
+    }
+
+    public void setAllowsPurchasing(boolean allowsPurchasing) {
+        this.allowsPurchasing = allowsPurchasing;
+    }
+
     public void save() {
-        File md = new File(Start.DIR + "\\.store\\AREAS\\");
-        File[] mdf = md.listFiles();
-        if (mdf != null) {
-            for (File file : mdf) {
-                if (file.getPath().endsWith(".areas")) {
-                    Area forg = Json.load(file.getPath(), Area.class);
-                    if (forg.getId().equals(getId())) {
-                        Json.save(file.getPath(), this);
+
+        if (Engine.getConfiguration().getMongodb().isEmpty()) {
+
+            File md = new File(Start.DIR + "\\.store\\AREAS\\");
+            File[] mdf = md.listFiles();
+            if (mdf != null) {
+                for (File file : mdf) {
+                    if (file.getPath().endsWith(".areas")) {
+                        Area forg = Pipe.load(file.getPath(), Area.class);
+                        if (forg.getId().equals(getId())) {
+                            Pipe.export(file.getPath(), this);
+                        }
                     }
                 }
             }
+        } else {
+            Pipe.save("AREAS", this);
         }
     }
 }

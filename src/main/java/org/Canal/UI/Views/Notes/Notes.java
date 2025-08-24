@@ -12,7 +12,7 @@ import java.awt.*;
 public class Notes extends LockeState {
 
     public Notes() {
-        super("Notes", "/", true, true, true, true);
+        super("Notes", "/NTS"); //TODO Notes?
         setFrameIcon(new ImageIcon(Notes.class.getResource("/icons/create.png")));
         JPanel titleBar = Elements.header("SimpleForms");
         setLayout(new BorderLayout());

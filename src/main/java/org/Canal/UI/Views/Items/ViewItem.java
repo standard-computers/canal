@@ -21,14 +21,6 @@ public class ViewItem extends LockeState {
     private Item item;
     private DesktopState desktop;
     private RefreshListener refreshListener;
-    private Copiable idField;
-    private Copiable orgField;
-    private Copiable nameField;
-    private Copiable linkField;
-    private Copiable vendorField;
-    private Copiable priceField;
-    private Copiable taxField;
-    private Copiable exciseTaxfield;
 
     public ViewItem(Item item, DesktopState desktop, RefreshListener refreshListener) {
 
@@ -54,6 +46,7 @@ public class ViewItem extends LockeState {
         tabs.addTab("Packaging", packaging());
 
         add(tabs, BorderLayout.CENTER);
+        setMaximized(true);
     }
 
     private JPanel vendorInfo(){
@@ -123,26 +116,17 @@ public class ViewItem extends LockeState {
         JPanel itemInfo = new JPanel(new FlowLayout(FlowLayout.LEFT));
         Form f = new Form();
 
-        idField = new Copiable(item.getId());
-        orgField = new Copiable(item.getOrg());
-        nameField = new Copiable(item.getName());
-        linkField = new Copiable(item.getLink());
-        vendorField = new Copiable(item.getVendor());
-        priceField = new Copiable(String.valueOf(item.getPrice()));
-        taxField = new Copiable(String.valueOf(item.getTax()));
-        exciseTaxfield = new Copiable(String.valueOf(item.getExciseTax()));
-
-        f.addInput(Elements.coloredLabel("ID", UIManager.getColor("Label.foreground")), idField);
-        f.addInput(Elements.coloredLabel("Organization", UIManager.getColor("Label.foreground")), orgField);
-        f.addInput(Elements.coloredLabel("Name", UIManager.getColor("Label.foreground")), nameField);
-        f.addInput(Elements.coloredLabel("Link", UIManager.getColor("Label.foreground")), linkField);
-        f.addInput(Elements.coloredLabel("Vendor", UIManager.getColor("Label.foreground")), vendorField);
+        f.addInput(Elements.coloredLabel("ID", UIManager.getColor("Label.foreground")), new Copiable(item.getId()));
+        f.addInput(Elements.coloredLabel("Organization", UIManager.getColor("Label.foreground")), new Copiable(item.getOrg()));
+        f.addInput(Elements.coloredLabel("Name", UIManager.getColor("Label.foreground")), new Copiable(item.getName()));
+        f.addInput(Elements.coloredLabel("Link", UIManager.getColor("Label.foreground")), new Copiable(item.getLink()));
+        f.addInput(Elements.coloredLabel("Vendor", UIManager.getColor("Label.foreground")), new Copiable(item.getVendor()));
         f.addInput(Elements.coloredLabel("Batched", UIManager.getColor("Label.foreground")), new JCheckBox(" Item Expires", item.isBatched()));
         f.addInput(Elements.coloredLabel("Rentable", UIManager.getColor("Label.foreground")), new JCheckBox(" Item can be rented", item.isRentable()));
         f.addInput(Elements.coloredLabel("SKU'd", UIManager.getColor("Label.foreground")), new JCheckBox(" Item has unique SKU", item.isSkud()));
-        f.addInput(Elements.coloredLabel("Price", UIManager.getColor("Label.foreground")), priceField);
-        f.addInput(Elements.coloredLabel("Tax", UIManager.getColor("Label.foreground")), taxField);
-        f.addInput(Elements.coloredLabel("Excise Tax", UIManager.getColor("Label.foreground")), exciseTaxfield);
+        f.addInput(Elements.coloredLabel("Price", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(item.getPrice())));
+        f.addInput(Elements.coloredLabel("UPC", UIManager.getColor("Label.foreground")), new Copiable(item.getUpc()));
+        f.addInput(Elements.coloredLabel("Vendor Number", UIManager.getColor("Label.foreground")), new Copiable(item.getVendorNumber()));
         itemInfo.add(f);
         return itemInfo;
     }
@@ -151,14 +135,14 @@ public class ViewItem extends LockeState {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton inventory = new IconButton("Inventory", "inventory", "Check stock of item");
-        inventory.addActionListener(e -> {
+        inventory.addActionListener(_ -> {
 
         });
         tb.add(inventory);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton label = new IconButton("Label", "label", "Print labels for properties");
-        label.addActionListener(e -> {
+        label.addActionListener(_ -> {
 
         });
         tb.add(label);
@@ -176,7 +160,7 @@ public class ViewItem extends LockeState {
 
         if((boolean) Engine.codex.getValue("ITS", "allow_archival")){
             IconButton archive = new IconButton("Archive", "archive", "Archive item");
-            archive.addActionListener(e -> {
+            archive.addActionListener(_ -> {
 
             });
             tb.add(archive);
@@ -185,7 +169,7 @@ public class ViewItem extends LockeState {
 
         if((boolean) Engine.codex.getValue("ITS", "allow_deletion")){
             IconButton delete = new IconButton("Delete", "delete", "Delete item");
-            delete.addActionListener(e -> {
+            delete.addActionListener(_ -> {
 
             });
             tb.add(delete);

@@ -44,7 +44,7 @@ public class ReturnOrder extends LockeState {
                     JOptionPane.showMessageDialog(null, "PO or Order Number required!", "Error", JOptionPane.ERROR_MESSAGE);
                 }else{
                     if(po.isEmpty()){
-                        PurchaseOrder spo = Engine.orders.getPurchaseOrder(po);
+                        PurchaseOrder spo = Engine.getPurchaseOrder(po);
                         if(spo == null){
                             JOptionPane.showMessageDialog(null, "PO or Order Number required!", "Error", JOptionPane.ERROR_MESSAGE);
                             if(!rlid.equals(spo.getVendor())){

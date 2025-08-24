@@ -5,15 +5,19 @@ import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
-import org.Canal.Utils.DesktopState;
-import org.Canal.Utils.Engine;
-import org.Canal.Utils.RefreshListener;
+import org.Canal.Utils.*;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FileReader;
+import java.io.Reader;
 import java.util.ArrayList;
 
 /**
@@ -31,7 +35,7 @@ public class Locations extends LockeState implements RefreshListener {
         this.objexType = objexType;
         this.desktop = desktop;
         String oo = objexType;
-        if(oo.startsWith("/")){
+        if (oo.startsWith("/")) {
             oo = oo.substring(1);
         }
         JPanel tb = toolbar();
@@ -44,20 +48,10 @@ public class Locations extends LockeState implements RefreshListener {
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);
         add(tableScrollPane, BorderLayout.CENTER);
-        table.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    JTable t = (JTable) e.getSource();
-                    int r = t.getSelectedRow();
-                    if (r != -1) {
-                        String v = String.valueOf(t.getValueAt(r, 1));
-                        desktop.put(Engine.router(objexType + "/" + v, desktop));
-                        dispose();
-                    }
-                }
-            }
-        });
+
+        if ((boolean) Engine.codex.getValue(objexType, "start_maximized")) {
+            setMaximized(true);
+        }
     }
 
     private JPanel toolbar() {
@@ -65,20 +59,68 @@ public class Locations extends LockeState implements RefreshListener {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
 
-        if((boolean) Engine.codex.getValue(objexType, "import_enabled")){
+        if ((boolean) Engine.codex.getValue(objexType, "import_enabled")) {
             IconButton importLocations = new IconButton("Import", "export", "Import as CSV");
             importLocations.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     JFileChooser fc = new JFileChooser();
+                    int result = fc.showOpenDialog(null);
 
+                    if (result == JFileChooser.APPROVE_OPTION) {
+                        File file = fc.getSelectedFile();
+                        try (Reader reader = new FileReader(file);
+                             CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader())) {
+
+                            for (CSVRecord record : csvParser) {
+
+                                Location l = new Location();
+
+                                ArrayList<Location> ls = Engine.getLocations(objexType);
+                                String prefix = (String) Engine.codex.getValue(objexType, "prefix");
+                                int leadingZeros = (Integer) Engine.codex.getValue(objexType, "leading_zeros"); // e.g., 3 -> 001
+                                int nextId = ls.size() + 1;
+                                int width = Math.max(0, leadingZeros);
+                                String numberPart = String.format("%0" + width + "d", nextId); // zero-pad to width
+                                String locationId = prefix + numberPart;
+
+                                l.setType(objexType);
+                                l.setId(locationId);
+                                l.setOrganization(record.get("Org"));
+                                l.setName(record.get("Name"));
+                                l.setLine1(record.get("Line 1"));
+                                l.setLine2(record.get("Line 2"));
+                                l.setCity(record.get("City"));
+                                l.setState(record.get("State"));
+                                l.setPostal(record.get("Postal"));
+                                l.setCountry(record.get("Country"));
+                                l.setEin(record.get("Tax ID"));
+                                l.setTaxExempt(Boolean.parseBoolean(record.get("Tax Exempt")));
+                                l.setEmail(record.get("Email"));
+                                l.setPhone(record.get("Phone"));
+                                l.setWidth(Double.parseDouble(record.get("Width")));
+                                l.setWidthUOM(record.get("wUOM"));
+                                l.setLength(Double.parseDouble(record.get("Length")));
+                                l.setLengthUOM(record.get("lUOM"));
+                                l.setHeight(Double.parseDouble(record.get("Height")));
+                                l.setHeightUOM(record.get("hUOM"));
+                                l.setStatus(LockeStatus.valueOf(record.get("Status")));
+                                Pipe.save(objexType, l);
+                            }
+                            refresh();
+
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                            JOptionPane.showMessageDialog(null, "Failed to import CSV: " + ex.getMessage());
+                        }
+                    }
                 }
             });
             tb.add(importLocations);
             tb.add(Box.createHorizontalStrut(5));
         }
 
-        if((boolean) Engine.codex.getValue(objexType, "export_enabled")){
+        if ((boolean) Engine.codex.getValue(objexType, "export_enabled")) {
             IconButton export = new IconButton("Export", "export", "Export as CSV");
             export.addMouseListener(new MouseAdapter() {
                 @Override
@@ -96,9 +138,16 @@ public class Locations extends LockeState implements RefreshListener {
 
         IconButton create = new IconButton("New", "create", "Create a Location", objexType + "/NEW");
         create.addActionListener(e -> {
-           desktop.put(new CreateLocation(objexType, desktop, this));
+            desktop.put(new CreateLocation(objexType, desktop, this));
         });
         tb.add(create);
+        tb.add(Box.createHorizontalStrut(5));
+
+        IconButton delete = new IconButton("Delete", "delete", "Delete Location(s)", objexType + "/DEL");
+        delete.addActionListener(e -> {
+            desktop.put(new CreateLocation(objexType, desktop, this));
+        });
+        tb.add(delete);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton find = new IconButton("Find", "find", "Find by Values", objexType + "/F");
@@ -149,6 +198,10 @@ public class Locations extends LockeState implements RefreshListener {
                 "aUOM",
                 "Volume",
                 "vUOM",
+                "Inventory",
+                "Production",
+                "Sales",
+                "Purchasing",
                 "Status",
                 "Created",
         };
@@ -179,22 +232,16 @@ public class Locations extends LockeState implements RefreshListener {
                     location.getAreaUOM(),
                     location.getVolume(),
                     location.getVolumeUOM(),
+                    location.allowsInventory(),
+                    location.allowsProduction(),
+                    location.allowsSales(),
+                    location.allowsPurchasing(),
                     location.getStatus(),
                     location.getCreated(),
             });
         }
-        return new CustomTable(columns, data);
-    }
-
-    @Override
-    public void refresh() {
-        CustomTable newTable = table();
-        JScrollPane scrollPane = (JScrollPane) table.getParent().getParent();
-        scrollPane.setViewportView(newTable);
-        table = newTable;
-        scrollPane.revalidate();
-        scrollPane.repaint();
-        table.addMouseListener(new MouseAdapter() {
+        CustomTable ct = new CustomTable(columns, data);
+        ct.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
@@ -207,5 +254,16 @@ public class Locations extends LockeState implements RefreshListener {
                 }
             }
         });
+        return ct;
+    }
+
+    @Override
+    public void refresh() {
+        CustomTable newTable = table();
+        JScrollPane scrollPane = (JScrollPane) table.getParent().getParent();
+        scrollPane.setViewportView(newTable);
+        table = newTable;
+        scrollPane.revalidate();
+        scrollPane.repaint();
     }
 }

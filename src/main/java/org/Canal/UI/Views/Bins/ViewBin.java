@@ -18,6 +18,7 @@ public class ViewBin extends LockeState {
     private UOMField weightField;
     private UOMField areaField;
     private UOMField volumeField;
+
     private JCheckBox autoReplenish;
     private JCheckBox fixedBin;
     private JCheckBox doesGoodsIssue;
@@ -48,17 +49,22 @@ public class ViewBin extends LockeState {
         JPanel toolbar = new JPanel(new BorderLayout());
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-        IconButton copyFrom = new IconButton("", "open", "Copy from Bin");
-        IconButton review = new IconButton("", "review", "Review Bin data");
-        IconButton create = new IconButton("", "execute", "Refresh Data");
+        IconButton copyFrom = new IconButton("Copy From", "open", "Copy from Bin");
         tb.add(copyFrom);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton review = new IconButton("Review", "review", "Review Bin data");
         tb.add(review);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton create = new IconButton("Execute", "execute", "Refresh Data");
         tb.add(create);
+
         tb.setBorder(new EmptyBorder(0, 5, 0, 5));
+
         toolbar.add(Elements.header(bin.getName(), SwingConstants.LEFT), BorderLayout.NORTH);
         toolbar.add(tb, BorderLayout.SOUTH);
+
         return toolbar;
     }
 
@@ -121,6 +127,7 @@ public class ViewBin extends LockeState {
         areaField.setValue(String.valueOf(bin.getArea()));
         volumeField = new UOMField();
         volumeField.setValue(String.valueOf(bin.getVolume()));
+
         f.addInput(Elements.coloredLabel("Width", Constants.colors[10]), widthField);
         f.addInput(Elements.coloredLabel("Length", Constants.colors[9]), lengthField);
         f.addInput(Elements.coloredLabel("Height", Constants.colors[8]), heightField);
@@ -128,16 +135,19 @@ public class ViewBin extends LockeState {
         f.addInput(Elements.coloredLabel("Area", Constants.colors[6]), areaField);
         f.addInput(Elements.coloredLabel("Volume", Constants.colors[5]), volumeField);
         dimensional.add(f);
+
         return dimensional;
     }
 
     private JPanel restrictions() {
+
         JPanel restrictions = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         return restrictions;
     }
 
     private JPanel stock() {
+
         JPanel stock = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         return stock;

@@ -9,8 +9,6 @@ import org.Canal.Utils.Engine;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -28,6 +26,7 @@ public class AutoMakeBins extends LockeState {
     private UOMField widthField;
     private UOMField lengthField;
     private UOMField heightField;
+    private UOMField weightField;
     private JPanel checkboxPanel;
     private ArrayList<Area> areas;
     private ArrayList<JCheckBox> checkboxes;
@@ -70,72 +69,88 @@ public class AutoMakeBins extends LockeState {
         tabs.addTab("General", general());
         tabs.addTab("Dimensional", dimensional());
         setLayout(new BorderLayout());
-        add(Elements.header("AutoMake Bins", SwingConstants.LEFT), BorderLayout.NORTH);
+        add(toolbar(), BorderLayout.NORTH);
         add(tabs, BorderLayout.CENTER);
-        JButton automake = Elements.button("AutoMake");
-        add(automake, BorderLayout.SOUTH);
-        automake.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                dispose();
-                for (JCheckBox checkbox : checkboxes) {
-                    if (checkbox.isSelected()) {
-                        Area a = Engine.getArea(checkbox.getActionCommand());
-                        if(a != null){
-                            for(int i = 1; i <= Integer.parseInt(binCount.getText()); i++){
-                                Bin b = new Bin();
-                                b.setId(idField.getText().trim()
-                                        .replace("@", checkbox.getActionCommand())
-                                        .replace("+", String.valueOf(i)));
-                                b.setName(nameField.getText().trim()
-                                        .replace("@", checkbox.getActionCommand())
-                                        .replace("+", String.valueOf(i)));
-                                b.setArea(checkbox.getActionCommand());
-                                b.setWidth(Double.parseDouble(widthField.getValue()));
-                                b.setLength(Double.parseDouble(lengthField.getValue()));
-                                b.setHeight(Double.parseDouble(heightField.getValue()));
-                                b.setWidthUOM(widthField.getUOM());
-                                b.setLengthUOM(lengthField.getUOM());
-                                b.setHeightUOM(heightField.getUOM());
-                                a.addBin(b);
-                            }
-                        }
-                        a.save();
-                    }
-                }
-                JOptionPane.showMessageDialog(AutoMakeBins.this, "AutoMake Complete");
-            }
-        });
     }
 
     private JPanel toolbar() {
+
+        JPanel toolbar = new JPanel(new BorderLayout());
+
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-        IconButton copyFrom = new IconButton("Labels", "label", "Delete an Area");
-        IconButton review = new IconButton("Print", "print", "Print selected");
-        IconButton execute = new IconButton("Refresh", "refresh", "Refresh data");
+
+        IconButton copyFrom = new IconButton("Copy From", "open", "Copy from Bin");
         tb.add(Box.createHorizontalStrut(5));
         tb.add(copyFrom);
+
+        IconButton review = new IconButton("Review", "review", "Review Date");
         tb.add(Box.createHorizontalStrut(5));
         tb.add(review);
+
+        IconButton start = new IconButton("Start AutoMake", "automake", "Start AutoMake");
+        start.addActionListener(_ -> {
+            dispose();
+            for (JCheckBox checkbox : checkboxes) {
+
+                if (checkbox.isSelected()) {
+
+                    Area a = Engine.getArea(checkbox.getActionCommand());
+                    if(a != null){
+
+                        for(int i = 1; i <= Integer.parseInt(binCount.getText()); i++){
+
+                            Bin b = new Bin();
+                            b.setId(idField.getText().trim()
+                                    .replace("@", checkbox.getActionCommand())
+                                    .replace("+", String.valueOf(i)));
+                            b.setName(nameField.getText().trim()
+                                    .replace("@", checkbox.getActionCommand())
+                                    .replace("+", String.valueOf(i)));
+                            b.setArea(checkbox.getActionCommand());
+
+                            b.setWidth(Double.parseDouble(widthField.getValue()));
+                            b.setWidthUOM(widthField.getUOM());
+
+                            b.setLength(Double.parseDouble(lengthField.getValue()));
+                            b.setLengthUOM(lengthField.getUOM());
+
+                            b.setHeight(Double.parseDouble(heightField.getValue()));
+                            b.setHeightUOM(heightField.getUOM());
+
+                            b.setWeight(Double.parseDouble(weightField.getValue()));
+                            b.setWeightUOM(weightField.getUOM());
+                            a.addBin(b);
+                        }
+                    }
+                    a.save();
+                }
+            }
+            JOptionPane.showMessageDialog(AutoMakeBins.this, "AutoMake Complete");
+        });
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(execute);
+        tb.add(start);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));
-        return tb;
+
+        toolbar.add(Elements.header("AutoMake Bins", SwingConstants.LEFT), BorderLayout.CENTER);
+        toolbar.add(tb, BorderLayout.SOUTH);
+        return toolbar;
     }
 
     private JPanel general(){
 
         JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        Form f = new Form();
+
         idField = Elements.input("@-BN+", 15);
         nameField = Elements.input("@-BIN+");
         binCount = Elements.input("1");
+
+        Form f = new Form();
         f.addInput(Elements.coloredLabel("Bin ID (current: BN1-IBD1)", Constants.colors[10]), idField);
         f.addInput(Elements.coloredLabel("Bin Name (current: BIN1-IBD1)", Constants.colors[9]), nameField);
         f.addInput(Elements.coloredLabel("Bin Create Count", Constants.colors[8]), binCount);
         p.add(f);
+
         return p;
     }
 
@@ -158,14 +173,19 @@ public class AutoMakeBins extends LockeState {
     private JPanel dimensional(){
 
         JPanel dimensional = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        Form f = new Form();
+
         widthField = new UOMField();
         lengthField = new UOMField();
         heightField = new UOMField();
+        weightField = new UOMField();
+
+        Form f = new Form();
         f.addInput(Elements.coloredLabel("Width", Constants.colors[10]), widthField);
         f.addInput(Elements.coloredLabel("Length", Constants.colors[9]), lengthField);
         f.addInput(Elements.coloredLabel("Height", Constants.colors[8]), heightField);
+        f.addInput(Elements.coloredLabel("Weight", Constants.colors[7]), weightField);
         dimensional.add(f);
+
         return dimensional;
     }
 }

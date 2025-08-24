@@ -41,7 +41,8 @@ public class ProductMovements extends LockeState implements RefreshListener {
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);
         add(tableScrollPane, BorderLayout.CENTER);
-        isMaximized();
+
+        setMaximized(true);
     }
 
     private CustomTable table() {
@@ -77,7 +78,7 @@ public class ProductMovements extends LockeState implements RefreshListener {
 
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-        IconButton export = new IconButton("", "export", "Export as CSV");
+        IconButton export = new IconButton("Export", "export", "Export as CSV", "/STK/MVS/EXP");
         JTextField filterValue = Elements.input(location, 10);
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));

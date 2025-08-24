@@ -1,10 +1,13 @@
 package org.Canal.UI.Views.Positions;
 
+import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.HumanResources.Position;
 import org.Canal.UI.Elements.CustomTabbedPane;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
+import org.Canal.Utils.Engine;
+import org.Canal.Utils.LockeStatus;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,11 +39,29 @@ public class ViewPosition extends LockeState {
         JPanel p = new JPanel(new BorderLayout());
         p.add(Elements.header(position.getName(), SwingConstants.LEFT), BorderLayout.NORTH);
         JPanel buttons = new JPanel();
+
         IconButton postPosition = new IconButton("Post", "positions", "Post position as available");
-        IconButton assignPosition = new IconButton("Assign", "positions", "Assign position to Employee");
         buttons.add(postPosition);
+
+        IconButton assignPosition = new IconButton("Assign", "positions", "Assign position to Employee");
+        assignPosition.addActionListener(e -> {
+            String employeeID = JOptionPane.showInputDialog(this, "Enter Employee ID", "Employee ID", JOptionPane.QUESTION_MESSAGE);
+            Employee employee = Engine.getEmployee(employeeID);
+            if (employee == null) {
+
+            } else {
+                employee.setPosition(position.getId());
+                position.setStatus(LockeStatus.IN_USE);
+//                position.save();
+                employee.save();
+                dispose();
+
+            }
+        });
         buttons.add(assignPosition);
+
         p.add(buttons, BorderLayout.SOUTH);
+
         return p;
     }
 }

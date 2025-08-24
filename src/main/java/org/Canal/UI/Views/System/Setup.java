@@ -5,7 +5,6 @@ import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Views.Controllers.CustomSetup;
 import org.Canal.Utils.Codex;
 import org.Canal.Utils.Engine;
-import org.Canal.Utils.Json;
 import org.Canal.Utils.Pipe;
 
 import javax.swing.*;
@@ -18,34 +17,19 @@ import java.awt.event.MouseEvent;
  */
 public class Setup extends JFrame {
 
-    public Setup(){
+    public Setup() {
 
-        setTitle("Setup Ratio");
+        setTitle("Setup Canal");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new GridLayout(5, 1));
+        setLayout(new GridLayout(4, 1));
 
-        if(Engine.codex == null){
+        if (Engine.codex == null) {
             Codex cdx = new Codex();
             Engine.codex = cdx;
-            Json.save(Start.DIR + "\\codex.cdx", cdx);
+            Pipe.export(Start.DIR + "\\codex.cdx", cdx);
         }
 
         JButton small = Elements.button("Single Location");
-        JButton medium = Elements.button("A Few Locations");
-        JButton large = Elements.button("Full Enterprise");
-        JButton custom = Elements.button("Custom Setup");
-        JButton fromImport = Elements.button("From Import");
-        add(small);
-        add(medium);
-        add(large);
-        add(custom);
-        add(fromImport);
-
-        setResizable(false);
-        pack();
-        setLocationRelativeTo(null);
-        setVisible(true);
-
         small.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
 
@@ -54,26 +38,31 @@ public class Setup extends JFrame {
                 new IniSystem();
             }
         });
-        medium.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
+        add(small);
 
-            }
-        });
-        large.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
+        JButton medium = Elements.button("A Few Locations");
+        medium.addActionListener(_ -> {
 
-            }
         });
-        custom.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                dispose();
-                new CustomSetup();
-            }
-        });
-        fromImport.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
+        add(medium);
 
-            }
+        JButton enterprise = Elements.button("Enterprise (Server and MongoDB)");
+        enterprise.addActionListener(_ -> {
+            dispose();
+            new EnterpriseSetup();
         });
+        add(enterprise);
+
+        JButton custom = Elements.button("Custom Setup");
+        custom.addActionListener(_ -> {
+            dispose();
+            new CustomSetup();
+        });
+        add(custom);
+
+        setResizable(false);
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
     }
 }

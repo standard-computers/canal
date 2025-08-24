@@ -2,17 +2,12 @@ package org.Canal.UI.Views.Positions;
 
 import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.HumanResources.Position;
-import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.*;
 import org.Canal.Utils.*;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -32,6 +27,7 @@ public class CreatePosition extends LockeState {
     private JTextField descriptionField;
     private Selectable departments;
     private JTextField compensationField;
+    private JTextField availabilityField;
     private Selectable countries;
     private JCheckBox isHourly;
     private JCheckBox isBonusable;
@@ -76,6 +72,7 @@ public class CreatePosition extends LockeState {
                 position.setName(positionNameField.getText());
                 position.setDescription(descriptionField.getText());
                 position.setCompensation(Double.parseDouble(compensationField.getText()));
+                position.setAvailability(Integer.parseInt(availabilityField.getText()));
                 position.setHourly(isHourly.isSelected());
                 position.setBonus(isBonusable.isSelected());
                 position.setCommission(isCommissionable.isSelected());
@@ -109,6 +106,7 @@ public class CreatePosition extends LockeState {
         descriptionField = Elements.input();
         departments = Selectables.departments();
         compensationField = Elements.input();
+        availabilityField = Elements.input("1");
         countries = Selectables.countries();
         isHourly = new JCheckBox("Employee must clock in and out");
         isBonusable = new JCheckBox("Employee can earn bonuses");
@@ -120,10 +118,11 @@ public class CreatePosition extends LockeState {
         f.addInput(Elements.coloredLabel("Short Description", Constants.colors[1]), descriptionField);
         f.addInput(Elements.coloredLabel("Department", Constants.colors[2]), departments);
         f.addInput(Elements.coloredLabel("Compensation", Constants.colors[3]), compensationField);
-        f.addInput(Elements.coloredLabel("Comp. Class", Constants.colors[4]), countries);
-        f.addInput(Elements.coloredLabel("Hourly?", Constants.colors[5]), isHourly);
-        f.addInput(Elements.coloredLabel("Earns Bonuses", Constants.colors[6]), isBonusable);
-        f.addInput(Elements.coloredLabel("Earns Commission", Constants.colors[7]), isCommissionable);
+        f.addInput(Elements.coloredLabel("Availability", Constants.colors[4]), availabilityField);
+        f.addInput(Elements.coloredLabel("Comp. Class", Constants.colors[5]), countries);
+        f.addInput(Elements.coloredLabel("Hourly?", Constants.colors[6]), isHourly);
+        f.addInput(Elements.coloredLabel("Earns Bonuses", Constants.colors[7]), isBonusable);
+        f.addInput(Elements.coloredLabel("Earns Commission", Constants.colors[8]), isCommissionable);
         f.addInput(Elements.coloredLabel("Auto Post", UIManager.getColor("Label.foreground")), autoPost);
         general.add(f);
         return general;

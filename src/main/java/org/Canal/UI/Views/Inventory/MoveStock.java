@@ -56,7 +56,9 @@ public class MoveStock extends LockeState {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
+
                 dispose();
+
                 Inventory i = Engine.getInventory(location);
                 String hu = mvHu.getText();
                 boolean success = false;
@@ -75,7 +77,8 @@ public class MoveStock extends LockeState {
                             s.setQuantity(newQty);
                             StockLine nss = new StockLine(
                                     s.getObjex(),
-                                    s.getId(),
+                                    s.getItem(),
+                                    s.getSku(),
                                     qty,
                                     "",
                                     destinationBins.getSelectedValue()

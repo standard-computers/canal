@@ -6,8 +6,6 @@ import org.Canal.Utils.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 /**
  * /ORGS/NEW
@@ -31,10 +29,16 @@ public class IniSystem extends JFrame {
     private UOMField lengthUOM = new UOMField();
     private UOMField heightUOM = new UOMField();
 
+    //Owner info for employee and user
+    private JTextField userFirstName;
+    private JTextField userLastName;
+    private JTextField passwordField;
+
     public IniSystem() {
 
-        setTitle("Setup Ratio");
+        setTitle("Setup Canal");
         CustomTabbedPane tabs = new CustomTabbedPane();
+        tabs.add("You", you());
         tabs.add("General", general());
         tabs.add("Contact Info", contact());
         tabs.add("Dimensional", dimensional());
@@ -59,44 +63,46 @@ public class IniSystem extends JFrame {
         IconButton execute = new IconButton("Create", "execute", "Create Organization");
         buttons.add(Box.createHorizontalStrut(5));
         buttons.add(execute);
-        execute.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                String locationId = locationIdField.getText().trim();
-                String locationName = locationNameField.getText().trim();
-                String line1 = line1Field.getText().trim();
-                String line2 = line2Field.getText().trim();
-                String city = cityField.getText().trim();
-                String state = stateField.getText().trim();
-                String postal = postalField.getText().trim();
-                String country = countries.getSelectedValue();
-                String ein = einField.getText().trim();
-                String email = emailField.getText().trim();
-                String phone = phoneField.getText().trim();
-                Location location = new Location();
-                location.setType("");
-                location.setId(locationId);
-                location.setName(locationName);
-                location.setLine1(line1);
-                location.setLine2(line2);
-                location.setCity(city);
-                location.setState(state);
-                location.setPostal(postal);
-                location.setCountry(country);
-                location.setEin(ein);
-                location.setTaxExempt(taxExempt.isSelected());
-                location.setEmail(email);
-                location.setPhone(phone);
-                location.setWidth(Double.parseDouble(widthUOM.getValue()));
-                location.setWidthUOM(widthUOM.getUOM());
-                location.setLength(Double.parseDouble(lengthUOM.getValue()));
-                location.setLengthUOM(lengthUOM.getUOM());
-                location.setHeight(Double.parseDouble(heightUOM.getValue()));
-                location.setHeightUOM(heightUOM.getUOM());
-                Pipe.save("/ORGS", location);
-                dispose();
-                new QuickExplorer();
-            }
+        execute.addActionListener(e -> {
+            String locationId = locationIdField.getText().trim();
+            String locationName = locationNameField.getText().trim();
+            String line1 = line1Field.getText().trim();
+            String line2 = line2Field.getText().trim();
+            String city = cityField.getText().trim();
+            String state = stateField.getText().trim();
+            String postal = postalField.getText().trim();
+            String country = countries.getSelectedValue();
+            String ein = einField.getText().trim();
+            String email = emailField.getText().trim();
+            String phone = phoneField.getText().trim();
+            Location location = new Location();
+            location.setType("");
+            location.setId(locationId);
+            location.setName(locationName);
+            location.setLine1(line1);
+            location.setLine2(line2);
+            location.setCity(city);
+            location.setState(state);
+            location.setPostal(postal);
+            location.setCountry(country);
+            location.setEin(ein);
+            location.setTaxExempt(taxExempt.isSelected());
+            location.setEmail(email);
+            location.setPhone(phone);
+            location.setWidth(Double.parseDouble(widthUOM.getValue()));
+            location.setWidthUOM(widthUOM.getUOM());
+            location.setLength(Double.parseDouble(lengthUOM.getValue()));
+            location.setLengthUOM(lengthUOM.getUOM());
+            location.setHeight(Double.parseDouble(heightUOM.getValue()));
+            location.setHeightUOM(heightUOM.getUOM());
+            location.allowsProduction();
+
+            Pipe.save("/ORGS", location);
+            location.setId("1");
+            Pipe.save("/CCS", location);
+
+            dispose();
+            new QuickExplorer();
         });
         return buttons;
     }
@@ -107,6 +113,22 @@ public class IniSystem extends JFrame {
         Form f1 = new Form();
         f1.addInput(Elements.coloredLabel("*New ID", UIManager.getColor("Label.foreground")), locationIdField);
         return f1;
+    }
+
+    private JPanel you(){
+
+        JPanel contactInfo = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        userFirstName = Elements.input(20);
+        userLastName = Elements.input();
+        passwordField = Elements.input();
+
+        Form f = new Form();
+        f.addInput(Elements.coloredLabel("First Name", Constants.colors[10]), userFirstName);
+        f.addInput(Elements.coloredLabel("Last Name", Constants.colors[9]), userLastName);
+        f.addInput(Elements.coloredLabel("Password", Constants.colors[8]), passwordField);
+        contactInfo.add(f);
+        return contactInfo;
     }
 
     private JPanel general(){

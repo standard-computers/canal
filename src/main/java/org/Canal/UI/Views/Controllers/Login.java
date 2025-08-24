@@ -4,7 +4,6 @@ import org.Canal.Models.HumanResources.User;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.LockeState;
-import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;

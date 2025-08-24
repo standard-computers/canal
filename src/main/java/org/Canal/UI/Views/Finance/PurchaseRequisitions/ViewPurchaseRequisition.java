@@ -3,7 +3,6 @@ package org.Canal.UI.Views.Finance.PurchaseRequisitions;
 import org.Canal.Models.BusinessUnits.PurchaseOrder;
 import org.Canal.Models.BusinessUnits.PurchaseRequisition;
 import org.Canal.UI.Elements.*;
-import org.Canal.UI.Views.ViewLocation;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.LockeStatus;
@@ -27,16 +26,16 @@ public class ViewPurchaseRequisition extends LockeState {
 
     public ViewPurchaseRequisition(PurchaseRequisition requisition, DesktopState desktop, RefreshListener refreshListener) {
 
-        super("Purchase Requisitions", "/ORDS/PR/$", true, true, true, true);
+        super("Purchase Requisitions", "/ORDS/PR/" + requisition.getId(), true, true, true, true);
         setFrameIcon(new ImageIcon(CreatePurchaseRequisition.class.getResource("/icons/purchasereqs.png")));
         this.requisition = requisition;
         this.desktop = desktop;
         this.refreshListener = refreshListener;
 
         CustomTabbedPane tabs = new CustomTabbedPane();
-        tabs.addTab("Header Information", new ImageIcon(ViewLocation.class.getResource("/icons/info.png")), headerInfo());
-        tabs.addTab("Purchase Orders", new ImageIcon(ViewLocation.class.getResource("/icons/purchaseorders.png")), purchaseOrders());
-        tabs.addTab("Activity", new ImageIcon(ViewLocation.class.getResource("/icons/activity.png")), activity());
+        tabs.addTab("Header Information", headerInfo());
+        tabs.addTab("Purchase Orders", purchaseOrders());
+        tabs.addTab("Activity", activity());
 
         setLayout(new BorderLayout());
         add(tabs, BorderLayout.CENTER);

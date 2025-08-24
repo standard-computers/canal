@@ -2,9 +2,8 @@ package org.Canal.Models.BusinessUnits;
 
 import org.Canal.Models.Objex;
 import org.Canal.Start;
-import org.Canal.Utils.Constants;
-import org.Canal.Utils.Json;
-import org.Canal.Utils.LockeStatus;
+import org.Canal.Utils.Engine;
+import org.Canal.Utils.Pipe;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -16,9 +15,10 @@ public class PurchaseRequisition extends Objex {
     private String buyer;
     private double maxSpend;
     private boolean isSingleOrder;
-    private String start, end;
+    private String start;
+    private String end;
     private String notes;
-    private ArrayList<OrderLineItem> products = new ArrayList<>();
+    private ArrayList<OrderLineItem> items = new ArrayList<>();
 
     public String getSupplier() {
         return supplier;
@@ -84,26 +84,31 @@ public class PurchaseRequisition extends Objex {
         this.notes = notes;
     }
 
-    public ArrayList<OrderLineItem> getProducts() {
-        return products;
+    public ArrayList<OrderLineItem> getItems() {
+        return items;
     }
 
-    public void setProducts(ArrayList<OrderLineItem> products) {
-        this.products = products;
+    public void setItems(ArrayList<OrderLineItem> items) {
+        this.items = items;
     }
 
-    public void save(){
-        File md = new File(Start.DIR + "\\.store\\PR\\");
-        File[] mdf = md.listFiles();
-        if (mdf != null) {
-            for (File file : mdf) {
-                if (file.getPath().endsWith(".pr")) {
-                    PurchaseRequisition forg = Json.load(file.getPath(), PurchaseRequisition.class);
-                    if (forg.getId().equals(getId())) {
-                        Json.save(file.getPath(), this);
+    public void save() {
+        if (Engine.getConfiguration().getMongodb().isEmpty()) {
+
+            File md = new File(Start.DIR + "\\.store\\ORDS\\PR\\");
+            File[] mdf = md.listFiles();
+            if (mdf != null) {
+                for (File file : mdf) {
+                    if (file.getPath().endsWith(".pr")) {
+                        PurchaseRequisition forg = Pipe.load(file.getPath(), PurchaseRequisition.class);
+                        if (forg.getId().equals(getId())) {
+                            Pipe.export(file.getPath(), this);
+                        }
                     }
                 }
             }
+        } else {
+            Pipe.save("ORDS/PR", this);
         }
     }
 }

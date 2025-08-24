@@ -82,7 +82,7 @@ public class ViewSalesOrder extends LockeState {
         selectShipTo.editable();
         selectSupplier = Selectables.allLocations();
         selectSupplier.editable();
-        orderId = new Copiable("SO" + (60000000 + (Engine.orders.getSalesOrders().size() + 1)));
+        orderId = new Copiable("SO" + (60000000 + (Engine.getSalesOrders().size() + 1)));
         f.addInput(Elements.coloredLabel("*Order ID", Constants.colors[0]), orderId);
         f.addInput(Elements.coloredLabel("Supplier", Constants.colors[1]), selectSupplier);
         f.addInput(Elements.coloredLabel("Bill To", Constants.colors[2]), selectBillTo);
@@ -124,7 +124,7 @@ public class ViewSalesOrder extends LockeState {
 
     private JPanel itemDetails(){
         JPanel p = new JPanel(new BorderLayout());
-        ArrayList<Item> items = Engine.products.getProducts();
+        ArrayList<Item> items = Engine.getItems();
         if(items.isEmpty()){
             JOptionPane.showMessageDialog(this, "No products found", "Error", JOptionPane.ERROR_MESSAGE);
             dispose();
@@ -205,7 +205,7 @@ public class ViewSalesOrder extends LockeState {
             createPurchaseOrder.setEnabled(false);
         }
         HashMap<String, String> prs = new HashMap<>();
-        for(PurchaseRequisition pr1 : Engine.orders.getPurchaseRequisitions()){
+        for(PurchaseRequisition pr1 : Engine.getPurchaseRequisitions()){
             prs.put(pr1.getId(), pr1.getId());
         }
         availablePurchaseRequisitions = new Selectable(prs);

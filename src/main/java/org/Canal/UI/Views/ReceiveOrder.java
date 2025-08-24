@@ -93,7 +93,7 @@ public class ReceiveOrder extends LockeState {
 
             private void onChange() {
                 String poId = poField.getText();
-                PurchaseOrder foundPo = Engine.orders.getPurchaseOrder(poId);
+                PurchaseOrder foundPo = Engine.getPurchaseOrder(poId);
                 if (foundPo != null) {
                     ArrayList<Object[]> its = new ArrayList<>();
                     ArrayList<OrderLineItem> items = foundPo.getItems();
@@ -170,7 +170,7 @@ public class ReceiveOrder extends LockeState {
 
                     } else {
 
-                        PurchaseOrder foundPurchaseOrder = Engine.orders.getPurchaseOrder(providedPurchaseOrder);
+                        PurchaseOrder foundPurchaseOrder = Engine.getPurchaseOrder(providedPurchaseOrder);
                         if (foundPurchaseOrder != null) {
                             if ((boolean) Engine.codex.getValue("ORDS/RCV", "block_locations")) {
                                 if (!foundPurchaseOrder.getShipTo().equals(location)) {
@@ -217,7 +217,7 @@ public class ReceiveOrder extends LockeState {
                                         //double itemPrice = Double.parseDouble(receivedItems.getValueAt(row, 3).toString());
                                         //double itemTotal = Double.parseDouble(receivedItems.getValueAt(row, 4).toString());
                                         lineitems.add(new OrderLineItem(itemId, itemName, itemQty, itemRcvd));
-                                        i.addStock(new StockLine("/ITS", itemId, itemQty, "UNKNOWN", selectedBinId));
+                                        i.addStock(new StockLine("/ITS", itemId, "$SKU", itemQty, "UNKNOWN", selectedBinId));
                                         //TODO Request SKU
                                     }
 

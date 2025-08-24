@@ -7,10 +7,11 @@ public class Position extends Objex {
     private String organization;
     private String department; //Department ID
     private String description; //Position Description
-    private double compensation;
+    private double compensation; //If hourly, do hourly rate
     private boolean hourly;
     private boolean bonus = false; //Position has opportunity to bonus
     private boolean commission = false; //Position works on or earns comission
+    private int availability = 1;
 
     public String getOrganization() {
         return organization;
@@ -66,5 +67,13 @@ public class Position extends Objex {
 
     public void setCommission(boolean commission) {
         this.commission = commission;
+    }
+
+    public int getAvailability() {
+        return availability;
+    }
+
+    public void setAvailability(int availability) {
+        this.availability = availability;
     }
 }

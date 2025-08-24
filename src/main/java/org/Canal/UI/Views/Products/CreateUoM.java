@@ -1,9 +1,6 @@
 package org.Canal.UI.Views.Products;
 
-import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.UI.Elements.*;
-import org.Canal.Utils.Constants;
-import org.Canal.Utils.Engine;
 import org.Canal.Utils.Includer;
 
 import javax.swing.*;

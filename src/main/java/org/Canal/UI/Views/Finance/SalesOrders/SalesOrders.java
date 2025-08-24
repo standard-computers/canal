@@ -5,15 +5,12 @@ import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
-import org.Canal.UI.Views.Finance.PurchaseRequisitions.CreatePurchaseRequisition;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 /**
@@ -99,7 +96,7 @@ public class SalesOrders extends LockeState {
                 "Status"
         };
         ArrayList<Object[]> sos = new ArrayList<>();
-        for (SalesOrder so : Engine.orders.getSalesOrders()) {
+        for (SalesOrder so : Engine.getSalesOrders()) {
             sos.add(new Object[]{
                     so.getOrderId(),
                     so.getOwner(),

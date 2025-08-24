@@ -1,11 +1,9 @@
 package org.Canal.Models.SupplyChainUnits;
 
-import org.Canal.Models.BusinessUnits.Ledger;
 import org.Canal.Models.Objex;
-import org.Canal.Models.Record;
 import org.Canal.Start;
 import org.Canal.Utils.Engine;
-import org.Canal.Utils.Json;
+import org.Canal.Utils.Pipe;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -112,19 +110,24 @@ public class Delivery extends Objex {
         this.pallets = pallets;
     }
 
-    public void save(){
-        File md = new File(Start.DIR + "\\.store\\TRANS\\" + type + "\\");
-        File[] mdf = md.listFiles();
-        if (mdf != null) {
-            for (File file : mdf) {
-                if (file.getPath().endsWith("." + type.toLowerCase())) {
-                    Delivery fl = Json.load(file.getPath(), Delivery.class);
-                    if (fl.getId().equals(id)) {
-                        Json.save(file.getPath(), this);
+    public void save() {
+        if (Engine.getConfiguration().getMongodb().isEmpty()) {
+
+            File md = new File(Start.DIR + "\\.store\\TRANS\\" + type + "\\");
+            File[] mdf = md.listFiles();
+            if (mdf != null) {
+                for (File file : mdf) {
+                    if (file.getPath().endsWith("." + type.toLowerCase())) {
+                        Delivery fl = Pipe.load(file.getPath(), Delivery.class);
+                        if (fl.getId().equals(id)) {
+                            Pipe.export(file.getPath(), this);
 //                        Engine.assertRecord("TRANS", id, new Record());
+                        }
                     }
                 }
             }
+        } else {
+            Pipe.save("TRANS/" + type, this);
         }
     }
 }

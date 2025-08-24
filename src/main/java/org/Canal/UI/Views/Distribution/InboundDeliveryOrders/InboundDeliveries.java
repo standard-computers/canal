@@ -92,9 +92,9 @@ public class InboundDeliveries extends LockeState implements RefreshListener {
         });
         label.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                String[] printables = new String[Engine.orders.getPurchaseOrder().size()];
-                for (int i = 0; i < Engine.orders.getPurchaseOrder().size(); i++) {
-                    printables[i] = Engine.orders.getPurchaseOrder().get(i).getOrderId();
+                String[] printables = new String[Engine.getPurchaseOrders().size()];
+                for (int i = 0; i < Engine.getPurchaseOrders().size(); i++) {
+                    printables[i] = Engine.getPurchaseOrders().get(i).getOrderId();
                 }
                 new CheckboxBarcodeFrame(printables);
             }

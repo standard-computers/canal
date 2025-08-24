@@ -1,6 +1,6 @@
 package org.Canal.UI.Elements;
 
-import org.Canal.Start;
+import org.Canal.Models.HumanResources.User;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;
@@ -10,10 +10,14 @@ import java.awt.event.MouseEvent;
 
 public class IconButton extends JButton {
 
+    private User me = Engine.getAssignedUser();
 
     public IconButton(String text, String icon, String toolTip, String locke) {
         configureButton(text, icon, toolTip);
         addMouseListener(createMouseAdapter(locke));
+        if(!me.hasAccess(locke)){
+            setVisible(false);
+        }
     }
 
     public IconButton(String text, String icon, String toolTip) {

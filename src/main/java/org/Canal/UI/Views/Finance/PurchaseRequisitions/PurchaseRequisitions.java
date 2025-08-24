@@ -49,7 +49,7 @@ public class PurchaseRequisitions extends LockeState implements RefreshListener 
                     int row = t.getSelectedRow();
                     if (row != -1) {
                         String v = String.valueOf(t.getValueAt(row, 1));
-                        PurchaseRequisition pr = Engine.orders.getPurchaseRequisition(v);
+                        PurchaseRequisition pr = Engine.getPurchaseRequisition(v);
                         desktop.put(new ViewPurchaseRequisition(pr, desktop, PurchaseRequisitions.this));
                     }
                 }
@@ -81,7 +81,7 @@ public class PurchaseRequisitions extends LockeState implements RefreshListener 
                 "Status"
         };
         ArrayList<Object[]> prs = new ArrayList<>();
-        for (PurchaseRequisition pr : Engine.orders.getPurchaseRequisitions()) {
+        for (PurchaseRequisition pr : Engine.getPurchaseRequisitions()) {
             if(!pr.getStatus().equals(LockeStatus.ARCHIVED) && !pr.getStatus().equals(LockeStatus.REMOVED)) {
                 double consumption = 0;
                 for(PurchaseOrder po : Engine.getPurchaseOrders()){
@@ -117,7 +117,7 @@ public class PurchaseRequisitions extends LockeState implements RefreshListener 
      * Action buttons for PR list
      * @return JPanel of buttons with a title element
      */
-    private JScrollPane toolbar() {
+    private JPanel toolbar() {
 
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
@@ -134,7 +134,8 @@ public class PurchaseRequisitions extends LockeState implements RefreshListener 
             tb.add(Box.createHorizontalStrut(5));
         }
 
-        IconButton open = new IconButton("Open", "open", "Open selected");
+        IconButton open = new IconButton("Open", "open", "Open selected", "/ORDS/PR/O");
+        open.addActionListener(_ -> desktop.put(Engine.router("/ORDS/PR/O", desktop)));
         tb.add(open);
         tb.add(Box.createHorizontalStrut(5));
 
@@ -143,6 +144,7 @@ public class PurchaseRequisitions extends LockeState implements RefreshListener 
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton autoMakePRs = new IconButton("AutoMake", "automake", "AutoMake Purchase Requisitions", "/ORDS/PR/AUTO_MK");
+        autoMakePRs.addActionListener(_ -> desktop.put(new AutoMakePurchaseRequisitions(desktop)));
         tb.add(autoMakePRs);
         tb.add(Box.createHorizontalStrut(5));
 
@@ -160,19 +162,6 @@ public class PurchaseRequisitions extends LockeState implements RefreshListener 
 
         IconButton refresh = new IconButton("Refresh", "refresh", "Refresh data");
         tb.add(refresh);
-        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
-
-        open.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                String prId = JOptionPane.showInputDialog("Enter Purchase Requision ID");
-                PurchaseRequisition pr = Engine.orders.getPurchaseRequisition(prId);
-                if(pr != null) {
-                    pr.setStatus(LockeStatus.IN_USE);
-                    pr.save();
-                    refresh();
-                }
-            }
-        });
 
         createPurchaseReq.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -181,9 +170,9 @@ public class PurchaseRequisitions extends LockeState implements RefreshListener 
         });
         labels.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                String[] printables = new String[Engine.orders.getPurchaseOrder().size()];
-                for (int i = 0; i < Engine.orders.getPurchaseOrder().size(); i++) {
-                    printables[i] = Engine.orders.getPurchaseOrder().get(i).getOrderId();
+                String[] printables = new String[Engine.getPurchaseOrders().size()];
+                for (int i = 0; i < Engine.getPurchaseOrders().size(); i++) {
+                    printables[i] = Engine.getPurchaseOrders().get(i).getOrderId();
                 }
                 new CheckboxBarcodeFrame(printables);
             }
@@ -194,7 +183,7 @@ public class PurchaseRequisitions extends LockeState implements RefreshListener 
                 refresh();
             }
         });
-        return Elements.scrollPane(tb);
+        return tb;
     }
 
     @Override

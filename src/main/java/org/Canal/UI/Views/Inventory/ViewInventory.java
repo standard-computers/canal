@@ -44,6 +44,8 @@ public class ViewInventory extends LockeState implements RefreshListener {
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);
         add(tableScrollPane, BorderLayout.CENTER);
+
+        setMaximized(true);
     }
 
     private CustomTable table() {
@@ -52,6 +54,7 @@ public class ViewInventory extends LockeState implements RefreshListener {
                 "Location",
                 "HU",
                 "ID",
+                "Item",
                 "Name",
                 "Org. Qty.",
                 "Qty.",
@@ -66,11 +69,12 @@ public class ViewInventory extends LockeState implements RefreshListener {
         };
         ArrayList<Object[]> stks = new ArrayList<>();
         for (StockLine sl : Engine.getInventory(location).getStockLines()) {
-            Item i = Engine.products.getItem(sl.getId());
+            Item i = Engine.getItem(sl.getItem());
             stks.add(new Object[]{
                     location,
                     sl.getHu(),
                     sl.getId(),
+                    sl.getItem(),
                     i.getName(),
                     (sl.getQuantity()),
                     (sl.getQuantity()),
@@ -91,55 +95,64 @@ public class ViewInventory extends LockeState implements RefreshListener {
 
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-        IconButton blockPo = new IconButton("Block", "block", "Block/Pause PO, can't be used");
-        IconButton move = new IconButton("Move", "start", "Move Inventory (Internally)");
-        IconButton movements = new IconButton("Movements", "movements", "View stock movements");
-        IconButton inventoryValuation = new IconButton("Valuation", "autoprice", "Valuate this inventory");
-        IconButton export = new IconButton("", "export", "Export as CSV");
-        IconButton label = new IconButton("Barcodes", "label", "Print labels for org properties");
-        JTextField filterValue = Elements.input(location, 10);
-        tb.add(blockPo);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(move);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(movements);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(inventoryValuation);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(export);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(label);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(filterValue);
-        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+        IconButton export = new IconButton("Export", "export", "Export as CSV");
         export.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 table.exportToCSV();
             }
         });
-        move.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                desktop.put(new MoveStock(location, ViewInventory.this));
+        tb.add(export);
+        tb.add(Box.createHorizontalStrut(5));
+
+        IconButton blockPo = new IconButton("Block", "block", "Block/Pause PO, can't be used");
+        tb.add(blockPo);
+        tb.add(Box.createHorizontalStrut(5));
+
+        IconButton move = new IconButton("Move", "start", "Move Inventory (Internally)");
+        move.addActionListener(_ -> desktop.put(new MoveStock(location, ViewInventory.this)));
+        tb.add(move);
+        tb.add(Box.createHorizontalStrut(5));
+
+        IconButton movements = new IconButton("Movements", "movements", "View stock movements");
+        movements.addActionListener(_ -> desktop.put(new ProductMovements(desktop, location)));
+        tb.add(movements);
+        tb.add(Box.createHorizontalStrut(5));
+
+        IconButton inventoryValuation = new IconButton("Valuation", "autoprice", "Valuate this inventory");
+        inventoryValuation.addActionListener(_ -> {
+            double totalValue = 0;
+            for(StockLine sl : Engine.getInventory(location).getStockLines()){
+                Item i = Engine.getItem(sl.getItem());
+                if(i != null){
+                    totalValue += (i.getPrice() + sl.getQuantity());
+                }
             }
+            JOptionPane.showMessageDialog(null, "$" + totalValue, "Inventory Valuation", JOptionPane.INFORMATION_MESSAGE);
         });
-        movements.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                desktop.put(new ProductMovements(desktop, location));
-            }
-        });
+        tb.add(inventoryValuation);
+        tb.add(Box.createHorizontalStrut(5));
+
+        IconButton label = new IconButton("Barcodes", "label", "Print labels for org properties");
+        tb.add(label);
+        tb.add(Box.createHorizontalStrut(5));
+
+        JTextField filterValue = Elements.input(location, 10);
+        tb.add(filterValue);
+        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
+
         label.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                String[] printables = new String[Engine.orders.getPurchaseOrder().size()];
-                for (int i = 0; i < Engine.orders.getPurchaseOrder().size(); i++) {
-                    printables[i] = Engine.orders.getPurchaseOrder().get(i).getOrderId();
+                String[] printables = new String[Engine.getPurchaseOrders().size()];
+                for (int i = 0; i < Engine.getPurchaseOrders().size(); i++) {
+                    printables[i] = Engine.getPurchaseOrders().get(i).getOrderId();
                 }
                 new CheckboxBarcodeFrame(printables);
             }
         });
+
         filterValue.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -149,6 +162,7 @@ public class ViewInventory extends LockeState implements RefreshListener {
                 }
             }
         });
+
         return tb;
     }
 
@@ -158,6 +172,7 @@ public class ViewInventory extends LockeState implements RefreshListener {
                 "Location",
                 "HU",
                 "ID",
+                "Item",
                 "Name",
                 "Org. Qty.",
                 "Qty.",
@@ -170,11 +185,12 @@ public class ViewInventory extends LockeState implements RefreshListener {
         };
         ArrayList<Object[]> stks = new ArrayList<>();
         for (StockLine sl : Engine.getInventory(id).getStockLines()) {
-            Item i = Engine.products.getItem(sl.getId());
+            Item i = Engine.getItem(sl.getItem());
             stks.add(new String[]{
                     id,
                     sl.getHu(),
                     sl.getId(),
+                    sl.getItem(),
                     i.getName(),
                     String.valueOf(sl.getQuantity()),
                     String.valueOf(sl.getQuantity()),

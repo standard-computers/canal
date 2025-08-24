@@ -5,7 +5,6 @@ import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.UOMField;
 import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.LockeState;
-import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Includer;
 
@@ -35,7 +34,7 @@ public class CreateInclusion extends LockeState {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 String productID = inclusionId.getText().trim();
-                Item component = Engine.products.getItem(productID);
+                Item component = Engine.getItem(productID);
                 if(component == null) {
                     System.out.println("No such product: " + productID);
                 }

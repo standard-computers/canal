@@ -7,6 +7,8 @@ package org.Canal.UI.Elements;
 public class MarkdownViewer extends LockeState {
 
     public MarkdownViewer(String uri) {
-        super("Reader", "/READER", true, true, true, true);
+
+        super("Reader", "/READER");
+
     }
 }

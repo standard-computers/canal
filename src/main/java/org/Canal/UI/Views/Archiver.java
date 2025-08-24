@@ -5,9 +5,8 @@ import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.Utils.Constants;
-import org.Canal.Utils.Json;
-import org.Canal.Utils.LockeStatus;
 import org.Canal.Utils.Pipe;
+import org.Canal.Utils.LockeStatus;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,7 +33,7 @@ public class Archiver extends LockeState {
                 File[] fs = Pipe.list(objex);
                 for(File f : fs){
                     if(f.getName().endsWith(objex.toLowerCase().replaceAll("/", "."))){
-                        Objex o = Json.load(f.getPath(), Objex.class);
+                        Objex o = Pipe.load(f.getPath(), Objex.class);
                         if(o.getId().equals(objexIdField.getText())){
                             o.setStatus(LockeStatus.ARCHIVED);
                             //TODO

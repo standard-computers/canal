@@ -64,6 +64,7 @@ public class PurchaseOrders extends LockeState implements RefreshListener {
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton createPurchaseOrder = new IconButton("New PO", "create", "Build an item", "/ORDS/PO/NEW");
+        createPurchaseOrder.addActionListener(_ -> desktop.put(new CreatePurchaseOrder(desktop)));
         tb.add(createPurchaseOrder);
         tb.add(Box.createHorizontalStrut(5));
 
@@ -89,18 +90,17 @@ public class PurchaseOrders extends LockeState implements RefreshListener {
 
         IconButton print = new IconButton("Print", "print", "Print selectes");
         labels.addActionListener(_ -> {
-            String[] printables = new String[Engine.orders.getPurchaseOrder().size()];
-            for (int i = 0; i < Engine.orders.getPurchaseOrder().size(); i++) {
-                printables[i] = Engine.orders.getPurchaseOrder().get(i).getOrderId();
+            String[] printables = new String[Engine.getPurchaseOrders().size()];
+            for (int i = 0; i < Engine.getPurchaseOrders().size(); i++) {
+                printables[i] = Engine.getPurchaseOrders().get(i).getOrderId();
             }
             new CheckboxBarcodeFrame(printables);
         });
         tb.add(print);
         tb.add(Box.createHorizontalStrut(5));
 
-
         IconButton refresh = new IconButton("Refresh", "refresh", "Refresh data");
-        refresh.addActionListener(e -> refresh());
+        refresh.addActionListener(_ -> refresh());
         tb.add(refresh);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -126,7 +126,7 @@ public class PurchaseOrders extends LockeState implements RefreshListener {
                 "Status",
         };
         ArrayList<Object[]> pos = new ArrayList<>();
-        for (PurchaseOrder po : Engine.orders.getPurchaseOrder()) {
+        for (PurchaseOrder po : Engine.getPurchaseOrders()) {
             pos.add(new Object[]{
                     po.getOrderId(),
                     po.getOwner(),
@@ -154,7 +154,7 @@ public class PurchaseOrders extends LockeState implements RefreshListener {
                     int row = t.getSelectedRow();
                     if (row != -1) {
                         String v = String.valueOf(t.getValueAt(row, 1));
-                        desktop.put(new ViewPurchaseOrder(Engine.orders.getPurchaseOrder(v), desktop, PurchaseOrders.this));
+                        desktop.put(new ViewPurchaseOrder(Engine.getPurchaseOrder(v), desktop, PurchaseOrders.this));
                     }
                 }
             }

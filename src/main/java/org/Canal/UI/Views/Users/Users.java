@@ -1,6 +1,5 @@
 package org.Canal.UI.Views.Users;
 
-import org.Canal.Models.HumanResources.Department;
 import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.HumanResources.User;
 import org.Canal.UI.Elements.CustomTable;
@@ -14,8 +13,6 @@ import org.Canal.Utils.RefreshListener;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -93,7 +90,7 @@ public class Users extends LockeState implements RefreshListener {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
 
-        IconButton importUsers = new IconButton("Import", "import", "Import from CSV", "");
+        IconButton importUsers = new IconButton("Import", "export", "Import from CSV", "");
         importUsers.addActionListener(_ -> table.exportToCSV());
         tb.add(importUsers);
         tb.add(Box.createHorizontalStrut(5));

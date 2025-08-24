@@ -239,7 +239,7 @@ public class ViewLocation extends LockeState implements RefreshListener {
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton areas = new IconButton("+ Areas", "areas", "Add an area cost center", "/AREAS/NEW");
-        areas.addActionListener(_ -> desktop.put(new CreateArea(location.getId(), ViewLocation.this)));
+        areas.addActionListener(_ -> desktop.put(new CreateArea(location.getId(), desktop, ViewLocation.this)));
         tb.add(areas);
         tb.add(Box.createHorizontalStrut(5));
 
@@ -256,7 +256,7 @@ public class ViewLocation extends LockeState implements RefreshListener {
         autoMakeAreas.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new AutoMakeAreas());
+                desktop.put(new AutoMakeAreas(null));
             }
         });
         tb.add(autoMakeAreas);
@@ -323,9 +323,9 @@ public class ViewLocation extends LockeState implements RefreshListener {
             Employee e = Engine.getEmployees(location.getId()).get(i);
             employees[i] = new Locke(e.getId() + " - " + e.getName(), UIManager.getIcon("FileView.fileIcon"), "/VEND/" + e.getId(), Constants.colors[3], null);
         }
-        Locke[] items = new Locke[Engine.products.getItems(location.getOrganization()).size()];
-        for (int i = 0; i < Engine.products.getItems(location.getOrganization()).size(); i++) {
-            Item l = Engine.products.getItems(location.getOrganization()).get(i);
+        Locke[] items = new Locke[Engine.getItems(location.getOrganization()).size()];
+        for (int i = 0; i < Engine.getItems(location.getOrganization()).size(); i++) {
+            Item l = Engine.getItems(location.getOrganization()).get(i);
             items[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/ITS/" + l.getId(), Constants.colors[4], null);
         }
         return new Locke(location.getName(), UIManager.getIcon("FileView.fileIcon"), "/DCSS/" + location.getId(), new Locke[]{

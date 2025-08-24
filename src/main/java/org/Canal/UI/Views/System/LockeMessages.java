@@ -17,7 +17,7 @@ public class LockeMessages extends LockeState {
 
     public LockeMessages(ArrayList<String[]> messages) {
 
-        super("Locke Messages", "/>", true, true, true, true);
+        super("Locke Messages", "/>$");
         setFrameIcon(new ImageIcon(LockeMessages.class.getResource("/icons/alerts.png")));
 
         RSyntaxTextArea textArea = new RSyntaxTextArea(20, 60);

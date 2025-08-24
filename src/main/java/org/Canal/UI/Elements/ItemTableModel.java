@@ -54,6 +54,7 @@ public class ItemTableModel extends AbstractTableModel {
 
     @Override
     public void setValueAt(Object value, int rowIndex, int columnIndex) {
+
         if (columnIndex == 1) {
             Item selectedItem = (Item) value;
             Location vendor = Engine.getLocation(selectedItem.getVendor(), "VEND");
@@ -98,6 +99,7 @@ public class ItemTableModel extends AbstractTableModel {
     }
 
     public void removeRow(int rowIndex) {
+
         if (rowIndex >= 0 && rowIndex < data.size()) {
             data.remove(rowIndex);
             fireTableRowsDeleted(rowIndex, rowIndex);
@@ -105,10 +107,19 @@ public class ItemTableModel extends AbstractTableModel {
     }
 
     public String getTotalPrice() {
+
         double total = 0.0;
         for (Object[] row : data) {
             total += Double.parseDouble(row[6].toString());
         }
         return new DecimalFormat("#.00").format(total);
+    }
+
+    public void empty() {
+
+        int oldSize = data.size();
+        if (oldSize == 0) return;
+        data.clear();
+        fireTableRowsDeleted(0, oldSize - 1);
     }
 }

@@ -32,6 +32,10 @@ public class CreateLocation extends LockeState {
     private JTextField emailField;
     private JTextField phoneField;
     private JCheckBox taxExempt;
+    private JCheckBox allowsInventory;
+    private JCheckBox allowsProduction;
+    private JCheckBox allowsSales;
+    private JCheckBox allowsPurchasing;
     private UOMField widthUOM = new UOMField();
     private UOMField lengthUOM = new UOMField();
     private UOMField heightUOM = new UOMField();
@@ -48,6 +52,7 @@ public class CreateLocation extends LockeState {
         tabs.add("General", general());
         tabs.add("Contact Info", contact());
         tabs.add("Dimensional", dimensional());
+        tabs.add("Controls", controls());
 
         JPanel header = new JPanel(new BorderLayout());
         header.add(Elements.header("Make a Location", SwingConstants.LEFT), BorderLayout.NORTH);
@@ -94,7 +99,13 @@ public class CreateLocation extends LockeState {
 
                     System.out.println(Engine.codex.getValue(objexType, "prefix"));
                     ArrayList<Location> ls = Engine.getLocations(objexType);
-                    String locationId = ((String) Engine.codex.getValue(objexType, "prefix")) + (1000 + (ls.size() + 1));;
+                    String prefix       = (String)  Engine.codex.getValue(objexType, "prefix");
+                    int leadingZeros    = (Integer) Engine.codex.getValue(objexType, "leading_zeros"); // e.g., 3 -> 001
+                    int nextId          = ls.size() + 1;
+                    int width = Math.max(0, leadingZeros);
+                    String numberPart = String.format("%0" + width + "d", nextId); // zero-pad to width
+                    String locationId = prefix + numberPart;
+
                     String organizationId = organizations.getSelectedValue();
                     String locationName = locationNameField.getText().trim();
                     String line1 = line1Field.getText().trim();
@@ -106,7 +117,9 @@ public class CreateLocation extends LockeState {
                     String ein = einField.getText().trim();
                     String email = emailField.getText().trim();
                     String phone = phoneField.getText().trim();
+
                     Location location = new Location();
+
                     location.setType(objexSelection.getSelectedValue());
                     location.setId(locationId);
                     location.setOrganization(organizationId);
@@ -127,11 +140,17 @@ public class CreateLocation extends LockeState {
                     location.setLengthUOM(lengthUOM.getUOM());
                     location.setHeight(Double.parseDouble(heightUOM.getValue()));
                     location.setHeightUOM(heightUOM.getUOM());
+                    location.setAllowsInventory(allowsInventory.isSelected());
+                    location.setAllowsProduction(allowsProduction.isSelected());
+                    location.setAllowsSales(allowsSales.isSelected());
+                    location.setAllowsPurchasing(allowsPurchasing.isSelected());
+
                     Pipe.save(objexType, location);
-                    dispose();
+
                     if(refreshListener != null) {
                         refreshListener.refresh();
                     }
+                    dispose();
 
                     //TODO auto_open_new
 //                    desktop.put(Engine.router(objexType + "/" + locationId, desktop));
@@ -207,5 +226,24 @@ public class CreateLocation extends LockeState {
         f.addInput(Elements.coloredLabel("Height", Constants.colors[2]), heightUOM);
         dimensional.add(f);
         return dimensional;
+    }
+
+    private JPanel controls(){
+
+        JPanel controls = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        allowsInventory = new JCheckBox("Inventory Movements");
+        allowsProduction = new JCheckBox("Allows Production");
+        allowsSales = new JCheckBox("Sales Order Processing");
+        allowsPurchasing = new JCheckBox("Purchase Order Processing");
+
+        Form f = new Form();
+        f.addInput(Elements.coloredLabel("Allow Inventory", Constants.colors[0]), allowsInventory);
+        f.addInput(Elements.coloredLabel("Allow Production", Constants.colors[1]), allowsProduction);
+        f.addInput(Elements.coloredLabel("Allow Sales", Constants.colors[2]), allowsSales);
+        f.addInput(Elements.coloredLabel("Allow Purchasing", Constants.colors[3]), allowsPurchasing);
+        controls.add(f);
+
+        return controls;
     }
 }

@@ -2,6 +2,7 @@ package org.Canal.UI.Views.Departments;
 
 import org.Canal.Models.HumanResources.Department;
 import org.Canal.Models.HumanResources.Position;
+import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.*;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -79,7 +80,7 @@ public class Departments extends LockeState implements RefreshListener {
         tb.add(createDepartment);
         tb.add(Box.createHorizontalStrut(5));
 
-        IconButton refresh = new IconButton("", "refresh", "Refresh Data");
+        IconButton refresh = new IconButton("Refresh", "refresh", "Refresh Data");
         refresh.addActionListener(_ -> refresh());
         tb.add(refresh);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -95,31 +96,37 @@ public class Departments extends LockeState implements RefreshListener {
                 "Organization",
                 "Location",
                 "Department",
+                "Dept. Name",
                 "Supervisor",
                 "Positions",
+                "Employees",
                 "Status",
                 "Created",
         };
         ArrayList<Object[]> data = new ArrayList<>();
-        for (Department department : Engine.getOrganization().getDepartments()) {
-            ArrayList<Position> positions = Engine.getPositions();
-            int posCount = 0;
-            for(Position position : positions){
-                if(position.getDepartment().equals(department.getId())){
-                    posCount++;
+        for(Location org : Engine.getLocations("ORGS")){
+            for (Department department : org.getDepartments()) {
+                ArrayList<Position> positions = Engine.getPositions();
+                int posCount = 0;
+                for(Position position : positions){
+                    if(position.getDepartment().equals(department.getId())){
+                        posCount++;
+                    }
                 }
+                data.add(new Object[]{
+                        department.getId(),
+                        department.getName(),
+                        department.getOrganization(),
+                        department.getLocation(),
+                        department.getDepartment(),
+                        "",
+                        department.getSupervisor(),
+                        posCount,
+                        "",
+                        department.getStatus(),
+                        department.getCreated(),
+                });
             }
-            data.add(new Object[]{
-                    department.getId(),
-                    department.getName(),
-                    department.getOrganization(),
-                    department.getLocation(),
-                    department.getDepartment(),
-                    department.getSupervisor(),
-                    posCount,
-                    department.getStatus(),
-                    department.getCreated(),
-            });
         }
         CustomTable ct = new CustomTable(columns, data);
         ct.addMouseListener(new MouseAdapter() {

@@ -49,30 +49,43 @@ public class Bins extends LockeState implements RefreshListener {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
 
-        IconButton importBins = new IconButton("Import", "export", "Import as CSV", "");
-        tb.add(importBins);
-        tb.add(Box.createHorizontalStrut(5));
+        if((boolean) Engine.codex.getValue("BNS", "import_enabled")){
+            IconButton importBins = new IconButton("Import", "export", "Import as CSV", "");
+            tb.add(importBins);
+            tb.add(Box.createHorizontalStrut(5));
+        }
 
-        IconButton export = new IconButton("Export", "export", "Export as CSV", "");
-        export.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                table.exportToCSV();
-            }
-        });
-        tb.add(export);
-        tb.add(Box.createHorizontalStrut(5));
+        if((boolean) Engine.codex.getValue("BNS", "export_enabled")){
+            IconButton export = new IconButton("Export", "export", "Export as CSV", "");
+            export.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    table.exportToCSV();
+                }
+            });
+            tb.add(export);
+            tb.add(Box.createHorizontalStrut(5));
+        }
 
         IconButton open = new IconButton("Open", "open", "Open Bin");
         tb.add(open);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton create = new IconButton("Create", "create", "Create a Bin", "/BNS/NEW");
+        create.addActionListener(_ -> desktop.put(new CreateBin(null, this)));
         tb.add(create);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton autoMakeBins = new IconButton("AutoMake", "automake", "Automate the creation of Bin(s)", "/BNS/AUTO_MK");
+        autoMakeBins.addActionListener(_ -> desktop.put(new AutoMakeBins()));
         tb.add(autoMakeBins);
+        tb.add(Box.createHorizontalStrut(5));
+
+        IconButton delete = new IconButton("Delete", "delete", "Delete Bin(s)", "/BNS/DEL");
+        delete.addActionListener(_ -> {
+
+        });
+        tb.add(delete);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton labels = new IconButton("Labels", "label", "Delete an Bin");
@@ -92,72 +105,63 @@ public class Bins extends LockeState implements RefreshListener {
     }
 
     private CustomTable table() {
+
         String[] columns = new String[]{
-            "ID",
-            "Location",
-            "Area",
-            "Name",
-            "Width",
-            "Width UOM",
-            "Length",
-            "Length UOM",
-            "Height",
-            "Height UOM",
-            "Area",
-            "Area UOM",
-            "Volume",
-            "Volume UOM",
-            "Auto Repl",
-            "Fixed",
-            "Picking",
-            "Putaway",
-            "GI",
-            "GR",
-            "Holds Stock",
-            "Status",
-            "Created",
+                "ID",
+                "Area",
+                "Name",
+                "Width",
+                "Width UOM",
+                "Length",
+                "Length UOM",
+                "Height",
+                "Height UOM",
+                "Area",
+                "Area UOM",
+                "Volume",
+                "Volume UOM",
+                "Auto Repl",
+                "Fixed",
+                "Picking",
+                "Putaway",
+                "GI",
+                "GR",
+                "Holds Stock",
+                "Status",
+                "Created",
         };
+
         int bin_count = 0;
         ArrayList<Object[]> data = new ArrayList<>();
-        for (Area area : Engine.getAreas()) {
-            for(Bin b : area.getBins()){
-                bin_count++;
-                Area a = new Area();
-                ArrayList<Area> areas = Engine.getAreas();
-                for(int i = 0; i < areas.size(); i++){
-                    for(int g = 0; g < areas.get(i).getBins().size(); g++){
-                        if(areas.get(i).getBins().get(g).getId().equals(b.getId())) {
-                            a = areas.get(i);
-                        }
-                    }
-                }
-                data.add(new Object[]{
-                        b.getId(),
-                        a.getLocation(),
-                        a.getId(),
-                        b.getName(),
-                        b.getWidth(),
-                        b.getWidthUOM(),
-                        b.getLength(),
-                        b.getLengthUOM(),
-                        b.getHeight(),
-                        b.getHeightUOM(),
-                        b.getAreaValue(),
-                        b.getAreaUOM(),
-                        b.getVolume(),
-                        b.getVolumeUOM(),
-                        b.isAuto_replenish(),
-                        b.isFixed(),
-                        b.isPicking(),
-                        b.isPutaway(),
-                        b.doesGI(),
-                        b.doesGR(),
-                        b.isHoldsStock(),
-                        b.getStatus(),
-                        b.getCreated(),
-                });
-            }
+        for (Bin b : Engine.getBins((Integer) Engine.codex.getValue("BNS", "find_limit"))) {
+            bin_count++;
+            //TODO remove extra call to are some how
+            data.add(new Object[]{
+                    b.getId(),
+                    b.getArea(),
+                    b.getName(),
+                    b.getWidth(),
+                    b.getWidthUOM(),
+                    b.getLength(),
+                    b.getLengthUOM(),
+                    b.getHeight(),
+                    b.getHeightUOM(),
+                    b.getAreaValue(),
+                    b.getAreaUOM(),
+                    b.getVolume(),
+                    b.getVolumeUOM(),
+                    b.isAuto_replenish(),
+                    b.isFixed(),
+                    b.isPicking(),
+                    b.isPutaway(),
+                    b.doesGI(),
+                    b.doesGR(),
+                    b.isHoldsStock(),
+                    b.getStatus(),
+                    b.getCreated(),
+            });
         }
+
         binCountString = "All Bins (" + bin_count + ")";
         CustomTable t = new CustomTable(columns, data);
         t.addMouseListener(new MouseAdapter() {
@@ -168,9 +172,9 @@ public class Bins extends LockeState implements RefreshListener {
                     int r = t.getSelectedRow();
                     if (r != -1) {
                         String v = String.valueOf(t.getValueAt(r, 1));
-                        for(Area d : Engine.getAreas()){
-                            for(Bin b : d.getBins()){
-                                if(v.equals(b.getId())){
+                        for (Area d : Engine.getAreas()) {
+                            for (Bin b : d.getBins()) {
+                                if (v.equals(b.getId())) {
                                     desktop.put(new ViewBin(b));
                                 }
                             }

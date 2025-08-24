@@ -24,6 +24,7 @@ public class CustomTable extends JTable {
     private String[] headers;
 
     public CustomTable(String[] headers, ArrayList<Object[]> data) {
+
         // Original setup code
         this.headers = new String[headers.length + 1];
         this.headers[0] = "Select";

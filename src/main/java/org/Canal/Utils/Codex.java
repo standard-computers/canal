@@ -65,9 +65,9 @@ public class Codex {
         variables.put("CCS", new HashMap<>() {{
             put("name", "Cost Centers");
             put("icon", "costcenters");
-            put("prefix", "CC");
+            put("prefix", "");
             put("leading_number", 1);
-            put("leading_zeros", 2);
+            put("leading_zeros", 4);
             put("allow_archival", true);
             put("allow_deletion", true);
             put("import_enabled", true);
@@ -178,6 +178,7 @@ public class Codex {
             put("prefix", "BN");
             put("leading_number", 1);
             put("leading_zeros", 2);
+            put("find_limit", 200);
             put("allow_archival", true);
             put("allow_deletion", true);
             put("import_enabled", true);
@@ -266,6 +267,22 @@ public class Codex {
             put("allow_batch_create", true);
             put("start_maximized", true);
         }});
+        variables.put("RTS", new HashMap<>() {{
+            put("name", "Rates");
+            put("icon", "ledgers");
+            put("prefix", "");
+            put("leading_number", 1);
+            put("leading_zeros", 3);
+            put("allow_archival", true);
+            put("allow_deletion", true);
+            put("import_enabled", true);
+            put("export_enabled", true);
+            put("automake_enabled", true);
+            put("auto_open_new", false);
+            put("dispose_on_save", true);
+            put("allow_batch_create", true);
+            put("start_maximized", true);
+        }});
         variables.put("ORDS/PO", new HashMap<>() {{
             put("name", "Purchase Orders");
             put("icon", "orders");
@@ -273,7 +290,7 @@ public class Codex {
             put("leading_number", 1);
             put("leading_zeros", 5);
             put("commit_to_ledger", false);
-            put("use_deliveries", false); //Creates associated delivery
+            put("use_deliveries", true); //Creates associated delivery
             put("allow_deletion", true); //Allow deletion of POs
             put("allow_archival", true); //Allow archival of POs
             put("import_enabled", false); //Allows POs to be created by AutoMake
@@ -367,8 +384,8 @@ public class Codex {
             put("import_enabled", true);
             put("export_enabled", true);
             put("allow_batch_create", true);
-            put("item_created_alert", true);
-            put("auto_open_new", true);
+            put("item_created_alert", false);
+            put("auto_open_new", false);
             put("dispose_on_save", true);
             put("default_width_uom", "IN");
             put("default_length_uom", "IN");
@@ -425,6 +442,8 @@ public class Codex {
             put("leading_zeros", 2);
             put("allow_archival", true);
             put("allow_deletion", true);
+            put("import_enabled", true);
+            put("export_enabled", true);
             put("automake_enabled", true);
             put("allow_batch_create", true);
             put("start_maximized", true);
@@ -461,6 +480,15 @@ public class Codex {
             put("automake_enabled", true);
             put("allow_batch_create", true);
             put("start_maximized", true);
+        }});
+        variables.put("STL", new HashMap<>() {{
+            put("name", "Stock Lines");
+            put("prefix", "ST");
+            put("length", 6);
+            put("allow_archival", false);
+            put("allow_deletion", true);
+            put("automake_enabled", true);
+            put("allow_batch_create", true);
         }});
     }
 

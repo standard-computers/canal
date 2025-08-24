@@ -14,21 +14,22 @@ import java.util.HashMap;
 
 public class Selectables {
 
-    public static Selectable allLocations(){
+    public static Selectable allLocations() {
+
         HashMap<String, String> availableLocations = new HashMap<>();
-        for(Location orgs : Engine.getLocations("ORGS")){
+        for (Location orgs : Engine.getLocations("ORGS")) {
             availableLocations.put(orgs.getId(), orgs.getId());
         }
-        for(Location cs : Engine.getLocations("CCS")){
+        for (Location cs : Engine.getLocations("CCS")) {
             availableLocations.put(cs.getId(), cs.getId());
         }
-        for(Location dcs : Engine.getLocations("DCSS")){
+        for (Location dcs : Engine.getLocations("DCSS")) {
             availableLocations.put(dcs.getId(), dcs.getId());
         }
-        for(Location whs : Engine.getLocations("WHS")){
+        for (Location whs : Engine.getLocations("WHS")) {
             availableLocations.put(whs.getId(), whs.getId());
         }
-        for(Location vndr : Engine.getLocations("VEND")){
+        for (Location vndr : Engine.getLocations("VEND")) {
             availableLocations.put(vndr.getId(), vndr.getId());
         }
         Selectable s = new Selectable(availableLocations);
@@ -36,24 +37,25 @@ public class Selectables {
         return s;
     }
 
-    public static Selectable allLocationsAndPeople(){
+    public static Selectable allLocationsAndPeople() {
+
         HashMap<String, String> options = new HashMap<>();
-        for(Location orgs : Engine.getLocations("ORGS")){
+        for (Location orgs : Engine.getLocations("ORGS")) {
             options.put(orgs.getId(), orgs.getId());
         }
-        for(Location cs : Engine.getLocations("CCS")){
+        for (Location cs : Engine.getLocations("CCS")) {
             options.put(cs.getId(), cs.getId());
         }
-        for(Location dcs : Engine.getLocations("DCSS")){
+        for (Location dcs : Engine.getLocations("DCSS")) {
             options.put(dcs.getId(), dcs.getId());
         }
-        for(Location whs : Engine.getLocations("WHS")){
+        for (Location whs : Engine.getLocations("WHS")) {
             options.put(whs.getId(), whs.getId());
         }
-        for(Location vndr : Engine.getLocations("VEND")){
+        for (Location vndr : Engine.getLocations("VEND")) {
             options.put(vndr.getId(), vndr.getId());
         }
-        for(Employee vndr : Engine.getPeople()){
+        for (Employee vndr : Engine.getPeople()) {
             options.put(vndr.getId(), vndr.getId());
         }
         Selectable s = new Selectable(options);
@@ -61,75 +63,95 @@ public class Selectables {
         return s;
     }
 
-    public static Selectable employees(){
+    public static Selectable employees() {
+
         HashMap<String, String> employees = new HashMap<>();
-        for(Employee emp : Engine.getEmployees()){
+        for (Employee emp : Engine.getEmployees()) {
             employees.put(emp.getId() + " - " + emp.getName(), emp.getId());
         }
         return new Selectable(employees);
     }
 
-    public static Selectable ledgers(){
+    public static Selectable ledgers() {
+
         HashMap<String, String> ledgers = new HashMap<>();
-        for(Ledger org : Engine.getLedgers()){
+        for (Ledger org : Engine.getLedgers()) {
             ledgers.put(org.getId(), org.getId());
         }
         return new Selectable(ledgers);
     }
 
-    public static Selectable organizations(){
+    public static Selectable organizations() {
+
         HashMap<String, String> organizations = new HashMap<>();
-        for(Location org : Engine.getLocations("ORGS")){
+        for (Location org : Engine.getLocations("ORGS")) {
             organizations.put(org.getId(), org.getId());
         }
         return new Selectable(organizations);
     }
 
-    public static Selectable areas(){
+    public static Selectable areas() {
+
         HashMap<String, String> areas = new HashMap<>();
-        for(Area a : Engine.getAreas()){
+        for (Area a : Engine.getAreas()) {
             areas.put(a.getId(), a.getId());
         }
         return new Selectable(areas);
     }
 
-    public static Selectable vendors(){
-        HashMap<String, String> vendors = new HashMap<>();
-        for(Location v : Engine.getLocations("VEND")){
-            vendors.put(v.getId(), v.getId());
-        }
-        Selectable s =  new Selectable(vendors);
-        s.editable();
-        return s;
-    }
+    public static Selectable customers() {
 
-    public static Selectable customers(){
         HashMap<String, String> customers = new HashMap<>();
-        for(Location v : Engine.getLocations("CSTS")){
+        for (Location v : Engine.getLocations("CSTS")) {
             customers.put(v.getId(), v.getId());
         }
-        Selectable s =  new Selectable(customers);
+        Selectable s = new Selectable(customers);
         s.editable();
         return s;
     }
 
-    public static Selectable carriers(){
+    public static Selectable carriers() {
+
         HashMap<String, String> carriers = new HashMap<>();
-        for(Location carrier : Engine.getLocations("TRANS/CRRS")){
+        for (Location carrier : Engine.getLocations("TRANS/CRRS")) {
             carriers.put(carrier.getName(), carrier.getId());
         }
         return new Selectable(carriers);
     }
 
-    public static Selectable departments(){
+    public static Selectable departments() {
+
         HashMap<String, String> departments = new HashMap<>();
-        for(Department department : Engine.getOrganization().getDepartments()){
+        for (Department department : Engine.getOrganization().getDepartments()) {
             departments.put(department.getId() + " – " + department.getName(), department.getId());
         }
         return new Selectable(departments);
     }
 
-    public static Selectable statusTypes(){
+    public static Selectable statusTypes() {
+
+        HashMap<String, String> statusTypes = new HashMap<>();
+        statusTypes.put("ACTIVE", "ACTIVE");
+        statusTypes.put("APPROVED", "APPROVED");
+        statusTypes.put("ARCHIVED", "ARCHIVED");
+        statusTypes.put("BLOCKED", "BLOCKED");
+        statusTypes.put("COMPLETED", "COMPLETED");
+        statusTypes.put("DELIVERED", "DELIVERED");
+        statusTypes.put("DRAFT", "DRAFT");
+        statusTypes.put("DELINQUENT", "DELINQUENT");
+        statusTypes.put("ERRORED", "ERRORED");
+        statusTypes.put("IN TRANSIT", "IN_TRANSIT");
+        statusTypes.put("NEW", "NEW");
+        statusTypes.put("OPEN", "OPEN");
+        statusTypes.put("PENDING", "PENDING");
+        statusTypes.put("REMOVED", "REMOVED");
+        statusTypes.put("SUSPENDED", "SUSPENDED");
+        statusTypes.put("IN PROGRESS", "IN_PROGRESS");
+        return new Selectable(statusTypes);
+    }
+
+    public static Selectable taskTypes() {
+
         HashMap<String, String> statusTypes = new HashMap<>();
         statusTypes.put("APPROVED", "APPROVED");
         statusTypes.put("ARCHIVED", "ARCHIVED");
@@ -149,27 +171,7 @@ public class Selectables {
         return new Selectable(statusTypes);
     }
 
-    public static Selectable taskTypes(){
-        HashMap<String, String> statusTypes = new HashMap<>();
-        statusTypes.put("APPROVED", "APPROVED");
-        statusTypes.put("ARCHIVED", "ARCHIVED");
-        statusTypes.put("BLOCKED", "BLOCKED");
-        statusTypes.put("COMPLETED", "COMPLETED");
-        statusTypes.put("DELIVERED", "DELIVERED");
-        statusTypes.put("DRAFT", "DRAFT");
-        statusTypes.put("DELINQUENT", "DELINQUENT");
-        statusTypes.put("ERRORED", "ERRORED");
-        statusTypes.put("IN TRANSIT", "IN_TRANSIT");
-        statusTypes.put("NEW", "NEW");
-        statusTypes.put("OPEN", "OPEN");
-        statusTypes.put("PENDING", "PENDING");
-        statusTypes.put("REMOVED", "REMOVED");
-        statusTypes.put("SUSPENDED", "SUSPENDED");
-        statusTypes.put("IN PROGRESS", "IN_PROGRESS");
-        return new Selectable(statusTypes);
-    }
-
-    public static Selectable periods(){
+    public static Selectable periods() {
         HashMap<String, String> statusTypes = new HashMap<>();
         statusTypes.put("Q1", "Q1");
         statusTypes.put("Q2", "Q2");
@@ -178,7 +180,8 @@ public class Selectables {
         return new Selectable(statusTypes);
     }
 
-    public static Selectable ethnicities(){
+    public static Selectable ethnicities() {
+
         HashMap<String, String> statusTypes = new HashMap<>();
         statusTypes.put("AFRICAN", "AFRICAN");
         statusTypes.put("ASIAN", "ASIAN");
@@ -193,7 +196,8 @@ public class Selectables {
         return new Selectable(statusTypes);
     }
 
-    public static Selectable genders(){
+    public static Selectable genders() {
+
         HashMap<String, String> statusTypes = new HashMap<>();
         statusTypes.put("MALE", "MALE");
         statusTypes.put("FEMALE", "FEMALE");
@@ -201,7 +205,8 @@ public class Selectables {
         return new Selectable(statusTypes);
     }
 
-    public static Selectable uoms(String preset){
+    public static Selectable uoms(String preset) {
+
         HashMap<String, String> statusTypes = new HashMap<>();
         statusTypes.put("MM", "MM");
         statusTypes.put("CM", "CM");
@@ -231,7 +236,8 @@ public class Selectables {
         return uomField;
     }
 
-    public static Selectable packagingUoms(){
+    public static Selectable packagingUoms() {
+
         HashMap<String, String> statusTypes = new HashMap<>();
         statusTypes.put("EA", "EA");
         statusTypes.put("BOX", "BOX");
@@ -255,6 +261,7 @@ public class Selectables {
     }
 
     public static Selectable countries() {
+
         HashMap<String, String> statusTypes = new HashMap<>();
         statusTypes.put("United States", "US");
         statusTypes.put("United Kingdom", "GB");
@@ -282,7 +289,9 @@ public class Selectables {
         s.setSelectedValue("US");
         return s;
     }
+
     public static Selectable themes() {
+
         HashMap<String, String> themeMap = new HashMap<>();
         themeMap.put("Arc", "/com/formdev/flatlaf/intellijthemes/themes/arc-theme.theme.json");
         themeMap.put("Arc Dark", "/com/formdev/flatlaf/intellijthemes/themes/arc_theme_dark.theme.json");
@@ -350,6 +359,7 @@ public class Selectables {
     }
 
     public static Selectable locationObjex(String preset) {
+
         HashMap<String, String> statusTypes = new HashMap<>();
         statusTypes.put("Cost Center", "/CCS");
         statusTypes.put("Transporation Carrier", "/TRANS/CRRS");
@@ -362,5 +372,24 @@ public class Selectables {
         Selectable s = new Selectable(statusTypes);
         s.setSelectedValue(preset);
         return s;
+    }
+
+    public static Selectable objexForRates() {
+
+        HashMap<String, String> statusTypes = new HashMap<>();
+        statusTypes.put("", "/");
+        statusTypes.put("", "/");
+        statusTypes.put("Accounts", "/ACCS");
+        statusTypes.put("Cost Center", "/CCS");
+        statusTypes.put("Catalogs", "/CATS");
+        statusTypes.put("Customer", "/CSTS");
+        statusTypes.put("Distribution Center", "/DCSS");
+        statusTypes.put("Items", "/ITS");
+        statusTypes.put("Organization", "/ORGS");
+        statusTypes.put("Office", "/OFFS");
+        statusTypes.put("Transporation Carrier", "/TRANS/CRRS");
+        statusTypes.put("Vendor", "/VEND");
+        statusTypes.put("Warehouse", "/WHS");
+        return new Selectable(statusTypes);
     }
 }

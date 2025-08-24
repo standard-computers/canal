@@ -25,11 +25,14 @@ public class ModifyItem extends LockeState {
     private JCheckBox rentableField;
     private JCheckBox skudField;
     private JCheckBox consumableField;
+    private JCheckBox virtualField;
+    private JTextField upcField;
+    private JTextField vendorNumberField;
     private JTextField priceField;
-    private JTextField widthField;
-    private JTextField lengthField;
-    private JTextField heightField;
-    private JTextField weightField;
+    private UOMField widthField;
+    private UOMField lengthField;
+    private UOMField heightField;
+    private UOMField weightField;
     private JTextField taxField;
     private JTextField exciseTaxfield;
     private JTextField baseQuantityField;
@@ -55,6 +58,7 @@ public class ModifyItem extends LockeState {
         tabs.addTab("Packaging", packaging());
 
         add(tabs, BorderLayout.CENTER);
+        setMaximized(true);
     }
 
     private JPanel dimensional(){
@@ -71,16 +75,40 @@ public class ModifyItem extends LockeState {
             consumableField.setSelected(true);
         }
 
+        virtualField = new JCheckBox("Like software");
+        if(item.isVirtual()){
+            virtualField.setSelected(true);
+        }
+
+        widthField = new UOMField();
+        widthField.setValue(String.valueOf(item.getWidth()));
+        widthField.setUOM(item.getWidthUOM());
+
+        lengthField = new UOMField();
+        lengthField.setValue(String.valueOf(item.getLength()));
+        lengthField.setUOM(item.getLengthUOM());
+
+        heightField = new UOMField();
+        heightField.setValue(String.valueOf(item.getHeight()));
+        heightField.setUOM(item.getHeightUOM());
+
+        weightField = new UOMField();
+        weightField.setValue(String.valueOf(item.getWeight()));
+        weightField.setUOM(item.getWeightUOM());
+
+        taxField = Elements.input(String.valueOf(item.getTax()));
+        exciseTaxfield = Elements.input(String.valueOf(item.getExciseTax()));
+
         f2.addInput(Elements.coloredLabel("Packaging Base Quantity", UIManager.getColor("Label.foreground")), baseQuantityField);
         f2.addInput(Elements.coloredLabel("Packaging UOM", UIManager.getColor("Label.foreground")), Elements.input(item.getPackagingUnit()));
         f2.addInput(Elements.coloredLabel("Consumable?", UIManager.getColor("Label.foreground")), consumableField);
         f2.addInput(Elements.coloredLabel("Color", UIManager.getColor("Label.foreground")), colorField);
-        f2.addInput(Elements.coloredLabel("Width", UIManager.getColor("Label.foreground")), Elements.input(item.getWidth() + " " + item.getWidthUOM()));
-        f2.addInput(Elements.coloredLabel("Length", UIManager.getColor("Label.foreground")), Elements.input(item.getLength() + " " + item.getLengthUOM()));
-        f2.addInput(Elements.coloredLabel("Height", UIManager.getColor("Label.foreground")), Elements.input(item.getHeight() + " " + item.getHeightUOM()));
-        f2.addInput(Elements.coloredLabel("Weight", UIManager.getColor("Label.foreground")), Elements.input(item.getWeight() + " " + item.getWeightUOM()));
-        f2.addInput(Elements.coloredLabel("Tax (0.05 as 5%)", UIManager.getColor("Label.foreground")), Elements.input(""));
-        f2.addInput(Elements.coloredLabel("Excise Tax (0.05 as 5%)", UIManager.getColor("Label.foreground")), Elements.input(""));
+        f2.addInput(Elements.coloredLabel("Width", UIManager.getColor("Label.foreground")), widthField);
+        f2.addInput(Elements.coloredLabel("Length", UIManager.getColor("Label.foreground")), lengthField);
+        f2.addInput(Elements.coloredLabel("Height", UIManager.getColor("Label.foreground")), heightField);
+        f2.addInput(Elements.coloredLabel("Weight", UIManager.getColor("Label.foreground")), weightField);
+        f2.addInput(Elements.coloredLabel("Tax", UIManager.getColor("Label.foreground")), taxField);
+        f2.addInput(Elements.coloredLabel("Excise Tax", UIManager.getColor("Label.foreground")), exciseTaxfield);
         p.add(f2);
         return p;
     }
@@ -107,13 +135,9 @@ public class ModifyItem extends LockeState {
         Form f = new Form();
 
         idField = new Copiable(item.getId());
-
         orgField = Elements.input(item.getOrg());
-
         nameField = Elements.input(item.getName());
-
         linkField = Elements.input(item.getLink());
-
         vendorField = Elements.input(item.getVendor());
 
         batchedField = new JCheckBox();
@@ -132,18 +156,8 @@ public class ModifyItem extends LockeState {
         }
 
         priceField = Elements.input(String.valueOf(item.getPrice()));
-
-        widthField = Elements.input(String.valueOf(item.getWidth()));
-
-        lengthField = Elements.input(String.valueOf(item.getLength()));
-
-        heightField = Elements.input(String.valueOf(item.getHeight()));
-
-        weightField = Elements.input(String.valueOf(item.getWeight()));
-
-        taxField = Elements.input(String.valueOf(item.getTax()));
-
-        exciseTaxfield = Elements.input(String.valueOf(item.getExciseTax()));
+        upcField = Elements.input(item.getUpc());
+        vendorNumberField = Elements.input(item.getVendorNumber());
 
         f.addInput(Elements.coloredLabel("ID", UIManager.getColor("Label.foreground")), idField);
         f.addInput(Elements.coloredLabel("Organization", UIManager.getColor("Label.foreground")), orgField);
@@ -154,8 +168,8 @@ public class ModifyItem extends LockeState {
         f.addInput(Elements.coloredLabel("Rentable", UIManager.getColor("Label.foreground")), rentableField);
         f.addInput(Elements.coloredLabel("SKU'd", UIManager.getColor("Label.foreground")), skudField);
         f.addInput(Elements.coloredLabel("Price", UIManager.getColor("Label.foreground")), priceField);
-        f.addInput(Elements.coloredLabel("Tax", UIManager.getColor("Label.foreground")), taxField);
-        f.addInput(Elements.coloredLabel("Excise Tax", UIManager.getColor("Label.foreground")), exciseTaxfield);
+        f.addInput(Elements.coloredLabel("UPC", UIManager.getColor("Label.foreground")), upcField);
+        f.addInput(Elements.coloredLabel("Vendor Number", UIManager.getColor("Label.foreground")), vendorNumberField);
         itemInfo.add(f);
         return itemInfo;
     }
@@ -165,7 +179,7 @@ public class ModifyItem extends LockeState {
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
 
         IconButton save = new IconButton("Save", "save", "Save modifications");
-        save.addActionListener(e -> {
+        save.addActionListener(_ -> {
 
             item.setName(nameField.getText());
             item.setLink(linkField.getText());
@@ -175,6 +189,22 @@ public class ModifyItem extends LockeState {
             item.setRentable(rentableField.isSelected());
             item.setSkud(skudField.isSelected());
             item.setConsumable(consumableField.isSelected());
+            item.setUpc(upcField.getText());
+            item.setVendorNumber(vendorNumberField.getText());
+            item.setTax(Double.parseDouble(taxField.getText()));
+            item.setExciseTax(Double.parseDouble(exciseTaxfield.getText()));
+
+            item.setWidth(Double.parseDouble(widthField.getValue()));
+            item.setWidthUOM(widthField.getUOM());
+
+            item.setLength(Double.parseDouble(lengthField.getValue()));
+            item.setLengthUOM(lengthField.getUOM());
+
+            item.setHeight(Double.parseDouble(heightField.getValue()));
+            item.setHeightUOM(heightField.getUOM());
+
+            item.setWeight(Double.parseDouble(weightField.getValue()));
+            item.setWeightUOM(weightField.getUOM());
 
             item.save();
 
@@ -191,7 +221,7 @@ public class ModifyItem extends LockeState {
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton label = new IconButton("Label", "label", "Print labels for properties");
-        label.addActionListener(e -> {
+        label.addActionListener(_ -> {
 
         });
         tb.add(label);
@@ -199,7 +229,7 @@ public class ModifyItem extends LockeState {
 
         if((boolean) Engine.codex.getValue("ITS", "allow_archival")){
             IconButton archive = new IconButton("Archive", "archive", "Archive item");
-            archive.addActionListener(e -> {
+            archive.addActionListener(_ -> {
 
             });
             tb.add(archive);
@@ -208,7 +238,7 @@ public class ModifyItem extends LockeState {
 
         if((boolean) Engine.codex.getValue("ITS", "allow_deletion")){
             IconButton delete = new IconButton("Delete", "delete", "Delete item");
-            delete.addActionListener(e -> {
+            delete.addActionListener(_ -> {
 
             });
             tb.add(delete);

@@ -38,4 +38,10 @@ public class UOMField extends JPanel {
     public void setUOM(String value){
         uom.setSelectedValue(value);
     }
+
+    public void disable(){
+        textField.setEnabled(false);
+        uom.setEnabled(false);
+        uom.disable();
+    }
 }

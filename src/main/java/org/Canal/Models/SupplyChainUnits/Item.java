@@ -3,7 +3,8 @@ package org.Canal.Models.SupplyChainUnits;
 import org.Canal.Models.BusinessUnits.OrderLineItem;
 import org.Canal.Models.Objex;
 import org.Canal.Start;
-import org.Canal.Utils.Json;
+import org.Canal.Utils.Engine;
+import org.Canal.Utils.Pipe;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class Item extends Objex {
     private boolean rentable;
     private boolean skud;
     private boolean consumable;
+    private boolean virtual;
     private double price;
     private double width;
     private String widthUOM;
@@ -128,6 +130,14 @@ public class Item extends Objex {
         this.consumable = consumable;
     }
 
+    public boolean isVirtual() {
+        return virtual;
+    }
+
+    public void setVirtual(boolean virtual) {
+        this.virtual = virtual;
+    }
+
     public double getPrice() {
         return price;
     }
@@ -184,19 +194,19 @@ public class Item extends Objex {
         this.heightUOM = heightUOM;
     }
 
-    public double getVolume(){
+    public double getVolume() {
         return width * length * height;
     }
 
-    public String getVolumeUOM(){
+    public String getVolumeUOM() {
         return heightUOM + 3;
     }
 
-    public double getSurfaceArea(){
+    public double getSurfaceArea() {
         return 2 * (width * length + width * height + length * height);
     }
 
-    public String getSurfaceAreaUOM(){
+    public String getSurfaceAreaUOM() {
         return widthUOM + 2;
     }
 
@@ -292,18 +302,23 @@ public class Item extends Objex {
         this.packaging = packaging;
     }
 
-    public void save(){
-        File md = new File(Start.DIR + "\\.store\\ITS\\");
-        File[] mdf = md.listFiles();
-        if (mdf != null) {
-            for (File file : mdf) {
-                if (file.getPath().endsWith(".its")) {
-                    Item fl = Json.load(file.getPath(), Item.class);
-                    if (fl.getId().equals(id)) {
-                        Json.save(file.getPath(), this);
+    public void save() {
+        if (Engine.getConfiguration().getMongodb().isEmpty()) {
+
+            File md = new File(Start.DIR + "\\.store\\ITS\\");
+            File[] mdf = md.listFiles();
+            if (mdf != null) {
+                for (File file : mdf) {
+                    if (file.getPath().endsWith(".its")) {
+                        Item fl = Pipe.load(file.getPath(), Item.class);
+                        if (fl.getId().equals(id)) {
+                            Pipe.export(file.getPath(), this);
+                        }
                     }
                 }
             }
+        } else {
+            Pipe.save("ITS", this);
         }
     }
 

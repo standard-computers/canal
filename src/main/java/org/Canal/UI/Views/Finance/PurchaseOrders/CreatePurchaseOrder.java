@@ -19,6 +19,8 @@ import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.*;
@@ -29,7 +31,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * /ORDS/PO/NEW
@@ -43,7 +44,7 @@ public class CreatePurchaseOrder extends LockeState {
     private JLabel netAmount;
     private JLabel taxAmount;
     private JLabel totalAmount;
-    private JTextField availablePrs;
+    private JTextField purchaseRequisition;
     private JTextField selectVendor;
     private JTextField selectBillTo;
     private JTextField selectShipTo;
@@ -57,11 +58,11 @@ public class CreatePurchaseOrder extends LockeState {
     private JCheckBox commitToLedger;
     private JCheckBox createDelivery;
     private Truck truck;
-    private RSyntaxTextArea textArea;
+    private RTextScrollPane textArea;
 
     public CreatePurchaseOrder(DesktopState desktop) {
 
-        super("Create Purchase Order", "/ORDS/PO/NEW", true, true, true, true);
+        super("Create Purchase Order", "/ORDS/PO/NEW");
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));
         Constants.checkLocke(this, true, true);
         this.desktop = desktop;
@@ -99,192 +100,248 @@ public class CreatePurchaseOrder extends LockeState {
         model.addTableModelListener(_ -> updateTotal());
     }
 
-    private JPanel buttons(){
+    private JPanel buttons() {
 
         JPanel p = new JPanel(new FlowLayout());
         p.setLayout(new BoxLayout(p, BoxLayout.X_AXIS));
-        IconButton copyFrom = new IconButton("Copy From","open", "Review for errors or warnings");
-        IconButton review = new IconButton("Review","review", "Review for errors or warnings");
-        IconButton create = new IconButton("Create","execute", "Create Purchase Order");
-        p.add(copyFrom);
-        p.add(Box.createHorizontalStrut(5));
-        p.add(review);
-        p.add(Box.createHorizontalStrut(5));
-        p.add(create);
-        p.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+        IconButton copyFrom = new IconButton("Copy From", "open", "Review for errors or warnings");
         copyFrom.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+
                 String copyPOId = JOptionPane.showInputDialog("Enter Purchase Order ID");
+                PurchaseOrder cpo = Engine.getPurchaseOrder(copyPOId);
+                if (cpo != null) {
 
+                } else {
+                    JOptionPane.showMessageDialog(CreatePurchaseOrder.this, "Invalid Purchase Order");
+                }
             }
         });
+        p.add(copyFrom);
+        p.add(Box.createHorizontalStrut(5));
 
-        review.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+        IconButton review = new IconButton("Review", "review", "Review for errors or warnings");
+        p.add(review);
+        p.add(Box.createHorizontalStrut(5));
 
-                if(!selectShipTo.getText().equals(selectBillTo.getText())){
-                    addToQueue(new String[]{"WARNING", "Bill To & Ship To do not match"});
-                }
-                if(truck == null){
-                    addToQueue(new String[]{"WARNING", "Truck not selected. One will be created"});
-                }
-                if(Engine.getLocation(selectVendor.getText(), "VEND") == null){
-                    addToQueue(new String[]{"WARNING", "Selected supplier is not a technical vendor"});
-                }
-                if(statuses.getSelectedValue().equals("COMPLETED")){
-                    addToQueue(new String[]{"WARNING", "Status COMPLETED will prevent further actions!"});
-                }
-                if(availablePrs.getText().equals("Available")){
-                    PurchaseRequisition pr = Engine.orders.getPurchaseRequisition(availablePrs.getText());
-                    if(pr == null){
-                        addToQueue(new String[]{"ERROR", "Selected Purchase Requisition was not found!!!"});
-                    }else{
-                        if(!pr.getBuyer().equals(selectBillTo.getText())){
-                            addToQueue(new String[]{"WARNING", "Bill To does not match buyer in selected Purchase Requisition"});
-                        }
-                        if(!pr.getBuyer().equals(selectShipTo.getText())){
-                            addToQueue(new String[]{"WARNING", "Ship To does not match buyer in selected Purchase Requisition"});
-                        }
-                        if(!pr.getSupplier().equals(selectVendor.getText())){
-                            addToQueue(new String[]{"WARNING", "Selected Purchase Requisition NOT for selected Vendor!"});
-                        }
+        IconButton create = new IconButton("Create", "execute", "Create Purchase Order");
+        p.add(create);
+        p.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+
+        review.addActionListener(_ -> {
+
+            if (!selectShipTo.getText().equals(selectBillTo.getText())) {
+                addToQueue(new String[]{"WARNING", "Bill To & Ship To do not match"});
+            }
+            if (truck == null) {
+                addToQueue(new String[]{"WARNING", "Truck not selected. One will be created"});
+            }
+            if (Engine.getLocation(selectVendor.getText(), "VEND") == null) {
+                addToQueue(new String[]{"WARNING", "Selected supplier is not a technical vendor"});
+            }
+            if (statuses.getSelectedValue().equals("COMPLETED")) {
+                addToQueue(new String[]{"WARNING", "Status COMPLETED will prevent further actions!"});
+            }
+            if (purchaseRequisition.getText().equals("Available")) {
+                PurchaseRequisition pr = Engine.getPurchaseRequisition(purchaseRequisition.getText());
+                if (pr == null) {
+                    addToQueue(new String[]{"ERROR", "Selected Purchase Requisition was not found!!!"});
+                } else {
+                    if (!pr.getBuyer().equals(selectBillTo.getText())) {
+                        addToQueue(new String[]{"WARNING", "Bill To does not match buyer in selected Purchase Requisition"});
                     }
-                }else{
-                    addToQueue(new String[]{"WARNING", "No Purchase Requisition selected. Is this intentional?"});
+                    if (!pr.getBuyer().equals(selectShipTo.getText())) {
+                        addToQueue(new String[]{"WARNING", "Ship To does not match buyer in selected Purchase Requisition"});
+                    }
+                    if (!pr.getSupplier().equals(selectVendor.getText())) {
+                        addToQueue(new String[]{"WARNING", "Selected Purchase Requisition NOT for selected Vendor!"});
+                    }
                 }
-                desktop.put(new LockeMessages(getQueue()));
-                purgeQueue();
+            } else {
+                addToQueue(new String[]{"WARNING", "No Purchase Requisition selected. Is this intentional?"});
             }
+            desktop.put(new LockeMessages(getQueue()));
+            purgeQueue();
         });
 
-        create.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if(expectedDelivery.getSelectedDate() == null){
-                    JOptionPane.showMessageDialog(null, "Must select a delivery date.", "Error", JOptionPane.ERROR_MESSAGE);
+        create.addActionListener(_ -> {
+
+            if (expectedDelivery.getSelectedDate() == null) {
+                JOptionPane.showMessageDialog(null, "Must select a delivery date.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            PurchaseRequisition assignedPR = Engine.getPurchaseRequisition(purchaseRequisition.getText());
+            if ((boolean) Engine.codex("ORDS/PO", "require_pr")) {
+                if (assignedPR == null) {
+                    JOptionPane.showMessageDialog(null, "Purchase Req required for PO", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                PurchaseRequisition assignedPR = Engine.orders.getPurchaseRequisition(availablePrs.getText());
-                if((boolean) Engine.codex("ORDS/PO", "require_pr")){
-                    if(assignedPR == null){
-                        JOptionPane.showMessageDialog(null, "Purchase Req required for PO", "Error", JOptionPane.ERROR_MESSAGE);
-                        return;
+            }
+            if ((boolean) Engine.codex("ORDS/PO", "vendor_match")) {
+                if (!selectVendor.getText().equals(assignedPR.getSupplier())) {
+                    JOptionPane.showMessageDialog(null, "Selected PO is not for this vendor.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+            int ccc = JOptionPane.showConfirmDialog(null, "You have selected the Org ID as the charge account. Are you sure you want to charge the corp account?", "Confirm order?", JOptionPane.YES_NO_CANCEL_OPTION);
+            if (ccc == JOptionPane.YES_OPTION) {
+                String newPOId = ((String) Engine.codex("ORDS/PO", "prefix")) + (70000000 + (Engine.getPurchaseOrders().size() + 1));
+                newOrder.setOwner((Engine.getAssignedUser().getId()));
+                newOrder.setOrderId(newPOId);
+                newOrder.setVendor(selectVendor.getText());
+                newOrder.setBillTo(selectBillTo.getText());
+                newOrder.setShipTo(selectShipTo.getText());
+                newOrder.setPurchaseRequisition(purchaseRequisition.getText());
+                SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+                newOrder.setExpectedDelivery(dateFormat.format(expectedDelivery.getSelectedDate()));
+                newOrder.setStatus(LockeStatus.NEW);
+
+                ArrayList<OrderLineItem> lineitems = new ArrayList<>();
+                for (int row = 0; row < model.getRowCount(); row++) {
+                    String itemName = model.getValueAt(row, 0).toString();
+                    String itemId = model.getValueAt(row, 1).toString();
+                    double itemQty = Double.parseDouble(model.getValueAt(row, 4).toString());
+                    double itemPrice = Double.parseDouble(model.getValueAt(row, 5).toString());
+                    double itemTotal = Double.parseDouble(model.getValueAt(row, 6).toString());
+                    lineitems.add(new OrderLineItem(itemName, itemId, itemQty, itemPrice, itemTotal));
+                }
+
+                newOrder.setItems(lineitems);
+                newOrder.setNetValue(Double.parseDouble(model.getTotalPrice()));
+                newOrder.setTaxAmount(taxRate * Double.parseDouble(model.getTotalPrice()));
+                newOrder.setTotal(taxRate * Double.parseDouble(model.getTotalPrice()) + Double.parseDouble(model.getTotalPrice()));
+                newOrder.setOrderedOn(LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss")));
+                newOrder.setStatus(LockeStatus.valueOf(statuses.getSelectedValue()));
+                assignedPR.setStatus(LockeStatus.IN_USE);
+                assignedPR.save();
+                Pipe.save("/ORDS/PO", newOrder);
+
+                if (createDelivery.isSelected()) {
+
+                    Truck t = new Truck();
+                    t.setId(((String) Engine.codex("TRANS/TRCKS", "prefix") + 1000 + (Engine.getTrucks().size() + 1)));
+                    t.setNumber(truckNumberField.getText());
+                    t.setCarrier(carriers.getSelectedValue());
+                    Pipe.save("/TRANS/TRCKS", t);
+
+                    Delivery d = new Delivery();
+                    d.setType("IDO");
+                    d.setId(((String) Engine.codex("TRANS/IDO", "prefix") + 1000 + (Engine.getInboundDeliveries().size() + 1)));
+                    d.setPurchaseOrder(newOrder.getOrderId());
+                    d.setExpectedDelivery(newOrder.getExpectedDelivery());
+                    d.setDestination(newOrder.getShipTo());
+                    d.setStatus(LockeStatus.PROCESSING);
+                    Pipe.save("/TRANS/IDO", d);
+                }
+
+                if (commitToLedger.isSelected()) {
+                    Ledger l = Engine.getLedger(ledgerId.getSelectedValue());
+                    if (l != null) {
+                        Transaction t = new Transaction();
+                        t.setId(Constants.generateId(5));
+                        t.setOwner(Engine.getAssignedUser().getId());
+                        t.setLocke(getLocke());
+                        t.setObjex(buyerObjexType.getSelectedValue());
+                        t.setLocation(selectBillTo.getText());
+                        t.setReference(newPOId);
+                        t.setAmount(-1 * Double.parseDouble(model.getTotalPrice()));
+                        t.setCommitted(Constants.now());
+                        t.setStatus(LockeStatus.PROCESSING);
+                        l.addTransaction(t);
+                        l.save();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No such ledger.", "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 }
-                if((boolean) Engine.codex("ORDS/PO", "vendor_match")){
-                    if(!selectVendor.getText().equals(assignedPR.getSupplier())){
-                        JOptionPane.showMessageDialog(null, "Selected PO is not for this vendor.", "Error", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-                }
-                int ccc = JOptionPane.showConfirmDialog(null, "You have selected the Org ID as the charge account. Are you sure you want to charge the corp account?", "Confirm order?", JOptionPane.YES_NO_CANCEL_OPTION);
-                if(ccc == JOptionPane.YES_OPTION){
-                    String newPOId = ((String) Engine.codex("ORDS/PO", "prefix")) + (70000000 + (Engine.getPurchaseOrders().size() + 1));
-                    newOrder.setOwner((Engine.getAssignedUser().getId()));
-                    newOrder.setOrderId(newPOId);
-                    newOrder.setVendor(selectVendor.getText());
-                    newOrder.setBillTo(selectBillTo.getText());
-                    newOrder.setShipTo(selectShipTo.getText());
-                    newOrder.setPurchaseRequisition(availablePrs.getText());
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
-                    newOrder.setExpectedDelivery(dateFormat.format(expectedDelivery.getSelectedDate()));
-                    newOrder.setStatus(LockeStatus.NEW);
-                    ArrayList<org.Canal.Models.BusinessUnits.OrderLineItem> lineitems = new ArrayList<>();
-                    for (int row = 0; row < model.getRowCount(); row++) {
-                        String itemName = model.getValueAt(row, 0).toString();
-                        String itemId = model.getValueAt(row, 1).toString();
-                        double itemQty = Double.parseDouble(model.getValueAt(row, 4).toString());
-                        double itemPrice = Double.parseDouble(model.getValueAt(row, 5).toString());
-                        double itemTotal = Double.parseDouble(model.getValueAt(row, 6).toString());
-                        lineitems.add(new org.Canal.Models.BusinessUnits.OrderLineItem(itemName, itemId, itemQty, itemPrice, itemTotal));
-                    }
-                    newOrder.setItems(lineitems);
-                    newOrder.setNetValue(Double.parseDouble(model.getTotalPrice()));
-                    newOrder.setTaxAmount(taxRate * Double.parseDouble(model.getTotalPrice()));
-                    newOrder.setTotal(taxRate * Double.parseDouble(model.getTotalPrice()) + Double.parseDouble(model.getTotalPrice()));
-                    newOrder.setOrderedOn(LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss")));
-                    newOrder.setStatus(LockeStatus.valueOf(statuses.getSelectedValue()));
-                    assignedPR.setStatus(LockeStatus.IN_USE);
-                    assignedPR.save();
-                    Pipe.save("/ORDS/PO", newOrder);
-
-                    if(createDelivery.isSelected()){
-
-                        Truck t = new Truck();
-                        t.setId(((String) Engine.codex("TRANS/TRCKS", "prefix") + 1000 + (Engine.getTrucks().size() + 1)));
-                        t.setNumber(truckNumberField.getText());
-                        t.setCarrier(carriers.getSelectedValue());
-                        Pipe.save("/TRANS/TRCKS", t);
-
-                        Delivery d = new Delivery();
-                        d.setId(((String) Engine.codex("TRANS/IDO", "prefix") + 1000 + (Engine.getInboundDeliveries().size() + 1)));
-                        d.setPurchaseOrder(newOrder.getOrderId());
-                        d.setExpectedDelivery(newOrder.getExpectedDelivery());
-                        d.setDestination(newOrder.getShipTo());
-                        d.setStatus(LockeStatus.PROCESSING);
-                        Pipe.save("/TRANS/IDO", d);
-                    }
-
-                    if(commitToLedger.isSelected()){
-                        Ledger l = Engine.getLedger(ledgerId.getSelectedValue());
-                        if(l != null){
-                            Transaction t = new Transaction();
-                            t.setId(Constants.generateId(5));
-                            t.setOwner(Engine.getAssignedUser().getId());
-                            t.setLocke(getLocke());
-                            t.setObjex(buyerObjexType.getSelectedValue());
-                            t.setLocation(selectBillTo.getText());
-                            t.setReference(newPOId);
-                            t.setAmount(-1 * Double.parseDouble(model.getTotalPrice()));
-                            t.setCommitted(Constants.now());
-                            t.setStatus(LockeStatus.PROCESSING);
-                            l.addTransaction(t);
-                            l.save();
-                        }else{
-                            JOptionPane.showMessageDialog(null, "No such ledger.", "Error", JOptionPane.ERROR_MESSAGE);
-                        }
-                    }
-                    dispose();
-                    JOptionPane.showMessageDialog(null, "Order submitted.");
-                }
+                dispose();
+                JOptionPane.showMessageDialog(null, "Order submitted.");
             }
         });
         return p;
     }
 
-    private JPanel orderInfoPanel(){
+    private JPanel orderInfoPanel() {
+
         JPanel orderInfo = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        Form f = new Form();
+
         selectBillTo = Elements.input(15);
         selectShipTo = Elements.input(15);
         selectVendor = Elements.input(15);
+
+        Form f = new Form();
         f.addInput(Elements.coloredLabel("Supplier/Vendor", Constants.colors[1]), selectVendor);
         f.addInput(Elements.coloredLabel("Bill To Location", Constants.colors[2]), selectBillTo);
         f.addInput(Elements.coloredLabel("Ship To Location", Constants.colors[3]), selectShipTo);
         orderInfo.add(f);
+
         return orderInfo;
     }
 
-    private JPanel orderInfo(){
+    private JPanel orderInfo() {
 
-        Form f = new Form();
         HashMap<String, String> prs = new HashMap<>();
-        for(PurchaseRequisition pr1 : Engine.orders.getPurchaseRequisitions()){
+        for (PurchaseRequisition pr1 : Engine.getPurchaseRequisitions()) {
             prs.put(pr1.getId(), pr1.getId());
         }
-        availablePrs = Elements.input();
+
+        purchaseRequisition = Elements.input();
+        purchaseRequisition.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                onChange();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                onChange();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                onChange();
+            }
+
+            private void onChange() {
+
+                String prid = purchaseRequisition.getText();
+                PurchaseRequisition foundPr = Engine.getPurchaseRequisition(prid);
+                if (foundPr != null) {
+                    selectVendor.setText(foundPr.getSupplier());
+                    selectShipTo.setText(foundPr.getBuyer());
+                    selectBillTo.setText(foundPr.getBuyer());
+
+                    if (!foundPr.getItems().isEmpty()) {
+                        model.empty();
+                    }
+
+                    for (int i = 0; i < foundPr.getItems().size(); i++) {
+
+                        OrderLineItem it = foundPr.getItems().get(i);
+                        Item fi = Engine.getItem(it.getId());
+
+                        model.addRow(fi);
+                        model.setValueAt(it.getQuantity(), i, 4);
+                    }
+                    updateTotal();
+                }
+            }
+        });
+
         expectedDelivery = new DatePicker();
         statuses = Selectables.statusTypes();
-        f.addInput(Elements.coloredLabel("Purchase Requisition", Constants.colors[9]), availablePrs);
+
+        Form f = new Form();
+        f.addInput(Elements.coloredLabel("Purchase Requisition", Constants.colors[9]), purchaseRequisition);
         f.addInput(Elements.coloredLabel("Expected Delivery", Constants.colors[8]), expectedDelivery);
         f.addInput(Elements.coloredLabel("Status", Constants.colors[7]), statuses);
+
         return f;
     }
 
-    private JPanel summary(){
+    private JPanel summary() {
 
         Form f = new Form();
         DecimalFormat df = new DecimalFormat("#0.00");
@@ -296,7 +353,7 @@ public class CreatePurchaseOrder extends LockeState {
         return f;
     }
 
-    private void updateTotal(){
+    private void updateTotal() {
 
         DecimalFormat df = new DecimalFormat("#0.00");
         netAmount.setText("$" + model.getTotalPrice());
@@ -304,11 +361,11 @@ public class CreatePurchaseOrder extends LockeState {
         totalAmount.setText("$" + df.format(taxRate * Double.parseDouble(model.getTotalPrice()) + Double.parseDouble(model.getTotalPrice())));
     }
 
-    private JPanel items(){
+    private JPanel items() {
 
         JPanel p = new JPanel(new BorderLayout());
-        ArrayList<Item> items = Engine.products.getProducts();
-        if(items.isEmpty()){
+        ArrayList<Item> items = Engine.getItems();
+        if (items.isEmpty()) {
             JOptionPane.showMessageDialog(this, "No products found", "Error", JOptionPane.ERROR_MESSAGE);
             dispose();
         }
@@ -325,7 +382,7 @@ public class CreatePurchaseOrder extends LockeState {
         table.getColumnModel().getColumn(7).setCellRenderer(centerRenderer);
         table.getColumnModel().getColumn(8).setCellRenderer(centerRenderer);
         JComboBox<Item> itemComboBox = new JComboBox<>(items.toArray(new Item[0]));
-        itemComboBox.addActionListener(e -> updateTotal());
+        itemComboBox.addActionListener(_ -> updateTotal());
         table.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(itemComboBox));
         JPanel buttons = new JPanel(new FlowLayout(FlowLayout.LEFT));
         buttons.setLayout(new BoxLayout(buttons, BoxLayout.X_AXIS));
@@ -353,13 +410,13 @@ public class CreatePurchaseOrder extends LockeState {
         return p;
     }
 
-    private JPanel delivery(){
+    private JPanel delivery() {
 
         JPanel delivery = new JPanel(new FlowLayout(FlowLayout.LEFT));
         Form p = new Form();
         final JComponent[] jc = {Elements.button("Select Truck")};
         createDelivery = new JCheckBox();
-        if((boolean) Engine.codex("ORDS/PO", "use_deliveries")){
+        if ((boolean) Engine.codex("ORDS/PO", "use_deliveries")) {
             createDelivery.setSelected(true);
             createDelivery.setEnabled(false);
         }
@@ -371,16 +428,16 @@ public class CreatePurchaseOrder extends LockeState {
                 String truckId = JOptionPane.showInputDialog("Enter Truck ID");
                 Truck t = null;
                 ArrayList<Truck> ts = Engine.getTrucks();
-                for(Truck tr : ts){
-                    if(tr.getId().equals(truckId)){
+                for (Truck tr : ts) {
+                    if (tr.getId().equals(truckId)) {
                         t = tr;
                     }
                 }
-                if(t != null){
+                if (t != null) {
                     jc[0] = Elements.label(t.getId());
                     repaint();
                     revalidate();
-                }else{
+                } else {
                     JOptionPane.showMessageDialog(null, "Truck does not exist", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -393,12 +450,12 @@ public class CreatePurchaseOrder extends LockeState {
         return delivery;
     }
 
-    private JPanel ledger(){
+    private JPanel ledger() {
 
         JPanel ledger = new JPanel(new FlowLayout(FlowLayout.LEFT));
         Form f = new Form();
         commitToLedger = new JCheckBox();
-        if((boolean) Engine.codex("ORDS/PO", "commit_to_ledger")){
+        if ((boolean) Engine.codex("ORDS/PO", "commit_to_ledger")) {
             commitToLedger.setSelected(true);
             commitToLedger.setEnabled(false);
         }
@@ -413,16 +470,14 @@ public class CreatePurchaseOrder extends LockeState {
         return ledger;
     }
 
-    private JPanel shipping(){
+    private JPanel shipping() {
         JPanel shipping = new JPanel(new FlowLayout(FlowLayout.LEFT));
         return shipping;
     }
 
-    private JPanel packaging(){
+    private JPanel packaging() {
         JPanel packaging = new JPanel(new BorderLayout());
         ArrayList<Object[]> stockLines = new ArrayList<>();
-//        model = new ItemTableModel(List.of());
-//        JTable table = new JTable(model);
 
         CustomTable packagingTable = new CustomTable(new String[]{
                 "HU",
@@ -441,7 +496,6 @@ public class CreatePurchaseOrder extends LockeState {
         IconButton addButton = new IconButton("Add Line", "add_rows", "Add line");
         addButton.addActionListener((ActionEvent _) -> {
             if (!stockLines.isEmpty()) {
-//                model.addRow(items.getFirst());
             }
         });
         buttons.add(addButton);
@@ -451,7 +505,6 @@ public class CreatePurchaseOrder extends LockeState {
         removeButton.addActionListener((ActionEvent _) -> {
 //            int selectedRow = table.getSelectedRow();
 //            if (selectedRow != -1) {
-//                model.removeRow(selectedRow);
 //            }
         });
         buttons.add(removeButton);
@@ -464,12 +517,10 @@ public class CreatePurchaseOrder extends LockeState {
         return packaging;
     }
 
-    private JPanel taxes(){
+    private JPanel taxes() {
 
         JPanel taxes = new JPanel(new BorderLayout());
         ArrayList<Object[]> ts = new ArrayList<>();
-//        model = new ItemTableModel(List.of());
-//        JTable table = new JTable(model);
 
         CustomTable taxesTable = new CustomTable(new String[]{
                 "Name",
@@ -481,10 +532,10 @@ public class CreatePurchaseOrder extends LockeState {
         JPanel buttons = new JPanel(new FlowLayout(FlowLayout.LEFT));
         buttons.setLayout(new BoxLayout(buttons, BoxLayout.X_AXIS));
         buttons.setBackground(UIManager.getColor("Panel.background"));
+
         IconButton addButton = new IconButton("Add Tax", "add_rows", "Add tax");
         addButton.addActionListener((ActionEvent _) -> {
             if (!ts.isEmpty()) {
-//                model.addRow(items.getFirst());
             }
         });
         buttons.add(addButton);
@@ -494,7 +545,6 @@ public class CreatePurchaseOrder extends LockeState {
         removeButton.addActionListener((ActionEvent _) -> {
 //            int selectedRow = table.getSelectedRow();
 //            if (selectedRow != -1) {
-//                model.removeRow(selectedRow);
 //            }
         });
         buttons.add(removeButton);
@@ -507,12 +557,9 @@ public class CreatePurchaseOrder extends LockeState {
         return taxes;
     }
 
-    private RTextScrollPane notes(){
+    private RTextScrollPane notes() {
 
-        textArea = new RSyntaxTextArea(20, 60);
-        textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_MARKDOWN);
-        textArea.setCodeFoldingEnabled(true);
-        textArea.setLineWrap(false);
+        textArea  = Elements.simpleEditor();
         return new RTextScrollPane(textArea);
     }
 }

@@ -35,7 +35,7 @@ public class CreateVariant extends LockeState {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 String productID = inclusionId.getText().trim();
-                Item component = Engine.products.getItem(productID);
+                Item component = Engine.getItem(productID);
                 if(component == null) {
                     System.out.println("No such product: " + productID);
                 }

@@ -2,7 +2,8 @@ package org.Canal.Models.BusinessUnits;
 
 import org.Canal.Models.Objex;
 import org.Canal.Start;
-import org.Canal.Utils.Json;
+import org.Canal.Utils.Engine;
+import org.Canal.Utils.Pipe;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -145,18 +146,24 @@ public class SalesOrder extends Objex {
         this.total = total;
     }
 
-    public void save(){
-        File md = new File(Start.DIR + "\\.store\\ORDS\\SO\\");
-        File[] mdf = md.listFiles();
-        if (mdf != null) {
-            for (File file : mdf) {
-                if (file.getPath().endsWith(".so")) {
-                    SalesOrder forg = Json.load(file.getPath(), SalesOrder.class);
-                    if (forg.getOrderId().equals(getOrderId())) {
-                        Json.save(file.getPath(), this);
+    public void save() {
+
+        if (Engine.getConfiguration().getMongodb().isEmpty()) {
+
+            File md = new File(Start.DIR + "\\.store\\ORDS\\SO\\");
+            File[] mdf = md.listFiles();
+            if (mdf != null) {
+                for (File file : mdf) {
+                    if (file.getPath().endsWith(".so")) {
+                        SalesOrder forg = Pipe.load(file.getPath(), SalesOrder.class);
+                        if (forg.getOrderId().equals(getOrderId())) {
+                            Pipe.export(file.getPath(), this);
+                        }
                     }
                 }
             }
+        } else {
+            Pipe.save("ORDS/SO", this);
         }
     }
 }

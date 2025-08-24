@@ -4,11 +4,8 @@ import com.formdev.flatlaf.IntelliJTheme;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Views.System.IniSystem;
 import org.Canal.UI.Views.System.Setup;
-import org.Canal.Utils.Codex;
+import org.Canal.Utils.*;
 import org.Canal.UI.Views.System.QuickExplorer;
-import org.Canal.Utils.Configuration;
-import org.Canal.Utils.Engine;
-import org.Canal.Utils.Json;
 
 import javax.swing.*;
 import java.awt.*;
@@ -38,7 +35,7 @@ public class Start {
                     File file = mdf[i];
                     if (file.getPath().endsWith(".cnl.mfg")) {
                         hasConfiguration = true;
-                        Engine.setConfiguration(Json.load(file.getPath(), Configuration.class));
+                        Engine.setConfiguration(Pipe.load(file.getPath(), Configuration.class));
                         try {
                             Font defaultFont = UIManager.getFont("defaultFont");
                             if (defaultFont != null) {
@@ -59,10 +56,13 @@ public class Start {
                             if(Engine.getConfiguration().getAssignedUser() != null){
                                 Engine.assignUser(Engine.getUser(Engine.getConfiguration().getAssignedUser()));
                             }
+                            if(!Engine.getConfiguration().getMongodb().isEmpty()){
+
+                            }
                             q = new QuickExplorer();
                         }
                     }else if(file.getPath().endsWith(".cdx")){
-                        Engine.codex = Json.load(file.getPath(), Codex.class);
+                        Engine.codex = Pipe.load(file.getPath(), Codex.class);
                     }
                 }
                 if(!hasConfiguration) {
@@ -71,7 +71,7 @@ public class Start {
                 if(Engine.codex == null){
                     Codex cdx = new Codex();
                     Engine.codex = cdx;
-                    Json.save(DIR + "\\codex.cdx", cdx);
+                    Pipe.export(DIR + "\\codex.cdx", cdx);
                 }
             }else{
                 new Setup();

@@ -5,7 +5,7 @@ import org.Canal.Models.SupplyChainUnits.MaterialMovement;
 import org.Canal.Models.SupplyChainUnits.StockLine;
 import org.Canal.Start;
 import org.Canal.Utils.Engine;
-import org.Canal.Utils.Json;
+import org.Canal.Utils.Pipe;
 import org.Canal.Utils.LockeStatus;
 
 import java.io.File;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class Inventory extends Objex {
 
     private String location;
-    private ArrayList<StockLine> stockLines =  new ArrayList<StockLine>();
+    private ArrayList<StockLine> stockLines = new ArrayList<StockLine>();
     private ArrayList<MaterialMovement> materialMovements = new ArrayList<>();
 
     public Inventory(String location) {
@@ -58,8 +58,8 @@ public class Inventory extends Objex {
     }
 
     public boolean inStock(String itemId) {
-        for(StockLine stockLine : stockLines) {
-            if(stockLine.getId().equals(itemId)) {
+        for (StockLine stockLine : stockLines) {
+            if (stockLine.getId().equals(itemId)) {
                 return true;
             }
         }
@@ -67,8 +67,8 @@ public class Inventory extends Objex {
     }
 
     public double getStock(String itemId) {
-        for(StockLine stockLine : stockLines) {
-            if(stockLine.getId().equals(itemId)) {
+        for (StockLine stockLine : stockLines) {
+            if (stockLine.getId().equals(itemId)) {
                 return stockLine.getQuantity();
             }
         }
@@ -76,8 +76,8 @@ public class Inventory extends Objex {
     }
 
     public StockLine getStockLine(String itemId) {
-        for(StockLine stockLine : stockLines) {
-            if(stockLine.getId().equals(itemId)) {
+        for (StockLine stockLine : stockLines) {
+            if (stockLine.getId().equals(itemId)) {
                 return stockLine;
             }
         }
@@ -88,7 +88,7 @@ public class Inventory extends Objex {
         for (StockLine sl : stockLines) {
             if (sl.equals(stockLine)) { // Assuming equals() is properly overridden
                 stockLine.setQuantity(stockLine.getQuantity() - quantity);
-                if(sl.getQuantity() == 0) {
+                if (sl.getQuantity() == 0) {
                     stockLines.remove(sl);
                 }
                 MaterialMovement nmm = new MaterialMovement();
@@ -111,18 +111,23 @@ public class Inventory extends Objex {
         System.out.println("Stock line not found.");
     }
 
-    public void save(){
-        File md = new File(Start.DIR + "\\.store\\STK\\");
-        File[] mdf = md.listFiles();
-        if (mdf != null) {
-            for (File file : mdf) {
-                if (file.getPath().endsWith(".stk")) {
-                    Inventory forg = Json.load(file.getPath(), Inventory.class);
-                    if (forg.getLocation().equals(location)) {
-                        Json.save(file.getPath(), this);
+    public void save() {
+        if (Engine.getConfiguration().getMongodb().isEmpty()) {
+
+            File md = new File(Start.DIR + "\\.store\\STK\\");
+            File[] mdf = md.listFiles();
+            if (mdf != null) {
+                for (File file : mdf) {
+                    if (file.getPath().endsWith(".stk")) {
+                        Inventory forg = Pipe.load(file.getPath(), Inventory.class);
+                        if (forg.getLocation().equals(location)) {
+                            Pipe.export(file.getPath(), this);
+                        }
                     }
                 }
             }
+        } else {
+            Pipe.save("STK", this);
         }
     }
 }

@@ -67,9 +67,9 @@ public class TaskList extends LockeState {
         });
         labels.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                String[] printables = new String[Engine.orders.getPurchaseOrder().size()];
-                for (int i = 0; i < Engine.orders.getPurchaseOrder().size(); i++) {
-                    printables[i] = Engine.orders.getPurchaseOrder().get(i).getOrderId();
+                String[] printables = new String[Engine.getPurchaseOrders().size()];
+                for (int i = 0; i < Engine.getPurchaseOrders().size(); i++) {
+                    printables[i] = Engine.getPurchaseOrders().get(i).getOrderId();
                 }
                 new CheckboxBarcodeFrame(printables);
             }
@@ -89,7 +89,7 @@ public class TaskList extends LockeState {
                 "Status"
         };
         ArrayList<String[]> pos = new ArrayList<>();
-        for (PurchaseOrder po : Engine.orders.getPurchaseOrder()) {
+        for (PurchaseOrder po : Engine.getPurchaseOrders()) {
             pos.add(new String[]{
                     po.getOrderId(),
                     po.getOwner(),

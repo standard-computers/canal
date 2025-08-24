@@ -26,7 +26,7 @@ public class GoodsIssues extends LockeState {
 
         super("Goods Issues", "/GI", true, true, true, true);
         setFrameIcon(new ImageIcon(GoodsIssues.class.getResource("/icons/purchaseorders.png")));
-        if(Engine.orders.getGoodsReceipts().isEmpty()){
+        if(Engine.getGoodsReceipts().isEmpty()){
             dispose();
             JOptionPane.showMessageDialog(this, "No Goods Receipts Posted!");
         }
@@ -80,7 +80,7 @@ public class GoodsIssues extends LockeState {
                 "Status"
         };
         ArrayList<String[]> goodsReceipts = new ArrayList<>();
-        for (GoodsReceipt gr : Engine.orders.getGoodsReceipts()) {
+        for (GoodsReceipt gr : Engine.getGoodsReceipts()) {
             goodsReceipts.add(new String[]{
                     gr.getId(),
                     gr.getPurchaseOrder(),
