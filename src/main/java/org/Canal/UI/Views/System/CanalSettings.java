@@ -30,7 +30,7 @@ public class CanalSettings extends LockeState {
 
     public CanalSettings(DesktopState desktop) {
 
-        super("Ratio Settings", "/CNL");
+        super("Canal Settings", "/CNL");
         setFrameIcon(new ImageIcon(CanalSettings.class.getResource("/icons/settings.png")));
         this.desktop = desktop;
 
@@ -53,7 +53,7 @@ public class CanalSettings extends LockeState {
         settings.add(instanceVars(), "Instace Variables");
         settings.add(databaseConnection(), "Database");
 
-        add(Elements.header("Ratio Settings", SwingConstants.LEFT), BorderLayout.NORTH);
+        add(Elements.header("Canal Settings", SwingConstants.LEFT), BorderLayout.NORTH);
         add(settings, BorderLayout.CENTER);
         add(cr, BorderLayout.SOUTH);
     }

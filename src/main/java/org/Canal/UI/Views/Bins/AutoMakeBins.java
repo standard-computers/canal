@@ -9,8 +9,6 @@ import org.Canal.Utils.Engine;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -32,8 +30,10 @@ public class AutoMakeBins extends LockeState {
     private ArrayList<JCheckBox> checkboxes;
 
     public AutoMakeBins() {
-        super("AutoMake Bins", "/BNS/AUTO_MK", false, true, false, true);
+
+        super("AutoMake Bins", "/BNS/AUTO_MK");
         setFrameIcon(new ImageIcon(AutoMakeBins.class.getResource("/icons/automake.png")));
+
         CustomTabbedPane tabs = new CustomTabbedPane();
         areas = Engine.getAreas();
         areas.addAll(Engine.getAreas());
@@ -50,25 +50,23 @@ public class AutoMakeBins extends LockeState {
         JPanel opts = new JPanel(new GridLayout(1, 2));
         JButton sa = Elements.button("Select All");
         JButton dsa = Elements.button("Deselect All");
-        sa.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                checkboxes.forEach(cb -> cb.setSelected(true));
-                repaint();
-            }
+        sa.addActionListener(_ -> {
+            checkboxes.forEach(cb -> cb.setSelected(true));
+            repaint();
         });
-        dsa.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                checkboxes.forEach(cb -> cb.setSelected(false));
-                repaint();
-            }
+        dsa.addActionListener(_ -> {
+            checkboxes.forEach(cb -> cb.setSelected(false));
+            repaint();
         });
         opts.add(sa);
         opts.add(dsa);
-        selector.add(opts, BorderLayout.SOUTH);
+
         tabs.addTab("Areas", selector);
         tabs.addTab("General", general());
         tabs.addTab("Dimensional", dimensional());
+
         setLayout(new BorderLayout());
+        selector.add(opts, BorderLayout.SOUTH);
         add(toolbar(), BorderLayout.NORTH);
         add(tabs, BorderLayout.CENTER);
     }

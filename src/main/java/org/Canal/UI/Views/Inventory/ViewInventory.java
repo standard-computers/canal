@@ -126,7 +126,7 @@ public class ViewInventory extends LockeState implements RefreshListener {
             for(StockLine sl : Engine.getInventory(location).getStockLines()){
                 Item i = Engine.getItem(sl.getItem());
                 if(i != null){
-                    totalValue += (i.getPrice() + sl.getQuantity());
+                    totalValue += sl.getValue();
                 }
             }
             JOptionPane.showMessageDialog(null, "$" + totalValue, "Inventory Valuation", JOptionPane.INFORMATION_MESSAGE);

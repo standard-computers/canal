@@ -3,39 +3,48 @@ package org.Canal.UI.Views.Items;
 import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.UI.Elements.*;
 import org.Canal.Utils.Engine;
+import org.Canal.Utils.LockeStatus;
 import org.Canal.Utils.RefreshListener;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
 /**
  * /ITS/MOD/$[ITEM_ID]
  */
 public class ModifyItem extends LockeState {
 
+    //Operating Objects
     private Item item;
     private RefreshListener refreshListener;
+
+    //General Info Tab
     private JTextField  idField;
     private JTextField orgField;
     private JTextField nameField;
     private JTextField linkField;
     private JTextField vendorField;
-    private JTextField colorField;
     private JCheckBox batchedField;
     private JCheckBox rentableField;
     private JCheckBox skudField;
     private JCheckBox consumableField;
     private JCheckBox virtualField;
+    private JTextField priceField;
     private JTextField upcField;
     private JTextField vendorNumberField;
-    private JTextField priceField;
+
+    //Dimensional Tab
+    private JTextField baseQuantityField;
+    private Selectable packagingUomField;
+    private JTextField colorField;
     private UOMField widthField;
     private UOMField lengthField;
     private UOMField heightField;
     private UOMField weightField;
     private JTextField taxField;
     private JTextField exciseTaxfield;
-    private JTextField baseQuantityField;
 
     public ModifyItem(Item item, RefreshListener refreshListener) {
 
@@ -44,12 +53,6 @@ public class ModifyItem extends LockeState {
         this.item = item;
         this.refreshListener = refreshListener;
 
-        setLayout(new BorderLayout());
-        JPanel iic = new JPanel(new BorderLayout());
-        iic.add(Elements.header(item.getId() + " – " + item.getName(), SwingConstants.LEFT), BorderLayout.NORTH);
-        iic.add(toolbar(), BorderLayout.SOUTH);
-        add(iic, BorderLayout.NORTH);
-
         CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.addTab("General", itemInfo());
         tabs.addTab("Dimensional", dimensional());
@@ -57,6 +60,8 @@ public class ModifyItem extends LockeState {
         tabs.addTab("Units of Measure", unitsOfMeasure());
         tabs.addTab("Packaging", packaging());
 
+        setLayout(new BorderLayout());
+        add(toolbar(), BorderLayout.NORTH);
         add(tabs, BorderLayout.CENTER);
         setMaximized(true);
     }
@@ -67,6 +72,9 @@ public class ModifyItem extends LockeState {
         Form f2 = new Form();
 
         baseQuantityField = Elements.input(String.valueOf(item.getBaseQuantity()));
+
+        packagingUomField = Selectables.packagingUoms();
+        packagingUomField.setSelectedValue(item.getPackagingUnit());
 
         colorField = Elements.input(item.getColor());
 
@@ -100,7 +108,7 @@ public class ModifyItem extends LockeState {
         exciseTaxfield = Elements.input(String.valueOf(item.getExciseTax()));
 
         f2.addInput(Elements.coloredLabel("Packaging Base Quantity", UIManager.getColor("Label.foreground")), baseQuantityField);
-        f2.addInput(Elements.coloredLabel("Packaging UOM", UIManager.getColor("Label.foreground")), Elements.input(item.getPackagingUnit()));
+        f2.addInput(Elements.coloredLabel("Packaging UOM", UIManager.getColor("Label.foreground")), packagingUomField);
         f2.addInput(Elements.coloredLabel("Consumable?", UIManager.getColor("Label.foreground")), consumableField);
         f2.addInput(Elements.coloredLabel("Color", UIManager.getColor("Label.foreground")), colorField);
         f2.addInput(Elements.coloredLabel("Width", UIManager.getColor("Label.foreground")), widthField);
@@ -132,7 +140,6 @@ public class ModifyItem extends LockeState {
     private JPanel itemInfo() {
 
         JPanel itemInfo = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        Form f = new Form();
 
         idField = new Copiable(item.getId());
         orgField = Elements.input(item.getOrg());
@@ -140,7 +147,7 @@ public class ModifyItem extends LockeState {
         linkField = Elements.input(item.getLink());
         vendorField = Elements.input(item.getVendor());
 
-        batchedField = new JCheckBox();
+        batchedField = new JCheckBox( " Item expires");
         if(item.isBatched()){
             batchedField.setSelected(true);
         }
@@ -159,22 +166,27 @@ public class ModifyItem extends LockeState {
         upcField = Elements.input(item.getUpc());
         vendorNumberField = Elements.input(item.getVendorNumber());
 
-        f.addInput(Elements.coloredLabel("ID", UIManager.getColor("Label.foreground")), idField);
-        f.addInput(Elements.coloredLabel("Organization", UIManager.getColor("Label.foreground")), orgField);
-        f.addInput(Elements.coloredLabel("Name", UIManager.getColor("Label.foreground")), nameField);
-        f.addInput(Elements.coloredLabel("Link", UIManager.getColor("Label.foreground")), linkField);
-        f.addInput(Elements.coloredLabel("Vendor", UIManager.getColor("Label.foreground")), vendorField);
-        f.addInput(Elements.coloredLabel("Batched", UIManager.getColor("Label.foreground")), batchedField);
-        f.addInput(Elements.coloredLabel("Rentable", UIManager.getColor("Label.foreground")), rentableField);
-        f.addInput(Elements.coloredLabel("SKU'd", UIManager.getColor("Label.foreground")), skudField);
-        f.addInput(Elements.coloredLabel("Price", UIManager.getColor("Label.foreground")), priceField);
-        f.addInput(Elements.coloredLabel("UPC", UIManager.getColor("Label.foreground")), upcField);
-        f.addInput(Elements.coloredLabel("Vendor Number", UIManager.getColor("Label.foreground")), vendorNumberField);
-        itemInfo.add(f);
+        Form form = new Form();
+        form.addInput(Elements.coloredLabel("ID", UIManager.getColor("Label.foreground")), idField);
+        form.addInput(Elements.coloredLabel("Organization", UIManager.getColor("Label.foreground")), orgField);
+        form.addInput(Elements.coloredLabel("Name", UIManager.getColor("Label.foreground")), nameField);
+        form.addInput(Elements.coloredLabel("Link", UIManager.getColor("Label.foreground")), linkField);
+        form.addInput(Elements.coloredLabel("Vendor", UIManager.getColor("Label.foreground")), vendorField);
+        form.addInput(Elements.coloredLabel("Batched", UIManager.getColor("Label.foreground")), batchedField);
+        form.addInput(Elements.coloredLabel("Rentable", UIManager.getColor("Label.foreground")), rentableField);
+        form.addInput(Elements.coloredLabel("SKU'd", UIManager.getColor("Label.foreground")), skudField);
+        form.addInput(Elements.coloredLabel("Price", UIManager.getColor("Label.foreground")), priceField);
+        form.addInput(Elements.coloredLabel("UPC", UIManager.getColor("Label.foreground")), upcField);
+        form.addInput(Elements.coloredLabel("Vendor Number", UIManager.getColor("Label.foreground")), vendorNumberField);
+        itemInfo.add(form);
+
         return itemInfo;
     }
 
     private JPanel toolbar() {
+
+        JPanel toolbar = new JPanel(new BorderLayout());
+
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
 
@@ -191,6 +203,10 @@ public class ModifyItem extends LockeState {
             item.setConsumable(consumableField.isSelected());
             item.setUpc(upcField.getText());
             item.setVendorNumber(vendorNumberField.getText());
+
+            item.setBaseQuantity(Double.parseDouble(baseQuantityField.getText()));
+            item.setPackagingUnit(packagingUomField.getSelectedValue());
+
             item.setTax(Double.parseDouble(taxField.getText()));
             item.setExciseTax(Double.parseDouble(exciseTaxfield.getText()));
 
@@ -220,6 +236,21 @@ public class ModifyItem extends LockeState {
         tb.add(save);
         tb.add(Box.createHorizontalStrut(5));
 
+        int mask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
+        KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_S, mask);
+        JRootPane rp = getRootPane();
+        rp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ks, "do-save");
+        rp.getActionMap().put("do-save", new AbstractAction() {
+            @Override public void actionPerformed(ActionEvent e) {
+                save.doClick();
+            }
+        });
+
+        IconButton review = new IconButton("Review", "review", "Review changes");
+        review.addActionListener(_ -> performReview());
+        tb.add(review);
+        tb.add(Box.createHorizontalStrut(5));
+
         IconButton label = new IconButton("Label", "label", "Print labels for properties");
         label.addActionListener(_ -> {
 
@@ -230,7 +261,10 @@ public class ModifyItem extends LockeState {
         if((boolean) Engine.codex.getValue("ITS", "allow_archival")){
             IconButton archive = new IconButton("Archive", "archive", "Archive item");
             archive.addActionListener(_ -> {
-
+                //TODO Codex for confirmation
+                item.setStatus(LockeStatus.ARCHIVED);
+                item.save();
+                dispose();
             });
             tb.add(archive);
             tb.add(Box.createHorizontalStrut(5));
@@ -243,8 +277,26 @@ public class ModifyItem extends LockeState {
             });
             tb.add(delete);
             tb.add(Box.createHorizontalStrut(5));
+            int mask2 = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
+            KeyStroke ks2 = KeyStroke.getKeyStroke(KeyEvent.VK_D, mask2);
+            JRootPane rp2 = getRootPane();
+            rp2.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ks2, "do-delete");
+            rp2.getActionMap().put("do-delete", new AbstractAction() {
+                @Override public void actionPerformed(ActionEvent e) {
+                    if (delete != null && delete.isEnabled()) {
+                        delete.doClick();
+                    }
+                }
+            });
         }
 
-        return tb;
+        toolbar.add(Elements.header("Modifying " + item.getId() + " – " + item.getName(), SwingConstants.LEFT), BorderLayout.CENTER);
+        toolbar.add(tb, BorderLayout.SOUTH);
+
+        return toolbar;
+    }
+
+    private void performReview() {
+
     }
 }

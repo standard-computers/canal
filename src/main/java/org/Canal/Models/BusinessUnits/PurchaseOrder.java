@@ -21,7 +21,10 @@ public class PurchaseOrder extends Objex {
     private String customer;
     private String vendor;
     private ArrayList<OrderLineItem> items = new ArrayList<>();
-    private double netValue, taxRate, taxAmount, total;
+    private double netValue;
+    private double taxRate;
+    private double taxAmount;
+    private double total;
 
     public String getOrderId() {
         return orderId;

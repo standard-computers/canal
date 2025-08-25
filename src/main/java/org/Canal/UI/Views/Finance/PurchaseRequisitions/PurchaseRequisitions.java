@@ -14,7 +14,6 @@ import org.Canal.Utils.LockeStatus;
 import org.Canal.Utils.RefreshListener;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -42,19 +41,6 @@ public class PurchaseRequisitions extends LockeState implements RefreshListener 
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);
         add(tableScrollPane, BorderLayout.CENTER);
-        table.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    JTable t = (JTable) e.getSource();
-                    int row = t.getSelectedRow();
-                    if (row != -1) {
-                        String v = String.valueOf(t.getValueAt(row, 1));
-                        PurchaseRequisition pr = Engine.getPurchaseRequisition(v);
-                        desktop.put(new ViewPurchaseRequisition(pr, desktop, PurchaseRequisitions.this));
-                    }
-                }
-            }
-        });
     }
 
     /**
@@ -76,13 +62,18 @@ public class PurchaseRequisitions extends LockeState implements RefreshListener 
                 "Consumption",
                 "Remaining",
                 "Single Ord?",
+                "Items",
                 "Valid From",
                 "Valid To",
-                "Status"
+                "Status",
+                "Created"
         };
         ArrayList<Object[]> prs = new ArrayList<>();
         for (PurchaseRequisition pr : Engine.getPurchaseRequisitions()) {
-            if(!pr.getStatus().equals(LockeStatus.ARCHIVED) && !pr.getStatus().equals(LockeStatus.REMOVED)) {
+            if(!pr.getStatus().equals(LockeStatus.ARCHIVED)
+                    && !pr.getStatus().equals(LockeStatus.REMOVED)
+                    && !pr.getStatus().equals(LockeStatus.DELETED)
+                    && !pr.getStatus().equals(LockeStatus.COMPLETED)) {
                 double consumption = 0;
                 for(PurchaseOrder po : Engine.getPurchaseOrders()){
                     if(po.getPurchaseRequisition().equals(pr.getId())){
@@ -104,13 +95,29 @@ public class PurchaseRequisitions extends LockeState implements RefreshListener 
                         consumption,
                         remaining,
                         String.valueOf(pr.isSingleOrder()),
+                        pr.getItems().size(),
                         pr.getStart(),
                         pr.getEnd(),
-                        String.valueOf(pr.getStatus())
+                        String.valueOf(pr.getStatus()),
+                        pr.getCreated()
                 });
             }
         }
-        return new CustomTable(columns, prs);
+        CustomTable ct = new CustomTable(columns, prs);
+        ct.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    JTable t = (JTable) e.getSource();
+                    int row = t.getSelectedRow();
+                    if (row != -1) {
+                        String v = String.valueOf(t.getValueAt(row, 1));
+                        PurchaseRequisition pr = Engine.getPurchaseRequisition(v);
+                        desktop.put(new ViewPurchaseRequisition(pr, desktop, PurchaseRequisitions.this));
+                    }
+                }
+            }
+        });
+        return ct;
     }
 
     /**
@@ -140,6 +147,7 @@ public class PurchaseRequisitions extends LockeState implements RefreshListener 
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton createPurchaseReq = new IconButton("New PR", "create", "Create a Purchase Requisition", "/ORDS/PR/NEW");
+        createPurchaseReq.addActionListener(_ -> desktop.put(new CreatePurchaseRequisition()));
         tb.add(createPurchaseReq);
         tb.add(Box.createHorizontalStrut(5));
 
@@ -148,26 +156,16 @@ public class PurchaseRequisitions extends LockeState implements RefreshListener 
         tb.add(autoMakePRs);
         tb.add(Box.createHorizontalStrut(5));
 
+        IconButton convertPurchaseRequisitions = new IconButton("Convert Purchase Reqs", "start", "Convert Purchase Requisitions to Purchase Orders", "/ORDS/PR/PO");
+        convertPurchaseRequisitions.addActionListener(_ -> desktop.put(new ConvertPurchaseRequisitions(desktop)));
+        tb.add(convertPurchaseRequisitions);
+        tb.add(Box.createHorizontalStrut(5));
+
         IconButton findPR = new IconButton("Find", "find", "Find a Purchase Requisition", "/ORDS/PR/F");
         tb.add(findPR);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton labels = new IconButton("Labels", "label", "Print labels for selected");
-        tb.add(labels);
-        tb.add(Box.createHorizontalStrut(5));
-
-        IconButton print = new IconButton("Print", "print", "Print selectes");
-        tb.add(print);
-        tb.add(Box.createHorizontalStrut(5));
-
-        IconButton refresh = new IconButton("Refresh", "refresh", "Refresh data");
-        tb.add(refresh);
-
-        createPurchaseReq.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                desktop.put(new CreatePurchaseRequisition());
-            }
-        });
         labels.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 String[] printables = new String[Engine.getPurchaseOrders().size()];
@@ -177,12 +175,17 @@ public class PurchaseRequisitions extends LockeState implements RefreshListener 
                 new CheckboxBarcodeFrame(printables);
             }
         });
-        refresh.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                refresh();
-            }
-        });
+        tb.add(labels);
+        tb.add(Box.createHorizontalStrut(5));
+
+        IconButton print = new IconButton("Print", "print", "Print selectes");
+        tb.add(print);
+        tb.add(Box.createHorizontalStrut(5));
+
+        IconButton refresh = new IconButton("Refresh", "refresh", "Refresh data");
+        refresh.addActionListener(_ -> refresh());
+        tb.add(refresh);
+
         return tb;
     }
 

@@ -3,10 +3,7 @@ package org.Canal.UI.Views.Rates;
 import org.Canal.Models.BusinessUnits.PurchaseRequisition;
 import org.Canal.Models.BusinessUnits.Rate;
 import org.Canal.UI.Elements.*;
-import org.Canal.Utils.Constants;
-import org.Canal.Utils.DesktopState;
-import org.Canal.Utils.Engine;
-import org.Canal.Utils.Pipe;
+import org.Canal.Utils.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,15 +17,17 @@ public class ViewRate extends LockeState {
 
     private Rate rate;
     private DesktopState desktop;
+    private RefreshListener refreshListener;
     private JCheckBox rateIsPercent;
     private JCheckBox rateIsTax;
 
-    public ViewRate(Rate rate, DesktopState desktop) {
+    public ViewRate(Rate rate, DesktopState desktop, RefreshListener refreshListener) {
 
         super("View Rate", "/RTS/" + rate.getId(), false, true, false, true);
         setFrameIcon(new ImageIcon(ViewRate.class.getResource("/icons/create.png")));
         this.rate = rate;
         this.desktop = desktop;
+        this.refreshListener = refreshListener;
 
         rateIsPercent = new JCheckBox();
         rateIsPercent.setEnabled(false);
@@ -65,6 +64,10 @@ public class ViewRate extends LockeState {
         buttons.setLayout(new BoxLayout(buttons, BoxLayout.X_AXIS));
 
         IconButton modify = new IconButton("Modify", "modify", "Modify Rate", "/RTS/MOD");
+        modify.addActionListener(_ -> {
+            dispose();
+            desktop.put(new ModifyRate(rate, desktop, refreshListener));
+        });
         buttons.add(Box.createHorizontalStrut(5));
         buttons.add(modify);
 
@@ -75,8 +78,8 @@ public class ViewRate extends LockeState {
         buttons.add(Box.createHorizontalStrut(5));
         buttons.add(delete);
 
+        toolbar.add(Elements.header("View " + rate.getName(), SwingConstants.LEFT), BorderLayout.CENTER);
         toolbar.add(buttons, BorderLayout.SOUTH);
-        toolbar.add(Elements.header("Create a Rate", SwingConstants.CENTER), BorderLayout.NORTH);
 
         return toolbar;
     }

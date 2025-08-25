@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class Inventory extends Objex {
 
     private String location;
-    private ArrayList<StockLine> stockLines = new ArrayList<StockLine>();
+    private ArrayList<StockLine> stockLines = new ArrayList<>();
     private ArrayList<MaterialMovement> materialMovements = new ArrayList<>();
 
     public Inventory(String location) {
@@ -112,6 +112,7 @@ public class Inventory extends Objex {
     }
 
     public void save() {
+
         if (Engine.getConfiguration().getMongodb().isEmpty()) {
 
             File md = new File(Start.DIR + "\\.store\\STK\\");

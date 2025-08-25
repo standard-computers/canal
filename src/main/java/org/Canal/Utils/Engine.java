@@ -17,7 +17,11 @@ import org.Canal.UI.Views.Customers.ViewCustomer;
 import org.Canal.UI.Views.Departments.DeleteDepartment;
 import org.Canal.UI.Views.Finance.Accounts.Accounts;
 import org.Canal.UI.Views.Finance.Accounts.CreateAccount;
+import org.Canal.UI.Views.Finance.Catalogs.ViewCatalog;
+import org.Canal.UI.Views.Finance.GoodsIssues.GoodsIssues;
 import org.Canal.UI.Views.Finance.PurchaseOrders.*;
+import org.Canal.UI.Views.Finance.PurchaseRequisitions.*;
+import org.Canal.UI.Views.Finance.SalesOrders.ViewSalesOrder;
 import org.Canal.UI.Views.Items.ModifyItem;
 import org.Canal.UI.Views.People.CreatePerson;
 import org.Canal.UI.Views.People.People;
@@ -49,15 +53,13 @@ import org.Canal.UI.Views.Items.ViewItem;
 import org.Canal.UI.Views.Items.Items;
 import org.Canal.UI.Views.Rates.CreateRate;
 import org.Canal.UI.Views.Rates.Rates;
+import org.Canal.UI.Views.Rates.ViewRate;
 import org.Canal.UI.Views.System.CanalSettings;
 import org.Canal.UI.Views.System.QuickExplorer;
 import org.Canal.UI.Views.Teams.CreateTeam;
 import org.Canal.UI.Views.Teams.Teams;
 import org.Canal.UI.Views.Inventory.*;
 import org.Canal.UI.Views.Finance.Invoices.CreateInvoice;
-import org.Canal.UI.Views.Finance.PurchaseRequisitions.AutoMakePurchaseRequisitions;
-import org.Canal.UI.Views.Finance.PurchaseRequisitions.CreatePurchaseRequisition;
-import org.Canal.UI.Views.Finance.PurchaseRequisitions.PurchaseRequisitions;
 import org.Canal.UI.Views.Finance.SalesOrders.AutoMakeSalesOrders;
 import org.Canal.UI.Views.Finance.SalesOrders.CreateSalesOrder;
 import org.Canal.UI.Views.Finance.SalesOrders.SalesOrders;
@@ -68,6 +70,7 @@ import org.Canal.UI.Views.Distribution.Trucks.Trucks;
 import org.Canal.UI.Views.Users.*;
 import org.Canal.UI.Views.ValueAddedServices.CreateVAS;
 import org.Canal.UI.Views.ValueAddedServices.ValueAddedServices;
+import org.bson.Document;
 
 import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
@@ -129,9 +132,9 @@ public class Engine {
      * LOCATIONS
      */
     public static ArrayList<Location> getLocations() {
+
         ArrayList<Location> locations = new ArrayList<>();
         String[] locs = new String[]{"DCSS", "CCS", "CSTS", "ORGS", "VEND", "WHS", "TRANS/CRRS", "OFFS"};
-
         if (Engine.getConfiguration().getMongodb().isEmpty()) { //Local disk
 
             for (String l : locs) {
@@ -144,8 +147,8 @@ public class Engine {
                 }
             }
         } else {
-            for (String l : locs) {
 
+            for (String l : locs) {
                 ConnectDB.collection(l).find().forEach(location -> {
                     Location u = Pipe.load(location, Location.class);
                     locations.add(u);
@@ -157,9 +160,18 @@ public class Engine {
         return locations;
     }
 
-    public static ArrayList<Location> getLocations(String objex) {
-        ArrayList<Location> locations = new ArrayList<>();
+    public static Location getLocationWithId(String id) {
+        for(Location loc : getLocations()) {
+            if(loc.getId().equals(id)) {
+                return loc;
+            }
+        }
+        return null;
+    }
 
+    public static ArrayList<Location> getLocations(String objex) {
+
+        ArrayList<Location> locations = new ArrayList<>();
         if (Engine.getConfiguration().getMongodb().isEmpty()) {
 
             File[] d = Pipe.list(objex);
@@ -430,7 +442,7 @@ public class Engine {
             });
         }
 
-        purchaseOrders.sort(Comparator.comparing(PurchaseOrder::getOrderId));
+        purchaseOrders.sort(Comparator.comparing(PurchaseOrder::getId));
         return purchaseOrders;
     }
 
@@ -475,6 +487,37 @@ public class Engine {
 
     public static Ledger getLedger(String id) {
         return getLedgers().stream().filter(inventory -> inventory.getId().equals(id)).toList().stream().findFirst().orElse(null);
+    }
+
+    /**
+     * RATES
+     */
+    public static ArrayList<Rate> getRates() {
+
+        ArrayList<Rate> rates = new ArrayList<>();
+        if (Engine.getConfiguration().getMongodb().isEmpty()) { //Local disk
+
+            File[] d = Pipe.list("RTS");
+            for (File file : d) {
+                if (!file.isDirectory()) {
+                    Rate rate = Pipe.load(file.getPath(), Rate.class);
+                    rates.add(rate);
+                }
+            }
+        } else {
+
+            ConnectDB.collection("RTS").find().forEach(rate -> {
+                Rate r = Pipe.load(rate, Rate.class);
+                rates.add(r);
+            });
+        }
+
+        rates.sort(Comparator.comparing(Rate::getId));
+        return rates;
+    }
+
+    public static Rate getRate(String id) {
+        return getRates().stream().filter(rate -> rate.getId().equals(id)).toList().stream().findFirst().orElse(null);
     }
 
     /**
@@ -644,8 +687,10 @@ public class Engine {
     public static Inventory getInventory(String location) {
         var i = getInventories().stream().filter(inventory -> inventory.getLocation().equals(location)).toList().stream().findFirst().orElse(null);
         if (i == null) {
-            i = new Inventory(location);
-            Pipe.save("/STK", i);
+            if(getConfiguration().getMongodb().isEmpty()) {
+                i = new Inventory(location);
+                Pipe.save("/STK", i);
+            }
         }
         return i;
     }
@@ -694,24 +739,33 @@ public class Engine {
         return (Engine.codex.getValue(objex, key) == null ? false : Engine.codex.getValue(objex, key));
     }
 
+    public static String generateId(String objexType){
+
+        int objexCount = (int) ConnectDB.collection(objexType).countDocuments();
+        String prefix = (String) Engine.codex.getValue(objexType, "prefix");
+        int leadingZeros = (Integer) Engine.codex.getValue(objexType, "leading_zeros"); // e.g., 3 -> 001
+        int nextId = objexCount + 1;
+        int width = Math.max(0, leadingZeros);
+        String numberPart = String.format("%0" + width + "d", nextId); // zero-pad to width
+        return prefix + numberPart;
+    }
+
     public static JInternalFrame router(String transactionCode, DesktopState desktop) {
         transactionCode = transactionCode.toUpperCase().trim();
         if (!transactionCode.startsWith("/")) {
             transactionCode = "/" + transactionCode;
         }
         switch (transactionCode) {
-            case "/ORGS" -> {
-                return new Locations("/ORGS", desktop);
+
+            //Accounts
+            case "/ACCS" -> {
+                return new Accounts(desktop);
             }
-            case "/ORGS/NEW" -> {
-                return new CreateLocation("/ORGS", desktop, null);
+            case "/ACCS/NEW" -> {
+                return new CreateAccount();
             }
-            case "/CCS" -> {
-                return new Locations("/CCS", desktop);
-            }
-            case "/CCS/NEW" -> {
-                return new CreateLocation("/CCS", desktop, null);
-            }
+
+            //AREAS
             case "/AREAS" -> {
                 return new Areas(desktop);
             }
@@ -721,6 +775,13 @@ public class Engine {
             case "/AREAS/AUTO_MK" -> {
                 return new AutoMakeAreas(null);
             }
+            case "/AREAS/O" -> {
+                String areaId = JOptionPane.showInputDialog(null, "Enter Area ID", "Area ID", JOptionPane.QUESTION_MESSAGE);
+                Area area = Engine.getArea(areaId);
+                return new ViewArea(area, desktop, null);
+            }
+
+            //BINS
             case "/BNS" -> {
                 return new Bins(desktop);
             }
@@ -736,27 +797,76 @@ public class Engine {
             case "/BNS/DEL" -> {
                 return new RemoveBin();
             }
+            case "/BNS/O" -> {
+                String binId = JOptionPane.showInputDialog(null, "Enter Bin ID", "Bin ID");
+                Bin bin = Engine.getBin(binId);
+                return new ViewBin(bin, desktop, null);
+            }
+
+            //ORGANIZATIONS
+            case "/ORGS" -> {
+                return new Locations("/ORGS", desktop);
+            }
+            case "/ORGS/NEW" -> {
+                return new CreateLocation("/ORGS", desktop, null);
+            }
+            case "/ORGS/O" -> {
+                String organizationId = JOptionPane.showInputDialog(null, "Enter Organization ID", "Organization ID", JOptionPane.QUESTION_MESSAGE);
+                Location organization = Engine.getLocation(organizationId, "CSTS");
+                return new ViewLocation(organization, desktop);
+            }
+
+            //COST CENTERS
+            case "/CCS" -> {
+                return new Locations("/CCS", desktop);
+            }
+            case "/CCS/NEW" -> {
+                return new CreateLocation("/CCS", desktop, null);
+            }
+            case "/CCS/O" -> {
+                String costCenterId = JOptionPane.showInputDialog(null, "Enter Cost Center ID", "Cost Center ID", JOptionPane.QUESTION_MESSAGE);
+                Location costCenter = Engine.getLocation(costCenterId, "CCS");
+                return new ViewLocation(costCenter, desktop);
+            }
+
+            //CUSTOMERS
             case "/CSTS" -> {
                 return new Locations("/CSTS", desktop);
             }
             case "/CSTS/NEW" -> {
                 return new CreateLocation("/CSTS", desktop, null);
             }
-            case "/ACCS" -> {
-                return new Accounts(desktop);
+            case "/CSTS/O" -> {
+                String customerId = JOptionPane.showInputDialog(null, "Enter Customer ID", "Customer ID", JOptionPane.QUESTION_MESSAGE);
+                Location customer = Engine.getLocation(customerId, "CSTS");
+                return new ViewCustomer(customer);
             }
-            case "/ACCS/NEW" -> {
-                return new CreateAccount();
-            }
+
+            //DISTRIBUTION CENTERS
             case "/DCSS" -> {
                 return new Locations("/DCSS", desktop);
             }
             case "/DCSS/NEW" -> {
                 return new CreateLocation("/DCSS", desktop, null);
             }
+
+            //OFFICES
             case "/OFFS" -> {
                 return new Locations("/OFFS", desktop);
             }
+            case "/OFFS/NEW" -> {
+                return new CreateLocation("/OFFS", desktop, null);
+            }
+
+            //TRANSPORTATION CARRIERS
+            case "/TRANS/CRRS" -> {
+                return new Locations("/TRANS/CRRS", desktop);
+            }
+            case "/TRANS/CRRS/NEW" -> {
+                return new CreateLocation("/TRANS/CRRS", desktop, null);
+            }
+
+            //OUTBOUND DELIVERIES
             case "/TRANS/ODO" -> {
                 return new OutboundDeliveries(desktop);
             }
@@ -769,70 +879,97 @@ public class Engine {
             case "/TRANS/IDO/NEW" -> {
                 return new CreateInboundDeliveryOrder();
             }
-            case "/TRANS/CRRS" -> {
-                return new Locations("/TRANS/CRRS", desktop);
-            }
-            case "/TRANS/CRRS/NEW" -> {
-                return new CreateLocation("/TRANS/CRRS", desktop, null);
-            }
+
+            //TRUCKS
             case "/TRANS/TRCKS" -> {
                 return new Trucks(desktop);
             }
             case "/TRANS/TRCKS/NEW" -> {
                 return new CreateTruck(desktop);
             }
+
+            //WAREHOUSES
             case "/WHS" -> {
                 return new Locations("/WHS", desktop);
             }
             case "/WHS/NEW" -> {
                 return new CreateLocation("/WHS", desktop, null);
             }
+
+            //VENDORS
             case "/VEND" -> {
                 return new Locations("/VEND", desktop);
             }
             case "/VEND/NEW" -> {
                 return new CreateLocation("/VEND", desktop, null);
             }
+
+            //VALUE ADDED SERVICES
             case "/VAS" -> {
                 return new ValueAddedServices();
             }
             case "/VAS/NEW" -> {
                 return new CreateVAS();
             }
+            case "/VAS/O" -> {
+                String vasId = JOptionPane.showInputDialog(null, "Enter VAS ID", "VAS", JOptionPane.QUESTION_MESSAGE);
+//                Engine.getVa
+                return new CreateVAS();
+            }
+
+            //RATES
             case "/RTS" -> {
-                return new Rates();
+                return new Rates(desktop);
             }
             case "/RTS/NEW" -> {
-                return new CreateRate(desktop);
+                return new CreateRate(desktop, null);
             }
+            case "/RTS/O" -> {
+                String rateId = JOptionPane.showInputDialog(null, "Enter Rate ID", "Rate ID", JOptionPane.QUESTION_MESSAGE);
+                Rate rate = Engine.getRate(rateId);
+                return new ViewRate(rate, desktop, null);
+            }
+
+            //LEDGERS
             case "/LGS" -> {
                 return new Ledgers(desktop);
             }
             case "/LGS/NEW" -> {
                 return new CreateLedger(desktop);
             }
+            case "/LGS/O" -> {
+                String ledgerId = JOptionPane.showInputDialog(null, "Enter Ledger ID", "Ledger ID", JOptionPane.QUESTION_MESSAGE);
+                Ledger ledger = Engine.getLedger(ledgerId);
+                return new ViewLedger(ledger, desktop);
+            }
+
+            //EMPLOYEES
             case "/EMPS" -> {
                 return new Employees(desktop);
             }
             case "/EMPS/O" -> {
                 String eid = JOptionPane.showInputDialog(null, "Enter Employee ID", "Employee ID", JOptionPane.QUESTION_MESSAGE);
-                Employee e = Engine.getEmployee(eid);
-                return new ViewEmployee(e, desktop, null);
+                Employee employee = Engine.getEmployee(eid);
+                return new ViewEmployee(employee, desktop, null);
             }
             case "/EMPS/NEW" -> {
                 return new CreateEmployee(desktop, null);
             }
+
+            //PEOPLE
             case "/PPL" -> {
                 return new People(desktop);
             }
             case "/PPL/O" -> {
                 String pid = JOptionPane.showInputDialog(null, "Enter Person ID", "Person ID", JOptionPane.QUESTION_MESSAGE);
-                Employee e = Engine.getEmployee(pid);
-                return new ViewEmployee(e, desktop, null);
+                Employee person = Engine.getEmployee(pid);
+                return new ViewEmployee(person, desktop, null);
             }
             case "/PPL/NEW" -> {
                 return new CreatePerson(desktop, false);
             }
+
+            //DEPARTMENTS
             case "/DPTS" -> {
                 return new Departments(desktop);
             }
@@ -842,19 +979,23 @@ public class Engine {
             case "/DPTS/DEL" -> {
                 return new DeleteDepartment();
             }
+
+            //TEAMS
             case "/TMS" -> {
                 return new Teams();
             }
             case "/TMS/NEW" -> {
                 return new CreateTeam();
             }
+
+            //USERS
             case "/USRS" -> {
                 return new Users(desktop);
             }
             case "/USRS/O" -> {
-                String uid = JOptionPane.showInputDialog(null, "Enter User ID", "User ID", JOptionPane.QUESTION_MESSAGE);
-                User e = Engine.getUser(uid);
-                return new ViewUser(desktop, e);
+                String uId = JOptionPane.showInputDialog(null, "Enter User ID", "User ID", JOptionPane.QUESTION_MESSAGE);
+                User user = Engine.getUser(uId);
+                return new ViewUser(desktop, user);
             }
             case "/USRS/CHG_PSSWD" -> {
                 return new ChangeUserPassword();
@@ -862,28 +1003,36 @@ public class Engine {
             case "/USRS/NEW" -> {
                 return new CreateUser(desktop, null);
             }
+
+            //STOCK AND INVENTORY
             case "/STK", "/INV" -> {
                 return new ViewInventory(desktop, Engine.getOrganization().getId());
             }
             case "/STK/MOD/MV" -> {
                 return new MoveStock("", null);
             }
+
+            //INVOICES
             case "/INVS", "/INVS/NEW" -> {
                 return new CreateInvoice(null);
             }
+
+            //CATALOGS
             case "/CATS" -> {
                 return new Catalogs(desktop);
             }
             case "/CATS/NEW" -> {
                 return new CreateCatalog(null);
             }
+            case "/CATS/O" -> {
+                String catId = JOptionPane.showInputDialog(null, "Enter Catalog ID", "Catalog ID", JOptionPane.QUESTION_MESSAGE);
+                Catalog catalog = Engine.getCatalog(catId);
+                return new ViewCatalog(catalog);
+            }
+
+            //ITEMS
             case "/ITS" -> {
                 return new Items(desktop);
-            }
-            case "/ITS/O" -> {
-                String eid = JOptionPane.showInputDialog(null, "Enter Item ID", "Item ID", JOptionPane.QUESTION_MESSAGE);
-                Item i = Engine.getItem(eid);
-                return new ViewItem(i, desktop, null);
             }
             case "/ITS/F" -> {
                 return new Items(desktop);
@@ -896,6 +1045,13 @@ public class Engine {
                 Item i = Engine.getItem(eid);
                 return new ModifyItem(i, null);
             }
+            case "/ITS/O" -> {
+                String eid = JOptionPane.showInputDialog(null, "Enter Item ID", "Item ID", JOptionPane.QUESTION_MESSAGE);
+                Item i = Engine.getItem(eid);
+                return new ViewItem(i, desktop, null);
+            }
+
+            //PURCHASE ORDERS
             case "/ORDS/PO" -> {
                 return new PurchaseOrders(desktop);
             }
@@ -907,8 +1063,8 @@ public class Engine {
             }
             case "/ORDS/PO/O" -> {
                 String poId = JOptionPane.showInputDialog(null, "Enter Purchase Order ID", "Purchase Order ID", JOptionPane.QUESTION_MESSAGE);
-                PurchaseOrder e = Engine.getPurchaseOrder(poId);
-                return new ViewPurchaseOrder(e, desktop, null);
+                PurchaseOrder purchaseOrder = Engine.getPurchaseOrder(poId);
+                return new ViewPurchaseOrder(purchaseOrder, desktop, null);
             }
             case "/ORDS/RCV" -> {
                 return new ReceiveOrder(Engine.getOrganization().getId(), desktop, null);
@@ -916,27 +1072,52 @@ public class Engine {
             case "/ORDS/RTRN" -> {
                 return new ReturnOrder(desktop);
             }
+
+            //PURCHASE REQUISITIONS
             case "/ORDS/PR" -> {
                 return new PurchaseRequisitions(desktop);
             }
             case "/ORDS/PR/NEW" -> {
                 return new CreatePurchaseRequisition();
             }
+            case "/ORDS/PR/PO" -> {
+                return new ConvertPurchaseRequisitions(desktop);
+            }
+            case "/ORDS/PR/O" -> {
+                String poId = JOptionPane.showInputDialog(null, "Enter Purchase Requisition ID", "Purchase Requisition ID", JOptionPane.QUESTION_MESSAGE);
+                PurchaseRequisition purchaseRequisition = Engine.getPurchaseRequisition(poId);
+                return new ViewPurchaseRequisition(purchaseRequisition, desktop, null);
+            }
             case "/ORDS/PR/AUTO_MK" -> {
                 return new AutoMakePurchaseRequisitions(desktop);
             }
+
+            //SALES ORDERS
             case "/ORDS/SO" -> {
                 return new SalesOrders(desktop);
             }
             case "/ORDS/SO/NEW" -> {
                 return new CreateSalesOrder();
             }
+            case "/ORDS/SO/O" -> {
+                String soId = JOptionPane.showInputDialog(null, "Enter Sales Order ID", "Sales Order ID", JOptionPane.QUESTION_MESSAGE);
+                SalesOrder salesOrder = Engine.getSalesOrder(soId);
+                return new ViewSalesOrder(salesOrder);
+            }
             case "/ORDS/SO/AUTO_MK" -> {
                 return new AutoMakeSalesOrders();
             }
+
+            //GOODS RECEIPTS
             case "/GR" -> {
                 return new GoodsReceipts(desktop);
             }
+
+            //GOODS ISSUES
+            case "/GI" -> {
+                return new GoodsIssues(desktop);
+            }
+
             case "/INV/MV/STO" -> {
                 return new CreateSTO();
             }
@@ -949,12 +1130,16 @@ public class Engine {
             case "/SHPS/RCV" -> {
                 return new ReceiveOrder("", desktop, null);
             }
+
+            //NOTES
             case "/NTS" -> {
                 return new Notes();
             }
             case "/NTS/NEW" -> {
                 return new CreateNote();
             }
+
+            //MOVEMENTS AND TASKS
             case "/MVMT/TSKS" -> {
                 return new TaskList(null, desktop);
             }
@@ -970,12 +1155,16 @@ public class Engine {
             case "/MVMT/TSKS/NEW" -> {
                 return new CreateTask();
             }
+
+            //POSITIONS
             case "/HR/POS" -> {
                 return new Positions(desktop);
             }
             case "/HR/POS/NEW" -> {
                 return new CreatePosition(desktop, null);
             }
+
+            //CONTROLLERS
             case "/DATA_CNTR" -> {
                 return new DataCenter();
             }

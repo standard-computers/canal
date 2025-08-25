@@ -113,6 +113,16 @@ public class Area extends Objex {
         this.bins = bins;
     }
 
+    public void setBin(Bin bin) {
+        for(int i = 0; i < bins.size(); i++){
+            Bin b = bins.get(i);
+            if(b.getId().equals(bin.getId())){
+                bins.set(i, bin);
+                break;
+            }
+        }
+    }
+
     public void addBin(Bin newBin) {
         bins.add(newBin);
     }

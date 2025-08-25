@@ -12,6 +12,7 @@ public class StockLine extends Objex {
     private String item;
     private String sku;
     private double quantity;
+    private double value;
     private String unitOfMeasure;
     private String batch;
     private String area;
@@ -51,6 +52,10 @@ public class StockLine extends Objex {
         return item;
     }
 
+    public void setItem(String item) {
+        this.item = item;
+    }
+
     public String getSku() {
         return sku;
     }
@@ -65,6 +70,14 @@ public class StockLine extends Objex {
 
     public void setQuantity(double quantity) {
         this.quantity = quantity;
+    }
+
+    public double getValue() {
+        return value;
+    }
+
+    public void setValue(double value) {
+        this.value = value;
     }
 
     public String getUnitOfMeasure() {

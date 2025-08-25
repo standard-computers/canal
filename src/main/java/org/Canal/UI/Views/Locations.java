@@ -61,58 +61,49 @@ public class Locations extends LockeState implements RefreshListener {
 
         if ((boolean) Engine.codex.getValue(objexType, "import_enabled")) {
             IconButton importLocations = new IconButton("Import", "export", "Import as CSV");
-            importLocations.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    JFileChooser fc = new JFileChooser();
-                    int result = fc.showOpenDialog(null);
+            importLocations.addActionListener(_ -> {
+                JFileChooser fc = new JFileChooser();
+                int result = fc.showOpenDialog(null);
 
-                    if (result == JFileChooser.APPROVE_OPTION) {
-                        File file = fc.getSelectedFile();
-                        try (Reader reader = new FileReader(file);
-                             CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader())) {
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    File file = fc.getSelectedFile();
+                    try (Reader reader = new FileReader(file);
+                         CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader())) {
 
-                            for (CSVRecord record : csvParser) {
+                        for (CSVRecord record : csvParser) {
 
-                                Location l = new Location();
+                            Location l = new Location();
 
-                                ArrayList<Location> ls = Engine.getLocations(objexType);
-                                String prefix = (String) Engine.codex.getValue(objexType, "prefix");
-                                int leadingZeros = (Integer) Engine.codex.getValue(objexType, "leading_zeros"); // e.g., 3 -> 001
-                                int nextId = ls.size() + 1;
-                                int width = Math.max(0, leadingZeros);
-                                String numberPart = String.format("%0" + width + "d", nextId); // zero-pad to width
-                                String locationId = prefix + numberPart;
+                            String locationId = Engine.generateId(objexType);
 
-                                l.setType(objexType);
-                                l.setId(locationId);
-                                l.setOrganization(record.get("Org"));
-                                l.setName(record.get("Name"));
-                                l.setLine1(record.get("Line 1"));
-                                l.setLine2(record.get("Line 2"));
-                                l.setCity(record.get("City"));
-                                l.setState(record.get("State"));
-                                l.setPostal(record.get("Postal"));
-                                l.setCountry(record.get("Country"));
-                                l.setEin(record.get("Tax ID"));
-                                l.setTaxExempt(Boolean.parseBoolean(record.get("Tax Exempt")));
-                                l.setEmail(record.get("Email"));
-                                l.setPhone(record.get("Phone"));
-                                l.setWidth(Double.parseDouble(record.get("Width")));
-                                l.setWidthUOM(record.get("wUOM"));
-                                l.setLength(Double.parseDouble(record.get("Length")));
-                                l.setLengthUOM(record.get("lUOM"));
-                                l.setHeight(Double.parseDouble(record.get("Height")));
-                                l.setHeightUOM(record.get("hUOM"));
-                                l.setStatus(LockeStatus.valueOf(record.get("Status")));
-                                Pipe.save(objexType, l);
-                            }
-                            refresh();
-
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            JOptionPane.showMessageDialog(null, "Failed to import CSV: " + ex.getMessage());
+                            l.setType(objexType);
+                            l.setId(locationId);
+                            l.setOrganization(record.get("Org"));
+                            l.setName(record.get("Name"));
+                            l.setLine1(record.get("Line 1"));
+                            l.setLine2(record.get("Line 2"));
+                            l.setCity(record.get("City"));
+                            l.setState(record.get("State"));
+                            l.setPostal(record.get("Postal"));
+                            l.setCountry(record.get("Country"));
+                            l.setEin(record.get("Tax ID"));
+                            l.setTaxExempt(Boolean.parseBoolean(record.get("Tax Exempt")));
+                            l.setEmail(record.get("Email"));
+                            l.setPhone(record.get("Phone"));
+                            l.setWidth(Double.parseDouble(record.get("Width")));
+                            l.setWidthUOM(record.get("wUOM"));
+                            l.setLength(Double.parseDouble(record.get("Length")));
+                            l.setLengthUOM(record.get("lUOM"));
+                            l.setHeight(Double.parseDouble(record.get("Height")));
+                            l.setHeightUOM(record.get("hUOM"));
+                            l.setStatus(LockeStatus.valueOf(record.get("Status")));
+                            Pipe.save(objexType, l);
                         }
+                        refresh();
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        JOptionPane.showMessageDialog(null, "Failed to import CSV: " + ex.getMessage());
                     }
                 }
             });
@@ -137,16 +128,12 @@ public class Locations extends LockeState implements RefreshListener {
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton create = new IconButton("New", "create", "Create a Location", objexType + "/NEW");
-        create.addActionListener(e -> {
-            desktop.put(new CreateLocation(objexType, desktop, this));
-        });
+        create.addActionListener(_ -> desktop.put(new CreateLocation(objexType, desktop, this)));
         tb.add(create);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton delete = new IconButton("Delete", "delete", "Delete Location(s)", objexType + "/DEL");
-        delete.addActionListener(e -> {
-            desktop.put(new CreateLocation(objexType, desktop, this));
-        });
+        delete.addActionListener(_ -> desktop.put(new CreateLocation(objexType, desktop, this)));
         tb.add(delete);
         tb.add(Box.createHorizontalStrut(5));
 
@@ -164,7 +151,7 @@ public class Locations extends LockeState implements RefreshListener {
 
 
         IconButton refresh = new IconButton("Refresh", "refresh", "Refresh Data");
-        refresh.addActionListener(e -> refresh());
+        refresh.addActionListener(_ -> refresh());
         tb.add(refresh);
         tb.setBorder(new EmptyBorder(0, 5, 0, 5));
 

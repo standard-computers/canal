@@ -12,6 +12,7 @@ public enum LockeStatus {
     ARCHIVED, //Like delete but still in system and can't be used AT ALL
     BLOCKED, //BLocked for forseeable future
     COMPLETED,
+    DELETED,
     DELIVERED,
     DRAFT, //Object is in draft stage and can go througn NO process
     DELINQUENT, //Past due/delinquent status (mainly customers, orders, payments, etc.)

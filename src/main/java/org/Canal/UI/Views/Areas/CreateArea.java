@@ -15,6 +15,7 @@ import java.awt.*;
  */
 public class CreateArea extends LockeState {
 
+    //General Info Tab
     private String location;
     private DesktopState desktop;
     private RefreshListener refreshListener;
@@ -22,12 +23,13 @@ public class CreateArea extends LockeState {
     private Selectable availableLocations;
     private JTextField areaNameField;
 
-    //Controls
+    //Controls Tab
     private JCheckBox allowsInventory;
     private JCheckBox allowsProduction;
     private JCheckBox allowsPurchasing;
     private JCheckBox allowsSales;
 
+    //Dimensional Tab
     private UOMField widthField;
     private UOMField lengthField;
     private UOMField heightField;
@@ -40,16 +42,16 @@ public class CreateArea extends LockeState {
         this.desktop = desktop;
         this.refreshListener = refreshListener;
 
-        CustomTabbedPane tabbedPane = new CustomTabbedPane();
-        tabbedPane.addTab("General", general());
-        tabbedPane.addTab("Controls", controls());
+        CustomTabbedPane tabs = new CustomTabbedPane();
+        tabs.addTab("General", general());
+        tabs.addTab("Controls", controls());
 
         JPanel header = new JPanel(new BorderLayout());
         header.add(Elements.header("New Area", SwingConstants.LEFT), BorderLayout.NORTH);
         header.add(toolbar(), BorderLayout.SOUTH);
 
         add(header, BorderLayout.NORTH);
-        add(tabbedPane, BorderLayout.CENTER);
+        add(tabs, BorderLayout.CENTER);
     }
 
     public JPanel toolbar() {

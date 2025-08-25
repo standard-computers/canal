@@ -56,7 +56,7 @@ public class ItemTableModel extends AbstractTableModel {
     public void setValueAt(Object value, int rowIndex, int columnIndex) {
 
         if (columnIndex == 1) {
-            Item selectedItem = (Item) value;
+            Item selectedItem = Engine.getItem(String.valueOf(value));
             Location vendor = Engine.getLocation(selectedItem.getVendor(), "VEND");
             data.get(rowIndex)[columnIndex] = selectedItem;
             data.get(rowIndex)[0] = selectedItem.getName();

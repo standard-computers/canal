@@ -12,7 +12,7 @@ import java.awt.*;
 /**
  * /RTS/NEW
  */
-public class CreateRate extends LockeState {
+public class ModifyRate extends LockeState {
 
     private DesktopState desktop;
     private RefreshListener refreshListener;
@@ -25,22 +25,23 @@ public class CreateRate extends LockeState {
     private JTextField rateReference;
     private JCheckBox rateIsTax;
 
-    public CreateRate(DesktopState desktop, RefreshListener refreshListener) {
+    public ModifyRate(Rate rate, DesktopState desktop, RefreshListener refreshListener) {
 
-        super("Create Rate", "/RTS/NEW", false, true, false, true);
-        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));
+        super("Modify Rate", "/RTS/MOD/" + rate.getId(), false, true, false, true);
+        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/modify.png")));
         setLayout(new GridBagLayout());
         this.desktop = desktop;
         this.refreshListener = refreshListener;
 
-        rateId = Elements.input(15);
-        rateName = Elements.input();
-        rateDescription = Elements.input();
-        rateIsPercent = new JCheckBox();
-        rateValue = Elements.input();
+        rateId = Elements.input(rate.getId());
+        rateName = Elements.input(rate.getName());
+        rateDescription = Elements.input(rate.getDescription());
+        rateIsPercent = new JCheckBox("", rate.isPercent());
+        rateValue = Elements.input(String.valueOf(rate.getValue()));
         objexes = Selectables.objexForRates();
-        rateReference = Elements.input();
-        rateIsTax = new JCheckBox();
+        objexes.setSelectedValue(rate.getObjex());
+        rateReference = Elements.input(rate.getReference());
+        rateIsTax = new JCheckBox("", rate.isTax());
 
         Form f = new Form();
         f.addInput(Elements.coloredLabel("*New Rate ID", UIManager.getColor("Label.foreground")), rateId);
@@ -66,7 +67,7 @@ public class CreateRate extends LockeState {
 
         IconButton copyFrom = new IconButton("Copy From", "open", "Copy Rate");
         copyFrom.addActionListener(_ -> {
-            String prId = JOptionPane.showInputDialog(CreateRate.this, "Enter Rate ID");
+            String prId = JOptionPane.showInputDialog(ModifyRate.this, "Enter Rate ID");
             PurchaseRequisition pr = Engine.getPurchaseRequisition(prId);
 
         });

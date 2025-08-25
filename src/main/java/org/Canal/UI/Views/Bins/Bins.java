@@ -28,10 +28,9 @@ public class Bins extends LockeState implements RefreshListener {
 
     public Bins(DesktopState desktop) {
 
-        super("Bins", "/BNS", true, true, true, true);
+        super("Bins", "/BNS");
         setFrameIcon(new ImageIcon(Bins.class.getResource("/icons/bins.png")));
         this.desktop = desktop;
-        setMaximized(true);
 
         JPanel tb = toolbar();
         JPanel holder = new JPanel(new BorderLayout());
@@ -42,6 +41,10 @@ public class Bins extends LockeState implements RefreshListener {
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);
         add(tableScrollPane, BorderLayout.CENTER);
+        
+        if((boolean) Engine.codex.getValue("BNS", "start_maximized")){
+            setMaximized(true);
+        }
     }
 
     private JPanel toolbar() {
@@ -68,6 +71,11 @@ public class Bins extends LockeState implements RefreshListener {
         }
 
         IconButton open = new IconButton("Open", "open", "Open Bin");
+        open.addActionListener(_ -> {
+           String binId = JOptionPane.showInputDialog("Bin ID");
+           Bin bin = Engine.getBin(binId);
+           desktop.put(new ViewBin(bin, desktop, this));
+        });
         tb.add(open);
         tb.add(Box.createHorizontalStrut(5));
 
@@ -111,15 +119,17 @@ public class Bins extends LockeState implements RefreshListener {
                 "Area",
                 "Name",
                 "Width",
-                "Width UOM",
+                "wUOM",
                 "Length",
-                "Length UOM",
+                "lUOM",
                 "Height",
-                "Height UOM",
+                "hUOM",
                 "Area",
-                "Area UOM",
+                "aUOM",
                 "Volume",
-                "Volume UOM",
+                "vUOM",
+                "Weight",
+                "wtUOM",
                 "Auto Repl",
                 "Fixed",
                 "Picking",
@@ -150,6 +160,8 @@ public class Bins extends LockeState implements RefreshListener {
                     b.getAreaUOM(),
                     b.getVolume(),
                     b.getVolumeUOM(),
+                    b.getWeight(),
+                    b.getWeightUOM(),
                     b.isAuto_replenish(),
                     b.isFixed(),
                     b.isPicking(),
@@ -163,8 +175,8 @@ public class Bins extends LockeState implements RefreshListener {
         }
 
         binCountString = "All Bins (" + bin_count + ")";
-        CustomTable t = new CustomTable(columns, data);
-        t.addMouseListener(new MouseAdapter() {
+        CustomTable ct = new CustomTable(columns, data);
+        ct.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
@@ -172,10 +184,11 @@ public class Bins extends LockeState implements RefreshListener {
                     int r = t.getSelectedRow();
                     if (r != -1) {
                         String v = String.valueOf(t.getValueAt(r, 1));
-                        for (Area d : Engine.getAreas()) {
-                            for (Bin b : d.getBins()) {
-                                if (v.equals(b.getId())) {
-                                    desktop.put(new ViewBin(b));
+                        for (Area area : Engine.getAreas()) {
+                            for (Bin bin : area.getBins()) {
+                                if (v.equals(bin.getId())) {
+                                    bin.setArea(area.getId());
+                                    desktop.put(new ViewBin(bin, desktop, Bins.this));
                                 }
                             }
                         }
@@ -183,7 +196,7 @@ public class Bins extends LockeState implements RefreshListener {
                 }
             }
         });
-        return t;
+        return ct;
     }
 
     @Override

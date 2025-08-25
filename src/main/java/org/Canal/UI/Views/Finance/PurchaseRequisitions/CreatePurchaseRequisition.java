@@ -25,22 +25,26 @@ import java.util.Date;
  */
 public class CreatePurchaseRequisition extends LockeState {
 
-    private ItemTableModel model;
-    private JLabel netAmount;
+    //General Info Tab
     private JTextField descriptionField;
+    private JTextField supplier;
+    private JTextField buyer;
     private JTextField maxSpendAmountField;
-    private RTextScrollPane notes;
-    private JTextField suppliers;
-    private JTextField buyers;
     private JCheckBox isSingleOrder;
     private DatePicker startDateField;
     private DatePicker endDateField;
+
+    //Items Tab
+    private ItemTableModel model;
+    private JLabel netAmount;
+
+    //Notes Tab
+    private RTextScrollPane notes;
 
     public CreatePurchaseRequisition() {
 
         super("Create Purchase Requisition", "/ORDS/PR/NEW");
         setFrameIcon(new ImageIcon(CreatePurchaseRequisition.class.getResource("/icons/create.png")));
-        Constants.checkLocke(this, true, true);
 
         CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.addTab("General", general());
@@ -55,8 +59,10 @@ public class CreatePurchaseRequisition extends LockeState {
 
     private JPanel toolbar() {
 
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.add(Elements.header("Create Purchase Requisition", SwingConstants.LEFT), BorderLayout.NORTH);
+        JPanel toolbar = new JPanel(new BorderLayout());
+
+        toolbar.add(Elements.header("Create Purchase Requisition", SwingConstants.LEFT), BorderLayout.NORTH);
+
         JPanel buttons = new JPanel(new FlowLayout());
         buttons.setLayout(new BoxLayout(buttons, BoxLayout.X_AXIS));
 
@@ -85,8 +91,8 @@ public class CreatePurchaseRequisition extends LockeState {
             if (ccc == JOptionPane.YES_OPTION) {
                 String preqId = "PR" + (100000 + (Engine.getPurchaseRequisitions().size() + 1));
                 String prName = descriptionField.getText();
-                String forVendor = suppliers.getText();
-                String forBuyer = buyers.getText();
+                String forVendor = supplier.getText();
+                String forBuyer = buyer.getText();
                 double poAmount = Double.parseDouble(maxSpendAmountField.getText());
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String prNotes = notes.getTextArea().getText();
@@ -120,30 +126,30 @@ public class CreatePurchaseRequisition extends LockeState {
         buttons.add(Box.createHorizontalStrut(5));
         buttons.add(execute);
 
-        panel.add(buttons, BorderLayout.SOUTH);
-        return panel;
+        toolbar.add(buttons, BorderLayout.SOUTH);
+        return toolbar;
     }
 
     public JPanel general() {
 
         JPanel general = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-        suppliers = Elements.input(15);
-        buyers = Elements.input();
+        supplier = Elements.input(15);
+        buyer = Elements.input();
         descriptionField = Elements.input("Purchase Orders to Vendor");
         maxSpendAmountField = Elements.input("500.00");
         startDateField = new DatePicker();
         endDateField = new DatePicker();
         isSingleOrder = new JCheckBox();
 
-        Form f = new Form();
-        f.addInput(Elements.coloredLabel("Description", Constants.colors[10]), descriptionField);
-        f.addInput(Elements.coloredLabel("Supplier", Constants.colors[8]), suppliers);
-        f.addInput(Elements.coloredLabel("Buyer", Constants.colors[7]), buyers);
-        f.addInput(Elements.coloredLabel("Max Spend", Constants.colors[6]), maxSpendAmountField);
-        f.addInput(Elements.coloredLabel("[or] Single Order", Constants.colors[5]), isSingleOrder);
-        f.addInput(Elements.coloredLabel("Start Date", Constants.colors[4]), startDateField);
-        f.addInput(Elements.coloredLabel("End Date", Constants.colors[3]), endDateField);
+        Form form = new Form();
+        form.addInput(Elements.coloredLabel("Description", Constants.colors[10]), descriptionField);
+        form.addInput(Elements.coloredLabel("Supplier", Constants.colors[8]), supplier);
+        form.addInput(Elements.coloredLabel("Buyer", Constants.colors[7]), buyer);
+        form.addInput(Elements.coloredLabel("Max Spend", Constants.colors[6]), maxSpendAmountField);
+        form.addInput(Elements.coloredLabel("[or] Single Order", Constants.colors[5]), isSingleOrder);
+        form.addInput(Elements.coloredLabel("Start Date", Constants.colors[4]), startDateField);
+        form.addInput(Elements.coloredLabel("End Date", Constants.colors[3]), endDateField);
         isSingleOrder.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 if (isSingleOrder.isSelected()) {
@@ -154,7 +160,7 @@ public class CreatePurchaseRequisition extends LockeState {
                 }
             }
         });
-        general.add(f);
+        general.add(form);
 
         return general;
     }
@@ -163,10 +169,6 @@ public class CreatePurchaseRequisition extends LockeState {
 
         JPanel p = new JPanel(new BorderLayout());
         ArrayList<Item> items = Engine.getItems();
-        if (items.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "No products found", "Error", JOptionPane.ERROR_MESSAGE);
-            dispose();
-        }
         model = new ItemTableModel(Collections.singletonList(items.getFirst()));
         JTable table = new JTable(model);
 
@@ -179,30 +181,36 @@ public class CreatePurchaseRequisition extends LockeState {
         table.getColumnModel().getColumn(6).setCellRenderer(centerRenderer);
         table.getColumnModel().getColumn(7).setCellRenderer(centerRenderer);
         table.getColumnModel().getColumn(8).setCellRenderer(centerRenderer);
-        JComboBox<Item> itemComboBox = new JComboBox<>(items.toArray(new Item[0]));
-        itemComboBox.addActionListener(_ -> updateTotal());
-        table.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(itemComboBox));
+
+        JTextField itemIdField = new JTextField(items.getFirst().getId());
+        itemIdField.addActionListener(_ -> updateTotal());
+        table.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(itemIdField));
+
         JPanel buttons = new JPanel(new FlowLayout(FlowLayout.LEFT));
         buttons.setLayout(new BoxLayout(buttons, BoxLayout.X_AXIS));
         buttons.setBackground(UIManager.getColor("Panel.background"));
-        IconButton addButton = new IconButton("Add Product", "add_rows", "Add products");
-        addButton.addActionListener((ActionEvent _) -> {
+
+        IconButton addItem = new IconButton("Add Item", "add_rows", "Add item");
+        addItem.addActionListener((ActionEvent _) -> {
             if (!items.isEmpty()) {
                 model.addRow(items.getFirst());
                 updateTotal();
             }
         });
-        IconButton removeButton = new IconButton("Remove Product", "delete_rows", "Remove selected product");
-        removeButton.addActionListener((ActionEvent _) -> {
+        buttons.add(addItem);
+        buttons.add(Box.createHorizontalStrut(5));
+
+        IconButton removeItem = new IconButton("Remove Item", "delete_rows", "Remove selected item");
+        removeItem.addActionListener((ActionEvent _) -> {
             int selectedRow = table.getSelectedRow();
             if (selectedRow != -1) {
                 model.removeRow(selectedRow);
                 updateTotal();
             }
         });
-        buttons.add(removeButton);
+        buttons.add(removeItem);
         buttons.add(Box.createHorizontalStrut(5));
-        buttons.add(addButton);
+
         JScrollPane sp = new JScrollPane(table);
         sp.setPreferredSize(new Dimension(600, 300));
         p.add(sp, BorderLayout.CENTER);
@@ -218,13 +226,13 @@ public class CreatePurchaseRequisition extends LockeState {
     private void updateTotal() {
 
         if (model == null) return;
-        System.out.println(model.getTotalPrice());
         String maxSpendCalc = model.getTotalPrice();
         netAmount.setText("Max Spend $" + maxSpendCalc);
         maxSpendAmountField.setText(maxSpendCalc);
     }
 
     private RTextScrollPane notes() {
+
         notes = Elements.simpleEditor();
         return notes;
     }

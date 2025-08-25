@@ -76,7 +76,7 @@ public class Constants {
     }
 
     public static Locke allModules() {
-        return new Locke("Ratio – All Actions", getIcon("controller"), "/ORGS", new Locke[]{
+        return new Locke("Canal – All Actions", getIcon("controller"), "/ORGS", new Locke[]{
                 new Locke("Quick Accesses", getIcon("controllers"), "/", new Locke[]{
                         new Locke("My Profile", getIcon("me"), "/ME", null),
                         new Locke("Finance", getIcon("finance"), "/FI", null),
@@ -85,10 +85,10 @@ public class Constants {
                         new Locke("Time Clock", getIcon("timeclock"), "/TM_CLCK", null),
                         new Locke("Clear Desk", getIcon("locke"), "/CLEAR_DSK", null),
                         new Locke("Close Desk", getIcon("locke"), "/CLOSE_DSK", null),
-                        new Locke("Ratio Settings", getIcon("settings"), "/CNL", null),
+                        new Locke("Canal Settings", getIcon("settings"), "/CNL", null),
                         new Locke("Data Center", getIcon("datacenter"), "/DATA_CNTR", null),
-                        new Locke("Restart Ratio", getIcon("locke"), "/RSTRT", null),
-                        new Locke("Leave Ratio", getIcon("locke"), "/EXIT", null),
+                        new Locke("Restart Canal", getIcon("locke"), "/RSTRT", null),
+                        new Locke("Leave Canal", getIcon("locke"), "/EXIT", null),
                 }),
                 new Locke("Accounts", getIcon("folder"), "/ACCS", new Locke[]{
                         new Locke("Open Account", getIcon("open"), "/ACCS/O", null),
@@ -111,11 +111,13 @@ public class Constants {
                         new Locke("Import Areas", getIcon("export"), "/AREAS/IMP", null),
                         new Locke("Export Areas", getIcon("export"), "/AREAS/EXP", null),
                         new Locke("Bins", getIcon("folder"), "/BNS", new Locke[]{
+                            new Locke("Open Bin", getIcon("open"), "/BNS/O", null),
                             new Locke("Find Bin", getIcon("find"), "/BNS/F", null),
                             new Locke("AutoMake Bins", getIcon("automake"), "/BNS/AUTO_MK", null),
                             new Locke("Create Bin", getIcon("create"), "/BNS/NEW", null),
                             new Locke("Modify Bin", getIcon("modify"), "/BNS/MOD", null),
                             new Locke("Empty Bin", getIcon("locke"), "/BNS/EMPTY", null),
+                            new Locke("Block Bin", getIcon("block"), "/BNS/BLK", null),
                             new Locke("Archive Bin", getIcon("archive"), "/BNS/ARCHV", null),
                             new Locke("Remove Bin", getIcon("delete"), "/BNS/DEL", null),
                         }),
@@ -289,14 +291,15 @@ public class Constants {
                 }),
                 new Locke("Purchase Reqs.", getIcon("folder"), "/ORDS/PR", new Locke[]{
                         new Locke("Open Purchase Req.", getIcon("open"), "/ORDS/PR/O", null),
-                        new Locke("AutoMake PRs", getIcon("automake"), "/ORDS/PR/AUTO_MK", null),
-                        new Locke("Find PR", getIcon("find"), "/ORDS/PR", null),
-                        new Locke("Create PR", getIcon("create"), "/ORDS/PR/NEW", null),
-                        new Locke("Modify PR", getIcon("modify"), "/ORDS/PR/MOD", null),
-                        new Locke("Block PR", getIcon("locke"), "/ORDS/PR/BLK", null),
-                        new Locke("Suspend PR", getIcon("locke"), "/ORDS/PR/SP", null),
-                        new Locke("Archive PR", getIcon("archive"), "/ORDS/PR/ARCHV", null),
-                        new Locke("Remove PR", getIcon("delete"), "/ORDS/PR/DEL", null),
+                        new Locke("AutoMake Purchase Reqs.", getIcon("automake"), "/ORDS/PR/AUTO_MK", null),
+                        new Locke("Convert Purchase Reqs.", getIcon("start"), "/ORDS/PR/PO", null),
+                        new Locke("Find Purchase Reqs.", getIcon("find"), "/ORDS/PR", null),
+                        new Locke("Create Purchase Reqs.", getIcon("create"), "/ORDS/PR/NEW", null),
+                        new Locke("Modify Purchase Reqs.", getIcon("modify"), "/ORDS/PR/MOD", null),
+                        new Locke("Block Purchase Reqs.", getIcon("locke"), "/ORDS/PR/BLK", null),
+                        new Locke("Suspend Purchase Reqs.", getIcon("locke"), "/ORDS/PR/SP", null),
+                        new Locke("Archive Purchase Reqs.", getIcon("archive"), "/ORDS/PR/ARCHV", null),
+                        new Locke("Remove Purchase Reqs.", getIcon("delete"), "/ORDS/PR/DEL", null),
                 }),
                 new Locke("Sales Orders", getIcon("folder"), "/ORDS/SO", new Locke[]{
                         new Locke("Open Sales Order", getIcon("open"), "/ORDS/SO/O", null),
@@ -309,6 +312,7 @@ public class Constants {
                         new Locke("Remove Sales Order", getIcon("delete"), "/ORDS/SO/DEL", null),
                 }),
                 new Locke("Organizations", getIcon("folder"), "/ORGS", new Locke[]{
+                        new Locke("Open Organization", getIcon("open"), "/ORGS/O", null),
                         new Locke("Find Organization", getIcon("find"), "/ORGS/F", null),
                         new Locke("Create an Organization", getIcon("create"), "/ORGS/NEW", null),
                         new Locke("Modify an Organization", getIcon("modify"), "/ORGS/MOD", null),
@@ -322,6 +326,7 @@ public class Constants {
                                 new Locke("Remove Department", getIcon("delete"), "/DPTS/DEL", null),
                         }),
                         new Locke("Positions", getIcon("folder"), "/HR/POS",  new Locke[]{
+                                new Locke("Open Position", getIcon("open"), "/HR/POS/O", null),
                                 new Locke("Find Position", getIcon("find"), "/HR/POS/F", null),
                                 new Locke("Create a Position", getIcon("create"), "/HR/POS/NEW", null),
                                 new Locke("Post Position", getIcon("locke"), "/HR/POS/POST", null),
@@ -330,6 +335,7 @@ public class Constants {
                                 new Locke("Remove Position", getIcon("delete"), "/HR/POS/DEL", null),
                         }),
                         new Locke("Teams", getIcon("folder"), "/TMS",  new Locke[]{
+                                new Locke("Open Team", getIcon("open"), "/TMS/O", null),
                                 new Locke("Find Team", getIcon("find"), "/TMS/F", null),
                                 new Locke("Create a Team", getIcon("create"), "/TMS/NEW", null),
                                 new Locke("Modify Team", getIcon("modify"), "/TMS/MOD", null),

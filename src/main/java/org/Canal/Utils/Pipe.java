@@ -53,14 +53,14 @@ public class Pipe {
      */
     public static UpdateResult overwriteById(String collectionName, Object entity, boolean upsert) {
         Document doc = toDocument(entity);
-        Object id = normalizeId(doc.get("id"));
-        if (id == null) {
-            throw new IllegalArgumentException("Entity must contain _id for overwriteById.");
-        }
+//        Object id = normalizeId(doc.get("id"));
+//        if (id == null) {
+//            throw new IllegalArgumentException("Entity must contain _id for overwriteById.");
+//        }
         // Ensure stored doc has properly-typed _id
-        doc.put("id", id);
+//        doc.put("id", id);
 
-        Bson filter = Filters.eq("id", id);
+        Bson filter = Filters.eq("id", doc.get("id"));
         return collection(collectionName).replaceOne(filter, doc, new ReplaceOptions().upsert(upsert));
     }
 

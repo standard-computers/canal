@@ -7,6 +7,7 @@ public class Objex {
 
     protected String id;
     protected String name = "";
+    protected String creator = "UKNOWN";
     protected String owner = "UKNOWN";
     protected LockeStatus status = LockeStatus.NEW;
     protected String created = Constants.now();
@@ -25,6 +26,14 @@ public class Objex {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
     }
 
     public String getOwner() {

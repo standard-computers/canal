@@ -1,6 +1,5 @@
 package org.Canal.Models.SupplyChainUnits;
 
-import org.Canal.Models.BusinessUnits.OrderLineItem;
 import org.Canal.Models.Objex;
 
 import java.util.ArrayList;
@@ -11,7 +10,7 @@ import java.util.ArrayList;
 public class Bin extends Objex {
 
     private String area; //Area ID this bin is in
-    private ArrayList<OrderLineItem> allowed_items;
+    private ArrayList<String> allowed_items;
     private int[] coordinates = new int[3];
     private double width;
     private String widthUOM;
@@ -27,7 +26,6 @@ public class Bin extends Objex {
     private boolean picking;
     private boolean goodsissue;
     private boolean goodsreceipt;
-
     private boolean holdsStock;
 
     public String getArea() {
@@ -54,11 +52,11 @@ public class Bin extends Objex {
         this.fixed = fixed;
     }
 
-    public ArrayList<OrderLineItem> getAllowed_items() {
+    public ArrayList<String> getAllowed_items() {
         return allowed_items;
     }
 
-    public void setAllowed_items(ArrayList<OrderLineItem> allowed_items) {
+    public void setAllowed_items(ArrayList<String> allowed_items) {
         this.allowed_items = allowed_items;
     }
 

@@ -44,6 +44,10 @@ public class Items extends LockeState implements RefreshListener {
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);
         add(tableScrollPane, BorderLayout.CENTER);
+
+        if((boolean) Engine.codex.getValue("ITS", "start_maximized")){
+            setMaximized(true);
+        }
     }
 
     private JPanel toolbar() {

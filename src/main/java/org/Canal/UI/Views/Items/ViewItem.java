@@ -8,10 +8,13 @@ import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
+import org.Canal.Utils.LockeStatus;
 import org.Canal.Utils.RefreshListener;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
 /**
  * /ITS/$[ITEM_ID]
@@ -132,8 +135,10 @@ public class ViewItem extends LockeState {
     }
 
     private JPanel toolbar() {
+
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+
         IconButton inventory = new IconButton("Inventory", "inventory", "Check stock of item");
         inventory.addActionListener(_ -> {
 
@@ -156,12 +161,26 @@ public class ViewItem extends LockeState {
             });
             tb.add(modify);
             tb.add(Box.createHorizontalStrut(5));
+            int mask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
+            KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_E, mask);
+            JRootPane rp = getRootPane();
+            rp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ks, "do-modify");
+            rp.getActionMap().put("do-modify", new AbstractAction() {
+                @Override public void actionPerformed(ActionEvent e) {
+                    modify.doClick();
+                }
+            });
         }
 
         if((boolean) Engine.codex.getValue("ITS", "allow_archival")){
             IconButton archive = new IconButton("Archive", "archive", "Archive item");
             archive.addActionListener(_ -> {
-
+                item.setStatus(LockeStatus.ARCHIVED);
+                item.save();
+                if(refreshListener != null) {
+                    refreshListener.refresh();
+                }
+                dispose();
             });
             tb.add(archive);
             tb.add(Box.createHorizontalStrut(5));

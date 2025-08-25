@@ -1,13 +1,7 @@
 package org.Canal.UI.Views;
 
-import org.Canal.Models.BusinessUnits.GoodsReceipt;
-import org.Canal.Models.BusinessUnits.Inventory;
-import org.Canal.Models.BusinessUnits.OrderLineItem;
-import org.Canal.Models.BusinessUnits.PurchaseOrder;
-import org.Canal.Models.SupplyChainUnits.Area;
-import org.Canal.Models.SupplyChainUnits.Bin;
-import org.Canal.Models.SupplyChainUnits.Delivery;
-import org.Canal.Models.SupplyChainUnits.StockLine;
+import org.Canal.Models.BusinessUnits.*;
+import org.Canal.Models.SupplyChainUnits.*;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.Copiable;
 import org.Canal.UI.Elements.DatePicker;
@@ -46,6 +40,12 @@ public class ReceiveOrder extends LockeState {
     private HashMap<String, String> putawayBinOptions;
     private CustomTable receivedItems;
 
+    //Goods Receipt Tab
+    private JCheckBox createGoodsReceipt;
+    private JCheckBox commitGrToLedger;
+    private Selectable ledgerId;
+
+
     public ReceiveOrder(String location, DesktopState desktop, RefreshListener refreshListener) {
 
         super("Receive Order", "/ORDS/RCV", false, true, false, true);
@@ -56,13 +56,15 @@ public class ReceiveOrder extends LockeState {
         this.desktop = desktop;
         this.refreshListener = refreshListener;
 
-        CustomTabbedPane tabbedPane = new CustomTabbedPane();
-        tabbedPane.addTab("Items", items());
-        tabbedPane.addTab("Methods", methods());
+        CustomTabbedPane tabs = new CustomTabbedPane();
+        tabs.addTab("Items", items());
+        tabs.addTab("Methods", methods());
+        tabs.addTab("Goods Receipt", goodsReceipt());
 
-        Form f = new Form();
         poField = Elements.input(12);
-        f.addInput(Elements.coloredLabel("Purchase Order #", Constants.colors[0]), poField);
+
+        Form form = new Form();
+        form.addInput(Elements.coloredLabel("Purchase Order #", Constants.colors[0]), poField);
         HashMap<String, String> putAwayOptions = new HashMap<>();
         for (Area a : Engine.getAreas(location)) {
             putAwayOptions.put(a.getId(), a.getId());
@@ -73,7 +75,7 @@ public class ReceiveOrder extends LockeState {
         }
         Copiable expDelivery = new Copiable("");
 
-        add(tabbedPane, BorderLayout.CENTER);
+        add(tabs, BorderLayout.CENTER);
 
         poField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -124,9 +126,9 @@ public class ReceiveOrder extends LockeState {
         availablePutawayBin = new Selectable(putawayBinOptions);
         availablePutawayBin.editable();
 
-        f.addInput(Elements.coloredLabel("Receiving Location", Constants.colors[1]), this.receivingLocation);
-        f.addInput(Elements.coloredLabel("Putaway Bin", Constants.colors[2]), availablePutawayBin);
-        f.addInput(Elements.coloredLabel("Expected Delivery", Constants.colors[3]), expDelivery);
+        form.addInput(Elements.coloredLabel("Receiving Location", Constants.colors[1]), this.receivingLocation);
+        form.addInput(Elements.coloredLabel("Putaway Bin", Constants.colors[2]), availablePutawayBin);
+        form.addInput(Elements.coloredLabel("Expected Delivery", Constants.colors[3]), expDelivery);
 
         String timestampFormat = "yyyy-MM-dd HH:mm:ss";
         DatePicker deliveryDate = new DatePicker();
@@ -135,14 +137,14 @@ public class ReceiveOrder extends LockeState {
         try {
             Date currentDate = sdf.parse(Constants.now());
             deliveryDate.setSelectedDate(currentDate);
-            f.addInput(Elements.coloredLabel("Delivery Date", UIManager.getColor("Label.foreground")), deliveryDate);
+            form.addInput(Elements.coloredLabel("Delivery Date", UIManager.getColor("Label.foreground")), deliveryDate);
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
         JPanel heading = new JPanel(new BorderLayout());
         heading.add(Elements.header("Receive Purchase Order", SwingConstants.LEFT), BorderLayout.NORTH);
-        heading.add(f, BorderLayout.CENTER);
+        heading.add(form, BorderLayout.CENTER);
         add(heading, BorderLayout.NORTH);
 
         JButton receive = Elements.button("Receive");
@@ -172,6 +174,7 @@ public class ReceiveOrder extends LockeState {
 
                         PurchaseOrder foundPurchaseOrder = Engine.getPurchaseOrder(providedPurchaseOrder);
                         if (foundPurchaseOrder != null) {
+
                             if ((boolean) Engine.codex.getValue("ORDS/RCV", "block_locations")) {
                                 if (!foundPurchaseOrder.getShipTo().equals(location)) {
 
@@ -191,13 +194,16 @@ public class ReceiveOrder extends LockeState {
                             }
 
                             GoodsReceipt goodsReceipt = new GoodsReceipt();
-                            goodsReceipt.setId(Constants.generateId(10));
-                            goodsReceipt.setPurchaseOrder(providedPurchaseOrder);
-                            goodsReceipt.setReceived(deliveryDate.getSelectedDateString());
-                            goodsReceipt.setReceiver(Engine.getAssignedUser().getId());
-                            goodsReceipt.setLocation(location);
-                            goodsReceipt.setStatus(LockeStatus.DELIVERED);
-                            ArrayList<OrderLineItem> lineitems = new ArrayList<>();
+                            if(createGoodsReceipt.isSelected()) {
+
+                                goodsReceipt.setId(Constants.generateId(10));
+                                goodsReceipt.setPurchaseOrder(providedPurchaseOrder);
+                                goodsReceipt.setReceived(deliveryDate.getSelectedDateString());
+                                goodsReceipt.setReceiver(Engine.getAssignedUser().getId());
+                                goodsReceipt.setLocation(location);
+                                goodsReceipt.setStatus(LockeStatus.DELIVERED);
+                            }
+                            ArrayList<StockLine> stockLines = new ArrayList<>();
 
                             String selectedBinId = availablePutawayBin.getSelectedValue();
 
@@ -207,22 +213,51 @@ public class ReceiveOrder extends LockeState {
 
                                 if (selectedBin.isPutaway()) {
 
-                                    Inventory i = Engine.getInventory(foundPurchaseOrder.getShipTo()); //TODO Double check
+                                    Inventory inventory = Engine.getInventory(foundPurchaseOrder.getShipTo()); //TODO Double check
+                                    if(inventory == null){
+                                        inventory = new Inventory(foundPurchaseOrder.getShipTo());
+                                        Pipe.save("STK", inventory);
+                                    }
 
                                     for (int row = 0; row < receivedItems.getRowCount(); row++) {
                                         String itemId = receivedItems.getValueAt(row, 1).toString();
-                                        String itemName = receivedItems.getValueAt(row, 2).toString();
+                                        Item foundItem = Engine.getItem(itemId);
                                         double itemQty = Double.parseDouble(receivedItems.getValueAt(row, 3).toString());
                                         double itemRcvd = Double.parseDouble(receivedItems.getValueAt(row, 4).toString());
-                                        //double itemPrice = Double.parseDouble(receivedItems.getValueAt(row, 3).toString());
-                                        //double itemTotal = Double.parseDouble(receivedItems.getValueAt(row, 4).toString());
-                                        lineitems.add(new OrderLineItem(itemId, itemName, itemQty, itemRcvd));
-                                        i.addStock(new StockLine("/ITS", itemId, "$SKU", itemQty, "UNKNOWN", selectedBinId));
+
+                                        StockLine grsl = new StockLine("/ITS", itemId, "", itemRcvd, "UNKNOWN", selectedBinId);
+                                        grsl.setValue(foundItem.getPrice() * itemQty);
+                                        stockLines.add(grsl);
+                                        inventory.addStock(grsl);
                                         //TODO Request SKU
                                     }
 
-                                    goodsReceipt.setItems(lineitems);
-                                    Pipe.save("/GR", goodsReceipt);
+                                    if(createGoodsReceipt.isSelected()) {
+                                        goodsReceipt.setItems(stockLines);
+
+                                        Pipe.save("/GR", goodsReceipt);
+
+                                        if(commitGrToLedger.isSelected()) {
+                                            Location foundLocation = Engine.getLocationWithId(location);
+                                            Ledger l = Engine.getLedger(ledgerId.getSelectedValue());
+                                            if (l != null) {
+                                                Transaction t = new Transaction();
+                                                t.setId(Constants.generateId(5));
+                                                t.setOwner(Engine.getAssignedUser().getId());
+                                                t.setLocke(getLocke());
+                                                t.setObjex(foundLocation.getType());
+                                                t.setLocation(location);
+                                                t.setReference(providedPurchaseOrder);
+                                                t.setAmount(goodsReceipt.getTotalValue());
+                                                t.setCommitted(Constants.now());
+                                                t.setStatus(LockeStatus.PROCESSING);
+                                                l.addTransaction(t);
+                                                l.save();
+                                            } else {
+                                                JOptionPane.showMessageDialog(null, "No such ledger.", "Error", JOptionPane.ERROR_MESSAGE);
+                                            }
+                                        }
+                                    }
 
                                     foundPurchaseOrder.setStatus(LockeStatus.DELIVERED);
                                     foundPurchaseOrder.save();
@@ -235,7 +270,7 @@ public class ReceiveOrder extends LockeState {
                                         }
                                     }
 
-                                    i.save();
+                                    inventory.save();
                                     dispose();
                                     JOptionPane.showMessageDialog(null, "Goods Receipt created and stock put away.");
 
@@ -270,15 +305,41 @@ public class ReceiveOrder extends LockeState {
     private JPanel methods(){
 
         JPanel methods = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        Form f = new Form();
 
         explodePackage = new JCheckBox("1 HU / EA BASE UOM");
         statuses = Selectables.statusTypes();
 
-        f.addInput(Elements.coloredLabel("Explode Package", UIManager.getColor("Panel.background")), explodePackage);
-        f.addInput(Elements.coloredLabel("Stock Status", UIManager.getColor("Panel.background")), statuses);
+        Form form = new Form();
+        form.addInput(Elements.coloredLabel("Explode Package", UIManager.getColor("Panel.background")), explodePackage);
+        form.addInput(Elements.coloredLabel("Stock Status", UIManager.getColor("Panel.background")), statuses);
+        methods.add(form);
 
-        methods.add(f);
+        return methods;
+    }
+
+    private JPanel goodsReceipt(){
+
+        JPanel methods = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        createGoodsReceipt = new JCheckBox("Generate GR");
+        if((boolean) Engine.codex.getValue("ORDS/RCV", "create_goods_receipt")){
+            createGoodsReceipt.setSelected(true);
+            createGoodsReceipt.setEnabled(false);
+        }
+
+        commitGrToLedger = new JCheckBox("Commit GR to Ledger");
+        if((boolean) Engine.codex.getValue("GR", "commit_to_ledger")){
+            commitGrToLedger.setSelected(true);
+            commitGrToLedger.setEnabled(false);
+        }
+
+        ledgerId = Selectables.ledgers();
+
+        Form form = new Form();
+        form.addInput(Elements.coloredLabel("Create Goods Receipt", UIManager.getColor("Panel.background")), createGoodsReceipt);
+        form.addInput(Elements.coloredLabel("Commit to Ledger", UIManager.getColor("Panel.background")), commitGrToLedger);
+        form.addInput(Elements.coloredLabel("Ledger", UIManager.getColor("Panel.background")), ledgerId);
+        methods.add(form);
 
         return methods;
     }

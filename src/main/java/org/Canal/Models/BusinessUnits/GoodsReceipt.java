@@ -1,6 +1,7 @@
 package org.Canal.Models.BusinessUnits;
 
 import org.Canal.Models.Objex;
+import org.Canal.Models.SupplyChainUnits.StockLine;
 
 import java.util.ArrayList;
 
@@ -10,7 +11,7 @@ public class GoodsReceipt extends Objex {
     public String received; //Timestamp of when received
     public String receiver; //User ID
     public String location; //Location receiving in at
-    public ArrayList<OrderLineItem> items; //ITS received and qty received
+    public ArrayList<StockLine> items; //ITS received and qty received
 
     public String getPurchaseOrder() {
         return purchaseOrder;
@@ -44,18 +45,26 @@ public class GoodsReceipt extends Objex {
         this.location = location;
     }
 
-    public ArrayList<OrderLineItem> getItems() {
+    public ArrayList<StockLine> getItems() {
         return items;
     }
 
-    public void setItems(ArrayList<OrderLineItem> items) {
+    public void setItems(ArrayList<StockLine> items) {
         this.items = items;
     }
 
     public double getTotalItems(){
         double total = 0;
-        for(OrderLineItem item : items){
+        for(StockLine item : items){
             total += item.getQuantity();
+        }
+        return total;
+    }
+
+    public double getTotalValue(){
+        double total = 0;
+        for(StockLine item : items){
+            total += item.getValue();
         }
         return total;
     }

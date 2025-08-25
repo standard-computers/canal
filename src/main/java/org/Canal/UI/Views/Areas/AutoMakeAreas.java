@@ -169,7 +169,7 @@ public class AutoMakeAreas extends LockeState {
            } else if (searchValue.startsWith("/")) { //Objex type selection
 
                for (int i = 0; i < checkboxes.size(); i++) {
-                   if(locations.get(i).getType().equals(searchValue)){
+                   if(locations.get(i).getType().equals(searchValue.toUpperCase())){
                        checkboxes.get(i).setSelected(!checkboxes.get(i).isSelected());
                    }
                }

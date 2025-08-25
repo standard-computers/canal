@@ -288,8 +288,8 @@ public class Codex {
             put("icon", "orders");
             put("prefix", "PO");
             put("leading_number", 1);
-            put("leading_zeros", 5);
-            put("commit_to_ledger", false);
+            put("leading_zeros", 6);
+            put("commit_to_ledger", true);
             put("use_deliveries", true); //Creates associated delivery
             put("allow_deletion", true); //Allow deletion of POs
             put("allow_archival", true); //Allow archival of POs
@@ -306,7 +306,7 @@ public class Codex {
             put("icon", "orders");
             put("prefix", "SO");
             put("leading_number", 1);
-            put("leading_zeros", 5);
+            put("leading_zeros", 6);
             put("commit_to_ledger", true);
             put("use_deliveries", true);
             put("auto_create_po", true);
@@ -324,7 +324,7 @@ public class Codex {
             put("icon", "orders");
             put("prefix", "PR");
             put("leading_number", 1);
-            put("leading_zeros", 5);
+            put("leading_zeros", 6);
             put("allow_archival", true);
             put("allow_deletion", true);
             put("import_enabled", false);
@@ -335,6 +335,7 @@ public class Codex {
         }});
         variables.put("ORDS/RCV", new HashMap<>() {{
             put("block_locations", true); //If not ship-to, can't receive
+            put("create_goods_receipt", true); //Creates Goods Receipt on receive
             put("allow_loc_block_override", true); //Presents override option for 'block_locations
             put("always_explode_package", false);
             put("allow_explode_package", true);
@@ -345,6 +346,8 @@ public class Codex {
             put("prefix", "GR");
             put("leading_number", 1);
             put("leading_zeros", 5);
+//            put("commit_to_ledger", false); //TODO Temp until remove
+            put("commit_to_ledger", true);
             put("allow_archival", true);
             put("allow_deletion", true);
             put("automake_enabled", true);

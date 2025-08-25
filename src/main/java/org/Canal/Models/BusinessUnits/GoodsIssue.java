@@ -1,6 +1,7 @@
 package org.Canal.Models.BusinessUnits;
 
 import org.Canal.Models.Objex;
+import org.Canal.Models.SupplyChainUnits.StockLine;
 
 import java.util.ArrayList;
 
@@ -9,7 +10,7 @@ public class GoodsIssue extends Objex {
     private String comments;
     private String issuer; //User ID of owner
     public String location; //Location receiving in at
-    public ArrayList<OrderLineItem> items; //ITS received and qty received
+    public ArrayList<StockLine> items; //ITS received and qty received
 
     public String getComments() {
         return comments;
@@ -35,11 +36,11 @@ public class GoodsIssue extends Objex {
         this.location = location;
     }
 
-    public ArrayList<OrderLineItem> getItems() {
+    public ArrayList<StockLine> getItems() {
         return items;
     }
 
-    public void setItems(ArrayList<OrderLineItem> items) {
+    public void setItems(ArrayList<StockLine> items) {
         this.items = items;
     }
 }
