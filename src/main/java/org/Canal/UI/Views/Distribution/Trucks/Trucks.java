@@ -1,5 +1,6 @@
 package org.Canal.UI.Views.Distribution.Trucks;
 
+import org.Canal.Models.SupplyChainUnits.Delivery;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.Models.SupplyChainUnits.Truck;
 import org.Canal.UI.Elements.CustomTable;
@@ -28,7 +29,7 @@ public class Trucks extends LockeState implements RefreshListener {
     public Trucks(DesktopState desktop) {
 
         super("Trucks", "/TRANS/TRCKS", true, true, true, true);
-        setFrameIcon(new ImageIcon(Trucks.class.getResource("/icons/trucks.png")));
+        setFrameIcon(new ImageIcon(Trucks.class.getResource("/icons/windows/trucks.png")));
         this.desktop = desktop;
 
         JPanel tb = toolbar();
@@ -57,55 +58,40 @@ public class Trucks extends LockeState implements RefreshListener {
     }
 
     private JPanel toolbar() {
-        JPanel tb = new JPanel();
-        tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-        IconButton export = new IconButton("", "export", "Export as CSV");
-        IconButton importTrucks = new IconButton("Import", "export", "Import as CSV");
-        IconButton createTruck = new IconButton("New", "create", "Create a Truck", "/TRANS/TRCKS/NEW");
-        IconButton modifyTruck = new IconButton("Modify", "modify", "Modify a Truck", "/TRANS/TRCKS/MOD");
-        IconButton archiveTruck = new IconButton("Archive", "archive", "Archive a Truck", "/TRANS/TRCKS/ARCHV");
-        IconButton refresh = new IconButton("Refresh", "refresh", "Refresh Data");
-        tb.add(export);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(importTrucks);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(createTruck);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(modifyTruck);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(archiveTruck);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(refresh);
-        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
-        export.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                table.exportToCSV();
-            }
-        });
-        importTrucks.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                JFileChooser fc = new JFileChooser();
 
-            }
-        });
-        refresh.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                refresh();
-            }
-        });
-        return tb;
+        JPanel toolbar = new JPanel();
+        toolbar.setLayout(new BoxLayout(toolbar, BoxLayout.X_AXIS));
+
+        IconButton export = new IconButton("Export", "export", "Export as CSV");
+        export.addActionListener(_ -> table.exportToCSV());
+        toolbar.add(export);
+        toolbar.add(Box.createHorizontalStrut(5));
+
+        IconButton importTrucks = new IconButton("Import", "export", "Import as CSV");
+        toolbar.add(importTrucks);
+        toolbar.add(Box.createHorizontalStrut(5));
+
+        IconButton createTruck = new IconButton("New", "create", "Create a Truck", "/TRANS/TRCKS/NEW");
+        toolbar.add(createTruck);
+        toolbar.add(Box.createHorizontalStrut(5));
+
+        IconButton refresh = new IconButton("Refresh", "refresh", "Refresh Data");
+        refresh.addActionListener(_ -> refresh());
+        toolbar.add(refresh);
+        toolbar.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+        return toolbar;
     }
 
     private CustomTable table() {
+
         String[] columns = new String[]{
                 "ID",
                 "Name",
                 "Number",
                 "Carrier",
                 "Carrier Name",
+                "Delivery",
                 "Driver",
                 "Pallets",
                 "Value",
@@ -117,16 +103,25 @@ public class Trucks extends LockeState implements RefreshListener {
         };
         ArrayList<Object[]> data = new ArrayList<>();
         for (Truck truck : Engine.getTrucks()) {
-            Location carrier = Engine.getLocation(truck.getCarrier(), "/TRANS/CRRS");
+
+            Location carrier = Engine.getLocation(truck.getCarrier(), "TRANS/CRRS");
+            Delivery delivery = null;
+            if(truck.getDelivery().startsWith(String.valueOf(Engine.codex.getValue("TRANS/IDO", "prefix")))){
+
+                delivery = Engine.getInboundDelivery(truck.getDelivery());
+            }else if(truck.getDelivery().startsWith(String.valueOf(Engine.codex.getValue("TRANS/ODO", "prefix")))){
+
+                delivery = Engine.getOutboundDelivery(truck.getDelivery());
+            }
             data.add(new Object[]{
                     truck.getId(),
                     truck.getName(),
                     truck.getNumber(),
                     truck.getCarrier(),
-                    "",
-//                    (!carrier.getName().isEmpty() ? carrier.getName() : ""),
+                    (!carrier.getName().isEmpty() ? carrier.getName() : ""),
+                    truck.getDelivery(),
                     truck.getDriver(),
-                    0,
+                    (delivery == null ? 0 : delivery.getPallets().size()),
                     "0.0",
                     "",
                     "LBS",
@@ -135,18 +130,8 @@ public class Trucks extends LockeState implements RefreshListener {
                     truck.getCreated()
             });
         }
-        return new CustomTable(columns, data);
-    }
-
-    @Override
-    public void refresh() {
-        CustomTable newTable = table();
-        JScrollPane scrollPane = (JScrollPane) table.getParent().getParent();
-        scrollPane.setViewportView(newTable);
-        table = newTable;
-        scrollPane.revalidate();
-        scrollPane.repaint();
-        table.addMouseListener(new MouseAdapter() {
+        CustomTable ct = new CustomTable(columns, data);
+        ct.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) { // Detect double click
@@ -159,5 +144,17 @@ public class Trucks extends LockeState implements RefreshListener {
                 }
             }
         });
+        return ct;
+    }
+
+    @Override
+    public void refresh() {
+
+        CustomTable newTable = table();
+        JScrollPane scrollPane = (JScrollPane) table.getParent().getParent();
+        scrollPane.setViewportView(newTable);
+        table = newTable;
+        scrollPane.revalidate();
+        scrollPane.repaint();
     }
 }

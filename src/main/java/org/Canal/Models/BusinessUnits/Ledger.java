@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public class Ledger extends Objex {
 
     public String organization;
+    public String location = "";
     public String period;
     private String starts;
     private String ends;
@@ -27,6 +28,14 @@ public class Ledger extends Objex {
 
     public void setOrganization(String organization) {
         this.organization = organization;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public String getPeriod() {

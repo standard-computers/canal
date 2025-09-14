@@ -1,5 +1,7 @@
 package org.Canal.UI.Views.System;
 
+import org.Canal.Models.HumanResources.Employee;
+import org.Canal.Models.HumanResources.User;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.*;
 import org.Canal.Utils.*;
@@ -13,26 +15,29 @@ import java.awt.*;
  */
 public class IniSystem extends JFrame {
 
-    private Selectable countries;
-    private JTextField locationIdField;
+    //Owner info for employee and user
+    private JTextField userFirstName;
+    private JTextField userLastName;
+    private JTextField passwordField;
+
+    //General Info Tab
     private JTextField locationNameField;
     private JTextField line1Field;
     private JTextField line2Field;
     private JTextField cityField;
     private JTextField stateField;
     private JTextField postalField;
+    private Selectable countries;
     private JTextField einField;
     private JTextField emailField;
     private JTextField phoneField;
     private JCheckBox taxExempt;
+
+    //Dimensional Tab
     private UOMField widthUOM = new UOMField();
     private UOMField lengthUOM = new UOMField();
     private UOMField heightUOM = new UOMField();
 
-    //Owner info for employee and user
-    private JTextField userFirstName;
-    private JTextField userLastName;
-    private JTextField passwordField;
 
     public IniSystem() {
 
@@ -45,7 +50,6 @@ public class IniSystem extends JFrame {
 
         JPanel header = new JPanel(new BorderLayout());
         header.add(Elements.header("Start Organization", SwingConstants.LEFT), BorderLayout.NORTH);
-        header.add (header(), BorderLayout.CENTER);
         header.add(toolbar(), BorderLayout.SOUTH);
 
         add(header, BorderLayout.NORTH);
@@ -60,11 +64,11 @@ public class IniSystem extends JFrame {
 
         JPanel buttons = new JPanel(new FlowLayout());
         buttons.setLayout(new BoxLayout(buttons, BoxLayout.X_AXIS));
-        IconButton execute = new IconButton("Create", "execute", "Create Organization");
+        IconButton execute = new IconButton("Create", "create", "Create Organization");
         buttons.add(Box.createHorizontalStrut(5));
         buttons.add(execute);
-        execute.addActionListener(e -> {
-            String locationId = locationIdField.getText().trim();
+        execute.addActionListener(_ -> {
+
             String locationName = locationNameField.getText().trim();
             String line1 = line1Field.getText().trim();
             String line2 = line2Field.getText().trim();
@@ -75,9 +79,8 @@ public class IniSystem extends JFrame {
             String ein = einField.getText().trim();
             String email = emailField.getText().trim();
             String phone = phoneField.getText().trim();
+
             Location location = new Location();
-            location.setType("");
-            location.setId(locationId);
             location.setName(locationName);
             location.setLine1(line1);
             location.setLine2(line2);
@@ -97,22 +100,60 @@ public class IniSystem extends JFrame {
             location.setHeightUOM(heightUOM.getUOM());
             location.allowsProduction();
 
+            //Create Organization
+            location.setType("/ORGS");
+            location.setId("1001");
             Pipe.save("/ORGS", location);
-            location.setId("1");
+
+            //Create Employee (me/you)
+            Employee emp = new Employee();
+            emp.setId("E10001");
+            emp.setOrg(location.getId());
+            emp.setFirstName(userFirstName.getText());
+            emp.setLastName(userLastName.getText());
+            emp.setLocation(location.getId());
+            emp.setLine1(line1);
+            emp.setLine2(line2);
+            emp.setCity(city);
+            emp.setState(state);
+            emp.setPostal(postal);
+            emp.setCountry(country);
+            emp.setPhone(phone);
+            emp.setEmail(email);
+            Pipe.save("/EMPS", emp);
+
+            //Create User for Employee if pasword creation works
+            try {
+                User user = new User();
+                user.setId("U1001");
+                user.setEmployee(emp.getId());
+                user.setAccesses(Constants.getAllTransactions());
+                String genHpv = Crypter.md5(passwordField.getText().trim());
+                user.setHpv(genHpv);
+                Pipe.save("/USRS", user);
+
+                Engine.getConfiguration().setAssignedUser(user.getId());
+                Pipe.saveConfiguration();
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+            //Create Cost Center (Store)
+            location.setId("0001");
+            location.setType("/CCS");
             Pipe.save("/CCS", location);
+
+            //Create Distribution Center
+            location.setId("DC01");
+            location.setType("/DCSS");
+            Pipe.save("/DCSS", location);
+
 
             dispose();
             new QuickExplorer();
         });
         return buttons;
-    }
-
-
-    private JPanel header() {
-
-        Form f1 = new Form();
-        f1.addInput(Elements.coloredLabel("*New ID", UIManager.getColor("Label.foreground")), locationIdField);
-        return f1;
     }
 
     private JPanel you(){
@@ -134,7 +175,6 @@ public class IniSystem extends JFrame {
     private JPanel general(){
 
         JPanel general = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        locationIdField = new JTextField("10001");
         locationNameField = Elements.input(15);
         line1Field = Elements.input();
         line2Field = Elements.input();

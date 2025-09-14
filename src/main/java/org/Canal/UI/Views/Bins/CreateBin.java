@@ -28,10 +28,14 @@ public class CreateBin extends LockeState {
     private JTextField locationField;
     private JTextField nameField;
     private Selectable areas;
+
+    //Dimensions Tab
     private UOMField widthField;
     private UOMField lengthField;
     private UOMField heightField;
     private UOMField weightField;
+
+    //Controls Tab
     private JCheckBox autoReplenish;
     private JCheckBox fixedBin;
     private JCheckBox doesGoodsIssue;
@@ -50,7 +54,8 @@ public class CreateBin extends LockeState {
         CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.addTab("General", general());
         tabs.addTab("Dimensional", dimensional());
-        tabs.addTab("Item Restrictions", restrictions());
+        tabs.addTab("Items", restrictions());
+        tabs.addTab("Controls", restrictions());
 
         add(toolbar(), BorderLayout.NORTH);
         add(tabs, BorderLayout.CENTER);
@@ -62,63 +67,64 @@ public class CreateBin extends LockeState {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         IconButton copyFrom = new IconButton("Copy From", "open", "Copy from Bin");
-        IconButton review = new IconButton("Review", "review", "Review Bin data");
-        IconButton create = new IconButton("Create", "execute", "Refresh Data");
+        copyFrom.addActionListener(_ -> {
+            String binId = JOptionPane.showInputDialog(CreateBin.this, "Enter Bin ID", "Copy Bin", JOptionPane.QUESTION_MESSAGE);
+            if(!binId.isEmpty()){
+
+            }
+        });
         tb.add(copyFrom);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton review = new IconButton("Review", "review", "Review Bin data");
         tb.add(review);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton create = new IconButton("Create", "create", "Refresh Data");
+        create.addActionListener(_ -> {
+
+            String binId = idField.getText();
+            String binName = nameField.getText().trim();
+            String binArea = areas.getSelectedValue();
+
+            Bin newBin = new Bin();
+            newBin.setId(binId);
+            newBin.setName(binName);
+
+            newBin.setWidth(Double.parseDouble(widthField.getValue()));
+            newBin.setWidthUOM(widthField.getUOM());
+
+            newBin.setLength(Double.parseDouble(lengthField.getValue()));
+            newBin.setLengthUOM(lengthField.getUOM());
+
+            newBin.setHeight(Double.parseDouble(heightField.getValue()));
+            newBin.setHeightUOM(heightField.getUOM());
+
+            newBin.setWeight(Double.parseDouble(weightField.getValue()));
+            newBin.setWeightUOM(weightField.getUOM());
+
+            newBin.setAuto_replenish(autoReplenish.isSelected());
+            newBin.setFixed(fixedBin.isSelected());
+            newBin.setPicking(pickingEnabled.isSelected());
+            newBin.setPutaway(putawayEnabled.isSelected());
+            newBin.setGoodsissue(doesGoodsIssue.isSelected());
+            newBin.setGoodsreceipt(doesGoodsReceipt.isSelected());
+            newBin.setHoldsStock(holdsStock.isSelected());
+
+            Area foundArea = Engine.getArea(binArea);
+            if(foundArea != null){
+                foundArea.addBin(newBin);
+                foundArea.save();
+                dispose();
+                JOptionPane.showMessageDialog(null, "Bin '" + binName + "' created in '" + binArea + "'");
+                refreshListener.refresh();
+            }else{
+                JOptionPane.showMessageDialog(null, "Bin '" + binName + "' could not be created in '" + binArea + "'");
+            }
+        });
         tb.add(create);
         tb.setBorder(new EmptyBorder(0, 5, 0, 5));
-        copyFrom.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                String binId = JOptionPane.showInputDialog(CreateBin.this, "Enter Bin ID", "Copy Bin", JOptionPane.QUESTION_MESSAGE);
-                if(!binId.isEmpty()){
 
-                }
-            }
-        });
-        create.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                String binId = idField.getText();
-                String binName = nameField.getText();
-                String binArea = areas.getSelectedValue();
-                double binWidth = Double.parseDouble(widthField.getValue());
-                String binWidthUom = widthField.getUOM();
-                double binLength = Double.parseDouble(lengthField.getValue());
-                String binLengthUom = lengthField.getUOM();
-                double binHeight = Double.parseDouble(heightField.getValue());
-                String binHeightUom = heightField.getUOM();
-                Bin newBin = new Bin();
-                newBin.setId(binId);
-                newBin.setName(binName);
-                newBin.setWidth(binWidth);
-                newBin.setWidthUOM(binWidthUom);
-                newBin.setLength(binLength);
-                newBin.setLengthUOM(binLengthUom);
-                newBin.setHeight(binHeight);
-                newBin.setHeightUOM(binHeightUom);
-                newBin.setAuto_replenish(autoReplenish.isSelected());
-                newBin.setFixed(fixedBin.isSelected());
-                newBin.setPicking(pickingEnabled.isSelected());
-                newBin.setPutaway(putawayEnabled.isSelected());
-                newBin.setGoodsissue(doesGoodsIssue.isSelected());
-                newBin.setGoodsreceipt(doesGoodsReceipt.isSelected());
-                newBin.setHoldsStock(holdsStock.isSelected());
-                Area foundArea = Engine.getArea(binArea);
-                if(foundArea != null){
-                    foundArea.addBin(newBin);
-                    foundArea.save();
-                    dispose();
-                    JOptionPane.showMessageDialog(null, "Bin '" + binName + "' created in '" + binArea + "'");
-                    refreshListener.refresh();
-                }else{
-                    JOptionPane.showMessageDialog(null, "Bin '" + binName + "' could not be created in '" + binArea + "'");
-                }
-            }
-        });
         toolbar.add(Elements.header("Make a Bin", SwingConstants.LEFT), BorderLayout.NORTH);
         toolbar.add(tb, BorderLayout.SOUTH);
         return toolbar;
@@ -127,7 +133,6 @@ public class CreateBin extends LockeState {
     private JPanel general() {
 
         JPanel general = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        Form f = new Form();
         String generatedId;
         idField = Elements.input();
         locationField = Elements.input();
@@ -161,6 +166,7 @@ public class CreateBin extends LockeState {
                 }
             }
         });
+
         idField.setText(generatedId);
         nameField = Elements.input(generatedId, 20);
         doesGoodsIssue = new JCheckBox("GI on stock removal from this bin");
@@ -172,35 +178,67 @@ public class CreateBin extends LockeState {
         fixedBin = new JCheckBox("Fixed Bin");
         fixedBin.setToolTipText("Bin can only contain one Item ID");
         holdsStock = new JCheckBox("Bin can hold inventory");
-        f.addInput(Elements.coloredLabel("*New Bin ID", UIManager.getColor("Label.foreground")), idField);
-        f.addInput(Elements.coloredLabel("Location ID", UIManager.getColor("Label.foreground")), locationField);
-        f.addInput(Elements.coloredLabel("*Area", UIManager.getColor("Label.foreground")), this.areas);
-        f.addInput(Elements.coloredLabel("Bin Name", Constants.colors[10]), nameField);
-        f.addInput(Elements.coloredLabel("Goods Issue", Constants.colors[10]), doesGoodsIssue);
-        f.addInput(Elements.coloredLabel("Goods Receipt", Constants.colors[10]), doesGoodsReceipt);
-        f.addInput(Elements.coloredLabel("Picking Enabled", Constants.colors[9]), pickingEnabled);
-        f.addInput(Elements.coloredLabel("Putaway Enabled", Constants.colors[9]), putawayEnabled);
-        f.addInput(Elements.coloredLabel("Auto Replenish", Constants.colors[8]), autoReplenish);
-        f.addInput(Elements.coloredLabel("Fixed Bin", Constants.colors[7]), fixedBin);
-        f.addInput(Elements.coloredLabel("Holds Stock", Constants.colors[7]), holdsStock);
-        general.add(f);
+
+        Form form = new Form();
+        form.addInput(Elements.coloredLabel("*New Bin ID", UIManager.getColor("Label.foreground")), idField);
+        form.addInput(Elements.coloredLabel("Location ID", UIManager.getColor("Label.foreground")), locationField);
+        form.addInput(Elements.coloredLabel("*Area", UIManager.getColor("Label.foreground")), this.areas);
+        form.addInput(Elements.coloredLabel("Bin Name", Constants.colors[10]), nameField);
+        form.addInput(Elements.coloredLabel("Goods Issue", Constants.colors[10]), doesGoodsIssue);
+        form.addInput(Elements.coloredLabel("Goods Receipt", Constants.colors[10]), doesGoodsReceipt);
+        form.addInput(Elements.coloredLabel("Picking Enabled", Constants.colors[9]), pickingEnabled);
+        form.addInput(Elements.coloredLabel("Putaway Enabled", Constants.colors[9]), putawayEnabled);
+        form.addInput(Elements.coloredLabel("Auto Replenish", Constants.colors[8]), autoReplenish);
+        form.addInput(Elements.coloredLabel("Fixed Bin", Constants.colors[7]), fixedBin);
+        form.addInput(Elements.coloredLabel("Holds Stock", Constants.colors[7]), holdsStock);
+        general.add(form);
+
         return general;
     }
 
     private JPanel dimensional() {
 
         JPanel dimensional = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        Form f = new Form();
+
         widthField = new UOMField();
         lengthField = new UOMField();
         heightField = new UOMField();
         weightField = new UOMField();
-        f.addInput(Elements.coloredLabel("Width", Constants.colors[10]), widthField);
-        f.addInput(Elements.coloredLabel("Length", Constants.colors[9]), lengthField);
-        f.addInput(Elements.coloredLabel("Height", Constants.colors[8]), heightField);
-        f.addInput(Elements.coloredLabel("Weight", Constants.colors[7]), weightField);
-        dimensional.add(f);
+
+        Form form = new Form();
+        form.addInput(Elements.coloredLabel("Width", Constants.colors[10]), widthField);
+        form.addInput(Elements.coloredLabel("Length", Constants.colors[9]), lengthField);
+        form.addInput(Elements.coloredLabel("Height", Constants.colors[8]), heightField);
+        form.addInput(Elements.coloredLabel("Weight", Constants.colors[7]), weightField);
+        dimensional.add(form);
+
         return dimensional;
+    }
+
+    private JPanel controls() {
+
+        JPanel controls = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        doesGoodsIssue = new JCheckBox("GI on stock removal");
+        doesGoodsReceipt = new JCheckBox("GR on put away");
+        pickingEnabled = new JCheckBox("Allow picks from this bin");
+        putawayEnabled = new JCheckBox("Allow put away to this bin");
+        autoReplenish = new JCheckBox("Auto Replenish");
+        fixedBin = new JCheckBox("Fixed Bin");
+        fixedBin.setToolTipText("Bin can only contain one Item ID");
+        holdsStock = new JCheckBox("Bin can hold inventory");
+
+        Form form = new Form();
+        form.addInput(Elements.coloredLabel("Goods Issue", UIManager.getColor("Label.foreground")), doesGoodsIssue);
+        form.addInput(Elements.coloredLabel("Goods Receipt", UIManager.getColor("Label.foreground")), doesGoodsReceipt);
+        form.addInput(Elements.coloredLabel("Picking Enabled", UIManager.getColor("Label.foreground")), pickingEnabled);
+        form.addInput(Elements.coloredLabel("Putaway Enabled", UIManager.getColor("Label.foreground")), putawayEnabled);
+        form.addInput(Elements.coloredLabel("Auto Replenish", UIManager.getColor("Label.foreground")), autoReplenish);
+        form.addInput(Elements.coloredLabel("Fixed Bin", UIManager.getColor("Label.foreground")), fixedBin);
+        form.addInput(Elements.coloredLabel("Holds Stock", UIManager.getColor("Label.foreground")), holdsStock);
+        controls.add(form);
+
+        return controls;
     }
 
     private JPanel restrictions() {

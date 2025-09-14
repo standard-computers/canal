@@ -3,7 +3,6 @@ package org.Canal.UI.Views.Bins;
 import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.Models.SupplyChainUnits.Bin;
 import org.Canal.UI.Elements.*;
-import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.LockeStatus;
 import org.Canal.Utils.RefreshListener;
@@ -37,8 +36,8 @@ public class ModifyBin extends LockeState {
 
     public ModifyBin(Bin bin, RefreshListener refreshListener) {
 
-        super("View Bin", "/BNS/" + bin.getId());
-        setFrameIcon(new ImageIcon(Bins.class.getResource("/icons/bins.png")));
+        super("View Bin", "/BNS/MOD/" + bin.getId());
+        setFrameIcon(new ImageIcon(Bins.class.getResource("/icons/windows/locke.png")));
         this.bin = bin;
         this.refreshListener = refreshListener;
 
@@ -99,6 +98,16 @@ public class ModifyBin extends LockeState {
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton delete = new IconButton("Delete", "delete", "Delete Bin", "/BNS/MOD");
+        delete.addActionListener(_ -> {
+            Area a = Engine.getArea(bin.getArea());
+            a.removeBin(bin.getId());
+            a.save();
+
+            if(refreshListener != null){
+                refreshListener.refresh();
+            }
+            dispose();
+        });
         tb.add(delete);
         tb.add(Box.createHorizontalStrut(5));
 

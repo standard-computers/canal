@@ -1,6 +1,5 @@
 package org.Canal.Models.SupplyChainUnits;
 
-import org.Canal.Models.BusinessUnits.OrderLineItem;
 import org.Canal.Models.Objex;
 import org.Canal.Start;
 import org.Canal.Utils.Engine;
@@ -12,8 +11,8 @@ import java.util.ArrayList;
 public class Item extends Objex {
 
     private String org;
-    private String vendor;
-    private String color;
+    private String vendor = "";
+    private String color = "";
     private String upc;
     private String vendorNumber;
     private double baseQuantity;
@@ -38,7 +37,7 @@ public class Item extends Objex {
     private double exciseTax;
     private double shelfLife;
     private String link;
-    private ArrayList<OrderLineItem> components = new ArrayList<>();
+    private ArrayList<StockLine> components = new ArrayList<>();
     private ArrayList<Object[]> uoms = new ArrayList<>();
     private ArrayList<Object[]> packaging = new ArrayList<>();
 
@@ -274,15 +273,15 @@ public class Item extends Objex {
         this.link = link;
     }
 
-    public ArrayList<OrderLineItem> getComponents() {
+    public ArrayList<StockLine> getComponents() {
         return components;
     }
 
-    public void setComponents(ArrayList<OrderLineItem> components) {
+    public void setComponents(ArrayList<StockLine> components) {
         this.components = components;
     }
 
-    public void addComponent(OrderLineItem component) {
+    public void addComponent(StockLine component) {
         this.components.add(component);
     }
 

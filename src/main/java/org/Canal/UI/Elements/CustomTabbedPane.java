@@ -51,11 +51,7 @@ public class CustomTabbedPane extends JTabbedPane {
             g2d.fillPolygon(tabShape);
             g2d.setColor(ColorUtil.adjustBrightness(UIManager.getColor("Panel.background"), 0.85f));
             g2d.drawPolygon(tabShape);
-            Font font = new Font(
-                    UIManager.getFont("Label.font").getName(),
-                    Font.PLAIN,
-                    Engine.getConfiguration().getFontSize() + 1
-            );
+            Font font = UIManager.getFont("TabbedPane.font").deriveFont((float) Engine.getConfiguration().getFontSize() + 1);
             g.setFont(font);
             FontMetrics metrics = g.getFontMetrics(font);
             String title = tabPane.getTitleAt(tabIndex);
@@ -71,6 +67,18 @@ public class CustomTabbedPane extends JTabbedPane {
                 g.drawString(title, textX, textY);
             }
             g2d.dispose();
+        }
+
+        @Override
+        protected int calculateTabWidth(int tabPlacement, int tabIndex, FontMetrics metrics) {
+            int base = super.calculateTabWidth(tabPlacement, tabIndex, metrics);
+            return base + 10;
+        }
+
+        @Override
+        protected int calculateTabHeight(int tabPlacement, int tabIndex, int fontHeight) {
+            int base = super.calculateTabHeight(tabPlacement, tabIndex, fontHeight);
+            return base + 4;
         }
     }
 }

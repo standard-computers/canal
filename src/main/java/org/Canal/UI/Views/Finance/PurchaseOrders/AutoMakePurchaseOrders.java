@@ -60,7 +60,7 @@ public class AutoMakePurchaseOrders extends LockeState {
     public AutoMakePurchaseOrders(DesktopState desktop) {
 
         super("AutoMake Purchase Orders", "/ORDS/PO/AUTO_MK");
-        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));
+        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/automake.png")));
         Constants.checkLocke(this, true, true);
         this.desktop = desktop;
         newOrder = new PurchaseOrder();

@@ -18,11 +18,12 @@ public class CreateInclusion extends LockeState {
     public CreateInclusion(Includer includer) {
 
         super("Include Item", "/", false, true, false, true);
-        setFrameIcon(new ImageIcon(CreateInclusion.class.getResource("/icons/locke.png")));
+        setFrameIcon(new ImageIcon(CreateInclusion.class.getResource("/icons/windows/locke.png")));
 
         Form f = new Form();
         JTextField inclusionId = Elements.input();
         UOMField usage = new UOMField("EA", true);
+        usage.setValue("1");
         f.addInput(Elements.coloredLabel("Item ID", UIManager.getColor("Label.foreground")), inclusionId);
         f.addInput(Elements.coloredLabel("Usage", UIManager.getColor("Label.foreground")), usage);
         setLayout(new BorderLayout());

@@ -11,7 +11,6 @@ public class CreditMemo extends Objex {
     private double quantity;
     private double value;
     private ArrayList<Objex> products;
-    private String note;
 
     public String getCustomer() {
         return customer;
@@ -51,13 +50,5 @@ public class CreditMemo extends Objex {
 
     public void setProducts(ArrayList<Objex> products) {
         this.products = products;
-    }
-
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
     }
 }

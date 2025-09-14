@@ -21,8 +21,8 @@ public class PurchaseOrder extends Objex {
     private String customer;
     private String vendor;
     private ArrayList<OrderLineItem> items = new ArrayList<>();
+    private ArrayList<Rate> rates = new ArrayList<>();
     private double netValue;
-    private double taxRate;
     private double taxAmount;
     private double total;
 
@@ -122,20 +122,20 @@ public class PurchaseOrder extends Objex {
         return total;
     }
 
+    public ArrayList<Rate> getRates() {
+        return rates;
+    }
+
+    public void setRates(ArrayList<Rate> rates) {
+        this.rates = rates;
+    }
+
     public double getNetValue() {
         return netValue;
     }
 
     public void setNetValue(double netValue) {
         this.netValue = netValue;
-    }
-
-    public double getTaxRate() {
-        return taxRate;
-    }
-
-    public void setTaxRate(double taxRate) {
-        this.taxRate = taxRate;
     }
 
     public double getTaxAmount() {

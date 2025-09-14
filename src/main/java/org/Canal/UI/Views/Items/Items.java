@@ -6,6 +6,7 @@ import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
+import org.Canal.UI.Views.Finder;
 import org.Canal.Utils.*;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -26,13 +27,15 @@ import java.util.ArrayList;
  */
 public class Items extends LockeState implements RefreshListener {
 
+    private ArrayList<Item> items;
     private DesktopState desktop;
     private CustomTable table;
 
-    public Items(DesktopState desktop) {
+    public Items(ArrayList<Item> items, DesktopState desktop) {
 
-        super("Items", "/ITS", true, true, true, true);
+        super("Items", "/ITS");
         setFrameIcon(new ImageIcon(Items.class.getResource("/icons/items.png")));
+        this.items = items;
         this.desktop = desktop;
 
         JPanel holder = new JPanel(new BorderLayout());
@@ -131,20 +134,17 @@ public class Items extends LockeState implements RefreshListener {
         }
 
         IconButton open = new IconButton("Open", "open", "Open an Item", "/ITS/O");
-        open.addActionListener(e -> {
-            desktop.put(Engine.router("/ITS/O", desktop));
-        });
+        open.addActionListener(_ -> desktop.put(Engine.router("/ITS/O", desktop)));
         tb.add(open);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton create = new IconButton("New", "create", "Create an Item", "/ITS/NEW");
-        create.addActionListener(e -> {
-            desktop.put(new CreateItem(desktop, this));
-        });
+        create.addActionListener(_ -> desktop.put(new CreateItem(desktop, this)));
         tb.add(create);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton find = new IconButton("Find", "find", "Find by Values", "/ITS/F");
+        find.addActionListener(_ -> desktop.put(new Finder("ITS", Item.class, desktop)));
         tb.add(find);
         tb.add(Box.createHorizontalStrut(5));
 
@@ -157,7 +157,7 @@ public class Items extends LockeState implements RefreshListener {
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton refresh = new IconButton("Refresh", "refresh", "Refresh Data");
-        refresh.addActionListener(e -> refresh());
+        refresh.addActionListener(_ -> refresh());
         tb.add(refresh);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));
         return tb;
@@ -198,7 +198,8 @@ public class Items extends LockeState implements RefreshListener {
             "Excise Tax"
         };
         ArrayList<Object[]> d = new ArrayList<>();
-        for (Item item : Engine.getItems()) {
+        for (Item item : items) {
+            item = Engine.getItem(item.getId());
             Location vendor = Engine.getLocation(item.getVendor(), "VEND");
             d.add(new Object[]{
                     item.getId(),
@@ -252,6 +253,7 @@ public class Items extends LockeState implements RefreshListener {
 
     @Override
     public void refresh() {
+
         CustomTable newTable = table();
         JScrollPane scrollPane = (JScrollPane) table.getParent().getParent();
         scrollPane.setViewportView(newTable);

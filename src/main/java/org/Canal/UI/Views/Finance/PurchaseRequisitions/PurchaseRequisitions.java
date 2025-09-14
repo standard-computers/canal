@@ -29,7 +29,7 @@ public class PurchaseRequisitions extends LockeState implements RefreshListener 
 
     public PurchaseRequisitions(DesktopState desktop) {
 
-        super("Purchase Requisitions", "/ORDS/PR", true, true, true, true);
+        super("Purchase Requisitions", "/ORDS/PR");
         setFrameIcon(new ImageIcon(PurchaseRequisitions.class.getResource("/icons/purchasereqs.png")));
         this.desktop = desktop;
 
@@ -41,6 +41,10 @@ public class PurchaseRequisitions extends LockeState implements RefreshListener 
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);
         add(tableScrollPane, BorderLayout.CENTER);
+
+        if((boolean) Engine.codex.getValue("ORDS/PR", "start_maximized")){
+            setMaximized(true);
+        }
     }
 
     /**
@@ -66,7 +70,6 @@ public class PurchaseRequisitions extends LockeState implements RefreshListener 
                 "Valid From",
                 "Valid To",
                 "Status",
-                "Created"
         };
         ArrayList<Object[]> prs = new ArrayList<>();
         for (PurchaseRequisition pr : Engine.getPurchaseRequisitions()) {
@@ -99,7 +102,6 @@ public class PurchaseRequisitions extends LockeState implements RefreshListener 
                         pr.getStart(),
                         pr.getEnd(),
                         String.valueOf(pr.getStatus()),
-                        pr.getCreated()
                 });
             }
         }

@@ -1,17 +1,25 @@
 package org.Canal.UI.Views.Areas;
 
 import org.Canal.Models.SupplyChainUnits.Area;
+import org.Canal.Models.SupplyChainUnits.Bin;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Views.Bins.CreateBin;
+import org.Canal.UI.Views.Bins.ViewBin;
 import org.Canal.Utils.DesktopState;
+import org.Canal.Utils.Engine;
 import org.Canal.Utils.LockeStatus;
 import org.Canal.Utils.RefreshListener;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
-public class ViewArea extends LockeState {
+public class ViewArea extends LockeState implements RefreshListener {
 
     private Area area;
     private DesktopState desktop;
@@ -20,7 +28,7 @@ public class ViewArea extends LockeState {
     public ViewArea(Area area, DesktopState desktop, RefreshListener refreshListener) {
 
         super("View Area", "/AREAS/" + area.getId());
-        setFrameIcon(new ImageIcon(CreateArea.class.getResource("/icons/areas.png")));
+        setFrameIcon(new ImageIcon(CreateArea.class.getResource("/icons/windows/areas.png")));
         this.area = area;
         this.desktop = desktop;
         this.refreshListener = refreshListener;
@@ -49,6 +57,15 @@ public class ViewArea extends LockeState {
         });
         tb.add(modify);
         tb.add(Box.createHorizontalStrut(5));
+        int mask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
+        KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_E, mask);
+        JRootPane rp = getRootPane();
+        rp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ks, "do-modify");
+        rp.getActionMap().put("do-modify", new AbstractAction() {
+            @Override public void actionPerformed(ActionEvent e) {
+                modify.doClick();
+            }
+        });
 
         IconButton makeBin = new IconButton("+ Bin", "bins", "Add a Bin", "/BNS/NEW");
         makeBin.addActionListener(_ -> desktop.put(new CreateBin(null, refreshListener)));
@@ -127,17 +144,17 @@ public class ViewArea extends LockeState {
         volumeField.setUOM(area.getVolumeUOM());
         volumeField.disable();
 
-        Form f = new Form();
-        f.addInput(Elements.coloredLabel("ID", UIManager.getColor("Label.foreground")), new Copiable(area.getId()));
-        f.addInput(Elements.coloredLabel("Location", UIManager.getColor("Label.foreground")), new Copiable(area.getLocation()));
-        f.addInput(Elements.coloredLabel("Name", UIManager.getColor("Label.foreground")), new Copiable(area.getName()));
-        f.addInput(Elements.coloredLabel("Status", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(area.getStatus())));
-        f.addInput(Elements.coloredLabel("Width", UIManager.getColor("Label.foreground")), widthField);
-        f.addInput(Elements.coloredLabel("Length", UIManager.getColor("Label.foreground")), lengthField);
-        f.addInput(Elements.coloredLabel("Height", UIManager.getColor("Label.foreground")), heightField);
-        f.addInput(Elements.coloredLabel("Area", UIManager.getColor("Label.foreground")), areaField);
-        f.addInput(Elements.coloredLabel("Volume", UIManager.getColor("Label.foreground")), volumeField);
-        panel.add(f, BorderLayout.CENTER);
+        Form form = new Form();
+        form.addInput(Elements.coloredLabel("ID", UIManager.getColor("Label.foreground")), new Copiable(area.getId()));
+        form.addInput(Elements.coloredLabel("Location", UIManager.getColor("Label.foreground")), new Copiable(area.getLocation()));
+        form.addInput(Elements.coloredLabel("Name", UIManager.getColor("Label.foreground")), new Copiable(area.getName()));
+        form.addInput(Elements.coloredLabel("Status", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(area.getStatus())));
+        form.addInput(Elements.coloredLabel("Width", UIManager.getColor("Label.foreground")), widthField);
+        form.addInput(Elements.coloredLabel("Length", UIManager.getColor("Label.foreground")), lengthField);
+        form.addInput(Elements.coloredLabel("Height", UIManager.getColor("Label.foreground")), heightField);
+        form.addInput(Elements.coloredLabel("Area", UIManager.getColor("Label.foreground")), areaField);
+        form.addInput(Elements.coloredLabel("Volume", UIManager.getColor("Label.foreground")), volumeField);
+        panel.add(form, BorderLayout.CENTER);
 
         return panel;
     }
@@ -146,20 +163,115 @@ public class ViewArea extends LockeState {
 
         JPanel controls = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-        Form f = new Form();
-        f.addInput(Elements.coloredLabel("Allow Inventory", UIManager.getColor("Label.foreground")), new JCheckBox("Inventory Movements", area.allowsInventory()));
-        f.addInput(Elements.coloredLabel("Allow Production", UIManager.getColor("Label.foreground")), new JCheckBox("Allows Production", area.allowsProduction()));
-        f.addInput(Elements.coloredLabel("Allow Sales", UIManager.getColor("Label.foreground")), new JCheckBox("Sales Order Processing", area.allowsSales()));
-        f.addInput(Elements.coloredLabel("Allow Purchasing", UIManager.getColor("Label.foreground")), new JCheckBox("Purchase Order Processing", area.allowsPurchasing()));
-        controls.add(f);
+
+        JCheckBox allowsInventory = new JCheckBox("Inventory Movements", area.allowsInventory());
+        allowsInventory.setEnabled(false);
+        JCheckBox allowsProduction = new JCheckBox("Production", area.allowsProduction());
+        allowsProduction.setEnabled(false);
+        JCheckBox allowsSales = new JCheckBox("Sales", area.allowsSales());
+        allowsSales.setEnabled(false);
+        JCheckBox allowsPurchasing = new JCheckBox("Purchasing", area.allowsPurchasing());
+        allowsPurchasing.setEnabled(false);
+
+        Form form = new Form();
+        form.addInput(Elements.coloredLabel("Allow Inventory", UIManager.getColor("Label.foreground")), allowsInventory);
+        form.addInput(Elements.coloredLabel("Allow Production", UIManager.getColor("Label.foreground")), allowsProduction);
+        form.addInput(Elements.coloredLabel("Allow Sales", UIManager.getColor("Label.foreground")), allowsSales);
+        form.addInput(Elements.coloredLabel("Allow Purchasing", UIManager.getColor("Label.foreground")), allowsPurchasing);
+        controls.add(form);
 
         return controls;
     }
 
-    private JPanel bins(){
+    private JScrollPane bins(){
 
         JPanel bins = new JPanel();
 
-        return bins;
+        String[] columns = new String[]{
+                "ID",
+                "Area",
+                "Name",
+                "Width",
+                "wUOM",
+                "Length",
+                "lUOM",
+                "Height",
+                "hUOM",
+                "Area",
+                "aUOM",
+                "Volume",
+                "vUOM",
+                "Weight",
+                "wtUOM",
+                "Auto Repl",
+                "Fixed",
+                "Picking",
+                "Putaway",
+                "GI",
+                "GR",
+                "Holds Stock",
+                "Status",
+                "Created",
+        };
+
+        ArrayList<Object[]> data = new ArrayList<>();
+        for (Bin b : Engine.getArea(area.getId()).getBins()) {
+            //TODO remove extra call to are some how
+            data.add(new Object[]{
+                    b.getId(),
+                    b.getArea(),
+                    b.getName(),
+                    b.getWidth(),
+                    b.getWidthUOM(),
+                    b.getLength(),
+                    b.getLengthUOM(),
+                    b.getHeight(),
+                    b.getHeightUOM(),
+                    b.getAreaValue(),
+                    b.getAreaUOM(),
+                    b.getVolume(),
+                    b.getVolumeUOM(),
+                    b.getWeight(),
+                    b.getWeightUOM(),
+                    b.isAuto_replenish(),
+                    b.isFixed(),
+                    b.isPicking(),
+                    b.isPutaway(),
+                    b.doesGI(),
+                    b.doesGR(),
+                    b.isHoldsStock(),
+                    b.getStatus(),
+                    b.getCreated(),
+            });
+        }
+
+        CustomTable ct = new CustomTable(columns, data);
+        ct.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    JTable t = (JTable) e.getSource();
+                    int r = t.getSelectedRow();
+                    if (r != -1) {
+                        String v = String.valueOf(t.getValueAt(r, 1));
+                        for (Area area : Engine.getAreas()) {
+                            for (Bin bin : area.getBins()) {
+                                if (v.equals(bin.getId())) {
+                                    bin.setArea(area.getId());
+                                    desktop.put(new ViewBin(bin, desktop, null));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        return new JScrollPane(ct);
+    }
+
+    @Override
+    public void refresh(){
+
     }
 }

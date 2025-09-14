@@ -59,7 +59,7 @@ public class CreatePosition extends LockeState {
 
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-        IconButton execute = new IconButton("Create", "execute", "Create Position");
+        IconButton execute = new IconButton("Create", "create", "Create Position");
         tb.add(execute);
         tb.setBorder(new EmptyBorder(0, 5, 0, 5));
         execute.addMouseListener(new MouseAdapter() {

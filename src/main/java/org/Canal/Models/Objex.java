@@ -5,12 +5,13 @@ import org.Canal.Utils.LockeStatus;
 
 public class Objex {
 
-    protected String id;
+    protected String id = "";
     protected String name = "";
     protected String creator = "UKNOWN";
     protected String owner = "UKNOWN";
     protected LockeStatus status = LockeStatus.NEW;
     protected String created = Constants.now();
+    protected String notes = "";
 
     public String getId() {
         return id;
@@ -58,5 +59,13 @@ public class Objex {
 
     public void setCreated(String created) {
         this.created = created;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 }

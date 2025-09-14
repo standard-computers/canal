@@ -99,7 +99,6 @@ public class GoodsIssues extends LockeState {
         table.setCellSelectionEnabled(true);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        Engine.adjustColumnWidths(table);
         return table;
     }
 }

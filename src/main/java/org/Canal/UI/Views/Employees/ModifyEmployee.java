@@ -7,6 +7,8 @@ import org.Canal.Utils.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.util.HashMap;
 
 /**
@@ -64,12 +66,8 @@ public class ModifyEmployee extends LockeState {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
 
-        IconButton review = new IconButton("Review", "review", "Review Area Data");
-        tb.add(review);
-        tb.add(Box.createHorizontalStrut(5));
-
         IconButton save = new IconButton("Save", "save", "Save changes");
-        save.addActionListener(e -> {
+        save.addActionListener(_ -> {
 
             employee.setLocation(locationField.getText());
             employee.setName(nameField.getText());
@@ -101,11 +99,26 @@ public class ModifyEmployee extends LockeState {
         });
         tb.add(save);
         tb.add(Box.createHorizontalStrut(5));
+        int mask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
+        KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_S, mask);
+        JRootPane rp = getRootPane();
+        rp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ks, "do-save");
+        rp.getActionMap().put("do-save", new AbstractAction() {
+            @Override public void actionPerformed(ActionEvent e) {
+                save.doClick();
+            }
+        });
+
+        IconButton review = new IconButton("Review", "review", "Review Area Data");
+        tb.add(review);
+        tb.add(Box.createHorizontalStrut(5));
 
         if((boolean) Engine.codex.getValue("EMPS", "allow_archival")){
             IconButton archive = new IconButton("Archive", "archive", "Archive item");
-            archive.addActionListener(e -> {
-
+            archive.addActionListener(_ -> {
+                employee.setStatus(LockeStatus.ARCHIVED);
+                employee.save();
+                dispose();
             });
             tb.add(archive);
             tb.add(Box.createHorizontalStrut(5));
@@ -113,7 +126,7 @@ public class ModifyEmployee extends LockeState {
 
         if((boolean) Engine.codex.getValue("EMPS", "allow_deletion")){
             IconButton delete = new IconButton("Delete", "delete", "Delete item");
-            delete.addActionListener(e -> {
+            delete.addActionListener(_ -> {
 
             });
             tb.add(delete);

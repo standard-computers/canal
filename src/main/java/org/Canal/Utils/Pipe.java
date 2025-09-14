@@ -24,9 +24,9 @@ public class Pipe {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
-    public static File[] list(String dir){
+    public static File[] list(String dir) {
         File f = new File(Start.DIR + "\\.store\\" + dir);
-        if(!f.exists()){
+        if (!f.exists()) {
             f.mkdirs();
         }
         return f.listFiles();
@@ -37,7 +37,9 @@ public class Pipe {
         return Document.parse(GSON.toJson(entity));
     }
 
-    /** Normalize an _id value: String 24-hex → ObjectId, else keep as-is. */
+    /**
+     * Normalize an _id value: String 24-hex → ObjectId, else keep as-is.
+     */
     private static Object normalizeId(Object id) {
         if (id == null) return null;
         if (id instanceof ObjectId) return id;
@@ -48,7 +50,7 @@ public class Pipe {
     /**
      * Overwrite a document by its _id contained in the entity.
      * If upsert=true and no match exists, it will insert.
-     *
+     * <p>
      * The entity MUST contain an `_id` field.
      */
     public static UpdateResult overwriteById(String collectionName, Object entity, boolean upsert) {
@@ -72,29 +74,29 @@ public class Pipe {
         Document doc = toDocument(entity);
         return collection(collectionName).replaceOne(filter, doc, new ReplaceOptions().upsert(upsert));
     }
-    
-    public static void save(String dir, Object o){
 
-        if(Engine.getConfiguration().getMongodb().isEmpty()){ //Save to local disk
+    public static void save(String dir, Object o) {
+
+        if (Engine.getConfiguration().getMongodb().isEmpty()) { //Save to local disk
 
             File f = new File(Start.DIR + "\\.store\\" + dir);
-            if(!f.exists()){
+            if (!f.exists()) {
                 f.mkdirs();
             }
             Pipe.export(Start.DIR + "\\.store\\" + dir + "\\" + UUID.randomUUID() + dir.replace("/", ".").toLowerCase(), o);
-        }else{
+        } else {
 
             String objex = dir.startsWith("/") ? dir.replaceFirst("/", "") : dir;
             overwriteById(objex, o, true);
         }
     }
 
-    public static boolean delete(String objex, String id){
+    public static boolean delete(String objex, String id) {
         File[] fs = Pipe.list(objex);
-        for(File f : fs){
-            if(f.getName().endsWith(objex.toLowerCase().replaceAll("/", "."))){
+        for (File f : fs) {
+            if (f.getName().endsWith(objex.toLowerCase().replaceAll("/", "."))) {
                 Objex o = Pipe.load(f.getPath(), Objex.class);
-                if(o.getId().equals(id)){
+                if (o.getId().equals(id)) {
                     f.delete();
                     return true;
                 }
@@ -105,7 +107,7 @@ public class Pipe {
 
     public static void saveConfiguration() {
         File md = new File(Start.DIR);
-        if(!md.exists()){
+        if (!md.exists()) {
             md.mkdirs();
         }
         File[] mdf = md.listFiles();
@@ -121,16 +123,6 @@ public class Pipe {
         if (!existed) {
             Pipe.export(Start.DIR + UUID.randomUUID() + ".cnl.mfg", Engine.getConfiguration());
         }
-    }
-
-    public static JsonObject get(String objex) {
-        File[] d = Pipe.list(objex); //Excpects '/OBJEX/.../..'
-        for(File f : d){
-            if(!f.isDirectory()){
-                return Pipe.load(f.getPath(), JsonObject.class);
-            }
-        }
-        return null;
     }
 
     public static void export(String filename, Object object) {
@@ -149,7 +141,7 @@ public class Pipe {
             return null;
         }
     }
-    
+
     public static <T> T load(Document document, Class<T> clazz) {
         return GSON.fromJson(document.toJson(), clazz);
     }

@@ -1,5 +1,7 @@
 package org.Canal.UI.Views.Controllers;
 
+import org.Canal.Models.HumanResources.Department;
+import org.Canal.Models.HumanResources.Employee;
 import org.Canal.UI.Elements.CustomTabbedPane;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.LockeState;
@@ -116,7 +118,7 @@ public class HumanResources extends LockeState {
         findDepartment.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new Finder("/DPTS", desktop));
+                desktop.put(new Finder("/DPTS", new Department(), desktop));
             }
         });
         departmentOptions.add(findDepartment);
@@ -148,7 +150,7 @@ public class HumanResources extends LockeState {
         findEmployee.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new Finder("/EMPS", desktop));
+                desktop.put(new Finder("/EMPS", new Employee(), desktop));
             }
         });
         employeeOptions.add(findEmployee);

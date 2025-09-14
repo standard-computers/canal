@@ -49,7 +49,7 @@ public class CreateDepartment extends LockeState {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
 
-        IconButton create = new IconButton("Create", "execute", "Create Department");
+        IconButton create = new IconButton("Create", "create", "Create Department");
         create.addActionListener(_ -> {
 
             Department newDepartment = new Department();

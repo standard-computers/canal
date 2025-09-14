@@ -19,7 +19,7 @@ public class CreateVariant extends LockeState {
     public CreateVariant(Includer includer) {
 
         super("Create Item Variant", "/", false, true, false, true);
-        setFrameIcon(new ImageIcon(CreateVariant.class.getResource("/icons/locke.png")));
+        setFrameIcon(new ImageIcon(CreateVariant.class.getResource("/icons/windows/locke.png")));
 
         Form f = new Form();
         JTextField inclusionId = Elements.input();

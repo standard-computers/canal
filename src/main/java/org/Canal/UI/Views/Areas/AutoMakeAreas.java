@@ -50,7 +50,7 @@ public class AutoMakeAreas extends LockeState {
         CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.addTab("General", general());
         tabs.addTab("Controls", controls());
-        tabs.addTab("*Locations", locationsSelection());
+        tabs.addTab("Locations", locationsSelection());
 
         JPanel header = new JPanel(new BorderLayout());
         header.add(Elements.header("AutoMake Areas", SwingConstants.LEFT), BorderLayout.CENTER);

@@ -5,7 +5,6 @@ import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.Selectable;
 import org.Canal.UI.Elements.Selectables;
 import org.Canal.UI.Elements.LockeState;
-import org.Canal.Utils.Engine;
 
 import javax.swing.*;
 import java.awt.*;
@@ -83,7 +82,6 @@ public class Inventory extends LockeState {
         table.setCellSelectionEnabled(true);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        Engine.adjustColumnWidths(table);
         return table;
     }
 }

@@ -24,9 +24,9 @@ public class Codex {
         variables.put("ORGS", new HashMap<>() {{
             put("name", "Organizations");
             put("prefix", "");
+            put("icon", "organizations");
             put("leading_number", 1);
             put("leading_zeros", 2);
-            put("icon", "organizations");
             put("allow_archival", true);
             put("allow_deletion", true);
             put("auto_putaway", false);
@@ -178,7 +178,7 @@ public class Codex {
             put("prefix", "BN");
             put("leading_number", 1);
             put("leading_zeros", 2);
-            put("find_limit", 200);
+            put("find_limit", 1000);
             put("allow_archival", true);
             put("allow_deletion", true);
             put("import_enabled", true);
@@ -439,7 +439,7 @@ public class Codex {
         }});
         variables.put("TRANS/CRRS", new HashMap<>() {{
             put("name", "Transportation Carriers");
-            put("icon", "carriers");
+            put("icon", "trucks");
             put("prefix", "CRR");
             put("leading_number", 1);
             put("leading_zeros", 2);

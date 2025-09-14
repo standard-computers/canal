@@ -7,6 +7,8 @@ import org.Canal.Utils.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
 /**
  * /AREAS/MOD/$
@@ -33,7 +35,7 @@ public class ModifyArea extends LockeState {
     public ModifyArea(Area area, RefreshListener refreshListener) {
 
         super("Modify " + area.getId(), "/AREAS/MOD/" + area.getId(), false, true, false, true);
-        setFrameIcon(new ImageIcon(ModifyArea.class.getResource("/icons/areas.png")));
+        setFrameIcon(new ImageIcon(ModifyArea.class.getResource("/icons/windows/locke.png")));
         this.area = area;
         this.refreshListener = refreshListener;
 
@@ -83,6 +85,15 @@ public class ModifyArea extends LockeState {
         });
         tb.add(save);
         tb.setBorder(new EmptyBorder(0, 5, 0, 5));
+        int mask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
+        KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_S, mask);
+        JRootPane rp = getRootPane();
+        rp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ks, "do-save");
+        rp.getActionMap().put("do-save", new AbstractAction() {
+            @Override public void actionPerformed(ActionEvent e) {
+                save.doClick();
+            }
+        });
 
         panel.add(tb, BorderLayout.SOUTH);
         return panel;

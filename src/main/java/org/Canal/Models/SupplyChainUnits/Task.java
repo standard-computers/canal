@@ -9,10 +9,19 @@ public class Task extends Objex {
     private String workOrder;
     private String flow;
     private String location;
+    private String area;
+    private String bin;
     private String employee;
     private String user;
     private String locke; //Destination Locke to listen to
     private String objex; //Associated reference Objex ID
+    private String item;
+    private double quantity;
+    private int employees;
+    private boolean goodsIssue;
+    private boolean goodsReceipt;
+    private double duration;
+    private String durationUOM;
 
     public String getType() {
         return type;
@@ -54,6 +63,22 @@ public class Task extends Objex {
         this.location = location;
     }
 
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public String getBin() {
+        return bin;
+    }
+
+    public void setBin(String bin) {
+        this.bin = bin;
+    }
+
     public String getEmployee() {
         return employee;
     }
@@ -84,5 +109,69 @@ public class Task extends Objex {
 
     public void setObjex(String objex) {
         this.objex = objex;
+    }
+
+    public String getItem() {
+        return item;
+    }
+
+    public void setItem(String item) {
+        this.item = item;
+    }
+
+    public double getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(double quantity) {
+        this.quantity = quantity;
+    }
+
+    public int getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(int employees) {
+        this.employees = employees;
+    }
+
+    public boolean doesGoodsIssue() {
+        return goodsIssue;
+    }
+
+    public void setGoodsIssue(boolean goodsIssue) {
+        this.goodsIssue = goodsIssue;
+    }
+
+    public boolean doesGoodsReceipt() {
+        return goodsReceipt;
+    }
+
+    public void setGoodsReceipt(boolean goodsReceipt) {
+        this.goodsReceipt = goodsReceipt;
+    }
+
+    public boolean isGoodsIssue() {
+        return goodsIssue;
+    }
+
+    public boolean isGoodsReceipt() {
+        return goodsReceipt;
+    }
+
+    public double getDuration() {
+        return duration;
+    }
+
+    public void setDuration(double duration) {
+        this.duration = duration;
+    }
+
+    public String getDurationUOM() {
+        return durationUOM;
+    }
+
+    public void setDurationUOM(String durationUOM) {
+        this.durationUOM = durationUOM;
     }
 }

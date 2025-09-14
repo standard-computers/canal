@@ -24,6 +24,9 @@ public enum LockeStatus {
     OPEN, //Just open, typically first stage
     PENDING, //From pending, pending first major action
     REMOVED, //Remove, not archived but still can't be used
+    SETTLED,
     SUSPENDED, //Blocked, but intent is to unblock
-    UNRESTRICTED, PROCESSING, FULFILLED, //Allows use of any kind
+    UNRESTRICTED,
+    PROCESSING,
+    FULFILLED, //Allows use of any kind
 }

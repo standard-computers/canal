@@ -1,6 +1,7 @@
 package org.Canal.UI.Views.Controllers;
 
 import org.Canal.Models.HumanResources.User;
+import org.Canal.UI.Elements.IconButton;
 import org.Canal.Utils.*;
 
 import javax.swing.*;
@@ -50,6 +51,25 @@ public class Controller extends JPanel implements RefreshListener {
         });
         JScrollPane treeScrollPane = new JScrollPane(dataTree);
         add(treeScrollPane, BorderLayout.CENTER);
+        add(controls(), BorderLayout.SOUTH);
+    }
+
+    private JPanel controls(){
+
+        JPanel controls = new JPanel(new GridLayout(1, 3));
+
+        JButton expand = new IconButton("", "expand", "Show all Lockes");
+        expand.addActionListener(_ -> expandAllNodes(dataTree));
+        controls.add(expand);
+
+        JButton collapse = new IconButton("", "collapse", "Hide all Lockes");
+        collapse.addActionListener(_ -> collapseAllNodes(dataTree));
+        controls.add(collapse);
+
+        JButton hide = new IconButton("", "hide", "Hide this menu");
+        controls.add(hide);
+
+        return controls;
     }
 
     public void setBar(String s){
@@ -70,7 +90,6 @@ public class Controller extends JPanel implements RefreshListener {
         DefaultMutableTreeNode rootTreeNode = createTreeNodes(rootNode);
         DefaultTreeModel model = (DefaultTreeModel) dataTree.getModel();
         model.setRoot(rootTreeNode);
-//        expandAllNodes(dataTree);
         revalidate();
         repaint();
     }
@@ -82,13 +101,18 @@ public class Controller extends JPanel implements RefreshListener {
         DefaultTreeModel treeModel = new DefaultTreeModel(rootTreeNode);
         JTree tree = new JTree(treeModel);
         tree.setCellRenderer(new CustomTreeCellRenderer());
-//        expandAllNodes(tree);
         return tree;
     }
 
     private void expandAllNodes(JTree tree) {
         for (int i = 0; i < tree.getRowCount(); i++) {
             tree.expandRow(i);
+        }
+    }
+
+    private void collapseAllNodes(JTree tree) {
+        for (int i = 1; i < tree.getRowCount(); i++) {
+            tree.collapseRow(i);
         }
     }
 

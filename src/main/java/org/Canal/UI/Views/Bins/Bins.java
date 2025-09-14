@@ -29,7 +29,7 @@ public class Bins extends LockeState implements RefreshListener {
     public Bins(DesktopState desktop) {
 
         super("Bins", "/BNS");
-        setFrameIcon(new ImageIcon(Bins.class.getResource("/icons/bins.png")));
+        setFrameIcon(new ImageIcon(Bins.class.getResource("/icons/windows/bins.png")));
         this.desktop = desktop;
 
         JPanel tb = toolbar();
@@ -60,12 +60,7 @@ public class Bins extends LockeState implements RefreshListener {
 
         if((boolean) Engine.codex.getValue("BNS", "export_enabled")){
             IconButton export = new IconButton("Export", "export", "Export as CSV", "");
-            export.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    table.exportToCSV();
-                }
-            });
+            export.addActionListener(_ -> table.exportToCSV());
             tb.add(export);
             tb.add(Box.createHorizontalStrut(5));
         }

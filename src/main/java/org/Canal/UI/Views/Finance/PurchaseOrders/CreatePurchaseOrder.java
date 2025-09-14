@@ -3,6 +3,7 @@ package org.Canal.UI.Views.Finance.PurchaseOrders;
 import org.Canal.Models.BusinessUnits.*;
 import org.Canal.Models.SupplyChainUnits.Delivery;
 import org.Canal.Models.SupplyChainUnits.Item;
+import org.Canal.Models.SupplyChainUnits.StockLine;
 import org.Canal.Models.SupplyChainUnits.Truck;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.DatePicker;
@@ -59,12 +60,14 @@ public class CreatePurchaseOrder extends LockeState {
     private Selectable buyerObjexType;
     private Selectable ledgerId;
 
-
     //Delivery Tab
     private JCheckBox createDelivery;
     private Selectable carriers;
     private JTextField truckNumberField;
     private Truck truck;
+
+    private ArrayList<Rate> rates = new ArrayList<>();
+    private CustomTable ratesTable;
 
     //Notes Tab
     private RTextScrollPane notes;
@@ -136,7 +139,7 @@ public class CreatePurchaseOrder extends LockeState {
         p.add(review);
         p.add(Box.createHorizontalStrut(5));
 
-        IconButton create = new IconButton("Create", "execute", "Create Purchase Order");
+        IconButton create = new IconButton("Create", "create", "Create Purchase Order");
         create.addActionListener(_ -> {
 
             if (expectedDelivery.getSelectedDate() == null) {
@@ -160,6 +163,7 @@ public class CreatePurchaseOrder extends LockeState {
             if (ccc == JOptionPane.YES_OPTION) {
                 String newPOId = ((String) Engine.codex("ORDS/PO", "prefix")) + (70000000 + (Engine.getPurchaseOrders().size() + 1));
                 newOrder.setOwner((Engine.getAssignedUser().getId()));
+                newOrder.setId(newPOId);
                 newOrder.setOrderId(newPOId);
                 newOrder.setVendor(selectVendor.getText());
                 newOrder.setBillTo(selectBillTo.getText());
@@ -180,13 +184,10 @@ public class CreatePurchaseOrder extends LockeState {
                 }
 
                 newOrder.setItems(lineitems);
-                newOrder.setNetValue(Double.parseDouble(model.getTotalPrice()));
-
-                //TODO Logic for Taxes and Rates
-                newOrder.setTaxAmount(Double.parseDouble(model.getTotalPrice()));
-                newOrder.setTotal(Double.parseDouble(model.getTotalPrice()) + Double.parseDouble(model.getTotalPrice()));
+                newOrder.setRates(rates);
                 newOrder.setOrderedOn(LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss")));
                 newOrder.setStatus(LockeStatus.valueOf(statuses.getSelectedValue()));
+                newOrder.setNotes(notes.getTextArea().getText());
                 assignedPR.setStatus(LockeStatus.IN_USE);
                 assignedPR.save();
                 Pipe.save("/ORDS/PO", newOrder);
@@ -207,6 +208,9 @@ public class CreatePurchaseOrder extends LockeState {
                     d.setDestination(newOrder.getShipTo());
                     d.setStatus(LockeStatus.PROCESSING);
                     Pipe.save("/TRANS/IDO", d);
+
+                    t.setDelivery(d.getId());
+                    t.save();
                 }
 
                 if (commitToLedger.isSelected()) {
@@ -219,10 +223,11 @@ public class CreatePurchaseOrder extends LockeState {
                         t.setObjex(buyerObjexType.getSelectedValue());
                         t.setLocation(selectBillTo.getText());
                         t.setReference(newPOId);
-                        t.setAmount(-1 * Double.parseDouble(model.getTotalPrice()));
+                        t.setAmount(-1 * newOrder.getTotal());
                         t.setCommitted(Constants.now());
                         t.setStatus(LockeStatus.PROCESSING);
                         l.addTransaction(t);
+                        l.setStatus(LockeStatus.IN_USE);
                         l.save();
                     } else {
                         JOptionPane.showMessageDialog(null, "No such ledger.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -246,11 +251,11 @@ public class CreatePurchaseOrder extends LockeState {
         selectShipTo = Elements.input();
         selectVendor = Elements.input();
 
-        Form f = new Form();
-        f.addInput(Elements.coloredLabel("Supplier/Vendor", Constants.colors[1]), selectVendor);
-        f.addInput(Elements.coloredLabel("Bill To Location", Constants.colors[2]), selectBillTo);
-        f.addInput(Elements.coloredLabel("Ship To Location", Constants.colors[3]), selectShipTo);
-        orderInfo.add(f);
+        Form form = new Form();
+        form.addInput(Elements.coloredLabel("Supplier/Vendor", Constants.colors[1]), selectVendor);
+        form.addInput(Elements.coloredLabel("Bill To Location", Constants.colors[2]), selectBillTo);
+        form.addInput(Elements.coloredLabel("Ship To Location", Constants.colors[3]), selectShipTo);
+        orderInfo.add(form);
 
         return orderInfo;
     }
@@ -325,6 +330,8 @@ public class CreatePurchaseOrder extends LockeState {
 
         //TODO Taxes and Rates
         taxAmount = Elements.label("$" + df.format(Double.parseDouble(model.getTotalPrice())));
+        f.addInput(Elements.coloredLabel("Tax Amount", UIManager.getColor("Label.foreground")), taxAmount);
+
         totalAmount = Elements.label("$" + df.format(Double.parseDouble("0.0") * Double.parseDouble(model.getTotalPrice()) + Double.parseDouble(model.getTotalPrice())));
         f.addInput(Elements.coloredLabel("Total Amount", UIManager.getColor("Label.foreground")), totalAmount);
         return f;
@@ -333,11 +340,30 @@ public class CreatePurchaseOrder extends LockeState {
     private void updateTotal() {
 
         DecimalFormat df = new DecimalFormat("#0.00");
-        netAmount.setText("$" + model.getTotalPrice());
-        //TODO Taxes and Rates
-        taxAmount.setText("$" + df.format(Double.parseDouble(model.getTotalPrice())));
-        //TODO Taxes and Rates
-        totalAmount.setText("$" + df.format(Double.parseDouble(model.getTotalPrice()) + Double.parseDouble(model.getTotalPrice())));
+
+        double preTax = Double.parseDouble(model.getTotalPrice());
+        newOrder.setNetValue(preTax);
+        netAmount.setText("$" + preTax);
+
+        double tax = 0.0;
+        for(Rate r : rates){
+            if(r.isTax()){
+                if(r.isPercent()){
+                    tax += preTax * r.getValue();
+                }else{
+                    tax += r.getValue();
+                }
+            }else{
+                tax += r.getValue();
+            }
+        }
+        double postTaxAmount = preTax + tax;
+
+        newOrder.setTaxAmount(tax);
+        taxAmount.setText("$" + df.format(tax));
+
+        newOrder.setTotal(postTaxAmount);
+        totalAmount.setText("$" + df.format(postTaxAmount));
     }
 
     private JPanel items() {
@@ -513,29 +539,66 @@ public class CreatePurchaseOrder extends LockeState {
         return packaging;
     }
 
+    private CustomTable taxesAndRatesTable() {
+        String[] columns = new String[]{
+                "#",
+                "ID",
+                "Name",
+                "Description",
+                "Percent",
+                "Tax",
+                "Value",
+        };
+
+        ArrayList<Object[]> data = new ArrayList<>();
+        for(int s = 0; s < rates.size(); s++){
+            Rate rate = rates.get(s);
+            data.add(new Object[]{
+                    String.valueOf(s + 1),
+                    rate.getId(),
+                    rate.getName(),
+                    rate.getDescription(),
+                    rate.isPercent(),
+                    rate.isTax(),
+                    rate.getValue()
+            });
+        }
+
+        CustomTable ct = new CustomTable(columns, data);
+        ct.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    JTable t = (JTable) e.getSource();
+                    int r = t.getSelectedRow();
+                    if (r != -1) {
+                        String v = String.valueOf(t.getValueAt(r, 1));
+
+                    }
+                }
+            }
+        });
+        return ct;
+    }
+
     private JPanel taxes() {
 
         JPanel taxes = new JPanel(new BorderLayout());
-        ArrayList<Object[]> ts = new ArrayList<>();
 
-        CustomTable taxesTable = new CustomTable(new String[]{
-                "Name",
-                "Jurisdiction",
-                "Percent",
-                "Amount",
-        }, ts);
-
-        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        buttons.setLayout(new BoxLayout(buttons, BoxLayout.X_AXIS));
-        buttons.setBackground(UIManager.getColor("Panel.background"));
+        JPanel toolbar = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        toolbar.setLayout(new BoxLayout(toolbar, BoxLayout.X_AXIS));
+        toolbar.setBackground(UIManager.getColor("Panel.background"));
 
         IconButton addButton = new IconButton("Add Tax", "add_rows", "Add tax");
         addButton.addActionListener((ActionEvent _) -> {
-            if (!ts.isEmpty()) {
-            }
+            String rateId = JOptionPane.showInputDialog("Enter the Tax or Rate ID");
+            Rate rate = Engine.getRate(rateId);
+            rates.add(rate);
+            refreshTaxesAndRates();
+            updateTotal();
         });
-        buttons.add(addButton);
-        buttons.add(Box.createHorizontalStrut(5));
+        toolbar.add(addButton);
+        toolbar.add(Box.createHorizontalStrut(5));
 
         IconButton removeButton = new IconButton("Remove Tax", "delete_rows", "Remove selected tax");
         removeButton.addActionListener((ActionEvent _) -> {
@@ -543,16 +606,23 @@ public class CreatePurchaseOrder extends LockeState {
 //            if (selectedRow != -1) {
 //            }
         });
-        buttons.add(removeButton);
-        buttons.add(Box.createHorizontalStrut(5));
+        toolbar.add(removeButton);
+        toolbar.add(Box.createHorizontalStrut(5));
 
-        JScrollPane sp = new JScrollPane(taxesTable);
-        sp.setPreferredSize(new Dimension(600, 300));
-
-        taxes.add(sp, BorderLayout.CENTER);
-        taxes.add(buttons, BorderLayout.NORTH);
+        taxes.add(toolbar, BorderLayout.NORTH);
+        ratesTable = taxesAndRatesTable();
+        taxes.add(new JScrollPane(ratesTable), BorderLayout.CENTER);
 
         return taxes;
+    }
+
+    private void refreshTaxesAndRates() {
+        CustomTable newTable = taxesAndRatesTable();
+        JScrollPane scrollPane = (JScrollPane) ratesTable.getParent().getParent();
+        scrollPane.setViewportView(newTable);
+        ratesTable = newTable;
+        scrollPane.revalidate();
+        scrollPane.repaint();
     }
 
     private void performReview(){
@@ -567,6 +637,9 @@ public class CreatePurchaseOrder extends LockeState {
         }
         if (statuses.getSelectedValue().equals("COMPLETED")) {
             addToQueue(new String[]{"WARNING", "Status COMPLETED will prevent further actions!"});
+        }
+        if (rates.isEmpty()) {
+            addToQueue(new String[]{"WARNING", "No rates or taxes have been added. ARE YOU SURE?"});
         }
         if (purchaseRequisition.getText().equals("Available")) {
             PurchaseRequisition pr = Engine.getPurchaseRequisition(purchaseRequisition.getText());

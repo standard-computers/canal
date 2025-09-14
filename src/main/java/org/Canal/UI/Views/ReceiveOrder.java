@@ -49,8 +49,8 @@ public class ReceiveOrder extends LockeState {
     public ReceiveOrder(String location, DesktopState desktop, RefreshListener refreshListener) {
 
         super("Receive Order", "/ORDS/RCV", false, true, false, true);
+        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/windows/locke.png")));
         Constants.checkLocke(this, true, true);
-        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/label.png")));
         setLayout(new BorderLayout());
         this.location = location;
         this.desktop = desktop;
@@ -120,8 +120,14 @@ public class ReceiveOrder extends LockeState {
         ArrayList<Area> as = (ArrayList<Area>) Engine.getAreas(location);
         for (Area a : as) {
             for (Bin b : a.getBins()) {
-                putawayBinOptions.put(b.getId(), b.getId());
+                if(b.isPutaway() && b.doesGR()){
+                    putawayBinOptions.put(b.getId(), b.getId());
+                }
             }
+        }
+        if(putAwayOptions.isEmpty()){
+            dispose();
+            JOptionPane.showMessageDialog(null, "No putaway and GR bins found!");
         }
         availablePutawayBin = new Selectable(putawayBinOptions);
         availablePutawayBin.editable();
@@ -216,7 +222,8 @@ public class ReceiveOrder extends LockeState {
                                     Inventory inventory = Engine.getInventory(foundPurchaseOrder.getShipTo()); //TODO Double check
                                     if(inventory == null){
                                         inventory = new Inventory(foundPurchaseOrder.getShipTo());
-                                        Pipe.save("STK", inventory);
+                                        inventory.setId(Constants.generateId(6));
+                                        Pipe.save("/STK", inventory);
                                     }
 
                                     for (int row = 0; row < receivedItems.getRowCount(); row++) {
@@ -239,7 +246,10 @@ public class ReceiveOrder extends LockeState {
 
                                         if(commitGrToLedger.isSelected()) {
                                             Location foundLocation = Engine.getLocationWithId(location);
-                                            Ledger l = Engine.getLedger(ledgerId.getSelectedValue());
+
+                                            Ledger l = Engine.hasLedger(foundLocation.getId());
+                                            if (l == null) l = Engine.getLedger(ledgerId.getSelectedValue());
+
                                             if (l != null) {
                                                 Transaction t = new Transaction();
                                                 t.setId(Constants.generateId(5));

@@ -29,7 +29,7 @@ public class ViewInventory extends LockeState implements RefreshListener {
 
     public ViewInventory(DesktopState desktop, String location) {
 
-        super("Location Inventory", "/STK", true, true, true, true);
+        super("Location Inventory", "/STK");
         setFrameIcon(new ImageIcon(ViewInventory.class.getResource("/icons/purchasereqs.png")));
         this.location = location;
         this.desktop = desktop;
@@ -78,8 +78,8 @@ public class ViewInventory extends LockeState implements RefreshListener {
                     i.getName(),
                     (sl.getQuantity()),
                     (sl.getQuantity()),
-                    Constants.formatUSD(i.getPrice()),
-                    Constants.formatUSD(i.getPrice() * sl.getQuantity()),
+                    i.getPrice(),
+                    sl.getValue(),
                     (sl.getQuantity() * i.getWeight()),
                     i.getWeightUOM(),
                     sl.getArea(),
@@ -126,7 +126,7 @@ public class ViewInventory extends LockeState implements RefreshListener {
             for(StockLine sl : Engine.getInventory(location).getStockLines()){
                 Item i = Engine.getItem(sl.getItem());
                 if(i != null){
-                    totalValue += sl.getValue();
+                    totalValue += sl.getQuantity() * i.getPrice();
                 }
             }
             JOptionPane.showMessageDialog(null, "$" + totalValue, "Inventory Valuation", JOptionPane.INFORMATION_MESSAGE);
@@ -174,7 +174,6 @@ public class ViewInventory extends LockeState implements RefreshListener {
                 "ID",
                 "Item",
                 "Name",
-                "Org. Qty.",
                 "Qty.",
                 "Price",
                 "Value",
@@ -192,7 +191,6 @@ public class ViewInventory extends LockeState implements RefreshListener {
                     sl.getId(),
                     sl.getItem(),
                     i.getName(),
-                    String.valueOf(sl.getQuantity()),
                     String.valueOf(sl.getQuantity()),
                     Constants.formatUSD(i.getPrice()),
                     Constants.formatUSD(i.getPrice() * sl.getQuantity()),

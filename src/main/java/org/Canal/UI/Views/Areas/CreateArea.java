@@ -37,7 +37,7 @@ public class CreateArea extends LockeState {
     public CreateArea(String location, DesktopState desktop, RefreshListener refreshListener) {
 
         super("New Area", "/AREAS/NEW", false, true, false, true);
-        setFrameIcon(new ImageIcon(CreateArea.class.getResource("/icons/areas.png")));
+        setFrameIcon(new ImageIcon(CreateArea.class.getResource("/icons/windows/areas.png")));
         this.location = location;
         this.desktop = desktop;
         this.refreshListener = refreshListener;
@@ -89,7 +89,7 @@ public class CreateArea extends LockeState {
         tb.add(review);
         tb.add(Box.createHorizontalStrut(5));
 
-        IconButton create = new IconButton("Create", "execute", "Refresh Data");
+        IconButton create = new IconButton("Create", "create", "Refresh Data");
         create.addActionListener(_ -> {
 
             Area newArea = new Area();

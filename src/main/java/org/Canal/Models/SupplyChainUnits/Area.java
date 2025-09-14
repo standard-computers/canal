@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class Area extends Objex {
 
-    private String location; //Location ID this are belongs to
+    private String location = ""; //Location ID this are belongs to
     private double width;
     private String widthUOM;
     private double length;
@@ -125,6 +125,19 @@ public class Area extends Objex {
 
     public void addBin(Bin newBin) {
         bins.add(newBin);
+    }
+
+    public void removeBin(Bin bin) {
+        bins.remove(bin);
+    }
+
+    public void removeBin(String binId) {
+        for(int i = 0; i < bins.size(); i++){
+            Bin bin = bins.get(i);
+            if(bin.getId().equals(binId)){
+                bins.remove(bin);
+            }
+        }
     }
 
     public boolean allowsInventory() {

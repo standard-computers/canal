@@ -7,6 +7,7 @@ import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.LockeStatus;
 import org.Canal.Utils.RefreshListener;
+import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -33,32 +34,36 @@ public class ViewPurchaseRequisition extends LockeState {
         this.refreshListener = refreshListener;
 
         CustomTabbedPane tabs = new CustomTabbedPane();
-        tabs.addTab("Header Information", headerInfo());
+        tabs.addTab("Header Information", general());
         tabs.addTab("Purchase Orders", purchaseOrders());
         tabs.addTab("Activity", activity());
+        tabs.addTab("Notes", notes());
 
         setLayout(new BorderLayout());
         add(tabs, BorderLayout.CENTER);
         add(headerPanel(), BorderLayout.NORTH);
     }
 
-    private JPanel headerInfo() {
+    private JPanel general() {
 
-        Form f = new Form();
-        f.addInput(Elements.coloredLabel("ID", UIManager.getColor("Label.foreground")), new Copiable(purchaseRequisition.getId()));
-        f.addInput(Elements.coloredLabel("Created", UIManager.getColor("Label.foreground")), new Copiable(purchaseRequisition.getCreated()));
-        f.addInput(Elements.coloredLabel("Creator (Owner)", UIManager.getColor("Label.foreground")),  new Copiable(purchaseRequisition.getOwner()));
-        f.addInput(Elements.coloredLabel("Purchase Req. #", UIManager.getColor("Label.foreground")),  new Copiable(purchaseRequisition.getNumber()));
-        f.addInput(Elements.coloredLabel("Supplier ID", UIManager.getColor("Label.foreground")),  new Copiable(purchaseRequisition.getSupplier()));
-        f.addInput(Elements.coloredLabel("Buyer", UIManager.getColor("Label.foreground")),  new Copiable(purchaseRequisition.getBuyer()));
-        f.addInput(Elements.coloredLabel("Max Spend", UIManager.getColor("Label.foreground")),  new Copiable(String.valueOf(purchaseRequisition.getMaxSpend())));
-        f.addInput(Elements.coloredLabel("Single Order?", UIManager.getColor("Label.foreground")),  new Copiable(String.valueOf(purchaseRequisition.isSingleOrder())));
-        f.addInput(Elements.coloredLabel("Valid From", UIManager.getColor("Label.foreground")),  new Copiable(purchaseRequisition.getStart()));
-        f.addInput(Elements.coloredLabel("To", UIManager.getColor("Label.foreground")),  new Copiable(purchaseRequisition.getEnd()));
-        f.addInput(Elements.coloredLabel("Notes", UIManager.getColor("Label.foreground")),  new Copiable(purchaseRequisition.getNotes()));
-        f.addInput(Elements.coloredLabel("Status", UIManager.getColor("Label.foreground")),  new Copiable(String.valueOf(purchaseRequisition.getStatus())));
-        f.addInput(Elements.coloredLabel("Created", UIManager.getColor("Label.foreground")),  new Copiable(purchaseRequisition.getCreated()));
-        return f;
+        JPanel general = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        Form form = new Form();
+        form.addInput(Elements.coloredLabel("ID", UIManager.getColor("Label.foreground")), new Copiable(purchaseRequisition.getId()));
+        form.addInput(Elements.coloredLabel("Created", UIManager.getColor("Label.foreground")), new Copiable(purchaseRequisition.getCreated()));
+        form.addInput(Elements.coloredLabel("Creator (Owner)", UIManager.getColor("Label.foreground")),  new Copiable(purchaseRequisition.getOwner()));
+        form.addInput(Elements.coloredLabel("Purchase Req. #", UIManager.getColor("Label.foreground")),  new Copiable(purchaseRequisition.getNumber()));
+        form.addInput(Elements.coloredLabel("Supplier ID", UIManager.getColor("Label.foreground")),  new Copiable(purchaseRequisition.getSupplier()));
+        form.addInput(Elements.coloredLabel("Buyer", UIManager.getColor("Label.foreground")),  new Copiable(purchaseRequisition.getBuyer()));
+        form.addInput(Elements.coloredLabel("Max Spend", UIManager.getColor("Label.foreground")),  new Copiable(String.valueOf(purchaseRequisition.getMaxSpend())));
+        form.addInput(Elements.coloredLabel("Single Order?", UIManager.getColor("Label.foreground")),  new Copiable(String.valueOf(purchaseRequisition.isSingleOrder())));
+        form.addInput(Elements.coloredLabel("Valid From", UIManager.getColor("Label.foreground")),  new Copiable(purchaseRequisition.getStart()));
+        form.addInput(Elements.coloredLabel("To", UIManager.getColor("Label.foreground")),  new Copiable(purchaseRequisition.getEnd()));
+        form.addInput(Elements.coloredLabel("Status", UIManager.getColor("Label.foreground")),  new Copiable(String.valueOf(purchaseRequisition.getStatus())));
+        form.addInput(Elements.coloredLabel("Created", UIManager.getColor("Label.foreground")),  new Copiable(purchaseRequisition.getCreated()));
+        general.add(form);
+
+        return form;
     }
 
     private JScrollPane purchaseOrders(){
@@ -76,7 +81,6 @@ public class ViewPurchaseRequisition extends LockeState {
                 "Vendor",
                 "Items",
                 "Net Value",
-                "Tax Rate",
                 "Tax Amount",
                 "Total",
                 "Status",
@@ -98,7 +102,6 @@ public class ViewPurchaseRequisition extends LockeState {
                         po.getVendor(),
                         po.getItems().size(),
                         po.getNetValue(),
-                        po.getTaxRate(),
                         po.getTaxAmount(),
                         po.getTotal(),
                         po.getStatus(),
@@ -197,5 +200,13 @@ public class ViewPurchaseRequisition extends LockeState {
 
         buttons.add(tb, BorderLayout.SOUTH);
         return buttons;
+    }
+
+    private RTextScrollPane notes() {
+
+        RTextScrollPane notes = Elements.simpleEditor();
+        notes.getTextArea().setText(purchaseRequisition.getNotes());
+        notes.getTextArea().setEditable(false);
+        return notes;
     }
 }

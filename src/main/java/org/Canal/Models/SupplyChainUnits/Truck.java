@@ -1,16 +1,21 @@
 package org.Canal.Models.SupplyChainUnits;
 
 import org.Canal.Models.Objex;
+import org.Canal.Start;
+import org.Canal.Utils.Engine;
+import org.Canal.Utils.Pipe;
+
+import java.io.File;
 
 public class Truck extends Objex {
 
-    private String number = "N/A";
-    private String carrier;
-    private String driver = "UNASSIGNED";
-    private String year = "UKNOWN";
-    private String make = "UKNOWN";
-    private String model = "UKNOWN";
-    private String notes = "NONE";
+    private String number = "N/A"; //Actual Truck Number
+    private String carrier; //Carrier ID
+    private String driver = ""; //Person ID
+    private String year = "";
+    private String make = "";
+    private String model = "";
+    private String delivery = ""; //Delivery ID (IDO or ODO)
 
     public String getNumber() {
         return number;
@@ -60,11 +65,31 @@ public class Truck extends Objex {
         this.model = model;
     }
 
-    public String getNotes() {
-        return notes;
+    public String getDelivery() {
+        return delivery;
     }
 
-    public void setNotes(String notes) {
-        this.notes = notes;
+    public void setDelivery(String delivery) {
+        this.delivery = delivery;
+    }
+
+    public void save() {
+        if (Engine.getConfiguration().getMongodb().isEmpty()) {
+
+            File md = new File(Start.DIR + "\\.store\\TRANS\\TRCKS\\");
+            File[] mdf = md.listFiles();
+            if (mdf != null) {
+                for (File file : mdf) {
+                    if (file.getPath().endsWith(".trans.trcks")) {
+                        BillOfMaterials fl = Pipe.load(file.getPath(), BillOfMaterials.class);
+                        if (fl.getId().equals(id)) {
+                            Pipe.export(file.getPath(), this);
+                        }
+                    }
+                }
+            }
+        } else {
+            Pipe.save("TRANS/TRCKS", this);
+        }
     }
 }

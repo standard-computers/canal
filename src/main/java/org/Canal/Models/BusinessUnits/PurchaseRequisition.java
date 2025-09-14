@@ -17,7 +17,6 @@ public class PurchaseRequisition extends Objex {
     private boolean isSingleOrder;
     private String start;
     private String end;
-    private String notes;
     private ArrayList<OrderLineItem> items = new ArrayList<>();
 
     public String getSupplier() {
@@ -74,14 +73,6 @@ public class PurchaseRequisition extends Objex {
 
     public void setEnd(String end) {
         this.end = end;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
     }
 
     public ArrayList<OrderLineItem> getItems() {

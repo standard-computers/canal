@@ -18,16 +18,30 @@ import java.util.Set;
  */
 public class AutoMakeBins extends LockeState {
 
+    //General Info
     private JTextField idField;
     private JTextField nameField;
     private JTextField binCount;
+
+    //Dimensional Tab
     private UOMField widthField;
     private UOMField lengthField;
     private UOMField heightField;
     private UOMField weightField;
+
+    //Areas Tab
     private JPanel checkboxPanel;
     private ArrayList<Area> areas;
     private ArrayList<JCheckBox> checkboxes;
+
+    //Controls Tab
+    private JCheckBox autoReplenish;
+    private JCheckBox fixedBin;
+    private JCheckBox doesGoodsIssue;
+    private JCheckBox doesGoodsReceipt;
+    private JCheckBox pickingEnabled;
+    private JCheckBox putawayEnabled;
+    private JCheckBox holdsStock;
 
     public AutoMakeBins() {
 
@@ -44,7 +58,26 @@ public class AutoMakeBins extends LockeState {
         JScrollPane js = new JScrollPane(checkboxPanel);
         js.setPreferredSize(new Dimension(200, 200));
         JPanel selector = new JPanel(new BorderLayout());
+
         JTextField search = Elements.input();
+        search.addActionListener(_ -> {
+
+            String searchValue = search.getText().trim();
+            if (searchValue.endsWith("*")) { //Searching for ID starts with
+                for (JCheckBox checkbox : checkboxes) {
+                    if (checkbox.getText().startsWith(searchValue.substring(0, searchValue.length() - 1))) {
+                        checkbox.setSelected(!checkbox.isSelected());
+                    }
+                }
+            } else { //Select exact match
+                for (JCheckBox checkbox : checkboxes) {
+                    if (checkbox.getText().equals(searchValue)) {
+                        checkbox.setSelected(!checkbox.isSelected());
+                    }
+                }
+            }
+        });
+
         selector.add(search, BorderLayout.NORTH);
         selector.add(js, BorderLayout.CENTER);
         JPanel opts = new JPanel(new GridLayout(1, 2));
@@ -64,6 +97,7 @@ public class AutoMakeBins extends LockeState {
         tabs.addTab("Areas", selector);
         tabs.addTab("General", general());
         tabs.addTab("Dimensional", dimensional());
+        tabs.addTab("Controls", controls());
 
         setLayout(new BorderLayout());
         selector.add(opts, BorderLayout.SOUTH);
@@ -79,6 +113,30 @@ public class AutoMakeBins extends LockeState {
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
 
         IconButton copyFrom = new IconButton("Copy From", "open", "Copy from Bin");
+        copyFrom.addActionListener(_ -> {
+            String binId = JOptionPane.showInputDialog("Bin ID", "Bin ID");
+            Bin bin = Engine.getBin(binId);
+            if (bin == null) {
+                return;
+            } else {
+                widthField.setValue(String.valueOf(bin.getWidth()));
+                widthField.setUOM(bin.getWidthUOM());
+                lengthField.setValue(String.valueOf(bin.getLength()));
+                lengthField.setUOM(bin.getLengthUOM());
+                heightField.setValue(String.valueOf(bin.getHeight()));
+                heightField.setUOM(bin.getHeightUOM());
+                weightField.setValue(String.valueOf(bin.getWeight()));
+                weightField.setUOM(bin.getWeightUOM());
+                autoReplenish.setSelected(bin.isAuto_replenish());
+                fixedBin.setSelected(bin.isFixed());
+                putawayEnabled.setSelected(bin.isPutaway());
+                pickingEnabled.setSelected(bin.isPicking());
+                doesGoodsIssue.setSelected(bin.doesGI());
+                doesGoodsReceipt.setSelected(bin.doesGR());
+                holdsStock.setSelected(bin.isHoldsStock());
+            }
+
+        });
         tb.add(Box.createHorizontalStrut(5));
         tb.add(copyFrom);
 
@@ -94,9 +152,9 @@ public class AutoMakeBins extends LockeState {
                 if (checkbox.isSelected()) {
 
                     Area a = Engine.getArea(checkbox.getActionCommand());
-                    if(a != null){
+                    if (a != null) {
 
-                        for(int i = 1; i <= Integer.parseInt(binCount.getText()); i++){
+                        for (int i = 1; i <= Integer.parseInt(binCount.getText()); i++) {
 
                             Bin b = new Bin();
                             b.setId(idField.getText().trim()
@@ -118,6 +176,15 @@ public class AutoMakeBins extends LockeState {
 
                             b.setWeight(Double.parseDouble(weightField.getValue()));
                             b.setWeightUOM(weightField.getUOM());
+
+                            b.setAuto_replenish(autoReplenish.isSelected());
+                            b.setFixed(fixedBin.isSelected());
+                            b.setPutaway(putawayEnabled.isSelected());
+                            b.setPicking(pickingEnabled.isSelected());
+                            b.setGoodsissue(doesGoodsIssue.isSelected());
+                            b.setGoodsreceipt(doesGoodsReceipt.isSelected());
+                            b.setHoldsStock(holdsStock.isSelected());
+
                             a.addBin(b);
                         }
                     }
@@ -135,7 +202,7 @@ public class AutoMakeBins extends LockeState {
         return toolbar;
     }
 
-    private JPanel general(){
+    private JPanel general() {
 
         JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
@@ -168,7 +235,7 @@ public class AutoMakeBins extends LockeState {
         }
     }
 
-    private JPanel dimensional(){
+    private JPanel dimensional() {
 
         JPanel dimensional = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
@@ -185,5 +252,31 @@ public class AutoMakeBins extends LockeState {
         dimensional.add(f);
 
         return dimensional;
+    }
+
+    private JPanel controls() {
+
+        JPanel controls = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        doesGoodsIssue = new JCheckBox("GI on stock removal");
+        doesGoodsReceipt = new JCheckBox("GR on put away");
+        pickingEnabled = new JCheckBox("Allow picks from this bin");
+        putawayEnabled = new JCheckBox("Allow put away to this bin");
+        autoReplenish = new JCheckBox("Auto Replenish");
+        fixedBin = new JCheckBox("Fixed Bin");
+        fixedBin.setToolTipText("Bin can only contain one Item ID");
+        holdsStock = new JCheckBox("Bin can hold inventory");
+
+        Form form = new Form();
+        form.addInput(Elements.coloredLabel("Goods Issue", UIManager.getColor("Label.foreground")), doesGoodsIssue);
+        form.addInput(Elements.coloredLabel("Goods Receipt", UIManager.getColor("Label.foreground")), doesGoodsReceipt);
+        form.addInput(Elements.coloredLabel("Picking Enabled", UIManager.getColor("Label.foreground")), pickingEnabled);
+        form.addInput(Elements.coloredLabel("Putaway Enabled", UIManager.getColor("Label.foreground")), putawayEnabled);
+        form.addInput(Elements.coloredLabel("Auto Replenish", UIManager.getColor("Label.foreground")), autoReplenish);
+        form.addInput(Elements.coloredLabel("Fixed Bin", UIManager.getColor("Label.foreground")), fixedBin);
+        form.addInput(Elements.coloredLabel("Holds Stock", UIManager.getColor("Label.foreground")), holdsStock);
+        controls.add(form);
+
+        return controls;
     }
 }

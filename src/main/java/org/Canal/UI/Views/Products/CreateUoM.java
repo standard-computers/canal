@@ -13,7 +13,7 @@ public class CreateUoM extends LockeState {
     public CreateUoM(Includer includer) {
 
         super("Create Unit of Measure", "/", false, true, false, true);
-        setFrameIcon(new ImageIcon(CreateUoM.class.getResource("/icons/locke.png")));
+        setFrameIcon(new ImageIcon(CreateUoM.class.getResource("/icons/windows/locke.png")));
 
         Form f = new Form();
 
@@ -33,7 +33,7 @@ public class CreateUoM extends LockeState {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 dispose();
-                includer.commitUoM(uomField.getSelectedValue(), baseQty.getText(), baseQtyUomField.getSelectedValue());
+                includer.commitUoM(uomField.getSelectedValue(), Double.parseDouble(baseQty.getText()), baseQtyUomField.getSelectedValue());
             }
         });
     }

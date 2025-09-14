@@ -1,6 +1,5 @@
 package org.Canal.UI.Elements;
 
-
 import javax.swing.*;
 import java.util.ArrayList;
 

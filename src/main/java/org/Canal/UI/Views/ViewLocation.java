@@ -38,7 +38,7 @@ public class ViewLocation extends LockeState implements RefreshListener {
     public ViewLocation(Location location, DesktopState desktop) {
 
         super(location.getId() + " – " + location.getName(), location.getType() + "/" + location.getId());
-        setFrameIcon(new ImageIcon(ViewLocation.class.getResource("/icons/" + Engine.codex(location.getType().replace("/", ""), "icon") + ".png")));
+        setFrameIcon(new ImageIcon(ViewLocation.class.getResource("/icons/windows/" + Engine.codex(location.getType().replace("/", ""), "icon") + ".png")));
         this.location = location;
         this.desktop = desktop;
 
@@ -269,7 +269,7 @@ public class ViewLocation extends LockeState implements RefreshListener {
 
         IconButton label = new IconButton("Labels", "label", "Print labels for properties");
         tb.add(label);
-        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
+        tb.add(Box.createHorizontalStrut(5));
 
         IconButton refresh = new IconButton("Refresh", "refresh", "Refresh data");
         tb.add(refresh);
@@ -306,7 +306,7 @@ public class ViewLocation extends LockeState implements RefreshListener {
         Locke[] bins = new Locke[binCount];
         for (int i = 0; i < bs.size(); i++) {
             Bin b = bs.get(i);
-            bins[i] = new Locke(b.getId() + " - " + b.getName(), UIManager.getIcon("FileView.fileIcon"), "/BNS/" + b.getId(), Constants.colors[1], null);
+            bins[i] = new Locke(b.getId(), UIManager.getIcon("FileView.fileIcon"), "/BNS/" + b.getId(), Constants.colors[1], null);
         }
         Locke[] customers = new Locke[Engine.getLocations(location.getOrganization(), "CSTS").size()];
         for (int i = 0; i < Engine.getLocations(location.getOrganization(), "CSTS").size(); i++) {

@@ -29,7 +29,7 @@ public class Employees extends LockeState implements RefreshListener {
     public Employees(DesktopState desktop) {
 
         super("Employees", "/EMPS", true, true, true, true);
-        setFrameIcon(new ImageIcon(Employees.class.getResource("/icons/employees.png")));
+        setFrameIcon(new ImageIcon(Employees.class.getResource("/icons/windows/employees.png")));
         this.desktop = desktop;
 
         JPanel holder = new JPanel(new BorderLayout());
@@ -112,6 +112,7 @@ public class Employees extends LockeState implements RefreshListener {
                 "ID",
                 "Org",
                 "Location",
+                "Nickname",
                 "First Name",
                 "Middle Name",
                 "Last Name",
@@ -139,6 +140,7 @@ public class Employees extends LockeState implements RefreshListener {
                     employee.getId(),
                     employee.getOrg(),
                     employee.getLocation(),
+                    employee.getName(),
                     employee.getFirstName(),
                     employee.getMiddleName(),
                     employee.getLastName(),

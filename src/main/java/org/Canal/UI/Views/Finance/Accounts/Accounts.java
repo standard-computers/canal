@@ -31,7 +31,7 @@ public class Accounts extends LockeState implements RefreshListener {
     public Accounts(DesktopState desktop) {
 
         super("Accounts", "/ACCS", true, true, true, true);
-        setFrameIcon(new ImageIcon(Accounts.class.getResource("/icons/employees.png")));
+        setFrameIcon(new ImageIcon(Accounts.class.getResource("/icons/windows/locke.png")));
         this.desktop = desktop;
 
         JPanel holder = new JPanel(new BorderLayout());

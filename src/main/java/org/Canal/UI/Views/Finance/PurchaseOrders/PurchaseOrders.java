@@ -8,6 +8,7 @@ import org.Canal.UI.Elements.LockeState;
 import org.Canal.UI.Views.System.CheckboxBarcodeFrame;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
+import org.Canal.Utils.LockeStatus;
 import org.Canal.Utils.RefreshListener;
 
 import javax.swing.*;
@@ -126,24 +127,30 @@ public class PurchaseOrders extends LockeState implements RefreshListener {
                 "Status",
         };
         ArrayList<Object[]> pos = new ArrayList<>();
+
         for (PurchaseOrder po : Engine.getPurchaseOrders()) {
-            pos.add(new Object[]{
-                    po.getOrderId(),
-                    po.getOwner(),
-                    po.getOrderedOn(),
-                    po.getExpectedDelivery(),
-                    po.getPurchaseRequisition(),
-                    po.getVendor(),
-                    po.getShipTo(),
-                    po.getBillTo(),
-                    po.getSoldTo(),
-                    po.getCustomer(),
-                    po.getTotal(),
-                    po.getItems().size(),
-                    po.getTotalItems(),
-                    po.getCreated(),
-                    String.valueOf(po.getStatus())
-            });
+            if(!po.getStatus().equals(LockeStatus.DELIVERED)
+                    && !po.getStatus().equals(LockeStatus.ARCHIVED)
+                    && !po.getStatus().equals(LockeStatus.DELETED)){
+
+                pos.add(new Object[]{
+                        po.getOrderId(),
+                        po.getOwner(),
+                        po.getOrderedOn(),
+                        po.getExpectedDelivery(),
+                        po.getPurchaseRequisition(),
+                        po.getVendor(),
+                        po.getShipTo(),
+                        po.getBillTo(),
+                        po.getSoldTo(),
+                        po.getCustomer(),
+                        po.getTotal(),
+                        po.getItems().size(),
+                        po.getTotalItems(),
+                        po.getCreated(),
+                        String.valueOf(po.getStatus())
+                });
+            }
         }
         CustomTable nt = new CustomTable(columns, pos);
         nt.addMouseListener(new MouseAdapter() {

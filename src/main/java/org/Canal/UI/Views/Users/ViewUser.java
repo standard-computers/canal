@@ -28,7 +28,7 @@ public class ViewUser extends LockeState {
     public ViewUser(DesktopState desktop, User user) {
 
         super("Users / " + user.getId(), "/USRS/" + user.getId(), false, true, false, true);
-        setFrameIcon(new ImageIcon(ViewUser.class.getResource("/icons/employees.png")));
+        setFrameIcon(new ImageIcon(ViewUser.class.getResource("/icons/windows/users.png")));
         this.desktop = desktop;
         this.user = user;
 
@@ -40,9 +40,11 @@ public class ViewUser extends LockeState {
         userInfo.add(vnl);
         userInfo.add(vil);
         userInfo.add(buttonBar());
+
         JPanel p = new JPanel(new BorderLayout());
         p.add(Elements.header(emp.getName(), SwingConstants.LEFT), BorderLayout.NORTH);
         p.add(userInfo, BorderLayout.CENTER);
+
         add(p, BorderLayout.NORTH);
         JTable table = table();
         JScrollPane accessHolder = new JScrollPane(table);
@@ -53,12 +55,16 @@ public class ViewUser extends LockeState {
 
         JPanel buttonBar = new JPanel(new FlowLayout(FlowLayout.LEFT));
         buttonBar.setLayout(new FlowLayout(FlowLayout.LEFT));
+
         IconButton modify = new IconButton("Modify", "modify", "Modify User");
-        IconButton viewEmployee = new IconButton("View Employee", "employees", "View Attached Employee");
-        IconButton suspend = new IconButton("Suspend", "suspend", "Suspend User");
         buttonBar.add(modify);
+
+        IconButton viewEmployee = new IconButton("View Employee", "employees", "View Attached Employee");
         buttonBar.add(viewEmployee);
+
+        IconButton suspend = new IconButton("Suspend", "suspend", "Suspend User");
         buttonBar.add(suspend);
+
         modify.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -82,7 +88,6 @@ public class ViewUser extends LockeState {
         }
         JTable table = new JTable(data, columns);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        Engine.adjustColumnWidths(table);
         return table;
     }
 }

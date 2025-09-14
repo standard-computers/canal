@@ -84,124 +84,157 @@ public class ConvertPurchaseRequisitions extends LockeState {
         IconButton automake = new IconButton("Convert Purchase Reqs", "start", "AutoMake");
         automake.addActionListener(_ -> {
 
-            int selected = 0;
-            for (JCheckBox cb : checkboxes) {
-                if (cb.isSelected()) selected++;
-            }
-
-            Loading loader = new Loading("", selected * 4);
-            loader.open();
-            loader.setVisible(true);
-
+            // 1) Gather selection & do quick validations on the EDT
+            java.util.List<Integer> selectedIdxs = new java.util.ArrayList<>();
             for (int i = 0; i < checkboxes.size(); i++) {
-
-                JCheckBox checkbox = checkboxes.get(i);
-                if (checkbox.isSelected()) {
-
-
-                    PurchaseOrder purchaseOrder = new PurchaseOrder();
-                    if (expectedDelivery.getSelectedDate() == null) {
-                        JOptionPane.showMessageDialog(null, "Must select a delivery date.", "Error", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-
-                    PurchaseRequisition purchaseRequisition = purchaseRequisitions.get(i);
-
-                    String purchaseOrderId = Engine.generateId("ORDS/PO");
-                    purchaseOrder.setId(purchaseOrderId);
-                    purchaseOrder.setOrderId(purchaseOrderId);
-                    purchaseOrder.setCreator("ORDS/PR/PO");
-                    purchaseOrder.setOwner(Engine.getAssignedUser().getId());
-                    purchaseOrder.setOrderedOn(Constants.now());
-                    purchaseOrder.setExpectedDelivery(expectedDelivery.getSelectedDateString());
-                    purchaseOrder.setPurchaseRequisition(purchaseRequisition.getId());
-                    purchaseOrder.setBillTo(purchaseRequisition.getBuyer());
-                    purchaseOrder.setShipTo(purchaseRequisition.getBuyer());
-                    purchaseOrder.setCustomer(purchaseRequisition.getBuyer());
-                    purchaseOrder.setVendor(purchaseRequisition.getSupplier());
-                    purchaseOrder.setItems(purchaseRequisition.getItems());
-
-                    double netValue = 0.0;
-
-                    if(purchaseRequisition.getItems().isEmpty()){
-                        purchaseOrder.setNetValue(netValue);
-                    }else{
-                        for(OrderLineItem oi : purchaseRequisition.getItems()){
-                            netValue += (oi.getQuantity() * oi.getPrice());
-                        }
-                        purchaseOrder.setNetValue(netValue);
-                    }
-
-                    double purchaseOrderTotal = netValue;
-                    //TODO Do Taxes & Rates
-                    purchaseOrder.setTotal(purchaseOrderTotal);
-
-                    loader.increment();
-                    loader.append("Creating Purchase Order " + purchaseOrderId + " for " + purchaseRequisition.getId());
-                    loader.setMessage("Creating Purchase Order " + purchaseOrderId + " for " + purchaseRequisition.getId());
-                    Pipe.save("ORDS/PO", purchaseOrder);
-
-                    if(createDelivery.isSelected()){
-                        Truck t = new Truck();
-                        String truckId = Engine.generateId("TRANS/TRCKS");
-                        t.setId(truckId);
-                        t.setNumber(truckId);
-                        t.setCarrier(carriers.getSelectedValue());
-                        loader.increment();
-                        loader.append("Creating Truck " + truckId + " for " + purchaseOrderId);
-                        loader.setMessage("Creating Truck " + truckId + " for " + purchaseOrderId);
-                        Pipe.save("/TRANS/TRCKS", t);
-
-                        Delivery d = new Delivery();
-                        String inboundDeliveryId = Engine.generateId("TRANS/IDO");
-                        d.setType("IDO");
-                        d.setId(inboundDeliveryId);
-                        d.setPurchaseOrder(purchaseOrder.getId());
-                        d.setExpectedDelivery(purchaseOrder.getExpectedDelivery());
-                        d.setDestination(purchaseOrder.getShipTo());
-                        d.setStatus(LockeStatus.PROCESSING);
-                        loader.increment();
-                        loader.append("Creating Inbound Delivery " + inboundDeliveryId + " for " + purchaseOrderId);
-                        loader.setMessage("Creating Inbound Delivery " + inboundDeliveryId + " for " + purchaseOrderId);
-                        Pipe.save("/TRANS/IDO", d);
-                    }
-
-                    if (commitToLedger.isSelected()) {
-                        Ledger l = Engine.getLedger(ledgerId.getSelectedValue());
-                        if (l != null) {
-                            Location billToLocation = Engine.getLocationWithId(purchaseOrder.getBillTo());
-                            Transaction t = new Transaction();
-                            t.setId(Constants.generateId(5));
-                            t.setCreator(getLocke());
-                            t.setOwner(Engine.getAssignedUser().getId());
-                            t.setLocke(getLocke());
-                            t.setObjex(billToLocation.getType());
-                            t.setLocation(purchaseOrder.getBillTo());
-                            t.setReference(purchaseOrderId);
-                            t.setAmount(-1 * purchaseOrder.getTotal());
-                            t.setCommitted(Constants.now());
-                            t.setStatus(LockeStatus.PROCESSING);
-                            l.addTransaction(t);
-                            loader.increment();
-                            loader.append("Creating Transaction " + t.getId() + " for " + purchaseOrderId);
-                            loader.setMessage("Creating Transaction " + t.getId() + " for " + purchaseOrderId);
-                            l.save();
-                        } else {
-                            JOptionPane.showMessageDialog(null, "No such ledger.", "Error", JOptionPane.ERROR_MESSAGE);
-                        }
-                    }
-                    loader.increment();
-                    loader.append("Updating status of Purchase Requisition to COMPLETED for " + purchaseRequisition.getId());
-                    loader.setMessage("Updating status of Purchase Requisition to COMPLETED for " + purchaseRequisition.getId());
-                    purchaseRequisition.setStatus(LockeStatus.COMPLETED);
-                    purchaseRequisition.save();
-                }
+                if (checkboxes.get(i).isSelected()) selectedIdxs.add(i);
             }
-            desktop.put(new PurchaseOrders(desktop));
-            loader.close();
-            dispose();
-            JOptionPane.showMessageDialog(null, "Conversion of Purchase Reqs Complete");
+            if (selectedIdxs.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "There are no purchase requisitions selected!");
+                return;
+            }
+            if (expectedDelivery.getSelectedDate() == null) {
+                JOptionPane.showMessageDialog(null, "Must select a delivery date.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // 2) Show the loader
+            Loading loader = new Loading("Converting Purchase Requisitions", selectedIdxs.size() * 4);
+            loader.setConsoleVisible(true);
+            loader.open();
+
+            // 3) Run heavy work off the EDT
+            SwingWorker<Void, String> worker = new SwingWorker<>() {
+
+                private void ui(Runnable r) { SwingUtilities.invokeLater(r); } // helper
+
+                @Override
+                protected Void doInBackground() {
+                    for (int idx : selectedIdxs) {
+                        JCheckBox checkbox = checkboxes.get(idx);
+                        if (!checkbox.isSelected()) continue; // guard if user toggles mid-run
+
+                        PurchaseRequisition purchaseRequisition = purchaseRequisitions.get(idx);
+
+                        // --- Create PO ---
+                        String purchaseOrderId = Engine.generateId("ORDS/PO");
+                        PurchaseOrder purchaseOrder = new PurchaseOrder();
+                        purchaseOrder.setId(purchaseOrderId);
+                        purchaseOrder.setOrderId(purchaseOrderId);
+                        purchaseOrder.setCreator("ORDS/PR/PO");
+                        purchaseOrder.setOwner(Engine.getAssignedUser().getId());
+                        purchaseOrder.setOrderedOn(Constants.now());
+                        purchaseOrder.setExpectedDelivery(expectedDelivery.getSelectedDateString());
+                        purchaseOrder.setPurchaseRequisition(purchaseRequisition.getId());
+                        purchaseOrder.setBillTo(purchaseRequisition.getBuyer());
+                        purchaseOrder.setShipTo(purchaseRequisition.getBuyer());
+                        purchaseOrder.setCustomer(purchaseRequisition.getBuyer());
+                        purchaseOrder.setVendor(purchaseRequisition.getSupplier());
+                        purchaseOrder.setItems(purchaseRequisition.getItems());
+
+                        double netValue = 0.0;
+                        if (!purchaseRequisition.getItems().isEmpty()) {
+                            for (OrderLineItem oi : purchaseRequisition.getItems()) {
+                                netValue += (oi.getQuantity() * oi.getPrice());
+                            }
+                        }
+                        purchaseOrder.setNetValue(netValue);
+                        purchaseOrder.setTotal(netValue); // TODO: taxes/rates
+
+                        Pipe.save("ORDS/PO", purchaseOrder);
+                        ui(() -> {
+                            loader.append("Creating Purchase Order " + purchaseOrderId + " for " + purchaseRequisition.getId());
+                            loader.setMessage("Creating Purchase Order " + purchaseOrderId + "…");
+                            loader.increment();
+                        });
+
+                        // --- Optional: Delivery ---
+                        if (createDelivery.isSelected()) {
+                            Truck t = new Truck();
+                            String truckId = Engine.generateId("TRANS/TRCKS");
+                            t.setId(truckId);
+                            t.setNumber(truckId);
+                            t.setCarrier(carriers.getSelectedValue());
+                            Pipe.save("/TRANS/TRCKS", t);
+                            ui(() -> {
+                                loader.append("Creating Truck " + truckId + " for " + purchaseOrderId);
+                                loader.setMessage("Creating Truck " + truckId + "…");
+                                loader.increment();
+                            });
+
+                            Delivery d = new Delivery();
+                            String inboundDeliveryId = Engine.generateId("TRANS/IDO");
+                            d.setType("IDO");
+                            d.setId(inboundDeliveryId);
+                            d.setPurchaseOrder(purchaseOrder.getId());
+                            d.setExpectedDelivery(purchaseOrder.getExpectedDelivery());
+                            d.setDestination(purchaseOrder.getShipTo());
+                            d.setStatus(LockeStatus.PROCESSING);
+                            Pipe.save("/TRANS/IDO", d);
+                            ui(() -> {
+                                loader.append("Creating Inbound Delivery " + inboundDeliveryId + " for " + purchaseOrderId);
+                                loader.setMessage("Creating Inbound Delivery " + inboundDeliveryId + "…");
+                                loader.increment();
+                            });
+                        }
+
+                        // --- Optional: Ledger ---
+                        if (commitToLedger.isSelected()) {
+                            Ledger l = Engine.hasLedger(purchaseRequisition.getBuyer());
+                            if (l == null) l = Engine.getLedger(ledgerId.getSelectedValue());
+
+                            if (l != null) {
+                                Location billToLocation = Engine.getLocationWithId(purchaseOrder.getBillTo());
+                                Transaction t = new Transaction();
+                                t.setId(Constants.generateId(5));
+                                t.setCreator(getLocke());
+                                t.setOwner(Engine.getAssignedUser().getId());
+                                t.setLocke(getLocke());
+                                t.setObjex(billToLocation.getType());
+                                t.setLocation(purchaseOrder.getBillTo());
+                                t.setReference(purchaseOrderId);
+                                t.setAmount(-1 * purchaseOrder.getTotal());
+                                t.setCommitted(Constants.now());
+                                t.setStatus(LockeStatus.PROCESSING);
+                                l.addTransaction(t);
+                                l.save();
+                                ui(() -> {
+                                    loader.append("Creating Transaction " + t.getId() + " for " + purchaseOrderId);
+                                    loader.setMessage("Creating Transaction " + t.getId() + "…");
+                                    loader.increment();
+                                });
+                            } else {
+                                // Surface the error back on the EDT
+                                ui(() -> JOptionPane.showMessageDialog(null, "No such ledger.", "Error", JOptionPane.ERROR_MESSAGE));
+                            }
+                        }
+
+                        // --- Finalize PR ---
+                        purchaseRequisition.setStatus(LockeStatus.COMPLETED);
+                        purchaseRequisition.save();
+                        ui(() -> {
+                            loader.append("Updated " + purchaseRequisition.getId() + " → COMPLETED");
+                            loader.setMessage("Finalizing " + purchaseRequisition.getId() + "…");
+                            loader.increment();
+                        });
+                    }
+                    return null;
+                }
+
+                @Override
+                protected void done() {
+                    SwingUtilities.invokeLater(() -> {
+                        desktop.put(new PurchaseOrders(desktop));
+                        loader.close();
+                        dispose();
+                        JOptionPane.showMessageDialog(null, "Conversion of Purchase Reqs Complete");
+                    });
+                }
+            };
+
+            worker.execute();
         });
+
         tb.add(automake);
         tb.setBorder(new EmptyBorder(5, 5, 5, 5));
 

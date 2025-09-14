@@ -68,7 +68,7 @@ public class CreateEmployee extends LockeState {
         tb.add(review);
         tb.add(Box.createHorizontalStrut(5));
 
-        IconButton create = new IconButton("Create", "execute", "Refresh Data");
+        IconButton create = new IconButton("Create", "create", "Refresh Data");
         create.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
 

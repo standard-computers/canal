@@ -25,7 +25,7 @@ public class ViewEmployee extends LockeState {
     public ViewEmployee(Employee employee, DesktopState desktop, RefreshListener refreshListener) {
 
         super(employee.getId() + " - " + employee.getName(), "/EMPS/" + employee.getId(), false, true, false, true);
-        setFrameIcon(new ImageIcon(Employees.class.getResource("/icons/employees.png")));
+        setFrameIcon(new ImageIcon(Employees.class.getResource("/icons/windows/employees.png")));
         this.employee = employee;
         this.desktop = desktop;
         this.refreshListener = refreshListener;
@@ -57,6 +57,7 @@ public class ViewEmployee extends LockeState {
     }
 
     private JPanel toolbar() {
+
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
 
@@ -64,7 +65,7 @@ public class ViewEmployee extends LockeState {
             if(!employee.getEmail().isEmpty()){
 
                 IconButton email = new IconButton("Email", "email", "Email Employee");
-                email.addActionListener(e -> {
+                email.addActionListener(_ -> {
                     try {
                         String mailto = "mailto:" + employee.getEmail();
                         Desktop.getDesktop().mail(new java.net.URI(mailto));
@@ -91,7 +92,7 @@ public class ViewEmployee extends LockeState {
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton modify = new IconButton("Modify", "modify", "Modify Employee");
-        modify.addActionListener(e -> {
+        modify.addActionListener(_ -> {
             dispose();
             desktop.put(new ModifyEmployee(employee, desktop, refreshListener));
         });
@@ -99,7 +100,7 @@ public class ViewEmployee extends LockeState {
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton suspend = new IconButton("Suspend", "blocked", "Suspend Employee");
-        suspend.addActionListener(e -> {
+        suspend.addActionListener(_ -> {
             employee.setStatus(LockeStatus.SUSPENDED);
             employee.save();
         });

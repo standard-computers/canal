@@ -29,29 +29,25 @@ public class Areas extends LockeState implements RefreshListener {
     private CustomTable table;
     private ArrayList<Area> areas;
 
-    public Areas(DesktopState desktop) {
-        super("Areas", "/AREAS", true, true, true, true);
-        setFrameIcon(new ImageIcon(Areas.class.getResource("/icons/areas.png")));
+    public Areas(ArrayList<Area> areas, DesktopState desktop) {
+
+        super("Areas", "/AREAS");
+        setFrameIcon(new ImageIcon(Areas.class.getResource("/icons/windows/areas.png")));
         this.desktop = desktop;
+        this.areas = areas;
 
-        // initial data
-        areas = Engine.getAreas();
-
-        // ----- NORTH: header + toolbar
         holder = new JPanel(new BorderLayout());
         headerComp = Elements.header(headerText(areas.size()), SwingConstants.LEFT);
         holder.add(headerComp, BorderLayout.CENTER);
         holder.add(toolbar(), BorderLayout.SOUTH);
 
-        // ----- CENTER: table + details
-        table = buildTable();
+        table = table();
         tableScroll = new JScrollPane(table);
 
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);
 
-        JSplitPane splitPane =
-                new JSplitPane(JSplitPane.VERTICAL_SPLIT, tableScroll, details());
+        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tableScroll, details());
         splitPane.setDividerLocation(250);
         splitPane.setResizeWeight(0.5);
         add(splitPane, BorderLayout.CENTER);
@@ -84,7 +80,7 @@ public class Areas extends LockeState implements RefreshListener {
 
         IconButton openSelected = new IconButton("Open", "open", "Open selected");
         openSelected.addActionListener(_ -> {
-            // Prefer the currently selected row; fall back to prompt
+
             int viewRow = table.getSelectedRow();
             String id = null;
             if (viewRow >= 0) {
@@ -160,8 +156,8 @@ public class Areas extends LockeState implements RefreshListener {
         tb.add(autoMakeBins);
         tb.add(Box.createHorizontalStrut(5));
 
-        IconButton labels = new IconButton("Labels", "label", "Print barcode for an Area");
-        tb.add(labels);
+        IconButton find = new IconButton("Find", "find", "Find Areas");
+        tb.add(find);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton print = new IconButton("Print", "print", "Print selected");
@@ -176,15 +172,28 @@ public class Areas extends LockeState implements RefreshListener {
         return tb;
     }
 
-    private CustomTable buildTable() {
+    private CustomTable table() {
         String[] columns = new String[]{
-                "ID", "Location", "Name",
-                "Width", "Width UOM",
-                "Length", "Length UOM",
-                "Height", "Height UOM",
-                "Area", "Area UOM",
-                "Volume", "Volume UOM",
-                "Σ Bins", "Status", "Created"
+                "ID",
+                "Location",
+                "Name",
+                "Width",
+                "Width UOM",
+                "Length",
+                "Length UOM",
+                "Height",
+                "Height UOM",
+                "Area",
+                "Area UOM",
+                "Volume",
+                "Volume UOM",
+                "Σ Bins",
+                "Allows Inv.",
+                "Allows Prod.",
+                "Allows Sales",
+                "Allows Purchasing",
+                "Status",
+                "Created"
         };
 
         ArrayList<Object[]> data = new ArrayList<>();
@@ -204,6 +213,10 @@ public class Areas extends LockeState implements RefreshListener {
                     area.getVolume(),
                     area.getVolumeUOM(),
                     area.getBins().size(),
+                    area.allowsInventory(),
+                    area.allowsProduction(),
+                    area.allowsSales(),
+                    area.allowsPurchasing(),
                     area.getStatus(),
                     area.getCreated(),
             });
@@ -219,12 +232,8 @@ public class Areas extends LockeState implements RefreshListener {
                     if (viewRow != -1) {
                         int modelRow = jt.convertRowIndexToModel(viewRow);
                         String id = String.valueOf(jt.getModel().getValueAt(modelRow, 1)); // 1 = ID
-                        for (Area d : areas) {
-                            if (String.valueOf(d.getId()).equals(id)) {
-                                desktop.put(new ViewArea(d, desktop, Areas.this));
-                                break;
-                            }
-                        }
+                        Area area = Engine.getArea(id);
+                        desktop.put(new ViewArea(area, desktop, Areas.this));
                     }
                 }
             }
@@ -233,6 +242,7 @@ public class Areas extends LockeState implements RefreshListener {
     }
 
     private CustomTabbedPane details() {
+
         CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.addTab("Bins", new JPanel());
         tabs.addTab("Inventory", new JPanel());
@@ -243,20 +253,15 @@ public class Areas extends LockeState implements RefreshListener {
 
     @Override
     public void refresh() {
-        // 1) data
-        areas = Engine.getAreas();
 
-        // 2) update header (rebuild the component to avoid type issues)
         holder.remove(headerComp);
         headerComp = Elements.header(headerText(areas.size()), SwingConstants.LEFT);
         holder.add(headerComp, BorderLayout.CENTER);
 
-        // 3) rebuild table and swap into the existing scroll pane
-        CustomTable newTable = buildTable();
+        CustomTable newTable = table();
         tableScroll.setViewportView(newTable);
         table = newTable;
 
-        // 4) layout refresh
         holder.revalidate();
         holder.repaint();
         tableScroll.revalidate();

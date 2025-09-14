@@ -1,24 +1,29 @@
 package org.Canal.Utils;
 
+import com.google.gson.Gson;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import org.Canal.Models.BusinessUnits.*;
 import org.Canal.Models.BusinessUnits.Inventory;
-import org.Canal.Models.HumanResources.Employee;
-import org.Canal.Models.HumanResources.Position;
-import org.Canal.Models.HumanResources.Timesheet;
-import org.Canal.Models.HumanResources.User;
+import org.Canal.Models.HumanResources.*;
 import org.Canal.Models.SupplyChainUnits.*;
 import org.Canal.Models.Record;
 import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.Start;
 import org.Canal.UI.Views.*;
 import org.Canal.UI.Views.Areas.*;
+import org.Canal.UI.Views.BOMS.BOMs;
+import org.Canal.UI.Views.BOMS.CreateBOM;
 import org.Canal.UI.Views.Bins.*;
 import org.Canal.UI.Views.Customers.ViewCustomer;
 import org.Canal.UI.Views.Departments.DeleteDepartment;
+import org.Canal.UI.Views.Employees.ModifyEmployee;
 import org.Canal.UI.Views.Finance.Accounts.Accounts;
 import org.Canal.UI.Views.Finance.Accounts.CreateAccount;
 import org.Canal.UI.Views.Finance.Catalogs.ViewCatalog;
 import org.Canal.UI.Views.Finance.GoodsIssues.GoodsIssues;
+import org.Canal.UI.Views.Finance.Invoices.Invoices;
+import org.Canal.UI.Views.Finance.Ledgers.AutoMakeLedgers;
 import org.Canal.UI.Views.Finance.PurchaseOrders.*;
 import org.Canal.UI.Views.Finance.PurchaseRequisitions.*;
 import org.Canal.UI.Views.Finance.SalesOrders.ViewSalesOrder;
@@ -70,19 +75,15 @@ import org.Canal.UI.Views.Distribution.Trucks.Trucks;
 import org.Canal.UI.Views.Users.*;
 import org.Canal.UI.Views.ValueAddedServices.CreateVAS;
 import org.Canal.UI.Views.ValueAddedServices.ValueAddedServices;
-import org.bson.Document;
 
 import javax.swing.*;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
-import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+import com.mongodb.client.model.Filters.*;
+import org.bson.Document;
 
 /**
  * This class is responsible for fetching and maintaining Canal objex.
@@ -93,6 +94,7 @@ public class Engine {
     public static Codex codex;
     public static Location organization;
     public static User assignedUser;
+    private static Gson gson = new Gson();
 
     public static User getAssignedUser() {
         return assignedUser;
@@ -160,10 +162,27 @@ public class Engine {
         return locations;
     }
 
+
     public static Location getLocationWithId(String id) {
-        for(Location loc : getLocations()) {
-            if(loc.getId().equals(id)) {
-                return loc;
+        if (id == null || id.isBlank()) return null;
+
+        // No DB configured → scan in-memory list
+        if (Engine.getConfiguration().getMongodb().isEmpty()) {
+            for (Location loc : getLocations()) {
+                if (id.equals(loc.getId())) return loc;
+            }
+            return null;
+        }
+
+        String[] collNames = {"DCSS","CCS","CSTS","ORGS","VEND","WHS","TRANS/CRRS","OFFS"};
+
+        for (String name : collNames) {
+            MongoCollection<Document> coll = ConnectDB.collection(name);
+            if (coll == null) continue;
+
+            Document doc = coll.find(new Document("id", id)).first();
+            if (doc != null) {
+                return Pipe.load(doc, Location.class);
             }
         }
         return null;
@@ -197,13 +216,23 @@ public class Engine {
     }
 
     public static Location getLocation(String id, String objex) {
-        for (Location l : getLocations(objex)) {
-            if (l.getId().equals(id)) {
-                return l;
+
+        if (id == null || id.isBlank()) return null;
+
+        if (Engine.getConfiguration().getMongodb().isEmpty()) {
+            for (Location l : getLocations(objex)) {
+                if (id.equals(l.getId())) return l;
             }
+            return null;
         }
-        return null;
+
+        MongoCollection<Document> coll = ConnectDB.collection(objex);
+        if (coll == null) return null;
+
+        Document doc = coll.find(new Document("id", id)).first();
+        return (doc != null) ? Pipe.load(doc, Location.class) : null;
     }
+
 
     /**
      * PEOPLE
@@ -213,8 +242,8 @@ public class Engine {
         ArrayList<Employee> people = new ArrayList<>();
         if(Engine.getConfiguration().getMongodb().isEmpty()) {
 
-            File[] areasDir = Pipe.list("PPL");
-            for (File file : areasDir) {
+            File[] peopleDir = Pipe.list("PPL");
+            for (File file : peopleDir) {
                 if (!file.isDirectory()) {
                     Employee person = Pipe.load(file.getPath(), Employee.class);
                     people.add(person);
@@ -256,7 +285,24 @@ public class Engine {
     }
 
     public static List<Area> getAreas(String id) {
-        return getAreas().stream().filter(a -> a.getLocation().equals(id)).collect(Collectors.toList());
+
+        if (id == null || id.isBlank()) return Collections.emptyList();
+
+        if (Engine.getConfiguration().getMongodb().isEmpty()) {
+            return getAreas().stream()
+                    .filter(a -> Objects.equals(a.getLocation(), id))
+                    .collect(Collectors.toList());
+        } else {
+            List<Area> areas = new ArrayList<>();
+            try (MongoCursor<Document> cur = ConnectDB.collection("AREAS")
+                    .find(new Document("location", id))
+                    .iterator()) {
+                while (cur.hasNext()) {
+                    areas.add(Pipe.load(cur.next(), Area.class));
+                }
+            }
+            return areas;
+        }
     }
 
     public static Area getArea(String id) {
@@ -447,7 +493,7 @@ public class Engine {
     }
 
     public static PurchaseOrder getPurchaseOrder(String purchaseOrderId) {
-        return getPurchaseOrders().stream().filter(pr -> pr.getId().equals(purchaseOrderId)).toList().stream().findFirst().orElse(null);
+        return getPurchaseOrders().stream().filter(pr -> pr.getOrderId().equals(purchaseOrderId)).toList().stream().findFirst().orElse(null);
     }
 
     public static List<PurchaseOrder> getPurchaseOrders(String shipTo) {
@@ -486,7 +532,11 @@ public class Engine {
     }
 
     public static Ledger getLedger(String id) {
-        return getLedgers().stream().filter(inventory -> inventory.getId().equals(id)).toList().stream().findFirst().orElse(null);
+        return getLedgers().stream().filter(ledger -> ledger.getId().equals(id)).toList().stream().findFirst().orElse(null);
+    }
+
+    public static Ledger hasLedger(String locationId) {
+        return getLedgers().stream().filter(ledger -> ledger.getLocation().equals(locationId)).toList().stream().findFirst().orElse(null);
     }
 
     /**
@@ -518,32 +568,6 @@ public class Engine {
 
     public static Rate getRate(String id) {
         return getRates().stream().filter(rate -> rate.getId().equals(id)).toList().stream().findFirst().orElse(null);
-    }
-
-    /**
-     * TRUCKS
-     */
-    public static ArrayList<Truck> getTrucks() {
-
-        ArrayList<Truck> trucks = new ArrayList<>();
-        if(Engine.getConfiguration().getMongodb().isEmpty()) {
-
-            File[] d = Pipe.list("TRANS/TRCKS");
-            for (File file : d) {
-                if (!file.isDirectory()) {
-                    Truck a = Pipe.load(file.getPath(), Truck.class);
-                    trucks.add(a);
-                }
-            }
-        } else {
-            ConnectDB.collection("TRANS/TRCKS").find().forEach(truck -> {
-                Truck u = Pipe.load(truck, Truck.class);
-                trucks.add(u);
-            });
-        }
-
-        trucks.sort(Comparator.comparing(Truck::getId));
-        return trucks;
     }
 
     /**
@@ -616,6 +640,10 @@ public class Engine {
         return getInboundDeliveries().stream().filter(delivery -> delivery.getId().equals(id)).toList().stream().findFirst().orElse(null);
     }
 
+    public static Delivery getInboundDeliveryForPO(String poNumber) {
+        return getInboundDeliveries().stream().filter(delivery -> delivery.getPurchaseOrder().equals(poNumber)).toList().stream().findFirst().orElse(null);
+    }
+
     /**
      * OUTBOUND DELIVERIES
      */
@@ -658,6 +686,40 @@ public class Engine {
     }
 
     /**
+     * TRUCKS
+     */
+    public static ArrayList<Truck> getTrucks() {
+
+        ArrayList<Truck> trucks = new ArrayList<>();
+        if(Engine.getConfiguration().getMongodb().isEmpty()) {
+
+            File[] d = Pipe.list("TRANS/TRCKS");
+            for (File file : d) {
+                if (!file.isDirectory()) {
+                    Truck a = Pipe.load(file.getPath(), Truck.class);
+                    trucks.add(a);
+                }
+            }
+        } else {
+            ConnectDB.collection("TRANS/TRCKS").find().forEach(truck -> {
+                Truck u = Pipe.load(truck, Truck.class);
+                trucks.add(u);
+            });
+        }
+
+        trucks.sort(Comparator.comparing(Truck::getId));
+        return trucks;
+    }
+
+    public static Truck getTruck(String id) {
+        return getTrucks().stream().filter(truck -> truck.getId().equals(id)).toList().stream().findFirst().orElse(null);
+    }
+
+    public static Truck getTruckForDelivery(String deliveryId) {
+        return getTrucks().stream().filter(truck -> truck.getDelivery().equals(deliveryId)).toList().stream().findFirst().orElse(null);
+    }
+
+    /**
      * INVENTORIES
      */
     public static ArrayList<Inventory> getInventories() {
@@ -685,14 +747,8 @@ public class Engine {
     }
 
     public static Inventory getInventory(String location) {
-        var i = getInventories().stream().filter(inventory -> inventory.getLocation().equals(location)).toList().stream().findFirst().orElse(null);
-        if (i == null) {
-            if(getConfiguration().getMongodb().isEmpty()) {
-                i = new Inventory(location);
-                Pipe.save("/STK", i);
-            }
-        }
-        return i;
+        //TODO Test for local disk because I think we need the old way of checking for null and making if so
+        return getInventories().stream().filter(stk -> stk.getLocation().equals(location)).toList().stream().findFirst().orElse(null);
     }
 
     /**
@@ -735,6 +791,158 @@ public class Engine {
         Pipe.export(Start.DIR + "\\.store\\RCS\\" + id + "." + objex.toLowerCase().replaceAll("/", "."), rcs);
     }
 
+
+    /**
+     * ITEMS
+     */
+    public static ArrayList<Item> getItems() {
+
+        ArrayList<Item> items = new ArrayList<>();
+        if (Engine.getConfiguration().getMongodb().isEmpty()) { //Local disk
+
+            File[] d = Pipe.list("ITS");
+            for (File file : d) {
+                if (!file.isDirectory()) {
+                    Item item = Pipe.load(file.getPath(), Item.class);
+                    items.add(item);
+                }
+            }
+        } else {
+
+            ConnectDB.collection("ITS").find().forEach(item -> {
+                Item u = Pipe.load(item, Item.class);
+                items.add(u);
+            });
+        }
+
+        items.sort(Comparator.comparing(Item::getId));
+        return items;
+    }
+
+    public static List<Item> getItems(String id) {
+        return getItems().stream().filter(item -> item.getOrg().equals(id)).collect(Collectors.toList());
+    }
+
+    public static Item getItem(String id) {
+        return getItems().stream().filter(i -> i.getId().equals(id)).toList().stream().findFirst().orElse(null);
+    }
+
+    /**
+     * BOMS
+     */
+    public static ArrayList<BillOfMaterials> getBoMs() {
+
+        ArrayList<BillOfMaterials> boms = new ArrayList<>();
+        if (Engine.getConfiguration().getMongodb().isEmpty()) { //Local disk
+
+            File[] d = Pipe.list("BOMS");
+            for (File file : d) {
+                if (!file.isDirectory()) {
+                    BillOfMaterials bom = Pipe.load(file.getPath(), BillOfMaterials.class);
+                    boms.add(bom);
+                }
+            }
+        } else {
+
+            ConnectDB.collection("BOMS").find().forEach(bom -> {
+                BillOfMaterials u = Pipe.load(bom, BillOfMaterials.class);
+                boms.add(u);
+            });
+        }
+
+        boms.sort(Comparator.comparing(BillOfMaterials::getId));
+        return boms;
+    }
+
+    public static List<BillOfMaterials> getBoMs(String finishedItemId) {
+        return getBoMs().stream().filter(bom -> bom.getItem().equals(finishedItemId)).collect(Collectors.toList());
+    }
+
+    public static BillOfMaterials getBoM(String id) {
+        return getBoMs().stream().filter(bom -> bom.getId().equals(id)).toList().stream().findFirst().orElse(null);
+    }
+
+    public static PurchaseRequisition getPurchaseRequisition(String id) {
+        return getPurchaseRequisitions().stream().filter(pr -> pr.getId().equals(id)).toList().stream().findFirst().orElse(null);
+    }
+
+    public static ArrayList<SalesOrder> getSalesOrders() {
+
+        ArrayList<SalesOrder> salesOrders = new ArrayList<>();
+        if (Engine.getConfiguration().getMongodb().isEmpty()) {
+
+            File[] posDir = Pipe.list("ORDS/SO");
+            for (File file : posDir) {
+                if (!file.isDirectory()) {
+                    SalesOrder salesOrder = Pipe.load(file.getPath(), SalesOrder.class);
+                    salesOrders.add(salesOrder);
+                }
+            }
+        } else {
+            ConnectDB.collection("ORDS/SO").find().forEach(salesOrder -> {
+                SalesOrder so = Pipe.load(salesOrder, SalesOrder.class);
+                salesOrders.add(so);
+            });
+        }
+
+        salesOrders.sort(Comparator.comparing(SalesOrder::getOrderId));
+        return salesOrders;
+    }
+
+    public static SalesOrder getSalesOrder(String salesOrderId) {
+        return getSalesOrders().stream().filter(pr -> pr.getId().equals(salesOrderId)).toList().stream().findFirst().orElse(null);
+    }
+
+    public static ArrayList<PurchaseRequisition> getPurchaseRequisitions() {
+
+        ArrayList<PurchaseRequisition> purchaseRequisions = new ArrayList<>();
+        if (Engine.getConfiguration().getMongodb().isEmpty()) {
+
+            File[] d = Pipe.list("ORDS/PR");
+            for (File f : d) {
+                if (!f.isDirectory()) {
+                    PurchaseRequisition purchaseRequisition = Pipe.load(f.getPath(), PurchaseRequisition.class);
+                    purchaseRequisions.add(purchaseRequisition);
+                }
+            }
+        } else {
+            ConnectDB.collection("ORDS/PR").find().forEach(purchaseRequisition -> {
+                PurchaseRequisition pr = Pipe.load(purchaseRequisition, PurchaseRequisition.class);
+                purchaseRequisions.add(pr);
+            });
+        }
+
+        purchaseRequisions.sort(Comparator.comparing(PurchaseRequisition::getId));
+        return purchaseRequisions;
+    }
+
+    public static PurchaseRequisition getPurchaseRequisitions(String purchaseRequisitionId) {
+        return getPurchaseRequisitions().stream().filter(pr -> pr.getId().equals(purchaseRequisitionId)).toList().stream().findFirst().orElse(null);
+    }
+
+    public static ArrayList<GoodsReceipt> getGoodsReceipts() {
+
+        ArrayList<GoodsReceipt> goodsReceipts = new ArrayList<>();
+        if (Engine.getConfiguration().getMongodb().isEmpty()) {
+
+            File[] posDir = Pipe.list("GR");
+            for (File file : posDir) {
+                if (!file.isDirectory()) {
+                    GoodsReceipt a = Pipe.load(file.getPath(), GoodsReceipt.class);
+                    goodsReceipts.add(a);
+                }
+            }
+        } else {
+            ConnectDB.collection("GR").find().forEach(goodsReceipt -> {
+                GoodsReceipt u = Pipe.load(goodsReceipt, GoodsReceipt.class);
+                goodsReceipts.add(u);
+            });
+        }
+
+        goodsReceipts.sort(Comparator.comparing(GoodsReceipt::getId));
+        return goodsReceipts;
+    }
+
     public static Object codex(String objex, String key) {
         return (Engine.codex.getValue(objex, key) == null ? false : Engine.codex.getValue(objex, key));
     }
@@ -767,13 +975,21 @@ public class Engine {
 
             //AREAS
             case "/AREAS" -> {
-                return new Areas(desktop);
+                return new Areas(getAreas(), desktop);
+            }
+            case "/AREAS/F" -> {
+                return new Finder("/AREAS", new Area(), desktop);
             }
             case "/AREAS/NEW" -> {
                 return new CreateArea(null, desktop, null);
             }
             case "/AREAS/AUTO_MK" -> {
                 return new AutoMakeAreas(null);
+            }
+            case "/AREAS/MOD" -> {
+                String areaId = JOptionPane.showInputDialog(null, "Area ID", "Area ID", JOptionPane.QUESTION_MESSAGE);
+                Area area = Engine.getArea(areaId);
+                return new ModifyArea(area, null);
             }
             case "/AREAS/O" -> {
                 String areaId = JOptionPane.showInputDialog(null, "Enter Area ID", "Area ID", JOptionPane.QUESTION_MESSAGE);
@@ -786,13 +1002,18 @@ public class Engine {
                 return new Bins(desktop);
             }
             case "/BNS/F" -> {
-                return new Finder("/BNS", desktop);
+                return new Finder("/BNS", new Bin(), desktop);
             }
             case "/BNS/NEW" -> {
                 return new CreateBin("", null);
             }
             case "/BNS/AUTO_MK" -> {
                 return new AutoMakeBins();
+            }
+            case "/BNS/MOD" -> {
+                String binId = JOptionPane.showInputDialog(null, "Enter Bin ID", "Bin ID", JOptionPane.QUESTION_MESSAGE);
+                Bin bin = Engine.getBin(binId);
+                return new ModifyBin(bin, null);
             }
             case "/BNS/DEL" -> {
                 return new RemoveBin();
@@ -807,6 +1028,9 @@ public class Engine {
             case "/ORGS" -> {
                 return new Locations("/ORGS", desktop);
             }
+            case "/ORGS/F" -> {
+                return new Finder("/ORGS", new Location(), desktop);
+            }
             case "/ORGS/NEW" -> {
                 return new CreateLocation("/ORGS", desktop, null);
             }
@@ -819,6 +1043,9 @@ public class Engine {
             //COST CENTERS
             case "/CCS" -> {
                 return new Locations("/CCS", desktop);
+            }
+            case "/CCS/F" -> {
+                return new Finder("/CCS", new Location(), desktop);
             }
             case "/CCS/NEW" -> {
                 return new CreateLocation("/CCS", desktop, null);
@@ -833,6 +1060,9 @@ public class Engine {
             case "/CSTS" -> {
                 return new Locations("/CSTS", desktop);
             }
+            case "/CSTS/F" -> {
+                return new Finder("/CSTS", new Location(), desktop);
+            }
             case "/CSTS/NEW" -> {
                 return new CreateLocation("/CSTS", desktop, null);
             }
@@ -845,6 +1075,9 @@ public class Engine {
             //DISTRIBUTION CENTERS
             case "/DCSS" -> {
                 return new Locations("/DCSS", desktop);
+            }
+            case "/DCSS/F" -> {
+                return new Finder("/DCSS", new Location(), desktop);
             }
             case "/DCSS/NEW" -> {
                 return new CreateLocation("/DCSS", desktop, null);
@@ -862,6 +1095,9 @@ public class Engine {
             case "/TRANS/CRRS" -> {
                 return new Locations("/TRANS/CRRS", desktop);
             }
+            case "/TRANS/CRRS/F" -> {
+                return new Finder("/TRANS/CRRS", new Location(), desktop);
+            }
             case "/TRANS/CRRS/NEW" -> {
                 return new CreateLocation("/TRANS/CRRS", desktop, null);
             }
@@ -870,11 +1106,17 @@ public class Engine {
             case "/TRANS/ODO" -> {
                 return new OutboundDeliveries(desktop);
             }
+            case "/TRANS/ODO/F" -> {
+                return new Finder("/TRANS/ODO", new Delivery(), desktop);
+            }
             case "/TRANS/ODO/NEW" -> {
                 return new CreateOutboundDeliveryOrder();
             }
             case "/TRANS/IDO" -> {
                 return new InboundDeliveries(desktop);
+            }
+            case "/TRANS/IDO/F" -> {
+                return new Finder("/TRANS/IDO", new Delivery(), desktop);
             }
             case "/TRANS/IDO/NEW" -> {
                 return new CreateInboundDeliveryOrder();
@@ -884,6 +1126,9 @@ public class Engine {
             case "/TRANS/TRCKS" -> {
                 return new Trucks(desktop);
             }
+            case "/TRANS/TRCKS/F" -> {
+                return new Finder("/TRANS/TRCKS", new Delivery(), desktop);
+            }
             case "/TRANS/TRCKS/NEW" -> {
                 return new CreateTruck(desktop);
             }
@@ -892,6 +1137,9 @@ public class Engine {
             case "/WHS" -> {
                 return new Locations("/WHS", desktop);
             }
+            case "/WHS/F" -> {
+                return new Finder("/WHS", new Location(), desktop);
+            }
             case "/WHS/NEW" -> {
                 return new CreateLocation("/WHS", desktop, null);
             }
@@ -899,6 +1147,9 @@ public class Engine {
             //VENDORS
             case "/VEND" -> {
                 return new Locations("/VEND", desktop);
+            }
+            case "/VEND/F" -> {
+                return new Finder("/VEND", new Location(), desktop);
             }
             case "/VEND/NEW" -> {
                 return new CreateLocation("/VEND", desktop, null);
@@ -921,6 +1172,9 @@ public class Engine {
             case "/RTS" -> {
                 return new Rates(desktop);
             }
+            case "/RTS/F" -> {
+                return new Finder("/RTS", new Rate(), desktop);
+            }
             case "/RTS/NEW" -> {
                 return new CreateRate(desktop, null);
             }
@@ -934,8 +1188,17 @@ public class Engine {
             case "/LGS" -> {
                 return new Ledgers(desktop);
             }
+            case "/LGS/F" -> {
+                return new Finder("/LGS", new Ledger(), desktop);
+            }
             case "/LGS/NEW" -> {
                 return new CreateLedger(desktop);
+            }
+            case "/LGS/AUTO_MK" -> {
+                return new AutoMakeLedgers(desktop, null);
+            }
+            case "/LGS/DEL" -> {
+//                return new CreateLedger(desktop);
             }
             case "/LGS/O" -> {
                 String ledgerId = JOptionPane.showInputDialog(null, "Enter Ledger ID", "Ledger ID", JOptionPane.QUESTION_MESSAGE);
@@ -946,6 +1209,9 @@ public class Engine {
             //EMPLOYEES
             case "/EMPS" -> {
                 return new Employees(desktop);
+            }
+            case "/EMPS/F" -> {
+                return new Finder("/EMPS", new Employee(), desktop);
             }
             case "/EMPS/O" -> {
                 String eid = JOptionPane.showInputDialog(null, "Enter Employee ID", "Employee ID", JOptionPane.QUESTION_MESSAGE);
@@ -960,6 +1226,9 @@ public class Engine {
             case "/PPL" -> {
                 return new People(desktop);
             }
+            case "/PPL/F" -> {
+                return new Finder("/PPL", new Employee(), desktop);
+            }
             case "/PPL/O" -> {
                 String pid = JOptionPane.showInputDialog(null, "Enter Person ID", "Person ID", JOptionPane.QUESTION_MESSAGE);
                 Employee person = Engine.getEmployee(pid);
@@ -972,6 +1241,9 @@ public class Engine {
             //DEPARTMENTS
             case "/DPTS" -> {
                 return new Departments(desktop);
+            }
+            case "/DPTS/F" -> {
+                return new Finder("/DPTS", new Department(), desktop);
             }
             case "/DPTS/NEW" -> {
                 return new CreateDepartment(desktop, null);
@@ -992,6 +1264,9 @@ public class Engine {
             case "/USRS" -> {
                 return new Users(desktop);
             }
+            case "/USRS/F" -> {
+                return new Finder("/USRS", new User(), desktop);
+            }
             case "/USRS/O" -> {
                 String uId = JOptionPane.showInputDialog(null, "Enter User ID", "User ID", JOptionPane.QUESTION_MESSAGE);
                 User user = Engine.getUser(uId);
@@ -1005,7 +1280,7 @@ public class Engine {
             }
 
             //STOCK AND INVENTORY
-            case "/STK", "/INV" -> {
+            case "/STK" -> {
                 return new ViewInventory(desktop, Engine.getOrganization().getId());
             }
             case "/STK/MOD/MV" -> {
@@ -1013,13 +1288,19 @@ public class Engine {
             }
 
             //INVOICES
-            case "/INVS", "/INVS/NEW" -> {
+            case "/INVS" -> {
+                return new Invoices(desktop);
+            }
+            case "/INVS/NEW" -> {
                 return new CreateInvoice(null);
             }
 
             //CATALOGS
             case "/CATS" -> {
                 return new Catalogs(desktop);
+            }
+            case "/CATS/F" -> {
+                return new Finder("/CATS", new Catalog(), desktop);
             }
             case "/CATS/NEW" -> {
                 return new CreateCatalog(null);
@@ -1032,10 +1313,10 @@ public class Engine {
 
             //ITEMS
             case "/ITS" -> {
-                return new Items(desktop);
+                return new Items(getItems(), desktop);
             }
             case "/ITS/F" -> {
-                return new Items(desktop);
+                return new Finder("/ITS", new Item(), desktop);
             }
             case "/ITS/NEW" -> {
                 return new CreateItem(desktop, null);
@@ -1043,12 +1324,20 @@ public class Engine {
             case "/ITS/MOD" -> {
                 String eid = JOptionPane.showInputDialog(null, "Enter Item ID", "Item ID", JOptionPane.QUESTION_MESSAGE);
                 Item i = Engine.getItem(eid);
-                return new ModifyItem(i, null);
+                return new ModifyItem(i, desktop, null);
             }
             case "/ITS/O" -> {
                 String eid = JOptionPane.showInputDialog(null, "Enter Item ID", "Item ID", JOptionPane.QUESTION_MESSAGE);
                 Item i = Engine.getItem(eid);
                 return new ViewItem(i, desktop, null);
+            }
+
+            //BILL OF MATERIALS
+            case "/BOMS" -> {
+                return new BOMs(getBoMs(), desktop);
+            }
+            case "/BOMS/NEW" -> {
+                return new CreateBOM(desktop, null);
             }
 
             //PURCHASE ORDERS
@@ -1210,9 +1499,7 @@ public class Engine {
                 }
             }
         }
-        if (transactionCode.endsWith("/F")) {
-            return new Finder(transactionCode.replace("/F", ""), desktop);
-        } else if (transactionCode.endsWith("/MOD")) {
+        if (transactionCode.endsWith("/MOD")) {
             return new Modifier(transactionCode.replace("/MOD", ""), null, null);
         } else if (transactionCode.endsWith("/ARCHV")) {
             return new Archiver(transactionCode.replace("/ARCHV", ""));
@@ -1239,11 +1526,8 @@ public class Engine {
                 }
             }
             case "CCS" -> {
-                for (Location l : Engine.getLocations("CCS")) {
-                    if (l.getId().equals(oid)) {
-                        return new ViewLocation(l, desktop);
-                    }
-                }
+                Location ccs = Engine.getLocation(oid, "CCS");
+                return new ViewLocation(ccs, desktop);
             }
             case "CSTS" -> {
                 for (Location l : Engine.getLocations("CSTS")) {
@@ -1316,139 +1600,108 @@ public class Engine {
                 return new Catalogs(desktop);
             }
         }
+
+        if(transactionCode.contains("/MOD/")) {
+
+            String t2 = chs[1] + "/MOD";
+            oid = chs[3];
+            switch (t2) {
+                case "ORGS/MOD" -> {
+                    for (Location org : Engine.getLocations("ORGS")) {
+                        if (org.getId().equals(oid)) {
+                            return new ViewLocation(org, desktop);
+                        }
+                    }
+                }
+                case "AREAS/MOD" -> {
+                    for (Area area : Engine.getAreas()) {
+                        if (area.getId().equals(oid)) {
+                            return new ModifyArea(area, null);
+                        }
+                    }
+                }
+                case "BNS/MOD" -> {
+                    Bin bin = Engine.getBin(oid);
+                    if (bin != null) {
+                        return new ModifyBin(bin, null);
+                    }
+                }
+                case "CCS/MOD" -> {
+                    for (Location costcenter : Engine.getLocations("CCS")) {
+                        if (costcenter.getId().equals(oid)) {
+                            return new ViewLocation(costcenter, desktop);
+                        }
+                    }
+                }
+                case "CSTS/MOD" -> {
+                    for (Location l : Engine.getLocations("CSTS")) {
+                        if (l.getId().equals(oid)) {
+                            return new ViewCustomer(l);
+                        }
+                    }
+                }
+                case "DCSS/MOD" -> {
+                    for (Location l : Engine.getLocations("DCSS")) {
+                        if (l.getId().equals(oid)) {
+                            return new ViewLocation(l, desktop);
+                        }
+                    }
+                }
+                case "VEND/MOD" -> {
+                    for (Location l : Engine.getLocations("VEND")) {
+                        if (l.getId().equals(oid)) {
+                            return new ViewLocation(l, desktop);
+                        }
+                    }
+                }
+                case "ITS/MOD" -> {
+                    Item i = Engine.getItem(oid);
+                    if (i != null) {
+                        return new ModifyItem(i, desktop, null);
+                    }
+                }
+                case "USRS/MOD" -> {
+                    User u = Engine.getUser(oid);
+                    if (u != null) {
+                    }
+                }
+                case "EMPS/MOD" -> {
+                    for (Employee employee : Engine.getEmployees()) {
+                        if (employee.getId().equals(oid)) {
+                            return new ModifyEmployee(employee, desktop, null);
+                        }
+                    }
+                }
+                case "LGS/MOD" -> {
+                    for (Ledger ledger : getLedgers()) {
+                        if (ledger.getId().equals(oid)) {
+                            return new ViewLedger(ledger, desktop);
+                        }
+                    }
+                    return new Ledgers(desktop);
+                }
+                case "WHS/MOD" -> {
+                    for (Location l : getLocations("WHS")) {
+                        if (l.getId().equals(oid)) {
+                            return new ViewLocation(l, desktop);
+                        }
+                    }
+                    return new Locations("/WHS", desktop);
+                }
+                case "ORDS/PO/MOD" -> {
+                    for (PurchaseOrder l : getPurchaseOrders()) {
+                        if (l.getOrderId().equals(oid)) {
+                            return new ViewPurchaseOrder(l, desktop, null);
+                        }
+                    }
+                    return new PurchaseOrders(desktop);
+                }
+                case "CATS/MOD" -> {
+                    return new Catalogs(desktop);
+                }
+            }
+        }
+
         return null;
-    }
-
-    public static void adjustColumnWidths(JTable table) {
-        for (int col = 0; col < table.getColumnCount(); col++) {
-            TableColumn column = table.getColumnModel().getColumn(col);
-            int maxWidth;
-            TableCellRenderer headerRenderer = table.getTableHeader().getDefaultRenderer();
-            Component headerComponent = headerRenderer.getTableCellRendererComponent(table, column.getHeaderValue(), false, false, 0, col);
-            maxWidth = headerComponent.getPreferredSize().width;
-            for (int row = 0; row < table.getRowCount(); row++) {
-                TableCellRenderer cellRenderer = table.getCellRenderer(row, col);
-                Component cellComponent = cellRenderer.getTableCellRendererComponent(table, table.getValueAt(row, col), false, false, row, col);
-                int cellWidth = cellComponent.getPreferredSize().width;
-                maxWidth = Math.max(maxWidth, cellWidth);
-            }
-            column.setPreferredWidth(maxWidth + 10);
-        }
-    }
-
-    /**
-     * ITEMS
-     */
-    public static ArrayList<Item> getItems() {
-
-        ArrayList<Item> items = new ArrayList<>();
-        if (Engine.getConfiguration().getMongodb().isEmpty()) { //Local disk
-
-            File[] d = Pipe.list("ITS");
-            for (File file : d) {
-                if (!file.isDirectory()) {
-                    Item item = Pipe.load(file.getPath(), Item.class);
-                    items.add(item);
-                }
-            }
-        } else {
-
-            ConnectDB.collection("ITS").find().forEach(item -> {
-                Item u = Pipe.load(item, Item.class);
-                items.add(u);
-            });
-        }
-
-        items.sort(Comparator.comparing(Item::getId));
-        return items;
-    }
-
-    public static List<Item> getItems(String id) {
-        return getItems().stream().filter(item -> item.getOrg().equals(id)).collect(Collectors.toList());
-    }
-
-    public static Item getItem(String id) {
-        return getItems().stream().filter(i -> i.getId().equals(id)).toList().stream().findFirst().orElse(null);
-    }
-
-    public static PurchaseRequisition getPurchaseRequisition(String id) {
-        return getPurchaseRequisitions().stream().filter(pr -> pr.getId().equals(id)).toList().stream().findFirst().orElse(null);
-    }
-
-    public static ArrayList<SalesOrder> getSalesOrders() {
-
-        ArrayList<SalesOrder> salesOrders = new ArrayList<>();
-        if (Engine.getConfiguration().getMongodb().isEmpty()) {
-
-            File[] posDir = Pipe.list("ORDS/SO");
-            for (File file : posDir) {
-                if (!file.isDirectory()) {
-                    SalesOrder salesOrder = Pipe.load(file.getPath(), SalesOrder.class);
-                    salesOrders.add(salesOrder);
-                }
-            }
-        } else {
-            ConnectDB.collection("ORDS/SO").find().forEach(salesOrder -> {
-                SalesOrder so = Pipe.load(salesOrder, SalesOrder.class);
-                salesOrders.add(so);
-            });
-        }
-
-        salesOrders.sort(Comparator.comparing(SalesOrder::getOrderId));
-        return salesOrders;
-    }
-
-    public static SalesOrder getSalesOrder(String salesOrderId) {
-        return getSalesOrders().stream().filter(pr -> pr.getId().equals(salesOrderId)).toList().stream().findFirst().orElse(null);
-    }
-
-    public static ArrayList<PurchaseRequisition> getPurchaseRequisitions() {
-
-        ArrayList<PurchaseRequisition> purchaseRequisions = new ArrayList<>();
-        if (Engine.getConfiguration().getMongodb().isEmpty()) {
-
-            File[] d = Pipe.list("ORDS/PR");
-            for (File f : d) {
-                if (!f.isDirectory()) {
-                    PurchaseRequisition purchaseRequisition = Pipe.load(f.getPath(), PurchaseRequisition.class);
-                    purchaseRequisions.add(purchaseRequisition);
-                }
-            }
-        } else {
-            ConnectDB.collection("ORDS/PR").find().forEach(purchaseRequisition -> {
-                PurchaseRequisition pr = Pipe.load(purchaseRequisition, PurchaseRequisition.class);
-                purchaseRequisions.add(pr);
-            });
-        }
-
-        purchaseRequisions.sort(Comparator.comparing(PurchaseRequisition::getId));
-        return purchaseRequisions;
-    }
-
-    public static PurchaseRequisition getPurchaseRequisitions(String purchaseRequisitionId) {
-        return getPurchaseRequisitions().stream().filter(pr -> pr.getId().equals(purchaseRequisitionId)).toList().stream().findFirst().orElse(null);
-    }
-
-    public static ArrayList<GoodsReceipt> getGoodsReceipts() {
-
-        ArrayList<GoodsReceipt> goodsReceipts = new ArrayList<>();
-        if (Engine.getConfiguration().getMongodb().isEmpty()) {
-
-            File[] posDir = Pipe.list("GR");
-            for (File file : posDir) {
-                if (!file.isDirectory()) {
-                    GoodsReceipt a = Pipe.load(file.getPath(), GoodsReceipt.class);
-                    goodsReceipts.add(a);
-                }
-            }
-        } else {
-            ConnectDB.collection("GR").find().forEach(goodsReceipt -> {
-                GoodsReceipt u = Pipe.load(goodsReceipt, GoodsReceipt.class);
-                goodsReceipts.add(u);
-            });
-        }
-
-        goodsReceipts.sort(Comparator.comparing(GoodsReceipt::getId));
-        return goodsReceipts;
     }
 }
