@@ -42,18 +42,18 @@ public class CreateRate extends LockeState {
         rateReference = Elements.input();
         rateIsTax = new JCheckBox();
 
-        Form f = new Form();
-        f.addInput(Elements.coloredLabel("*New Rate ID", UIManager.getColor("Label.foreground")), rateId);
-        f.addInput(Elements.coloredLabel("Name", Constants.colors[10]), rateName);
-        f.addInput(Elements.coloredLabel("Description", Constants.colors[9]), rateDescription);
-        f.addInput(Elements.coloredLabel("Percent", Constants.colors[8]), rateIsPercent);
-        f.addInput(Elements.coloredLabel("Value", Constants.colors[7]), rateValue);
-        f.addInput(Elements.coloredLabel("Objex", Constants.colors[6]), objexes);
-        f.addInput(Elements.coloredLabel("Reference", Constants.colors[5]), rateReference);
-        f.addInput(Elements.coloredLabel("Tax", Constants.colors[4]), rateIsTax);
+        Form form = new Form();
+        form.addInput(Elements.coloredLabel("*New Rate ID", UIManager.getColor("Label.foreground")), rateId);
+        form.addInput(Elements.coloredLabel("Name", Constants.colors[10]), rateName);
+        form.addInput(Elements.coloredLabel("Description", Constants.colors[9]), rateDescription);
+        form.addInput(Elements.coloredLabel("Percent", Constants.colors[8]), rateIsPercent);
+        form.addInput(Elements.coloredLabel("Value", Constants.colors[7]), rateValue);
+        form.addInput(Elements.coloredLabel("Objex", Constants.colors[6]), objexes);
+        form.addInput(Elements.coloredLabel("Reference", Constants.colors[5]), rateReference);
+        form.addInput(Elements.coloredLabel("Tax", Constants.colors[4]), rateIsTax);
 
         setLayout(new BorderLayout());
-        add(f, BorderLayout.CENTER);
+        add(form, BorderLayout.CENTER);
         add(toolbar(), BorderLayout.NORTH);
     }
 
@@ -91,13 +91,12 @@ public class CreateRate extends LockeState {
             newRate.setTax(rateIsTax.isSelected());
             Pipe.save("/RTS", newRate);
 
-
-            if(refreshListener != null) {
+            dispose();
+            if (refreshListener != null) {
                 refreshListener.refresh();
             }
-            dispose();
 
-            if((boolean) Engine.codex.getValue("RTS", "auto_open_new")){
+            if ((boolean) Engine.codex.getValue("RTS", "auto_open_new")) {
 
                 desktop.put(new ViewRate(newRate, desktop, refreshListener));
             }

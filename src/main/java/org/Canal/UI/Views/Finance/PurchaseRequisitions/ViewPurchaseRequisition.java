@@ -1,6 +1,6 @@
 package org.Canal.UI.Views.Finance.PurchaseRequisitions;
 
-import org.Canal.Models.BusinessUnits.PurchaseOrder;
+import org.Canal.Models.BusinessUnits.Order;
 import org.Canal.Models.BusinessUnits.PurchaseRequisition;
 import org.Canal.UI.Elements.*;
 import org.Canal.Utils.DesktopState;
@@ -27,7 +27,7 @@ public class ViewPurchaseRequisition extends LockeState {
 
     public ViewPurchaseRequisition(PurchaseRequisition requisition, DesktopState desktop, RefreshListener refreshListener) {
 
-        super("Purchase Requisitions", "/ORDS/PR/" + requisition.getId(), true, true, true, true);
+        super("Purchase Requisitions", "/ORDS/PR/" + requisition.getId());
         setFrameIcon(new ImageIcon(CreatePurchaseRequisition.class.getResource("/icons/purchasereqs.png")));
         this.purchaseRequisition = requisition;
         this.desktop = desktop;
@@ -87,7 +87,7 @@ public class ViewPurchaseRequisition extends LockeState {
                 "Created"
         };
         ArrayList<Object[]> data = new ArrayList<>();
-        for (PurchaseOrder po : Engine.getPurchaseOrders()) {
+        for (Order po : Engine.getPurchaseOrders()) {
             if(po.getPurchaseRequisition().equals(purchaseRequisition.getNumber())) {
                 data.add(new Object[]{
                         po.getId(),

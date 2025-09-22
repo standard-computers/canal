@@ -14,12 +14,15 @@ import org.Canal.UI.Views.*;
 import org.Canal.UI.Views.Areas.*;
 import org.Canal.UI.Views.BOMS.BOMs;
 import org.Canal.UI.Views.BOMS.CreateBOM;
+import org.Canal.UI.Views.BOMS.ViewBOM;
 import org.Canal.UI.Views.Bins.*;
 import org.Canal.UI.Views.Customers.ViewCustomer;
 import org.Canal.UI.Views.Departments.DeleteDepartment;
 import org.Canal.UI.Views.Employees.ModifyEmployee;
 import org.Canal.UI.Views.Finance.Accounts.Accounts;
+import org.Canal.UI.Views.Finance.Accounts.AutoMakeAccounts;
 import org.Canal.UI.Views.Finance.Accounts.CreateAccount;
+import org.Canal.UI.Views.Finance.Accounts.ViewAccount;
 import org.Canal.UI.Views.Finance.Catalogs.ViewCatalog;
 import org.Canal.UI.Views.Finance.GoodsIssues.GoodsIssues;
 import org.Canal.UI.Views.Finance.Invoices.Invoices;
@@ -73,8 +76,6 @@ import org.Canal.UI.Views.Productivity.Tasks.TaskList;
 import org.Canal.UI.Views.Distribution.Trucks.CreateTruck;
 import org.Canal.UI.Views.Distribution.Trucks.Trucks;
 import org.Canal.UI.Views.Users.*;
-import org.Canal.UI.Views.ValueAddedServices.CreateVAS;
-import org.Canal.UI.Views.ValueAddedServices.ValueAddedServices;
 
 import javax.swing.*;
 import java.io.File;
@@ -82,7 +83,7 @@ import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.util.*;
 import java.util.stream.Collectors;
-import com.mongodb.client.model.Filters.*;
+
 import org.bson.Document;
 
 /**
@@ -166,7 +167,6 @@ public class Engine {
     public static Location getLocationWithId(String id) {
         if (id == null || id.isBlank()) return null;
 
-        // No DB configured → scan in-memory list
         if (Engine.getConfiguration().getMongodb().isEmpty()) {
             for (Location loc : getLocations()) {
                 if (id.equals(loc.getId())) return loc;
@@ -259,6 +259,36 @@ public class Engine {
         return people;
     }
 
+
+    /**
+     * ACCOUNTS
+     */
+    public static ArrayList<Account> getAccounts() {
+
+        ArrayList<Account> accounts = new ArrayList<>();
+        if(Engine.getConfiguration().getMongodb().isEmpty()) {
+
+            File[] accountsDir = Pipe.list("ACCS");
+            for (File file : accountsDir) {
+                if (!file.isDirectory()) {
+                    Account account = Pipe.load(file.getPath(), Account.class);
+                    accounts.add(account);
+                }
+            }
+        }else{
+            ConnectDB.collection("ACCS").find().forEach(account -> {
+                Account ep = Pipe.load(account, Account.class);
+                accounts.add(ep);
+            });
+        }
+        accounts.sort(Comparator.comparing(Account::getId));
+        return accounts;
+    }
+
+    public static Account getAccount(String id) {
+        return getAccounts().stream().filter(account -> account.getId().equals(id)).toList().stream().findFirst().orElse(null);
+    }
+
     /**
      * AREAS
      */
@@ -306,7 +336,7 @@ public class Engine {
     }
 
     public static Area getArea(String id) {
-        return getAreas().stream().filter(c -> c.getId().equals(id)).toList().stream().findFirst().orElse(null);
+        return getAreas().stream().filter(area -> area.getId().equals(id)).toList().stream().findFirst().orElse(null);
     }
 
     /**
@@ -315,9 +345,9 @@ public class Engine {
     public static Bin getBin(String id) {
         ArrayList<Area> areas = getAreas();
         for (Area area : areas) {
-            for (Bin b : area.getBins()) {
-                if (b.getId().equals(id)) {
-                    return b;
+            for (Bin bin : area.getBins()) {
+                if (bin.getId().equals(id)) {
+                    return bin;
                 }
             }
         }
@@ -469,38 +499,38 @@ public class Engine {
     /**
      * PURCHASE ORDERS
      */
-    public static ArrayList<PurchaseOrder> getPurchaseOrders() {
+    public static ArrayList<Order> getPurchaseOrders() {
 
-        ArrayList<PurchaseOrder> purchaseOrders = new ArrayList<>();
+        ArrayList<Order> purchaseOrders = new ArrayList<>();
         if (Engine.getConfiguration().getMongodb().isEmpty()) {
 
             File[] posDir = Pipe.list("ORDS/PO");
             for (File file : posDir) {
                 if (!file.isDirectory()) {
-                    PurchaseOrder purchaseOrder = Pipe.load(file.getPath(), PurchaseOrder.class);
+                    Order purchaseOrder = Pipe.load(file.getPath(), Order.class);
                     purchaseOrders.add(purchaseOrder);
                 }
             }
         } else {
             ConnectDB.collection("ORDS/PO").find().forEach(purchaseOrder -> {
-                PurchaseOrder u = Pipe.load(purchaseOrder, PurchaseOrder.class);
+                Order u = Pipe.load(purchaseOrder, Order.class);
                 purchaseOrders.add(u);
             });
         }
 
-        purchaseOrders.sort(Comparator.comparing(PurchaseOrder::getId));
+        purchaseOrders.sort(Comparator.comparing(Order::getId));
         return purchaseOrders;
     }
 
-    public static PurchaseOrder getPurchaseOrder(String purchaseOrderId) {
+    public static Order getPurchaseOrder(String purchaseOrderId) {
         return getPurchaseOrders().stream().filter(pr -> pr.getOrderId().equals(purchaseOrderId)).toList().stream().findFirst().orElse(null);
     }
 
-    public static List<PurchaseOrder> getPurchaseOrders(String shipTo) {
+    public static List<Order> getPurchaseOrders(String shipTo) {
         return getPurchaseOrders().stream().filter(order -> order.getShipTo().equals(shipTo)).collect(Collectors.toList());
     }
 
-    public static List<PurchaseOrder> getPurchaseOrders(String shipTo, LockeStatus status) {
+    public static List<Order> getPurchaseOrders(String shipTo, LockeStatus status) {
         return getPurchaseOrders().stream().filter(order -> order.getShipTo().equals(shipTo) && order.getStatus().equals(status)).collect(Collectors.toList());
     }
 
@@ -866,30 +896,30 @@ public class Engine {
         return getPurchaseRequisitions().stream().filter(pr -> pr.getId().equals(id)).toList().stream().findFirst().orElse(null);
     }
 
-    public static ArrayList<SalesOrder> getSalesOrders() {
+    public static ArrayList<Order> getSalesOrders() {
 
-        ArrayList<SalesOrder> salesOrders = new ArrayList<>();
+        ArrayList<Order> salesOrders = new ArrayList<>();
         if (Engine.getConfiguration().getMongodb().isEmpty()) {
 
             File[] posDir = Pipe.list("ORDS/SO");
             for (File file : posDir) {
                 if (!file.isDirectory()) {
-                    SalesOrder salesOrder = Pipe.load(file.getPath(), SalesOrder.class);
+                    Order salesOrder = Pipe.load(file.getPath(), Order.class);
                     salesOrders.add(salesOrder);
                 }
             }
         } else {
             ConnectDB.collection("ORDS/SO").find().forEach(salesOrder -> {
-                SalesOrder so = Pipe.load(salesOrder, SalesOrder.class);
+                Order so = Pipe.load(salesOrder, Order.class);
                 salesOrders.add(so);
             });
         }
 
-        salesOrders.sort(Comparator.comparing(SalesOrder::getOrderId));
+        salesOrders.sort(Comparator.comparing(Order::getOrderId));
         return salesOrders;
     }
 
-    public static SalesOrder getSalesOrder(String salesOrderId) {
+    public static Order getSalesOrder(String salesOrderId) {
         return getSalesOrders().stream().filter(pr -> pr.getId().equals(salesOrderId)).toList().stream().findFirst().orElse(null);
     }
 
@@ -969,8 +999,19 @@ public class Engine {
             case "/ACCS" -> {
                 return new Accounts(desktop);
             }
+            case "/ACCS/F" -> {
+                return new Finder("/ACCS", Account.class, desktop);
+            }
+            case "/ACCS/AUTO_MK" -> {
+                return new AutoMakeAccounts(desktop, null);
+            }
             case "/ACCS/NEW" -> {
-                return new CreateAccount();
+                return new CreateAccount(desktop, null);
+            }
+            case "/ACCS/O" -> {
+                String accountId = JOptionPane.showInputDialog("Enter Account ID");
+                Account account = Engine.getAccount(accountId);
+                return new ViewAccount(account, desktop);
             }
 
             //AREAS
@@ -984,12 +1025,12 @@ public class Engine {
                 return new CreateArea(null, desktop, null);
             }
             case "/AREAS/AUTO_MK" -> {
-                return new AutoMakeAreas(null);
+                return new AutoMakeAreas(desktop, null);
             }
             case "/AREAS/MOD" -> {
                 String areaId = JOptionPane.showInputDialog(null, "Area ID", "Area ID", JOptionPane.QUESTION_MESSAGE);
                 Area area = Engine.getArea(areaId);
-                return new ModifyArea(area, null);
+                return new ModifyArea(area, desktop, null);
             }
             case "/AREAS/O" -> {
                 String areaId = JOptionPane.showInputDialog(null, "Enter Area ID", "Area ID", JOptionPane.QUESTION_MESSAGE);
@@ -1005,15 +1046,15 @@ public class Engine {
                 return new Finder("/BNS", new Bin(), desktop);
             }
             case "/BNS/NEW" -> {
-                return new CreateBin("", null);
+                return new CreateBin("", desktop, null);
             }
             case "/BNS/AUTO_MK" -> {
-                return new AutoMakeBins();
+                return new AutoMakeBins(desktop);
             }
             case "/BNS/MOD" -> {
                 String binId = JOptionPane.showInputDialog(null, "Enter Bin ID", "Bin ID", JOptionPane.QUESTION_MESSAGE);
                 Bin bin = Engine.getBin(binId);
-                return new ModifyBin(bin, null);
+                return new ModifyBin(bin, desktop, null);
             }
             case "/BNS/DEL" -> {
                 return new RemoveBin();
@@ -1155,19 +1196,6 @@ public class Engine {
                 return new CreateLocation("/VEND", desktop, null);
             }
 
-            //VALUE ADDED SERVICES
-            case "/VAS" -> {
-                return new ValueAddedServices();
-            }
-            case "/VAS/NEW" -> {
-                return new CreateVAS();
-            }
-            case "/VAS/O" -> {
-                String vasId = JOptionPane.showInputDialog(null, "Enter VAS ID", "VAS", JOptionPane.QUESTION_MESSAGE);
-//                Engine.getVa
-                return new CreateVAS();
-            }
-
             //RATES
             case "/RTS" -> {
                 return new Rates(desktop);
@@ -1292,7 +1320,7 @@ public class Engine {
                 return new Invoices(desktop);
             }
             case "/INVS/NEW" -> {
-                return new CreateInvoice(null);
+                return new CreateInvoice(desktop);
             }
 
             //CATALOGS
@@ -1336,8 +1364,16 @@ public class Engine {
             case "/BOMS" -> {
                 return new BOMs(getBoMs(), desktop);
             }
+            case "/BOMS/F" -> {
+                return new Finder("/BOMS", BillOfMaterials.class, desktop);
+            }
             case "/BOMS/NEW" -> {
                 return new CreateBOM(desktop, null);
+            }
+            case "/BOMS/O" -> {
+                String bomId = JOptionPane.showInputDialog("Bill of Materials ID");
+                BillOfMaterials bom = getBoM(bomId);
+                return new ViewBOM(bom, desktop, null);
             }
 
             //PURCHASE ORDERS
@@ -1352,7 +1388,7 @@ public class Engine {
             }
             case "/ORDS/PO/O" -> {
                 String poId = JOptionPane.showInputDialog(null, "Enter Purchase Order ID", "Purchase Order ID", JOptionPane.QUESTION_MESSAGE);
-                PurchaseOrder purchaseOrder = Engine.getPurchaseOrder(poId);
+                Order purchaseOrder = Engine.getPurchaseOrder(poId);
                 return new ViewPurchaseOrder(purchaseOrder, desktop, null);
             }
             case "/ORDS/RCV" -> {
@@ -1386,11 +1422,11 @@ public class Engine {
                 return new SalesOrders(desktop);
             }
             case "/ORDS/SO/NEW" -> {
-                return new CreateSalesOrder();
+                return new CreateSalesOrder(desktop);
             }
             case "/ORDS/SO/O" -> {
                 String soId = JOptionPane.showInputDialog(null, "Enter Sales Order ID", "Sales Order ID", JOptionPane.QUESTION_MESSAGE);
-                SalesOrder salesOrder = Engine.getSalesOrder(soId);
+                Order salesOrder = Engine.getSalesOrder(soId);
                 return new ViewSalesOrder(salesOrder);
             }
             case "/ORDS/SO/AUTO_MK" -> {
@@ -1586,7 +1622,7 @@ public class Engine {
                 return new Locations("/WHS", desktop);
             }
             case "ORDS" -> {
-                for (PurchaseOrder l : getPurchaseOrders()) {
+                for (Order l : getPurchaseOrders()) {
                     if (l.getOrderId().equals(oid)) {
                         return new ViewPurchaseOrder(l, desktop, null);
                     }
@@ -1616,14 +1652,14 @@ public class Engine {
                 case "AREAS/MOD" -> {
                     for (Area area : Engine.getAreas()) {
                         if (area.getId().equals(oid)) {
-                            return new ModifyArea(area, null);
+                            return new ModifyArea(area, desktop, null);
                         }
                     }
                 }
                 case "BNS/MOD" -> {
                     Bin bin = Engine.getBin(oid);
                     if (bin != null) {
-                        return new ModifyBin(bin, null);
+                        return new ModifyBin(bin, desktop, null);
                     }
                 }
                 case "CCS/MOD" -> {
@@ -1689,7 +1725,7 @@ public class Engine {
                     return new Locations("/WHS", desktop);
                 }
                 case "ORDS/PO/MOD" -> {
-                    for (PurchaseOrder l : getPurchaseOrders()) {
+                    for (Order l : getPurchaseOrders()) {
                         if (l.getOrderId().equals(oid)) {
                             return new ViewPurchaseOrder(l, desktop, null);
                         }

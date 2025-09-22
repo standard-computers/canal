@@ -16,7 +16,7 @@ import java.awt.*;
 public class DataCenter extends LockeState {
 
     public DataCenter() {
-        super("Data Center", "/DATA_CNTR", true, true, true, true);
+        super("Data Center", "/DATA_CNTR");
         setFrameIcon(new ImageIcon(ViewLocation.class.getResource("/icons/datacenter.png")));
         super.isMaximized();
         CustomTabbedPane main = new CustomTabbedPane();

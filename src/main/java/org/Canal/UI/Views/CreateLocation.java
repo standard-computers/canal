@@ -6,6 +6,8 @@ import org.Canal.Utils.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -67,16 +69,47 @@ public class CreateLocation extends LockeState {
 
         JPanel buttons = new JPanel(new FlowLayout());
         buttons.setLayout(new BoxLayout(buttons, BoxLayout.X_AXIS));
+        buttons.add(Box.createHorizontalStrut(5));
 
         IconButton copyFrom = new IconButton("Copy From", "open", "Copy From Location");
         copyFrom.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                String prId = JOptionPane.showInputDialog(CreateLocation.this, "Enter Location ID");
+
+                String locationId = JOptionPane.showInputDialog(CreateLocation.this, "Enter Location ID");
+                Location location = Engine.getLocationWithId(locationId);
+
+                //Copy General Info
+                locationNameField.setText(location.getName());
+                line1Field.setText(location.getLine1());
+                line2Field.setText(location.getLine2());
+                cityField.setText(location.getCity());
+                stateField.setText(location.getState());
+                postalField.setText(location.getPostal());
+                einField.setText(location.getEin());
+                einField.setText(location.getEin());
+                taxExempt.setSelected(location.isTaxExempt());
+
+                //Copy Contact Info
+                emailField.setText(location.getEmail());
+                phoneField.setText(location.getPhone());
+
+                //Copy Dimensional Data
+                widthUOM.setValue(String.valueOf(location.getWidth()));
+                widthUOM.setUOM(location.getWidthUOM());
+                lengthUOM.setValue(String.valueOf(location.getLength()));
+                lengthUOM.setUOM(location.getLengthUOM());
+                heightUOM.setValue(String.valueOf(location.getHeight()));
+                heightUOM.setUOM(location.getHeightUOM());
+
+                allowsInventory.setSelected(location.allowsInventory());
+                allowsProduction.setSelected(location.allowsProduction());
+                allowsSales.setSelected(location.allowsSales());
+                allowsPurchasing.setSelected(location.allowsPurchasing());
             }
         });
-        buttons.add(Box.createHorizontalStrut(5));
         buttons.add(copyFrom);
+        buttons.add(Box.createHorizontalStrut(5));
 
         IconButton review = new IconButton("Review", "review", "Review Location Information");
         review.addMouseListener(new MouseAdapter() {
@@ -86,11 +119,11 @@ public class CreateLocation extends LockeState {
 
             }
         });
-        buttons.add(Box.createHorizontalStrut(5));
         buttons.add(review);
+        buttons.add(Box.createHorizontalStrut(5));
 
-        IconButton execute = new IconButton("Execute", "execute", "Create Location");
-        execute.addMouseListener(new MouseAdapter() {
+        IconButton create = new IconButton("Create", "create", "Create Location");
+        create.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
 
@@ -157,8 +190,18 @@ public class CreateLocation extends LockeState {
                 }
             }
         });
+        buttons.add(create);
         buttons.add(Box.createHorizontalStrut(5));
-        buttons.add(execute);
+        int mask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
+        KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_S, mask);
+        JRootPane rp = getRootPane();
+        rp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ks, "do-create");
+        rp.getActionMap().put("do-create", new AbstractAction() {
+            @Override public void actionPerformed(ActionEvent e) {
+                create.doClick();
+            }
+        });
+
         return buttons;
     }
 

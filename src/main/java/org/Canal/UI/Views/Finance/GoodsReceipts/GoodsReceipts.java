@@ -22,7 +22,7 @@ public class GoodsReceipts extends LockeState {
 
     public GoodsReceipts(DesktopState desktop) {
 
-        super("Goods Receipts", "/GR", true, true, true, true);
+        super("Goods Receipts", "/GR");
         setFrameIcon(new ImageIcon(GoodsReceipts.class.getResource("/icons/purchaseorders.png")));
         this.desktop = desktop;
 

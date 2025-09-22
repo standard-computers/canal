@@ -1,6 +1,6 @@
 package org.Canal.UI.Views;
 
-import org.Canal.Models.BusinessUnits.PurchaseOrder;
+import org.Canal.Models.BusinessUnits.Order;
 import org.Canal.UI.Elements.*;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
@@ -44,7 +44,7 @@ public class ReturnOrder extends LockeState {
                     JOptionPane.showMessageDialog(null, "PO or Order Number required!", "Error", JOptionPane.ERROR_MESSAGE);
                 }else{
                     if(po.isEmpty()){
-                        PurchaseOrder spo = Engine.getPurchaseOrder(po);
+                        Order spo = Engine.getPurchaseOrder(po);
                         if(spo == null){
                             JOptionPane.showMessageDialog(null, "PO or Order Number required!", "Error", JOptionPane.ERROR_MESSAGE);
                             if(!rlid.equals(spo.getVendor())){

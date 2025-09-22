@@ -25,6 +25,7 @@ import java.util.ArrayList;
  */
 public class CreateItem extends LockeState implements Includer {
 
+    private Item item = new Item();
     private RefreshListener refreshListener;
     private JTextField itemIdField;
     private JTextField itemNameField;
@@ -40,17 +41,24 @@ public class CreateItem extends LockeState implements Includer {
     private UOMField itemLength;
     private UOMField itemHeight;
     private UOMField itemWeight;
+
+    //Controls Tab
+    private JCheckBox isSkud;
     private JCheckBox isBatched;
     private JCheckBox isRentable;
-    private JCheckBox isSkud;
     private JCheckBox isConsumable;
     private JCheckBox isVirtual;
+    private JCheckBox allowSales;
+    private JCheckBox allowPurchasing;
+    private JCheckBox keepInventory;
+
+
+
     private JCheckBox createBom;
     private Selectable orgIdField;
     private JTextField selectedVendor;
     private Selectable packagingUnits;
     private DesktopState desktop;
-    private ArrayList<Object[]> componentsData = new ArrayList<>();
     private ArrayList<Object[]> uomsData = new ArrayList<>();
     private ArrayList<Object[]> packagingData = new ArrayList<>();
     private CustomTable bomsView;
@@ -60,7 +68,7 @@ public class CreateItem extends LockeState implements Includer {
 
     public CreateItem(DesktopState desktop, RefreshListener refreshListener) {
 
-        super("Create an Item", "/ITS/NEW", true, true, true, true);
+        super("Create an Item", "/ITS/NEW");
         setFrameIcon(new ImageIcon(CreateItem.class.getResource("/icons/create.png")));
         Constants.checkLocke(this, true, true);
         this.desktop = desktop;
@@ -81,7 +89,10 @@ public class CreateItem extends LockeState implements Includer {
         setLayout(new BorderLayout());
         add(topBar, BorderLayout.NORTH);
         add(tabs, BorderLayout.CENTER);
-        setMaximized(true);
+
+        if((boolean) Engine.codex.getValue("ITS", "start_maximized")){
+            setMaximized(true);
+        }
     }
 
     private JPanel toolbar() {
@@ -113,6 +124,9 @@ public class CreateItem extends LockeState implements Includer {
                     isRentable.setSelected(i.isRentable());
                     isVirtual.setSelected(i.isVirtual());
                     isConsumable.setSelected(i.isConsumable());
+                    allowSales.setSelected(i.allowSales());
+                    allowPurchasing.setSelected(i.allowPurchasing());
+                    keepInventory.setSelected(i.keepInventory());
 
                     //Copy Dimensional Info
                     itemWidth.setValue(String.valueOf(i.getWidth()));
@@ -125,6 +139,10 @@ public class CreateItem extends LockeState implements Includer {
                     itemWeight.setUOM(i.getWeightUOM());
                     tax.setText(String.valueOf(i.getTax()));
                     exciseTax.setText(String.valueOf(i.getExciseTax()));
+
+                    item.setComponents(i.getComponents());
+
+                    refreshComponents();
 
                 } else {
                     JOptionPane.showMessageDialog(CreateItem.this, "Item does not exist");
@@ -152,18 +170,18 @@ public class CreateItem extends LockeState implements Includer {
                 }
 
                 if (createBom.isSelected()) {
-                    if (componentsData.isEmpty()) {
+                    if (item.getComponents().isEmpty()) {
                         addToQueue(new String[]{"CRITICAL", "BoM creation selected but no components!!!"});
                     }
                 }
 
                 double estPrice = 0.0;
-                for (Object[] o : componentsData) {
-                    System.out.println(o[4].toString());
-                    estPrice += Double.parseDouble(o[4].toString());
+                for (StockLine sl : item.getComponents()) {
+                    estPrice += sl.getValue();
                 }
                 if (estPrice > Double.parseDouble(itemPriceField.getText())) {
-                    addToQueue(new String[]{"WARNING", "Component price is more than item price. Suggested prices is " + estPrice});
+                    addToQueue(new String[]{"WARNING", "Component price is more than item price."});
+                    addToQueue(new String[]{"WARNING", "Suggested prices is " + estPrice});
                 }
 
                 if (isRentable.isSelected() && !isSkud.isSelected()) {
@@ -181,9 +199,8 @@ public class CreateItem extends LockeState implements Includer {
         IconButton autoprice = new IconButton("Autoprice", "autoprice", "");
         autoprice.addActionListener(_ -> {
             double estPrice = 0.0;
-            for (Object[] o : componentsData) {
-                System.out.println(o[4].toString());
-                estPrice += (Double.parseDouble(o[2].toString()) * Double.parseDouble(o[4].toString()));
+            for (StockLine o : item.getComponents()) {
+                estPrice += o.getValue();
             }
             itemPriceField.setText(Double.toString(estPrice));
         });
@@ -213,23 +230,31 @@ public class CreateItem extends LockeState implements Includer {
 
     protected void createItem() {
 
-        Item item = new Item();
+
+        //Set General Info
         item.setId(itemIdField.getText());
         item.setOrg(orgIdField.getSelectedValue());
         item.setName(itemNameField.getText());
         item.setLink(itemLinkField.getText());
-        item.setUpc(upc.getText());
         item.setVendorNumber(vendorNumber.getText());
-        item.setBaseQuantity(Double.parseDouble(baseQtyField.getText().trim()));
-        item.setPackagingUnit(packagingUnits.getSelectedValue());
+        item.setPrice(Double.parseDouble(itemPriceField.getText()));
+        item.setUpc(upc.getText());
         item.setVendor(selectedVendor.getText());
-        item.setColor(itemColorField.getText());
+
+        //Set Controls Properties
+        item.setSkud(isSkud.isSelected());
         item.setBatched(isBatched.isSelected());
         item.setRentable(isRentable.isSelected());
-        item.setSkud(isSkud.isSelected());
         item.setConsumable(isConsumable.isSelected());
         item.setVirtual(isVirtual.isSelected());
-        item.setPrice(Double.parseDouble(itemPriceField.getText()));
+        item.allowSales(allowSales.isSelected());
+        item.allowPurchasing(allowPurchasing.isSelected());
+        item.keepInventory(keepInventory.isSelected());
+
+        //Set Dimensional Properties
+        item.setBaseQuantity(Double.parseDouble(baseQtyField.getText().trim()));
+        item.setPackagingUnit(packagingUnits.getSelectedValue());
+        item.setColor(itemColorField.getText());
         item.setWidth(Double.parseDouble(itemWidth.getValue()));
         item.setWidthUOM(itemWidth.getUOM());
         item.setLength(Double.parseDouble(itemLength.getValue()));
@@ -240,19 +265,6 @@ public class CreateItem extends LockeState implements Includer {
         item.setWeightUOM(itemWeight.getUOM());
         item.setTax(Double.parseDouble(tax.getText()));
         item.setExciseTax(Double.parseDouble(exciseTax.getText()));
-        for (Object[] o : componentsData) {
-
-            double quantity = Double.parseDouble(o[2].toString());
-            StockLine sl = new StockLine();
-            sl.setItem(o[0].toString());
-            sl.setName(o[1].toString());
-            sl.setQuantity(quantity);
-            sl.setUnitOfMeasure(o[3].toString());
-
-            double value = Double.parseDouble(o[4].toString());
-            sl.setValue(value);
-            item.addComponent(sl);
-        }
         item.setUoms(uomsData);
         Pipe.save("/ITS", item);
 
@@ -309,6 +321,9 @@ public class CreateItem extends LockeState implements Includer {
         isRentable = new JCheckBox(" Item can be rented");
         isVirtual = new JCheckBox(" Item not physical");
         isConsumable = new JCheckBox(" Item qty used (raw materials)");
+        allowSales = new JCheckBox(" Item can be sold");
+        allowPurchasing = new JCheckBox(" Item can be purchased");
+        keepInventory = new JCheckBox(" Keep inventory of item");
 
         Form form = new Form();
         form.addInput(Elements.coloredLabel("SKU'd Product", Constants.colors[10]), isSkud);
@@ -316,6 +331,9 @@ public class CreateItem extends LockeState implements Includer {
         form.addInput(Elements.coloredLabel("Rentable", Constants.colors[8]), isRentable);
         form.addInput(Elements.coloredLabel("Virtual", Constants.colors[7]), isVirtual);
         form.addInput(Elements.coloredLabel("Consumable", Constants.colors[6]), isConsumable);
+        form.addInput(Elements.coloredLabel("Allow Sales", Constants.colors[5]), allowSales);
+        form.addInput(Elements.coloredLabel("Allow Purchasing", Constants.colors[4]), allowPurchasing);
+        form.addInput(Elements.coloredLabel("Keep Inventory", Constants.colors[3]), keepInventory);
         controls.add(form);
 
         return controls;
@@ -327,7 +345,7 @@ public class CreateItem extends LockeState implements Includer {
 
         baseQtyField = Elements.input("1");
 
-        packagingUnits = Selectables.packagingUoms();
+        packagingUnits = Selectables.allPackagingUoms();
 
         itemWidth = new UOMField();
         if (Engine.codex.getValue("ITS", "default_width_uom") != null) {
@@ -426,82 +444,120 @@ public class CreateItem extends LockeState implements Includer {
         return packaging;
     }
 
+    private CustomTable componentsTable() {
+        String[] columns = new String[]{
+                "Component",
+                "Item ID",
+                "Item Name",
+                "Vendor",
+                "Req Qty",
+                "Qty UOM",
+                "Price",
+                "Total"
+        };
+
+        ArrayList<Object[]> data = new ArrayList<>();
+        for (int s = 0; s < item.getComponents().size(); s++) {
+            StockLine ol = item.getComponents().get(s);
+            Item i = Engine.getItem(ol.getItem());
+            data.add(new Object[]{
+                    String.valueOf(s + 1),
+                    ol.getItem(),
+                    ol.getName(),
+                    i.getVendor(),
+                    ol.getQuantity(),
+                    ol.getUnitOfMeasure(),
+                    ol.getValue(),
+                    (ol.getValue() * ol.getQuantity())
+            });
+        }
+
+        CustomTable ct = new CustomTable(columns, data);
+        ct.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    JTable t = (JTable) e.getSource();
+                    int r = t.getSelectedRow();
+                    if (r != -1) {
+                        String v = String.valueOf(t.getValueAt(r, 1));
+
+                    }
+                }
+            }
+        });
+        return ct;
+    }
+
     private JPanel billOfMaterials() {
 
         JPanel bom = new JPanel(new BorderLayout());
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-
-        IconButton addComponents = new IconButton("Add", "add_rows", "Add Component");
-        addComponents.addActionListener(_ -> desktop.put(new CreateInclusion(CreateItem.this)));
-        tb.add(addComponents);
         tb.add(Box.createHorizontalStrut(5));
 
-        IconButton removeUoM = new IconButton("Remove Selected", "delete_rows", "Remove Selected Component");
+        IconButton addComponent = new IconButton("Add Component", "add_rows", "Add Component");
+        addComponent.addActionListener(_ -> desktop.put(new CreateInclusion(CreateItem.this)));
+        tb.add(addComponent);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(removeUoM);
+
+        IconButton removeComponent = new IconButton("Remove Component", "delete_rows", "Remove Selected Component");
+        removeComponent.addActionListener(_ -> {
+            int selectedRow = bomsView.getSelectedRow();
+            if (selectedRow != -1) {
+                item.getComponents().remove(selectedRow);
+                refreshComponents();
+            }
+        });
+        tb.add(removeComponent);
+        tb.add(Box.createHorizontalStrut(5));
 
         createBom = new JCheckBox("Create separate BoM");
         createBom.setToolTipText("Create a separate Objex as /BOMS");
-        tb.add(Box.createHorizontalStrut(5));
         tb.add(createBom);
+        tb.add(Box.createHorizontalStrut(5));
 
         bom.add(tb, BorderLayout.NORTH);
-        bomsView = new CustomTable(new String[]{
-                "Item ID",
-                "Item Name",
-                "Req Qty",
-                "Qty UOM",
-                "Price",
-                "Total"
-        }, componentsData);
-        scrollPane = new JScrollPane(bomsView);
-        bom.add(scrollPane, BorderLayout.CENTER);
+        bomsView = componentsTable();
+        bom.add(new JScrollPane(bomsView), BorderLayout.CENTER);
         return bom;
+    }
+
+    private void refreshComponents() {
+
+        CustomTable newTable = componentsTable();
+        JScrollPane scrollPane = (JScrollPane) bomsView.getParent().getParent();
+        scrollPane.setViewportView(newTable);
+        bomsView = newTable;
+        scrollPane.revalidate();
+        scrollPane.repaint();
     }
 
     @Override
     public void commitInclusion(Item item, double qty, String uom) {
 
-        componentsData.add(new Object[]{
-                item.getId(),
-                item.getName(),
-                qty,
-                uom,
-                item.getPrice(),
-                (qty * item.getPrice())
+        StockLine newComponent = new StockLine();
+        newComponent.setItem(item.getId());
+        newComponent.setName(item.getName());
+        newComponent.setQuantity(qty);
+        newComponent.setUnitOfMeasure(uom);
+        newComponent.setValue(item.getBasePrice());
+        this.item.addComponent(newComponent);
+        this.item.getComponents().sort((a, b) -> {
+            int nameCmp = a.getName().compareToIgnoreCase(b.getName());
+            if (nameCmp != 0) {
+                return nameCmp;
+            }
+            return a.getId().compareToIgnoreCase(b.getId());
         });
-
-        CustomTable newBoms = new CustomTable(new String[]{
-                "Item ID",
-                "Item Name",
-                "Req Qty",
-                "Qty UOM",
-                "Price",
-                "Total"
-        }, componentsData);
-        JScrollPane scrollPane = (JScrollPane) bomsView.getParent().getParent();
-        scrollPane.setViewportView(newBoms);
-        bomsView = newBoms;
-        scrollPane.revalidate();
-        scrollPane.repaint();
+        refreshComponents();
     }
 
     @Override
     public void commitUoM(String uom, double qty, String baseQtyUom) {
 
         uomsData.add(new Object[]{1, uom, qty, baseQtyUom});
-        CustomTable newUoms = new CustomTable(new String[]{
-                "Qty",
-                "UOM",
-                "Base Qty",
-                "Base Qty UOM"
-        }, uomsData);
-        JScrollPane scrollPane = (JScrollPane) uomsView.getParent().getParent();
-        scrollPane.setViewportView(newUoms);
-        uomsView = newUoms;
-        scrollPane.revalidate();
-        scrollPane.repaint();
+        refreshComponents();
     }
 
     @Override

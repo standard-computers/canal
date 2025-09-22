@@ -94,6 +94,7 @@ public class Constants {
                 new Locke("Accounts", getIcon("folder"), "/ACCS", new Locke[]{
                         new Locke("Open Account", getIcon("open"), "/ACCS/O", null),
                         new Locke("Find Account", getIcon("find"), "/ACCS/F", null),
+                        new Locke("AutoMake Account", getIcon("automake"), "/ACCS/AUTO_MK", null),
                         new Locke("Create Account", getIcon("create"), "/ACCS/NEW", null),
                         new Locke("Modify Account", getIcon("modify"), "/ACCS/MOD", null),
                         new Locke("Archive Account", getIcon("archive"), "/ACCS/ARCHV", null),
@@ -127,6 +128,7 @@ public class Constants {
                         new Locke("Open Bill of Materials", getIcon("open"), "/BOMS/O", null),
                         new Locke("Find Bill of Materials", getIcon("find"), "/BOMS/F", null),
                         new Locke("Create Bill of Materials", getIcon("create"), "/BOMS/NEW", null),
+                        new Locke("Activate a Bill of Materials", getIcon("start"), "/BOMS/ACTV", null),
                         new Locke("Modify Bill of Materials", getIcon("modify"), "/BOMS/MOD", null),
                         new Locke("Archive Bill of Materials", getIcon("archive"), "/BOMS/ARCHV", null),
                         new Locke("Remove Bill of Materials", getIcon("delete"), "/BOMS/DEL", null),
@@ -244,7 +246,7 @@ public class Constants {
                                 new Locke("Remove a Flow", getIcon("delete"), "/MVMT/FLWS/DEL", null),
                         }),
                         new Locke("Work Orders", getIcon("folder"), "/MVMT/WO", new Locke[]{ //Controller
-                                new Locke("Find Work Order", getIcon("find"), "/MVMT/WO", null),
+                                new Locke("Find Work Order", getIcon("find"), "/MVMT/WO/F", null),
                                 new Locke("Create Work Order", getIcon("create"), "/MVMT/WO/NEW", null),
                                 new Locke("Modify Work Order", getIcon("modify"), "/MVMT/WO/MOD", null),
                                 new Locke("Block Work Order", getIcon("locke"), "/MVMT/WO/BLK", null),
@@ -305,7 +307,7 @@ public class Constants {
                 }),
                 new Locke("Sales Orders", getIcon("folder"), "/ORDS/SO", new Locke[]{
                         new Locke("Open Sales Order", getIcon("open"), "/ORDS/SO/O", null),
-                        new Locke("Find Sales Order", getIcon("find"), "/ORDS/SO", null),
+                        new Locke("Find Sales Order", getIcon("find"), "/ORDS/SO/F", null),
                         new Locke("Create Sales Order", getIcon("create"), "/ORDS/SO/NEW", null),
                         new Locke("Modify Sales Order", getIcon("modify"), "/ORDS/SO/MOD", null),
                         new Locke("Block Sales Order", getIcon("locke"), "/ORDS/SO/BLK", null),
@@ -417,14 +419,6 @@ public class Constants {
                                 new Locke("Archive ASN", getIcon("archive"), "/TRANS/ASN/ARCHV", null),
                                 new Locke("Remove ASN", getIcon("delete"), "/TRANS/ASN/DEL", null),
                         }),
-                }),
-                new Locke("VAS", getIcon("folder"), "/VAS", new Locke[]{
-                        new Locke("Open VAS", getIcon("open"), "/VAS/O", null),
-                        new Locke("Find VAS", getIcon("find"), "/VAS/F", null),
-                        new Locke("Create VAS", getIcon("create"), "/VAS/NEW", null),
-                        new Locke("Modify VAS", getIcon("modify"), "/VAS/MOD", null),
-                        new Locke("Archive VAS", getIcon("archive"), "/VAS/ARCHV", null),
-                        new Locke("Remove VAS", getIcon("delete"), "/VAS/DEL", null),
                 }),
                 new Locke("Vendors", getIcon("vendors"), "/VEND", new Locke[]{
                         new Locke("Open Vendor", getIcon("open"), "/VEND/O", null),

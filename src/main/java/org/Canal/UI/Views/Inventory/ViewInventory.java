@@ -1,5 +1,6 @@
 package org.Canal.UI.Views.Inventory;
 
+import org.Canal.Models.SupplyChainUnits.Bin;
 import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.Models.SupplyChainUnits.StockLine;
 import org.Canal.UI.Elements.CustomTable;
@@ -70,6 +71,7 @@ public class ViewInventory extends LockeState implements RefreshListener {
         ArrayList<Object[]> stks = new ArrayList<>();
         for (StockLine sl : Engine.getInventory(location).getStockLines()) {
             Item i = Engine.getItem(sl.getItem());
+            Bin b = Engine.getBin(sl.getBin());
             stks.add(new Object[]{
                     location,
                     sl.getHu(),
@@ -82,7 +84,7 @@ public class ViewInventory extends LockeState implements RefreshListener {
                     sl.getValue(),
                     (sl.getQuantity() * i.getWeight()),
                     i.getWeightUOM(),
-                    sl.getArea(),
+                    b.getArea(),
                     sl.getBin(),
                     sl.getReceipt(),
                     String.valueOf(sl.getStatus())

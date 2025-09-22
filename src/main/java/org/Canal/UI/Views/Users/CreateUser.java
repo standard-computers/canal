@@ -28,7 +28,6 @@ public class CreateUser extends LockeState {
     private DesktopState desktop;
     private RefreshListener refreshListener;
     private JPanel canalAccess;
-    private JTextField userIdField;
     private Selectable employees;
     private ArrayList<JCheckBox> checkboxes;
     private RSyntaxTextArea textArea;
@@ -48,16 +47,15 @@ public class CreateUser extends LockeState {
                 throw new RuntimeException(e);
             }
         }
-        Form f = new Form();
-        String puid = "U" + (10000 + (Engine.getUsers().size() + 1));
-        userIdField = Elements.input(puid);
+
         employees = Selectables.employees();
-        f.addInput(Elements.coloredLabel("New User ID", Constants.colors[10]), userIdField);
-        f.addInput(Elements.coloredLabel("Employee", Constants.colors[9]), employees);
+
+        Form form = new Form();
+        form.addInput(Elements.coloredLabel("Employee", Constants.colors[9]), employees);
 
         JPanel again = new JPanel(new BorderLayout());
         again.add(Elements.header("Create New User", SwingConstants.LEFT), BorderLayout.NORTH);
-        again.add(f, BorderLayout.CENTER);
+        again.add(form, BorderLayout.CENTER);
         again.add(toolbar(), BorderLayout.SOUTH);
         add(again, BorderLayout.NORTH);
 
@@ -68,48 +66,60 @@ public class CreateUser extends LockeState {
     }
 
     private JPanel toolbar() {
+
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        tb.add(Box.createHorizontalStrut(5));
+
         IconButton copy = new IconButton("Copy From", "open", "Export as CSV", "");
-        IconButton review = new IconButton("Review", "review", "Review User");
-        IconButton create = new IconButton("Create User", "execute", "Create User");
-        accessCount = Elements.link("0 Accesses", "Total number of Locked Codes user has access to");
+        copy.addActionListener(_ -> {
+
+            String userId = JOptionPane.showInputDialog("Enter User ID");
+            User u = Engine.getUser(userId);
+            employees.setSelectedValue(u.getEmployee());
+        });
         tb.add(copy);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton review = new IconButton("Review", "review", "Review User");
         tb.add(review);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton create = new IconButton("Create User", "execute", "Create User");
         tb.add(create);
-        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
+        tb.add(Box.createHorizontalStrut(5));
 
-        create.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                User newUser = new User();
-                newUser.setId(userIdField.getText().trim());
-                newUser.setEmployee(employees.getSelectedValue());
-                ArrayList<String> accesses = new ArrayList<>();
-                for(JCheckBox c : checkboxes){
-                    if(c.isSelected()){
-                        accesses.add(c.getText());
-                    }
-                }
-                newUser.setAccesses(accesses);
-                Employee emp = Engine.getEmployee(employees.getSelectedValue());
-                try {
-                    String genHpv = Crypter.md5(emp.getName().split(" ")[emp.getName().split(" ").length - 1].toLowerCase() + "1234");
-                    newUser.setHpv(genHpv);
-                    Pipe.save("/USRS", newUser);
-                    dispose();
-                    JOptionPane.showMessageDialog(null, "User create for ORG " + Engine.getOrganization().getId());
+        accessCount = Elements.link("0 Accesses", "Total number of Locked Codes user has access to");
 
-                    if(refreshListener != null){
-                        refreshListener.refresh();
-                    }
-
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "User creation failed because password encryption was not implemented.");
+        create.addActionListener(_ -> {
+            User newUser = new User();
+            String userId = Engine.generateId("USRS");
+            newUser.setId(userId);
+            newUser.setEmployee(employees.getSelectedValue());
+            ArrayList<String> accesses = new ArrayList<>();
+            for(JCheckBox c : checkboxes){
+                if(c.isSelected()){
+                    accesses.add(c.getText());
                 }
             }
+            newUser.setAccesses(accesses);
+            Employee emp = Engine.getEmployee(employees.getSelectedValue());
+            try {
+                String genHpv = Crypter.md5(emp.getName().split(" ")[emp.getName().split(" ").length - 1].toLowerCase() + "1234");
+                newUser.setHpv(genHpv);
+                Pipe.save("/USRS", newUser);
+                dispose();
+                JOptionPane.showMessageDialog(null, "User create for ORG " + Engine.getOrganization().getId());
+
+                if(refreshListener != null){
+                    refreshListener.refresh();
+                }
+
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "User creation failed because password encryption was not implemented.");
+            }
         });
+
         return tb;
     }
 
@@ -120,25 +130,25 @@ public class CreateUser extends LockeState {
         JScrollPane scrollPane = new JScrollPane(canalAccess);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setPreferredSize(new Dimension(400, 300));
+
         JPanel ctrls = new JPanel(new GridLayout(1, 2));
-        JButton sa = Elements.button("Select All");
-        JButton dsa = Elements.button("Deselect All");
-        ctrls.add(sa);
-        ctrls.add(dsa);
+        JButton selectAll = Elements.button("Select All");
+        selectAll.addActionListener(_ -> {
+            checkboxes.forEach(cb -> cb.setSelected(true));
+            repaint();
+        });
+        ctrls.add(selectAll);
+
+        JButton deselectAll = Elements.button("Deselect All");
+        deselectAll.addActionListener(_ -> {
+            checkboxes.forEach(cb -> cb.setSelected(false));
+            repaint();
+        });
+        ctrls.add(deselectAll);
+
         p.add(ctrls, BorderLayout.SOUTH);
-        sa.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                checkboxes.forEach(cb -> cb.setSelected(true));
-                repaint();
-            }
-        });
-        dsa.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                checkboxes.forEach(cb -> cb.setSelected(false));
-                repaint();
-            }
-        });
         p.add(scrollPane, BorderLayout.CENTER);
+
         return p;
     }
 

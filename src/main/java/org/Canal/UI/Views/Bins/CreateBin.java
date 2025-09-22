@@ -4,17 +4,19 @@ import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.Models.SupplyChainUnits.Bin;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.*;
+import org.Canal.UI.Views.System.LockeMessages;
 import org.Canal.Utils.Constants;
+import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.RefreshListener;
+import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.util.HashMap;
 
 /**
@@ -23,6 +25,7 @@ import java.util.HashMap;
 public class CreateBin extends LockeState {
 
     private String location;
+    private DesktopState desktop;
     private RefreshListener refreshListener;
     private JTextField idField;
     private JTextField locationField;
@@ -44,21 +47,30 @@ public class CreateBin extends LockeState {
     private JCheckBox putawayEnabled;
     private JCheckBox holdsStock;
 
-    public CreateBin(String location, RefreshListener refreshListener) {
+    //Notes Tab
+    private RTextScrollPane notes;
 
-        super("New Bin", "/BNS/NEW", false, true, false, true);
-        setFrameIcon(new ImageIcon(CreateBin.class.getResource("/icons/bins.png")));
+    public CreateBin(String location, DesktopState desktop, RefreshListener refreshListener) {
+
+        super("New Bin", "/BNS/NEW");
+        setFrameIcon(new ImageIcon(CreateBin.class.getResource("/icons/create.png")));
         this.location = location;
+        this.desktop = desktop;
         this.refreshListener = refreshListener;
 
         CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.addTab("General", general());
+        tabs.addTab("Controls", controls());
         tabs.addTab("Dimensional", dimensional());
         tabs.addTab("Items", restrictions());
-        tabs.addTab("Controls", restrictions());
+        tabs.addTab("Notes", notes());
 
         add(toolbar(), BorderLayout.NORTH);
         add(tabs, BorderLayout.CENTER);
+
+        if ((boolean) Engine.codex.getValue("BNS", "start_maximized")) {
+            setMaximized(true);
+        }
     }
 
     private JPanel toolbar() {
@@ -66,6 +78,8 @@ public class CreateBin extends LockeState {
         JPanel toolbar = new JPanel(new BorderLayout());
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        tb.add(Box.createHorizontalStrut(5));
+
         IconButton copyFrom = new IconButton("Copy From", "open", "Copy from Bin");
         copyFrom.addActionListener(_ -> {
             String binId = JOptionPane.showInputDialog(CreateBin.this, "Enter Bin ID", "Copy Bin", JOptionPane.QUESTION_MESSAGE);
@@ -77,6 +91,7 @@ public class CreateBin extends LockeState {
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton review = new IconButton("Review", "review", "Review Bin data");
+        review.addActionListener(_ -> performReview());
         tb.add(review);
         tb.add(Box.createHorizontalStrut(5));
 
@@ -105,11 +120,13 @@ public class CreateBin extends LockeState {
 
             newBin.setAuto_replenish(autoReplenish.isSelected());
             newBin.setFixed(fixedBin.isSelected());
-            newBin.setPicking(pickingEnabled.isSelected());
-            newBin.setPutaway(putawayEnabled.isSelected());
-            newBin.setGoodsissue(doesGoodsIssue.isSelected());
-            newBin.setGoodsreceipt(doesGoodsReceipt.isSelected());
-            newBin.setHoldsStock(holdsStock.isSelected());
+            newBin.pickingEnabled(pickingEnabled.isSelected());
+            newBin.putawayEnabled(putawayEnabled.isSelected());
+            newBin.doesGI(doesGoodsIssue.isSelected());
+            newBin.doesGR(doesGoodsReceipt.isSelected());
+            newBin.holdsStock(holdsStock.isSelected());
+
+            newBin.setNotes(notes.getTextArea().getText());
 
             Area foundArea = Engine.getArea(binArea);
             if(foundArea != null){
@@ -123,7 +140,17 @@ public class CreateBin extends LockeState {
             }
         });
         tb.add(create);
-        tb.setBorder(new EmptyBorder(0, 5, 0, 5));
+        tb.add(Box.createHorizontalStrut(5));
+
+        int mask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
+        KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_S, mask);
+        JRootPane rp = getRootPane();
+        rp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ks, "do-modify");
+        rp.getActionMap().put("do-modify", new AbstractAction() {
+            @Override public void actionPerformed(ActionEvent e) {
+                create.doClick();
+            }
+        });
 
         toolbar.add(Elements.header("Make a Bin", SwingConstants.LEFT), BorderLayout.NORTH);
         toolbar.add(tb, BorderLayout.SOUTH);
@@ -169,50 +196,15 @@ public class CreateBin extends LockeState {
 
         idField.setText(generatedId);
         nameField = Elements.input(generatedId, 20);
-        doesGoodsIssue = new JCheckBox("GI on stock removal from this bin");
-        doesGoodsReceipt = new JCheckBox("GR on put away to this bin");
-        pickingEnabled = new JCheckBox("Allow picks from this bin");
-        putawayEnabled = new JCheckBox("Allow picks from this bin");
-        autoReplenish = new JCheckBox("Auto Replenish");
-        autoReplenish.setToolTipText("Bin will be automatically replenished based on set replenishments");
-        fixedBin = new JCheckBox("Fixed Bin");
-        fixedBin.setToolTipText("Bin can only contain one Item ID");
-        holdsStock = new JCheckBox("Bin can hold inventory");
 
         Form form = new Form();
         form.addInput(Elements.coloredLabel("*New Bin ID", UIManager.getColor("Label.foreground")), idField);
         form.addInput(Elements.coloredLabel("Location ID", UIManager.getColor("Label.foreground")), locationField);
         form.addInput(Elements.coloredLabel("*Area", UIManager.getColor("Label.foreground")), this.areas);
         form.addInput(Elements.coloredLabel("Bin Name", Constants.colors[10]), nameField);
-        form.addInput(Elements.coloredLabel("Goods Issue", Constants.colors[10]), doesGoodsIssue);
-        form.addInput(Elements.coloredLabel("Goods Receipt", Constants.colors[10]), doesGoodsReceipt);
-        form.addInput(Elements.coloredLabel("Picking Enabled", Constants.colors[9]), pickingEnabled);
-        form.addInput(Elements.coloredLabel("Putaway Enabled", Constants.colors[9]), putawayEnabled);
-        form.addInput(Elements.coloredLabel("Auto Replenish", Constants.colors[8]), autoReplenish);
-        form.addInput(Elements.coloredLabel("Fixed Bin", Constants.colors[7]), fixedBin);
-        form.addInput(Elements.coloredLabel("Holds Stock", Constants.colors[7]), holdsStock);
         general.add(form);
 
         return general;
-    }
-
-    private JPanel dimensional() {
-
-        JPanel dimensional = new JPanel(new FlowLayout(FlowLayout.LEFT));
-
-        widthField = new UOMField();
-        lengthField = new UOMField();
-        heightField = new UOMField();
-        weightField = new UOMField();
-
-        Form form = new Form();
-        form.addInput(Elements.coloredLabel("Width", Constants.colors[10]), widthField);
-        form.addInput(Elements.coloredLabel("Length", Constants.colors[9]), lengthField);
-        form.addInput(Elements.coloredLabel("Height", Constants.colors[8]), heightField);
-        form.addInput(Elements.coloredLabel("Weight", Constants.colors[7]), weightField);
-        dimensional.add(form);
-
-        return dimensional;
     }
 
     private JPanel controls() {
@@ -229,16 +221,36 @@ public class CreateBin extends LockeState {
         holdsStock = new JCheckBox("Bin can hold inventory");
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Goods Issue", UIManager.getColor("Label.foreground")), doesGoodsIssue);
-        form.addInput(Elements.coloredLabel("Goods Receipt", UIManager.getColor("Label.foreground")), doesGoodsReceipt);
-        form.addInput(Elements.coloredLabel("Picking Enabled", UIManager.getColor("Label.foreground")), pickingEnabled);
-        form.addInput(Elements.coloredLabel("Putaway Enabled", UIManager.getColor("Label.foreground")), putawayEnabled);
-        form.addInput(Elements.coloredLabel("Auto Replenish", UIManager.getColor("Label.foreground")), autoReplenish);
-        form.addInput(Elements.coloredLabel("Fixed Bin", UIManager.getColor("Label.foreground")), fixedBin);
-        form.addInput(Elements.coloredLabel("Holds Stock", UIManager.getColor("Label.foreground")), holdsStock);
+        form.addInput(Elements.coloredLabel("Goods Issue", Constants.colors[10]), doesGoodsIssue);
+        form.addInput(Elements.coloredLabel("Goods Receipt", Constants.colors[9]), doesGoodsReceipt);
+        form.addInput(Elements.coloredLabel("Picking Enabled", Constants.colors[8]), pickingEnabled);
+        form.addInput(Elements.coloredLabel("Putaway Enabled", Constants.colors[7]), putawayEnabled);
+        form.addInput(Elements.coloredLabel("Auto Replenish", Constants.colors[6]), autoReplenish);
+        form.addInput(Elements.coloredLabel("Fixed Bin", Constants.colors[5]), fixedBin);
+        form.addInput(Elements.coloredLabel("Holds Stock", Constants.colors[4]), holdsStock);
         controls.add(form);
 
         return controls;
+    }
+
+    private JPanel dimensional() {
+
+        JPanel dimensional = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        widthField = new UOMField();
+        lengthField = new UOMField();
+        heightField = new UOMField();
+        weightField = new UOMField();
+        weightField.setUOM("OZ");
+
+        Form form = new Form();
+        form.addInput(Elements.coloredLabel("Width", Constants.colors[0]), widthField);
+        form.addInput(Elements.coloredLabel("Length", Constants.colors[1]), lengthField);
+        form.addInput(Elements.coloredLabel("Height", Constants.colors[2]), heightField);
+        form.addInput(Elements.coloredLabel("Weight", Constants.colors[3]), weightField);
+        dimensional.add(form);
+
+        return dimensional;
     }
 
     private JPanel restrictions() {
@@ -246,5 +258,49 @@ public class CreateBin extends LockeState {
         JPanel restrictions = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         return restrictions;
+    }
+
+    private RTextScrollPane notes() {
+
+        notes = Elements.simpleEditor();
+        return notes;
+    }
+
+    private void performReview(){
+
+        if(idField.getText().isEmpty()){
+            addToQueue(new String[]{"CRITICAL", "Bin ID is not set!!!"});
+        }
+
+        if(locationField.getText().isEmpty()){
+            addToQueue(new String[]{"CRITICAL", "Bin Location ID is not set!!!"});
+        }
+
+        if(areas.getSelectedValue().isEmpty()){
+            addToQueue(new String[]{"CRITICAL", "Bin Area is not set!!!"});
+        }
+
+        if(nameField.getText().isEmpty()){
+            addToQueue(new String[]{"CRITICAL", "Bin Name is not set!!!"});
+        }
+
+        if(Double.parseDouble(widthField.getValue()) == 0){
+            addToQueue(new String[]{"WARNING", "Bin width will be set to 0. Are you sure?"});
+        }
+
+        if(Double.parseDouble(lengthField.getValue()) == 0){
+            addToQueue(new String[]{"WARNING", "Bin length will be set to 0. Are you sure?"});
+        }
+
+        if(Double.parseDouble(heightField.getValue()) == 0){
+            addToQueue(new String[]{"WARNING", "Bin height will be set to 0. Are you sure?"});
+        }
+
+        if(Double.parseDouble(weightField.getValue()) == 0){
+            addToQueue(new String[]{"WARNING", "Bin weight will be set to 0. Are you sure?"});
+        }
+
+        desktop.put(new LockeMessages(getQueue()));
+        purgeQueue();
     }
 }

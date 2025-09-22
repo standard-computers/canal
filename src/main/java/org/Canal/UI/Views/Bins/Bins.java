@@ -11,7 +11,6 @@ import org.Canal.Utils.Engine;
 import org.Canal.Utils.RefreshListener;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -41,8 +40,8 @@ public class Bins extends LockeState implements RefreshListener {
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);
         add(tableScrollPane, BorderLayout.CENTER);
-        
-        if((boolean) Engine.codex.getValue("BNS", "start_maximized")){
+
+        if ((boolean) Engine.codex.getValue("BNS", "start_maximized")) {
             setMaximized(true);
         }
     }
@@ -51,14 +50,15 @@ public class Bins extends LockeState implements RefreshListener {
 
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        tb.add(Box.createHorizontalStrut(5));
 
-        if((boolean) Engine.codex.getValue("BNS", "import_enabled")){
+        if ((boolean) Engine.codex.getValue("BNS", "import_enabled")) {
             IconButton importBins = new IconButton("Import", "export", "Import as CSV", "");
             tb.add(importBins);
             tb.add(Box.createHorizontalStrut(5));
         }
 
-        if((boolean) Engine.codex.getValue("BNS", "export_enabled")){
+        if ((boolean) Engine.codex.getValue("BNS", "export_enabled")) {
             IconButton export = new IconButton("Export", "export", "Export as CSV", "");
             export.addActionListener(_ -> table.exportToCSV());
             tb.add(export);
@@ -67,28 +67,21 @@ public class Bins extends LockeState implements RefreshListener {
 
         IconButton open = new IconButton("Open", "open", "Open Bin");
         open.addActionListener(_ -> {
-           String binId = JOptionPane.showInputDialog("Bin ID");
-           Bin bin = Engine.getBin(binId);
-           desktop.put(new ViewBin(bin, desktop, this));
+            String binId = JOptionPane.showInputDialog("Bin ID");
+            Bin bin = Engine.getBin(binId);
+            desktop.put(new ViewBin(bin, desktop, this));
         });
         tb.add(open);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton create = new IconButton("Create", "create", "Create a Bin", "/BNS/NEW");
-        create.addActionListener(_ -> desktop.put(new CreateBin(null, this)));
+        create.addActionListener(_ -> desktop.put(new CreateBin(null, desktop, this)));
         tb.add(create);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton autoMakeBins = new IconButton("AutoMake", "automake", "Automate the creation of Bin(s)", "/BNS/AUTO_MK");
-        autoMakeBins.addActionListener(_ -> desktop.put(new AutoMakeBins()));
+        autoMakeBins.addActionListener(_ -> desktop.put(new AutoMakeBins(desktop)));
         tb.add(autoMakeBins);
-        tb.add(Box.createHorizontalStrut(5));
-
-        IconButton delete = new IconButton("Delete", "delete", "Delete Bin(s)", "/BNS/DEL");
-        delete.addActionListener(_ -> {
-
-        });
-        tb.add(delete);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton labels = new IconButton("Labels", "label", "Delete an Bin");
@@ -99,11 +92,11 @@ public class Bins extends LockeState implements RefreshListener {
         tb.add(print);
         tb.add(Box.createHorizontalStrut(5));
 
-
         IconButton refresh = new IconButton("Refresh", "refresh", "Refresh Data");
-        refresh.addActionListener(e -> refresh());
+        refresh.addActionListener(_ -> refresh());
         tb.add(refresh);
-        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
+        tb.add(Box.createHorizontalStrut(5));
+
         return tb;
     }
 
@@ -159,11 +152,11 @@ public class Bins extends LockeState implements RefreshListener {
                     b.getWeightUOM(),
                     b.isAuto_replenish(),
                     b.isFixed(),
-                    b.isPicking(),
-                    b.isPutaway(),
+                    b.pickingEnabled(),
+                    b.putawayEnabled(),
                     b.doesGI(),
                     b.doesGR(),
-                    b.isHoldsStock(),
+                    b.holdsStock(),
                     b.getStatus(),
                     b.getCreated(),
             });

@@ -46,7 +46,7 @@ public class Ledger extends Objex {
         this.period = period;
     }
 
-    public String getStarts() {
+    public String starts() {
         return starts;
     }
 
@@ -54,7 +54,7 @@ public class Ledger extends Objex {
         this.starts = starts;
     }
 
-    public String getEnds() {
+    public String ends() {
         return ends;
     }
 

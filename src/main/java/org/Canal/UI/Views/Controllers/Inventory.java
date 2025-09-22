@@ -20,7 +20,7 @@ public class Inventory extends LockeState {
 
     public Inventory() {
 
-        super("Inventory Control", "/INV", true, true, true, true);
+        super("Inventory Control", "/INV");
 
         setLayout(new BorderLayout());
         add(toolbar(), BorderLayout.NORTH);

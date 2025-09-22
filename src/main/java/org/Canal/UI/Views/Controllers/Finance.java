@@ -24,7 +24,7 @@ public class Finance extends LockeState {
 
     public Finance(DesktopState desktop) {
 
-        super("Finance", "/FI", true, true, true, true);
+        super("Finance", "/FI");
         setFrameIcon(new ImageIcon(TimeClock.class.getResource("/icons/windows/finance.png")));
 
         JPanel main = new JPanel(new GridLayout(1, 4));
@@ -54,7 +54,7 @@ public class Finance extends LockeState {
         sales.add(salesOrders);
         createSalesOrder.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new CreateSalesOrder());
+                desktop.put(new CreateSalesOrder(desktop));
             }
         });
         salesOrders.addMouseListener(new MouseAdapter() {

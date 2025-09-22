@@ -9,9 +9,9 @@ import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.LockeStatus;
 import org.Canal.Utils.RefreshListener;
+import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -38,21 +38,26 @@ public class ViewArea extends LockeState implements RefreshListener {
         tabs.addTab("Controls", controls());
         tabs.addTab("Activity", bins());
         tabs.addTab("Bins", bins());
+        tabs.addTab("Notes", notes());
 
         add(toolbar(), BorderLayout.NORTH);
         add(tabs, BorderLayout.CENTER);
+
+        if ((boolean) Engine.codex.getValue("AREAS", "start_maximized")) {
+            setMaximized(true);
+        }
     }
 
     public JPanel toolbar() {
 
         JPanel panel = new JPanel(new BorderLayout());
         JPanel tb = new JPanel();
-
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        tb.add(Box.createHorizontalStrut(5));
 
         IconButton modify = new IconButton("Modify", "modify", "Modify Area", "/AREAS/MOD");
         modify.addActionListener(_ -> {
-            desktop.put(new ModifyArea(area, refreshListener));
+            desktop.put(new ModifyArea(area, desktop, refreshListener));
             dispose();
         });
         tb.add(modify);
@@ -62,25 +67,27 @@ public class ViewArea extends LockeState implements RefreshListener {
         JRootPane rp = getRootPane();
         rp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ks, "do-modify");
         rp.getActionMap().put("do-modify", new AbstractAction() {
-            @Override public void actionPerformed(ActionEvent e) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 modify.doClick();
             }
         });
 
         IconButton makeBin = new IconButton("+ Bin", "bins", "Add a Bin", "/BNS/NEW");
-        makeBin.addActionListener(_ -> desktop.put(new CreateBin(null, refreshListener)));
+        makeBin.addActionListener(_ -> desktop.put(new CreateBin(null, desktop, refreshListener)));
         tb.add(makeBin);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton archive;
-        if(area.getStatus().equals(LockeStatus.ARCHIVED) || area.getStatus().equals(LockeStatus.NEW)){
+        if (area.getStatus().equals(LockeStatus.ARCHIVED)
+                || area.getStatus().equals(LockeStatus.NEW)) {
 
             archive = new IconButton("Activate", "start", "Activate Area");
             archive.addActionListener(_ -> {
                 area.setStatus(LockeStatus.ACTIVE);
                 area.save();
                 dispose();
-                if(refreshListener != null){
+                if (refreshListener != null) {
                     refreshListener.refresh();
                 }
             });
@@ -91,7 +98,7 @@ public class ViewArea extends LockeState implements RefreshListener {
                 area.setStatus(LockeStatus.ARCHIVED);
                 area.save();
                 dispose();
-                if(refreshListener != null){
+                if (refreshListener != null) {
                     refreshListener.refresh();
                 }
             });
@@ -99,16 +106,40 @@ public class ViewArea extends LockeState implements RefreshListener {
         tb.add(archive);
         tb.add(Box.createHorizontalStrut(5));
 
+        if (!area.getStatus().equals(LockeStatus.BLOCKED)) {
+            IconButton block = new IconButton("Block", "block", "Block Area", "/AREAS/ARCHV");
+            block.addActionListener(_ -> {
+
+                area.setStatus(LockeStatus.BLOCKED);
+                area.save();
+
+                dispose();
+                if (refreshListener != null) {
+                    refreshListener.refresh();
+                }
+            });
+            tb.add(block);
+            tb.add(Box.createHorizontalStrut(5));
+        }
+
         IconButton delete = new IconButton("Delete", "delete", "Delete Area", "/AREAS/DEL");
         delete.addActionListener(_ -> {
-            if(area.getBins().isEmpty()) {
 
+            if (area.getBins().isEmpty()) {
+
+                area.setStatus(LockeStatus.DELETED);
+                area.save();
+                dispose();
+                if (refreshListener != null) {
+                    refreshListener.refresh();
+                }
             } else {
 
             }
         });
         tb.add(delete);
-        tb.setBorder(new EmptyBorder(0, 5, 0, 5));
+        tb.add(Box.createHorizontalStrut(5));
+
         panel.add(Elements.header(area.getName() + " - " + area.getId(), SwingConstants.LEFT), BorderLayout.CENTER);
         panel.add(tb, BorderLayout.SOUTH);
 
@@ -117,7 +148,7 @@ public class ViewArea extends LockeState implements RefreshListener {
 
     public JPanel general() {
 
-        JPanel panel = new JPanel(new BorderLayout());
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         UOMField widthField = new UOMField();
         widthField.setValue(String.valueOf(area.getWidth()));
@@ -163,29 +194,17 @@ public class ViewArea extends LockeState implements RefreshListener {
 
         JPanel controls = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-
-        JCheckBox allowsInventory = new JCheckBox("Inventory Movements", area.allowsInventory());
-        allowsInventory.setEnabled(false);
-        JCheckBox allowsProduction = new JCheckBox("Production", area.allowsProduction());
-        allowsProduction.setEnabled(false);
-        JCheckBox allowsSales = new JCheckBox("Sales", area.allowsSales());
-        allowsSales.setEnabled(false);
-        JCheckBox allowsPurchasing = new JCheckBox("Purchasing", area.allowsPurchasing());
-        allowsPurchasing.setEnabled(false);
-
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Allow Inventory", UIManager.getColor("Label.foreground")), allowsInventory);
-        form.addInput(Elements.coloredLabel("Allow Production", UIManager.getColor("Label.foreground")), allowsProduction);
-        form.addInput(Elements.coloredLabel("Allow Sales", UIManager.getColor("Label.foreground")), allowsSales);
-        form.addInput(Elements.coloredLabel("Allow Purchasing", UIManager.getColor("Label.foreground")), allowsPurchasing);
+        form.addInput(Elements.coloredLabel("Allows Inventory", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(area.allowsInventory())));
+        form.addInput(Elements.coloredLabel("Allows Production", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(area.allowsProduction())));
+        form.addInput(Elements.coloredLabel("Allows Sales", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(area.allowsSales())));
+        form.addInput(Elements.coloredLabel("Allows Purchasing", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(area.allowsPurchasing())));
         controls.add(form);
 
         return controls;
     }
 
-    private JScrollPane bins(){
-
-        JPanel bins = new JPanel();
+    private JScrollPane bins() {
 
         String[] columns = new String[]{
                 "ID",
@@ -235,11 +254,11 @@ public class ViewArea extends LockeState implements RefreshListener {
                     b.getWeightUOM(),
                     b.isAuto_replenish(),
                     b.isFixed(),
-                    b.isPicking(),
-                    b.isPutaway(),
+                    b.pickingEnabled(),
+                    b.putawayEnabled(),
                     b.doesGI(),
                     b.doesGR(),
-                    b.isHoldsStock(),
+                    b.holdsStock(),
                     b.getStatus(),
                     b.getCreated(),
             });
@@ -266,12 +285,19 @@ public class ViewArea extends LockeState implements RefreshListener {
                 }
             }
         });
-
         return new JScrollPane(ct);
     }
 
+    private RTextScrollPane notes() {
+
+        RTextScrollPane notes = Elements.simpleEditor();
+        notes.getTextArea().setText(area.getNotes());
+        notes.getTextArea().setEditable(false);
+        return notes;
+    }
+
     @Override
-    public void refresh(){
+    public void refresh() {
 
     }
 }

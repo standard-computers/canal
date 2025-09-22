@@ -1,17 +1,18 @@
 package org.Canal.UI.Views.Areas;
 
 import org.Canal.Models.SupplyChainUnits.Area;
+import org.Canal.Models.SupplyChainUnits.BillOfMaterials;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Views.Bins.AutoMakeBins;
 import org.Canal.UI.Views.Bins.CreateBin;
 import org.Canal.UI.Views.Deleter;
+import org.Canal.UI.Views.Finder;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Pipe;
 import org.Canal.Utils.RefreshListener;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -62,8 +63,10 @@ public class Areas extends LockeState implements RefreshListener {
     }
 
     private JPanel toolbar() {
+
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        tb.add(Box.createHorizontalStrut(5));
 
         if ((boolean) Engine.codex.getValue("AREAS", "import_enabled")) {
             IconButton importAreas = new IconButton("Import", "export", "Import from CSV", "");
@@ -142,21 +145,22 @@ public class Areas extends LockeState implements RefreshListener {
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton autoMakeAreas = new IconButton("AutoMake", "automake", "Automate the creation of areas", "/AREAS/AUTO_MK");
-        autoMakeAreas.addActionListener(_ -> desktop.put(new AutoMakeAreas(this)));
+        autoMakeAreas.addActionListener(_ -> desktop.put(new AutoMakeAreas(desktop, this)));
         tb.add(autoMakeAreas);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton makeBin = new IconButton("Make a Bin", "bins", "Make a single Bin", "/BNS/NEW");
-        makeBin.addActionListener(_ -> desktop.put(new CreateBin(null, this)));
+        makeBin.addActionListener(_ -> desktop.put(new CreateBin(null, desktop, this)));
         tb.add(makeBin);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton autoMakeBins = new IconButton("AutoMake Bins", "automake", "Automate Bins", "/BNS/AUTO_MK");
-        autoMakeBins.addActionListener(_ -> desktop.put(new AutoMakeBins()));
+        autoMakeBins.addActionListener(_ -> desktop.put(new AutoMakeBins(desktop)));
         tb.add(autoMakeBins);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton find = new IconButton("Find", "find", "Find Areas");
+        find.addActionListener(_ -> desktop.put(new Finder("/AREAS", BillOfMaterials.class, desktop)));
         tb.add(find);
         tb.add(Box.createHorizontalStrut(5));
 
@@ -168,7 +172,6 @@ public class Areas extends LockeState implements RefreshListener {
         refresh.addActionListener(_ -> refresh());
         tb.add(refresh);
 
-        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
         return tb;
     }
 

@@ -4,13 +4,10 @@ import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.CustomTabbedPane;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
-import org.Canal.UI.Views.Finance.Invoices.CreateInvoice;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 /**
  * /CSTS/$[CUSTOMER_ID]
@@ -77,28 +74,31 @@ public class ViewCustomer extends LockeState {
     }
 
     private JPanel toolbar() {
+
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        tb.add(Box.createHorizontalStrut(5));
+
         IconButton invoice = new IconButton("Invoice", "invoices", "Invoice customer");
-        IconButton addPerson = new IconButton("+ Person", "add_person", "Add person to customer");
-        IconButton delinquent = new IconButton("Delinquent", "delinquent", "Customer in dunning");
-        IconButton blocked = new IconButton("Block", "blocked", "Customer is blocked. No transactions.");
-        IconButton refresh = new IconButton("Refresh", "refresh", "Reload from store");
-        invoice.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                new CreateInvoice(customer.getId());
-            }
-        });
         tb.add(invoice);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton addPerson = new IconButton("+ Person", "add_person", "Add person to customer");
         tb.add(addPerson);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton delinquent = new IconButton("Delinquent", "delinquent", "Customer in dunning");
         tb.add(delinquent);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton blocked = new IconButton("Block", "blocked", "Customer is blocked. No transactions.");
         tb.add(blocked);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton refresh = new IconButton("Refresh", "refresh", "Reload from store");
         tb.add(refresh);
+        tb.add(Box.createHorizontalStrut(5));
+
         return tb;
     }
 }

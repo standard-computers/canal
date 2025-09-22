@@ -28,7 +28,7 @@ public class Trucks extends LockeState implements RefreshListener {
 
     public Trucks(DesktopState desktop) {
 
-        super("Trucks", "/TRANS/TRCKS", true, true, true, true);
+        super("Trucks", "/TRANS/TRCKS");
         setFrameIcon(new ImageIcon(Trucks.class.getResource("/icons/windows/trucks.png")));
         this.desktop = desktop;
 

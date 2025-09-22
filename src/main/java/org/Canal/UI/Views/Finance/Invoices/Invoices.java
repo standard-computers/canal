@@ -139,17 +139,17 @@ public class Invoices extends LockeState implements RefreshListener {
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton autoMakeAreas = new IconButton("AutoMake", "automake", "Automate the creation of areas", "/INVS/AUTO_MK");
-        autoMakeAreas.addActionListener(_ -> desktop.put(new AutoMakeAreas(this)));
+        autoMakeAreas.addActionListener(_ -> desktop.put(new AutoMakeAreas(desktop, this)));
         tb.add(autoMakeAreas);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton makeBin = new IconButton("Make a Bin", "bins", "Make a single Bin", "/BNS/NEW");
-        makeBin.addActionListener(_ -> desktop.put(new CreateBin(null, this)));
+        makeBin.addActionListener(_ -> desktop.put(new CreateBin(null, desktop, this)));
         tb.add(makeBin);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton autoMakeBins = new IconButton("AutoMake Bins", "automake", "Automate Bins", "/BNS/AUTO_MK");
-        autoMakeBins.addActionListener(_ -> desktop.put(new AutoMakeBins()));
+        autoMakeBins.addActionListener(_ -> desktop.put(new AutoMakeBins(desktop)));
         tb.add(autoMakeBins);
         tb.add(Box.createHorizontalStrut(5));
 

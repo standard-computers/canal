@@ -31,7 +31,7 @@ public class Deleter extends LockeState {
         JButton confirmDeletion = Elements.button("Confirm Objex Deletion");
         add(confirmDeletion, BorderLayout.SOUTH);
 
-        ActionListener doDelete = e -> {
+        ActionListener doDelete = _ -> {
             if (Pipe.delete(objex, objexIdField.getText())) {
                 if (refreshListener != null) refreshListener.refresh();
 

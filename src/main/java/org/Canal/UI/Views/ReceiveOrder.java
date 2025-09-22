@@ -95,7 +95,7 @@ public class ReceiveOrder extends LockeState {
 
             private void onChange() {
                 String poId = poField.getText();
-                PurchaseOrder foundPo = Engine.getPurchaseOrder(poId);
+                Order foundPo = Engine.getPurchaseOrder(poId);
                 if (foundPo != null) {
                     ArrayList<Object[]> its = new ArrayList<>();
                     ArrayList<OrderLineItem> items = foundPo.getItems();
@@ -120,7 +120,7 @@ public class ReceiveOrder extends LockeState {
         ArrayList<Area> as = (ArrayList<Area>) Engine.getAreas(location);
         for (Area a : as) {
             for (Bin b : a.getBins()) {
-                if(b.isPutaway() && b.doesGR()){
+                if(b.putawayEnabled() && b.doesGR()){
                     putawayBinOptions.put(b.getId(), b.getId());
                 }
             }
@@ -178,7 +178,7 @@ public class ReceiveOrder extends LockeState {
 
                     } else {
 
-                        PurchaseOrder foundPurchaseOrder = Engine.getPurchaseOrder(providedPurchaseOrder);
+                        Order foundPurchaseOrder = Engine.getPurchaseOrder(providedPurchaseOrder);
                         if (foundPurchaseOrder != null) {
 
                             if ((boolean) Engine.codex.getValue("ORDS/RCV", "block_locations")) {
@@ -217,7 +217,7 @@ public class ReceiveOrder extends LockeState {
 
                             if (selectedBin != null) {
 
-                                if (selectedBin.isPutaway()) {
+                                if (selectedBin.putawayEnabled()) {
 
                                     Inventory inventory = Engine.getInventory(foundPurchaseOrder.getShipTo()); //TODO Double check
                                     if(inventory == null){
@@ -338,7 +338,7 @@ public class ReceiveOrder extends LockeState {
         }
 
         commitGrToLedger = new JCheckBox("Commit GR to Ledger");
-        if((boolean) Engine.codex.getValue("GR", "commit_to_ledger")){
+        if((boolean) Engine.codex.getValue("ORDS/RCV", "commit_to_ledger")){
             commitGrToLedger.setSelected(true);
             commitGrToLedger.setEnabled(false);
         }

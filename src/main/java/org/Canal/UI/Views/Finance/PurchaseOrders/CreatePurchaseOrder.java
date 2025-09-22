@@ -3,7 +3,6 @@ package org.Canal.UI.Views.Finance.PurchaseOrders;
 import org.Canal.Models.BusinessUnits.*;
 import org.Canal.Models.SupplyChainUnits.Delivery;
 import org.Canal.Models.SupplyChainUnits.Item;
-import org.Canal.Models.SupplyChainUnits.StockLine;
 import org.Canal.Models.SupplyChainUnits.Truck;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Elements.DatePicker;
@@ -38,7 +37,7 @@ public class CreatePurchaseOrder extends LockeState {
 
     //Operating Objects
     private DesktopState desktop;
-    private PurchaseOrder newOrder;
+    private Order newOrder;
     private ItemTableModel model;
 
     //Value Labels
@@ -78,7 +77,7 @@ public class CreatePurchaseOrder extends LockeState {
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));
         Constants.checkLocke(this, true, true);
         this.desktop = desktop;
-        newOrder = new PurchaseOrder();
+        newOrder = new Order();
 
         CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.addTab("Item Details", items());
@@ -116,6 +115,7 @@ public class CreatePurchaseOrder extends LockeState {
 
         JPanel p = new JPanel(new FlowLayout());
         p.setLayout(new BoxLayout(p, BoxLayout.X_AXIS));
+        p.add(Box.createHorizontalStrut(5));
 
         IconButton copyFrom = new IconButton("Copy From", "open", "Review for errors or warnings");
         copyFrom.addMouseListener(new MouseAdapter() {
@@ -123,7 +123,7 @@ public class CreatePurchaseOrder extends LockeState {
             public void mouseClicked(MouseEvent e) {
 
                 String copyPOId = JOptionPane.showInputDialog("Enter Purchase Order ID");
-                PurchaseOrder cpo = Engine.getPurchaseOrder(copyPOId);
+                Order cpo = Engine.getPurchaseOrder(copyPOId);
                 if (cpo != null) {
 
                 } else {
@@ -238,7 +238,6 @@ public class CreatePurchaseOrder extends LockeState {
             }
         });
         p.add(create);
-        p.setBorder(new EmptyBorder(5, 5, 5, 5));
 
         return p;
     }

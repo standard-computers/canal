@@ -8,6 +8,6 @@ import org.Canal.UI.Elements.LockeState;
 public class CustomProductionOrder extends LockeState {
 
     public CustomProductionOrder() {
-        super("Custom Production Order", "/PROD/CST/NEW", true, true, true, true);
+        super("Custom Production Order", "/PROD/CST/NEW");
     }
 }

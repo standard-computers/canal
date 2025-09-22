@@ -9,8 +9,18 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class Copiable extends JTextField {
+
     public Copiable(String value) {
+
         super(value);
+        if(value.equals("false")){
+
+            setForeground(Color.RED);
+
+        }else if(value.equals("true")){
+
+            setForeground(new Color(11, 111, 9));
+        }
         setFont(new Font(UIManager.getFont("Label.font").getName(), Font.PLAIN, Engine.getConfiguration().getFontSize()));
         setEditable(false);
         addMouseListener(new MouseAdapter() {

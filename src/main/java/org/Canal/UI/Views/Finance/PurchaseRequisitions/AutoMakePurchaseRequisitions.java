@@ -368,7 +368,6 @@ public class AutoMakePurchaseRequisitions extends LockeState {
             }
         }
 
-        //Check buyer count, must be greater than 0
         int buyerCount = 0;
         for (JCheckBox checkbox : checkboxes) {
             if (checkbox.isSelected()) {

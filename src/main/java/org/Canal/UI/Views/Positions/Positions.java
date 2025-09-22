@@ -28,7 +28,7 @@ public class Positions extends LockeState implements RefreshListener {
 
     public Positions(DesktopState desktop) {
 
-        super("Positions", "/HR/POS", true, true, true, true);
+        super("Positions", "/HR/POS");
         setFrameIcon(new ImageIcon(Positions.class.getResource("/icons/positions.png")));
         this.desktop = desktop;
 

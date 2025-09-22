@@ -8,7 +8,7 @@ import org.Canal.UI.Elements.LockeState;
 public class Help extends LockeState {
 
     public Help() {
-        super("Canal Help", "/HELP", true, true, true, true);
+        super("Canal Help", "/HELP");
 
     }
 }

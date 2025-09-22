@@ -1,14 +1,15 @@
 package org.Canal.UI.Views.Bins;
 
+import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.Models.SupplyChainUnits.Bin;
 import org.Canal.UI.Elements.*;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.LockeStatus;
 import org.Canal.Utils.RefreshListener;
+import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -19,15 +20,6 @@ public class ViewBin extends LockeState {
     private Bin bin;
     private DesktopState desktop;
     private RefreshListener refreshListener;
-
-    //Controls Tab
-    private JCheckBox autoReplenish;
-    private JCheckBox fixedBin;
-    private JCheckBox doesGoodsIssue;
-    private JCheckBox doesGoodsReceipt;
-    private JCheckBox pickingEnabled;
-    private JCheckBox putawayEnabled;
-    private JCheckBox holdsStock;
 
     //Dimensional Tab
     private UOMField widthField;
@@ -49,10 +41,14 @@ public class ViewBin extends LockeState {
         tabs.addTab("Controls", controls());
         tabs.addTab("Item Restrictions", restrictions());
         tabs.addTab("Stock", stock());
+        tabs.addTab("Notes", notes());
 
         add(toolbar(), BorderLayout.NORTH);
         add(tabs, BorderLayout.CENTER);
 
+        if ((boolean) Engine.codex.getValue("BNS", "start_maximized")) {
+            setMaximized(true);
+        }
     }
 
     private JPanel toolbar() {
@@ -60,18 +56,19 @@ public class ViewBin extends LockeState {
         JPanel toolbar = new JPanel(new BorderLayout());
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-        IconButton copyFrom = new IconButton("Copy From", "open", "Copy from Bin");
-        tb.add(copyFrom);
         tb.add(Box.createHorizontalStrut(5));
 
-        IconButton review = new IconButton("Review", "review", "Review Bin data");
-        tb.add(review);
+        IconButton copyFrom = new IconButton("Copy From", "open", "Copy from Bin");
+        copyFrom.addActionListener(_ -> {
+
+        });
+        tb.add(copyFrom);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton modify = new IconButton("Modify", "modify", "Modify Bin", "/BNS/MOD");
         modify.addActionListener(_ -> {
             dispose();
-            desktop.put(new ModifyBin(bin, refreshListener));
+            desktop.put(new ModifyBin(bin, desktop, refreshListener));
         });
         tb.add(modify);
         tb.add(Box.createHorizontalStrut(5));
@@ -87,13 +84,24 @@ public class ViewBin extends LockeState {
 
         IconButton block = new IconButton("Block", "block", "Block Bin", "/BNS/BLK");
         block.addActionListener(_ -> {
-            bin.setStatus(LockeStatus.BLOCKED);
 
+            bin.setStatus(LockeStatus.BLOCKED);
+            bin.save();
+            dispose();
+            if(refreshListener != null) {
+                refreshListener.refresh();
+            }
         });
         tb.add(block);
         tb.add(Box.createHorizontalStrut(5));
 
-        tb.setBorder(new EmptyBorder(0, 5, 0, 5));
+        IconButton archive = new IconButton("Archive", "archive", "Archive Bin", "/BNS/BLK");
+        archive.addActionListener(_ -> {
+            bin.setStatus(LockeStatus.ARCHIVED);
+            bin.save();
+        });
+        tb.add(archive);
+        tb.add(Box.createHorizontalStrut(5));
 
         toolbar.add(Elements.header(bin.getName(), SwingConstants.LEFT), BorderLayout.NORTH);
         toolbar.add(tb, BorderLayout.SOUTH);
@@ -109,9 +117,10 @@ public class ViewBin extends LockeState {
 
         Form form = new Form();
         form.addInput(Elements.coloredLabel("Bin ID", UIManager.getColor("Label.foreground")), new Copiable(bin.getId()));
-        form.addInput(Elements.coloredLabel("Location ID", UIManager.getColor("Label.foreground")), new Copiable(locationId));
+        form.addInput(Elements.coloredLabel("Location", UIManager.getColor("Label.foreground")), new Copiable(locationId));
         form.addInput(Elements.coloredLabel("Area", UIManager.getColor("Label.foreground")), new Copiable(bin.getArea()));
         form.addInput(Elements.coloredLabel("Bin Name", UIManager.getColor("Label.foreground")), new Copiable(bin.getName()));
+        form.addInput(Elements.coloredLabel("Status", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(bin.getStatus())));
         general.add(form);
 
         return general;
@@ -155,43 +164,14 @@ public class ViewBin extends LockeState {
 
         JPanel controls = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-        doesGoodsIssue = new JCheckBox("GI on stock removal");
-        doesGoodsIssue.setSelected(bin.doesGI());
-        doesGoodsIssue.setEnabled(false);
-
-        doesGoodsReceipt = new JCheckBox("GR on put away");
-        doesGoodsReceipt.setSelected(bin.doesGR());
-        doesGoodsReceipt.setEnabled(false);
-
-        pickingEnabled = new JCheckBox("Allow picks from this bin");
-        pickingEnabled.setSelected(bin.isPicking());
-        pickingEnabled.setEnabled(false);
-
-        putawayEnabled = new JCheckBox("Allow put away to this bin");
-        putawayEnabled.setSelected(bin.isPutaway());
-        putawayEnabled.setEnabled(false);
-
-        autoReplenish = new JCheckBox("Auto Replenish");
-        autoReplenish.setSelected(bin.isAuto_replenish());
-        autoReplenish.setToolTipText("Bin will be automatically replenished based on set replenishments");
-        autoReplenish.setEnabled(false);
-
-        fixedBin = new JCheckBox("Fixed Bin");
-        fixedBin.setToolTipText("Bin can only contain one Item ID");
-        fixedBin.setEnabled(false);
-
-        holdsStock = new JCheckBox("Bin can hold inventory");
-        holdsStock.setSelected(bin.isHoldsStock());
-        holdsStock.setEnabled(false);
-
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Goods Issue", UIManager.getColor("Label.foreground")), doesGoodsIssue);
-        form.addInput(Elements.coloredLabel("Goods Receipt", UIManager.getColor("Label.foreground")), doesGoodsReceipt);
-        form.addInput(Elements.coloredLabel("Picking Enabled", UIManager.getColor("Label.foreground")), pickingEnabled);
-        form.addInput(Elements.coloredLabel("Putaway Enabled", UIManager.getColor("Label.foreground")), putawayEnabled);
-        form.addInput(Elements.coloredLabel("Auto Replenish", UIManager.getColor("Label.foreground")), autoReplenish);
-        form.addInput(Elements.coloredLabel("Fixed Bin", UIManager.getColor("Label.foreground")), fixedBin);
-        form.addInput(Elements.coloredLabel("Holds Stock", UIManager.getColor("Label.foreground")), holdsStock);
+        form.addInput(Elements.coloredLabel("Goods Issue", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(bin.doesGI())));
+        form.addInput(Elements.coloredLabel("Goods Receipt", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(bin.doesGR())));
+        form.addInput(Elements.coloredLabel("Picking Enabled", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(bin.pickingEnabled())));
+        form.addInput(Elements.coloredLabel("Putaway Enabled", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(bin.putawayEnabled())));
+        form.addInput(Elements.coloredLabel("Auto Replenish", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(bin.isAuto_replenish())));
+        form.addInput(Elements.coloredLabel("Fixed Bin", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(bin.isFixed())));
+        form.addInput(Elements.coloredLabel("Holds Stock", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(bin.holdsStock())));
         controls.add(form);
 
         return controls;
@@ -209,5 +189,13 @@ public class ViewBin extends LockeState {
         JPanel stock = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         return stock;
+    }
+
+    private RTextScrollPane notes() {
+
+        RTextScrollPane notes = Elements.simpleEditor();
+        notes.getTextArea().setText(bin.getNotes());
+        notes.getTextArea().setEditable(false);
+        return notes;
     }
 }

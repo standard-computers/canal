@@ -14,7 +14,7 @@ public class ViewDepartment extends LockeState {
 
     public ViewDepartment(Department department) {
 
-        super("Department " + department.getId(), "/DPTS/" + department.getId(), true, true, true, true);
+        super("Department " + department.getId(), "/DPTS/" + department.getId());
         setFrameIcon(new ImageIcon(ViewDepartment.class.getResource("/icons/departments.png")));
         CustomTabbedPane tabbedPane = new CustomTabbedPane();
 

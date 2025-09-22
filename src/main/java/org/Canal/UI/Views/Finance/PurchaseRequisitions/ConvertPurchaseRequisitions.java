@@ -118,7 +118,7 @@ public class ConvertPurchaseRequisitions extends LockeState {
 
                         // --- Create PO ---
                         String purchaseOrderId = Engine.generateId("ORDS/PO");
-                        PurchaseOrder purchaseOrder = new PurchaseOrder();
+                        Order purchaseOrder = new Order();
                         purchaseOrder.setId(purchaseOrderId);
                         purchaseOrder.setOrderId(purchaseOrderId);
                         purchaseOrder.setCreator("ORDS/PR/PO");

@@ -186,7 +186,7 @@ public class Elements {
         selectorButton.setPreferredSize(new Dimension(30, textField.getPreferredSize().height));
         selectorButton.setVisible(true);
         container.add(selectorButton, BorderLayout.EAST);
-        selectorButton.addActionListener(e -> {
+        selectorButton.addActionListener(_ -> {
             JInternalFrame selectionDialog = new JInternalFrame("Select Options", true);
             selectionDialog.setLayout(new BorderLayout());
             selectionDialog.setSize(400, 300);

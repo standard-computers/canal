@@ -1,6 +1,6 @@
 package org.Canal.UI.Views.Productivity.Tasks;
 
-import org.Canal.Models.BusinessUnits.PurchaseOrder;
+import org.Canal.Models.BusinessUnits.Order;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
@@ -25,7 +25,7 @@ public class TaskList extends LockeState {
     private Location location;
 
     public TaskList(Location location, DesktopState desktop) {
-        super("Task List", "/MVMT/TSKS", true, true, true, true);
+        super("Task List", "/MVMT/TSKS");
         this.desktop = desktop;
         JPanel tb = toolbar();
         JPanel holder = new JPanel(new BorderLayout());
@@ -89,7 +89,7 @@ public class TaskList extends LockeState {
                 "Status"
         };
         ArrayList<String[]> pos = new ArrayList<>();
-        for (PurchaseOrder po : Engine.getPurchaseOrders()) {
+        for (Order po : Engine.getPurchaseOrders()) {
             pos.add(new String[]{
                     po.getOrderId(),
                     po.getOwner(),

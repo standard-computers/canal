@@ -44,7 +44,7 @@ public class ViewPosition extends LockeState {
         buttons.add(postPosition);
 
         IconButton assignPosition = new IconButton("Assign", "positions", "Assign position to Employee");
-        assignPosition.addActionListener(e -> {
+        assignPosition.addActionListener(_ -> {
             String employeeID = JOptionPane.showInputDialog(this, "Enter Employee ID", "Employee ID", JOptionPane.QUESTION_MESSAGE);
             Employee employee = Engine.getEmployee(employeeID);
             if (employee == null) {

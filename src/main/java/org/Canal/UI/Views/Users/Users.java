@@ -28,7 +28,7 @@ public class Users extends LockeState implements RefreshListener {
 
     public Users(DesktopState desktop) {
 
-        super("Users", "/USRS", true, true, true, true);
+        super("Users", "/USRS");
         setFrameIcon(new ImageIcon(Users.class.getResource("/icons/windows/users.png")));
         setLayout(new BorderLayout());
         this.desktop = desktop;
@@ -43,26 +43,26 @@ public class Users extends LockeState implements RefreshListener {
     }
 
     private CustomTable table() {
+
         String[] columns = new String[]{
                 "ID",
                 "Employee ID",
-                "Name",
                 "Employee Name",
                 "Accesses",
                 "Status",
                 "Created"
         };
+
         ArrayList<Object[]> data = new ArrayList<>();
-        for (User users : Engine.getUsers()) {
-            Employee e = Engine.getEmployee(users.getEmployee() );
+        for (User user : Engine.getUsers()) {
+            Employee e = Engine.getEmployee(user.getEmployee());
             data.add(new Object[]{
-                    users.getId(),
-                    users.getEmployee(),
-                    users.getName(),
+                    user.getId(),
+                    user.getEmployee(),
                     e.getName(),
-                    users.getAccesses().size(),
-                    users.getStatus(),
-                    users.getCreated(),
+                    user.getAccesses().size(),
+                    user.getStatus(),
+                    user.getCreated(),
             });
         }
         CustomTable newTable = new CustomTable(columns, data);
@@ -87,8 +87,10 @@ public class Users extends LockeState implements RefreshListener {
     }
 
     private JPanel toolbar() {
+
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        tb.add(Box.createHorizontalStrut(5));
 
         IconButton importUsers = new IconButton("Import", "export", "Import from CSV", "");
         importUsers.addActionListener(_ -> table.exportToCSV());
@@ -101,10 +103,10 @@ public class Users extends LockeState implements RefreshListener {
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton openSelected = new IconButton("Open", "open", "Open selected");
-        openSelected.addActionListener(e -> {
+        openSelected.addActionListener(_ -> {
             String uid = JOptionPane.showInputDialog("Enter User ID");
             if (uid != null) {
-                User u =  Engine.getUser(uid);
+                User u = Engine.getUser(uid);
                 desktop.put(new ViewUser(desktop, u));
             }
         });
@@ -125,14 +127,16 @@ public class Users extends LockeState implements RefreshListener {
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton refresh = new IconButton("Refresh", "refresh", "Refresh data");
-        refresh.addActionListener(e -> refresh());
+        refresh.addActionListener(_ -> refresh());
         tb.add(refresh);
-        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
+        tb.add(Box.createHorizontalStrut(5));
+
         return tb;
     }
 
     @Override
     public void refresh() {
+
         CustomTable newTable = table();
         JScrollPane scrollPane = (JScrollPane) table.getParent().getParent();
         scrollPane.setViewportView(newTable);

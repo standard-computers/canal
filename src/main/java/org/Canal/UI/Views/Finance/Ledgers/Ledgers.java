@@ -131,8 +131,8 @@ public class Ledgers extends LockeState implements RefreshListener {
                     gr.getOrganization(),
                     gr.getLocation(),
                     gr.getPeriod(),
-                    gr.getStarts(),
-                    gr.getEnds(),
+                    gr.starts(),
+                    gr.ends(),
                     gr.getCreated(),
                     String.valueOf(gr.getTransactions().size()),
                     String.valueOf(gr.getStatus())

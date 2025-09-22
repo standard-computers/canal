@@ -10,19 +10,27 @@ import java.util.ArrayList;
 
 public class Item extends Objex {
 
+    //General (Info) Properties
     private String org;
     private String vendor = "";
     private String color = "";
+    private double price;
     private String upc;
     private String vendorNumber;
-    private double baseQuantity;
-    private String packagingUnit;
+
+    //Controls Properties
     private boolean batched;
     private boolean rentable;
     private boolean skud;
     private boolean consumable;
     private boolean virtual;
-    private double price;
+    private boolean allowSales;
+    private boolean allowPurchasing;
+    private boolean keepInventory;
+
+    //Dimensional Properties
+    private double baseQuantity;
+    private String packagingUnit;
     private double width;
     private String widthUOM;
     private double length;
@@ -137,8 +145,40 @@ public class Item extends Objex {
         this.virtual = virtual;
     }
 
+    public boolean allowSales() {
+        return allowSales;
+    }
+
+    public void allowSales(boolean allowSales) {
+        this.allowSales = allowSales;
+    }
+
+    public boolean allowPurchasing() {
+        return allowPurchasing;
+    }
+
+    public void allowPurchasing(boolean allowPurchasing) {
+        this.allowPurchasing = allowPurchasing;
+    }
+
+    public boolean keepInventory() {
+        return keepInventory;
+    }
+
+    public void keepInventory(boolean keepInventory) {
+        this.keepInventory = keepInventory;
+    }
+
     public double getPrice() {
         return price;
+    }
+
+    public double getBasePrice() {
+        return price / baseQuantity;
+    }
+
+    public double getBasePrice(double quantity) {
+        return (price / baseQuantity) * quantity;
     }
 
     public void setPrice(double price) {

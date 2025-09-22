@@ -207,8 +207,7 @@ public class ViewLocation extends LockeState implements RefreshListener {
 
         IconButton sell = new IconButton("Sell", "create", "Sell from this DC", "/ORDS/SO/NEW");
         sell.addActionListener(_ -> {
-            CreateSalesOrder cso = new CreateSalesOrder();
-            cso.setSelectedSupplier(location.getId());
+            CreateSalesOrder cso = new CreateSalesOrder(desktop);
             desktop.put(cso);
         });
         tb.add(sell);
@@ -244,26 +243,17 @@ public class ViewLocation extends LockeState implements RefreshListener {
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton addBin = new IconButton("+ Bin", "bins", "Add an area cost center");
-        addBin.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                desktop.put(new CreateBin(location.getId(), ViewLocation.this));
-            }
-        });
+        addBin.addActionListener(_ -> desktop.put(new CreateBin(location.getId(), desktop, ViewLocation.this)));
         tb.add(addBin);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton autoMakeAreas = new IconButton("AutoMake Areas", "automake", "Automate the creation of areas", "/AREAS/AUTO_MK");
-        autoMakeAreas.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                desktop.put(new AutoMakeAreas(null));
-            }
-        });
+        autoMakeAreas.addActionListener(_ -> desktop.put(new AutoMakeAreas(desktop, null)));
         tb.add(autoMakeAreas);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton autoMakeBins = new IconButton("AutoMake Bins", "automake", "Automate the creation of bins", "/BNS/AUTO_MK");
-        autoMakeBins.addActionListener(_ -> desktop.put(new AutoMakeBins()));
+        autoMakeBins.addActionListener(_ -> desktop.put(new AutoMakeBins(desktop)));
         tb.add(autoMakeBins);
         tb.add(Box.createHorizontalStrut(5));
 

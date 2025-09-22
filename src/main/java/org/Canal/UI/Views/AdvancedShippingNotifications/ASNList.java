@@ -1,6 +1,6 @@
 package org.Canal.UI.Views.AdvancedShippingNotifications;
 
-import org.Canal.Models.BusinessUnits.PurchaseOrder;
+import org.Canal.Models.BusinessUnits.Order;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
@@ -82,7 +82,7 @@ public class ASNList extends LockeState {
     private JTable table() {
         String[] columns = new String[]{"ID", "Owner", "Supplier", "Ship To", "Bill To", "Sold To", "Customer", "Status"};
         ArrayList<String[]> pos = new ArrayList<>();
-        for (PurchaseOrder po : Engine.getPurchaseOrders()) {
+        for (Order po : Engine.getPurchaseOrders()) {
             pos.add(new String[]{
                     po.getOrderId(),
                     po.getOwner(),

@@ -6,9 +6,12 @@ import org.Canal.Models.SupplyChainUnits.StockLine;
 import org.Canal.Models.SupplyChainUnits.Task;
 import org.Canal.UI.Elements.*;
 import org.Canal.Utils.*;
+import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -22,8 +25,6 @@ public class ViewBOM extends LockeState {
     private BillOfMaterials billOfMaterials;
     private DesktopState desktop;
     private RefreshListener refreshListener;
-    private CustomTable bomsView;
-    private CustomTable stepsView;
 
     public ViewBOM(BillOfMaterials billOfMaterials, DesktopState desktop, RefreshListener refreshListener) {
 
@@ -37,18 +38,20 @@ public class ViewBOM extends LockeState {
         tabs.addTab("Components", components());
         tabs.addTab("Steps", steps());
         tabs.addTab("Controls", controls());
+        tabs.addTab("Notes", notes());
 
         setLayout(new BorderLayout());
         add(header(), BorderLayout.NORTH);
         add(tabs, BorderLayout.CENTER);
     }
 
-    private JPanel header(){
+    private JPanel header() {
 
         JPanel header = new JPanel(new BorderLayout());
         JPanel itemInfo = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         Form form = new Form();
+        form.addInput(Elements.coloredLabel("ID", UIManager.getColor("Label.foreground")), new Copiable(billOfMaterials.getId()));
         form.addInput(Elements.coloredLabel("BOM Name", UIManager.getColor("Label.foreground")), new Copiable(billOfMaterials.getName()));
         form.addInput(Elements.coloredLabel("Production Location", UIManager.getColor("Label.foreground")), new Copiable(billOfMaterials.getLocation()));
         form.addInput(Elements.coloredLabel("Finished Item ID", UIManager.getColor("Label.foreground")), new Copiable(billOfMaterials.getItem()));
@@ -68,18 +71,82 @@ public class ViewBOM extends LockeState {
 
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-
-        IconButton copyFrom = new IconButton("Copy From", "open", "Copy Form BOM");
-        copyFrom.addActionListener(_ -> {
-
-        });
-        tb.add(copyFrom);
         tb.add(Box.createHorizontalStrut(5));
+
+        if (billOfMaterials.getStatus().equals(LockeStatus.NEW)) {
+
+            IconButton activate = new IconButton("Activate", "start", "Activate BOM for Production");
+            activate.addActionListener(_ -> {
+
+                billOfMaterials.setStatus(LockeStatus.ACTIVE);
+                billOfMaterials.save();
+                if (refreshListener != null) {
+                    refreshListener.refresh();
+                }
+                dispose();
+            });
+            tb.add(activate);
+            tb.add(Box.createHorizontalStrut(5));
+        }
+
+        if (billOfMaterials.getStatus().equals(LockeStatus.ACTIVE)) {
+
+            IconButton deactivate = new IconButton("Deactivate", "suspend", "Deactivate BOM for Production");
+            deactivate.addActionListener(_ -> {
+
+                billOfMaterials.setStatus(LockeStatus.SUSPENDED);
+                billOfMaterials.save();
+                if (refreshListener != null) {
+                    refreshListener.refresh();
+                }
+                dispose();
+            });
+            tb.add(deactivate);
+            tb.add(Box.createHorizontalStrut(5));
+        }
+
+        if (!billOfMaterials.getStatus().equals(LockeStatus.ACTIVE)) {
+
+            IconButton archive = new IconButton("Archive", "archive", "Archive Bill of Materials", "/BOMS/ARCHV");
+            archive.addActionListener(_ -> {
+
+                billOfMaterials.setStatus(LockeStatus.ARCHIVED);
+                billOfMaterials.save();
+                if (refreshListener != null) {
+                    refreshListener.refresh();
+                }
+                dispose();
+            });
+            tb.add(archive);
+            tb.add(Box.createHorizontalStrut(5));
+
+            IconButton delete = new IconButton("Delete", "delete", "Delete Bill of Materials", "/BOMS/DEL");
+            delete.addActionListener(_ -> {
+
+                billOfMaterials.setStatus(LockeStatus.DELETED);
+                billOfMaterials.save();
+                if (refreshListener != null) {
+                    refreshListener.refresh();
+                }
+                dispose();
+            });
+            tb.add(delete);
+            tb.add(Box.createHorizontalStrut(5));
+        }
 
         IconButton modify = new IconButton("Modify", "modify", "/BOMS/MOD");
         modify.addActionListener(_ -> desktop.put(new ModifyBOM(billOfMaterials, desktop, refreshListener)));
         tb.add(modify);
         tb.add(Box.createHorizontalStrut(5));
+        int mask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
+        KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_E, mask);
+        JRootPane rp = getRootPane();
+        rp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ks, "do-modify");
+        rp.getActionMap().put("do-modify", new AbstractAction() {
+            @Override public void actionPerformed(ActionEvent e) {
+                modify.doClick();
+            }
+        });
 
         toolbar.add(Elements.header(billOfMaterials.getId() + " " + billOfMaterials.getName(), SwingConstants.LEFT), BorderLayout.CENTER);
         toolbar.add(tb, BorderLayout.SOUTH);
@@ -87,7 +154,7 @@ public class ViewBOM extends LockeState {
         return toolbar;
     }
 
-    private CustomTable componentsTable() {
+    private JScrollPane components() {
 
         String[] columns = new String[]{
                 "Component",
@@ -101,7 +168,7 @@ public class ViewBOM extends LockeState {
         };
 
         ArrayList<Object[]> data = new ArrayList<>();
-        for(int s = 0; s < billOfMaterials.getComponents().size(); s++){
+        for (int s = 0; s < billOfMaterials.getComponents().size(); s++) {
             StockLine ol = billOfMaterials.getComponents().get(s);
             Item i = Engine.getItem(ol.getItem());
             data.add(new Object[]{
@@ -130,19 +197,10 @@ public class ViewBOM extends LockeState {
                 }
             }
         });
-        return ct;
+        return new JScrollPane(ct);
     }
 
-    private JPanel components(){
-
-        JPanel bom = new JPanel(new BorderLayout());
-        bomsView = componentsTable();
-        bom.add(new JScrollPane(bomsView), BorderLayout.CENTER);
-
-        return bom;
-    }
-
-    private JScrollPane steps(){
+    private JScrollPane steps() {
 
         String[] columns = new String[]{
                 "Step",
@@ -160,7 +218,7 @@ public class ViewBOM extends LockeState {
         };
 
         ArrayList<Object[]> data = new ArrayList<>();
-        for(int s = 0; s < billOfMaterials.getSteps().size(); s++){
+        for (int s = 0; s < billOfMaterials.getSteps().size(); s++) {
             Task ol = billOfMaterials.getSteps().get(s);
             data.add(new Object[]{
                     String.valueOf(s + 1),
@@ -192,12 +250,10 @@ public class ViewBOM extends LockeState {
                 }
             }
         });
-
         return new JScrollPane(ct);
     }
 
-
-    private JPanel controls(){
+    private JPanel controls() {
 
         JPanel controls = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
@@ -206,5 +262,13 @@ public class ViewBOM extends LockeState {
         controls.add(form);
 
         return controls;
+    }
+
+    private RTextScrollPane notes() {
+
+        RTextScrollPane notes = Elements.simpleEditor();
+        notes.getTextArea().setText(billOfMaterials.getNotes());
+        notes.getTextArea().setEditable(false);
+        return notes;
     }
 }

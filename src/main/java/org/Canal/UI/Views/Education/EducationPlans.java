@@ -5,7 +5,7 @@ import org.Canal.UI.Elements.LockeState;
 public class EducationPlans extends LockeState {
 
     public EducationPlans() {
-        super("Education Plans", "/HR/EDU/PLNS", true, true, true, true);
+        super("Education Plans", "/HR/EDU/PLNS");
 
     }
 }

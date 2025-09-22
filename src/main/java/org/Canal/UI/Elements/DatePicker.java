@@ -36,9 +36,9 @@ public class DatePicker extends JPanel {
         add(calendarButton, BorderLayout.EAST);
 
         // Sync manual changes in dateField with the internal state
-        dateField.addActionListener(e -> updateFromDateField());
+        dateField.addActionListener(_ -> updateFromDateField());
 
-        calendarButton.addActionListener(e -> calendarPopup.show(dateField, 0, dateField.getHeight()));
+        calendarButton.addActionListener(_ -> calendarPopup.show(dateField, 0, dateField.getHeight()));
     }
 
     private void initializeCalendarPopup() {
@@ -65,7 +65,7 @@ public class DatePicker extends JPanel {
         Calendar calendar = Calendar.getInstance();
         monthSpinner.setValue(months[calendar.get(Calendar.MONTH)]);
 
-        monthSpinner.addChangeListener(e -> updateDaysPanel());
+        monthSpinner.addChangeListener(_ -> updateDaysPanel());
         yearSpinner = new JSpinner(new SpinnerNumberModel(Calendar.getInstance().get(Calendar.YEAR), 1900, 3000, 1));
         JSpinner.NumberEditor yearEditor = new JSpinner.NumberEditor(yearSpinner, "####");
         yearSpinner.setEditor(yearEditor);
@@ -113,7 +113,7 @@ public class DatePicker extends JPanel {
         for (int day = 1; day <= daysInMonth; day++) {
             JButton dayButton = new JButton(String.valueOf(day));
             int finalDay = day;
-            dayButton.addActionListener(e -> selectDate(finalDay));
+            dayButton.addActionListener(_ -> selectDate(finalDay));
             daysPanel.add(dayButton);
         }
         daysPanel.revalidate();

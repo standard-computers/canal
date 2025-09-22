@@ -1,6 +1,7 @@
 package org.Canal.Models.SupplyChainUnits;
 
 import org.Canal.Models.Objex;
+import org.Canal.Utils.Engine;
 
 import java.util.ArrayList;
 
@@ -148,19 +149,19 @@ public class Bin extends Objex {
         return heightUOM + "3";
     }
 
-    public boolean isPicking() {
+    public boolean pickingEnabled() {
         return picking;
     }
 
-    public void setPicking(boolean picking) {
+    public void pickingEnabled(boolean picking) {
         this.picking = picking;
     }
 
-    public boolean isPutaway() {
+    public boolean putawayEnabled() {
         return putaway;
     }
 
-    public void setPutaway(boolean putaway) {
+    public void putawayEnabled(boolean putaway) {
         this.putaway = putaway;
     }
 
@@ -168,7 +169,7 @@ public class Bin extends Objex {
         return goodsissue;
     }
 
-    public void setGoodsissue(boolean goodsissue) {
+    public void doesGI(boolean goodsissue) {
         this.goodsissue = goodsissue;
     }
 
@@ -176,15 +177,21 @@ public class Bin extends Objex {
         return goodsreceipt;
     }
 
-    public void setGoodsreceipt(boolean goodsreceipt) {
+    public void doesGR(boolean goodsreceipt) {
         this.goodsreceipt = goodsreceipt;
     }
 
-    public boolean isHoldsStock() {
+    public boolean holdsStock() {
         return holdsStock;
     }
 
-    public void setHoldsStock(boolean holdsStock) {
+    public void holdsStock(boolean holdsStock) {
         this.holdsStock = holdsStock;
+    }
+
+    public void save() {
+        Area a = Engine.getArea(area);
+        a.setBin(this);
+        a.save();
     }
 }

@@ -20,7 +20,7 @@ public class MyProfile extends LockeState {
 
     public MyProfile(DesktopState desktop) {
 
-        super("My Profile", "/ME", true, true, true, true);
+        super("My Profile", "/ME");
         setFrameIcon(new ImageIcon(MyProfile.class.getResource("/icons/me.png")));
         //TODO Check that user is assigned
         me = Engine.getEmployee(Engine.getAssignedUser().getEmployee());

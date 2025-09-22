@@ -20,10 +20,10 @@ public class Archiver extends LockeState {
         super("Archiver", objex + "/ARCHV", false, true, false, true);
 
         JTextField objexIdField = Elements.input(20);
-        Form f = new Form();
-        f.addInput(Elements.coloredLabel("Objex ID", Constants.colors[0]), objexIdField);
+        Form form = new Form();
+        form.addInput(Elements.coloredLabel("Objex ID", Constants.colors[0]), objexIdField);
         setLayout(new BorderLayout());
-        add(f, BorderLayout.CENTER);
+        add(form, BorderLayout.CENTER);
         JButton confirmArchival = Elements.button("Confirm Objex Archival");
         add(confirmArchival, BorderLayout.SOUTH);
         add(Elements.header("Archive a " + objex, SwingConstants.LEFT), BorderLayout.NORTH);
@@ -40,7 +40,7 @@ public class Archiver extends LockeState {
                         }
                     }
                 }
-                //Doesn't exist
+                //TODO Doesn't exist
             }
         });
     }

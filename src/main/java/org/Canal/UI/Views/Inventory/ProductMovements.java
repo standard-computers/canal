@@ -27,7 +27,7 @@ public class ProductMovements extends LockeState implements RefreshListener {
 
     public ProductMovements(DesktopState desktop, String location) {
 
-        super("Product Movements in Stock", "/STK", true, true, true, true);
+        super("Product Movements in Stock", "/STK");
         setFrameIcon(new ImageIcon(ProductMovements.class.getResource("/icons/purchasereqs.png")));
         this.desktop = desktop;
         this.location = location;

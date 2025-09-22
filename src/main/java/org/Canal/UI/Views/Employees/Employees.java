@@ -28,7 +28,7 @@ public class Employees extends LockeState implements RefreshListener {
 
     public Employees(DesktopState desktop) {
 
-        super("Employees", "/EMPS", true, true, true, true);
+        super("Employees", "/EMPS");
         setFrameIcon(new ImageIcon(Employees.class.getResource("/icons/windows/employees.png")));
         this.desktop = desktop;
 
@@ -54,7 +54,7 @@ public class Employees extends LockeState implements RefreshListener {
 
         if((boolean) Engine.codex.getValue("EMPS", "import_enabled")){
             IconButton importEmployees = new IconButton("Import", "export", "Import as CSV", "");
-            importEmployees.addActionListener(e -> {
+            importEmployees.addActionListener(_ -> {
 
             });
             tb.add(importEmployees);
@@ -63,7 +63,7 @@ public class Employees extends LockeState implements RefreshListener {
 
         if((boolean) Engine.codex.getValue("EMPS", "export_enabled")){
             IconButton export = new IconButton("", "export", "Export as CSV", "");
-            export.addActionListener(e -> table.exportToCSV());
+            export.addActionListener(_ -> table.exportToCSV());
             tb.add(export);
             tb.add(Box.createHorizontalStrut(5));
         }

@@ -1,6 +1,6 @@
 package org.Canal.UI.Views.Finance.PurchaseRequisitions;
 
-import org.Canal.Models.BusinessUnits.PurchaseOrder;
+import org.Canal.Models.BusinessUnits.Order;
 import org.Canal.Models.BusinessUnits.PurchaseRequisition;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.CustomTable;
@@ -78,7 +78,7 @@ public class PurchaseRequisitions extends LockeState implements RefreshListener 
                     && !pr.getStatus().equals(LockeStatus.DELETED)
                     && !pr.getStatus().equals(LockeStatus.COMPLETED)) {
                 double consumption = 0;
-                for(PurchaseOrder po : Engine.getPurchaseOrders()){
+                for(Order po : Engine.getPurchaseOrders()){
                     if(po.getPurchaseRequisition().equals(pr.getId())){
                         consumption -= po.getTotal();
                     }

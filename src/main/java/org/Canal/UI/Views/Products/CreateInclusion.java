@@ -17,19 +17,22 @@ public class CreateInclusion extends LockeState {
 
     public CreateInclusion(Includer includer) {
 
-        super("Include Item", "/", false, true, false, true);
+        super("Include Item", "/$>", false, true, false, true);
         setFrameIcon(new ImageIcon(CreateInclusion.class.getResource("/icons/windows/locke.png")));
 
-        Form f = new Form();
         JTextField inclusionId = Elements.input();
         UOMField usage = new UOMField("EA", true);
         usage.setValue("1");
-        f.addInput(Elements.coloredLabel("Item ID", UIManager.getColor("Label.foreground")), inclusionId);
-        f.addInput(Elements.coloredLabel("Usage", UIManager.getColor("Label.foreground")), usage);
+
+        Form form = new Form();
+        form.addInput(Elements.coloredLabel("Item ID", UIManager.getColor("Label.foreground")), inclusionId);
+        form.addInput(Elements.coloredLabel("Usage", UIManager.getColor("Label.foreground")), usage);
+
         setLayout(new BorderLayout());
-        add(f, BorderLayout.CENTER);
+        add(form, BorderLayout.CENTER);
         JButton submit = Elements.button("Include");
         add(submit, BorderLayout.SOUTH);
+
         submit.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

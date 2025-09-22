@@ -1,20 +1,16 @@
 package org.Canal.UI.Views.Finance.Accounts;
 
-import org.Canal.Models.HumanResources.Department;
-import org.Canal.Models.HumanResources.Employee;
-import org.Canal.Models.HumanResources.Position;
+import org.Canal.Models.BusinessUnits.Account;
 import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
-import org.Canal.UI.Views.Departments.ViewDepartment;
-import org.Canal.UI.Views.Employees.ViewEmployee;
+import org.Canal.UI.Views.Finder;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.RefreshListener;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -26,97 +22,93 @@ import java.util.ArrayList;
 public class Accounts extends LockeState implements RefreshListener {
 
     private DesktopState desktop;
-    private CustomTable table;
+    private CustomTable accountsTable;
 
     public Accounts(DesktopState desktop) {
 
-        super("Accounts", "/ACCS", true, true, true, true);
+        super("Accounts", "/ACCS");
         setFrameIcon(new ImageIcon(Accounts.class.getResource("/icons/windows/locke.png")));
         this.desktop = desktop;
 
         JPanel holder = new JPanel(new BorderLayout());
-        table = table();
-        JScrollPane tableScrollPane = new JScrollPane(table);
+        accountsTable = table();
+        JScrollPane tableScrollPane = new JScrollPane(accountsTable);
         tableScrollPane.setPreferredSize(new Dimension(750, 600));
         holder.add(Elements.header("Accounts", SwingConstants.LEFT), BorderLayout.CENTER);
         holder.add(toolbar(), BorderLayout.SOUTH);
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);
         add(tableScrollPane, BorderLayout.CENTER);
-        table.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    JTable target = (JTable) e.getSource();
-                    int row = target.getSelectedRow();
-                    if (row != -1) {
-                        String value = String.valueOf(target.getValueAt(row, 1));
-                        desktop.put(new ViewEmployee(Engine.getEmployee(value), desktop, Accounts.this));
-                    }
-                }
-            }
-        });
+
+        if((boolean) Engine.codex.getValue("ACCS", "start_maximized")){
+            setMaximized(true);
+        }
     }
 
     private JPanel toolbar() {
 
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        tb.add(Box.createHorizontalStrut(5));
+
+        IconButton export = new IconButton("Export", "export", "Export as CSV", "/ACCS/EXP");
+        export.addActionListener(_ -> accountsTable.exportToCSV());
+        tb.add(export);
+        tb.add(Box.createHorizontalStrut(5));
 
         IconButton open = new IconButton("Open", "open", "Open Account", "/ACCS/O");
+        open.addActionListener(_ -> desktop.put(Engine.router("/ACCS/O", desktop)));
         tb.add(open);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton create = new IconButton("New", "create", "Create Account", "/ACCS/NEW");
+        create.addActionListener(_ -> desktop.put(new CreateAccount(desktop, this)));
         tb.add(create);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton find = new IconButton("Find", "find", "Find by Account", "/ACCS/F");
+        find.addActionListener(_ -> desktop.put(new Finder("/ACCS", Account.class, desktop)));
         tb.add(find);
         tb.add(Box.createHorizontalStrut(5));
 
-        IconButton export = new IconButton("", "export", "Export as CSV", "");
-        export.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                table.exportToCSV();
-            }
-        });
-        tb.add(export);
-        tb.add(Box.createHorizontalStrut(5));
-
-        IconButton refresh = new IconButton("", "refresh", "Refresh data");
-        refresh.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                refresh();
-            }
-        });
+        IconButton refresh = new IconButton("Refresh", "refresh", "Refresh data");
+        refresh.addActionListener(_ -> refresh());
         tb.add(refresh);
-        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
+
         return tb;
     }
 
     private CustomTable table() {
-        String[] columns = new String[]{};
+
+        String[] columns = new String[]{
+                "ID",
+                "Name",
+                "Location",
+                "Customer",
+                "Opened",
+                "Closed",
+                "Protected",
+                "Agreement",
+                "Status",
+                "Created",
+        };
         ArrayList<Object[]> data = new ArrayList<>();
-        for (Employee employee : Engine.getEmployees()) {
-            Position p = Engine.getPosition(employee.getPosition());
+        for (Account account : Engine.getAccounts()) {
             data.add(new Object[]{
+                    account.getId(),
+                    account.getName(),
+                    account.getLocation(),
+                    account.getCustomer(),
+                    account.getOpened(),
+                    account.getClosed(),
+                    account.isPasswordProtected(),
+                    account.getAgreement(),
+                    account.getStatus(),
+                    account.getCreated(),
             });
         }
-        return new CustomTable(columns, data);
-    }
-
-    @Override
-    public void refresh() {
-        CustomTable newTable = table();
-        JScrollPane scrollPane = (JScrollPane) table.getParent().getParent();
-        scrollPane.setViewportView(newTable);
-        table = newTable;
-        scrollPane.revalidate();
-        scrollPane.repaint();
-        table.addMouseListener(new MouseAdapter() {
+        CustomTable ct = new CustomTable(columns, data);
+        ct.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
@@ -124,14 +116,23 @@ public class Accounts extends LockeState implements RefreshListener {
                     int r = t.getSelectedRow();
                     if (r != -1) {
                         String v = String.valueOf(t.getValueAt(r, 1));
-                        for(Department d : Engine.getOrganization().getDepartments()){
-                            if(d.getId().equals(v)){
-                                desktop.put(new ViewDepartment(d));
-                            }
-                        }
+                        Account account = Engine.getAccount(v);
+                        desktop.put(new ViewAccount(account, desktop));
                     }
                 }
             }
         });
+        return ct;
+    }
+
+    @Override
+    public void refresh() {
+
+        CustomTable newTable = table();
+        JScrollPane scrollPane = (JScrollPane) accountsTable.getParent().getParent();
+        scrollPane.setViewportView(newTable);
+        accountsTable = newTable;
+        scrollPane.revalidate();
+        scrollPane.repaint();
     }
 }

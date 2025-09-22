@@ -1,15 +1,15 @@
 package org.Canal.UI.Views.Finance.SalesOrders;
 
-import org.Canal.Models.BusinessUnits.SalesOrder;
+import org.Canal.Models.BusinessUnits.Order;
 import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
+import org.Canal.UI.Views.Finder;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -23,7 +23,7 @@ public class SalesOrders extends LockeState {
 
     public SalesOrders(DesktopState desktop) {
 
-        super("Sales Orders", "/ORDS/SO", true, true, true, true);
+        super("Sales Orders", "/ORDS/SO");
         setFrameIcon(new ImageIcon(SalesOrders.class.getResource("/icons/salesorders.png")));
         this.desktop = desktop;
 
@@ -41,6 +41,7 @@ public class SalesOrders extends LockeState {
 
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        tb.add(Box.createHorizontalStrut(5));
 
         if((boolean) Engine.codex.getValue("ORDS/SO", "import_enabled")) {
             IconButton importSalesOrders = new IconButton("Import", "export", "Import from CSV");
@@ -58,13 +59,14 @@ public class SalesOrders extends LockeState {
         tb.add(openSelected);
         tb.add(Box.createHorizontalStrut(5));
 
-        IconButton createSO = new IconButton("New", "create", "Build an item", "/ORDS/SO/NEW");
-        createSO.addActionListener(_ -> desktop.put(new CreateSalesOrder()));
-        tb.add(createSO);
+        IconButton create = new IconButton("Create", "create", "Build an item", "/ORDS/SO/NEW");
+        create.addActionListener(_ -> desktop.put(new CreateSalesOrder(desktop)));
+        tb.add(create);
         tb.add(Box.createHorizontalStrut(5));
 
-        IconButton findSO = new IconButton("Find", "find", "Find by values", "/ORDS/SO/F");
-        tb.add(findSO);
+        IconButton find = new IconButton("Find", "find", "Find by values", "/ORDS/SO/F");
+        find.addActionListener(_ -> desktop.put(new Finder("/ORDS/SO", Order.class, desktop)));
+        tb.add(find);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton label = new IconButton("Labels", "label", "Print labels for org properties");
@@ -77,7 +79,7 @@ public class SalesOrders extends LockeState {
 
         IconButton refresh = new IconButton("Refresh", "refresh", "Refresh data");
         tb.add(refresh);
-        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
+
         return tb;
     }
 
@@ -96,7 +98,7 @@ public class SalesOrders extends LockeState {
                 "Status"
         };
         ArrayList<Object[]> sos = new ArrayList<>();
-        for (SalesOrder so : Engine.getSalesOrders()) {
+        for (Order so : Engine.getSalesOrders()) {
             sos.add(new Object[]{
                     so.getOrderId(),
                     so.getOwner(),

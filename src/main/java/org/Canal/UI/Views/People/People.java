@@ -26,7 +26,7 @@ public class People extends LockeState implements RefreshListener {
     private CustomTable table;
 
     public People(DesktopState desktop) {
-        super("People", "/PPL", true, true, true, true);
+        super("People", "/PPL");
         setFrameIcon(new ImageIcon(People.class.getResource("/icons/windows/employees.png")));
 
         JPanel holder = new JPanel(new BorderLayout());

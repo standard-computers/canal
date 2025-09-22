@@ -4,13 +4,15 @@ import org.Canal.Models.Objex;
 
 public class Account extends Objex {
 
-    private String location;
-    private String customer; //Customer ID
+    private String location = "";
+    private String customer = ""; //Customer ID
     private String opened;
-    private String closed;
+    private String closed = "";
     private boolean passwordProtected;
-    private String password;
-    private String agreement; //An Agreement ID, combines locations
+    private String password = "";
+    private String agreement = ""; //An Agreement ID, combines locations
+    private double terms = 0.0;
+    private String termsUOM = "";
 
     public String getLocation() {
         return location;
@@ -66,5 +68,21 @@ public class Account extends Objex {
 
     public void setAgreement(String agreement) {
         this.agreement = agreement;
+    }
+
+    public double getTerms() {
+        return terms;
+    }
+
+    public void setTerms(double terms) {
+        this.terms = terms;
+    }
+
+    public String getTermsUOM() {
+        return termsUOM;
+    }
+
+    public void setTermsUOM(String termsUOM) {
+        this.termsUOM = termsUOM;
     }
 }

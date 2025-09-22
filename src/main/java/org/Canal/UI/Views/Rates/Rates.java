@@ -123,14 +123,14 @@ public class Rates extends LockeState implements RefreshListener {
         }
 
         IconButton open = new IconButton("Open", "open", "Open an Item", "/ITS/O");
-        open.addActionListener(e -> {
+        open.addActionListener(_ -> {
             desktop.put(Engine.router("/ITS/O", desktop));
         });
         tb.add(open);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton create = new IconButton("New", "create", "Create an Item", "/ITS/NEW");
-        create.addActionListener(e -> {
+        create.addActionListener(_ -> {
             desktop.put(new CreateItem(desktop, this));
         });
         tb.add(create);

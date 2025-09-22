@@ -23,7 +23,7 @@ public class CreateCatalog extends LockeState {
 
     public CreateCatalog(DesktopState desktop) {
 
-        super("Build a Catalog", "/CATS/NEW", true, true, true, true);
+        super("Build a Catalog", "/CATS/NEW");
         setFrameIcon(new ImageIcon(CreateCatalog.class.getResource("/icons/create.png")));
 
 //        if(Engine.products.getItems().isEmpty() && Engine.products.getMaterials().isEmpty()){

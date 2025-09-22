@@ -4,10 +4,12 @@ import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Views.System.LockeMessages;
 import org.Canal.Utils.*;
+import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
 /**
  * /AREAS/NEW
@@ -22,6 +24,7 @@ public class CreateArea extends LockeState {
     private JTextField areaIdField;
     private Selectable availableLocations;
     private JTextField areaNameField;
+    private Selectable statuses;
 
     //Controls Tab
     private JCheckBox allowsInventory;
@@ -34,9 +37,12 @@ public class CreateArea extends LockeState {
     private UOMField lengthField;
     private UOMField heightField;
 
+    //Notes Tab
+    private RTextScrollPane notes;
+
     public CreateArea(String location, DesktopState desktop, RefreshListener refreshListener) {
 
-        super("New Area", "/AREAS/NEW", false, true, false, true);
+        super("New Area", "/AREAS/NEW");
         setFrameIcon(new ImageIcon(CreateArea.class.getResource("/icons/windows/areas.png")));
         this.location = location;
         this.desktop = desktop;
@@ -45,6 +51,7 @@ public class CreateArea extends LockeState {
         CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.addTab("General", general());
         tabs.addTab("Controls", controls());
+        tabs.addTab("Notes", notes());
 
         JPanel header = new JPanel(new BorderLayout());
         header.add(Elements.header("New Area", SwingConstants.LEFT), BorderLayout.NORTH);
@@ -52,6 +59,10 @@ public class CreateArea extends LockeState {
 
         add(header, BorderLayout.NORTH);
         add(tabs, BorderLayout.CENTER);
+
+        if ((boolean) Engine.codex.getValue("AREAS", "start_maximized")) {
+            setMaximized(true);
+        }
     }
 
     public JPanel toolbar() {
@@ -59,6 +70,7 @@ public class CreateArea extends LockeState {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        tb.add(Box.createHorizontalStrut(5));
 
         IconButton copyFrom = new IconButton("Copy From", "open", "Copy Area");
         copyFrom.addActionListener(_ -> {
@@ -79,6 +91,7 @@ public class CreateArea extends LockeState {
                 allowsProduction.setSelected(a.allowsProduction());
                 allowsSales.setSelected(a.allowsSales());
                 allowsPurchasing.setSelected(a.allowsPurchasing());
+                notes.getTextArea().setText(a.getNotes());
             }
         });
         tb.add(copyFrom);
@@ -92,23 +105,24 @@ public class CreateArea extends LockeState {
         IconButton create = new IconButton("Create", "create", "Refresh Data");
         create.addActionListener(_ -> {
 
-            Area newArea = new Area();
+            Area area = new Area();
+            area.setId(areaIdField.getText().trim());
+            area.setLocation(availableLocations.getSelectedValue());
+            area.setName(areaNameField.getText());
+            area.setWidth(Double.parseDouble(widthField.getValue()));
+            area.setWidthUOM(widthField.getUOM());
+            area.setLength(Double.parseDouble(lengthField.getValue()));
+            area.setLengthUOM(lengthField.getUOM());
+            area.setHeight(Double.parseDouble(heightField.getValue()));
+            area.setHeightUOM(heightField.getUOM());
+            area.setAllowsInventory(allowsInventory.isSelected());
+            area.setAllowsProduction(allowsProduction.isSelected());
+            area.setAllowsPurchasing(allowsPurchasing.isSelected());
+            area.setAllowsSales(allowsSales.isSelected());
+            area.setNotes(notes.getTextArea().getText());
+            area.setStatus(LockeStatus.valueOf(statuses.getSelectedValue()));
 
-            newArea.setId(areaIdField.getText().trim());
-            newArea.setLocation(availableLocations.getSelectedValue());
-            newArea.setName(areaNameField.getText());
-            newArea.setWidth(Double.parseDouble(widthField.getValue()));
-            newArea.setWidthUOM(widthField.getUOM());
-            newArea.setLength(Double.parseDouble(lengthField.getValue()));
-            newArea.setLengthUOM(lengthField.getUOM());
-            newArea.setHeight(Double.parseDouble(heightField.getValue()));
-            newArea.setHeightUOM(heightField.getUOM());
-            newArea.setAllowsInventory(allowsInventory.isSelected());
-            newArea.setAllowsProduction(allowsProduction.isSelected());
-            newArea.setAllowsPurchasing(allowsPurchasing.isSelected());
-            newArea.setAllowsSales(allowsSales.isSelected());
-
-            Pipe.save("/AREAS", newArea);
+            Pipe.save("/AREAS", area);
 
             dispose();
             if (refreshListener != null) {
@@ -121,9 +135,20 @@ public class CreateArea extends LockeState {
 
         });
         tb.add(create);
-        tb.setBorder(new EmptyBorder(0, 5, 0, 5));
+        tb.add(Box.createHorizontalStrut(5));
+        int mask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
+        KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_S, mask);
+        JRootPane rp = getRootPane();
+        rp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ks, "do-modify");
+        rp.getActionMap().put("do-modify", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                create.doClick();
+            }
+        });
 
         panel.add(tb, BorderLayout.SOUTH);
+
         return panel;
     }
 
@@ -143,15 +168,18 @@ public class CreateArea extends LockeState {
         widthField = new UOMField();
         lengthField = new UOMField();
         heightField = new UOMField();
+        statuses = Selectables.statusTypes();
+        statuses.setSelectedValue("ACTIVE");
 
-        Form f = new Form();
-        f.addInput(Elements.coloredLabel("*New ID", UIManager.getColor("Label.foreground")), areaIdField);
-        f.addInput(Elements.coloredLabel("*Location", UIManager.getColor("Label.foreground")), availableLocations);
-        f.addInput(Elements.coloredLabel("Area Name", Constants.colors[10]), areaNameField);
-        f.addInput(Elements.coloredLabel("Width", Constants.colors[9]), widthField);
-        f.addInput(Elements.coloredLabel("Length", Constants.colors[8]), lengthField);
-        f.addInput(Elements.coloredLabel("Height", Constants.colors[7]), heightField);
-        panel.add(f);
+        Form form = new Form();
+        form.addInput(Elements.coloredLabel("*New ID", UIManager.getColor("Label.foreground")), areaIdField);
+        form.addInput(Elements.coloredLabel("*Location", UIManager.getColor("Label.foreground")), availableLocations);
+        form.addInput(Elements.coloredLabel("Area Name", Constants.colors[10]), areaNameField);
+        form.addInput(Elements.coloredLabel("Width", Constants.colors[9]), widthField);
+        form.addInput(Elements.coloredLabel("Length", Constants.colors[8]), lengthField);
+        form.addInput(Elements.coloredLabel("Height", Constants.colors[7]), heightField);
+        form.addInput(Elements.coloredLabel("Status", Constants.colors[6]), statuses);
+        panel.add(form);
 
         return panel;
     }
@@ -160,20 +188,25 @@ public class CreateArea extends LockeState {
 
         JPanel controls = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-        Form f = new Form();
-
         allowsInventory = new JCheckBox("Inventory Movements");
         allowsProduction = new JCheckBox("Allows Production");
         allowsSales = new JCheckBox("Sales Order Processing");
         allowsPurchasing = new JCheckBox("Purchase Order Processing");
 
-        f.addInput(Elements.coloredLabel("Allow Inventory", Constants.colors[0]), allowsInventory);
-        f.addInput(Elements.coloredLabel("Allow Production", Constants.colors[1]), allowsProduction);
-        f.addInput(Elements.coloredLabel("Allow Sales", Constants.colors[2]), allowsSales);
-        f.addInput(Elements.coloredLabel("Allow Purchasing", Constants.colors[3]), allowsPurchasing);
-        controls.add(f);
+        Form form = new Form();
+        form.addInput(Elements.coloredLabel("Allows Inventory", Constants.colors[0]), allowsInventory);
+        form.addInput(Elements.coloredLabel("Allows Production", Constants.colors[1]), allowsProduction);
+        form.addInput(Elements.coloredLabel("Allows Sales", Constants.colors[2]), allowsSales);
+        form.addInput(Elements.coloredLabel("Allows Purchasing", Constants.colors[3]), allowsPurchasing);
+        controls.add(form);
 
         return controls;
+    }
+
+    private RTextScrollPane notes() {
+
+        notes = Elements.simpleEditor();
+        return notes;
     }
 
     private void performReview() {
@@ -186,21 +219,31 @@ public class CreateArea extends LockeState {
                 addToQueue(new String[]{"WARNING", "Area ID already in use!"});
             }
         }
+
         if (areaNameField.getText().isEmpty()) {
             addToQueue(new String[]{"WARNING", "Area name is empty!"});
         }
+
         if (Double.parseDouble(widthField.getValue()) == 0) {
             addToQueue(new String[]{"WARNING", "Width is set to zero 0"});
         }
+
         if (Double.parseDouble(lengthField.getValue()) == 0) {
             addToQueue(new String[]{"WARNING", "Length is set to zero 0"});
         }
+
         if (Double.parseDouble(heightField.getValue()) == 0) {
             addToQueue(new String[]{"WARNING", "Height is set to zero 0"});
         }
+
         if (!allowsInventory.isSelected()) {
             addToQueue(new String[]{"WARNING", "'Allows Inventory' is not selected, are you sure?'"});
         }
+
+        if (!statuses.getSelectedValue().equals("ACTIVE")) {
+            addToQueue(new String[]{"WARNING", "Area Status not set to ACTIVE, are you sure?'"});
+        }
+
         desktop.put(new LockeMessages(getQueue()));
         purgeQueue();
     }

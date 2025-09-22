@@ -8,6 +8,8 @@ import org.Canal.Utils.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -48,6 +50,7 @@ public class CreateDepartment extends LockeState {
 
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        tb.add(Box.createHorizontalStrut(5));
 
         IconButton create = new IconButton("Create", "create", "Create Department");
         create.addActionListener(_ -> {
@@ -78,8 +81,17 @@ public class CreateDepartment extends LockeState {
             }
         });
         tb.add(create);
+        tb.add(Box.createHorizontalStrut(5));
+        int mask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
+        KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_S, mask);
+        JRootPane rp = getRootPane();
+        rp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ks, "do-modify");
+        rp.getActionMap().put("do-modify", new AbstractAction() {
+            @Override public void actionPerformed(ActionEvent e) {
+                create.doClick();
+            }
+        });
 
-        tb.setBorder(new EmptyBorder(0, 5, 0, 5));
         return tb;
     }
 
@@ -110,23 +122,17 @@ public class CreateDepartment extends LockeState {
         JPanel positions = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel buttons = new JPanel();
         buttons.setLayout(new BoxLayout(buttons, BoxLayout.X_AXIS));
+        buttons.add(Box.createHorizontalStrut(5));
+
         IconButton add = new IconButton("Assign Position", "add_rows", "Add Position");
-        IconButton remove = new IconButton("Remove Selected", "delete_rows", "Remove Selected Position");
         buttons.add(add);
         buttons.add(Box.createHorizontalStrut(5));
+
+        IconButton remove = new IconButton("Remove Selected", "delete_rows", "Remove Selected Position");
         buttons.add(remove);
-        add.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-
-            }
-        });
-        remove.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-
-            }
-        });
 
         positions.add(buttons, BorderLayout.SOUTH);
+
         return positions;
     }
 }

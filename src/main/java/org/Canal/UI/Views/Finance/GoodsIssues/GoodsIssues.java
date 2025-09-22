@@ -24,7 +24,7 @@ public class GoodsIssues extends LockeState {
 
     public GoodsIssues(DesktopState desktop) {
 
-        super("Goods Issues", "/GI", true, true, true, true);
+        super("Goods Issues", "/GI");
         setFrameIcon(new ImageIcon(GoodsIssues.class.getResource("/icons/purchaseorders.png")));
         if(Engine.getGoodsReceipts().isEmpty()){
             dispose();

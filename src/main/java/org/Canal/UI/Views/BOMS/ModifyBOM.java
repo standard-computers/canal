@@ -8,6 +8,7 @@ import org.Canal.UI.Elements.*;
 import org.Canal.UI.Views.Products.CreateInclusion;
 import org.Canal.UI.Views.System.LockeMessages;
 import org.Canal.Utils.*;
+import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
 import java.awt.*;
@@ -39,6 +40,9 @@ public class ModifyBOM extends LockeState implements Includer {
     private CustomTable bomsView;
     private CustomTable stepsView;
 
+    //Notes Tab
+    private RTextScrollPane notes;
+
     public ModifyBOM(BillOfMaterials billOfMaterials, DesktopState desktop, RefreshListener refreshListener) {
 
         super("Modify Bill of Materials", "/BOMS/MOD/" + billOfMaterials.getId());
@@ -51,13 +55,14 @@ public class ModifyBOM extends LockeState implements Includer {
         tabs.addTab("Components", components());
         tabs.addTab("Steps", steps());
         tabs.addTab("Controls", controls());
+        tabs.addTab("Notes", notes());
 
         setLayout(new BorderLayout());
         add(header(), BorderLayout.NORTH);
         add(tabs, BorderLayout.CENTER);
     }
 
-    private JPanel header(){
+    private JPanel header() {
 
         JPanel header = new JPanel(new BorderLayout());
         JPanel itemInfo = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -80,7 +85,6 @@ public class ModifyBOM extends LockeState implements Includer {
         return header;
     }
 
-
     private JPanel toolbar() {
 
         JPanel toolbar = new JPanel(new BorderLayout());
@@ -88,53 +92,40 @@ public class ModifyBOM extends LockeState implements Includer {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
 
-        IconButton copyFrom = new IconButton("Copy From", "open", "Copy Form BOM");
-        copyFrom.addActionListener(_ -> {
-            String bomId = JOptionPane.showInputDialog("Enter BOM ID");
-            BillOfMaterials bom = Engine.getBoM(bomId);
-            bomNameField.setText(bom.getName());
-            locationField.setText(bom.getLocation());
-            itemId.setText(bom.getItem());
-            customerField.setText(bom.getCustomer());
-            status.setSelectedValue(String.valueOf(bom.getStatus()));
-            refreshComponents();
-            refreshSteps();
-        });
-        tb.add(copyFrom);
-        tb.add(Box.createHorizontalStrut(5));
-
-        IconButton review = new IconButton("Review", "review", "Review changes");
-        review.addActionListener(_ -> performReview());
-        tb.add(review);
-        tb.add(Box.createHorizontalStrut(5));
-
-        IconButton create = new IconButton("Create", "create", "Save modifications");
-        create.addActionListener(_ -> {
+        IconButton save = new IconButton("Save", "save", "Save modifications");
+        save.addActionListener(_ -> {
 
             billOfMaterials.setName(bomNameField.getText());
             billOfMaterials.setLocation(locationField.getText());
             billOfMaterials.setItem(itemId.getText());
             billOfMaterials.setCustomer(customerField.getText());
+            billOfMaterials.setNotes(notes.getTextArea().getText());
             billOfMaterials.save();
 
             dispose();
 
-            if(refreshListener != null){
+            if (refreshListener != null) {
                 refreshListener.refresh();
             }
             //TODO Alert and close
         });
-        tb.add(create);
+        tb.add(save);
         tb.add(Box.createHorizontalStrut(5));
         int mask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
         KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_S, mask);
         JRootPane rp = getRootPane();
         rp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ks, "do-save");
         rp.getActionMap().put("do-save", new AbstractAction() {
-            @Override public void actionPerformed(ActionEvent e) {
-                create.doClick();
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                save.doClick();
             }
         });
+
+        IconButton review = new IconButton("Review", "review", "Review changes");
+        review.addActionListener(_ -> performReview());
+        tb.add(review);
+        tb.add(Box.createHorizontalStrut(5));
 
         toolbar.add(Elements.header("Modifying " + billOfMaterials.getId() + " " + billOfMaterials.getName(), SwingConstants.LEFT), BorderLayout.CENTER);
         toolbar.add(tb, BorderLayout.SOUTH);
@@ -155,7 +146,7 @@ public class ModifyBOM extends LockeState implements Includer {
         };
 
         ArrayList<Object[]> data = new ArrayList<>();
-        for(int s = 0; s < billOfMaterials.getComponents().size(); s++){
+        for (int s = 0; s < billOfMaterials.getComponents().size(); s++) {
             StockLine ol = billOfMaterials.getComponents().get(s);
             Item i = Engine.getItem(ol.getItem());
             data.add(new Object[]{
@@ -187,7 +178,7 @@ public class ModifyBOM extends LockeState implements Includer {
         return ct;
     }
 
-    private JPanel components(){
+    private JPanel components() {
 
         JPanel bom = new JPanel(new BorderLayout());
         JPanel tb = new JPanel();
@@ -223,7 +214,7 @@ public class ModifyBOM extends LockeState implements Includer {
 
         IconButton reprice = new IconButton("Refresh", "refresh", "Refresh component data");
         reprice.addActionListener(_ -> {
-            for(int i = 0; i < billOfMaterials.getComponents().size(); i++){
+            for (int i = 0; i < billOfMaterials.getComponents().size(); i++) {
                 Item ti = Engine.getItem(billOfMaterials.getComponents().get(i).getItem());
                 billOfMaterials.getComponents().get(i).setValue(ti.getPrice());
             }
@@ -251,7 +242,7 @@ public class ModifyBOM extends LockeState implements Includer {
         };
 
         ArrayList<Object[]> data = new ArrayList<>();
-        for(int s = 0; s < billOfMaterials.getSteps().size(); s++){
+        for (int s = 0; s < billOfMaterials.getSteps().size(); s++) {
             Task ol = billOfMaterials.getSteps().get(s);
             data.add(new Object[]{
                     String.valueOf(s + 1),
@@ -281,11 +272,12 @@ public class ModifyBOM extends LockeState implements Includer {
         return ct;
     }
 
-    private JPanel steps(){
+    private JPanel steps() {
 
         JPanel stps = new JPanel(new BorderLayout());
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        tb.add(Box.createHorizontalStrut(5));
 
         IconButton copyFrom = new IconButton("Copy From", "open", "Copy from BOM");
         copyFrom.addActionListener(_ -> {
@@ -313,18 +305,6 @@ public class ModifyBOM extends LockeState implements Includer {
         tb.add(removeStep);
         tb.add(Box.createHorizontalStrut(5));
 
-        IconButton reprice = new IconButton("Refresh", "refresh", "Refresh component data");
-        reprice.addActionListener(_ -> {
-            for(int i = 0; i < billOfMaterials.getComponents().size(); i++){
-                Item ti = Engine.getItem(billOfMaterials.getComponents().get(i).getItem());
-                billOfMaterials.getComponents().get(i).setValue(ti.getPrice());
-            }
-            refreshComponents();
-        });
-        tb.add(reprice);
-        tb.add(Box.createHorizontalStrut(5));
-
-
         stps.add(tb, BorderLayout.NORTH);
         stepsView = stepsTable();
         stps.add(new JScrollPane(stepsView), BorderLayout.CENTER);
@@ -333,7 +313,7 @@ public class ModifyBOM extends LockeState implements Includer {
     }
 
 
-    private JPanel controls(){
+    private JPanel controls() {
 
         JPanel controls = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
@@ -346,33 +326,40 @@ public class ModifyBOM extends LockeState implements Includer {
         return controls;
     }
 
+    private RTextScrollPane notes() {
+
+        notes = Elements.simpleEditor();
+        notes.getTextArea().setText(billOfMaterials.getNotes());
+        return notes;
+    }
+
     private void performReview() {
 
-        if(bomNameField.getText().trim().isEmpty()){
+        if (bomNameField.getText().trim().isEmpty()) {
             addToQueue(new String[]{"WARNING", "Bill of Materials name not set. Are you sure?"});
         }
 
-        if(locationField.getText().trim().isEmpty()){
+        if (locationField.getText().trim().isEmpty()) {
             addToQueue(new String[]{"WARNING", "Bill of Materials production location not set. Are you sure?"});
         }
 
-        if(itemId.getText().trim().isEmpty()){
+        if (itemId.getText().trim().isEmpty()) {
             addToQueue(new String[]{"CRITICAL", "Bill of Materials must have finished item ID!!!"});
         }
 
-        if(itemId.getText().trim().isEmpty()){
+        if (itemId.getText().trim().isEmpty()) {
             addToQueue(new String[]{"WARNING", "Bill of Materials customer not set. Are you sure?"});
         }
 
-        if(billOfMaterials.getComponents().isEmpty()){
+        if (billOfMaterials.getComponents().isEmpty()) {
             addToQueue(new String[]{"CRITICAL", "Bill of Materials has no components. No point!"});
         }
 
-        if(billOfMaterials.getSteps().isEmpty()){
+        if (billOfMaterials.getSteps().isEmpty()) {
             addToQueue(new String[]{"WARNING", "Bill of Materials has no steps. Are you sure?"});
         }
 
-        if(!status.getSelectedValue().equals("ACTIVE")){
+        if (!status.getSelectedValue().equals("ACTIVE")) {
             addToQueue(new String[]{"WARNING", "BOM status MUST be ACTIVE to use for production!"});
         }
 
@@ -422,11 +409,12 @@ public class ModifyBOM extends LockeState implements Includer {
 
     @Override
     public void commitUoM(String uom, double qty, String baseQtyUom) {
-
     }
 
     @Override
     public void commitStep(Task task) {
 
+        billOfMaterials.getSteps().add(task);
+        refreshSteps();
     }
 }

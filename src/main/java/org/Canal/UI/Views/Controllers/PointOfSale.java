@@ -9,7 +9,7 @@ public class PointOfSale extends LockeState {
 
     public PointOfSale() {
 
-        super("Canal POS", "/POS", true, true, true, true);
+        super("Canal POS", "/POS");
 
         setMaximized(true);
     }

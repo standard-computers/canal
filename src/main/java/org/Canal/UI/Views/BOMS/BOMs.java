@@ -5,10 +5,10 @@ import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
+import org.Canal.UI.Views.Finder;
 import org.Canal.Utils.*;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -49,34 +49,27 @@ public class BOMs extends LockeState implements RefreshListener {
 
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        tb.add(Box.createHorizontalStrut(5));
 
         if((boolean) Engine.codex.getValue("ITS", "export_enabled")) {
             IconButton export = new IconButton("Export", "export", "Export as CSV", "");
-            export.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    table.exportToCSV();
-                }
-            });
+            export.addActionListener(_ -> table.exportToCSV());
             tb.add(export);
             tb.add(Box.createHorizontalStrut(5));
         }
 
-        IconButton open = new IconButton("Open", "open", "Open an Item", "/BOMS/O");
-        open.addActionListener(_ -> {
-            desktop.put(Engine.router("/ITS/O", desktop));
-        });
+        IconButton open = new IconButton("Open", "open", "Open an Bill of Materials", "/BOMS/O");
+        open.addActionListener(_ -> desktop.put(Engine.router("/BOMS/O", desktop)));
         tb.add(open);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton create = new IconButton("New", "create", "Create an Item", "/BOMS/NEW");
-        create.addActionListener(_ -> {
-            desktop.put(new CreateBOM(desktop, this));
-        });
+        create.addActionListener(_ -> desktop.put(new CreateBOM(desktop, this)));
         tb.add(create);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton find = new IconButton("Find", "find", "Find by Values", "/BOMS/F");
+        find.addActionListener(_ -> desktop.put(new Finder("/BOMS", BillOfMaterials.class, desktop)));
         tb.add(find);
         tb.add(Box.createHorizontalStrut(5));
 
@@ -91,7 +84,8 @@ public class BOMs extends LockeState implements RefreshListener {
         IconButton refresh = new IconButton("Refresh", "refresh", "Refresh Data");
         refresh.addActionListener(_ -> refresh());
         tb.add(refresh);
-        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
+        tb.add(Box.createHorizontalStrut(5));
+
         return tb;
     }
 
@@ -107,10 +101,10 @@ public class BOMs extends LockeState implements RefreshListener {
             "Status",
         };
 
-        ArrayList<Object[]> d = new ArrayList<>();
+        ArrayList<Object[]> data = new ArrayList<>();
         for (BillOfMaterials bom : boms) {
             bom = Engine.getBoM(bom.getId());
-            d.add(new Object[]{
+            data.add(new Object[]{
                     bom.getId(),
                     bom.getName(),
                     bom.getLocation(),
@@ -120,7 +114,7 @@ public class BOMs extends LockeState implements RefreshListener {
                     bom.getStatus(),
             });
         }
-        CustomTable ct = new CustomTable(columns, d);
+        CustomTable ct = new CustomTable(columns, data);
         ct.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

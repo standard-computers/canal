@@ -25,7 +25,7 @@ import java.util.HashMap;
  */
 public class ViewSalesOrder extends LockeState {
 
-    private SalesOrder salesOrder;
+    private Order salesOrder;
     private ItemTableModel model;
     private double taxRate = 0.05;
     private JLabel netValue;
@@ -37,7 +37,7 @@ public class ViewSalesOrder extends LockeState {
     private JCheckBox commitToLedger, createOutboundDelivery, createPurchaseOrder, createInboundDelivery;
     private JTextField outboundTruckId, inboundTruckId;
 
-    public ViewSalesOrder(SalesOrder salesOrder) {
+    public ViewSalesOrder(Order salesOrder) {
 
         super("Create Sales Order", "/ORDS/SO/NEW", false, true, false, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));

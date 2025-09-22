@@ -7,6 +7,7 @@ public class Codex {
     HashMap<String, HashMap<String, Object>> variables = new HashMap<>();
 
     public Codex() {
+
         variables.put("/", new HashMap<>() {{
             put("minumim_build", 1); //What Min build version should clients have?
             put("currency_symbol", "$");
@@ -21,6 +22,7 @@ public class Codex {
             put("vendor_managed_inventory", false); //Vendor can manage their inventory & POs with their login
             put("vendor_managed_ledger", false); //Maintain ledger for vendor
         }});
+
         variables.put("ORGS", new HashMap<>() {{
             put("name", "Organizations");
             put("prefix", "");
@@ -46,6 +48,7 @@ public class Codex {
             put("start_maximized", true);
             put("auto_open_new", false);
         }});
+
         variables.put("DCSS", new HashMap<>() {{
             put("name", "Distribution Centers");
             put("icon", "distributioncenters");
@@ -62,6 +65,7 @@ public class Codex {
             put("start_maximized", true);
             put("auto_open_new", false);
         }});
+
         variables.put("CCS", new HashMap<>() {{
             put("name", "Cost Centers");
             put("icon", "costcenters");
@@ -78,6 +82,7 @@ public class Codex {
             put("start_maximized", true);
             put("auto_open_new", false);
         }});
+
         variables.put("OFFS", new HashMap<>() {{
             put("name", "Offices");
             put("icon", "costcenters");
@@ -94,6 +99,7 @@ public class Codex {
             put("start_maximized", true);
             put("auto_open_new", false);
         }});
+
         variables.put("VEND", new HashMap<>() {{
             put("name", "Vendors");
             put("icon", "vendors");
@@ -110,6 +116,7 @@ public class Codex {
             put("start_maximized", true);
             put("auto_open_new", false);
         }});
+
         variables.put("WHS", new HashMap<>() {{
             put("name", "Warehouses");
             put("icon", "warehouses");
@@ -126,12 +133,13 @@ public class Codex {
             put("start_maximized", true);
             put("auto_open_new", false);
         }});
+
         variables.put("CSTS", new HashMap<>() {{
             put("name", "Customers");
             put("icon", "customers");
-            put("prefix", "C");
+            put("prefix", "1");
             put("leading_number", 1);
-            put("leading_zeros", 2);
+            put("leading_zeros", 6);
             put("allow_archival", true);
             put("allow_deletion", true);
             put("import_enabled", true);
@@ -141,12 +149,13 @@ public class Codex {
             put("item_created_alert", false);
             put("start_maximized", true);
         }});
+
         variables.put("ACCS", new HashMap<>() {{
             put("name", "Accounts");
             put("icon", "accounts");
-            put("prefix", "#");
+            put("prefix", "1");
             put("leading_number", 1);
-            put("leading_zeros", 2);
+            put("leading_zeros", 6);
             put("require_agreements", false);
             put("allow_archival", true);
             put("allow_deletion", true);
@@ -157,6 +166,7 @@ public class Codex {
             put("item_created_alert", false);
             put("start_maximized", true);
         }});
+
         variables.put("AREAS", new HashMap<>() {{
             put("name", "Areas");
             put("icon", "areas");
@@ -172,6 +182,7 @@ public class Codex {
             put("item_created_alert", false);
             put("start_maximized", true);
         }});
+
         variables.put("BNS", new HashMap<>() {{
             put("name", "Bins");
             put("icon", "bins");
@@ -188,6 +199,7 @@ public class Codex {
             put("item_created_alert", false);
             put("start_maximized", true);
         }});
+
         variables.put("DPTS", new HashMap<>() {{
             put("name", "Bins");
             put("icon", "bins");
@@ -204,6 +216,7 @@ public class Codex {
             put("auto_open_new", false);
             put("start_maximized", true);
         }});
+
         variables.put("HR/POS", new HashMap<>() {{
             put("name", "Positions");
             put("icon", "positions");
@@ -220,6 +233,7 @@ public class Codex {
             put("allow_batch_create", true);
             put("start_maximized", true);
         }});
+
         variables.put("EMPS", new HashMap<>() {{
             put("name", "People");
             put("icon", "employees");
@@ -238,6 +252,7 @@ public class Codex {
             put("item_created_alert", false);
             put("start_maximized", true);
         }});
+
         variables.put("USRS", new HashMap<>() {{
             put("name", "Users");
             put("icon", "users");
@@ -253,6 +268,7 @@ public class Codex {
             put("allow_batch_create", true);
             put("start_maximized", false);
         }});
+
         variables.put("LGS", new HashMap<>() {{
             put("name", "Ledgers");
             put("icon", "ledgers");
@@ -267,6 +283,7 @@ public class Codex {
             put("allow_batch_create", true);
             put("start_maximized", true);
         }});
+
         variables.put("RTS", new HashMap<>() {{
             put("name", "Rates");
             put("icon", "ledgers");
@@ -283,6 +300,7 @@ public class Codex {
             put("allow_batch_create", true);
             put("start_maximized", true);
         }});
+
         variables.put("ORDS/PO", new HashMap<>() {{
             put("name", "Purchase Orders");
             put("icon", "orders");
@@ -301,6 +319,7 @@ public class Codex {
             put("vendor_match", true);
             put("start_maximized", true);
         }});
+
         variables.put("ORDS/SO", new HashMap<>() {{
             put("name", "Sales Orders");
             put("icon", "orders");
@@ -319,6 +338,7 @@ public class Codex {
             put("allow_batch_create", true);
             put("start_maximized", true);
         }});
+
         variables.put("ORDS/PR", new HashMap<>() {{
             put("name", "Purchase Requisitions");
             put("icon", "orders");
@@ -333,20 +353,22 @@ public class Codex {
             put("allow_batch_create", true);
             put("start_maximized", true);
         }});
+
         variables.put("ORDS/RCV", new HashMap<>() {{
             put("block_locations", true); //If not ship-to, can't receive
-            put("create_goods_receipt", true); //Creates Goods Receipt on receive
+            put("create_goods_receipt", false); //Creates Goods Receipt on receive
             put("allow_loc_block_override", true); //Presents override option for 'block_locations
+            put("commit_to_ledger", false); //Presents override option for 'block_locations
             put("always_explode_package", false);
             put("allow_explode_package", true);
             put("require_skus", true); //If received product is sku'd requires SKU be provided
         }});
+
         variables.put("GR", new HashMap<>() {{
             put("name", "Goods Receipts");
             put("prefix", "GR");
             put("leading_number", 1);
             put("leading_zeros", 5);
-//            put("commit_to_ledger", false); //TODO Temp until remove
             put("commit_to_ledger", true);
             put("allow_archival", true);
             put("allow_deletion", true);
@@ -354,6 +376,7 @@ public class Codex {
             put("allow_batch_create", true);
             put("start_maximized", true);
         }});
+
         variables.put("GI", new HashMap<>() {{
             put("name", "Goods Issues");
             put("prefix", "GI");
@@ -365,6 +388,7 @@ public class Codex {
             put("allow_batch_create", true);
             put("start_maximized", true);
         }});
+
         variables.put("CATS", new HashMap<>() {{
             put("name", "Catalogs");
             put("prefix", "CT");
@@ -376,6 +400,7 @@ public class Codex {
             put("allow_batch_create", true);
             put("start_maximized", true);
         }});
+
         variables.put("ITS", new HashMap<>() {{
             put("name", "Items");
             put("prefix", "X0");
@@ -396,6 +421,7 @@ public class Codex {
             put("default_weight_uom", "OZ");
             put("start_maximized", true);
         }});
+
         variables.put("BOMS", new HashMap<>() {{
             put("name", "Bill of Materials");
             put("prefix", "B");
@@ -406,6 +432,7 @@ public class Codex {
             put("allow_deletion", true);
             put("start_maximized", true);
         }});
+
         variables.put("MOS", new HashMap<>() {{
             put("name", "Manufacturing Orders");
             put("prefix", "MO");
@@ -416,6 +443,7 @@ public class Codex {
             put("allow_deletion", true);
             put("start_maximized", true);
         }});
+
         variables.put("MTS", new HashMap<>() {{
             put("name", "Materials");
             put("prefix", "M0");
@@ -426,6 +454,7 @@ public class Codex {
             put("allow_deletion", true);
             put("start_maximized", true);
         }});
+
         variables.put("CMPS", new HashMap<>() {{
             put("name", "Components");
             put("prefix", "CP0");
@@ -437,6 +466,7 @@ public class Codex {
             put("allow_batch_create", true);
             put("start_maximized", true);
         }});
+
         variables.put("TRANS/CRRS", new HashMap<>() {{
             put("name", "Transportation Carriers");
             put("icon", "trucks");
@@ -451,6 +481,7 @@ public class Codex {
             put("allow_batch_create", true);
             put("start_maximized", true);
         }});
+
         variables.put("TRANS/ODO", new HashMap<>() {{
             put("name", "Outbound Deliveries");
             put("prefix", "OBD");
@@ -462,6 +493,7 @@ public class Codex {
             put("allow_batch_create", true);
             put("start_maximized", true);
         }});
+
         variables.put("TRANS/IDO", new HashMap<>() {{
             put("name", "Inbound Deliveries");
             put("prefix", "IND");
@@ -473,6 +505,7 @@ public class Codex {
             put("allow_batch_create", true);
             put("start_maximized", true);
         }});
+
         variables.put("TRANS/TRCKS", new HashMap<>() {{
             put("name", "Trucks");
             put("prefix", "TR");
@@ -484,6 +517,7 @@ public class Codex {
             put("allow_batch_create", true);
             put("start_maximized", true);
         }});
+
         variables.put("STL", new HashMap<>() {{
             put("name", "Stock Lines");
             put("prefix", "ST");
@@ -507,6 +541,6 @@ public class Codex {
         if (innerMap != null) {
             return innerMap.get(innerKey);
         }
-        return null; // Return null if the outer or inner key does not exist
+        return null;
     }
 }

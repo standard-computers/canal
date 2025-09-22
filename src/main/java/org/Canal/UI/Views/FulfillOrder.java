@@ -2,8 +2,7 @@ package org.Canal.UI.Views;
 
 import org.Canal.Models.BusinessUnits.Inventory;
 import org.Canal.Models.BusinessUnits.OrderLineItem;
-import org.Canal.Models.BusinessUnits.PurchaseOrder;
-import org.Canal.Models.BusinessUnits.SalesOrder;
+import org.Canal.Models.BusinessUnits.Order;
 import org.Canal.Models.SupplyChainUnits.Delivery;
 import org.Canal.UI.Elements.*;
 import org.Canal.Utils.Constants;
@@ -32,7 +31,7 @@ public class FulfillOrder extends LockeState {
     private JCheckBox individualizeGoodsIssue;
     private JCheckBox createConfirmTasks;
     private CustomTable fulfillItems;
-    private PurchaseOrder order;
+    private Order order;
 
     public FulfillOrder(String location) {
 
@@ -78,7 +77,7 @@ public class FulfillOrder extends LockeState {
             }
             private void onChange() {
                 String poId = poNumber.getText();
-                PurchaseOrder foundPo = Engine.getPurchaseOrder(poId);
+                Order foundPo = Engine.getPurchaseOrder(poId);
                 if(foundPo != null){
                     order = foundPo;
                     ArrayList<Object[]> its = new ArrayList<>();
@@ -113,7 +112,7 @@ public class FulfillOrder extends LockeState {
             }
             private void onChange() {
                 String poId = soNumber.getText();
-                SalesOrder foundSalesOrder = Engine.getSalesOrder(poId);
+                Order foundSalesOrder = Engine.getSalesOrder(poId);
                 if(foundSalesOrder != null){
                     ArrayList<Object[]> its = new ArrayList<>();
                     ArrayList<OrderLineItem> items = foundSalesOrder.getItems();
@@ -188,7 +187,7 @@ public class FulfillOrder extends LockeState {
                                     }
                                 }
                                 order = Engine.getPurchaseOrder(poNum);
-                                SalesOrder so = Engine.getSalesOrder(soNum);
+                                Order so = Engine.getSalesOrder(soNum);
                                 if(od != null){
                                     od.setStatus(LockeStatus.FULFILLED);
                                     od.save();

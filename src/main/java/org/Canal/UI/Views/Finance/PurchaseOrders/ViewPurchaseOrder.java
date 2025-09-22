@@ -1,7 +1,7 @@
 package org.Canal.UI.Views.Finance.PurchaseOrders;
 
 import org.Canal.Models.BusinessUnits.OrderLineItem;
-import org.Canal.Models.BusinessUnits.PurchaseOrder;
+import org.Canal.Models.BusinessUnits.Order;
 import org.Canal.Models.BusinessUnits.Rate;
 import org.Canal.Models.SupplyChainUnits.Delivery;
 import org.Canal.Models.SupplyChainUnits.Item;
@@ -15,7 +15,6 @@ import org.Canal.Utils.RefreshListener;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -26,16 +25,16 @@ import java.util.ArrayList;
  */
 public class ViewPurchaseOrder extends LockeState {
 
-    private PurchaseOrder purchaseOrder;
+    private Order purchaseOrder;
     private DesktopState desktop;
     private RefreshListener refreshListener;
 
     private Delivery delivery;
     private Truck truck;
 
-    public ViewPurchaseOrder(PurchaseOrder purchaseOrder, DesktopState desktop, RefreshListener refreshListener) {
+    public ViewPurchaseOrder(Order purchaseOrder, DesktopState desktop, RefreshListener refreshListener) {
 
-        super("Purchase Order", "/ORDS/PO/" + purchaseOrder.getOrderId(), true, true, true, true);
+        super("Purchase Order", "/ORDS/PO/" + purchaseOrder.getOrderId());
         setFrameIcon(new ImageIcon(ViewPurchaseOrder.class.getResource("/icons/purchasereqs.png")));
         this.purchaseOrder = purchaseOrder;
         this.desktop = desktop;
@@ -71,6 +70,7 @@ public class ViewPurchaseOrder extends LockeState {
 
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        tb.add(Box.createHorizontalStrut(5));
 
         if(!purchaseOrder.getStatus().equals(LockeStatus.DELIVERED)
             || !purchaseOrder.getStatus().equals(LockeStatus.ARCHIVED)
@@ -133,7 +133,7 @@ public class ViewPurchaseOrder extends LockeState {
 
         IconButton print = new IconButton("Print", "print", "Print Pururchase Order");
         tb.add(print);
-        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
+        tb.add(Box.createHorizontalStrut(5));
 
         buttons.add(tb, BorderLayout.SOUTH);
         return buttons;
@@ -232,19 +232,22 @@ public class ViewPurchaseOrder extends LockeState {
         truckView.setLayout(new BoxLayout(truckView, BoxLayout.Y_AXIS));
         truckView.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Padding
 
-        Form truckInfo = new Form();
-        truckInfo.addInput(Elements.coloredLabel("ID", UIManager.getColor("Label.foreground")), new Copiable(truck.getId()));
-        truckInfo.addInput(Elements.coloredLabel("Carrier", UIManager.getColor("Label.foreground")), new Copiable(truck.getCarrier()));
-        truckInfo.addInput(Elements.coloredLabel("Driver", UIManager.getColor("Label.foreground")), new Copiable(truck.getDriver()));
-        truckInfo.addInput(Elements.coloredLabel("Year", UIManager.getColor("Label.foreground")), new Copiable(truck.getYear()));
-        truckInfo.addInput(Elements.coloredLabel("Make", UIManager.getColor("Label.foreground")), new Copiable(truck.getMake()));
-        truckInfo.addInput(Elements.coloredLabel("Model", UIManager.getColor("Label.foreground")), new Copiable(truck.getModel())); // fixed model line
-        truckInfo.addInput(Elements.coloredLabel("Notes", UIManager.getColor("Label.foreground")), new Copiable(truck.getNotes()));
-        truckInfo.addInput(Elements.coloredLabel("Status", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(truck.getStatus())));
+        if(truck != null){
 
-        truckView.add(Elements.header("Truck Info"));
-        truckView.add(Box.createVerticalStrut(5)); // Spacer
-        truckView.add(truckInfo);
+            Form truckInfo = new Form();
+            truckInfo.addInput(Elements.coloredLabel("ID", UIManager.getColor("Label.foreground")), new Copiable(truck.getId()));
+            truckInfo.addInput(Elements.coloredLabel("Carrier", UIManager.getColor("Label.foreground")), new Copiable(truck.getCarrier()));
+            truckInfo.addInput(Elements.coloredLabel("Driver", UIManager.getColor("Label.foreground")), new Copiable(truck.getDriver()));
+            truckInfo.addInput(Elements.coloredLabel("Year", UIManager.getColor("Label.foreground")), new Copiable(truck.getYear()));
+            truckInfo.addInput(Elements.coloredLabel("Make", UIManager.getColor("Label.foreground")), new Copiable(truck.getMake()));
+            truckInfo.addInput(Elements.coloredLabel("Model", UIManager.getColor("Label.foreground")), new Copiable(truck.getModel())); // fixed model line
+            truckInfo.addInput(Elements.coloredLabel("Notes", UIManager.getColor("Label.foreground")), new Copiable(truck.getNotes()));
+            truckInfo.addInput(Elements.coloredLabel("Status", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(truck.getStatus())));
+
+            truckView.add(Elements.header("Truck Info"));
+            truckView.add(Box.createVerticalStrut(5)); // Spacer
+            truckView.add(truckInfo);
+        }
 
         // Stack both views
         deliveryTab.add(deliveryView);

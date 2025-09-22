@@ -6,7 +6,6 @@ import org.Canal.UI.Elements.Copiable;
 import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.UI.Views.Bins.ViewBin;
-import org.Canal.UI.Views.Products.CreateUoM;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.LockeStatus;
@@ -54,7 +53,10 @@ public class ViewItem extends LockeState {
         tabs.addTab("Packaging", packaging());
 
         add(tabs, BorderLayout.CENTER);
-        setMaximized(true);
+
+        if((boolean) Engine.codex.getValue("ITS", "start_maximized")){
+            setMaximized(true);
+        }
     }
 
     private JPanel info() {
@@ -76,23 +78,24 @@ public class ViewItem extends LockeState {
     }
 
     private JPanel vendorInfo(){
+
         JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT));
         Location vendor = Engine.getLocation(item.getVendor(), "VEND");
         if (vendor == null) {
             JOptionPane.showMessageDialog(null, "A Vendor has not been allocated for this item. Please contact the data team.");
         }
-        Form vi = new Form();
 
-        vi.addInput(Elements.coloredLabel("Vendor ID", UIManager.getColor("Label.foreground")), new Copiable(vendor.getId()));
-        vi.addInput(Elements.coloredLabel("Vendor Name", UIManager.getColor("Label.foreground")), new Copiable(vendor.getName()));
-        vi.addInput(Elements.coloredLabel("Street", UIManager.getColor("Label.foreground")), new Copiable(vendor.getLine1()));
-        vi.addInput(Elements.coloredLabel("City", UIManager.getColor("Label.foreground")), new Copiable(vendor.getCity()));
-        vi.addInput(Elements.coloredLabel("State", UIManager.getColor("Label.foreground")), new Copiable(vendor.getState()));
-        vi.addInput(Elements.coloredLabel("Postal", UIManager.getColor("Label.foreground")), new Copiable(vendor.getPostal()));
-        vi.addInput(Elements.coloredLabel("Country", UIManager.getColor("Label.foreground")), new Copiable(vendor.getCountry()));
-        vi.addInput(Elements.coloredLabel("Tax Exempt", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(vendor.isTaxExempt())));
-        vi.addInput(Elements.coloredLabel("Status", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(vendor.getStatus())));
-        p.add(vi);
+        Form form = new Form();
+        form.addInput(Elements.coloredLabel("Vendor ID", UIManager.getColor("Label.foreground")), new Copiable(vendor.getId()));
+        form.addInput(Elements.coloredLabel("Vendor Name", UIManager.getColor("Label.foreground")), new Copiable(vendor.getName()));
+        form.addInput(Elements.coloredLabel("Street", UIManager.getColor("Label.foreground")), new Copiable(vendor.getLine1()));
+        form.addInput(Elements.coloredLabel("City", UIManager.getColor("Label.foreground")), new Copiable(vendor.getCity()));
+        form.addInput(Elements.coloredLabel("State", UIManager.getColor("Label.foreground")), new Copiable(vendor.getState()));
+        form.addInput(Elements.coloredLabel("Postal", UIManager.getColor("Label.foreground")), new Copiable(vendor.getPostal()));
+        form.addInput(Elements.coloredLabel("Country", UIManager.getColor("Label.foreground")), new Copiable(vendor.getCountry()));
+        form.addInput(Elements.coloredLabel("Tax Exempt", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(vendor.isTaxExempt())));
+        form.addInput(Elements.coloredLabel("Status", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(vendor.getStatus())));
+        p.add(form);
 
         return p;
     }
@@ -101,23 +104,15 @@ public class ViewItem extends LockeState {
 
         JPanel controls = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-        JCheckBox skud = new JCheckBox(" Item has unique SKU", item.isSkud());
-        skud.setEnabled(false);
-        JCheckBox batched = new JCheckBox(" Item Expires", item.isBatched());
-        batched.setEnabled(false);
-        JCheckBox rentable =  new JCheckBox(" Item can be rented", item.isRentable());
-        rentable.setEnabled(false);
-        JCheckBox virtual = new JCheckBox(" Item can be rented", item.isVirtual());
-        virtual.setEnabled(false);
-        JCheckBox consumable = new JCheckBox(" Item qty used (raw materials)", item.isConsumable());
-        consumable.setEnabled(false);
-
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("SKU'd", UIManager.getColor("Label.foreground")), skud);
-        form.addInput(Elements.coloredLabel("Batched", UIManager.getColor("Label.foreground")), batched);
-        form.addInput(Elements.coloredLabel("Rentable", UIManager.getColor("Label.foreground")),rentable);
-        form.addInput(Elements.coloredLabel("Virtual", UIManager.getColor("Label.foreground")), virtual);
-        form.addInput(Elements.coloredLabel("Consumable", UIManager.getColor("Label.foreground")), consumable);
+        form.addInput(Elements.coloredLabel("SKU'd", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(item.isSkud())));
+        form.addInput(Elements.coloredLabel("Batched", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(item.isBatched())));
+        form.addInput(Elements.coloredLabel("Rentable", UIManager.getColor("Label.foreground")),new Copiable(String.valueOf(item.isRentable())));
+        form.addInput(Elements.coloredLabel("Virtual", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(item.isVirtual())));
+        form.addInput(Elements.coloredLabel("Consumable", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(item.isConsumable())));
+        form.addInput(Elements.coloredLabel("Allow Sales", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(item.allowSales())));
+        form.addInput(Elements.coloredLabel("Allow Purchasing", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(item.allowPurchasing())));
+        form.addInput(Elements.coloredLabel("Keep Inventory", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(item.keepInventory())));
         controls.add(form);
 
         return controls;
@@ -126,18 +121,19 @@ public class ViewItem extends LockeState {
     private JPanel dimensional(){
 
         JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        Form f2 = new Form();
 
-        f2.addInput(Elements.coloredLabel("Packaging Base Quantity", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(item.getBaseQuantity())));
-        f2.addInput(Elements.coloredLabel("Packaging UOM", UIManager.getColor("Label.foreground")), new Copiable(item.getPackagingUnit()));
-        f2.addInput(Elements.coloredLabel("Color", UIManager.getColor("Label.foreground")), new Copiable(item.getColor()));
-        f2.addInput(Elements.coloredLabel("Width", UIManager.getColor("Label.foreground")), new Copiable(item.getWidth() + " " + item.getWidthUOM()));
-        f2.addInput(Elements.coloredLabel("Length", UIManager.getColor("Label.foreground")), new Copiable(item.getLength() + " " + item.getLengthUOM()));
-        f2.addInput(Elements.coloredLabel("Height", UIManager.getColor("Label.foreground")), new Copiable(item.getHeight() + " " + item.getHeightUOM()));
-        f2.addInput(Elements.coloredLabel("Weight", UIManager.getColor("Label.foreground")), new Copiable(item.getWeight() + " " + item.getWeightUOM()));
-        f2.addInput(Elements.coloredLabel("Tax (0.05 as 5%)", UIManager.getColor("Label.foreground")), new Copiable(""));
-        f2.addInput(Elements.coloredLabel("Excise Tax (0.05 as 5%)", UIManager.getColor("Label.foreground")), new Copiable(""));
-        p.add(f2);
+        Form form = new Form();
+        form.addInput(Elements.coloredLabel("Packaging Base Quantity", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(item.getBaseQuantity())));
+        form.addInput(Elements.coloredLabel("Packaging UOM", UIManager.getColor("Label.foreground")), new Copiable(item.getPackagingUnit()));
+        form.addInput(Elements.coloredLabel("Color", UIManager.getColor("Label.foreground")), new Copiable(item.getColor()));
+        form.addInput(Elements.coloredLabel("Width", UIManager.getColor("Label.foreground")), new Copiable(item.getWidth() + " " + item.getWidthUOM()));
+        form.addInput(Elements.coloredLabel("Length", UIManager.getColor("Label.foreground")), new Copiable(item.getLength() + " " + item.getLengthUOM()));
+        form.addInput(Elements.coloredLabel("Height", UIManager.getColor("Label.foreground")), new Copiable(item.getHeight() + " " + item.getHeightUOM()));
+        form.addInput(Elements.coloredLabel("Weight", UIManager.getColor("Label.foreground")), new Copiable(item.getWeight() + " " + item.getWeightUOM()));
+        form.addInput(Elements.coloredLabel("Tax (0.05 as 5%)", UIManager.getColor("Label.foreground")), new Copiable(""));
+        form.addInput(Elements.coloredLabel("Excise Tax (0.05 as 5%)", UIManager.getColor("Label.foreground")), new Copiable(""));
+        p.add(form);
+
         return p;
     }
 
@@ -196,10 +192,8 @@ public class ViewItem extends LockeState {
                 }
             }
         });
-
         return new JScrollPane(ct);
     }
-
 
     private JScrollPane unitsOfMeasure() {
 
@@ -213,6 +207,7 @@ public class ViewItem extends LockeState {
     }
 
     private JPanel packaging(){
+
         JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT));
         return p;
     }
@@ -221,6 +216,7 @@ public class ViewItem extends LockeState {
 
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        tb.add(Box.createHorizontalStrut(5));
 
         IconButton inventory = new IconButton("Inventory", "inventory", "Check stock of item");
         inventory.addActionListener(_ -> {

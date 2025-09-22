@@ -28,7 +28,7 @@ public class OutboundDeliveries extends LockeState {
 
     public OutboundDeliveries(DesktopState desktop) {
 
-        super("Outbound Deliveries", "/TRANS/ODO", true, true, true, true);
+        super("Outbound Deliveries", "/TRANS/ODO");
         setFrameIcon(new ImageIcon(OutboundDeliveries.class.getResource("/icons/outbound.png")));
 
         this.desktop = desktop;

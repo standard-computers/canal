@@ -35,7 +35,7 @@ import java.util.HashMap;
 public class AutoMakePurchaseOrders extends LockeState {
 
     private DesktopState desktop;
-    private PurchaseOrder newOrder;
+    private Order newOrder;
     private ItemTableModel model;
     private double taxRate = 0.05;
     private JLabel netAmount;
@@ -63,7 +63,7 @@ public class AutoMakePurchaseOrders extends LockeState {
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/automake.png")));
         Constants.checkLocke(this, true, true);
         this.desktop = desktop;
-        newOrder = new PurchaseOrder();
+        newOrder = new Order();
 
         CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.addTab("Item Details", items());
@@ -108,7 +108,7 @@ public class AutoMakePurchaseOrders extends LockeState {
             public void mouseClicked(MouseEvent e) {
 
                 String copyPOId = JOptionPane.showInputDialog("Enter Purchase Order ID");
-                PurchaseOrder cpo = Engine.getPurchaseOrder(copyPOId);
+                Order cpo = Engine.getPurchaseOrder(copyPOId);
                 if(cpo != null){
 
                 } else {

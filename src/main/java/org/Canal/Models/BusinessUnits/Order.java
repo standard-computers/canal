@@ -8,12 +8,12 @@ import org.Canal.Utils.Pipe;
 import java.io.File;
 import java.util.ArrayList;
 
-public class SalesOrder extends Objex {
+public class Order extends Objex {
 
     private String orderId; //Order ID
     private String orderedOn; //Timestamp this was ordered on
     private String expectedDelivery; //When this should arrive to ship to
-    private String purchaseOrder;
+    private String purchaseRequisition; //Purchase Requisition ID
     private String billTo; //Location ID
     private String shipTo; //Location ID
     private String soldTo; //Location ID
@@ -21,8 +21,8 @@ public class SalesOrder extends Objex {
     private String customer;
     private String vendor;
     private ArrayList<OrderLineItem> items = new ArrayList<>();
+    private ArrayList<Rate> rates = new ArrayList<>();
     private double netValue;
-    private double taxRate;
     private double taxAmount;
     private double total;
 
@@ -50,12 +50,12 @@ public class SalesOrder extends Objex {
         this.expectedDelivery = expectedDelivery;
     }
 
-    public String getPurchaseOrder() {
-        return purchaseOrder;
+    public String getPurchaseRequisition() {
+        return purchaseRequisition;
     }
 
-    public void setPurchaseOrder(String purchaseOrder) {
-        this.purchaseOrder = purchaseOrder;
+    public void setPurchaseRequisition(String purchaseRequisition) {
+        this.purchaseRequisition = purchaseRequisition;
     }
 
     public String getBillTo() {
@@ -114,20 +114,28 @@ public class SalesOrder extends Objex {
         this.items = items;
     }
 
+    public double getTotalItems() {
+        double total = 0;
+        for (OrderLineItem item : items) {
+            total += item.getQuantity();
+        }
+        return total;
+    }
+
+    public ArrayList<Rate> getRates() {
+        return rates;
+    }
+
+    public void setRates(ArrayList<Rate> rates) {
+        this.rates = rates;
+    }
+
     public double getNetValue() {
         return netValue;
     }
 
     public void setNetValue(double netValue) {
         this.netValue = netValue;
-    }
-
-    public double getTaxRate() {
-        return taxRate;
-    }
-
-    public void setTaxRate(double taxRate) {
-        this.taxRate = taxRate;
     }
 
     public double getTaxAmount() {
@@ -154,8 +162,8 @@ public class SalesOrder extends Objex {
             File[] mdf = md.listFiles();
             if (mdf != null) {
                 for (File file : mdf) {
-                    if (file.getPath().endsWith(".so")) {
-                        SalesOrder forg = Pipe.load(file.getPath(), SalesOrder.class);
+                    if (file.getPath().endsWith(".po")) {
+                        Order forg = Pipe.load(file.getPath(), Order.class);
                         if (forg.getOrderId().equals(getOrderId())) {
                             Pipe.export(file.getPath(), this);
                         }
@@ -163,7 +171,7 @@ public class SalesOrder extends Objex {
                 }
             }
         } else {
-            Pipe.save("ORDS/SO", this);
+            Pipe.save("ORDS/PO", this);
         }
     }
 }

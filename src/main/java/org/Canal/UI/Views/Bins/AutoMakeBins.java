@@ -3,7 +3,9 @@ package org.Canal.UI.Views.Bins;
 import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.Models.SupplyChainUnits.Bin;
 import org.Canal.UI.Elements.*;
+import org.Canal.UI.Views.System.LockeMessages;
 import org.Canal.Utils.Constants;
+import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;
@@ -17,6 +19,9 @@ import java.util.Set;
  * /BNS/AUTO_MK
  */
 public class AutoMakeBins extends LockeState {
+
+    //Operating Objects
+    private DesktopState desktop;
 
     //General Info
     private JTextField idField;
@@ -43,10 +48,11 @@ public class AutoMakeBins extends LockeState {
     private JCheckBox putawayEnabled;
     private JCheckBox holdsStock;
 
-    public AutoMakeBins() {
+    public AutoMakeBins(DesktopState desktop) {
 
         super("AutoMake Bins", "/BNS/AUTO_MK");
         setFrameIcon(new ImageIcon(AutoMakeBins.class.getResource("/icons/automake.png")));
+        this.desktop = desktop;
 
         CustomTabbedPane tabs = new CustomTabbedPane();
         areas = Engine.getAreas();
@@ -80,18 +86,20 @@ public class AutoMakeBins extends LockeState {
 
         selector.add(search, BorderLayout.NORTH);
         selector.add(js, BorderLayout.CENTER);
+
         JPanel opts = new JPanel(new GridLayout(1, 2));
         JButton sa = Elements.button("Select All");
-        JButton dsa = Elements.button("Deselect All");
         sa.addActionListener(_ -> {
             checkboxes.forEach(cb -> cb.setSelected(true));
             repaint();
         });
+        opts.add(sa);
+
+        JButton dsa = Elements.button("Deselect All");
         dsa.addActionListener(_ -> {
             checkboxes.forEach(cb -> cb.setSelected(false));
             repaint();
         });
-        opts.add(sa);
         opts.add(dsa);
 
         tabs.addTab("Areas", selector);
@@ -129,11 +137,11 @@ public class AutoMakeBins extends LockeState {
                 weightField.setUOM(bin.getWeightUOM());
                 autoReplenish.setSelected(bin.isAuto_replenish());
                 fixedBin.setSelected(bin.isFixed());
-                putawayEnabled.setSelected(bin.isPutaway());
-                pickingEnabled.setSelected(bin.isPicking());
+                putawayEnabled.setSelected(bin.putawayEnabled());
+                pickingEnabled.setSelected(bin.pickingEnabled());
                 doesGoodsIssue.setSelected(bin.doesGI());
                 doesGoodsReceipt.setSelected(bin.doesGR());
-                holdsStock.setSelected(bin.isHoldsStock());
+                holdsStock.setSelected(bin.holdsStock());
             }
 
         });
@@ -141,6 +149,7 @@ public class AutoMakeBins extends LockeState {
         tb.add(copyFrom);
 
         IconButton review = new IconButton("Review", "review", "Review Date");
+        review.addActionListener(_ -> performReview());
         tb.add(Box.createHorizontalStrut(5));
         tb.add(review);
 
@@ -179,11 +188,11 @@ public class AutoMakeBins extends LockeState {
 
                             b.setAuto_replenish(autoReplenish.isSelected());
                             b.setFixed(fixedBin.isSelected());
-                            b.setPutaway(putawayEnabled.isSelected());
-                            b.setPicking(pickingEnabled.isSelected());
-                            b.setGoodsissue(doesGoodsIssue.isSelected());
-                            b.setGoodsreceipt(doesGoodsReceipt.isSelected());
-                            b.setHoldsStock(holdsStock.isSelected());
+                            b.putawayEnabled(putawayEnabled.isSelected());
+                            b.pickingEnabled(pickingEnabled.isSelected());
+                            b.doesGI(doesGoodsIssue.isSelected());
+                            b.doesGR(doesGoodsReceipt.isSelected());
+                            b.holdsStock(holdsStock.isSelected());
 
                             a.addBin(b);
                         }
@@ -210,11 +219,11 @@ public class AutoMakeBins extends LockeState {
         nameField = Elements.input("@-BIN+");
         binCount = Elements.input("1");
 
-        Form f = new Form();
-        f.addInput(Elements.coloredLabel("Bin ID (current: BN1-IBD1)", Constants.colors[10]), idField);
-        f.addInput(Elements.coloredLabel("Bin Name (current: BIN1-IBD1)", Constants.colors[9]), nameField);
-        f.addInput(Elements.coloredLabel("Bin Create Count", Constants.colors[8]), binCount);
-        p.add(f);
+        Form form = new Form();
+        form.addInput(Elements.coloredLabel("Bin ID (current: BN1-IBD1)", Constants.colors[10]), idField);
+        form.addInput(Elements.coloredLabel("Bin Name (current: BIN1-IBD1)", Constants.colors[9]), nameField);
+        form.addInput(Elements.coloredLabel("Bin Create Count", Constants.colors[8]), binCount);
+        p.add(form);
 
         return p;
     }
@@ -278,5 +287,49 @@ public class AutoMakeBins extends LockeState {
         controls.add(form);
 
         return controls;
+    }
+
+    private void performReview(){
+
+        if(idField.getText().isEmpty()){
+            addToQueue(new String[]{"CRITICAL", "Bin ID field empty!"});
+        }
+
+        if(nameField.getText().isEmpty()){
+            addToQueue(new String[]{"CRITICAL", "Bin Name field empty!"});
+        }
+
+        if(Double.parseDouble(binCount.getText()) <= 0){
+            addToQueue(new String[]{"CRITICAL", "Bin count is less than or equal to 0! No bins will be created!"});
+        }
+
+        if(widthField.getValue().isEmpty()){
+            addToQueue(new String[]{"CRITICAL", "Bin WIDTH dimension is set to 0, are you sure?"});
+        }
+
+        if(lengthField.getValue().isEmpty()){
+            addToQueue(new String[]{"CRITICAL", "Bin LENGTH dimension is set to 0, are you sure?"});
+        }
+
+        if(heightField.getValue().isEmpty()){
+            addToQueue(new String[]{"CRITICAL", "Bin HEIGHT dimension is set to 0, are you sure?"});
+        }
+
+        if(weightField.getValue().isEmpty()){
+            addToQueue(new String[]{"CRITICAL", "Bin WEIGHT dimension is set to 0, are you sure?"});
+        }
+
+        int areaCount = 0;
+        for (JCheckBox checkbox : checkboxes) {
+            if (checkbox.isSelected()) {
+                areaCount++;
+            }
+        }
+        if (areaCount == 0) {
+            addToQueue(new String[]{"CRITICAL", "NO AREAS SELECTED!!!"});
+        }
+
+        desktop.put(new LockeMessages(getQueue()));
+        purgeQueue();
     }
 }

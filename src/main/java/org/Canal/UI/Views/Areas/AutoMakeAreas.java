@@ -3,16 +3,11 @@ package org.Canal.UI.Views.Areas;
 import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.*;
-import org.Canal.Utils.Constants;
-import org.Canal.Utils.Engine;
-import org.Canal.Utils.Pipe;
-import org.Canal.Utils.RefreshListener;
+import org.Canal.UI.Views.System.LockeMessages;
+import org.Canal.Utils.*;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 /**
@@ -20,6 +15,8 @@ import java.util.ArrayList;
  */
 public class AutoMakeAreas extends LockeState {
 
+    //Operating Object
+    private DesktopState desktop;
     private RefreshListener refreshListener;
 
     //General Area Info
@@ -40,17 +37,18 @@ public class AutoMakeAreas extends LockeState {
     private ArrayList<Location> locations;
     private ArrayList<JCheckBox> checkboxes;
 
-    public AutoMakeAreas(RefreshListener refreshListener) {
+    public AutoMakeAreas(DesktopState desktop, RefreshListener refreshListener) {
 
         super("AutoMake Areas", "/AREAS/AUTO_MK");
         setFrameIcon(new ImageIcon(AutoMakeAreas.class.getResource("/icons/automake.png")));
         setLayout(new BorderLayout());
+        this.desktop = desktop;
         this.refreshListener = refreshListener;
 
         CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.addTab("General", general());
         tabs.addTab("Controls", controls());
-        tabs.addTab("Locations", locationsSelection());
+        tabs.addTab("Locations", locations());
 
         JPanel header = new JPanel(new BorderLayout());
         header.add(Elements.header("AutoMake Areas", SwingConstants.LEFT), BorderLayout.CENTER);
@@ -60,13 +58,15 @@ public class AutoMakeAreas extends LockeState {
         add(tabs, BorderLayout.CENTER);
     }
 
-    private JPanel toolbar(){
+    private JPanel toolbar() {
 
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        tb.add(Box.createHorizontalStrut(5));
 
         IconButton review = new IconButton("Review", "review", "Review Area Data");
+        review.addActionListener(_ -> performReview());
         tb.add(review);
         tb.add(Box.createHorizontalStrut(5));
 
@@ -90,21 +90,21 @@ public class AutoMakeAreas extends LockeState {
             dispose();
             JOptionPane.showMessageDialog(AutoMakeAreas.this, "AutoMake Complete");
 
-            if(refreshListener != null){
+            if (refreshListener != null) {
                 refreshListener.refresh();
             }
         });
         tb.add(create);
-        tb.setBorder(new EmptyBorder(0, 5, 0, 5));
+        tb.add(Box.createHorizontalStrut(5));
 
         panel.add(tb, BorderLayout.SOUTH);
+
         return panel;
     }
 
     private JPanel general() {
 
         JPanel general = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        Form f = new Form();
 
         areaIdField = Elements.input("HBD1-@");
         areaNameField = Elements.input("Highbay");
@@ -112,12 +112,13 @@ public class AutoMakeAreas extends LockeState {
         lengthField = new UOMField();
         heightField = new UOMField();
 
-        f.addInput(Elements.coloredLabel("*New Area ID (current: LOC_ID-001)", UIManager.getColor("Label.foreground")), areaIdField);
-        f.addInput(Elements.coloredLabel("Area Name (current: LOC_ID-001", UIManager.getColor("Label.foreground")), areaNameField);
-        f.addInput(Elements.coloredLabel("Width", Constants.colors[10]), widthField);
-        f.addInput(Elements.coloredLabel("Length", Constants.colors[9]), lengthField);
-        f.addInput(Elements.coloredLabel("Height", Constants.colors[8]), heightField);
-        general.add(f);
+        Form form = new Form();
+        form.addInput(Elements.coloredLabel("*New Area ID (current: LOC_ID-001)", UIManager.getColor("Label.foreground")), areaIdField);
+        form.addInput(Elements.coloredLabel("Area Name (current: LOC_ID-001", UIManager.getColor("Label.foreground")), areaNameField);
+        form.addInput(Elements.coloredLabel("Width", Constants.colors[10]), widthField);
+        form.addInput(Elements.coloredLabel("Length", Constants.colors[9]), lengthField);
+        form.addInput(Elements.coloredLabel("Height", Constants.colors[8]), heightField);
+        general.add(form);
 
         return general;
     }
@@ -126,23 +127,23 @@ public class AutoMakeAreas extends LockeState {
 
         JPanel controls = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-        Form f = new Form();
-
         allowsInventory = new JCheckBox("Inventory Movements");
         allowsProduction = new JCheckBox("Allows Production");
         allowsSales = new JCheckBox("Sales Order Processing");
         allowsPurchasing = new JCheckBox("Purchase Order Processing");
 
-        f.addInput(Elements.coloredLabel("Allow Inventory", Constants.colors[0]), allowsInventory);
-        f.addInput(Elements.coloredLabel("Allow Production", Constants.colors[1]), allowsProduction);
-        f.addInput(Elements.coloredLabel("Allow Sales", Constants.colors[2]), allowsSales);
-        f.addInput(Elements.coloredLabel("Allow Purchasing", Constants.colors[3]), allowsPurchasing);
-        controls.add(f);
+        Form form = new Form();
+        form.addInput(Elements.coloredLabel("Allow Inventory", Constants.colors[0]), allowsInventory);
+        form.addInput(Elements.coloredLabel("Allow Production", Constants.colors[1]), allowsProduction);
+        form.addInput(Elements.coloredLabel("Allow Sales", Constants.colors[2]), allowsSales);
+        form.addInput(Elements.coloredLabel("Allow Purchasing", Constants.colors[3]), allowsPurchasing);
+        controls.add(form);
 
         return controls;
     }
 
-    private JPanel locationsSelection(){
+    private JPanel locations() {
+
         JPanel locationsSelection = new JPanel(new BorderLayout());
         locations = Engine.getLocations();
 
@@ -159,30 +160,29 @@ public class AutoMakeAreas extends LockeState {
         JTextField search = Elements.input();
         search.addActionListener(_ -> {
 
-           String searchValue = search.getText().trim();
-           if(searchValue.endsWith("*")){ //Searching for ID starts with
-               for (JCheckBox checkbox : checkboxes) {
-                   if (checkbox.getText().startsWith(searchValue.substring(0, searchValue.length() - 1))) {
-                       checkbox.setSelected(!checkbox.isSelected());
-                   }
-               }
-           } else if (searchValue.startsWith("/")) { //Objex type selection
+            String searchValue = search.getText().trim();
+            if (searchValue.endsWith("*")) { //Searching for ID starts with
+                for (JCheckBox checkbox : checkboxes) {
+                    if (checkbox.getText().startsWith(searchValue.substring(0, searchValue.length() - 1))) {
+                        checkbox.setSelected(!checkbox.isSelected());
+                    }
+                }
+            } else if (searchValue.startsWith("/")) { //Objex type selection
 
-               for (int i = 0; i < checkboxes.size(); i++) {
-                   if(locations.get(i).getType().equals(searchValue.toUpperCase())){
-                       checkboxes.get(i).setSelected(!checkboxes.get(i).isSelected());
-                   }
-               }
+                for (int i = 0; i < checkboxes.size(); i++) {
+                    if (locations.get(i).getType().equals(searchValue.toUpperCase())) {
+                        checkboxes.get(i).setSelected(!checkboxes.get(i).isSelected());
+                    }
+                }
 
-           } else { //Select exact match
-               for (JCheckBox checkbox : checkboxes) {
-                   if (checkbox.getText().equals(searchValue)) {
-                       checkbox.setSelected(!checkbox.isSelected());
-                   }
-               }
-           }
+            } else { //Select exact match
+                for (JCheckBox checkbox : checkboxes) {
+                    if (checkbox.getText().equals(searchValue)) {
+                        checkbox.setSelected(!checkbox.isSelected());
+                    }
+                }
+            }
         });
-
         selector.add(search, BorderLayout.NORTH);
 
         selector.add(js, BorderLayout.CENTER);
@@ -190,20 +190,16 @@ public class AutoMakeAreas extends LockeState {
         JPanel opts = new JPanel(new GridLayout(1, 2));
 
         JButton selectAll = Elements.button("Select All");
-        selectAll.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                checkboxes.forEach(cb -> cb.setSelected(true));
-                repaint();
-            }
+        selectAll.addActionListener(_ -> {
+            checkboxes.forEach(cb -> cb.setSelected(true));
+            repaint();
         });
         opts.add(selectAll);
 
         JButton deselectAll = Elements.button("Deselect All");
-        deselectAll.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                checkboxes.forEach(cb -> cb.setSelected(false));
-                repaint();
-            }
+        deselectAll.addActionListener(_ -> {
+            checkboxes.forEach(cb -> cb.setSelected(false));
+            repaint();
         });
         opts.add(deselectAll);
 
@@ -222,5 +218,45 @@ public class AutoMakeAreas extends LockeState {
             checkboxes.add(checkbox);
             checkboxPanel.add(checkbox);
         }
+    }
+
+    private void performReview() {
+
+        if (areaIdField.getText().isEmpty()) {
+            addToQueue(new String[]{"CRITICAL", "Area ID field empty!"});
+        }
+
+        if (areaNameField.getText().isEmpty()) {
+            addToQueue(new String[]{"CRITICAL", "Area Name field empty!"});
+        }
+
+        if (!allowsInventory.isSelected()) {
+            addToQueue(new String[]{"WARNING", "Area does not allow inventory movements, are you sure?"});
+        }
+
+        if (widthField.getValue().isEmpty()) {
+            addToQueue(new String[]{"CRITICAL", "Area WIDTH dimension is set to 0, are you sure?"});
+        }
+
+        if (lengthField.getValue().isEmpty()) {
+            addToQueue(new String[]{"CRITICAL", "Area LENGTH dimension is set to 0, are you sure?"});
+        }
+
+        if (heightField.getValue().isEmpty()) {
+            addToQueue(new String[]{"CRITICAL", "Area HEIGHT dimension is set to 0, are you sure?"});
+        }
+
+        int locationCount = 0;
+        for (JCheckBox checkbox : checkboxes) {
+            if (checkbox.isSelected()) {
+                locationCount++;
+            }
+        }
+        if (locationCount == 0) {
+            addToQueue(new String[]{"CRITICAL", "NO LOCATIONS SELECTED!!!"});
+        }
+
+        desktop.put(new LockeMessages(getQueue()));
+        purgeQueue();
     }
 }

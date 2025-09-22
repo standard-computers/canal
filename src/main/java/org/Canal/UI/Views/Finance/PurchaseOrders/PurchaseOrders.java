@@ -1,6 +1,6 @@
 package org.Canal.UI.Views.Finance.PurchaseOrders;
 
-import org.Canal.Models.BusinessUnits.PurchaseOrder;
+import org.Canal.Models.BusinessUnits.Order;
 import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
@@ -28,7 +28,7 @@ public class PurchaseOrders extends LockeState implements RefreshListener {
 
     public PurchaseOrders(DesktopState desktop) {
 
-        super("Purchase Orders", "/ORDS/PO", true, true, true, true);
+        super("Purchase Orders", "/ORDS/PO");
         setFrameIcon(new ImageIcon(PurchaseOrders.class.getResource("/icons/purchaseorders.png")));
         this.desktop = desktop;
 
@@ -128,7 +128,7 @@ public class PurchaseOrders extends LockeState implements RefreshListener {
         };
         ArrayList<Object[]> pos = new ArrayList<>();
 
-        for (PurchaseOrder po : Engine.getPurchaseOrders()) {
+        for (Order po : Engine.getPurchaseOrders()) {
             if(!po.getStatus().equals(LockeStatus.DELIVERED)
                     && !po.getStatus().equals(LockeStatus.ARCHIVED)
                     && !po.getStatus().equals(LockeStatus.DELETED)){

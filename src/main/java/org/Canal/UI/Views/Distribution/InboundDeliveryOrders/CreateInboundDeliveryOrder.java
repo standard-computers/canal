@@ -22,7 +22,7 @@ public class CreateInboundDeliveryOrder extends LockeState {
         add(f, BorderLayout.NORTH);
         JButton create = Elements.button("Create");
         add(create, BorderLayout.SOUTH);
-        create.addActionListener(e -> {
+        create.addActionListener(_ -> {
 
         });
     }

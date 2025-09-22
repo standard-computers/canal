@@ -10,7 +10,7 @@ public class UOMField extends JPanel {
     public UOMField(String preset, boolean packaging) {
         textField = Elements.input("0.00", 13);
         if(packaging){
-            uom = Selectables.packagingUoms();
+            uom = Selectables.allPackagingUoms();
             uom.setSelectedValue(preset);
         }else{
             uom = Selectables.uoms(preset);
