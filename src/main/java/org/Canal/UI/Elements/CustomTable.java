@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 public class CustomTable extends JTable {
 
+    private static final Color HIGHLIGHT_COLOR = new Color(207, 159, 0);
     private EventList<Object[]> rows;
     private String[] headers;
 
@@ -138,6 +139,30 @@ public class CustomTable extends JTable {
         }
     }
 
+    @Override
+    public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+        Component c = super.prepareRenderer(renderer, row, column);
+
+        int leadRow = getSelectionModel().getLeadSelectionIndex();
+
+        if (c instanceof JComponent) {
+            if (row == leadRow && getSelectedColumn() != -1) {
+                // Highlight row outline + padding
+                ((JComponent) c).setBorder(
+                        BorderFactory.createCompoundBorder(
+                                BorderFactory.createMatteBorder(1, 1, 1, 1, HIGHLIGHT_COLOR), // row outline
+                                BorderFactory.createEmptyBorder(5, 12, 5, 5)                  // padding
+                        )
+                );
+            } else {
+                // Normal padding
+                ((JComponent) c).setBorder(BorderFactory.createEmptyBorder(5, 12, 5, 5));
+            }
+        }
+
+        return c;
+    }
+
     private static class CheckboxRenderer extends JCheckBox implements TableCellRenderer {
         public CheckboxRenderer() {
             setHorizontalAlignment(CENTER);
@@ -148,7 +173,7 @@ public class CustomTable extends JTable {
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             setSelected(value != null && (Boolean) value);
             if (isSelected) {
-                setBackground(table.getSelectionBackground());
+                setBackground(HIGHLIGHT_COLOR);
             } else {
                 setBackground(table.getBackground());
             }
@@ -184,15 +209,14 @@ public class CustomTable extends JTable {
                     }
                 }
             } else {
-                c.setBackground(table.getSelectionBackground()); // Use selection background for selected rows
+                c.setBackground(table.getSelectionBackground());
             }
             if (c instanceof JComponent) {
                 ((JComponent) c).setBorder(
                         BorderFactory.createCompoundBorder(
-                                ((JComponent) c).getBorder(), // Keep existing border
+                                ((JComponent) c).getBorder(),
                                 BorderFactory.createEmptyBorder(5, 10, 5, 10) // top, left, bottom, right padding
                         )
-//                        BorderFactory.createMatteBorder(1, 0, 0, 1, ColorUtil.adjustBrightness(UIManager.getColor("Panel.background"), 0.85f))
                 );
             }
             return c;
