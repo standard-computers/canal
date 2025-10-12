@@ -111,9 +111,7 @@ public class CreateUser extends LockeState {
                 dispose();
                 JOptionPane.showMessageDialog(null, "User create for ORG " + Engine.getOrganization().getId());
 
-                if(refreshListener != null){
-                    refreshListener.refresh();
-                }
+                if(refreshListener != null) refreshListener.refresh();
 
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "User creation failed because password encryption was not implemented.");

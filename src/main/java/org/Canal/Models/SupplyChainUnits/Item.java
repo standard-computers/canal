@@ -1,13 +1,13 @@
 package org.Canal.Models.SupplyChainUnits;
 
 import org.Canal.Models.Objex;
-import org.Canal.Start;
-import org.Canal.Utils.Engine;
-import org.Canal.Utils.Pipe;
 
-import java.io.File;
 import java.util.ArrayList;
 
+/**
+ * ITS
+ *
+ */
 public class Item extends Objex {
 
     //General (Info) Properties
@@ -48,6 +48,15 @@ public class Item extends Objex {
     private ArrayList<StockLine> components = new ArrayList<>();
     private ArrayList<Object[]> uoms = new ArrayList<>();
     private ArrayList<Object[]> packaging = new ArrayList<>();
+
+    //Planning Variables
+    private double leadTime = 1.0;
+    private double transporationTime = 1.0;
+    private double manufacturingTime = 1.0;
+
+    public Item() {
+        this.type = "ITS";
+    }
 
     public String getOrg() {
         return org;
@@ -341,24 +350,28 @@ public class Item extends Objex {
         this.packaging = packaging;
     }
 
-    public void save() {
-        if (Engine.getConfiguration().getMongodb().isEmpty()) {
+    public double getLeadTime() {
+        return leadTime;
+    }
 
-            File md = new File(Start.DIR + "\\.store\\ITS\\");
-            File[] mdf = md.listFiles();
-            if (mdf != null) {
-                for (File file : mdf) {
-                    if (file.getPath().endsWith(".its")) {
-                        Item fl = Pipe.load(file.getPath(), Item.class);
-                        if (fl.getId().equals(id)) {
-                            Pipe.export(file.getPath(), this);
-                        }
-                    }
-                }
-            }
-        } else {
-            Pipe.save("ITS", this);
-        }
+    public void setLeadTime(double leadTime) {
+        this.leadTime = leadTime;
+    }
+
+    public double getTransporationTime() {
+        return transporationTime;
+    }
+
+    public void setTransporationTime(double transporationTime) {
+        this.transporationTime = transporationTime;
+    }
+
+    public double getManufacturingTime() {
+        return manufacturingTime;
+    }
+
+    public void setManufacturingTime(double manufacturingTime) {
+        this.manufacturingTime = manufacturingTime;
     }
 
     @Override

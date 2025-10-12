@@ -1,14 +1,16 @@
 package org.Canal.Models.SupplyChainUnits;
 
 import org.Canal.Models.Objex;
-import org.Canal.Start;
-import org.Canal.Utils.Engine;
-import org.Canal.Utils.Pipe;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
 
+/**
+ * AREAS
+ * Areas represent a physical space within a Location Objex.
+ * Areas are a standalone Objex.
+ * Bins (BNS) belong to AREAS which means they are saved within that MDB colleciton.
+ */
 public class Area extends Objex {
 
     private String location = ""; //Location ID this are belongs to
@@ -24,6 +26,10 @@ public class Area extends Objex {
     private boolean allowsProduction = false;
     private boolean allowsSales = true;
     private boolean allowsPurchasing = true;
+
+    public Area() {
+        this.type = "AREAS";
+    }
 
     public String getLocation() {
         return location;
@@ -170,26 +176,5 @@ public class Area extends Objex {
 
     public void setAllowsPurchasing(boolean allowsPurchasing) {
         this.allowsPurchasing = allowsPurchasing;
-    }
-
-    public void save() {
-
-        if (Engine.getConfiguration().getMongodb().isEmpty()) {
-
-            File md = new File(Start.DIR + "\\.store\\AREAS\\");
-            File[] mdf = md.listFiles();
-            if (mdf != null) {
-                for (File file : mdf) {
-                    if (file.getPath().endsWith(".areas")) {
-                        Area forg = Pipe.load(file.getPath(), Area.class);
-                        if (forg.getId().equals(getId())) {
-                            Pipe.export(file.getPath(), this);
-                        }
-                    }
-                }
-            }
-        } else {
-            Pipe.save("AREAS", this);
-        }
     }
 }

@@ -4,6 +4,9 @@ import org.Canal.Models.Objex;
 
 import java.util.ArrayList;
 
+/**
+ * CMS
+ */
 public class CreditMemo extends Objex {
 
     private String customer;
@@ -11,6 +14,10 @@ public class CreditMemo extends Objex {
     private double quantity;
     private double value;
     private ArrayList<Objex> products;
+
+    public CreditMemo() {
+        this.type = "CMS";
+    }
 
     public String getCustomer() {
         return customer;

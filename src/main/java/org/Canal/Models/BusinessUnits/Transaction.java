@@ -2,6 +2,9 @@ package org.Canal.Models.BusinessUnits;
 
 import org.Canal.Models.Objex;
 
+/**
+ * LGS/TRS
+ */
 public class Transaction extends Objex {
 
     private String locke; //Canal transaction was commited with
@@ -11,6 +14,10 @@ public class Transaction extends Objex {
     private double amount;
     private String committed; //Timestamp transaction committed
     private String settled; //Timestamp transaction settled
+
+    public Transaction() {
+        this.type = "LGS/TRS";
+    }
 
     public String getLocke() {
         return locke;

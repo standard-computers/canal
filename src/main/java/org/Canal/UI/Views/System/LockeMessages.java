@@ -1,7 +1,7 @@
 package org.Canal.UI.Views.System;
 
 import org.Canal.UI.Elements.LockeState;
-import org.Canal.UI.Views.Productivity.Flows.CreateFlow;
+import org.Canal.UI.Views.Flows.CreateFlow;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.Theme;

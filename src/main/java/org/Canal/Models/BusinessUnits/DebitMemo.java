@@ -4,6 +4,9 @@ import org.Canal.Models.Objex;
 
 import java.util.ArrayList;
 
+/**
+ * DBS
+ */
 public class DebitMemo extends Objex {
 
     private String customer;
@@ -11,6 +14,10 @@ public class DebitMemo extends Objex {
     private double quantity;
     private double value;
     private ArrayList<Objex> products;
+
+    public DebitMemo() {
+        this.type = "DBS";
+    }
 
     public String getCustomer() {
         return customer;

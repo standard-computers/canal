@@ -2,9 +2,11 @@ package org.Canal.Models;
 
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.LockeStatus;
+import org.Canal.Utils.Pipe;
 
 public class Objex {
 
+    protected String type = "";
     protected String id = "";
     protected String name = "";
     protected String creator = "UKNOWN";
@@ -12,6 +14,14 @@ public class Objex {
     protected LockeStatus status = LockeStatus.NEW;
     protected String created = Constants.now();
     protected String notes = "";
+
+    public String getType() {
+        return type;
+    }
+
+    protected void setType(String type) {
+        this.type = type;
+    }
 
     public String getId() {
         return id;
@@ -67,5 +77,9 @@ public class Objex {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public void save(){
+        Pipe.save(type, this);
     }
 }

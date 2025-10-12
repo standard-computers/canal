@@ -6,13 +6,12 @@ import org.Canal.UI.Elements.*;
 import org.Canal.UI.Views.Areas.AutoMakeAreas;
 import org.Canal.UI.Views.Bins.AutoMakeBins;
 import org.Canal.UI.Views.Bins.CreateBin;
-import org.Canal.UI.Views.Finance.SalesOrders.CreateSalesOrder;
+import org.Canal.UI.Views.SalesOrders.CreateSalesOrder;
 import org.Canal.UI.Views.Inventory.ViewInventory;
 import org.Canal.UI.Views.Areas.CreateArea;
 import org.Canal.Utils.*;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
@@ -37,7 +36,7 @@ public class ViewLocation extends LockeState implements RefreshListener {
 
     public ViewLocation(Location location, DesktopState desktop) {
 
-        super(location.getId() + " – " + location.getName(), location.getType() + "/" + location.getId());
+        super(location.getId() + " – " + location.getName(), "/" + location.getType() + "/" + location.getId());
         setFrameIcon(new ImageIcon(ViewLocation.class.getResource("/icons/windows/" + Engine.codex(location.getType().replace("/", ""), "icon") + ".png")));
         this.location = location;
         this.desktop = desktop;
@@ -53,7 +52,6 @@ public class ViewLocation extends LockeState implements RefreshListener {
         tabs.addTab("Pending Tasks", pendingTasks());
         tabs.addTab("Events", events());
         dataTree = createTree();
-        expandAllNodes(dataTree);
         dataTree.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -200,6 +198,7 @@ public class ViewLocation extends LockeState implements RefreshListener {
     private JPanel toolbar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        tb.add(Box.createHorizontalStrut(5));
 
         IconButton order = new IconButton("Order", "create", "Order from a vendor", "/ORDS/PO/NEW");
         tb.add(order);
@@ -242,7 +241,7 @@ public class ViewLocation extends LockeState implements RefreshListener {
         tb.add(areas);
         tb.add(Box.createHorizontalStrut(5));
 
-        IconButton addBin = new IconButton("+ Bin", "bins", "Add an area cost center");
+        IconButton addBin = new IconButton("+ Bin", "bins", "Add an area cost center", "/BNS/NEW");
         addBin.addActionListener(_ -> desktop.put(new CreateBin(location.getId(), desktop, ViewLocation.this)));
         tb.add(addBin);
         tb.add(Box.createHorizontalStrut(5));
@@ -261,9 +260,14 @@ public class ViewLocation extends LockeState implements RefreshListener {
         tb.add(label);
         tb.add(Box.createHorizontalStrut(5));
 
+        IconButton modify = new IconButton("Modify", "modify", "Modify this location", "/" + location.getType() + "/MOD");
+        modify.addActionListener(_ -> desktop.put(new ModifyLocation(location, null)));
+        tb.add(modify);
+        tb.add(Box.createHorizontalStrut(5));
+
         IconButton refresh = new IconButton("Refresh", "refresh", "Refresh data");
         tb.add(refresh);
-        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
+        tb.add(Box.createHorizontalStrut(5));
 
         return tb;
     }
@@ -348,7 +352,7 @@ public class ViewLocation extends LockeState implements RefreshListener {
         DefaultMutableTreeNode rootTreeNode = createTreeNodes(rootNode);
         DefaultTreeModel model = (DefaultTreeModel) dataTree.getModel();
         model.setRoot(rootTreeNode);
-        expandAllNodes(dataTree);
+//        expandAllNodes(dataTree);
         revalidate();
         repaint();
     }

@@ -2,6 +2,10 @@ package org.Canal.Models.HumanResources;
 
 import org.Canal.Models.Objex;
 
+/**
+ * HR/POS
+ *
+ */
 public class Position extends Objex {
 
     private String organization;
@@ -12,6 +16,10 @@ public class Position extends Objex {
     private boolean bonus = false; //Position has opportunity to bonus
     private boolean commission = false; //Position works on or earns comission
     private int availability = 1;
+
+    public Position() {
+        this.type = "HR/POS";
+    }
 
     public String getOrganization() {
         return organization;

@@ -3,6 +3,7 @@ package org.Canal.Utils;
 import com.google.gson.Gson;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
+import com.mongodb.client.model.ReplaceOptions;
 import org.Canal.Models.BusinessUnits.*;
 import org.Canal.Models.BusinessUnits.Inventory;
 import org.Canal.Models.HumanResources.*;
@@ -19,42 +20,45 @@ import org.Canal.UI.Views.Bins.*;
 import org.Canal.UI.Views.Customers.ViewCustomer;
 import org.Canal.UI.Views.Departments.DeleteDepartment;
 import org.Canal.UI.Views.Employees.ModifyEmployee;
-import org.Canal.UI.Views.Finance.Accounts.Accounts;
-import org.Canal.UI.Views.Finance.Accounts.AutoMakeAccounts;
-import org.Canal.UI.Views.Finance.Accounts.CreateAccount;
-import org.Canal.UI.Views.Finance.Accounts.ViewAccount;
-import org.Canal.UI.Views.Finance.Catalogs.ViewCatalog;
-import org.Canal.UI.Views.Finance.GoodsIssues.GoodsIssues;
-import org.Canal.UI.Views.Finance.Invoices.Invoices;
-import org.Canal.UI.Views.Finance.Ledgers.AutoMakeLedgers;
-import org.Canal.UI.Views.Finance.PurchaseOrders.*;
-import org.Canal.UI.Views.Finance.PurchaseRequisitions.*;
-import org.Canal.UI.Views.Finance.SalesOrders.ViewSalesOrder;
+import org.Canal.UI.Views.Accounts.Accounts;
+import org.Canal.UI.Views.Accounts.AutoMakeAccounts;
+import org.Canal.UI.Views.Accounts.CreateAccount;
+import org.Canal.UI.Views.Accounts.ViewAccount;
+import org.Canal.UI.Views.Catalogs.ViewCatalog;
+import org.Canal.UI.Views.GoodsIssues.GoodsIssues;
+import org.Canal.UI.Views.Invoices.Invoices;
+import org.Canal.UI.Views.Ledgers.AutoMakeLedgers;
+import org.Canal.UI.Views.PurchaseOrders.AutoMakePurchaseOrders;
+import org.Canal.UI.Views.PurchaseOrders.CreatePurchaseOrder;
+import org.Canal.UI.Views.PurchaseOrders.PurchaseOrders;
+import org.Canal.UI.Views.PurchaseOrders.ViewPurchaseOrder;
+import org.Canal.UI.Views.PurchaseRequisitions.*;
+import org.Canal.UI.Views.SalesOrders.ViewSalesOrder;
 import org.Canal.UI.Views.Items.ModifyItem;
 import org.Canal.UI.Views.People.CreatePerson;
 import org.Canal.UI.Views.People.People;
 import org.Canal.UI.Views.Positions.Positions;
-import org.Canal.UI.Views.Productivity.Flows.CreateFlow;
-import org.Canal.UI.Views.Productivity.Waves.CreateWave;
+import org.Canal.UI.Views.Flows.CreateFlow;
+import org.Canal.UI.Views.Waves.CreateWave;
 import org.Canal.UI.Views.Productivity.WorkOrders.CreateWorkOrder;
 import org.Canal.UI.Views.Controllers.*;
 import org.Canal.UI.Views.Employees.CreateEmployee;
 import org.Canal.UI.Views.Employees.ViewEmployee;
 import org.Canal.UI.Views.Employees.Employees;
-import org.Canal.UI.Views.Finance.Catalogs.Catalogs;
-import org.Canal.UI.Views.Finance.Catalogs.CreateCatalog;
-import org.Canal.UI.Views.Finance.GoodsReceipts.GoodsReceipts;
-import org.Canal.UI.Views.Finance.Ledgers.CreateLedger;
-import org.Canal.UI.Views.Finance.Ledgers.ViewLedger;
-import org.Canal.UI.Views.Finance.Ledgers.Ledgers;
+import org.Canal.UI.Views.Catalogs.Catalogs;
+import org.Canal.UI.Views.Catalogs.CreateCatalog;
+import org.Canal.UI.Views.GoodsReceipts.GoodsReceipts;
+import org.Canal.UI.Views.Ledgers.CreateLedger;
+import org.Canal.UI.Views.Ledgers.ViewLedger;
+import org.Canal.UI.Views.Ledgers.Ledgers;
 import org.Canal.UI.Views.Departments.CreateDepartment;
 import org.Canal.UI.Views.Departments.Departments;
-import org.Canal.UI.Views.Distribution.InboundDeliveryOrders.CreateInboundDeliveryOrder;
-import org.Canal.UI.Views.Distribution.InboundDeliveryOrders.InboundDeliveries;
+import org.Canal.UI.Views.InboundDeliveryOrders.CreateInboundDeliveryOrder;
+import org.Canal.UI.Views.InboundDeliveryOrders.InboundDeliveries;
 import org.Canal.UI.Views.Notes.CreateNote;
 import org.Canal.UI.Views.Notes.Notes;
-import org.Canal.UI.Views.Distribution.OutboundDeliveryOrders.CreateOutboundDeliveryOrder;
-import org.Canal.UI.Views.Distribution.OutboundDeliveryOrders.OutboundDeliveries;
+import org.Canal.UI.Views.OutboundDeliveryOrders.CreateOutboundDeliveryOrder;
+import org.Canal.UI.Views.OutboundDeliveryOrders.OutboundDeliveries;
 import org.Canal.UI.Views.Positions.CreatePosition;
 import org.Canal.UI.Views.Items.CreateItem;
 import org.Canal.UI.Views.Items.ViewItem;
@@ -67,14 +71,14 @@ import org.Canal.UI.Views.System.QuickExplorer;
 import org.Canal.UI.Views.Teams.CreateTeam;
 import org.Canal.UI.Views.Teams.Teams;
 import org.Canal.UI.Views.Inventory.*;
-import org.Canal.UI.Views.Finance.Invoices.CreateInvoice;
-import org.Canal.UI.Views.Finance.SalesOrders.AutoMakeSalesOrders;
-import org.Canal.UI.Views.Finance.SalesOrders.CreateSalesOrder;
-import org.Canal.UI.Views.Finance.SalesOrders.SalesOrders;
-import org.Canal.UI.Views.Productivity.Tasks.CreateTask;
-import org.Canal.UI.Views.Productivity.Tasks.TaskList;
-import org.Canal.UI.Views.Distribution.Trucks.CreateTruck;
-import org.Canal.UI.Views.Distribution.Trucks.Trucks;
+import org.Canal.UI.Views.Invoices.CreateInvoice;
+import org.Canal.UI.Views.SalesOrders.AutoMakeSalesOrders;
+import org.Canal.UI.Views.SalesOrders.CreateSalesOrder;
+import org.Canal.UI.Views.SalesOrders.SalesOrders;
+import org.Canal.UI.Views.Tasks.CreateTask;
+import org.Canal.UI.Views.Tasks.TaskList;
+import org.Canal.UI.Views.Trucks.CreateTruck;
+import org.Canal.UI.Views.Trucks.Trucks;
 import org.Canal.UI.Views.Users.*;
 
 import javax.swing.*;
@@ -87,7 +91,7 @@ import java.util.stream.Collectors;
 import org.bson.Document;
 
 /**
- * This class is responsible for fetching and maintaining Canal objex.
+ * This class is responsible for fetching and maintaining Objex.
  */
 public class Engine {
 
@@ -96,6 +100,12 @@ public class Engine {
     public static Location organization;
     public static User assignedUser;
     private static Gson gson = new Gson();
+
+    private static <T> ArrayList<T> loadCollection(String collectionName, Class<T> clazz) {
+        ArrayList<T> results = new ArrayList<>();
+        ConnectDB.collection(collectionName).find().forEach(doc -> results.add(Pipe.load(doc, clazz)));
+        return results;
+    }
 
     public static User getAssignedUser() {
         return assignedUser;
@@ -138,25 +148,11 @@ public class Engine {
 
         ArrayList<Location> locations = new ArrayList<>();
         String[] locs = new String[]{"DCSS", "CCS", "CSTS", "ORGS", "VEND", "WHS", "TRANS/CRRS", "OFFS"};
-        if (Engine.getConfiguration().getMongodb().isEmpty()) { //Local disk
-
-            for (String l : locs) {
-                File[] d = Pipe.list(l);
-                for (File file : d) {
-                    if (!file.isDirectory() && file.getPath().endsWith("." + l.toLowerCase())) {
-                        Location loc = Pipe.load(file.getPath(), Location.class);
-                        locations.add(loc);
-                    }
-                }
-            }
-        } else {
-
-            for (String l : locs) {
-                ConnectDB.collection(l).find().forEach(location -> {
-                    Location u = Pipe.load(location, Location.class);
-                    locations.add(u);
-                });
-            }
+        for (String l : locs) {
+            ConnectDB.collection(l).find().forEach(location -> {
+                Location u = Pipe.load(location, Location.class);
+                locations.add(u);
+            });
         }
 
         locations.sort(Comparator.comparing(Location::getId));
@@ -165,17 +161,10 @@ public class Engine {
 
 
     public static Location getLocationWithId(String id) {
+
         if (id == null || id.isBlank()) return null;
 
-        if (Engine.getConfiguration().getMongodb().isEmpty()) {
-            for (Location loc : getLocations()) {
-                if (id.equals(loc.getId())) return loc;
-            }
-            return null;
-        }
-
         String[] collNames = {"DCSS","CCS","CSTS","ORGS","VEND","WHS","TRANS/CRRS","OFFS"};
-
         for (String name : collNames) {
             MongoCollection<Document> coll = ConnectDB.collection(name);
             if (coll == null) continue;
@@ -191,21 +180,10 @@ public class Engine {
     public static ArrayList<Location> getLocations(String objex) {
 
         ArrayList<Location> locations = new ArrayList<>();
-        if (Engine.getConfiguration().getMongodb().isEmpty()) {
-
-            File[] d = Pipe.list(objex);
-            for (File file : d) {
-                if (!file.isDirectory()) {
-                    Location l = Pipe.load(file.getPath(), Location.class);
-                    locations.add(l);
-                }
-            }
-        } else {
-            ConnectDB.collection((objex.startsWith("/") ? objex.replaceFirst("/", "") : objex)).find().forEach(location -> {
-                Location u = Pipe.load(location, Location.class);
-                locations.add(u);
-            });
-        }
+        ConnectDB.collection((objex.startsWith("/") ? objex.replaceFirst("/", "") : objex)).find().forEach(location -> {
+            Location u = Pipe.load(location, Location.class);
+            locations.add(u);
+        });
 
         locations.sort(Comparator.comparing(Location::getId));
         return locations;
@@ -240,21 +218,10 @@ public class Engine {
     public static ArrayList<Employee> getPeople() {
 
         ArrayList<Employee> people = new ArrayList<>();
-        if(Engine.getConfiguration().getMongodb().isEmpty()) {
-
-            File[] peopleDir = Pipe.list("PPL");
-            for (File file : peopleDir) {
-                if (!file.isDirectory()) {
-                    Employee person = Pipe.load(file.getPath(), Employee.class);
-                    people.add(person);
-                }
-            }
-        }else{
-            ConnectDB.collection("PPL").find().forEach(person -> {
-                Employee ep = Pipe.load(person, Employee.class);
-                people.add(ep);
-            });
-        }
+        ConnectDB.collection("PPL").find().forEach(person -> {
+            Employee ep = Pipe.load(person, Employee.class);
+            people.add(ep);
+        });
         people.sort(Comparator.comparing(Employee::getId));
         return people;
     }
@@ -266,21 +233,10 @@ public class Engine {
     public static ArrayList<Account> getAccounts() {
 
         ArrayList<Account> accounts = new ArrayList<>();
-        if(Engine.getConfiguration().getMongodb().isEmpty()) {
-
-            File[] accountsDir = Pipe.list("ACCS");
-            for (File file : accountsDir) {
-                if (!file.isDirectory()) {
-                    Account account = Pipe.load(file.getPath(), Account.class);
-                    accounts.add(account);
-                }
-            }
-        }else{
-            ConnectDB.collection("ACCS").find().forEach(account -> {
-                Account ep = Pipe.load(account, Account.class);
-                accounts.add(ep);
-            });
-        }
+        ConnectDB.collection("ACCS").find().forEach(account -> {
+            Account ep = Pipe.load(account, Account.class);
+            accounts.add(ep);
+        });
         accounts.sort(Comparator.comparing(Account::getId));
         return accounts;
     }
@@ -295,21 +251,10 @@ public class Engine {
     public static ArrayList<Area> getAreas() {
 
         ArrayList<Area> areas = new ArrayList<>();
-        if (Engine.getConfiguration().getMongodb().isEmpty()) {
-
-            File[] areasDir = Pipe.list("AREAS");
-            for (File file : areasDir) {
-                if (!file.isDirectory()) {
-                    Area area = Pipe.load(file.getPath(), Area.class);
-                    areas.add(area);
-                }
-            }
-        } else {
-            ConnectDB.collection("AREAS").find().forEach(area -> {
-                Area u = Pipe.load(area, Area.class);
-                areas.add(u);
-            });
-        }
+        ConnectDB.collection("AREAS").find().forEach(area -> {
+            Area u = Pipe.load(area, Area.class);
+            areas.add(u);
+        });
         areas.sort(Comparator.comparing(Area::getId));
         return areas;
     }
@@ -380,23 +325,10 @@ public class Engine {
     public static ArrayList<Employee> getEmployees() {
 
         ArrayList<Employee> employees = new ArrayList<>();
-        if (Engine.getConfiguration().getMongodb().isEmpty()) { //Local disk
-
-            File[] d = Pipe.list("EMPS");
-            for (File file : d) {
-                if (!file.isDirectory()) {
-                    Employee a = Pipe.load(file.getPath(), Employee.class);
-                    employees.add(a);
-                }
-            }
-        } else {
-
-            ConnectDB.collection("EMPS").find().forEach(employee -> {
-                Employee e = Pipe.load(employee, Employee.class);
-                employees.add(e);
-            });
-        }
-
+        ConnectDB.collection("EMPS").find().forEach(employee -> {
+            Employee e = Pipe.load(employee, Employee.class);
+            employees.add(e);
+        });
         employees.sort(Comparator.comparing(Employee::getId));
         return employees;
     }
@@ -413,14 +345,7 @@ public class Engine {
      * TIME SHEETS
      */
     public static ArrayList<Timesheet> getTimesheets() {
-        ArrayList<Timesheet> timesheets = new ArrayList<>();
-        File[] d = Pipe.list("HR/TMSH");
-        for (File file : d) {
-            if (!file.isDirectory()) {
-                Timesheet a = Pipe.load(file.getPath(), Timesheet.class);
-                timesheets.add(a);
-            }
-        }
+        ArrayList<Timesheet> timesheets = loadCollection("HR/TMSH", Timesheet.class);
         timesheets.sort(Comparator.comparing(Timesheet::getId));
         return timesheets;
     }
@@ -440,23 +365,10 @@ public class Engine {
     public static ArrayList<Catalog> getCatalogs() {
 
         ArrayList<Catalog> catalogs = new ArrayList<>();
-        if (Engine.getConfiguration().getMongodb().isEmpty()) { //Local disk
-
-            File[] catsDirs = Pipe.list("CATS");
-            for (File catsDir : catsDirs) {
-                if (!catsDir.isDirectory()) {
-                    Catalog catalog = Pipe.load(catsDir.getPath(), Catalog.class);
-                    catalogs.add(catalog);
-                }
-            }
-        } else {
-
-            ConnectDB.collection("CATS").find().forEach(catalog -> {
-                Catalog u = Pipe.load(catalog, Catalog.class);
-                catalogs.add(u);
-            });
-        }
-
+        ConnectDB.collection("CATS").find().forEach(catalog -> {
+            Catalog u = Pipe.load(catalog, Catalog.class);
+            catalogs.add(u);
+        });
         catalogs.sort(Comparator.comparing(Catalog::getId));
         return catalogs;
     }
@@ -469,26 +381,12 @@ public class Engine {
      * USERS
      */
     public static ArrayList<User> getUsers() {
+
         ArrayList<User> users = new ArrayList<>();
-
-        if (Engine.getConfiguration().getMongodb().isEmpty()) { //Local disk
-
-            File[] usrsDir = Pipe.list("USRS");
-            for (File file : usrsDir) {
-                if (!file.isDirectory()) {
-                    User a = Pipe.load(file.getPath(), User.class);
-                    users.add(a);
-                }
-            }
-            users.sort(Comparator.comparing(User::getId));
-        } else {
-
-            ConnectDB.collection("USRS").find().forEach(user -> {
-                User u = Pipe.load(user, User.class);
-                users.add(u);
-            });
-        }
-
+        ConnectDB.collection("USRS").find().forEach(user -> {
+            User u = Pipe.load(user, User.class);
+            users.add(u);
+        });
         return users;
     }
 
@@ -502,22 +400,10 @@ public class Engine {
     public static ArrayList<Order> getPurchaseOrders() {
 
         ArrayList<Order> purchaseOrders = new ArrayList<>();
-        if (Engine.getConfiguration().getMongodb().isEmpty()) {
-
-            File[] posDir = Pipe.list("ORDS/PO");
-            for (File file : posDir) {
-                if (!file.isDirectory()) {
-                    Order purchaseOrder = Pipe.load(file.getPath(), Order.class);
-                    purchaseOrders.add(purchaseOrder);
-                }
-            }
-        } else {
-            ConnectDB.collection("ORDS/PO").find().forEach(purchaseOrder -> {
-                Order u = Pipe.load(purchaseOrder, Order.class);
-                purchaseOrders.add(u);
-            });
-        }
-
+        ConnectDB.collection("ORDS/PO").find().forEach(purchaseOrder -> {
+            Order u = Pipe.load(purchaseOrder, Order.class);
+            purchaseOrders.add(u);
+        });
         purchaseOrders.sort(Comparator.comparing(Order::getId));
         return purchaseOrders;
     }
@@ -538,25 +424,12 @@ public class Engine {
      * LEDGERS
      */
     public static ArrayList<Ledger> getLedgers() {
+
         ArrayList<Ledger> ledgers = new ArrayList<>();
-
-        if (Engine.getConfiguration().getMongodb().isEmpty()) { //Local disk
-
-            File[] d = Pipe.list("LGS");
-            for (File file : d) {
-                if (!file.isDirectory()) {
-                    Ledger a = Pipe.load(file.getPath(), Ledger.class);
-                    ledgers.add(a);
-                }
-            }
-        } else {
-
-            ConnectDB.collection("LGS").find().forEach(ledger -> {
-                Ledger u = Pipe.load(ledger, Ledger.class);
-                ledgers.add(u);
-            });
-        }
-
+        ConnectDB.collection("LGS").find().forEach(ledger -> {
+            Ledger u = Pipe.load(ledger, Ledger.class);
+            ledgers.add(u);
+        });
         ledgers.sort(Comparator.comparing(Ledger::getId));
         return ledgers;
     }
@@ -575,23 +448,10 @@ public class Engine {
     public static ArrayList<Rate> getRates() {
 
         ArrayList<Rate> rates = new ArrayList<>();
-        if (Engine.getConfiguration().getMongodb().isEmpty()) { //Local disk
-
-            File[] d = Pipe.list("RTS");
-            for (File file : d) {
-                if (!file.isDirectory()) {
-                    Rate rate = Pipe.load(file.getPath(), Rate.class);
-                    rates.add(rate);
-                }
-            }
-        } else {
-
-            ConnectDB.collection("RTS").find().forEach(rate -> {
-                Rate r = Pipe.load(rate, Rate.class);
-                rates.add(r);
-            });
-        }
-
+        ConnectDB.collection("RTS").find().forEach(rate -> {
+            Rate r = Pipe.load(rate, Rate.class);
+            rates.add(r);
+        });
         rates.sort(Comparator.comparing(Rate::getId));
         return rates;
     }
@@ -606,22 +466,10 @@ public class Engine {
     public static ArrayList<Position> getPositions() {
 
         ArrayList<Position> positions = new ArrayList<>();
-        if(Engine.getConfiguration().getMongodb().isEmpty()) {
-
-            File[] d = Pipe.list("HR/POS");
-            for (File file : d) {
-                if (!file.isDirectory()) {
-                    Position position = Pipe.load(file.getPath(), Position.class);
-                    positions.add(position);
-                }
-            }
-        } else {
-            ConnectDB.collection("HR/POS").find().forEach(position -> {
-                Position u = Pipe.load(position, Position.class);
-                positions.add(u);
-            });
-        }
-
+        ConnectDB.collection("HR/POS").find().forEach(position -> {
+            Position u = Pipe.load(position, Position.class);
+            positions.add(u);
+        });
         positions.sort(Comparator.comparing(Position::getId));
         return positions;
     }
@@ -636,22 +484,10 @@ public class Engine {
     public static ArrayList<Delivery> getInboundDeliveries() {
 
         ArrayList<Delivery> inboundDeliveries = new ArrayList<>();
-        if(Engine.getConfiguration().getMongodb().isEmpty()) {
-
-            File[] d = Pipe.list("TRANS/IDO");
-            for (File file : d) {
-                if (!file.isDirectory()) {
-                    Delivery inboundDelivery = Pipe.load(file.getPath(), Delivery.class);
-                    inboundDeliveries.add(inboundDelivery);
-                }
-            }
-        } else {
-            ConnectDB.collection("TRANS/IDO").find().forEach(inboundDelivery -> {
-                Delivery delivery = Pipe.load(inboundDelivery, Delivery.class);
-                inboundDeliveries.add(delivery);
-            });
-        }
-
+        ConnectDB.collection("TRANS/IDO").find().forEach(inboundDelivery -> {
+            Delivery delivery = Pipe.load(inboundDelivery, Delivery.class);
+            inboundDeliveries.add(delivery);
+        });
         inboundDeliveries.sort(Comparator.comparing(Delivery::getId));
         return inboundDeliveries;
     }
@@ -680,22 +516,10 @@ public class Engine {
     public static ArrayList<Delivery> getOutboundDeliveries() {
 
         ArrayList<Delivery> outboundDeliveries = new ArrayList<>();
-        if(Engine.getConfiguration().getMongodb().isEmpty()) {
-
-            File[] d = Pipe.list("TRANS/ODO");
-            for (File file : d) {
-                if (!file.isDirectory()) {
-                    Delivery outboundDelivery = Pipe.load(file.getPath(), Delivery.class);
-                    outboundDeliveries.add(outboundDelivery);
-                }
-            }
-        } else {
-            ConnectDB.collection("TRANS/ODO").find().forEach(outboundDelivery -> {
-                Delivery delivery = Pipe.load(outboundDelivery, Delivery.class);
-                outboundDeliveries.add(delivery);
-            });
-        }
-
+        ConnectDB.collection("TRANS/ODO").find().forEach(outboundDelivery -> {
+            Delivery delivery = Pipe.load(outboundDelivery, Delivery.class);
+            outboundDeliveries.add(delivery);
+        });
         outboundDeliveries.sort(Comparator.comparing(Delivery::getId));
         return outboundDeliveries;
     }
@@ -721,22 +545,10 @@ public class Engine {
     public static ArrayList<Truck> getTrucks() {
 
         ArrayList<Truck> trucks = new ArrayList<>();
-        if(Engine.getConfiguration().getMongodb().isEmpty()) {
-
-            File[] d = Pipe.list("TRANS/TRCKS");
-            for (File file : d) {
-                if (!file.isDirectory()) {
-                    Truck a = Pipe.load(file.getPath(), Truck.class);
-                    trucks.add(a);
-                }
-            }
-        } else {
-            ConnectDB.collection("TRANS/TRCKS").find().forEach(truck -> {
-                Truck u = Pipe.load(truck, Truck.class);
-                trucks.add(u);
-            });
-        }
-
+        ConnectDB.collection("TRANS/TRCKS").find().forEach(truck -> {
+            Truck u = Pipe.load(truck, Truck.class);
+            trucks.add(u);
+        });
         trucks.sort(Comparator.comparing(Truck::getId));
         return trucks;
     }
@@ -755,23 +567,10 @@ public class Engine {
     public static ArrayList<Inventory> getInventories() {
 
         ArrayList<Inventory> is = new ArrayList<>();
-        if (Engine.getConfiguration().getMongodb().isEmpty()) { //Local disk
-
-            File[] d = Pipe.list("STK");
-            for (File f : d) {
-                if (!f.isDirectory()) {
-                    Inventory a = Pipe.load(f.getPath(), Inventory.class);
-                    is.add(a);
-                }
-            }
-        } else {
-
-            ConnectDB.collection("STK").find().forEach(stock -> {
-                Inventory u = Pipe.load(stock, Inventory.class);
-                is.add(u);
-            });
-        }
-
+        ConnectDB.collection("STK").find().forEach(stock -> {
+            Inventory u = Pipe.load(stock, Inventory.class);
+            is.add(u);
+        });
         is.sort(Comparator.comparing(Inventory::getLocation));
         return is;
     }
@@ -785,40 +584,41 @@ public class Engine {
      * RECORDS
      */
     public static ArrayList<ArrayList<Record>> getRecords() {
-
         ArrayList<ArrayList<Record>> all = new ArrayList<>();
-        if(Engine.getConfiguration().getMongodb().isEmpty()) {
-
-            File[] d = Pipe.list("RCS");
-            for (File f : d) {
-                if (!f.isDirectory()) {
-                    all.add(Pipe.load(f.getPath(), ArrayList.class));
+        ConnectDB.collection("RCS").find().forEach(records -> {
+            ArrayList<Record> r = new ArrayList<>();
+            List<Document> docs = records.getList("records", Document.class);
+            if (docs != null) {
+                for (Document doc : docs) {
+                    r.add(Pipe.load(doc, Record.class));
                 }
             }
-        }else {
-            ConnectDB.collection("RCS").find().forEach(records -> {
-               ArrayList<Record> r = Pipe.load(records, ArrayList.class);
-               all.add(r);
-            });
-        }
+            all.add(r);
+        });
 
         return all;
     }
 
     public static void assertRecord(String objex, String id, Record record) {
-        ArrayList<Record> rcs = null;
-        File[] d = Pipe.list("RCS");
-        for (File f : d) {
-            if (!f.isDirectory()) {
-                if (f.getPath().endsWith(id + "." + objex.toLowerCase().replaceAll("/", "."))) {
-                    rcs = Pipe.load(f.getPath(), ArrayList.class);
-                }
+        String normalized = objex.startsWith("/") ? objex.replaceFirst("/", "") : objex;
+        Document filter = new Document("id", id).append("objex", normalized);
+
+        Document existing = ConnectDB.collection("RCS").find(filter).first();
+        List<Document> records = new ArrayList<>();
+        if (existing != null) {
+            List<Document> existingRecords = existing.getList("records", Document.class);
+            if (existingRecords != null) {
+                records.addAll(existingRecords);
             }
         }
-        if (rcs != null) {
-            rcs.add(record);
-        }
-        Pipe.export(Start.DIR + "\\.store\\RCS\\" + id + "." + objex.toLowerCase().replaceAll("/", "."), rcs);
+
+        records.add(Document.parse(gson.toJson(record)));
+
+        Document replacement = new Document("id", id)
+                .append("objex", normalized)
+                .append("records", records);
+
+        ConnectDB.collection("RCS").replaceOne(filter, replacement, new ReplaceOptions().upsert(true));
     }
 
 
@@ -828,23 +628,10 @@ public class Engine {
     public static ArrayList<Item> getItems() {
 
         ArrayList<Item> items = new ArrayList<>();
-        if (Engine.getConfiguration().getMongodb().isEmpty()) { //Local disk
-
-            File[] d = Pipe.list("ITS");
-            for (File file : d) {
-                if (!file.isDirectory()) {
-                    Item item = Pipe.load(file.getPath(), Item.class);
-                    items.add(item);
-                }
-            }
-        } else {
-
-            ConnectDB.collection("ITS").find().forEach(item -> {
-                Item u = Pipe.load(item, Item.class);
-                items.add(u);
-            });
-        }
-
+        ConnectDB.collection("ITS").find().forEach(item -> {
+            Item u = Pipe.load(item, Item.class);
+            items.add(u);
+        });
         items.sort(Comparator.comparing(Item::getId));
         return items;
     }
@@ -863,23 +650,10 @@ public class Engine {
     public static ArrayList<BillOfMaterials> getBoMs() {
 
         ArrayList<BillOfMaterials> boms = new ArrayList<>();
-        if (Engine.getConfiguration().getMongodb().isEmpty()) { //Local disk
-
-            File[] d = Pipe.list("BOMS");
-            for (File file : d) {
-                if (!file.isDirectory()) {
-                    BillOfMaterials bom = Pipe.load(file.getPath(), BillOfMaterials.class);
-                    boms.add(bom);
-                }
-            }
-        } else {
-
-            ConnectDB.collection("BOMS").find().forEach(bom -> {
-                BillOfMaterials u = Pipe.load(bom, BillOfMaterials.class);
-                boms.add(u);
-            });
-        }
-
+        ConnectDB.collection("BOMS").find().forEach(bom -> {
+            BillOfMaterials u = Pipe.load(bom, BillOfMaterials.class);
+            boms.add(u);
+        });
         boms.sort(Comparator.comparing(BillOfMaterials::getId));
         return boms;
     }
@@ -899,22 +673,10 @@ public class Engine {
     public static ArrayList<Order> getSalesOrders() {
 
         ArrayList<Order> salesOrders = new ArrayList<>();
-        if (Engine.getConfiguration().getMongodb().isEmpty()) {
-
-            File[] posDir = Pipe.list("ORDS/SO");
-            for (File file : posDir) {
-                if (!file.isDirectory()) {
-                    Order salesOrder = Pipe.load(file.getPath(), Order.class);
-                    salesOrders.add(salesOrder);
-                }
-            }
-        } else {
-            ConnectDB.collection("ORDS/SO").find().forEach(salesOrder -> {
-                Order so = Pipe.load(salesOrder, Order.class);
-                salesOrders.add(so);
-            });
-        }
-
+        ConnectDB.collection("ORDS/SO").find().forEach(salesOrder -> {
+            Order so = Pipe.load(salesOrder, Order.class);
+            salesOrders.add(so);
+        });
         salesOrders.sort(Comparator.comparing(Order::getOrderId));
         return salesOrders;
     }
@@ -926,22 +688,10 @@ public class Engine {
     public static ArrayList<PurchaseRequisition> getPurchaseRequisitions() {
 
         ArrayList<PurchaseRequisition> purchaseRequisions = new ArrayList<>();
-        if (Engine.getConfiguration().getMongodb().isEmpty()) {
-
-            File[] d = Pipe.list("ORDS/PR");
-            for (File f : d) {
-                if (!f.isDirectory()) {
-                    PurchaseRequisition purchaseRequisition = Pipe.load(f.getPath(), PurchaseRequisition.class);
-                    purchaseRequisions.add(purchaseRequisition);
-                }
-            }
-        } else {
-            ConnectDB.collection("ORDS/PR").find().forEach(purchaseRequisition -> {
-                PurchaseRequisition pr = Pipe.load(purchaseRequisition, PurchaseRequisition.class);
-                purchaseRequisions.add(pr);
-            });
-        }
-
+        ConnectDB.collection("ORDS/PR").find().forEach(purchaseRequisition -> {
+            PurchaseRequisition pr = Pipe.load(purchaseRequisition, PurchaseRequisition.class);
+            purchaseRequisions.add(pr);
+        });
         purchaseRequisions.sort(Comparator.comparing(PurchaseRequisition::getId));
         return purchaseRequisions;
     }
@@ -953,22 +703,10 @@ public class Engine {
     public static ArrayList<GoodsReceipt> getGoodsReceipts() {
 
         ArrayList<GoodsReceipt> goodsReceipts = new ArrayList<>();
-        if (Engine.getConfiguration().getMongodb().isEmpty()) {
-
-            File[] posDir = Pipe.list("GR");
-            for (File file : posDir) {
-                if (!file.isDirectory()) {
-                    GoodsReceipt a = Pipe.load(file.getPath(), GoodsReceipt.class);
-                    goodsReceipts.add(a);
-                }
-            }
-        } else {
-            ConnectDB.collection("GR").find().forEach(goodsReceipt -> {
-                GoodsReceipt u = Pipe.load(goodsReceipt, GoodsReceipt.class);
-                goodsReceipts.add(u);
-            });
-        }
-
+        ConnectDB.collection("GR").find().forEach(goodsReceipt -> {
+            GoodsReceipt u = Pipe.load(goodsReceipt, GoodsReceipt.class);
+            goodsReceipts.add(u);
+        });
         goodsReceipts.sort(Comparator.comparing(GoodsReceipt::getId));
         return goodsReceipts;
     }
@@ -1645,7 +1383,7 @@ public class Engine {
                 case "ORGS/MOD" -> {
                     for (Location org : Engine.getLocations("ORGS")) {
                         if (org.getId().equals(oid)) {
-                            return new ViewLocation(org, desktop);
+                            return new ModifyLocation(org, null);
                         }
                     }
                 }
@@ -1665,28 +1403,28 @@ public class Engine {
                 case "CCS/MOD" -> {
                     for (Location costcenter : Engine.getLocations("CCS")) {
                         if (costcenter.getId().equals(oid)) {
-                            return new ViewLocation(costcenter, desktop);
+                            return new ModifyLocation(costcenter, null);
                         }
                     }
                 }
                 case "CSTS/MOD" -> {
                     for (Location l : Engine.getLocations("CSTS")) {
                         if (l.getId().equals(oid)) {
-                            return new ViewCustomer(l);
+                            return new ModifyLocation(l, null);
                         }
                     }
                 }
                 case "DCSS/MOD" -> {
                     for (Location l : Engine.getLocations("DCSS")) {
                         if (l.getId().equals(oid)) {
-                            return new ViewLocation(l, desktop);
+                            return new ModifyLocation(l, null);
                         }
                     }
                 }
                 case "VEND/MOD" -> {
                     for (Location l : Engine.getLocations("VEND")) {
                         if (l.getId().equals(oid)) {
-                            return new ViewLocation(l, desktop);
+                            return new ModifyLocation(l, null);
                         }
                     }
                 }
@@ -1719,7 +1457,7 @@ public class Engine {
                 case "WHS/MOD" -> {
                     for (Location l : getLocations("WHS")) {
                         if (l.getId().equals(oid)) {
-                            return new ViewLocation(l, desktop);
+                            return new ModifyLocation(l, null);
                         }
                     }
                     return new Locations("/WHS", desktop);
@@ -1737,7 +1475,6 @@ public class Engine {
                 }
             }
         }
-
         return null;
     }
 }

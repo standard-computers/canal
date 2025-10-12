@@ -1,6 +1,7 @@
 package org.Canal.UI.Views.Areas;
 
 import org.Canal.Models.SupplyChainUnits.Area;
+import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Views.System.LockeMessages;
 import org.Canal.Utils.*;
@@ -98,12 +99,19 @@ public class CreateArea extends LockeState {
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton review = new IconButton("Review", "review", "Review Area Data");
-        review.addActionListener(_ -> performReview());
+        review.addActionListener(_ -> performReview(true));
         tb.add(review);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton create = new IconButton("Create", "create", "Refresh Data");
         create.addActionListener(_ -> {
+
+            for (String[] s : getQueue()) {
+                if (s[0].equals("CRITICAL")) {
+                    JOptionPane.showMessageDialog(CreateArea.this, "Critical message encountered. Click Review.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
 
             Area area = new Area();
             area.setId(areaIdField.getText().trim());
@@ -209,7 +217,7 @@ public class CreateArea extends LockeState {
         return notes;
     }
 
-    private void performReview() {
+    private void performReview(boolean purge) {
 
         if (areaIdField.getText().isEmpty()) {
             addToQueue(new String[]{"WARNING", "Area ID is empty!"});
@@ -236,6 +244,15 @@ public class CreateArea extends LockeState {
             addToQueue(new String[]{"WARNING", "Height is set to zero 0"});
         }
 
+        if (allowsProduction.isSelected()) {
+            Location l = Engine.getLocationWithId(areaIdField.getText());
+            if (l != null) {
+                if (!l.allowsProduction()) {
+                    addToQueue(new String[]{"CRITICAL", "The selected location does not allow production and will fail."});
+                }
+            }
+        }
+
         if (!allowsInventory.isSelected()) {
             addToQueue(new String[]{"WARNING", "'Allows Inventory' is not selected, are you sure?'"});
         }
@@ -245,6 +262,6 @@ public class CreateArea extends LockeState {
         }
 
         desktop.put(new LockeMessages(getQueue()));
-        purgeQueue();
+        if (purge) purgeQueue();
     }
 }

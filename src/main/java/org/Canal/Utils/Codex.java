@@ -27,8 +27,10 @@ public class Codex {
             put("name", "Organizations");
             put("prefix", "");
             put("icon", "organizations");
+            put("endpoint", "");
             put("leading_number", 1);
             put("leading_zeros", 2);
+            put("allow_notes", true);
             put("allow_archival", true);
             put("allow_deletion", true);
             put("auto_putaway", false);
@@ -51,10 +53,12 @@ public class Codex {
 
         variables.put("DCSS", new HashMap<>() {{
             put("name", "Distribution Centers");
-            put("icon", "distributioncenters");
             put("prefix", "DC");
+            put("icon", "distributioncenters");
+            put("endpoint", "");
             put("leading_number", 1);
             put("leading_zeros", 2);
+            put("allow_notes", true);
             put("allow_archival", true);
             put("allow_deletion", true);
             put("import_enabled", true);
@@ -68,10 +72,12 @@ public class Codex {
 
         variables.put("CCS", new HashMap<>() {{
             put("name", "Cost Centers");
-            put("icon", "costcenters");
             put("prefix", "");
+            put("icon", "costcenters");
+            put("endpoint", "");
             put("leading_number", 1);
             put("leading_zeros", 4);
+            put("allow_notes", true);
             put("allow_archival", true);
             put("allow_deletion", true);
             put("import_enabled", true);
@@ -85,10 +91,12 @@ public class Codex {
 
         variables.put("OFFS", new HashMap<>() {{
             put("name", "Offices");
-            put("icon", "costcenters");
             put("prefix", "LOC");
+            put("icon", "costcenters");
+            put("endpoint", "");
             put("leading_number", 1);
             put("leading_zeros", 2);
+            put("allow_notes", true);
             put("allow_archival", true);
             put("allow_deletion", true);
             put("import_enabled", true);
@@ -102,10 +110,12 @@ public class Codex {
 
         variables.put("VEND", new HashMap<>() {{
             put("name", "Vendors");
-            put("icon", "vendors");
             put("prefix", "V");
+            put("icon", "vendors");
+            put("endpoint", "");
             put("leading_number", 1);
             put("leading_zeros", 2);
+            put("allow_notes", true);
             put("allow_archival", true);
             put("allow_deletion", true);
             put("import_enabled", true);
@@ -119,10 +129,12 @@ public class Codex {
 
         variables.put("WHS", new HashMap<>() {{
             put("name", "Warehouses");
-            put("icon", "warehouses");
             put("prefix", "WH");
+            put("icon", "warehouses");
+            put("endpoint", "");
             put("leading_number", 1);
             put("leading_zeros", 2);
+            put("allow_notes", true);
             put("allow_archival", true);
             put("allow_deletion", true);
             put("import_enabled", true);
@@ -136,10 +148,12 @@ public class Codex {
 
         variables.put("CSTS", new HashMap<>() {{
             put("name", "Customers");
-            put("icon", "customers");
             put("prefix", "1");
+            put("icon", "customers");
+            put("endpoint", "");
             put("leading_number", 1);
             put("leading_zeros", 6);
+            put("allow_notes", true);
             put("allow_archival", true);
             put("allow_deletion", true);
             put("import_enabled", true);
@@ -152,10 +166,12 @@ public class Codex {
 
         variables.put("ACCS", new HashMap<>() {{
             put("name", "Accounts");
-            put("icon", "accounts");
             put("prefix", "1");
+            put("icon", "accounts");
+            put("endpoint", "");
             put("leading_number", 1);
             put("leading_zeros", 6);
+            put("allow_notes", true);
             put("require_agreements", false);
             put("allow_archival", true);
             put("allow_deletion", true);
@@ -169,10 +185,12 @@ public class Codex {
 
         variables.put("AREAS", new HashMap<>() {{
             put("name", "Areas");
-            put("icon", "areas");
             put("prefix", "A");
+            put("icon", "areas");
+            put("endpoint", "");
             put("leading_number", 1);
             put("leading_zeros", 2);
+            put("allow_notes", true);
             put("allow_archival", true);
             put("allow_deletion", true);
             put("import_enabled", true);
@@ -185,11 +203,13 @@ public class Codex {
 
         variables.put("BNS", new HashMap<>() {{
             put("name", "Bins");
-            put("icon", "bins");
             put("prefix", "BN");
+            put("icon", "bins");
+            put("endpoint", "");
             put("leading_number", 1);
             put("leading_zeros", 2);
             put("find_limit", 1000);
+            put("allow_notes", true);
             put("allow_archival", true);
             put("allow_deletion", true);
             put("import_enabled", true);
@@ -202,10 +222,12 @@ public class Codex {
 
         variables.put("DPTS", new HashMap<>() {{
             put("name", "Bins");
-            put("icon", "bins");
             put("prefix", "BN");
+            put("icon", "bins");
+            put("endpoint", "");
             put("leading_number", 1);
             put("leading_zeros", 1);
+            put("allow_notes", true);
             put("allow_archival", true);
             put("allow_deletion", true);
             put("import_enabled", true);
@@ -219,10 +241,12 @@ public class Codex {
 
         variables.put("HR/POS", new HashMap<>() {{
             put("name", "Positions");
-            put("icon", "positions");
             put("prefix", "POS-RQ");
+            put("icon", "positions");
+            put("endpoint", "");
             put("leading_number", 1);
             put("leading_zeros", 2);
+            put("allow_notes", true);
             put("allow_archival", true);
             put("allow_deletion", true);
             put("import_enabled", true);
@@ -236,10 +260,12 @@ public class Codex {
 
         variables.put("EMPS", new HashMap<>() {{
             put("name", "People");
-            put("icon", "employees");
             put("prefix", "E");
+            put("icon", "employees");
+            put("endpoint", "");
             put("leading_number", 1);
             put("leading_zeros", 2);
+            put("allow_notes", true);
             put("allow_archival", true);
             put("allow_deletion", true);
             put("allow_modification", true);
@@ -255,10 +281,12 @@ public class Codex {
 
         variables.put("USRS", new HashMap<>() {{
             put("name", "Users");
-            put("icon", "users");
             put("prefix", "U");
+            put("icon", "users");
+            put("endpoint", "");
             put("leading_number", 1);
             put("leading_zeros", 2);
+            put("allow_notes", true);
             put("allow_archival", true);
             put("allow_deletion", true);
             put("allow_modification", true);
@@ -271,10 +299,12 @@ public class Codex {
 
         variables.put("LGS", new HashMap<>() {{
             put("name", "Ledgers");
-            put("icon", "ledgers");
             put("prefix", "GL");
+            put("icon", "ledgers");
+            put("endpoint", "");
             put("leading_number", 1);
             put("leading_zeros", 2);
+            put("allow_notes", true);
             put("allow_archival", true);
             put("allow_deletion", true);
             put("import_enabled", true);
@@ -286,10 +316,12 @@ public class Codex {
 
         variables.put("RTS", new HashMap<>() {{
             put("name", "Rates");
-            put("icon", "ledgers");
             put("prefix", "");
+            put("icon", "ledgers");
+            put("endpoint", "");
             put("leading_number", 1);
             put("leading_zeros", 3);
+            put("allow_notes", true);
             put("allow_archival", true);
             put("allow_deletion", true);
             put("import_enabled", true);
@@ -303,10 +335,12 @@ public class Codex {
 
         variables.put("ORDS/PO", new HashMap<>() {{
             put("name", "Purchase Orders");
-            put("icon", "orders");
             put("prefix", "PO");
+            put("icon", "orders");
+            put("endpoint", "");
             put("leading_number", 1);
             put("leading_zeros", 6);
+            put("allow_notes", true);
             put("commit_to_ledger", true);
             put("use_deliveries", true); //Creates associated delivery
             put("allow_deletion", true); //Allow deletion of POs
@@ -322,10 +356,12 @@ public class Codex {
 
         variables.put("ORDS/SO", new HashMap<>() {{
             put("name", "Sales Orders");
-            put("icon", "orders");
             put("prefix", "SO");
+            put("icon", "orders");
+            put("endpoint", "");
             put("leading_number", 1);
             put("leading_zeros", 6);
+            put("allow_notes", true);
             put("commit_to_ledger", true);
             put("use_deliveries", true);
             put("auto_create_po", true);
@@ -341,10 +377,12 @@ public class Codex {
 
         variables.put("ORDS/PR", new HashMap<>() {{
             put("name", "Purchase Requisitions");
-            put("icon", "orders");
             put("prefix", "PR");
+            put("icon", "orders");
+            put("endpoint", "");
             put("leading_number", 1);
             put("leading_zeros", 6);
+            put("allow_notes", true);
             put("allow_archival", true);
             put("allow_deletion", true);
             put("import_enabled", false);
@@ -355,6 +393,7 @@ public class Codex {
         }});
 
         variables.put("ORDS/RCV", new HashMap<>() {{
+            put("allow_notes", true);
             put("block_locations", true); //If not ship-to, can't receive
             put("create_goods_receipt", false); //Creates Goods Receipt on receive
             put("allow_loc_block_override", true); //Presents override option for 'block_locations
@@ -367,8 +406,11 @@ public class Codex {
         variables.put("GR", new HashMap<>() {{
             put("name", "Goods Receipts");
             put("prefix", "GR");
+            put("icon", "");
+            put("endpoint", "");
             put("leading_number", 1);
             put("leading_zeros", 5);
+            put("allow_notes", true);
             put("commit_to_ledger", true);
             put("allow_archival", true);
             put("allow_deletion", true);
@@ -380,8 +422,11 @@ public class Codex {
         variables.put("GI", new HashMap<>() {{
             put("name", "Goods Issues");
             put("prefix", "GI");
+            put("icon", "");
+            put("endpoint", "");
             put("leading_number", 1);
             put("leading_zeros", 5);
+            put("allow_notes", true);
             put("allow_archival", true);
             put("allow_deletion", true);
             put("automake_enabled", true);
@@ -392,8 +437,11 @@ public class Codex {
         variables.put("CATS", new HashMap<>() {{
             put("name", "Catalogs");
             put("prefix", "CT");
+            put("icon", "");
+            put("endpoint", "");
             put("leading_number", 1);
             put("leading_zeros", 2);
+            put("allow_notes", true);
             put("allow_archival", true);
             put("allow_deletion", true);
             put("automake_enabled", true);
@@ -404,8 +452,11 @@ public class Codex {
         variables.put("ITS", new HashMap<>() {{
             put("name", "Items");
             put("prefix", "X0");
+            put("icon", "");
+            put("endpoint", "");
             put("leading_number", 1);
             put("leading_zeros", 2);
+            put("allow_notes", true);
             put("allow_archival", true);
             put("allow_deletion", true);
             put("allow_modification", true);
@@ -425,8 +476,11 @@ public class Codex {
         variables.put("BOMS", new HashMap<>() {{
             put("name", "Bill of Materials");
             put("prefix", "B");
+            put("icon", "");
+            put("endpoint", "");
             put("leading_number", 1);
             put("leading_zeros", 3);
+            put("allow_notes", true);
             put("allow_modification", true);
             put("allow_archival", true);
             put("allow_deletion", true);
@@ -436,8 +490,11 @@ public class Codex {
         variables.put("MOS", new HashMap<>() {{
             put("name", "Manufacturing Orders");
             put("prefix", "MO");
+            put("icon", "");
+            put("endpoint", "");
             put("leading_number", 1);
             put("leading_zeros", 4);
+            put("allow_notes", true);
             put("allow_modification", true);
             put("allow_archival", true);
             put("allow_deletion", true);
@@ -447,8 +504,11 @@ public class Codex {
         variables.put("MTS", new HashMap<>() {{
             put("name", "Materials");
             put("prefix", "M0");
+            put("icon", "");
+            put("endpoint", "");
             put("leading_number", 1);
             put("leading_zeros", 2);
+            put("allow_notes", true);
             put("allow_modification", true);
             put("allow_archival", true);
             put("allow_deletion", true);
@@ -458,8 +518,11 @@ public class Codex {
         variables.put("CMPS", new HashMap<>() {{
             put("name", "Components");
             put("prefix", "CP0");
+            put("icon", "");
+            put("endpoint", "");
             put("leading_number", 1);
             put("leading_zeros", 2);
+            put("allow_notes", true);
             put("allow_archival", true);
             put("allow_deletion", true);
             put("automake_enabled", true);
@@ -471,8 +534,11 @@ public class Codex {
             put("name", "Transportation Carriers");
             put("icon", "trucks");
             put("prefix", "CRR");
+            put("icon", "");
+            put("endpoint", "");
             put("leading_number", 1);
             put("leading_zeros", 2);
+            put("allow_notes", true);
             put("allow_archival", true);
             put("allow_deletion", true);
             put("import_enabled", true);
@@ -485,8 +551,11 @@ public class Codex {
         variables.put("TRANS/ODO", new HashMap<>() {{
             put("name", "Outbound Deliveries");
             put("prefix", "OBD");
+            put("icon", "");
+            put("endpoint", "");
             put("leading_number", 1);
             put("leading_zeros", 2);
+            put("allow_notes", true);
             put("allow_archival", true);
             put("allow_deletion", true);
             put("automake_enabled", true);
@@ -497,8 +566,11 @@ public class Codex {
         variables.put("TRANS/IDO", new HashMap<>() {{
             put("name", "Inbound Deliveries");
             put("prefix", "IND");
+            put("icon", "");
+            put("endpoint", "");
             put("leading_number", 1);
             put("leading_zeros", 2);
+            put("allow_notes", true);
             put("allow_archival", true);
             put("allow_deletion", true);
             put("automake_enabled", true);
@@ -509,8 +581,11 @@ public class Codex {
         variables.put("TRANS/TRCKS", new HashMap<>() {{
             put("name", "Trucks");
             put("prefix", "TR");
+            put("icon", "");
+            put("endpoint", "");
             put("leading_number", 1);
             put("leading_zeros", 2);
+            put("allow_notes", true);
             put("allow_archival", true);
             put("allow_deletion", true);
             put("automake_enabled", true);
@@ -521,7 +596,10 @@ public class Codex {
         variables.put("STL", new HashMap<>() {{
             put("name", "Stock Lines");
             put("prefix", "ST");
+            put("icon", "");
+            put("endpoint", "");
             put("length", 6);
+            put("allow_notes", true);
             put("allow_archival", false);
             put("allow_deletion", true);
             put("automake_enabled", true);

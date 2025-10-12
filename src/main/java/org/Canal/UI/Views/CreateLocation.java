@@ -52,7 +52,7 @@ public class CreateLocation extends LockeState {
 
         CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.add("General", general());
-        tabs.add("Contact Info", contact());
+        tabs.add("Contact", contact());
         tabs.add("Dimensional", dimensional());
         tabs.add("Controls", controls());
 
@@ -130,7 +130,6 @@ public class CreateLocation extends LockeState {
                 int ccc = JOptionPane.showConfirmDialog(null, "Confirm Location creation?", "Confirm Execution", JOptionPane.YES_NO_OPTION);
                 if(ccc == JOptionPane.YES_OPTION){
 
-                    System.out.println(Engine.codex.getValue(objexType, "prefix"));
                     ArrayList<Location> ls = Engine.getLocations(objexType);
                     String prefix       = (String)  Engine.codex.getValue(objexType, "prefix");
                     int leadingZeros    = (Integer) Engine.codex.getValue(objexType, "leading_zeros"); // e.g., 3 -> 001
@@ -180,10 +179,8 @@ public class CreateLocation extends LockeState {
 
                     Pipe.save(objexType, location);
 
-                    if(refreshListener != null) {
-                        refreshListener.refresh();
-                    }
                     dispose();
+                    if(refreshListener != null) refreshListener.refresh();
 
                     //TODO auto_open_new
 //                    desktop.put(Engine.router(objexType + "/" + locationId, desktop));

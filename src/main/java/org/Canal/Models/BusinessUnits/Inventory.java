@@ -3,19 +3,23 @@ package org.Canal.Models.BusinessUnits;
 import org.Canal.Models.Objex;
 import org.Canal.Models.SupplyChainUnits.MaterialMovement;
 import org.Canal.Models.SupplyChainUnits.StockLine;
-import org.Canal.Start;
 import org.Canal.Utils.Engine;
-import org.Canal.Utils.Pipe;
 import org.Canal.Utils.LockeStatus;
 
-import java.io.File;
 import java.util.ArrayList;
 
+/**
+ * STK
+ */
 public class Inventory extends Objex {
 
     private String location;
     private ArrayList<StockLine> stockLines = new ArrayList<>();
     private ArrayList<MaterialMovement> materialMovements = new ArrayList<>();
+
+    public Inventory() {
+        this.type = "STK";
+    }
 
     public Inventory(String location) {
         this.location = location;
@@ -109,26 +113,5 @@ public class Inventory extends Objex {
             }
         }
         System.out.println("Stock line not found.");
-    }
-
-    public void save() {
-
-        if (Engine.getConfiguration().getMongodb().isEmpty()) {
-
-            File md = new File(Start.DIR + "\\.store\\STK\\");
-            File[] mdf = md.listFiles();
-            if (mdf != null) {
-                for (File file : mdf) {
-                    if (file.getPath().endsWith(".stk")) {
-                        Inventory forg = Pipe.load(file.getPath(), Inventory.class);
-                        if (forg.getLocation().equals(location)) {
-                            Pipe.export(file.getPath(), this);
-                        }
-                    }
-                }
-            }
-        } else {
-            Pipe.save("STK", this);
-        }
     }
 }

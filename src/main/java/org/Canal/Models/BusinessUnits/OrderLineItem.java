@@ -3,6 +3,7 @@ package org.Canal.Models.BusinessUnits;
 import org.Canal.Models.Objex;
 
 /**
+ * ORDS/L
  * This class represents a set of items
  * at a set purchase price.
  */
@@ -14,6 +15,7 @@ public class OrderLineItem extends Objex {
     private double total;
 
     public OrderLineItem(String name, String id, double quantity, double price, double total) {
+        this.type = "ORDS/L";
         super.name = name;
         this.id = id;
         this.quantity = quantity;
@@ -22,6 +24,7 @@ public class OrderLineItem extends Objex {
     }
 
     public OrderLineItem(String itemId, String name, double quantity, double onHand) {
+        this.type = "ORDS/L";
         this.id = itemId;
         this.name = name;
         this.quantity = quantity;

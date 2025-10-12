@@ -2,13 +2,13 @@ package org.Canal.UI.Views.Controllers;
 
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.LockeState;
-import org.Canal.UI.Views.Finance.GoodsIssues.GoodsIssues;
-import org.Canal.UI.Views.Finance.GoodsReceipts.GoodsReceipts;
-import org.Canal.UI.Views.Finance.PurchaseRequisitions.PurchaseRequisitions;
-import org.Canal.UI.Views.Finance.PurchaseOrders.CreatePurchaseOrder;
-import org.Canal.UI.Views.Finance.PurchaseRequisitions.CreatePurchaseRequisition;
-import org.Canal.UI.Views.Finance.SalesOrders.CreateSalesOrder;
-import org.Canal.UI.Views.Finance.SalesOrders.SalesOrders;
+import org.Canal.UI.Views.GoodsIssues.GoodsIssues;
+import org.Canal.UI.Views.GoodsReceipts.GoodsReceipts;
+import org.Canal.UI.Views.PurchaseRequisitions.PurchaseRequisitions;
+import org.Canal.UI.Views.PurchaseOrders.CreatePurchaseOrder;
+import org.Canal.UI.Views.PurchaseRequisitions.CreatePurchaseRequisition;
+import org.Canal.UI.Views.SalesOrders.CreateSalesOrder;
+import org.Canal.UI.Views.SalesOrders.SalesOrders;
 import org.Canal.Utils.DesktopState;
 
 import javax.swing.*;

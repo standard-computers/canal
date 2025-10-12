@@ -1,13 +1,10 @@
 package org.Canal.Models.HumanResources;
 
-import org.Canal.Models.BusinessUnits.Ledger;
 import org.Canal.Models.Objex;
-import org.Canal.Start;
-import org.Canal.Utils.Engine;
-import org.Canal.Utils.Pipe;
 
-import java.io.File;
-
+/**
+ * EMPS
+ */
 public class Employee extends Objex {
 
     private String org; //Org ID
@@ -33,6 +30,10 @@ public class Employee extends Objex {
     private String gender;
     private boolean veteran;
     private boolean disability;
+
+    public Employee() {
+        this.type = "EMPS";
+    }
 
     public String getOrg() {
         return org;
@@ -216,26 +217,5 @@ public class Employee extends Objex {
 
     public void setDisability(boolean disability) {
         this.disability = disability;
-    }
-
-    public void save() {
-
-        if (Engine.getConfiguration().getMongodb().isEmpty()) {
-
-            File md = new File(Start.DIR + "\\.store\\EMPS\\");
-            File[] mdf = md.listFiles();
-            if (mdf != null) {
-                for (File file : mdf) {
-                    if (file.getPath().endsWith(".emps")) {
-                        Ledger fl = Pipe.load(file.getPath(), Ledger.class);
-                        if (fl.getId().equals(id)) {
-                            Pipe.export(file.getPath(), this);
-                        }
-                    }
-                }
-            }
-        } else {
-            Pipe.save("EMPS", this);
-        }
     }
 }

@@ -2,16 +2,11 @@ package org.Canal.Models.SupplyChainUnits;
 
 import org.Canal.Models.HumanResources.Department;
 import org.Canal.Models.Objex;
-import org.Canal.Start;
-import org.Canal.Utils.Engine;
-import org.Canal.Utils.Pipe;
 
-import java.io.File;
 import java.util.ArrayList;
 
 public class Location extends Objex {
 
-    private String type;
     private String organization;
     private String line1;
     private String line2;
@@ -30,17 +25,17 @@ public class Location extends Objex {
     private double height;
     private String heightUOM;
     private ArrayList<Department> departments = new ArrayList<>();
+
+    //Controls
     private boolean allowsInventory = true;
     private boolean allowsProduction = false;
     private boolean allowsSales = true;
     private boolean allowsPurchasing = true;
 
-    public String getType() {
-        return type;
-    }
 
+    @Override
     public void setType(String type) {
-        this.type = type;
+        super.setType(type);
     }
 
     public String getOrganization() {
@@ -250,26 +245,5 @@ public class Location extends Objex {
 
     public void setAllowsPurchasing(boolean allowsPurchasing) {
         this.allowsPurchasing = allowsPurchasing;
-    }
-
-    public void save(){
-
-        if(Engine.getConfiguration().getMongodb().isEmpty()) {
-
-            File md = new File(Start.DIR + "\\.store\\" + type + "\\");
-            File[] mdf = md.listFiles();
-            if (mdf != null) {
-                for (File file : mdf) {
-                    if (file.getPath().endsWith(".orgs")) {
-                        Location forg = Pipe.load(file.getPath(), Location.class);
-                        if (forg.getId().equals(this.getId())) {
-                            Pipe.export(file.getPath(), this);
-                        }
-                    }
-                }
-            }
-        }else{
-            Pipe.save(type, this);
-        }
     }
 }

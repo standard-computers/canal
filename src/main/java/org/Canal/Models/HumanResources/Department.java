@@ -4,6 +4,10 @@ import org.Canal.Models.Objex;
 
 import java.util.ArrayList;
 
+/**
+ * DPTS
+ * Departments belong to the Location Objex
+ */
 public class Department extends Objex {
 
     private String organization; //Org this Department belongs too
@@ -11,6 +15,10 @@ public class Department extends Objex {
     private String department = "UNKNOWN"; //If child Department, Parent Department ID
     private String supervisor = "UNKNOWN";
     private ArrayList<Position> positions = new ArrayList<>();
+
+    public Department() {
+        this.type = "DPTS";
+    }
 
     public String getOrganization() {
         return organization;

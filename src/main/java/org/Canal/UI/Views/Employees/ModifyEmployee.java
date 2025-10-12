@@ -89,9 +89,7 @@ public class ModifyEmployee extends LockeState {
 
             employee.save();
 
-            if(refreshListener != null){
-                refreshListener.refresh();
-            }
+            if(refreshListener != null) refreshListener.refresh();
 
            if((boolean) Engine.codex.getValue("EMPS", "dispose_on_save")){
                dispose();

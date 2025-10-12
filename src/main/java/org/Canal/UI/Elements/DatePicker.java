@@ -16,16 +16,17 @@ public class DatePicker extends JPanel {
     private JSpinner yearSpinner;
     private JPanel daysPanel;
     private JLabel monthYearLabel;
-    private JTextField timeInputField; // Time input in the popup panel
+    private JTextField timeInputField;
     private Date selectedDate;
 
     private final String[] months = new SimpleDateFormat().getDateFormatSymbols().getMonths();
+    private final String[] weekDays = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public DatePicker() {
         dateField = Elements.input(15);
-        dateField.setText(dateFormat.format(new Date())); // Default to the current date and time
-        dateField.setEditable(true); // Allow manual editing of the date
+        dateField.setText(dateFormat.format(new Date()));
+        dateField.setEditable(true);
 
         calendarButton = new JButton("▼");
         calendarPopup = new JPopupMenu();
@@ -35,66 +36,77 @@ public class DatePicker extends JPanel {
         add(dateField, BorderLayout.CENTER);
         add(calendarButton, BorderLayout.EAST);
 
-        // Sync manual changes in dateField with the internal state
         dateField.addActionListener(_ -> updateFromDateField());
-
         calendarButton.addActionListener(_ -> calendarPopup.show(dateField, 0, dateField.getHeight()));
     }
 
     private void initializeCalendarPopup() {
-        JPanel calendarPanel = new JPanel();
-        calendarPanel.setLayout(new BorderLayout());
-        JPanel controlsPanel = new JPanel(new FlowLayout());
-        monthYearLabel = new JLabel();
+        JPanel calendarPanel = new JPanel(new BorderLayout());
+        JPanel controlsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
-        controlsPanel.add(monthYearLabel);
+        // Fixed size spinners
+        Dimension spinnerSize = new Dimension(90, 25);
 
         monthSpinner = new JSpinner(new SpinnerListModel(months) {
             @Override
             public Object getNextValue() {
                 return super.getNextValue() == null ? months[0] : super.getNextValue();
             }
-
             @Override
             public Object getPreviousValue() {
                 return super.getPreviousValue() == null ? months[months.length - 2] : super.getPreviousValue();
             }
         });
+        monthSpinner.setPreferredSize(spinnerSize);
 
-        // Set default month to current month
-        Calendar calendar = Calendar.getInstance();
-        monthSpinner.setValue(months[calendar.get(Calendar.MONTH)]);
-
-        monthSpinner.addChangeListener(_ -> updateDaysPanel());
         yearSpinner = new JSpinner(new SpinnerNumberModel(Calendar.getInstance().get(Calendar.YEAR), 1900, 3000, 1));
         JSpinner.NumberEditor yearEditor = new JSpinner.NumberEditor(yearSpinner, "####");
         yearSpinner.setEditor(yearEditor);
+        yearSpinner.setPreferredSize(spinnerSize);
+
+        Calendar calendar = Calendar.getInstance();
+        monthSpinner.setValue(months[calendar.get(Calendar.MONTH)]);
+        monthSpinner.addChangeListener(_ -> updateDaysPanel());
         yearSpinner.addChangeListener(e -> updateDaysPanel());
+
         controlsPanel.add(monthSpinner);
         controlsPanel.add(yearSpinner);
 
         calendarPanel.add(controlsPanel, BorderLayout.NORTH);
-        daysPanel = new JPanel();
-        daysPanel.setLayout(new GridLayout(6, 7)); // 6 rows for weeks, 7 columns for days
-        calendarPanel.add(daysPanel, BorderLayout.CENTER);
 
-        // Add time input panel
+        // ---- NEW: split weekday headers and day buttons ----
+        JPanel calendarBody = new JPanel(new BorderLayout());
+
+        // Weekday headers
+        JPanel headerPanel = new JPanel(new GridLayout(1, 7));
+        for (String wd : weekDays) {
+            JLabel lbl = new JLabel(wd, SwingConstants.CENTER);
+            lbl.setFont(lbl.getFont().deriveFont(Font.BOLD));
+            headerPanel.add(lbl);
+        }
+        calendarBody.add(headerPanel, BorderLayout.NORTH);
+
+        // Days panel (only day numbers go here)
+        daysPanel = new JPanel(new GridLayout(6, 7));
+        calendarBody.add(daysPanel, BorderLayout.CENTER);
+
+        calendarPanel.add(calendarBody, BorderLayout.CENTER);
+
+        // Time input
         JPanel timePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         timePanel.add(new JLabel("Time (HH:mm:ss):"));
-        timeInputField = Elements.input("00:00:00", 8); // Default to "00:00:00"
+        timeInputField = Elements.input("00:00:00", 8);
         timePanel.add(timeInputField);
-
-        // Sync time input field with the selectedDate when changed
         timeInputField.addActionListener(e -> updateTimeFromInput());
-
         calendarPanel.add(timePanel, BorderLayout.SOUTH);
 
         calendarPopup.add(calendarPanel);
-        updateDaysPanel(); // Initial update to show current month and year
+        updateDaysPanel();
     }
 
     private void updateDaysPanel() {
-        daysPanel.removeAll(); // Clear previous days
+        daysPanel.removeAll();
+
         Calendar calendar = Calendar.getInstance();
         String selectedMonth = (String) monthSpinner.getValue();
         int monthIndex = getMonthIndex(selectedMonth);
@@ -102,31 +114,46 @@ public class DatePicker extends JPanel {
         calendar.set(Calendar.YEAR, (int) yearSpinner.getValue());
         calendar.set(Calendar.DAY_OF_MONTH, 1);
 
-        int firstDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1; // Adjust for 0-based index
-        monthYearLabel.setText(selectedMonth + " " + calendar.get(Calendar.YEAR));
+        // Normalize so Sunday=0, Monday=1, ... Saturday=6
+        int firstDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - Calendar.SUNDAY;
+        if (firstDayOfWeek < 0) {
+            firstDayOfWeek += 7;
+        }
 
+        int daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+        // Add blanks before first day
         for (int i = 0; i < firstDayOfWeek; i++) {
             daysPanel.add(new JLabel(""));
         }
 
-        int daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        // Add buttons for days
         for (int day = 1; day <= daysInMonth; day++) {
             JButton dayButton = new JButton(String.valueOf(day));
+            dayButton.setMargin(new Insets(1, 1, 1, 1));
             int finalDay = day;
             dayButton.addActionListener(_ -> selectDate(finalDay));
+
+            // Optional: highlight today's date
+            Calendar today = Calendar.getInstance();
+            if (day == today.get(Calendar.DAY_OF_MONTH)
+                    && monthIndex == today.get(Calendar.MONTH)
+                    && (int) yearSpinner.getValue() == today.get(Calendar.YEAR)) {
+                dayButton.setBackground(new Color(207, 159, 0));
+            }
+
             daysPanel.add(dayButton);
         }
+
         daysPanel.revalidate();
         daysPanel.repaint();
     }
 
     private int getMonthIndex(String monthName) {
         for (int i = 0; i < months.length; i++) {
-            if (months[i].equals(monthName)) {
-                return i;
-            }
+            if (months[i].equals(monthName)) return i;
         }
-        return 0; // Default to January if not found
+        return 0;
     }
 
     private void selectDate(int day) {
@@ -135,14 +162,14 @@ public class DatePicker extends JPanel {
         calendar.set(Calendar.YEAR, (int) yearSpinner.getValue());
         calendar.set(Calendar.DAY_OF_MONTH, day);
 
-        // Retain the time portion from the input
         try {
             Date time = new SimpleDateFormat("HH:mm:ss").parse(timeInputField.getText());
-            calendar.set(Calendar.HOUR_OF_DAY, time.getHours());
-            calendar.set(Calendar.MINUTE, time.getMinutes());
-            calendar.set(Calendar.SECOND, time.getSeconds());
+            Calendar t = Calendar.getInstance();
+            t.setTime(time);
+            calendar.set(Calendar.HOUR_OF_DAY, t.get(Calendar.HOUR_OF_DAY));
+            calendar.set(Calendar.MINUTE, t.get(Calendar.MINUTE));
+            calendar.set(Calendar.SECOND, t.get(Calendar.SECOND));
         } catch (ParseException e) {
-            // Default to 00:00:00 if the time input is invalid
             calendar.set(Calendar.HOUR_OF_DAY, 0);
             calendar.set(Calendar.MINUTE, 0);
             calendar.set(Calendar.SECOND, 0);
@@ -154,7 +181,8 @@ public class DatePicker extends JPanel {
     }
 
     private void updateDateField() {
-        dateField.setText(dateFormat.format(selectedDate));
+        if (selectedDate != null)
+            dateField.setText(dateFormat.format(selectedDate));
     }
 
     private void updateFromDateField() {
@@ -170,6 +198,7 @@ public class DatePicker extends JPanel {
     }
 
     private void updateTimeFromInput() {
+        if (selectedDate == null) selectedDate = new Date();
         try {
             String[] parts = timeInputField.getText().split(":");
             if (parts.length == 3) {
@@ -195,7 +224,17 @@ public class DatePicker extends JPanel {
         updateDateField();
     }
 
+    /**
+     * Sets date by applying payment terms (in days) to current date.
+     */
+    public void setDateByPaymentTerms(int days) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, days);
+        selectedDate = calendar.getTime();
+        updateDateField();
+    }
+
     public String getSelectedDateString() {
-        return dateFormat.format(selectedDate);
+        return selectedDate != null ? dateFormat.format(selectedDate) : "";
     }
 }

@@ -150,7 +150,7 @@ public class CustomTable extends JTable {
                 // Highlight row outline + padding
                 ((JComponent) c).setBorder(
                         BorderFactory.createCompoundBorder(
-                                BorderFactory.createMatteBorder(1, 1, 1, 1, HIGHLIGHT_COLOR), // row outline
+                                BorderFactory.createMatteBorder(1, 1, 1, 0, HIGHLIGHT_COLOR), // row outline
                                 BorderFactory.createEmptyBorder(5, 12, 5, 5)                  // padding
                         )
                 );

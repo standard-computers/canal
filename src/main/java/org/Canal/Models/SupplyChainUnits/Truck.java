@@ -1,11 +1,6 @@
 package org.Canal.Models.SupplyChainUnits;
 
 import org.Canal.Models.Objex;
-import org.Canal.Start;
-import org.Canal.Utils.Engine;
-import org.Canal.Utils.Pipe;
-
-import java.io.File;
 
 public class Truck extends Objex {
 
@@ -71,25 +66,5 @@ public class Truck extends Objex {
 
     public void setDelivery(String delivery) {
         this.delivery = delivery;
-    }
-
-    public void save() {
-        if (Engine.getConfiguration().getMongodb().isEmpty()) {
-
-            File md = new File(Start.DIR + "\\.store\\TRANS\\TRCKS\\");
-            File[] mdf = md.listFiles();
-            if (mdf != null) {
-                for (File file : mdf) {
-                    if (file.getPath().endsWith(".trans.trcks")) {
-                        BillOfMaterials fl = Pipe.load(file.getPath(), BillOfMaterials.class);
-                        if (fl.getId().equals(id)) {
-                            Pipe.export(file.getPath(), this);
-                        }
-                    }
-                }
-            }
-        } else {
-            Pipe.save("TRANS/TRCKS", this);
-        }
     }
 }

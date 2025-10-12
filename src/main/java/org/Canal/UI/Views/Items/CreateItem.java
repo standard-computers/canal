@@ -51,8 +51,9 @@ public class CreateItem extends LockeState implements Includer {
     private JCheckBox allowSales;
     private JCheckBox allowPurchasing;
     private JCheckBox keepInventory;
-
-
+    private JTextField leadTime;
+    private JTextField transportationTime;
+    private JTextField manufacturingTime;
 
     private JCheckBox createBom;
     private Selectable orgIdField;
@@ -250,6 +251,9 @@ public class CreateItem extends LockeState implements Includer {
         item.allowSales(allowSales.isSelected());
         item.allowPurchasing(allowPurchasing.isSelected());
         item.keepInventory(keepInventory.isSelected());
+        item.setLeadTime(Double.parseDouble(leadTime.getText()));
+        item.setTransporationTime(Double.parseDouble(transportationTime.getText()));
+        item.setManufacturingTime(Double.parseDouble(manufacturingTime.getText()));
 
         //Set Dimensional Properties
         item.setBaseQuantity(Double.parseDouble(baseQtyField.getText().trim()));
@@ -324,6 +328,9 @@ public class CreateItem extends LockeState implements Includer {
         allowSales = new JCheckBox(" Item can be sold");
         allowPurchasing = new JCheckBox(" Item can be purchased");
         keepInventory = new JCheckBox(" Keep inventory of item");
+        leadTime = Elements.input("1.0");
+        transportationTime = Elements.input("1.0");
+        manufacturingTime = Elements.input("1.0");
 
         Form form = new Form();
         form.addInput(Elements.coloredLabel("SKU'd Product", Constants.colors[10]), isSkud);
@@ -334,6 +341,9 @@ public class CreateItem extends LockeState implements Includer {
         form.addInput(Elements.coloredLabel("Allow Sales", Constants.colors[5]), allowSales);
         form.addInput(Elements.coloredLabel("Allow Purchasing", Constants.colors[4]), allowPurchasing);
         form.addInput(Elements.coloredLabel("Keep Inventory", Constants.colors[3]), keepInventory);
+        form.addInput(Elements.coloredLabel("Lead Time", Constants.colors[2]), leadTime);
+        form.addInput(Elements.coloredLabel("Transportation Time", Constants.colors[1]), transportationTime);
+        form.addInput(Elements.coloredLabel("Manufacturing Time", Constants.colors[0]), manufacturingTime);
         controls.add(form);
 
         return controls;

@@ -88,9 +88,7 @@ public class ModifyBin extends LockeState {
 
            dispose();
 
-           if(refreshListener != null){
-               refreshListener.refresh();
-           }
+           if(refreshListener != null) refreshListener.refresh();
         });
         tb.add(save);
         tb.add(Box.createHorizontalStrut(5));
@@ -133,9 +131,7 @@ public class ModifyBin extends LockeState {
             bin.save();
 
             dispose();
-            if(refreshListener != null){
-                refreshListener.refresh();
-            }
+            if(refreshListener != null) refreshListener.refresh();
         });
         tb.add(delete);
         tb.add(Box.createHorizontalStrut(5));

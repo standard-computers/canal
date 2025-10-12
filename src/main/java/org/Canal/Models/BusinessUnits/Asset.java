@@ -3,8 +3,8 @@ package org.Canal.Models.BusinessUnits;
 import org.Canal.Models.Objex;
 
 /**
+ * ASTS
  * Assets help manage physical assets like vehicles, computers, etc.
- *
  */
 public class Asset extends Objex {
 
@@ -16,6 +16,10 @@ public class Asset extends Objex {
     private double value; //Value of item or price paid
     private double tax; //Tax paid on item
     private double annualDepreciation; //As percent (5% = 0.05)
+
+    public Asset() {
+        this.type = "ASTS";
+    }
 
     public String getVendor() {
         return vendor;

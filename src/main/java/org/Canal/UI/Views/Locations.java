@@ -5,7 +5,7 @@ import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
-import org.Canal.UI.Views.Finance.Ledgers.Ledgers;
+import org.Canal.UI.Views.Ledgers.Ledgers;
 import org.Canal.Utils.*;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;

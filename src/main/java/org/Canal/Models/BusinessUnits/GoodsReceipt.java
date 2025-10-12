@@ -5,6 +5,9 @@ import org.Canal.Models.SupplyChainUnits.StockLine;
 
 import java.util.ArrayList;
 
+/**
+ * GR
+ */
 public class GoodsReceipt extends Objex {
 
     public String purchaseOrder; //PO this is tied to
@@ -12,6 +15,10 @@ public class GoodsReceipt extends Objex {
     public String receiver; //User ID
     public String location; //Location receiving in at
     public ArrayList<StockLine> items; //ITS received and qty received
+
+    public GoodsReceipt() {
+        this.type = "GR";
+    }
 
     public String getPurchaseOrder() {
         return purchaseOrder;

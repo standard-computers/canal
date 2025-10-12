@@ -5,12 +5,19 @@ import org.Canal.Models.SupplyChainUnits.StockLine;
 
 import java.util.ArrayList;
 
+/**
+ * GI
+ */
 public class GoodsIssue extends Objex {
 
     private String comments;
     private String issuer; //User ID of owner
     public String location; //Location receiving in at
     public ArrayList<StockLine> items; //ITS received and qty received
+
+    public GoodsIssue() {
+        this.type = "GI";
+    }
 
     public String getComments() {
         return comments;

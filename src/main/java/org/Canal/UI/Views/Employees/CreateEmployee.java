@@ -111,9 +111,7 @@ public class CreateEmployee extends LockeState {
                 }
                 dispose();
 
-                if(refreshListener != null){
-                    refreshListener.refresh();
-                }
+                if(refreshListener != null) refreshListener.refresh();
 
                 if((boolean) Engine.codex.getValue("EMPS", "auto_open_new")){
                     desktop.put(new ViewEmployee(newEmployee, desktop, refreshListener));

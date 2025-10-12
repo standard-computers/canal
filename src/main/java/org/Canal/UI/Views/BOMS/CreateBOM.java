@@ -5,7 +5,7 @@ import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.Models.SupplyChainUnits.StockLine;
 import org.Canal.Models.SupplyChainUnits.Task;
 import org.Canal.UI.Elements.*;
-import org.Canal.UI.Views.Productivity.Tasks.CreateStep;
+import org.Canal.UI.Views.Tasks.CreateStep;
 import org.Canal.UI.Views.Products.CreateInclusion;
 import org.Canal.UI.Views.System.LockeMessages;
 import org.Canal.Utils.*;

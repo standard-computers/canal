@@ -1,18 +1,20 @@
 package org.Canal.UI.Views;
 
+import com.mongodb.client.model.Filters;
 import org.Canal.Models.Objex;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.LockeState;
+import org.Canal.Utils.ConnectDB;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Pipe;
 import org.Canal.Utils.LockeStatus;
+import org.bson.Document;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
 
 public class Archiver extends LockeState {
 
@@ -30,17 +32,25 @@ public class Archiver extends LockeState {
         confirmArchival.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                File[] fs = Pipe.list(objex);
-                for(File f : fs){
-                    if(f.getName().endsWith(objex.toLowerCase().replaceAll("/", "."))){
-                        Objex o = Pipe.load(f.getPath(), Objex.class);
-                        if(o.getId().equals(objexIdField.getText())){
-                            o.setStatus(LockeStatus.ARCHIVED);
-                            //TODO
-                        }
-                    }
+                String normalized = objex.startsWith("/") ? objex.replaceFirst("/", "") : objex;
+                Document match = ConnectDB.collection(normalized)
+                        .find(Filters.eq("id", objexIdField.getText()))
+                        .first();
+
+                if (match != null) {
+                    Objex o = Pipe.load(match, Objex.class);
+                    o.setStatus(LockeStatus.ARCHIVED);
+                    o.save();
+                    JOptionPane.showMessageDialog(null,
+                            "Objex archived successfully.",
+                            "Archive Complete",
+                            JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null,
+                            "No objex found with the provided ID.",
+                            "Archive Failed",
+                            JOptionPane.WARNING_MESSAGE);
                 }
-                //TODO Doesn't exist
             }
         });
     }

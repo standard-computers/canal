@@ -5,13 +5,17 @@ import org.Canal.Models.Objex;
 import java.util.ArrayList;
 
 /**
- * /HR/EVS
+ * EVTS
  */
 public class Event extends Objex {
 
     private String start;
     private String end;
     private ArrayList<String> attendees; //Objex IDs
+
+    public Event() {
+        this.type = "EVTS";
+    }
 
     public Event(String start) {
         this.start = start;

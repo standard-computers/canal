@@ -1,14 +1,11 @@
 package org.Canal.Models.BusinessUnits;
 
 import org.Canal.Models.Objex;
-import org.Canal.Start;
-import org.Canal.Utils.Engine;
-import org.Canal.Utils.Pipe;
 
-import java.io.File;
 import java.util.ArrayList;
 
 /**
+ * LGS
  * Ledger contains a record of certian transactions
  * done through Lockes that should be tracked for
  * business purposes.
@@ -21,6 +18,10 @@ public class Ledger extends Objex {
     private String starts;
     private String ends;
     private ArrayList<Transaction> transactions = new ArrayList<>();
+
+    public Ledger() {
+        this.type = "LGS";
+    }
 
     public String getOrganization() {
         return organization;
@@ -72,25 +73,5 @@ public class Ledger extends Objex {
 
     public void addTransaction(Transaction transaction) {
         transactions.add(transaction);
-    }
-
-    public void save() {
-        if (Engine.getConfiguration().getMongodb().isEmpty()) {
-
-            File md = new File(Start.DIR + "\\.store\\LGS\\");
-            File[] mdf = md.listFiles();
-            if (mdf != null) {
-                for (File file : mdf) {
-                    if (file.getPath().endsWith(".lgs")) {
-                        Ledger fl = Pipe.load(file.getPath(), Ledger.class);
-                        if (fl.getId().equals(id)) {
-                            Pipe.export(file.getPath(), this);
-                        }
-                    }
-                }
-            }
-        } else {
-            Pipe.save("LGS", this);
-        }
     }
 }

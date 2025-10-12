@@ -93,10 +93,8 @@ public class ModifyRate extends LockeState {
             Pipe.save("/RTS", newRate);
 
 
-            if(refreshListener != null) {
-                refreshListener.refresh();
-            }
             dispose();
+            if(refreshListener != null) refreshListener.refresh();
 
             if((boolean) Engine.codex.getValue("RTS", "auto_open_new")){
 

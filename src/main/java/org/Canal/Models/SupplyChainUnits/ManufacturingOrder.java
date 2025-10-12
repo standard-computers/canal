@@ -4,6 +4,9 @@ import org.Canal.Models.Objex;
 
 import java.util.ArrayList;
 
+/**
+ * MOS
+ */
 public class ManufacturingOrder extends Objex {
 
     private String item; //Item ID
@@ -21,6 +24,10 @@ public class ManufacturingOrder extends Objex {
     private ArrayList<MaterialMovement> movements = new ArrayList<>(); //Product movements
     private boolean qualityCheck; //Requires Quality Check
     private String notes;
+
+    public ManufacturingOrder() {
+        this.type = "MOS";
+    }
 
     public String getItem() {
         return item;

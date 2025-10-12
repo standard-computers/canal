@@ -4,12 +4,19 @@ import org.Canal.Models.Objex;
 
 import java.util.ArrayList;
 
+/**
+ * TMS
+ */
 public class Team extends Objex {
 
     private String department;
     private String leader;
     private String description;
     private ArrayList<String> members;
+
+    public Team() {
+        this.type = "TMS";
+    }
 
     public String getDescription() {
         return description;

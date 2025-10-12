@@ -2,6 +2,9 @@ package org.Canal.Models.BusinessUnits;
 
 import org.Canal.Models.Objex;
 
+/**
+ * ACCS
+ */
 public class Account extends Objex {
 
     private String location = "";
@@ -12,7 +15,10 @@ public class Account extends Objex {
     private String password = "";
     private String agreement = ""; //An Agreement ID, combines locations
     private double terms = 0.0;
-    private String termsUOM = "";
+
+    public Account() {
+        this.type = "ACCS";
+    }
 
     public String getLocation() {
         return location;
@@ -76,13 +82,5 @@ public class Account extends Objex {
 
     public void setTerms(double terms) {
         this.terms = terms;
-    }
-
-    public String getTermsUOM() {
-        return termsUOM;
-    }
-
-    public void setTermsUOM(String termsUOM) {
-        this.termsUOM = termsUOM;
     }
 }

@@ -2,11 +2,10 @@ package org.Canal.Utils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
+import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
-import org.Canal.Models.Objex;
 import org.Canal.Start;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -23,14 +22,6 @@ import static org.Canal.Utils.ConnectDB.collection;
 public class Pipe {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-
-    public static File[] list(String dir) {
-        File f = new File(Start.DIR + "\\.store\\" + dir);
-        if (!f.exists()) {
-            f.mkdirs();
-        }
-        return f.listFiles();
-    }
 
     private static Document toDocument(Object entity) {
         if (entity instanceof Document d) return d;
@@ -76,33 +67,14 @@ public class Pipe {
     }
 
     public static void save(String dir, Object o) {
-
-        if (Engine.getConfiguration().getMongodb().isEmpty()) { //Save to local disk
-
-            File f = new File(Start.DIR + "\\.store\\" + dir);
-            if (!f.exists()) {
-                f.mkdirs();
-            }
-            Pipe.export(Start.DIR + "\\.store\\" + dir + "\\" + UUID.randomUUID() + dir.replace("/", ".").toLowerCase(), o);
-        } else {
-
-            String objex = dir.startsWith("/") ? dir.replaceFirst("/", "") : dir;
-            overwriteById(objex, o, true);
-        }
+        String objex = dir.startsWith("/") ? dir.replaceFirst("/", "") : dir;
+        overwriteById(objex, o, true);
     }
 
     public static boolean delete(String objex, String id) {
-        File[] fs = Pipe.list(objex);
-        for (File f : fs) {
-            if (f.getName().endsWith(objex.toLowerCase().replaceAll("/", "."))) {
-                Objex o = Pipe.load(f.getPath(), Objex.class);
-                if (o.getId().equals(id)) {
-                    f.delete();
-                    return true;
-                }
-            }
-        }
-        return false;
+        String collectionName = objex.startsWith("/") ? objex.replaceFirst("/", "") : objex;
+        DeleteResult result = collection(collectionName).deleteOne(Filters.eq("id", id));
+        return result.getDeletedCount() > 0;
     }
 
     public static void saveConfiguration() {

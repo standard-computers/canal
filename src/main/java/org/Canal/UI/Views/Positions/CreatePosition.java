@@ -84,9 +84,7 @@ public class CreatePosition extends LockeState {
                 }
                 dispose();
 
-                if(refreshListener != null){
-                    refreshListener.refresh();
-                }
+                if(refreshListener != null) refreshListener.refresh();
 
                 if((boolean) Engine.codex.getValue("HR/POS", "auto_open_new")){
                     desktop.put(new ViewPosition(position));

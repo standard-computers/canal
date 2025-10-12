@@ -1,13 +1,12 @@
 package org.Canal.Models.BusinessUnits;
 
 import org.Canal.Models.Objex;
-import org.Canal.Start;
-import org.Canal.Utils.Engine;
-import org.Canal.Utils.Pipe;
 
-import java.io.File;
 import java.util.ArrayList;
 
+/**
+ * ORDS/PR
+ */
 public class PurchaseRequisition extends Objex {
 
     private String number;
@@ -18,6 +17,10 @@ public class PurchaseRequisition extends Objex {
     private String start;
     private String end;
     private ArrayList<OrderLineItem> items = new ArrayList<>();
+
+    public PurchaseRequisition() {
+        this.type = "ORDS/PR";
+    }
 
     public String getSupplier() {
         return supplier;
@@ -81,25 +84,5 @@ public class PurchaseRequisition extends Objex {
 
     public void setItems(ArrayList<OrderLineItem> items) {
         this.items = items;
-    }
-
-    public void save() {
-        if (Engine.getConfiguration().getMongodb().isEmpty()) {
-
-            File md = new File(Start.DIR + "\\.store\\ORDS\\PR\\");
-            File[] mdf = md.listFiles();
-            if (mdf != null) {
-                for (File file : mdf) {
-                    if (file.getPath().endsWith(".pr")) {
-                        PurchaseRequisition forg = Pipe.load(file.getPath(), PurchaseRequisition.class);
-                        if (forg.getId().equals(getId())) {
-                            Pipe.export(file.getPath(), this);
-                        }
-                    }
-                }
-            }
-        } else {
-            Pipe.save("ORDS/PR", this);
-        }
     }
 }

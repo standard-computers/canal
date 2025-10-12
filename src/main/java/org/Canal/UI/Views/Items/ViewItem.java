@@ -113,6 +113,9 @@ public class ViewItem extends LockeState {
         form.addInput(Elements.coloredLabel("Allow Sales", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(item.allowSales())));
         form.addInput(Elements.coloredLabel("Allow Purchasing", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(item.allowPurchasing())));
         form.addInput(Elements.coloredLabel("Keep Inventory", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(item.keepInventory())));
+        form.addInput(Elements.coloredLabel("Lead Time", UIManager.getColor("Label.foreground")), new Copiable(item.getLeadTime() + " DAYS"));
+        form.addInput(Elements.coloredLabel("Transporation Time", UIManager.getColor("Label.foreground")), new Copiable(item.getTransporationTime() + " DAYS"));
+        form.addInput(Elements.coloredLabel("Manufacturing Time", UIManager.getColor("Label.foreground")), new Copiable(item.getManufacturingTime() + " DAYS"));
         controls.add(form);
 
         return controls;
@@ -254,11 +257,11 @@ public class ViewItem extends LockeState {
         if((boolean) Engine.codex.getValue("ITS", "allow_archival")){
             IconButton archive = new IconButton("Archive", "archive", "Archive item");
             archive.addActionListener(_ -> {
+
                 item.setStatus(LockeStatus.ARCHIVED);
                 item.save();
-                if(refreshListener != null) {
-                    refreshListener.refresh();
-                }
+
+                if(refreshListener != null) refreshListener.refresh();
                 dispose();
             });
             tb.add(archive);
@@ -270,10 +273,9 @@ public class ViewItem extends LockeState {
             delete.addActionListener(_ -> {
                 item.setStatus(LockeStatus.DELETED);
                 item.save();
+
                 dispose();
-                if(refreshListener != null) {
-                    refreshListener.refresh();
-                }
+                if(refreshListener != null) refreshListener.refresh();
             });
             tb.add(delete);
             tb.add(Box.createHorizontalStrut(5));

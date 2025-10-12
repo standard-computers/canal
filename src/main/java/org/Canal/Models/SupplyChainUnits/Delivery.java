@@ -1,16 +1,11 @@
 package org.Canal.Models.SupplyChainUnits;
 
 import org.Canal.Models.Objex;
-import org.Canal.Start;
-import org.Canal.Utils.Engine;
-import org.Canal.Utils.Pipe;
 
-import java.io.File;
 import java.util.ArrayList;
 
 public class Delivery extends Objex {
 
-    private String type;
     private String salesOrder;
     private String purchaseOrder; //PO delivery is a result of
     private String expectedDelivery; //When it should arrive, could differ from PO
@@ -22,12 +17,9 @@ public class Delivery extends Objex {
     private Truck truck;
     private ArrayList<StockLine> pallets = new ArrayList<>();
 
-    public String getType() {
-        return type;
-    }
-
+    @Override
     public void setType(String type) {
-        this.type = type;
+        super.setType(type);
     }
 
     public String getSalesOrder() {
@@ -108,26 +100,5 @@ public class Delivery extends Objex {
 
     public void setPallets(ArrayList<StockLine> pallets) {
         this.pallets = pallets;
-    }
-
-    public void save() {
-        if (Engine.getConfiguration().getMongodb().isEmpty()) {
-
-            File md = new File(Start.DIR + "\\.store\\TRANS\\" + type + "\\");
-            File[] mdf = md.listFiles();
-            if (mdf != null) {
-                for (File file : mdf) {
-                    if (file.getPath().endsWith("." + type.toLowerCase())) {
-                        Delivery fl = Pipe.load(file.getPath(), Delivery.class);
-                        if (fl.getId().equals(id)) {
-                            Pipe.export(file.getPath(), this);
-//                        Engine.assertRecord("TRANS", id, new Record());
-                        }
-                    }
-                }
-            }
-        } else {
-            Pipe.save("TRANS/" + type, this);
-        }
     }
 }

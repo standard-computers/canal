@@ -1,13 +1,13 @@
 package org.Canal.Models.BusinessUnits;
 
 import org.Canal.Models.Objex;
-import org.Canal.Start;
-import org.Canal.Utils.Engine;
-import org.Canal.Utils.Pipe;
 
-import java.io.File;
 import java.util.ArrayList;
 
+/**
+ * ORDS/[PO || SO]
+ * Type is set within associated create Lockes
+ */
 public class Order extends Objex {
 
     private String orderId; //Order ID
@@ -25,6 +25,11 @@ public class Order extends Objex {
     private double netValue;
     private double taxAmount;
     private double total;
+
+    @Override
+    public void setType(String type){
+        super.setType(type);
+    }
 
     public String getOrderId() {
         return orderId;
@@ -152,26 +157,5 @@ public class Order extends Objex {
 
     public void setTotal(double total) {
         this.total = total;
-    }
-
-    public void save() {
-
-        if (Engine.getConfiguration().getMongodb().isEmpty()) {
-
-            File md = new File(Start.DIR + "\\.store\\ORDS\\SO\\");
-            File[] mdf = md.listFiles();
-            if (mdf != null) {
-                for (File file : mdf) {
-                    if (file.getPath().endsWith(".po")) {
-                        Order forg = Pipe.load(file.getPath(), Order.class);
-                        if (forg.getOrderId().equals(getOrderId())) {
-                            Pipe.export(file.getPath(), this);
-                        }
-                    }
-                }
-            }
-        } else {
-            Pipe.save("ORDS/PO", this);
-        }
     }
 }

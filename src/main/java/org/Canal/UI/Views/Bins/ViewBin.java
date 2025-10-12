@@ -88,9 +88,7 @@ public class ViewBin extends LockeState {
             bin.setStatus(LockeStatus.BLOCKED);
             bin.save();
             dispose();
-            if(refreshListener != null) {
-                refreshListener.refresh();
-            }
+            if(refreshListener != null) refreshListener.refresh();
         });
         tb.add(block);
         tb.add(Box.createHorizontalStrut(5));

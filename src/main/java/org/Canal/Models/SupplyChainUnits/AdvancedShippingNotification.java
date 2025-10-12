@@ -2,6 +2,9 @@ package org.Canal.Models.SupplyChainUnits;
 
 import org.Canal.Models.Objex;
 
+/**
+ * ASN
+ */
 public class AdvancedShippingNotification extends Objex {
 
     private String shipmentId;
@@ -10,6 +13,10 @@ public class AdvancedShippingNotification extends Objex {
     private String trackingNumber;
     private String purchaseOrder; //PO ID
     private double weight;
+
+    public AdvancedShippingNotification() {
+        this.type = "ASN";
+    }
 
     public String getShipmentId() {
         return shipmentId;

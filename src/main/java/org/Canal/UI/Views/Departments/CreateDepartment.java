@@ -72,9 +72,7 @@ public class CreateDepartment extends LockeState {
             }
             dispose();
 
-            if(refreshListener != null){
-                refreshListener.refresh();
-            }
+            if(refreshListener != null) refreshListener.refresh();
 
             if((boolean) Engine.codex.getValue("DPTS", "auto_open_new")){
                 Engine.router("/DPTS/" + deptIdField.getText(), desktop);

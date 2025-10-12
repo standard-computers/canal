@@ -2,6 +2,9 @@ package org.Canal.Models.BusinessUnits;
 
 import org.Canal.Models.Objex;
 
+/**
+ * RTS
+ */
 public class Rate extends Objex {
 
     private String description;
@@ -10,6 +13,10 @@ public class Rate extends Objex {
     private String objex; //Objex type this rate is for.
     private String reference; //Objex ID this rate applies to
     private boolean tax; //This rate is a tax
+
+    public Rate() {
+        this.type = "RTS";
+    }
 
     public String getDescription() {
         return description;

@@ -1,13 +1,13 @@
 package org.Canal.Models.SupplyChainUnits;
 
 import org.Canal.Models.Objex;
-import org.Canal.Start;
-import org.Canal.Utils.Engine;
-import org.Canal.Utils.Pipe;
 
-import java.io.File;
 import java.util.ArrayList;
 
+
+/**
+ * BOMS
+ */
 public class BillOfMaterials extends Objex {
 
     private String location; //If not empty, BOM valid only at this location
@@ -15,6 +15,10 @@ public class BillOfMaterials extends Objex {
     private String customer; //Used if customer assigned to manuracturing order
     private ArrayList<StockLine> components;
     private ArrayList<Task> steps;
+
+    public BillOfMaterials() {
+        this.type = "BOMS";
+    }
 
     public String getLocation() {
         return location;
@@ -54,25 +58,5 @@ public class BillOfMaterials extends Objex {
 
     public void setSteps(ArrayList<Task> steps) {
         this.steps = steps;
-    }
-
-    public void save() {
-        if (Engine.getConfiguration().getMongodb().isEmpty()) {
-
-            File md = new File(Start.DIR + "\\.store\\BOMS\\");
-            File[] mdf = md.listFiles();
-            if (mdf != null) {
-                for (File file : mdf) {
-                    if (file.getPath().endsWith(".boms")) {
-                        BillOfMaterials fl = Pipe.load(file.getPath(), BillOfMaterials.class);
-                        if (fl.getId().equals(id)) {
-                            Pipe.export(file.getPath(), this);
-                        }
-                    }
-                }
-            }
-        } else {
-            Pipe.save("BOMS", this);
-        }
     }
 }

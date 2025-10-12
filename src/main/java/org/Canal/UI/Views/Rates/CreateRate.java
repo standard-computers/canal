@@ -4,6 +4,7 @@ import org.Canal.Models.BusinessUnits.PurchaseRequisition;
 import org.Canal.Models.BusinessUnits.Rate;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Views.Controllers.Controller;
+import org.Canal.UI.Views.System.LockeMessages;
 import org.Canal.Utils.*;
 
 import javax.swing.*;
@@ -66,14 +67,17 @@ public class CreateRate extends LockeState {
 
         IconButton copyFrom = new IconButton("Copy From", "open", "Copy Rate");
         copyFrom.addActionListener(_ -> {
-            String prId = JOptionPane.showInputDialog(CreateRate.this, "Enter Rate ID");
-            PurchaseRequisition pr = Engine.getPurchaseRequisition(prId);
+            String rateId = JOptionPane.showInputDialog(CreateRate.this, "Enter Rate ID");
+            Rate rate = Engine.getRate(rateId);
+
+
 
         });
         buttons.add(Box.createHorizontalStrut(5));
         buttons.add(copyFrom);
 
         IconButton review = new IconButton("Review", "review", "Review Rate");
+        review.addActionListener(_ -> performReview());
         buttons.add(Box.createHorizontalStrut(5));
         buttons.add(review);
 
@@ -108,5 +112,49 @@ public class CreateRate extends LockeState {
         toolbar.add(Elements.header("Create a Rate", SwingConstants.LEFT), BorderLayout.NORTH);
 
         return toolbar;
+    }
+
+    private void performReview(){
+
+        if(rateId.getText().isEmpty()){
+            addToQueue(new String[]{"CRITICAL", "Rate/Tax MUST have an ID"});
+        }
+
+        if(rateName.getText().isEmpty()){
+            addToQueue(new String[]{"WARNING", "Rate or tax name not set. Are you sure?"});
+        }
+
+        if(rateValue.getText().isEmpty()){
+            addToQueue(new String[]{"CRITICAL", "Rate/Tax must have value"});
+        }
+
+        if(rateIsPercent.isSelected()){
+            if(Double.parseDouble(rateValue.getText()) >= 1){
+                addToQueue(new String[]{"CRITICAL", "Rate/Tax value as percent >= 1 will be >= 100%. Are you sure?"});
+            }
+        }
+
+        if(rateIsPercent.isSelected()){
+            if(rateIsTax.isSelected()){
+                if(Double.parseDouble(rateValue.getText()) >= 1){
+                    addToQueue(new String[]{"CRITICAL", "Tax is >= 1 will be >= 100%. Are you sure?"});
+                }
+            }
+        }
+
+        if(objexes.getSelectedValue().isEmpty()){
+            addToQueue(new String[]{"WARNING", "An Objex is not referenced. Are you sure?"});
+        } else {
+            if(rateReference.getText().isEmpty()){
+                addToQueue(new String[]{"WARNING", "An Objex is referenced without value in reference. Are you sure?"});
+            }
+        }
+
+        if(rateReference.getText().isEmpty()){
+            addToQueue(new String[]{"WARNING", "Rate/Tax reference not set, are you sure?"});
+        }
+
+        desktop.put(new LockeMessages(getQueue()));
+        purgeQueue();
     }
 }

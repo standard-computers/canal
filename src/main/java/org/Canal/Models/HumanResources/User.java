@@ -6,6 +6,9 @@ import org.Canal.Utils.Crypter;
 import javax.swing.*;
 import java.util.ArrayList;
 
+/**
+ * USRS
+ */
 public class User extends Objex {
 
     private String employee; //Employee ID User is tied to
@@ -13,6 +16,10 @@ public class User extends Objex {
     private String fontSize;
     private String theme;
     private String hpv;
+
+    public User() {
+        this.type = "USRS";
+    }
 
     public String getEmployee() {
         return employee;

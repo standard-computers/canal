@@ -6,6 +6,8 @@ import org.Canal.Utils.Engine;
 import java.util.ArrayList;
 
 /**
+ * BNS
+ * This Objex belongs to AREAS
  * For inventory and storage of items.
  */
 public class Bin extends Objex {
@@ -28,6 +30,10 @@ public class Bin extends Objex {
     private boolean goodsissue;
     private boolean goodsreceipt;
     private boolean holdsStock;
+
+    public Bin(){
+        this.type = "BNS";
+    }
 
     public String getArea() {
         return area;

@@ -5,7 +5,9 @@ import org.Canal.Models.Objex;
 import java.util.ArrayList;
 
 /**
+ * CATS
  * A list of available items to someone.
+ * Its use can be restricted to CCS, CSTS, and VEND for purchasing and sales.
  */
 public class Catalog extends Objex {
 
@@ -17,6 +19,10 @@ public class Catalog extends Objex {
     private ArrayList<String> customers;
     private ArrayList<String> vendors;
     private ArrayList<Item> items = new ArrayList<>();
+
+    public Catalog() {
+        this.type = "CATS";
+    }
 
     public String getDescription() {
         return description;

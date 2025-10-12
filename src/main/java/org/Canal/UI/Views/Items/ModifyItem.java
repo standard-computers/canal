@@ -45,6 +45,9 @@ public class ModifyItem extends LockeState implements Includer {
     private JCheckBox allowSales;
     private JCheckBox allowPurchasing;
     private JCheckBox keepInventory;
+    private JTextField leadTime;
+    private JTextField transportationTime;
+    private JTextField manufacturingTime;
 
     //Dimensional Tab
     private JTextField baseQuantityField;
@@ -111,6 +114,9 @@ public class ModifyItem extends LockeState implements Includer {
             item.allowSales(allowSales.isSelected());
             item.allowPurchasing(allowPurchasing.isSelected());
             item.keepInventory(keepInventory.isSelected());
+            item.setLeadTime(Double.parseDouble(leadTime.getText()));
+            item.setTransporationTime(Double.parseDouble(transportationTime.getText()));
+            item.setManufacturingTime(Double.parseDouble(manufacturingTime.getText()));
 
             item.setBaseQuantity(Double.parseDouble(baseQuantityField.getText()));
             item.setPackagingUnit(packagingUomField.getSelectedValue());
@@ -247,6 +253,9 @@ public class ModifyItem extends LockeState implements Includer {
         allowSales = new JCheckBox(" Item can be sold", item.allowSales());
         allowPurchasing = new JCheckBox(" Item can be purchased", item.allowPurchasing());
         keepInventory = new JCheckBox(" Keep inventory of item", item.keepInventory());
+        leadTime = Elements.input(String.valueOf(item.getLeadTime()));
+        transportationTime = Elements.input(String.valueOf(item.getTransporationTime()));
+        manufacturingTime = Elements.input(String.valueOf(item.getManufacturingTime()));
 
         Form form = new Form();
         form.addInput(Elements.coloredLabel("SKU'd", UIManager.getColor("Label.foreground")), skud);
@@ -257,6 +266,9 @@ public class ModifyItem extends LockeState implements Includer {
         form.addInput(Elements.coloredLabel("Allow Sales", UIManager.getColor("Label.foreground")), allowSales);
         form.addInput(Elements.coloredLabel("Allow Purchasing", UIManager.getColor("Label.foreground")), allowPurchasing);
         form.addInput(Elements.coloredLabel("Keep Inventory", UIManager.getColor("Label.foreground")), keepInventory);
+        form.addInput(Elements.coloredLabel("Lead Time", UIManager.getColor("Label.foreground")), leadTime);
+        form.addInput(Elements.coloredLabel("Transporation Time", UIManager.getColor("Label.foreground")), transportationTime);
+        form.addInput(Elements.coloredLabel("Manufacturing Time", UIManager.getColor("Label.foreground")), manufacturingTime);
         controls.add(form);
 
         return controls;
