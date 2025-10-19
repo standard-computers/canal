@@ -12,8 +12,6 @@ import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 /**
  * /TRANS/$[DLV_TYPE]/$[DELIVERY_ID]
@@ -24,7 +22,7 @@ public class ViewDelivery extends LockeState {
 
     public ViewDelivery(Delivery delivery) {
 
-        super("View Delivery", "/TRANS/" + delivery.getType(), false, true, false, true);
+        super("View Delivery", "/" + delivery.getType() + "/" + delivery.getId());
         this.delivery = delivery;
 
         setLayout(new BorderLayout());
@@ -36,7 +34,7 @@ public class ViewDelivery extends LockeState {
         add(optionsInfo, BorderLayout.NORTH);
     }
 
-    private JPanel general(){
+    private JPanel general() {
 
         JPanel general = new JPanel();
         CustomTabbedPane tabs = new CustomTabbedPane();
@@ -49,12 +47,18 @@ public class ViewDelivery extends LockeState {
         return general;
     }
 
-    private JPanel toolbar(){
+    private JPanel toolbar() {
+
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton markDelivered = new IconButton("Mark Delivered", "trucks", "Email Employee");
+        markDelivered.addActionListener(_ -> {
+            delivery.setStatus(LockeStatus.DELIVERED);
+            delivery.save();
+            dispose();
+        });
         tb.add(markDelivered);
         tb.add(Box.createHorizontalStrut(5));
 
@@ -76,54 +80,24 @@ public class ViewDelivery extends LockeState {
 
         IconButton label = new IconButton("Labels", "label", "Print labels for properties (like for badges)");
         tb.add(label);
-        markDelivered.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e){
-                delivery.setStatus(LockeStatus.DELIVERED);
-                delivery.save();
-                dispose();
-            }
-        });
-        receive.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
+        tb.add(Box.createHorizontalStrut(5));
 
-            }
-        });
-        writeup.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-
-            }
-        });
-        suspend.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-
-            }
-        });
-        label.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-
-            }
-        });
         return tb;
     }
 
-    private JPanel pallets(){
+    private JPanel pallets() {
         JPanel p = new JPanel();
 
         return p;
     }
 
-    private JPanel items(){
+    private JPanel items() {
         JPanel p = new JPanel();
 
         return p;
     }
 
-    private JPanel receipt(){
+    private JPanel receipt() {
         JPanel p = new JPanel();
         RSyntaxTextArea textArea = new RSyntaxTextArea(20, 60);
         textArea.append("ID : " + delivery.getId() + "\n");

@@ -9,7 +9,6 @@ import org.Canal.UI.Elements.LockeState;
 import org.Canal.Utils.*;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -40,46 +39,40 @@ public class ViewLedger extends LockeState implements RefreshListener {
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);
         add(tableScrollPane, BorderLayout.CENTER);
-        table.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) { // Detect double click
-                    JTable target = (JTable) e.getSource();
-                    int row = target.getSelectedRow(); // Get the clicked row
-                    if (row != -1) {
-                        String value = String.valueOf(target.getValueAt(row, 1));
-                    }
-                }
-            }
-        });
 
-        if((boolean) Engine.codex.getValue("LGS", "start_maximized")){
+        if ((boolean) Engine.codex.getValue("LGS", "start_maximized")) {
             setMaximized(true);
         }
     }
 
     private JPanel toolbar() {
 
-        JPanel tb = new JPanel();
-        tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-
+        JPanel toolbar = new JPanel();
+        toolbar.setLayout(new BoxLayout(toolbar, BoxLayout.X_AXIS));
+        toolbar.add(Box.createHorizontalStrut(5));
 
         IconButton export = new IconButton("Export", "export", "Export as CSV");
         export.addActionListener(_ -> table.exportToCSV());
-        tb.add(export);
-        tb.add(Box.createHorizontalStrut(5));
+        toolbar.add(export);
+        toolbar.add(Box.createHorizontalStrut(5));
 
-        IconButton modifyLedger = new IconButton("Make Adjustment", "modify", "Modify a Location", "/G/MOD");
-        tb.add(modifyLedger);
-        tb.add(Box.createHorizontalStrut(5));
+        IconButton modify = new IconButton("Modify", "modify", "Modify Ledger", "/LGS/MOD");
+        modify.addActionListener(_ -> {});
+        toolbar.add(modify);
+        toolbar.add(Box.createHorizontalStrut(5));
 
-        if(!ledger.getStatus().equals(LockeStatus.SETTLED)){
+        IconButton makeAdjustment = new IconButton("Make Adjustment", "autoprice", "Make Adjustment", "/LGS/ADJ");
+        makeAdjustment.addActionListener(_ -> {});
+        toolbar.add(makeAdjustment);
+        toolbar.add(Box.createHorizontalStrut(5));
 
-            IconButton settle = new IconButton("Settle", "start", "Settle Transactions");
+        if (!ledger.getStatus().equals(LockeStatus.SETTLED)) {
+
+            IconButton settle = new IconButton("Settle", "complete", "Settle Transactions", "/LGS/TRS/STL");
             settle.addActionListener(_ -> {
 
-                for(int i = 0; i < ledger.getTransactions().size(); i++){
-                    if(!ledger.getTransactions().get(i).getStatus().equals(LockeStatus.SETTLED)){
+                for (int i = 0; i < ledger.getTransactions().size(); i++) {
+                    if (!ledger.getTransactions().get(i).getStatus().equals(LockeStatus.SETTLED)) {
                         ledger.getTransactions().get(i).setStatus(LockeStatus.SETTLED);
                         ledger.getTransactions().get(i).setSettled(Constants.now());
                     }
@@ -89,33 +82,32 @@ public class ViewLedger extends LockeState implements RefreshListener {
                 refresh();
                 settle.setVisible(false);
             });
-            tb.add(settle);
-            tb.add(Box.createHorizontalStrut(5));
+            toolbar.add(settle);
+            toolbar.add(Box.createHorizontalStrut(5));
         }
 
-        IconButton removeLedger = new IconButton("Remove", "delete", "Delete a Location", "/G/DEL");
-        tb.add(removeLedger);
-        tb.add(Box.createHorizontalStrut(5));
+        IconButton addTransaction = new IconButton("Add Transaction", "create", "Add a Transaction", "/LGS/TRS/ADD");
+        addTransaction.addActionListener(_ -> {});
+        toolbar.add(addTransaction);
+        toolbar.add(Box.createHorizontalStrut(5));
 
         IconButton valueate = new IconButton("Balance", "autoprice", "Evaluate Balance");
         valueate.addActionListener(_ -> {
             double value = 0.0;
-            for(Transaction t: ledger.getTransactions()){
+            for (Transaction t : ledger.getTransactions()) {
                 value += t.getAmount();
             }
             JOptionPane.showMessageDialog(null, "$" + value + "\n" + ledger.getName() + " / " + ledger.getId() + " / " + Constants.now());
         });
-        tb.add(valueate);
-        tb.add(Box.createHorizontalStrut(5));
+        toolbar.add(valueate);
+        toolbar.add(Box.createHorizontalStrut(5));
 
         IconButton refresh = new IconButton("Refresh", "refresh", "Refresh Data");
         refresh.addActionListener(_ -> refresh());
-        tb.add(refresh);
-        tb.add(Box.createHorizontalStrut(5));
+        toolbar.add(refresh);
+        toolbar.add(Box.createHorizontalStrut(5));
 
-        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
-
-        return tb;
+        return toolbar;
     }
 
     private CustomTable table() {
@@ -151,7 +143,25 @@ public class ViewLedger extends LockeState implements RefreshListener {
                     t.getCreated(),
             });
         }
-        return new CustomTable(columns, data);
+        CustomTable ct = new CustomTable(columns, data);
+        ct.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) { // Detect double click
+                    JTable target = (JTable) e.getSource();
+                    int row = target.getSelectedRow(); // Get the clicked row
+                    if (row != -1) {
+                        String value = String.valueOf(target.getValueAt(row, 1));
+                        for (Transaction t : ledger.getTransactions()) {
+                            if (t.getId().equals(value)) {
+                                desktop.put(new ViewTransaction(ledger, t, ViewLedger.this));
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        return ct;
     }
 
     @Override
@@ -163,18 +173,5 @@ public class ViewLedger extends LockeState implements RefreshListener {
         table = newTable;
         scrollPane.revalidate();
         scrollPane.repaint();
-        table.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) { // Detect double click
-                    JTable target = (JTable) e.getSource();
-                    int row = target.getSelectedRow(); // Get the clicked row
-                    if (row != -1) {
-                        String value = String.valueOf(target.getValueAt(row, 1));
-                        desktop.put(Engine.router("/LGS/TRANS/" + value, desktop));
-                    }
-                }
-            }
-        });
     }
 }

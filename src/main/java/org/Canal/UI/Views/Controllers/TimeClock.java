@@ -24,7 +24,7 @@ public class TimeClock extends LockeState {
     public TimeClock(DesktopState desktop) {
 
         super("Employee Time Clock", "/TM_CLCK", false, true, false, true);
-        setFrameIcon(new ImageIcon(TimeClock.class.getResource("/icons/timeclock.png")));
+        setFrameIcon(new ImageIcon(TimeClock.class.getResource("/icons/windows/timeclock.png")));
         this.desktop = desktop;
 
         Employee me = Engine.getEmployee(Engine.getAssignedUser().getEmployee());

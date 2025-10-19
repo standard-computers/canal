@@ -258,4 +258,60 @@ public class Location extends Objex {
     public void setAllowsPurchasing(boolean allowsPurchasing) {
         this.allowsPurchasing = allowsPurchasing;
     }
+
+    public boolean isReservations() {
+        return reservations;
+    }
+
+    public void setReservations(boolean reservations) {
+        this.reservations = reservations;
+    }
+
+    public boolean isDeficits() {
+        return deficits;
+    }
+
+    public void setDeficits(boolean deficits) {
+        this.deficits = deficits;
+    }
+
+    public boolean isDoProduction() {
+        return doProduction;
+    }
+
+    public void setDoProduction(boolean doProduction) {
+        this.doProduction = doProduction;
+    }
+
+    public boolean isBackorder() {
+        return backorder;
+    }
+
+    public void setBackorder(boolean backorder) {
+        this.backorder = backorder;
+    }
+
+    public ArrayList<String> getBackup() {
+        return backup;
+    }
+
+    public void setBackup(ArrayList<String> backup) {
+        this.backup = backup;
+    }
+
+    public int getCadence() {
+        return cadence;
+    }
+
+    public void setCadence(int cadence) {
+        this.cadence = cadence;
+    }
+
+    public ArrayList<String> getSuppliers() {
+        return suppliers;
+    }
+
+    public void setSuppliers(ArrayList<String> suppliers) {
+        this.suppliers = suppliers;
+    }
 }

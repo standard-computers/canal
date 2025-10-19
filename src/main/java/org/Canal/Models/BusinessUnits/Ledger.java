@@ -65,6 +65,7 @@ public class Ledger extends Objex {
 
     public void setTransactions(ArrayList<Transaction> transactions) {
         this.transactions = transactions;
+        save();
     }
 
     public ArrayList<Transaction> getTransactions() {
@@ -73,5 +74,16 @@ public class Ledger extends Objex {
 
     public void addTransaction(Transaction transaction) {
         transactions.add(transaction);
+        save();
+    }
+
+    public void updateTransaction(Transaction transaction) {
+        this.transactions.set(this.transactions.indexOf(transaction), transaction);
+        save();
+    }
+
+    public void removeTransaction(Transaction transaction) {
+        this.transactions.remove(transaction);
+        save();
     }
 }

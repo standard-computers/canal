@@ -7,7 +7,6 @@ import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.UI.Views.System.CheckboxBarcodeFrame;
 import org.Canal.UI.Views.Distribution.ViewDelivery;
-import org.Canal.UI.Views.PurchaseOrders.CreatePurchaseOrder;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.LockeStatus;
@@ -20,6 +19,8 @@ import java.util.ArrayList;
 
 /**
  * /TRANS/ODO
+ * View active Outbound Deliveries.
+ * Deliveries must not be DELIVERED, DELETED, or ARCHIVED.
  */
 public class OutboundDeliveries extends LockeState {
 
@@ -28,74 +29,60 @@ public class OutboundDeliveries extends LockeState {
 
     public OutboundDeliveries(DesktopState desktop) {
 
-        super("Outbound Deliveries", "/TRANS/ODO");
+        super("Active Outbound Deliveries", "/TRANS/ODO");
         setFrameIcon(new ImageIcon(OutboundDeliveries.class.getResource("/icons/outbound.png")));
-
         this.desktop = desktop;
-        JPanel tb = toolbar();
+
+        setLayout(new BorderLayout());
+
         JPanel holder = new JPanel(new BorderLayout());
+        holder.add(Elements.header("Active Inbound Deliveries", SwingConstants.LEFT), BorderLayout.CENTER);
+        holder.add(toolbar(), BorderLayout.SOUTH);
+        add(holder, BorderLayout.NORTH);
+
         table = table();
         JScrollPane tableScrollPane = new JScrollPane(table);
-        holder.add(tableScrollPane, BorderLayout.CENTER);
-        holder.add(tb, BorderLayout.NORTH);
-        add(holder);
-        table.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) { // Detect double click
-                    JTable target = (JTable) e.getSource();
-                    int row = target.getSelectedRow(); // Get the clicked row
-                    if (row != -1) {
-                        String value = String.valueOf(target.getValueAt(row, 1));
-                        desktop.put(new ViewDelivery(Engine.getOutboundDelivery(value)));
-                    }
-                }
-            }
-        });
+        add(tableScrollPane, BorderLayout.CENTER);
     }
 
     private JPanel toolbar() {
-        JPanel tb = new JPanel();
-        tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-        IconButton export = new IconButton("", "export", "Export as CSV");
-        IconButton createPurchaseOrder = new IconButton("Create ODO", "create", "Build an item");
-        IconButton blockPo = new IconButton("Block", "block", "Block/Pause PO, can't be used");
-        IconButton suspendPo = new IconButton("Suspend", "suspend", "Suspend PO, can't be used");
+
+        JPanel toolbar = new JPanel();
+        toolbar.setLayout(new BoxLayout(toolbar, BoxLayout.X_AXIS));
+        toolbar.add(Box.createHorizontalStrut(5));
+
+        IconButton export = new IconButton("Export", "export", "Export as CSV");
+        toolbar.add(export);
+        toolbar.add(Box.createHorizontalStrut(5));
+
+        IconButton importDeliveries = new IconButton("Import", "export", "Import from CSV");
+        toolbar.add(importDeliveries);
+        toolbar.add(Box.createHorizontalStrut(5));
+
+        IconButton create = new IconButton("Create ODO", "create", "Build an item");
+        toolbar.add(create);
+        toolbar.add(Box.createHorizontalStrut(5));
+
         IconButton activatePO = new IconButton("Start", "start", "Resume/Activate PO");
+        toolbar.add(activatePO);
+        toolbar.add(Box.createHorizontalStrut(5));
+
         IconButton archivePo = new IconButton("Archive", "archive", "Archive PO, removes");
+        toolbar.add(archivePo);
+        toolbar.add(Box.createHorizontalStrut(5));
+
         IconButton label = new IconButton("Barcodes", "label", "Print labels for org properties");
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(Elements.h3("Outbound Deliveries"));
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(export);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(createPurchaseOrder);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(blockPo);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(suspendPo);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(activatePO);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(archivePo);
-        tb.add(Box.createHorizontalStrut(5));
-        tb.add(label);
-        tb.add(Box.createHorizontalStrut(5));
-        createPurchaseOrder.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                desktop.put(new CreatePurchaseOrder(desktop));
+        label.addActionListener(_ -> {
+            String[] printables = new String[Engine.getPurchaseOrders().size()];
+            for (int i = 0; i < Engine.getPurchaseOrders().size(); i++) {
+                printables[i] = Engine.getPurchaseOrders().get(i).getOrderId();
             }
+            new CheckboxBarcodeFrame(printables);
         });
-        label.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                String[] printables = new String[Engine.getPurchaseOrders().size()];
-                for (int i = 0; i < Engine.getPurchaseOrders().size(); i++) {
-                    printables[i] = Engine.getPurchaseOrders().get(i).getOrderId();
-                }
-                new CheckboxBarcodeFrame(printables);
-            }
-        });
-        return tb;
+        toolbar.add(label);
+        toolbar.add(Box.createHorizontalStrut(5));
+
+        return toolbar;
     }
 
     private CustomTable table() {
@@ -119,7 +106,9 @@ public class OutboundDeliveries extends LockeState {
         };
         ArrayList<Object[]> data = new ArrayList<>();
         for (Delivery delivery : Engine.getOutboundDeliveries()) {
-            if(!delivery.getStatus().equals(LockeStatus.ARCHIVED)) {
+            if (!delivery.getStatus().equals(LockeStatus.DELETED)
+                    && !delivery.getStatus().equals(LockeStatus.ARCHIVED)
+                    && !delivery.getStatus().equals(LockeStatus.DELIVERED)) {
                 data.add(new Object[]{
                         delivery.getId(),
                         delivery.getName(),
@@ -140,6 +129,20 @@ public class OutboundDeliveries extends LockeState {
                 });
             }
         }
-        return new CustomTable(columns, data);
+        CustomTable ct = new CustomTable(columns, data);
+        ct.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) { // Detect double click
+                    JTable target = (JTable) e.getSource();
+                    int row = target.getSelectedRow(); // Get the clicked row
+                    if (row != -1) {
+                        String value = String.valueOf(target.getValueAt(row, 1));
+                        desktop.put(new ViewDelivery(Engine.getOutboundDelivery(value)));
+                    }
+                }
+            }
+        });
+        return ct;
     }
 }

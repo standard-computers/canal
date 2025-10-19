@@ -5,7 +5,9 @@ import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.Constants;
+import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
+import org.Canal.Utils.RefreshListener;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -26,6 +28,9 @@ import java.util.HashMap;
 public class ViewSalesOrder extends LockeState {
 
     private Order salesOrder;
+    private DesktopState desktop;
+    private RefreshListener refreshListener;
+
     private ItemTableModel model;
     private double taxRate = 0.05;
     private JLabel netValue;
@@ -37,11 +42,13 @@ public class ViewSalesOrder extends LockeState {
     private JCheckBox commitToLedger, createOutboundDelivery, createPurchaseOrder, createInboundDelivery;
     private JTextField outboundTruckId, inboundTruckId;
 
-    public ViewSalesOrder(Order salesOrder) {
+    public ViewSalesOrder(Order salesOrder, DesktopState desktop, RefreshListener refreshListener) {
 
         super("Create Sales Order", "/ORDS/SO/NEW", false, true, false, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));
         this.salesOrder = salesOrder;
+        this.desktop = desktop;
+        this.refreshListener = refreshListener;
 
         CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.addTab("Item Details", itemDetails());

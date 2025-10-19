@@ -1190,7 +1190,7 @@ public class Engine {
             case "/ORDS/SO/O" -> {
                 String soId = JOptionPane.showInputDialog(null, "Enter Sales Order ID", "Sales Order ID", JOptionPane.QUESTION_MESSAGE);
                 Order salesOrder = Engine.getSalesOrder(soId);
-                return new ViewSalesOrder(salesOrder);
+                return new ViewSalesOrder(salesOrder, desktop, null);
             }
             case "/ORDS/SO/AUTO_MK" -> {
                 return new AutoMakeSalesOrders();

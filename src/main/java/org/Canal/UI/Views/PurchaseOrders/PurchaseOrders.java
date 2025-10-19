@@ -47,6 +47,7 @@ public class PurchaseOrders extends LockeState implements RefreshListener {
 
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        tb.add(Box.createHorizontalStrut(5));
 
         if((boolean) Engine.codex.getValue("ORDS/PO", "import_enabled")){
             IconButton importPOs = new IconButton("Import", "export", "Import as CSV");
@@ -103,7 +104,7 @@ public class PurchaseOrders extends LockeState implements RefreshListener {
         IconButton refresh = new IconButton("Refresh", "refresh", "Refresh data");
         refresh.addActionListener(_ -> refresh());
         tb.add(refresh);
-        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
+        tb.add(Box.createHorizontalStrut(5));
 
         return tb;
     }

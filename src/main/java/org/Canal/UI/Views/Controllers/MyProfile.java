@@ -4,7 +4,6 @@ import org.Canal.Models.HumanResources.Employee;
 import org.Canal.UI.Elements.CustomTabbedPane;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.LockeState;
-import org.Canal.UI.Views.ViewLocation;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
@@ -21,16 +20,16 @@ public class MyProfile extends LockeState {
     public MyProfile(DesktopState desktop) {
 
         super("My Profile", "/ME");
-        setFrameIcon(new ImageIcon(MyProfile.class.getResource("/icons/me.png")));
+        setFrameIcon(new ImageIcon(MyProfile.class.getResource("/icons/windows/me.png")));
         //TODO Check that user is assigned
         me = Engine.getEmployee(Engine.getAssignedUser().getEmployee());
 
         CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.addTab("Summary", summary());
-        tabs.addTab("Pay", new ImageIcon(ViewLocation.class.getResource("/icons/payment.png")), pay());
-        tabs.addTab("Time", new ImageIcon(ViewLocation.class.getResource("/icons/timeclock.png")), time());
+        tabs.addTab("Pay", pay());
+        tabs.addTab("Time", time());
         tabs.addTab("Information", information());
-        tabs.addTab("Positions", new ImageIcon(ViewLocation.class.getResource("/icons/positions.png")), positions());
+        tabs.addTab("Positions", positions());
         tabs.addTab("Learning", learning());
         setLayout(new BorderLayout());
         add(Elements.header("My Profile", SwingConstants.LEFT), BorderLayout.NORTH);
@@ -39,38 +38,44 @@ public class MyProfile extends LockeState {
     }
 
     private JPanel summary(){
-        JPanel p = new JPanel();
 
-        return p;
+        JPanel summary = new JPanel();
+
+        return summary;
     }
 
     private JPanel pay(){
-        JPanel p = new JPanel();
 
-        return p;
+        JPanel pay = new JPanel();
+
+        return pay;
     }
 
     private JPanel time(){
-        JPanel p = new JPanel();
 
-        return p;
+        JPanel time = new JPanel();
+
+        return time;
     }
 
     private JPanel information(){
-        JPanel p = new JPanel();
 
-        return p;
+        JPanel information = new JPanel();
+
+        return information;
     }
 
     private JPanel positions(){
-        JPanel p = new JPanel();
 
-        return p;
+        JPanel positions = new JPanel();
+
+        return positions;
     }
 
     private JPanel learning(){
-        JPanel p = new JPanel();
 
-        return p;
+        JPanel learning = new JPanel();
+
+        return learning;
     }
 }
