@@ -208,7 +208,6 @@ public class Codex {
             put("endpoint", "");
             put("leading_number", 1);
             put("leading_zeros", 2);
-            put("find_limit", 1000);
             put("allow_notes", true);
             put("allow_archival", true);
             put("allow_deletion", true);
@@ -217,7 +216,7 @@ public class Codex {
             put("automake_enabled", true);
             put("allow_batch_create", true);
             put("item_created_alert", false);
-            put("start_maximized", true);
+            put("start_maximized", false);
         }});
 
         variables.put("DPTS", new HashMap<>() {{

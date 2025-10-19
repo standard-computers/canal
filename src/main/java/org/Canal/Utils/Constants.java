@@ -180,21 +180,8 @@ public class Constants {
                         new Locke("Remove Employee", getIcon("delete"), "/EMPS/DEL", null),
                 }),
                 new Locke("Inventory", getIcon("folder"), "/STK", new Locke[]{
-                        new Locke("Stock Check", getIcon("locke"), "/STK/SC/", null),
-                        new Locke("Org Stock Overview", getIcon("locke"), "/STK/SC/IID", null),
-                        new Locke("Stock by Vendor", getIcon("locke"), "/STK/SC/VEND", null),
-                        new Locke("Stock by Vendor with Item", getIcon("locke"), "/STK/SC/VEND_IID", null),
-                        new Locke("Stock by Vendor with Cost Center", getIcon("locke"), "/STK/SC/VEND_CCS", null),
-                        new Locke("Stock by Vendor for Distribution Center", getIcon("locke"), "/STK/SC/VEND_DCSS", null),
-                        new Locke("Item Stock Check", getIcon("locke"), "/STK/SC/IID", null),
                         new Locke("Move Inventory", getIcon("locke"), "/STK/MOD/MV", null),
-                        new Locke("Perform Stock Transfer Order (STO)", getIcon("locke"), "/STK/MV/STO", null),
-                        new Locke("Remove Inventory", getIcon("locke"), "/STK/MV/DEL", null),
-                        new Locke("Adjust Inventory", getIcon("locke"), "/STK/MV/ADJ", null),
-                        new Locke("Physical Inventory", getIcon("locke"), "/STK/PI", null),
-                        new Locke("Physical Inventory Count", getIcon("locke"), "/STK/PI_COUNT", null),
-                        new Locke("Physical Inventory for Item", getIcon("locke"), "/STK/PI/ITS", null),
-                        new Locke("Physical Inventory for Material", getIcon("locke"), "/STK/PI/MTS", null),
+                        new Locke("Move to Bin", getIcon("locke"), "/STK/MV/BN", null),
                         new Locke("Physical Inventory for Plant", getIcon("locke"), "/STK/PI/PLNT", null),
                 }),
                 new Locke("Invoices", getIcon("invoices"), "/INVS", new Locke[]{
@@ -450,6 +437,7 @@ public class Constants {
                         new Locke("Modify a User", getIcon("folder"), "/USRS/MOD", new Locke[]{
                                 new Locke("Suspend", getIcon("locke"), "/USRS/MOD/SP", null),
                                 new Locke("Change Access", getIcon("locke"), "/USRS/MOD/CHGAC", null),
+                                new Locke("Add Locke Access", getIcon("locke"), "/USRS/MOD/ALKS", null),
                         }),
                 }),
         });

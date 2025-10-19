@@ -7,10 +7,20 @@ public class Truck extends Objex {
     private String number = "N/A"; //Actual Truck Number
     private String carrier; //Carrier ID
     private String driver = ""; //Person ID
+    private String licensePlate = "";
+    private String vin = "";
     private String year = "";
     private String make = "";
     private String model = "";
     private String delivery = ""; //Delivery ID (IDO or ODO)
+    private double weight;
+    private String weightUOM;
+    private double maxWeight;
+    private String maxWeightUOM;
+
+    public Truck() {
+        this.type = "TRANS/TRCKS";
+    }
 
     public String getNumber() {
         return number;
@@ -34,6 +44,22 @@ public class Truck extends Objex {
 
     public void setDriver(String driver) {
         this.driver = driver;
+    }
+
+    public String getLicensePlate() {
+        return licensePlate;
+    }
+
+    public void setLicensePlate(String licensePlate) {
+        this.licensePlate = licensePlate;
+    }
+
+    public String getVin() {
+        return vin;
+    }
+
+    public void setVin(String vin) {
+        this.vin = vin;
     }
 
     public String getYear() {
@@ -66,5 +92,37 @@ public class Truck extends Objex {
 
     public void setDelivery(String delivery) {
         this.delivery = delivery;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
+
+    public String getWeightUOM() {
+        return weightUOM;
+    }
+
+    public void setWeightUOM(String weightUOM) {
+        this.weightUOM = weightUOM;
+    }
+
+    public double getMaxWeight() {
+        return maxWeight;
+    }
+
+    public void setMaxWeight(double maxWeight) {
+        this.maxWeight = maxWeight;
+    }
+
+    public String getMaxWeightUOM() {
+        return maxWeightUOM;
+    }
+
+    public void setMaxWeightUOM(String maxWeightUOM) {
+        this.maxWeightUOM = maxWeightUOM;
     }
 }

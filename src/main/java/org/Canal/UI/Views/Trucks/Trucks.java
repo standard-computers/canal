@@ -12,7 +12,6 @@ import org.Canal.Utils.Engine;
 import org.Canal.Utils.RefreshListener;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -42,25 +41,13 @@ public class Trucks extends LockeState implements RefreshListener {
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);
         add(tableScrollPane, BorderLayout.CENTER);
-        table.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    JTable target = (JTable) e.getSource();
-                    int row = target.getSelectedRow();
-                    if (row != -1) {
-                        String value = String.valueOf(target.getValueAt(row, 1));
-                        desktop.put(Engine.router("/TRANS/TRCKS/" + value, desktop));
-                    }
-                }
-            }
-        });
     }
 
     private JPanel toolbar() {
 
         JPanel toolbar = new JPanel();
         toolbar.setLayout(new BoxLayout(toolbar, BoxLayout.X_AXIS));
+        toolbar.add(Box.createHorizontalStrut(5));
 
         IconButton export = new IconButton("Export", "export", "Export as CSV");
         export.addActionListener(_ -> table.exportToCSV());
@@ -72,13 +59,14 @@ public class Trucks extends LockeState implements RefreshListener {
         toolbar.add(Box.createHorizontalStrut(5));
 
         IconButton createTruck = new IconButton("New", "create", "Create a Truck", "/TRANS/TRCKS/NEW");
+        createTruck.addActionListener(_ -> desktop.put(new CreateTruck(desktop)));
         toolbar.add(createTruck);
         toolbar.add(Box.createHorizontalStrut(5));
 
         IconButton refresh = new IconButton("Refresh", "refresh", "Refresh Data");
         refresh.addActionListener(_ -> refresh());
         toolbar.add(refresh);
-        toolbar.setBorder(new EmptyBorder(5, 5, 5, 5));
+        toolbar.add(Box.createHorizontalStrut(5));
 
         return toolbar;
     }
@@ -97,7 +85,6 @@ public class Trucks extends LockeState implements RefreshListener {
                 "Value",
                 "Est Weight",
                 "wUOM",
-                "Notes",
                 "Status",
                 "Created"
         };
@@ -125,7 +112,6 @@ public class Trucks extends LockeState implements RefreshListener {
                     "0.0",
                     "",
                     "LBS",
-                    truck.getNotes(),
                     truck.getStatus(),
                     truck.getCreated()
             });
@@ -134,12 +120,13 @@ public class Trucks extends LockeState implements RefreshListener {
         ct.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) { // Detect double click
+                if (e.getClickCount() == 2) {
                     JTable target = (JTable) e.getSource();
-                    int row = target.getSelectedRow(); // Get the clicked row
+                    int row = target.getSelectedRow();
                     if (row != -1) {
                         String value = String.valueOf(target.getValueAt(row, 1));
-                        desktop.put(Engine.router("/TRANS/TRCKS/" + value, desktop));
+                        Truck truck = Engine.getTruck(value);
+                        desktop.put(new ViewTruck(truck, desktop, Trucks.this));
                     }
                 }
             }

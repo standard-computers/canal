@@ -131,7 +131,7 @@ public class Bins extends LockeState implements RefreshListener {
 
         int bin_count = 0;
         ArrayList<Object[]> data = new ArrayList<>();
-        for (Bin b : Engine.getBins((Integer) Engine.codex.getValue("BNS", "find_limit"))) {
+        for (Bin b : Engine.getBins()) {
             bin_count++;
             //TODO remove extra call to are some how
             data.add(new Object[]{
@@ -172,14 +172,8 @@ public class Bins extends LockeState implements RefreshListener {
                     int r = t.getSelectedRow();
                     if (r != -1) {
                         String v = String.valueOf(t.getValueAt(r, 1));
-                        for (Area area : Engine.getAreas()) {
-                            for (Bin bin : area.getBins()) {
-                                if (v.equals(bin.getId())) {
-                                    bin.setArea(area.getId());
-                                    desktop.put(new ViewBin(bin, desktop, Bins.this));
-                                }
-                            }
-                        }
+                        Bin bin = Engine.getBin(v);
+                        desktop.put(new ViewBin(bin, desktop, Bins.this));
                     }
                 }
             }

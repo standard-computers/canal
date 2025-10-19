@@ -41,6 +41,10 @@ public class User extends Objex {
         return accesses.get(index);
     }
 
+    public void addAccess(String access){
+        accesses.add(access);
+    }
+
     public String getFontSize() {
         return fontSize;
     }

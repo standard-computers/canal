@@ -208,8 +208,8 @@ public class CreateBOM extends LockeState implements Includer {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
 
-        IconButton copyFrom = new IconButton("Copy From", "open", "Copy from item");
-        copyFrom.addActionListener(_ -> {
+        IconButton copyFromItem = new IconButton("Copy From", "open", "Copy from item");
+        copyFromItem.addActionListener(_ -> {
             String iid = JOptionPane.showInputDialog("Enter Item ID");
             Item i = Engine.getItem(iid);
             bomNameField.setText(i.getName());
@@ -217,7 +217,7 @@ public class CreateBOM extends LockeState implements Includer {
             components = i.getComponents();
             refreshComponents();
         });
-        tb.add(copyFrom);
+        tb.add(copyFromItem);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton addComponent = new IconButton("Add Component", "add_rows", "Add Component");

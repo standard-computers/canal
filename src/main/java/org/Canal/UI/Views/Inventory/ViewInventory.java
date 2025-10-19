@@ -1,5 +1,6 @@
 package org.Canal.UI.Views.Inventory;
 
+import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.Models.SupplyChainUnits.Bin;
 import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.Models.SupplyChainUnits.StockLine;
@@ -7,6 +8,8 @@ import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
+import org.Canal.UI.Views.Areas.Areas;
+import org.Canal.UI.Views.Areas.ViewArea;
 import org.Canal.UI.Views.System.CheckboxBarcodeFrame;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
@@ -90,60 +93,66 @@ public class ViewInventory extends LockeState implements RefreshListener {
                     String.valueOf(sl.getStatus())
             });
         }
-        return new CustomTable(columns, stks);
+        CustomTable ct = new CustomTable(columns, stks);
+        ct.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    JTable jt = (JTable) e.getSource();
+                    int viewRow = jt.getSelectedRow();
+                    if (viewRow != -1) {
+                        int modelRow = jt.convertRowIndexToModel(viewRow);
+                        String id = String.valueOf(jt.getModel().getValueAt(modelRow, 3));
+                        for (StockLine sl : Engine.getInventory(location).getStockLines()) {
+                            if (sl.getId().equals(id)) {
+                                desktop.put(new ViewStockLine(sl, desktop, ViewInventory.this));
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        return ct;
     }
 
     private JPanel toolbar() {
 
-        JPanel tb = new JPanel();
-        tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        JPanel tb = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        JPanel toolbar = new JPanel();
+        toolbar.setLayout(new BoxLayout(toolbar, BoxLayout.X_AXIS));
+        toolbar.add(Box.createHorizontalStrut(5));
 
         IconButton export = new IconButton("Export", "export", "Export as CSV");
-        export.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                table.exportToCSV();
-            }
-        });
-        tb.add(export);
-        tb.add(Box.createHorizontalStrut(5));
-
-        IconButton blockPo = new IconButton("Block", "block", "Block/Pause PO, can't be used");
-        tb.add(blockPo);
-        tb.add(Box.createHorizontalStrut(5));
+        export.addActionListener(_ -> table.exportToCSV());
+        toolbar.add(export);
+        toolbar.add(Box.createHorizontalStrut(5));
 
         IconButton move = new IconButton("Move", "start", "Move Inventory (Internally)");
         move.addActionListener(_ -> desktop.put(new MoveStock(location, ViewInventory.this)));
-        tb.add(move);
-        tb.add(Box.createHorizontalStrut(5));
+        toolbar.add(move);
+        toolbar.add(Box.createHorizontalStrut(5));
 
         IconButton movements = new IconButton("Movements", "movements", "View stock movements");
         movements.addActionListener(_ -> desktop.put(new ProductMovements(desktop, location)));
-        tb.add(movements);
-        tb.add(Box.createHorizontalStrut(5));
+        toolbar.add(movements);
+        toolbar.add(Box.createHorizontalStrut(5));
 
         IconButton inventoryValuation = new IconButton("Valuation", "autoprice", "Valuate this inventory");
         inventoryValuation.addActionListener(_ -> {
             double totalValue = 0;
-            for(StockLine sl : Engine.getInventory(location).getStockLines()){
+            for (StockLine sl : Engine.getInventory(location).getStockLines()) {
                 Item i = Engine.getItem(sl.getItem());
-                if(i != null){
+                if (i != null) {
                     totalValue += sl.getQuantity() * i.getPrice();
                 }
             }
             JOptionPane.showMessageDialog(null, "$" + totalValue, "Inventory Valuation", JOptionPane.INFORMATION_MESSAGE);
         });
-        tb.add(inventoryValuation);
-        tb.add(Box.createHorizontalStrut(5));
+        toolbar.add(inventoryValuation);
+        toolbar.add(Box.createHorizontalStrut(5));
 
         IconButton label = new IconButton("Barcodes", "label", "Print labels for org properties");
-        tb.add(label);
-        tb.add(Box.createHorizontalStrut(5));
-
-        JTextField filterValue = Elements.input(location, 10);
-        tb.add(filterValue);
-        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
-
         label.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -154,7 +163,10 @@ public class ViewInventory extends LockeState implements RefreshListener {
                 new CheckboxBarcodeFrame(printables);
             }
         });
+        toolbar.add(label);
+        toolbar.add(Box.createHorizontalStrut(5));
 
+        JTextField filterValue = Elements.input(location, 10);
         filterValue.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -164,6 +176,9 @@ public class ViewInventory extends LockeState implements RefreshListener {
                 }
             }
         });
+
+        tb.add(toolbar);
+        tb.add(filterValue);
 
         return tb;
     }
@@ -187,6 +202,7 @@ public class ViewInventory extends LockeState implements RefreshListener {
         ArrayList<Object[]> stks = new ArrayList<>();
         for (StockLine sl : Engine.getInventory(id).getStockLines()) {
             Item i = Engine.getItem(sl.getItem());
+            Bin bin = Engine.getBin(sl.getBin());
             stks.add(new String[]{
                     id,
                     sl.getHu(),
@@ -196,9 +212,9 @@ public class ViewInventory extends LockeState implements RefreshListener {
                     String.valueOf(sl.getQuantity()),
                     Constants.formatUSD(i.getPrice()),
                     Constants.formatUSD(i.getPrice() * sl.getQuantity()),
-                    sl.getArea(),
+                    bin.getArea(),
                     sl.getBin(),
-                    sl.getReceipt(),
+                    sl.getCreated(),
                     String.valueOf(sl.getStatus())
             });
         }
@@ -207,6 +223,24 @@ public class ViewInventory extends LockeState implements RefreshListener {
         JScrollPane scrollPane = (JScrollPane) table.getParent().getParent();
         scrollPane.setViewportView(filteredTable);
         table = filteredTable;
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    JTable jt = (JTable) e.getSource();
+                    int viewRow = jt.getSelectedRow();
+                    if (viewRow != -1) {
+                        int modelRow = jt.convertRowIndexToModel(viewRow);
+                        String id = String.valueOf(jt.getModel().getValueAt(modelRow, 3));
+                        for (StockLine sl : Engine.getInventory(location).getStockLines()) {
+                            if (sl.getId().equals(id)) {
+                                desktop.put(new ViewStockLine(sl, desktop, ViewInventory.this));
+                            }
+                        }
+                    }
+                }
+            }
+        });
         scrollPane.revalidate();
         scrollPane.repaint();
     }

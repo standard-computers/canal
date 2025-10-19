@@ -21,10 +21,6 @@ public class Inventory extends Objex {
         this.type = "STK";
     }
 
-    public Inventory(String location) {
-        this.location = location;
-    }
-
     public void addStock(StockLine stockLine) {
         stockLines.add(stockLine);
     }
@@ -101,7 +97,7 @@ public class Inventory extends Objex {
                 nmm.setSourceHu(stockLine.getHu());
                 nmm.setDestinationBin("OUTBOUND");
                 nmm.setDestinationHu("NO_HU");
-                nmm.setType("Goods Issue");
+                nmm.setType("GI");
                 nmm.setStatus(LockeStatus.COMPLETED);
                 materialMovements.add(nmm);
 //                if (stockLine.getQuantity() >= quantity) {

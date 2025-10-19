@@ -32,41 +32,49 @@ public class ViewDelivery extends LockeState {
         JPanel optionsInfo = new JPanel(new BorderLayout());
         optionsInfo.add(Elements.header("View Delivery", SwingConstants.LEFT), BorderLayout.NORTH);
 
-        add(info(), BorderLayout.CENTER);
+        add(general(), BorderLayout.CENTER);
         add(optionsInfo, BorderLayout.NORTH);
     }
 
-    private JPanel info(){
-        JPanel p = new JPanel();
+    private JPanel general(){
+
+        JPanel general = new JPanel();
         CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.add("Receipt", receipt());
         tabs.add("Pallets", pallets());
         tabs.add("Items", items());
-        p.setLayout(new BorderLayout());
-        p.add(toolbar(), BorderLayout.NORTH);
-        p.add(tabs, BorderLayout.CENTER);
-        return p;
+        general.setLayout(new BorderLayout());
+        general.add(toolbar(), BorderLayout.NORTH);
+        general.add(tabs, BorderLayout.CENTER);
+        return general;
     }
 
     private JPanel toolbar(){
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        tb.add(Box.createHorizontalStrut(5));
+
         IconButton markDelivered = new IconButton("Mark Delivered", "trucks", "Email Employee");
-        IconButton receive = new IconButton("Receive", "invoices", "Receive Delivery (GR)");
-        IconButton depart = new IconButton("Depart", "invoices", "Depart Delivery (GI)");
-        IconButton writeup = new IconButton("Writeup", "delinquent", "Writeup Employee");
-        IconButton suspend = new IconButton("Suspend", "blocked", "Suspend Employee");
-        IconButton label = new IconButton("Labels", "label", "Print labels for properties (like for badges)");
         tb.add(markDelivered);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton receive = new IconButton("Receive", "invoices", "Receive Delivery (GR)");
         tb.add(receive);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton depart = new IconButton("Depart", "invoices", "Depart Delivery (GI)");
         tb.add(depart);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton writeup = new IconButton("Writeup", "delinquent", "Writeup Employee");
         tb.add(writeup);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton suspend = new IconButton("Suspend", "blocked", "Suspend Employee");
         tb.add(suspend);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton label = new IconButton("Labels", "label", "Print labels for properties (like for badges)");
         tb.add(label);
         markDelivered.addMouseListener(new MouseAdapter() {
             @Override

@@ -52,7 +52,10 @@ public class CreateArea extends LockeState {
         CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.addTab("General", general());
         tabs.addTab("Controls", controls());
-        tabs.addTab("Notes", notes());
+
+        if ((boolean) Engine.codex.getValue("AREAS", "allow_notes")) {
+            tabs.addTab("Notes", notes());
+        }
 
         JPanel header = new JPanel(new BorderLayout());
         header.add(Elements.header("New Area", SwingConstants.LEFT), BorderLayout.NORTH);
@@ -112,7 +115,6 @@ public class CreateArea extends LockeState {
                     return;
                 }
             }
-
             Area area = new Area();
             area.setId(areaIdField.getText().trim());
             area.setLocation(availableLocations.getSelectedValue());

@@ -10,8 +10,12 @@ public class MaterialMovement extends Objex {
     private String destinationBin;
     private String sourceHu;
     private String destinationHu;
-    private String type = "";
     private double quantity = 0.0;
+
+    @Override
+    public void setType(String type) {
+        super.setType(type);
+    }
 
     public String getObjex() {
         return objex;
@@ -59,14 +63,6 @@ public class MaterialMovement extends Objex {
 
     public void setDestinationHu(String destinationHu) {
         this.destinationHu = destinationHu;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public double getQuantity() {

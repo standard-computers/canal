@@ -171,34 +171,12 @@ public class Invoices extends LockeState implements RefreshListener {
 
     private CustomTable buildTable() {
         String[] columns = new String[]{
-                "ID", "Location", "Name",
-                "Width", "Width UOM",
-                "Length", "Length UOM",
-                "Height", "Height UOM",
-                "Area", "Area UOM",
-                "Volume", "Volume UOM",
-                "Σ Bins", "Status", "Created"
         };
 
         ArrayList<Object[]> data = new ArrayList<>();
         for (Area area : areas) {
             data.add(new Object[]{
-                    area.getId(),
-                    area.getLocation(),
-                    area.getName(),
-                    area.getWidth(),
-                    area.getWidthUOM(),
-                    area.getLength(),
-                    area.getLengthUOM(),
-                    area.getHeight(),
-                    area.getHeightUOM(),
-                    area.getArea(),
-                    area.getAreaUOM(),
-                    area.getVolume(),
-                    area.getVolumeUOM(),
-                    area.getBins().size(),
-                    area.getStatus(),
-                    area.getCreated(),
+
             });
         }
 

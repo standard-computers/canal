@@ -3,6 +3,7 @@ package org.Canal.UI.Views.PurchaseRequisitions;
 import org.Canal.Models.BusinessUnits.OrderLineItem;
 import org.Canal.Models.BusinessUnits.PurchaseRequisition;
 import org.Canal.Models.SupplyChainUnits.Item;
+import org.Canal.Models.SupplyChainUnits.StockLine;
 import org.Canal.UI.Elements.*;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
@@ -209,6 +210,24 @@ public class CreatePurchaseRequisition extends LockeState {
             }
         });
         buttons.add(removeItem);
+        buttons.add(Box.createHorizontalStrut(5));
+
+        IconButton explodeItem = new IconButton("Explode Item", "automake", "Get item components");
+        explodeItem.addActionListener((ActionEvent _) -> {
+
+            String itemId = JOptionPane.showInputDialog("Enter Item ID");
+            if (itemId != null) {
+                Item i = Engine.getItem(itemId);
+                if (i != null) {
+                    for(StockLine ol : i.getComponents()) {
+                        Item i2 = Engine.getItem(ol.getItem());
+                        model.addRow(i2);
+                        updateTotal();
+                    }
+                }
+            }
+        });
+        buttons.add(explodeItem);
         buttons.add(Box.createHorizontalStrut(5));
 
         JScrollPane sp = new JScrollPane(table);

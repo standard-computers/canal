@@ -43,15 +43,14 @@ public class ViewPurchaseOrder extends LockeState {
         delivery = Engine.getInboundDeliveryForPO(purchaseOrder.getOrderId());
         truck = Engine.getTruckForDelivery(delivery.getId());
 
-
         CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.addTab("General", general());
         tabs.addTab("Activity", activity());
-        tabs.addTab("Items", items());
+        tabs.addTab("Items (" + purchaseOrder.getItems().size() + ")", items());
         tabs.addTab("Delivery", delivery());
         tabs.addTab("Shipping", shipping());
         tabs.addTab("Packaging", packaging());
-        tabs.addTab("Taxes & Rates", taxesAndRates());
+        tabs.addTab("Taxes & Rates (" + purchaseOrder.getRates().size() + ")", taxesAndRates());
         tabs.addTab("Notes", notes());
 
         setLayout(new BorderLayout());
@@ -130,6 +129,7 @@ public class ViewPurchaseOrder extends LockeState {
         tb.add(Box.createHorizontalStrut(5));
 
         buttons.add(tb, BorderLayout.SOUTH);
+
         return buttons;
     }
 

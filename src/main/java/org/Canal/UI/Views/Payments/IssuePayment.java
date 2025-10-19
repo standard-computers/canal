@@ -1,4 +1,4 @@
-package org.Canal.UI.Views.Finance.Payments;
+package org.Canal.UI.Views.Payments;
 
 import org.Canal.UI.Elements.Input;
 import org.Canal.UI.Elements.LockeState;
@@ -6,10 +6,13 @@ import org.Canal.UI.Elements.LockeState;
 import javax.swing.*;
 import java.awt.*;
 
-public class AcceptPayment extends LockeState {
+/**
+ * /FIN/PYMNTS/NEW
+ */
+public class IssuePayment extends LockeState {
 
-    public AcceptPayment() {
-        super("Process Payment", "/", false, true, false, true);
+    public IssuePayment() {
+        super("Issue Payment", "/FIN/PYMNTS/NEW", false, true, false, true);
         Input custId = new Input("Customer ID");
         Input poNumber = new Input("PO Number");
         Input amount = new Input("Invoice Number");

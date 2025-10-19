@@ -33,6 +33,7 @@ public class StockLine extends Objex {
     }
 
     public StockLine() {
+        this.status = LockeStatus.UNRESTRICTED;
     }
 
     public String getObjex() {

@@ -1,13 +1,10 @@
 package org.Canal.UI.Views.Positions;
 
-import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.HumanResources.Position;
 import org.Canal.UI.Elements.CustomTabbedPane;
-import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
-import org.Canal.Utils.Engine;
-import org.Canal.Utils.LockeStatus;
+import org.Canal.Utils.DesktopState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,12 +15,14 @@ import java.awt.*;
 public class ViewPosition extends LockeState {
 
     private Position position;
+    private DesktopState desktop;
 
-    public ViewPosition(Position position) {
+    public ViewPosition(Position position, DesktopState desktop) {
 
-        super("", "/HR/POS/$", false, true, false, true);
-        setFrameIcon(new ImageIcon(ViewPosition.class.getResource("/icons/positions.png")));
+        super("View Position", "/HR/POS/" + position.getId());
+        setFrameIcon(new ImageIcon(ViewPosition.class.getResource("/icons/windows/locke.png")));
         this.position = position;
+        this.desktop = desktop;
 
         CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.addTab("Information", new JPanel());
@@ -34,34 +33,26 @@ public class ViewPosition extends LockeState {
         add(tabs, BorderLayout.CENTER);
     }
 
-    private JPanel toolbar(){
+    private JPanel toolbar() {
 
-        JPanel p = new JPanel(new BorderLayout());
-        p.add(Elements.header(position.getName(), SwingConstants.LEFT), BorderLayout.NORTH);
-        JPanel buttons = new JPanel();
+        JPanel tb = new JPanel();
+        tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        tb.add(Box.createHorizontalStrut(5));
 
-        IconButton postPosition = new IconButton("Post", "positions", "Post position as available");
-        buttons.add(postPosition);
-
-        IconButton assignPosition = new IconButton("Assign", "positions", "Assign position to Employee");
-        assignPosition.addActionListener(_ -> {
-            String employeeID = JOptionPane.showInputDialog(this, "Enter Employee ID", "Employee ID", JOptionPane.QUESTION_MESSAGE);
-            Employee employee = Engine.getEmployee(employeeID);
-            if (employee == null) {
-
-            } else {
-                employee.setPosition(position.getId());
-                position.setStatus(LockeStatus.IN_USE);
-//                position.save();
-                employee.save();
-                dispose();
-
-            }
+        IconButton modify = new IconButton("Modify", "modify", "Modify Position", "/HR/POS/MOD");
+        modify.addActionListener(_ -> {
+            dispose();
+            desktop.put(new ModifyPosition(position, desktop, null));
         });
-        buttons.add(assignPosition);
+        tb.add(modify);
+        tb.add(Box.createHorizontalStrut(5));
 
-        p.add(buttons, BorderLayout.SOUTH);
+//        IconButton create = new IconButton("Create", "create", "Create Position");
+//        tb.add(create);
+//        tb.add(Box.createHorizontalStrut(5));
 
-        return p;
+        return tb;
     }
+
+
 }

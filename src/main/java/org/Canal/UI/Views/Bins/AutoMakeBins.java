@@ -7,6 +7,7 @@ import org.Canal.UI.Views.System.LockeMessages;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
+import org.Canal.Utils.Pipe;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -194,7 +195,7 @@ public class AutoMakeBins extends LockeState {
                             b.doesGR(doesGoodsReceipt.isSelected());
                             b.holdsStock(holdsStock.isSelected());
 
-                            a.addBin(b);
+                            Pipe.save("/BNS", b);
                         }
                     }
                     a.save();

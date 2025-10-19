@@ -91,6 +91,7 @@ public class ModifyBOM extends LockeState implements Includer {
 
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        tb.add(Box.createHorizontalStrut(5));
 
         IconButton save = new IconButton("Save", "save", "Save modifications");
         save.addActionListener(_ -> {

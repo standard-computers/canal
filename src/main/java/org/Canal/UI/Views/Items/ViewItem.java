@@ -48,7 +48,7 @@ public class ViewItem extends LockeState {
         tabs.addTab("Controls", controls());
         tabs.addTab("Dimensional", dimensional());
         tabs.addTab("Batch Data", batchData());
-        tabs.addTab("Bill of Materials", billOfMaterials());
+        tabs.addTab("Bill of Materials (" + item.getComponents().size() + ")", billOfMaterials());
         tabs.addTab("Units of Measure", unitsOfMeasure());
         tabs.addTab("Packaging", packaging());
 
@@ -183,14 +183,7 @@ public class ViewItem extends LockeState {
                     int r = t.getSelectedRow();
                     if (r != -1) {
                         String v = String.valueOf(t.getValueAt(r, 1));
-                        for (Area area : Engine.getAreas()) {
-                            for (Bin bin : area.getBins()) {
-                                if (v.equals(bin.getId())) {
-                                    bin.setArea(area.getId());
-                                    desktop.put(new ViewBin(bin, desktop, null));
-                                }
-                            }
-                        }
+                        desktop.put(Engine.router("/ITS/" + v, desktop));
                     }
                 }
             }

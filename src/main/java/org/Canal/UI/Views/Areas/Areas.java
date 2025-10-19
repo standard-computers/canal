@@ -113,7 +113,7 @@ public class Areas extends LockeState implements RefreshListener {
         delete.addActionListener(_ -> {
             if (table.isEditing()) table.getCellEditor().stopCellEditing();
 
-            java.util.List<Integer> checkedViewRows = new java.util.ArrayList<>();
+            java.util.List<Integer> checkedViewRows = new ArrayList<>();
             for (int viewRow = 0; viewRow < table.getRowCount(); viewRow++) {
                 if (Boolean.TRUE.equals(table.getValueAt(viewRow, 0))) {
                     checkedViewRows.add(viewRow);
@@ -215,7 +215,7 @@ public class Areas extends LockeState implements RefreshListener {
                     area.getAreaUOM(),
                     area.getVolume(),
                     area.getVolumeUOM(),
-                    area.getBins().size(),
+                    Engine.getBinsForArea(area.getId()).size(),
                     area.allowsInventory(),
                     area.allowsProduction(),
                     area.allowsSales(),

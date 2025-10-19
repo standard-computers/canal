@@ -51,7 +51,7 @@ public class Positions extends LockeState implements RefreshListener {
                     if (row != -1) {
                         String value = String.valueOf(target.getValueAt(row, 1));
                         Position p = Engine.getPosition(value);
-                        desktop.put(new ViewPosition(p));
+                        desktop.put(new ViewPosition(p, desktop));
                     }
                 }
             }
@@ -61,6 +61,7 @@ public class Positions extends LockeState implements RefreshListener {
     private JPanel toolbar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        tb.add(Box.createHorizontalStrut(5));
 
         if((boolean) Engine.codex.getValue("HR/POS", "import_enabled")){
             IconButton importPositions = new IconButton("Import", "export", "Import as CSV");
@@ -77,16 +78,10 @@ public class Positions extends LockeState implements RefreshListener {
 
         if((boolean) Engine.codex.getValue("HR/POS", "export_enabled")){
             IconButton export = new IconButton("Export", "export", "Export as CSV");
-            export.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    table.exportToCSV();
-                }
-            });
+            export.addActionListener(_ -> table.exportToCSV());
             tb.add(export);
             tb.add(Box.createHorizontalStrut(5));
         }
-
 
         IconButton createPosition = new IconButton("New", "create", "Create a Position", "/HR/POS/NEW");
         createPosition.addActionListener(_ -> desktop.put(new CreatePosition(desktop, this)));
@@ -101,10 +96,10 @@ public class Positions extends LockeState implements RefreshListener {
         tb.add(findPosition);
         tb.add(Box.createHorizontalStrut(5));
 
-        IconButton refresh = new IconButton("", "refresh", "Refresh Data");
+        IconButton refresh = new IconButton("Refresh", "refresh", "Refresh Data");
         refresh.addActionListener(_ -> refresh());
         tb.add(refresh);
-        tb.setBorder(new EmptyBorder(0, 5, 0, 5));
+        tb.add(Box.createHorizontalStrut(5));
 
         super.addKeyListener(new KeyListener() {
             @Override

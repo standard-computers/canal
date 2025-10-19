@@ -21,26 +21,37 @@ public class CreateLocation extends LockeState {
     private String objexType;
     private DesktopState desktop;
     private RefreshListener refreshListener;
+
+    //Header Elements
     private Selectable objexSelection;
     private Selectable organizations;
-    private Selectable countries;
+
+    //General Info Tab
     private JTextField locationNameField;
     private JTextField line1Field;
     private JTextField line2Field;
     private JTextField cityField;
     private JTextField stateField;
     private JTextField postalField;
+    private Selectable countries;
     private JTextField einField;
+    private JCheckBox taxExempt;
+
+    //Contact Tab
     private JTextField emailField;
     private JTextField phoneField;
-    private JCheckBox taxExempt;
+
+    //Dimensional Tab
+    private UOMField widthUOM = new UOMField();
+    private UOMField lengthUOM = new UOMField();
+    private UOMField heightUOM = new UOMField();
+
+    //Controls Tab
     private JCheckBox allowsInventory;
     private JCheckBox allowsProduction;
     private JCheckBox allowsSales;
     private JCheckBox allowsPurchasing;
-    private UOMField widthUOM = new UOMField();
-    private UOMField lengthUOM = new UOMField();
-    private UOMField heightUOM = new UOMField();
+
 
     public CreateLocation(String objexType, DesktopState desktop, RefreshListener refreshListener) {
 

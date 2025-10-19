@@ -4,6 +4,7 @@ import org.Canal.Models.BusinessUnits.Account;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Views.System.LockeMessages;
 import org.Canal.Utils.*;
+import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,6 +31,9 @@ public class CreateAccount extends LockeState {
 
     //Taxes & Rates Tab
 
+    //Notes Tab
+    private RTextScrollPane notes;
+
 
     public CreateAccount(DesktopState desktop, RefreshListener refreshListener) {
 
@@ -41,6 +45,10 @@ public class CreateAccount extends LockeState {
         CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.addTab("General", info());
         tabs.addTab("Taxes & Rates", rates());
+
+        if ((boolean) Engine.codex.getValue("ACCS", "allow_notes")) {
+            tabs.addTab("Notes", notes());
+        }
 
         setLayout(new BorderLayout());
         add(toolbar(), BorderLayout.NORTH);
@@ -126,6 +134,12 @@ public class CreateAccount extends LockeState {
         JPanel rates = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         return rates;
+    }
+
+    private RTextScrollPane notes() {
+
+        notes = Elements.simpleEditor();
+        return notes;
     }
 
     private void performReview() {

@@ -5,10 +5,7 @@ import org.Canal.Models.SupplyChainUnits.Bin;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Views.System.LockeMessages;
-import org.Canal.Utils.Constants;
-import org.Canal.Utils.DesktopState;
-import org.Canal.Utils.Engine;
-import org.Canal.Utils.RefreshListener;
+import org.Canal.Utils.*;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
@@ -104,6 +101,7 @@ public class CreateBin extends LockeState {
 
             Bin newBin = new Bin();
             newBin.setId(binId);
+            newBin.setArea(binArea);
             newBin.setName(binName);
 
             newBin.setWidth(Double.parseDouble(widthField.getValue()));
@@ -125,19 +123,11 @@ public class CreateBin extends LockeState {
             newBin.doesGI(doesGoodsIssue.isSelected());
             newBin.doesGR(doesGoodsReceipt.isSelected());
             newBin.holdsStock(holdsStock.isSelected());
-
             newBin.setNotes(notes.getTextArea().getText());
+            Pipe.save("/BNS", newBin);
 
-            Area foundArea = Engine.getArea(binArea);
-            if(foundArea != null){
-                foundArea.addBin(newBin);
-                foundArea.save();
-                dispose();
-                JOptionPane.showMessageDialog(null, "Bin '" + binName + "' created in '" + binArea + "'");
-                refreshListener.refresh();
-            }else{
-                JOptionPane.showMessageDialog(null, "Bin '" + binName + "' could not be created in '" + binArea + "'");
-            }
+            dispose();
+            if(refreshListener != null) refreshListener.refresh();
         });
         tb.add(create);
         tb.add(Box.createHorizontalStrut(5));

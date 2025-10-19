@@ -14,7 +14,7 @@ public class Delivery extends Objex {
     private Area destinationArea; //Area this will arrive to
     private Bin destinationDoor; //Door this will arrive to
     private String total;
-    private Truck truck;
+    private String truck; //Truck ID
     private ArrayList<StockLine> pallets = new ArrayList<>();
 
     @Override
@@ -86,11 +86,11 @@ public class Delivery extends Objex {
         this.total = total;
     }
 
-    public Truck getTruck() {
+    public String getTruck() {
         return truck;
     }
 
-    public void setTruck(Truck truck) {
+    public void setTruck(String truck) {
         this.truck = truck;
     }
 

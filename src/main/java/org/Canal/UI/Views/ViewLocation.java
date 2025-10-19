@@ -1,6 +1,6 @@
 package org.Canal.UI.Views;
 
-import org.Canal.Models.HumanResources.Employee;
+import org.Canal.Models.BusinessUnits.Inventory;
 import org.Canal.Models.SupplyChainUnits.*;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Views.Areas.AutoMakeAreas;
@@ -40,6 +40,7 @@ public class ViewLocation extends LockeState implements RefreshListener {
         setFrameIcon(new ImageIcon(ViewLocation.class.getResource("/icons/windows/" + Engine.codex(location.getType().replace("/", ""), "icon") + ".png")));
         this.location = location;
         this.desktop = desktop;
+        Engine.setLocation(location.getId());
 
         setLayout(new BorderLayout());
         JPanel tb = toolbar();
@@ -213,10 +214,20 @@ public class ViewLocation extends LockeState implements RefreshListener {
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton inventory = new IconButton("Inventory", "inventory", "Inventory of items in cost center");
+        inventory.addActionListener(_ -> {
+           Inventory i = Engine.getInventory(location.getId());
+           if(i == null){
+               System.out.println("Initializing Inventory");
+               i = new Inventory();
+               i.setLocation(location.getId());
+               i.setId(Constants.generateId(6));
+               Pipe.save("/STK", i);
+           }
+           desktop.put(new ViewInventory(desktop, location.getId()));
+        });
         inventory.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                desktop.put(new ViewInventory(desktop, location.getId()));
             }
         });
         tb.add(inventory);
@@ -284,53 +295,21 @@ public class ViewLocation extends LockeState implements RefreshListener {
 
     private Locke createRootNode() {
 
-        Locke[] areas = new Locke[Engine.getAreas(location.getId()).size()];
-        for (int i = 0; i < Engine.getAreas(location.getId()).size(); i++) {
-            Area l = Engine.getAreas(location.getId()).get(i);
-            areas[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/ITS/" + l.getId(), Constants.colors[0], null);
-        }
-        int binCount = 0;
-        ArrayList<Bin> bs = new ArrayList<>();
-        for(Area a : Engine.getAreas(location.getId())){
-            binCount += a.getBins().size();
-            for(Bin b : a.getBins()){
-                bs.add(b);
-            }
-        }
-        Locke[] bins = new Locke[binCount];
-        for (int i = 0; i < bs.size(); i++) {
-            Bin b = bs.get(i);
-            bins[i] = new Locke(b.getId(), UIManager.getIcon("FileView.fileIcon"), "/BNS/" + b.getId(), Constants.colors[1], null);
-        }
-        Locke[] customers = new Locke[Engine.getLocations(location.getOrganization(), "CSTS").size()];
-        for (int i = 0; i < Engine.getLocations(location.getOrganization(), "CSTS").size(); i++) {
-            Location l = Engine.getLocations(location.getOrganization(), "CSTS").get(i);
-            customers[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/CSTS/" + l.getId(), Constants.colors[2], null);
-        }
-        Locke[] vendors = new Locke[Engine.getLocations(location.getOrganization(), "DCSS").size()];
-        for (int i = 0; i < Engine.getLocations(location.getOrganization(), "DCSS").size(); i++) {
-            Location l = Engine.getLocations(location.getOrganization(), "DCSS").get(i);
-            vendors[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/VEND/" + l.getId(), Constants.colors[3], null);
-        }
-        Locke[] employees = new Locke[Engine.getEmployees(location.getId()).size()];
-        for (int i = 0; i < Engine.getEmployees(location.getId()).size(); i++) {
-            Employee e = Engine.getEmployees(location.getId()).get(i);
-            employees[i] = new Locke(e.getId() + " - " + e.getName(), UIManager.getIcon("FileView.fileIcon"), "/VEND/" + e.getId(), Constants.colors[3], null);
-        }
-        Locke[] items = new Locke[Engine.getItems(location.getOrganization()).size()];
-        for (int i = 0; i < Engine.getItems(location.getOrganization()).size(); i++) {
-            Item l = Engine.getItems(location.getOrganization()).get(i);
-            items[i] = new Locke(l.getId() + " - " + l.getName(), UIManager.getIcon("FileView.fileIcon"), "/ITS/" + l.getId(), Constants.colors[4], null);
-        }
         return new Locke(location.getName(), UIManager.getIcon("FileView.fileIcon"), "/DCSS/" + location.getId(), new Locke[]{
-                new Locke("Areas", UIManager.getIcon("FileView.fileIcon"), "/AREAS", areas),
-                new Locke("Bins", UIManager.getIcon("FileView.fileIcon"), "/BNS", bins),
-                new Locke("Customers", UIManager.getIcon("FileView.fileIcon"), "/CSTS", customers),
                 new Locke("Orders", UIManager.getIcon("FileView.fileIcon"), "/ORDS", null),
-                new Locke("Vendors", UIManager.getIcon("FileView.fileIcon"), "/VEND", employees),
-                new Locke("People", UIManager.getIcon("FileView.fileIcon"), "/EMPS", employees),
-                new Locke("Items", UIManager.getIcon("FileView.fileIcon"), "/ITS", items),
-                new Locke("Materials", UIManager.getIcon("FileView.fileIcon"), "/MTS", null),
+                new Locke("Stock", UIManager.getIcon("FileView.directoryIcon"), "/STK", new Locke[] {
+                        new Locke("Move Stock Internally", UIManager.getIcon("FileView.fileIcon"), "/STK/MOD/MOV", null),
+                        new Locke("Move Bin to Bin", UIManager.getIcon("FileView.fileIcon"), "/STK/MV/BB", null),
+                        new Locke("Move Qty to Bin", UIManager.getIcon("FileView.fileIcon"), "/STK/MV/BN", null),
+                        new Locke("Move HU to Bin", UIManager.getIcon("FileView.fileIcon"), "/STK/MV/FULL", null),
+                        new Locke("Directed Move HU to Bin", UIManager.getIcon("FileView.fileIcon"), "/STK/MV/DFULL", null),
+                }),
+                new Locke("Orders", UIManager.getIcon("FileView.fileIcon"), "/ORDS", new Locke[] {
+                        new Locke("Orders", UIManager.getIcon("FileView.fileIcon"), "/ORDS", null)
+                }),
+                new Locke("Bins", UIManager.getIcon("FileView.fileIcon"), "/ORDS", new Locke[] {
+                        new Locke("Orders", UIManager.getIcon("FileView.fileIcon"), "/ORDS", null)
+                }),
         });
     }
 

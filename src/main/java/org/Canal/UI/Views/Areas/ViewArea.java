@@ -125,17 +125,7 @@ public class ViewArea extends LockeState implements RefreshListener {
         IconButton delete = new IconButton("Delete", "delete", "Delete Area", "/AREAS/DEL");
         delete.addActionListener(_ -> {
 
-            if (area.getBins().isEmpty()) {
 
-                area.setStatus(LockeStatus.DELETED);
-                area.save();
-                dispose();
-                if (refreshListener != null) {
-                    refreshListener.refresh();
-                }
-            } else {
-
-            }
         });
         tb.add(delete);
         tb.add(Box.createHorizontalStrut(5));
@@ -234,7 +224,7 @@ public class ViewArea extends LockeState implements RefreshListener {
         };
 
         ArrayList<Object[]> data = new ArrayList<>();
-        for (Bin b : Engine.getArea(area.getId()).getBins()) {
+        for (Bin b : Engine.getBinsForArea(area.getId())) {
             //TODO remove extra call to are some how
             data.add(new Object[]{
                     b.getId(),
@@ -273,14 +263,8 @@ public class ViewArea extends LockeState implements RefreshListener {
                     int r = t.getSelectedRow();
                     if (r != -1) {
                         String v = String.valueOf(t.getValueAt(r, 1));
-                        for (Area area : Engine.getAreas()) {
-                            for (Bin bin : area.getBins()) {
-                                if (v.equals(bin.getId())) {
-                                    bin.setArea(area.getId());
-                                    desktop.put(new ViewBin(bin, desktop, null));
-                                }
-                            }
-                        }
+                        Bin bin = Engine.getBin(v);
+                        desktop.put(new ViewBin(bin, desktop, null));
                     }
                 }
             }

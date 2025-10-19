@@ -98,6 +98,7 @@ public class Engine {
     private static Configuration configuration = new Configuration();
     public static Codex codex;
     public static Location organization;
+    public static String location;
     public static User assignedUser;
     private static Gson gson = new Gson();
 
@@ -139,6 +140,14 @@ public class Engine {
 
     public static Location getOrganization() {
         return organization;
+    }
+
+    public static String getLocation() {
+        return location;
+    }
+
+    public static void setLocation(String location) {
+        Engine.location = location;
     }
 
     /**
@@ -261,23 +270,15 @@ public class Engine {
 
     public static List<Area> getAreas(String id) {
 
-        if (id == null || id.isBlank()) return Collections.emptyList();
-
-        if (Engine.getConfiguration().getMongodb().isEmpty()) {
-            return getAreas().stream()
-                    .filter(a -> Objects.equals(a.getLocation(), id))
-                    .collect(Collectors.toList());
-        } else {
-            List<Area> areas = new ArrayList<>();
-            try (MongoCursor<Document> cur = ConnectDB.collection("AREAS")
-                    .find(new Document("location", id))
-                    .iterator()) {
-                while (cur.hasNext()) {
-                    areas.add(Pipe.load(cur.next(), Area.class));
-                }
+        List<Area> areas = new ArrayList<>();
+        try (MongoCursor<Document> cur = ConnectDB.collection("AREAS")
+                .find(new Document("location", id))
+                .iterator()) {
+            while (cur.hasNext()) {
+                areas.add(Pipe.load(cur.next(), Area.class));
             }
-            return areas;
         }
+        return areas;
     }
 
     public static Area getArea(String id) {
@@ -287,36 +288,45 @@ public class Engine {
     /**
      * BINS
      */
-    public static Bin getBin(String id) {
-        ArrayList<Area> areas = getAreas();
-        for (Area area : areas) {
-            for (Bin bin : area.getBins()) {
-                if (bin.getId().equals(id)) {
-                    return bin;
-                }
-            }
-        }
-        return null;
+    public static List<Bin> getBins(){
+
+        ArrayList<Bin> bins = new ArrayList<>();
+        ConnectDB.collection("BNS").find().forEach(bin -> {
+            Bin u = Pipe.load(bin, Bin.class);
+            bins.add(u);
+        });
+        bins.sort(Comparator.comparing(Bin::getId));
+        return bins;
     }
 
-    public static ArrayList<Bin> getBins(int limit) {
-        ArrayList<Bin> bins = new ArrayList<>();
-        if (limit == 0) return bins;
-        final boolean unlimited = limit < 0;
-        outer:
-        for (Area area : getAreas()) {
-            if (area == null) continue;
-            java.util.List<Bin> areaBins = area.getBins();
-            if (areaBins == null || areaBins.isEmpty()) continue;
-            for (Bin b : areaBins) {
-                b.setArea(area.getId());
-                bins.add(b);
-                if (!unlimited && bins.size() >= limit) {
-                    break outer;
-                }
+    public static List<Bin> getBinsForArea(String area) {
+
+        List<Bin> bins = new ArrayList<>();
+        try (MongoCursor<Document> cur = ConnectDB.collection("BNS")
+                .find(new Document("area", area))
+                .iterator()) {
+            while (cur.hasNext()) {
+                bins.add(Pipe.load(cur.next(), Bin.class));
             }
         }
         return bins;
+    }
+    public static List<Bin> getBinsForLocation(String location) {
+
+        List<Bin> bins = new ArrayList<>();
+        try (MongoCursor<Document> cur = ConnectDB.collection("BNS")
+                .find(new Document("location", location))
+                .iterator()) {
+            while (cur.hasNext()) {
+                bins.add(Pipe.load(cur.next(), Bin.class));
+            }
+        }
+        return bins;
+    }
+
+    public static Bin getBin(String id) {
+
+        return getBins().stream().filter(bin -> bin.getId().equals(id)).toList().stream().findFirst().orElse(null);
     }
 
     /**
@@ -528,7 +538,7 @@ public class Engine {
 
         ArrayList<Delivery> outboundDeliveries = new ArrayList<>();
         for(Delivery delivery : getOutboundDeliveries()){
-            if(delivery.getDestination().equals(destination)){
+            if(delivery.getOrigin().equals(destination)){
                 outboundDeliveries.add(delivery);
             }
         }
@@ -1041,6 +1051,9 @@ public class Engine {
             case "/USRS/CHG_PSSWD" -> {
                 return new ChangeUserPassword();
             }
+            case "/USRS/MOD/ALKS" -> {
+                return new AddLocke();
+            }
             case "/USRS/NEW" -> {
                 return new CreateUser(desktop, null);
             }
@@ -1051,6 +1064,18 @@ public class Engine {
             }
             case "/STK/MOD/MV" -> {
                 return new MoveStock("", null);
+            }
+            case "/STK/MV/BN" -> {
+                return new MoveToBin(null);
+            }
+            case "/STK/MV/BB" -> {
+                return new MoveBinToBin(null);
+            }
+            case "/STK/MV/FULL" -> {
+                return new MoveToBinFull(null);
+            }
+            case "/STK/MV/DFULL" -> {
+                return new DirectedMoveToBinFull(null);
             }
 
             //INVOICES

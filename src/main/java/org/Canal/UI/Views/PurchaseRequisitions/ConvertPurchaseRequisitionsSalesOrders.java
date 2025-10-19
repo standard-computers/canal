@@ -17,9 +17,9 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
 /**
- * /ORDS/PR/PO
+ * /ORDS/PR/SO
  */
-public class ConvertPurchaseRequisitions extends LockeState {
+public class ConvertPurchaseRequisitionsSalesOrders extends LockeState {
 
     private DesktopState desktop;
     private JPanel checkboxPanel;
@@ -39,10 +39,10 @@ public class ConvertPurchaseRequisitions extends LockeState {
     //Notes Tab
     private RTextScrollPane notes;
 
-    public ConvertPurchaseRequisitions(DesktopState desktop) {
+    public ConvertPurchaseRequisitionsSalesOrders(DesktopState desktop) {
 
-        super("Convert Purchase Requisitions", "/ORDS/PR/PO");
-        setFrameIcon(new ImageIcon(ConvertPurchaseRequisitions.class.getResource("/icons/start.png")));
+        super("Convert Purchase Requisitions", "/ORDS/PR/SO");
+        setFrameIcon(new ImageIcon(ConvertPurchaseRequisitionsSalesOrders.class.getResource("/icons/start.png")));
         this.desktop = desktop;
 
         for(PurchaseRequisition purchaseRequisition : Engine.getPurchaseRequisitions()){
@@ -85,7 +85,7 @@ public class ConvertPurchaseRequisitions extends LockeState {
         automake.addActionListener(_ -> {
 
             // 1) Gather selection & do quick validations on the EDT
-            java.util.List<Integer> selectedIdxs = new java.util.ArrayList<>();
+            java.util.List<Integer> selectedIdxs = new ArrayList<>();
             for (int i = 0; i < checkboxes.size(); i++) {
                 if (checkboxes.get(i).isSelected()) selectedIdxs.add(i);
             }

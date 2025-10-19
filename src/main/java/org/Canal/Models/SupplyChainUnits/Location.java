@@ -8,12 +8,15 @@ import java.util.ArrayList;
 public class Location extends Objex {
 
     private String organization;
+
     private String line1;
     private String line2;
     private String city;
     private String state;
     private String postal;
     private String country;
+
+
     private boolean taxExempt = false;
     private String ein = "UNKNOWN";
     private String email = "UNKNOWN";
@@ -31,6 +34,15 @@ public class Location extends Objex {
     private boolean allowsProduction = false;
     private boolean allowsSales = true;
     private boolean allowsPurchasing = true;
+
+    //TODO
+    private boolean reservations = true; //Consider Stock Reservations
+    private boolean deficits = false; //Allow Stock Deficits
+    private boolean doProduction = true; //If item and location can produce, make MO
+    private boolean backorder = true; //Block order creation if false and no stock for item
+    private ArrayList<String> backup; //Array of Location IDs
+    private int cadence = 86400; //Every X Seconds AutoMake a Plan and execute it for this location
+    private ArrayList<String> suppliers = new ArrayList<>();
 
 
     @Override

@@ -4,7 +4,6 @@ import org.Canal.Models.Objex;
 
 public class Task extends Objex {
 
-    private String type;
     private String description;
     private String workOrder;
     private String flow;
@@ -22,14 +21,6 @@ public class Task extends Objex {
     private boolean goodsReceipt;
     private double duration;
     private String durationUOM;
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
 
     public String getDescription() {
         return description;

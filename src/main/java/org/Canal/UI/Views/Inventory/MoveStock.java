@@ -14,7 +14,6 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * /STK/MOD/MV
@@ -26,17 +25,9 @@ public class MoveStock extends LockeState {
         super("Move Stock", "/STK/MOD/MV", false, true, false, true);
         setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/windows/locke.png")));
 
-        HashMap<String, String> putawayBinOptions = new HashMap<>();
-        ArrayList<Area> as = (ArrayList<Area>) Engine.getAreas(location);
-        for (Area a : as) {
-            for (Bin b : a.getBins()) {
-                putawayBinOptions.put(b.getId(), b.getId());
-            }
-        }
-        Selectable destinationBins = new Selectable(putawayBinOptions);
-        destinationBins.editable();
 
-        JTextField mvHu = Elements.input();
+        JTextField mvHu = Elements.input(15);
+        JTextField destinationBins = Elements.input();
         JTextField mvQty = Elements.input();
         JCheckBox createHu = new JCheckBox("Assigns new HU to SockLine");
         JCheckBox createWt = new JCheckBox();
@@ -44,8 +35,8 @@ public class MoveStock extends LockeState {
         createHu.setSelected(true);
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Destination Bin", Constants.colors[0]), destinationBins);
         form.addInput(Elements.coloredLabel("HU", Constants.colors[1]), mvHu);
+        form.addInput(Elements.coloredLabel("Destination Bin", Constants.colors[0]), destinationBins);
         form.addInput(Elements.coloredLabel("Quantity", Constants.colors[2]), mvQty);
         form.addInput(Elements.coloredLabel("Create HU", Constants.colors[3]), createHu);
         form.addInput(Elements.coloredLabel("Create WT", Constants.colors[3]), createWt);
@@ -56,6 +47,7 @@ public class MoveStock extends LockeState {
         add(form, BorderLayout.CENTER);
         JButton move = Elements.button("Move Stock");
         add(move, BorderLayout.SOUTH);
+//        move.addActionListener(e -> {});
         move.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -119,7 +111,7 @@ public class MoveStock extends LockeState {
                         mm.setObjex(modified.getObjex());
                         mm.setUser(Engine.getAssignedUser().getId());
                         mm.setSourceBin(modified.getBin());
-                        mm.setDestinationBin(destinationBins.getSelectedValue());
+                        mm.setDestinationBin(destinationBins.getText());
                         mm.setSourceHu(modified.getHu());
                         mm.setDestinationHu(newHu);
                         mm.setQuantity(qty);
@@ -128,7 +120,6 @@ public class MoveStock extends LockeState {
                     }
                 }
                 i.save();
-                JOptionPane.showMessageDialog(MoveStock.this, "Moving Stock Complete!");
                 if (success) {
                     refreshListener.refresh();
                 }

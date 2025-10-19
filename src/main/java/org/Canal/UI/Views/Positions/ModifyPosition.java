@@ -12,15 +12,14 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 /**
- * /HR/POS/NEW
- *  Create a new Position in an Organization.
- * Positions MUST be attached to a Department <em>/DPTS</em>
+ * /HR/POS/MOD/$
+ * Modify a Position
  */
-public class CreatePosition extends LockeState {
+public class ModifyPosition extends LockeState {
 
+    private Position position;
     private DesktopState desktop;
     private RefreshListener refreshListener;
-    private JTextField positionIdField;
     private Selectable organizations;
     private JTextField positionNameField;
     private JTextField descriptionField;
@@ -31,14 +30,14 @@ public class CreatePosition extends LockeState {
     private JCheckBox isHourly;
     private JCheckBox isBonusable;
     private JCheckBox isCommissionable;
-    private JCheckBox autoPost;
     private ArrayList<Employee> employees = new ArrayList<>();
     private CustomTable employeesTable;
 
-    public CreatePosition(DesktopState desktop, RefreshListener refreshListener) {
+    public ModifyPosition(Position position, DesktopState desktop, RefreshListener refreshListener) {
 
-        super("Create a Position", "/HR/POS/NEW", false, true, false, true);
-        setFrameIcon(new ImageIcon(CreatePosition.class.getResource("/icons/create.png")));
+        super("Modify a Position", "/HR/POS/MOD/" + position.getId());
+        setFrameIcon(new ImageIcon(ModifyPosition.class.getResource("/icons/modify.png")));
+        this.position = position;
         this.desktop = desktop;
         this.refreshListener = refreshListener;
 
@@ -48,7 +47,7 @@ public class CreatePosition extends LockeState {
 
         setLayout(new BorderLayout());
         JPanel header = new JPanel(new BorderLayout());
-        header.add(Elements.header("New Position", SwingConstants.LEFT), BorderLayout.NORTH);
+        header.add(Elements.header("Modify " + position.getName(), SwingConstants.LEFT), BorderLayout.NORTH);
         header.add(toolbar(), BorderLayout.SOUTH);
         add(header, BorderLayout.NORTH);
         add(tabs, BorderLayout.CENTER);
@@ -56,20 +55,18 @@ public class CreatePosition extends LockeState {
 
     private JPanel toolbar() {
 
-        JPanel tb = new JPanel();
-        tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
-        tb.add(Box.createHorizontalStrut(5));
+        JPanel toolbar = new JPanel();
+        toolbar.setLayout(new BoxLayout(toolbar, BoxLayout.X_AXIS));
+        toolbar.add(Box.createHorizontalStrut(5));
 
         IconButton review = new IconButton("Review", "review", "Review Position data");
         review.addActionListener(_ -> performReview());
-        tb.add(review);
-        tb.add(Box.createHorizontalStrut(5));
+        toolbar.add(review);
+        toolbar.add(Box.createHorizontalStrut(5));
 
-        IconButton create = new IconButton("Create", "create", "Create Position");
-        create.addActionListener(_ -> {
+        IconButton save = new IconButton("Save", "save", "Save changes");
+        save.addActionListener(_ -> {
 
-            Position position = new Position();
-            position.setId(positionIdField.getText());
             position.setOrganization(organizations.getSelectedValue());
             position.setDepartment(departments.getSelectedValue());
             position.setName(positionNameField.getText());
@@ -80,44 +77,42 @@ public class CreatePosition extends LockeState {
             position.setBonus(isBonusable.isSelected());
             position.setCommission(isCommissionable.isSelected());
             position.setStatus(LockeStatus.NEW);
-            Pipe.save("/HR/POS", position);
+            position.save();
 
-            if((boolean) Engine.codex.getValue("HR/POS", "item_created_alert")){
+            if ((boolean) Engine.codex.getValue("HR/POS", "item_created_alert")) {
                 JOptionPane.showMessageDialog(null, "Position succesfully created!");
             }
             dispose();
 
-            if(refreshListener != null) refreshListener.refresh();
+            if (refreshListener != null) refreshListener.refresh();
 
-            if((boolean) Engine.codex.getValue("HR/POS", "auto_open_new")){
+            if ((boolean) Engine.codex.getValue("HR/POS", "auto_open_new")) {
                 desktop.put(new ViewPosition(position, desktop));
             }
         });
-        tb.add(create);
-        tb.add(Box.createHorizontalStrut(5));
+        toolbar.add(save);
+        toolbar.add(Box.createHorizontalStrut(5));
 
-        return tb;
+        return toolbar;
     }
 
     private JPanel general() {
 
         JPanel general = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-        positionIdField = Elements.input("R-DEPT-" + (Engine.getPositions().size() + 1));
         organizations = Selectables.organizations();
-        positionNameField = Elements.input();
-        descriptionField = Elements.input();
+        positionNameField = Elements.input(position.getName());
+        descriptionField = Elements.input(position.getDescription());
         departments = Selectables.departments();
-        compensationField = Elements.input();
-        availabilityField = Elements.input("1");
+        departments.setSelectedValue(position.getDepartment());
+        compensationField = Elements.input(String.valueOf(position.getCompensation()));
+        availabilityField = Elements.input(String.valueOf(position.getAvailability()));
         countries = Selectables.countries();
-        isHourly = new JCheckBox("Employee must clock in and out");
-        isBonusable = new JCheckBox("Employee can earn bonuses");
-        isCommissionable = new JCheckBox("Position is or can earn commission");
-        autoPost = new JCheckBox("Post position as open?");
+        isHourly = new JCheckBox("Employee must clock in and out", position.isHourly());
+        isBonusable = new JCheckBox("Employee can earn bonuses", position.isBonus());
+        isCommissionable = new JCheckBox("Position is or can earn commission", position.isCommission());
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("*New Position ID", UIManager.getColor("Label.foreground")), positionIdField);
         form.addInput(Elements.coloredLabel("*Organization", UIManager.getColor("Label.foreground")), organizations);
         form.addInput(Elements.coloredLabel("Position Name", Constants.colors[0]), positionNameField);
         form.addInput(Elements.coloredLabel("Short Description", Constants.colors[1]), descriptionField);
@@ -128,14 +123,12 @@ public class CreatePosition extends LockeState {
         form.addInput(Elements.coloredLabel("Hourly?", Constants.colors[6]), isHourly);
         form.addInput(Elements.coloredLabel("Earns Bonuses", Constants.colors[7]), isBonusable);
         form.addInput(Elements.coloredLabel("Earns Commission", Constants.colors[8]), isCommissionable);
-        form.addInput(Elements.coloredLabel("Auto Post", UIManager.getColor("Label.foreground")), autoPost);
         general.add(form);
 
         return general;
     }
 
-    private CustomTable employeesTable(){
-
+    private CustomTable employeesTable() {
         String[] columns = new String[]{
                 "ID",
                 "Name"
@@ -151,7 +144,6 @@ public class CreatePosition extends LockeState {
     }
 
     private JPanel employees() {
-
         JPanel employeesPanel = new JPanel(new BorderLayout());
 
         JPanel buttons = new JPanel();
@@ -191,10 +183,10 @@ public class CreatePosition extends LockeState {
                         employeesTable = newTable;
                         scrollPane.revalidate();
                         scrollPane.repaint();
-                    }else{
+                    } else {
                         System.out.println("No employee selected");
                     }
-                }else{
+                } else {
                     System.out.println("No employee selected");
                 }
             }

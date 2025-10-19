@@ -196,7 +196,7 @@ public class CreateInvoice extends LockeState {
                     Pipe.save("/TRANS/TRCKS", t);
 
                     Delivery d = new Delivery();
-                    d.setType("IDO");
+                    d.setType("TRANS/IDO");
                     d.setId(((String) Engine.codex("TRANS/IDO", "prefix") + 1000 + (Engine.getInboundDeliveries().size() + 1)));
                     d.setPurchaseOrder(newInvoice.getOrderId());
                     d.setExpectedDelivery(newInvoice.getExpectedDelivery());

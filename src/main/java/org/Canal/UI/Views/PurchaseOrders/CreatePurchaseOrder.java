@@ -161,6 +161,7 @@ public class CreatePurchaseOrder extends LockeState {
             }
             int ccc = JOptionPane.showConfirmDialog(null, "You have selected the Org ID as the charge account. Are you sure you want to charge the corp account?", "Confirm order?", JOptionPane.YES_NO_CANCEL_OPTION);
             if (ccc == JOptionPane.YES_OPTION) {
+
                 String newPOId = ((String) Engine.codex("ORDS/PO", "prefix")) + (70000000 + (Engine.getPurchaseOrders().size() + 1));
                 newOrder.setType("ORDS/PO");
                 newOrder.setOwner((Engine.getAssignedUser().getId()));
@@ -202,7 +203,7 @@ public class CreatePurchaseOrder extends LockeState {
                     Pipe.save("/TRANS/TRCKS", t);
 
                     Delivery d = new Delivery();
-                    d.setType("IDO");
+                    d.setType("TRANS/IDO");
                     d.setId(((String) Engine.codex("TRANS/IDO", "prefix") + 1000 + (Engine.getInboundDeliveries().size() + 1)));
                     d.setPurchaseOrder(newOrder.getOrderId());
                     d.setExpectedDelivery(newOrder.getExpectedDelivery());

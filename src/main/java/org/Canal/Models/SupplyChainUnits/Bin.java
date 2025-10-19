@@ -1,5 +1,6 @@
 package org.Canal.Models.SupplyChainUnits;
 
+import org.Canal.Models.BusinessUnits.Inventory;
 import org.Canal.Models.Objex;
 import org.Canal.Utils.Engine;
 
@@ -31,7 +32,7 @@ public class Bin extends Objex {
     private boolean goodsreceipt;
     private boolean holdsStock;
 
-    public Bin(){
+    public Bin() {
         this.type = "BNS";
     }
 
@@ -195,9 +196,14 @@ public class Bin extends Objex {
         this.holdsStock = holdsStock;
     }
 
-    public void save() {
-        Area a = Engine.getArea(area);
-        a.setBin(this);
-        a.save();
+    public boolean hasInventory() {
+        Area a = Engine.getArea(this.area);
+        Inventory i = Engine.getInventory(a.getLocation());
+        for (StockLine sl : i.getStockLines()) {
+            if (sl.getBin().equals(this.id)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

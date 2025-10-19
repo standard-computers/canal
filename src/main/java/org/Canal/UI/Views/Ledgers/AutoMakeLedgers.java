@@ -162,7 +162,7 @@ public class AutoMakeLedgers extends LockeState {
            } else if (searchValue.startsWith("/")) { //Objex type selection
 
                for (int i = 0; i < checkboxes.size(); i++) {
-                   if(locations.get(i).getType().equals(searchValue.toUpperCase())){
+                   if(locations.get(i).getType().equals(searchValue.toUpperCase().replace("/", ""))){
                        checkboxes.get(i).setSelected(!checkboxes.get(i).isSelected());
                    }
                }

@@ -2,7 +2,6 @@ package org.Canal.Models.SupplyChainUnits;
 
 import org.Canal.Models.Objex;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -13,7 +12,10 @@ import java.util.Map;
  */
 public class Area extends Objex {
 
+    //General Properties
     private String location = ""; //Location ID this are belongs to
+
+    //Dimensional
     private double width;
     private String widthUOM;
     private double length;
@@ -21,7 +23,8 @@ public class Area extends Objex {
     private double height;
     private String heightUOM;
     private Map<String, String> properties;
-    private ArrayList<Bin> bins = new ArrayList<>();
+
+    //Controls
     private boolean allowsInventory = true;
     private boolean allowsProduction = false;
     private boolean allowsSales = true;
@@ -109,41 +112,6 @@ public class Area extends Objex {
 
     public void setProperties(Map<String, String> properties) {
         this.properties = properties;
-    }
-
-    public ArrayList<Bin> getBins() {
-        return bins;
-    }
-
-    public void setBins(ArrayList<Bin> bins) {
-        this.bins = bins;
-    }
-
-    public void setBin(Bin bin) {
-        for(int i = 0; i < bins.size(); i++){
-            Bin b = bins.get(i);
-            if(b.getId().equals(bin.getId())){
-                bins.set(i, bin);
-                break;
-            }
-        }
-    }
-
-    public void addBin(Bin newBin) {
-        bins.add(newBin);
-    }
-
-    public void removeBin(Bin bin) {
-        bins.remove(bin);
-    }
-
-    public void removeBin(String binId) {
-        for(int i = 0; i < bins.size(); i++){
-            Bin bin = bins.get(i);
-            if(bin.getId().equals(binId)){
-                bins.remove(bin);
-            }
-        }
     }
 
     public boolean allowsInventory() {

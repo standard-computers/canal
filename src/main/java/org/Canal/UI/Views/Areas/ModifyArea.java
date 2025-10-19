@@ -52,7 +52,10 @@ public class ModifyArea extends LockeState {
         CustomTabbedPane tabbedPane = new CustomTabbedPane();
         tabbedPane.addTab("General", general());
         tabbedPane.addTab("Controls", controls());
-        tabbedPane.addTab("Notes", notes());
+
+        if ((boolean) Engine.codex.getValue("AREAS", "allow_notes")) {
+            tabbedPane.addTab("Notes", notes());
+        }
 
         JPanel header = new JPanel(new BorderLayout());
         header.add(Elements.header("Modify " + area.getName() + " - " + area.getId(), SwingConstants.LEFT), BorderLayout.NORTH);
@@ -133,18 +136,7 @@ public class ModifyArea extends LockeState {
         IconButton archive = new IconButton("Archive", "archive", "Archive Area", "/AREAS/ARCHV");
         archive.addActionListener(_ -> {
 
-            if (area.getBins().isEmpty()) {
 
-                area.setStatus(LockeStatus.ARCHIVED);
-                area.save();
-
-                dispose();
-                if (refreshListener != null) {
-                    refreshListener.refresh();
-                }
-            } else {
-
-            }
         });
         tb.add(archive);
         tb.add(Box.createHorizontalStrut(5));
@@ -152,18 +144,7 @@ public class ModifyArea extends LockeState {
         IconButton delete = new IconButton("Delete", "delete", "Delete Area", "/AREAS/DEL");
         delete.addActionListener(_ -> {
 
-            if (area.getBins().isEmpty()) {
 
-                area.setStatus(LockeStatus.DELETED);
-                area.save();
-
-                dispose();
-                if (refreshListener != null) {
-                    refreshListener.refresh();
-                }
-            } else {
-
-            }
         });
         tb.add(delete);
         tb.add(Box.createHorizontalStrut(5));

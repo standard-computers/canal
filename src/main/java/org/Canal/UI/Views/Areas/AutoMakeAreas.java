@@ -72,8 +72,11 @@ public class AutoMakeAreas extends LockeState {
 
         IconButton create = new IconButton("AutoMake", "automake", "Start AutoMake");
         create.addActionListener(_ -> {
+
             for (JCheckBox checkbox : checkboxes) {
+
                 if (checkbox.isSelected()) {
+
                     Area newArea = new Area();
                     newArea.setId(areaIdField.getText().trim().replace("@", checkbox.getActionCommand()));
                     newArea.setLocation(checkbox.getActionCommand());
@@ -84,6 +87,10 @@ public class AutoMakeAreas extends LockeState {
                     newArea.setLengthUOM(lengthField.getUOM());
                     newArea.setHeight(Double.parseDouble(heightField.getValue()));
                     newArea.setHeightUOM(heightField.getUOM());
+                    newArea.setAllowsInventory(allowsInventory.isSelected());
+                    newArea.setAllowsProduction(allowsProduction.isSelected());
+                    newArea.setAllowsSales(allowsSales.isSelected());
+                    newArea.setAllowsPurchasing(allowsPurchasing.isSelected());
                     Pipe.save("/AREAS", newArea);
                 }
             }
@@ -170,7 +177,7 @@ public class AutoMakeAreas extends LockeState {
             } else if (searchValue.startsWith("/")) { //Objex type selection
 
                 for (int i = 0; i < checkboxes.size(); i++) {
-                    if (locations.get(i).getType().equals(searchValue.toUpperCase())) {
+                    if (locations.get(i).getType().equals(searchValue.toUpperCase().replaceFirst("/", ""))) {
                         checkboxes.get(i).setSelected(!checkboxes.get(i).isSelected());
                     }
                 }
