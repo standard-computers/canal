@@ -42,13 +42,13 @@ public class CreateLedger extends LockeState {
         ledgerEndPicker = new DatePicker();
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("*New Ledger ID", UIManager.getColor("Label.foreground")), ledgerIdField);
-        form.addInput(Elements.coloredLabel("Organization", Constants.colors[0]), organizations);
-        form.addInput(Elements.coloredLabel("Ledger Name", Constants.colors[1]), ledgerNameField);
-        form.addInput(Elements.coloredLabel("Location", Constants.colors[2]), locationField);
-        form.addInput(Elements.coloredLabel("Period", Constants.colors[3]), periods);
-        form.addInput(Elements.coloredLabel("Start Date", Constants.colors[4]), ledgerStartPicker);
-        form.addInput(Elements.coloredLabel("Close Date", Constants.colors[5]), ledgerEndPicker);
+        form.addInput(Elements.inputLabel("*New Ledger ID"), ledgerIdField);
+        form.addInput(Elements.inputLabel("Organization"), organizations);
+        form.addInput(Elements.inputLabel("Ledger Name"), ledgerNameField);
+        form.addInput(Elements.inputLabel("Location"), locationField);
+        form.addInput(Elements.inputLabel("Period"), periods);
+        form.addInput(Elements.inputLabel("Start Date"), ledgerStartPicker);
+        form.addInput(Elements.inputLabel("Close Date"), ledgerEndPicker);
 
         setLayout(new BorderLayout());
         add(toolbar(), BorderLayout.NORTH);

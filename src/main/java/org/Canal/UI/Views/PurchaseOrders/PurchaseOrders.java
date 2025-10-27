@@ -50,7 +50,7 @@ public class PurchaseOrders extends LockeState implements RefreshListener {
         tb.add(Box.createHorizontalStrut(5));
 
         if((boolean) Engine.codex.getValue("ORDS/PO", "import_enabled")){
-            IconButton importPOs = new IconButton("Import", "export", "Import as CSV");
+            IconButton importPOs = new IconButton("Import", "import", "Import as CSV");
             tb.add(importPOs);
             tb.add(Box.createHorizontalStrut(5));
         }
@@ -86,7 +86,7 @@ public class PurchaseOrders extends LockeState implements RefreshListener {
         tb.add(findPO);
         tb.add(Box.createHorizontalStrut(5));
 
-        IconButton labels = new IconButton("Labels", "label", "Print labels for org properties");
+        IconButton labels = new IconButton("Labels", "barcodes", "Print labels for org properties");
         tb.add(labels);
         tb.add(Box.createHorizontalStrut(5));
 

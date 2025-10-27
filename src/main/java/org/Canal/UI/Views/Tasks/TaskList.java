@@ -37,34 +37,35 @@ public class TaskList extends LockeState {
     }
 
     private JPanel toolbar() {
+
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+
         IconButton export = new IconButton("", "export", "Export as CSV");
-        IconButton createPurchaseOrder = new IconButton("Create", "create", "Build an item");
-        IconButton blockPO = new IconButton("Block", "block", "Block/Pause PO, can't be used");
-        IconButton suspendPO = new IconButton("Suspend", "suspend", "Suspend PO, can't be used");
-        IconButton activatePO = new IconButton("Start", "start", "Resume/Activate PO");
-        IconButton archivePO = new IconButton("Archive", "archive", "Archive PO, removes");
-        IconButton labels = new IconButton("Labels", "label", "Print labels for org properties");
-        IconButton print = new IconButton("Print", "print", "Print selected...");
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton createPurchaseOrder = new IconButton("Create", "create", "Build an item");
         tb.add(createPurchaseOrder);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton blockPO = new IconButton("Block", "block", "Block/Pause PO, can't be used");
         tb.add(blockPO);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton suspendPO = new IconButton("Suspend", "suspend", "Suspend PO, can't be used");
         tb.add(suspendPO);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton activatePO = new IconButton("Start", "start", "Resume/Activate PO");
         tb.add(activatePO);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton archivePO = new IconButton("Archive", "archive", "Archive PO, removes");
         tb.add(archivePO);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(labels);
-        createPurchaseOrder.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                desktop.put(new CreatePurchaseOrder(desktop));
-            }
-        });
+
+        IconButton labels = new IconButton("Labels", "barcodes", "Print labels for org properties");
         labels.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 String[] printables = new String[Engine.getPurchaseOrders().size()];
@@ -74,6 +75,8 @@ public class TaskList extends LockeState {
                 new CheckboxBarcodeFrame(printables);
             }
         });
+        tb.add(labels);
+
         return tb;
     }
 

@@ -29,8 +29,8 @@ public class MoveToBinFull extends LockeState {
         JTextField destinationBin = Elements.input();
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("HU", Constants.colors[0]), selectedHU);
-        form.addInput(Elements.coloredLabel("Destination Bin", Constants.colors[1]), destinationBin);
+        form.addInput(Elements.inputLabel("HU"), selectedHU);
+        form.addInput(Elements.inputLabel("Destination Bin"), destinationBin);
 
         setLayout(new BorderLayout());
         add(Elements.header("Move Full Stock", SwingConstants.LEFT), BorderLayout.NORTH);

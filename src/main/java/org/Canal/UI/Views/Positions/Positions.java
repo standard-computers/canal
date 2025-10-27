@@ -64,7 +64,7 @@ public class Positions extends LockeState implements RefreshListener {
         tb.add(Box.createHorizontalStrut(5));
 
         if((boolean) Engine.codex.getValue("HR/POS", "import_enabled")){
-            IconButton importPositions = new IconButton("Import", "export", "Import as CSV");
+            IconButton importPositions = new IconButton("Import", "import", "Import as CSV");
             importPositions.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {

@@ -19,28 +19,32 @@ public class Login extends LockeState {
     public Login(boolean closable) {
         super("Login", "/LOGIN", false, closable, false, false);
         setFrameIcon(new ImageIcon(Login.class.getResource("/icons/login.png")));
-        Form f = new Form();
+
         JTextField userIdField = Elements.input(10);
         JPasswordField passwordField = new JPasswordField(10);
-        f.addInput(Elements.coloredLabel("User ID", UIManager.getColor("Label.foreground")), userIdField);
-        f.addInput(Elements.coloredLabel("Password", UIManager.getColor("Label.foreground")), passwordField);
-        JButton login = Elements.button("Login");
+
+        Form form = new Form();
+        form.addInput(Elements.inputLabel("User ID"), userIdField);
+        form.addInput(Elements.inputLabel("Password"), passwordField);
+
         setLayout(new BorderLayout());
-        add(f, BorderLayout.CENTER);
-        add(login, BorderLayout.SOUTH);
+        add(form, BorderLayout.CENTER);
+
+        JButton login = Elements.button("Login");
         login.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 String providedUserId = userIdField.getText().trim();
                 String providedPassword = passwordField.getText().trim();
                 User u = Engine.getUser(providedUserId);
-                if(u.hasPassword(providedPassword)){
+                if (u.hasPassword(providedPassword)) {
                     Engine.assignUser(u);
                     JOptionPane.showMessageDialog(null, "This Canal has been assigned 😊");
                     dispose();
-                }else{
+                } else {
                     JOptionPane.showMessageDialog(Login.this, "Wrong Password", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
+        add(login, BorderLayout.SOUTH);
     }
 }

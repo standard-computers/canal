@@ -93,9 +93,9 @@ public class EnterpriseSetup extends JFrame {
         serverPassword = Elements.input();
 
         Form f = new Form();
-        f.addInput(Elements.coloredLabel("URI", Constants.colors[0]), serverURI);
-        f.addInput(Elements.coloredLabel("Username", Constants.colors[1]), serverUsername);
-        f.addInput(Elements.coloredLabel("Password", Constants.colors[2]), serverPassword);
+        f.addInput(Elements.inputLabel("URI"), serverURI);
+        f.addInput(Elements.inputLabel("Username"), serverUsername);
+        f.addInput(Elements.inputLabel("Password"), serverPassword);
 
         server.add(f);
 
@@ -111,9 +111,9 @@ public class EnterpriseSetup extends JFrame {
         mongoDBPassword = Elements.input();
 
         Form f = new Form();
-        f.addInput(Elements.coloredLabel("URI", Constants.colors[3]), mongoDbURI);
-        f.addInput(Elements.coloredLabel("Username", Constants.colors[4]), mongoDBUser);
-        f.addInput(Elements.coloredLabel("Password", Constants.colors[5]), mongoDBPassword);
+        f.addInput(Elements.inputLabel("URI"), mongoDbURI);
+        f.addInput(Elements.inputLabel("Username"), mongoDBUser);
+        f.addInput(Elements.inputLabel("Password"), mongoDBPassword);
 
         mongodb.add(f);
 

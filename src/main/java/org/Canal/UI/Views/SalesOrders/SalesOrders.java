@@ -50,7 +50,7 @@ public class SalesOrders extends LockeState implements RefreshListener {
         tb.add(Box.createHorizontalStrut(5));
 
         if ((boolean) Engine.codex.getValue("ORDS/SO", "import_enabled")) {
-            IconButton importSalesOrders = new IconButton("Import", "export", "Import from CSV");
+            IconButton importSalesOrders = new IconButton("Import", "import", "Import from CSV");
             tb.add(importSalesOrders);
             tb.add(Box.createHorizontalStrut(5));
         }

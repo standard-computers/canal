@@ -13,11 +13,11 @@ public class Copiable extends JTextField {
     public Copiable(String value) {
 
         super(value);
-        if(value.equals("false")){
+        if (value != null && value.equals("false")) {
 
             setForeground(Color.RED);
 
-        }else if(value.equals("true")){
+        } else if (value != null && value.equals("true")) {
 
             setForeground(new Color(11, 111, 9));
         }

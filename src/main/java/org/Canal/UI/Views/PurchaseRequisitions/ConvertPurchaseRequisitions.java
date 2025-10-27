@@ -333,9 +333,9 @@ public class ConvertPurchaseRequisitions extends LockeState {
         expectedDelivery = new DatePicker();
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Create Inbound Delivery (IDO) for Ship-To", Constants.colors[10]), createDelivery);
-        form.addInput(Elements.coloredLabel("Carrier", Constants.colors[9]), carriers);
-        form.addInput(Elements.coloredLabel("Expected Delivery Date", Constants.colors[8]), expectedDelivery);
+        form.addInput(Elements.inputLabel("Create Inbound Delivery (IDO) for Ship-To"), createDelivery);
+        form.addInput(Elements.inputLabel("Carrier"), carriers);
+        form.addInput(Elements.inputLabel("Expected Delivery Date"), expectedDelivery);
 
         formHolder.add(form);
         JLabel warning = Elements.label("THIS APPLIES TO ALL GENERATED PURCHASE ORDERS");
@@ -359,9 +359,9 @@ public class ConvertPurchaseRequisitions extends LockeState {
         ledgerId = Selectables.ledgers();
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Commit to Ledger", UIManager.getColor("Label.foreground")), commitToLedger);
-        form.addInput(Elements.coloredLabel("Purchasing Org.", UIManager.getColor("Label.foreground")), organizations);
-        form.addInput(Elements.coloredLabel("Ledger", UIManager.getColor("Label.foreground")), ledgerId);
+        form.addInput(Elements.inputLabel("Commit to Ledger"), commitToLedger);
+        form.addInput(Elements.inputLabel("Purchasing Org."), organizations);
+        form.addInput(Elements.inputLabel("Ledger"), ledgerId);
         ledger.add(form);
 
         return ledger;

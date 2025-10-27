@@ -3,6 +3,7 @@ package org.Canal.UI.Views;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.*;
 import org.Canal.Utils.*;
+import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
 import java.awt.*;
@@ -52,6 +53,9 @@ public class CreateLocation extends LockeState {
     private JCheckBox allowsSales;
     private JCheckBox allowsPurchasing;
 
+    //Notes Tab
+    private RTextScrollPane notes;
+
 
     public CreateLocation(String objexType, DesktopState desktop, RefreshListener refreshListener) {
 
@@ -66,10 +70,11 @@ public class CreateLocation extends LockeState {
         tabs.add("Contact", contact());
         tabs.add("Dimensional", dimensional());
         tabs.add("Controls", controls());
+        tabs.add("Notes", notes());
 
         JPanel header = new JPanel(new BorderLayout());
         header.add(Elements.header("Make a Location", SwingConstants.LEFT), BorderLayout.NORTH);
-        header.add (header(), BorderLayout.CENTER);
+        header.add(header(), BorderLayout.CENTER);
         header.add(toolbar(), BorderLayout.SOUTH);
 
         add(header, BorderLayout.NORTH);
@@ -139,12 +144,12 @@ public class CreateLocation extends LockeState {
             public void mouseClicked(MouseEvent e) {
 
                 int ccc = JOptionPane.showConfirmDialog(null, "Confirm Location creation?", "Confirm Execution", JOptionPane.YES_NO_OPTION);
-                if(ccc == JOptionPane.YES_OPTION){
+                if (ccc == JOptionPane.YES_OPTION) {
 
                     ArrayList<Location> ls = Engine.getLocations(objexType);
-                    String prefix       = (String)  Engine.codex.getValue(objexType, "prefix");
-                    int leadingZeros    = (Integer) Engine.codex.getValue(objexType, "leading_zeros"); // e.g., 3 -> 001
-                    int nextId          = ls.size() + 1;
+                    String prefix = (String) Engine.codex.getValue(objexType, "prefix");
+                    int leadingZeros = (Integer) Engine.codex.getValue(objexType, "leading_zeros"); // e.g., 3 -> 001
+                    int nextId = ls.size() + 1;
                     int width = Math.max(0, leadingZeros);
                     String numberPart = String.format("%0" + width + "d", nextId); // zero-pad to width
                     String locationId = prefix + numberPart;
@@ -191,7 +196,7 @@ public class CreateLocation extends LockeState {
                     Pipe.save(objexType, location);
 
                     dispose();
-                    if(refreshListener != null) refreshListener.refresh();
+                    if (refreshListener != null) refreshListener.refresh();
 
                     //TODO auto_open_new
 //                    desktop.put(Engine.router(objexType + "/" + locationId, desktop));
@@ -205,7 +210,8 @@ public class CreateLocation extends LockeState {
         JRootPane rp = getRootPane();
         rp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ks, "do-create");
         rp.getActionMap().put("do-create", new AbstractAction() {
-            @Override public void actionPerformed(ActionEvent e) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 create.doClick();
             }
         });
@@ -215,21 +221,22 @@ public class CreateLocation extends LockeState {
 
     private JPanel header() {
 
-        Form f1 = new Form();
-        f1.addInput(Elements.coloredLabel("Type",  UIManager.getColor("Label.foreground")), objexSelection);
-        if(!objexType.equals("/ORGS")) {
-            f1.addInput(Elements.coloredLabel("*Organization", UIManager.getColor("Label.foreground")), organizations);
+        Form form = new Form();
+        form.addInput(Elements.inputLabel("Type"), objexSelection);
+        if (!objexType.equals("/ORGS")) {
+            form.addInput(Elements.inputLabel("*Organization"), organizations);
         }
-        return f1;
+        return form;
     }
 
-    private JPanel general(){
+    private JPanel general() {
 
         JPanel general = new JPanel(new FlowLayout(FlowLayout.LEFT));
         String oo = objexType;
-        if(oo.startsWith("/")){
+        if (oo.startsWith("/")) {
             oo = oo.substring(1);
         }
+
         objexSelection = Selectables.locationObjex(objexType);
         organizations = Selectables.organizations();
         locationNameField = Elements.input(15);
@@ -242,44 +249,50 @@ public class CreateLocation extends LockeState {
         einField = Elements.input();
         taxExempt = new JCheckBox();
 
-        Form f2 = new Form();
-        f2.addInput(Elements.coloredLabel("Name", Constants.colors[0]), locationNameField);
-        f2.addInput(Elements.coloredLabel("Address Line 1", Constants.colors[1]), line1Field);
-        f2.addInput(Elements.coloredLabel("Line 2", Constants.colors[2]), line2Field);
-        f2.addInput(Elements.coloredLabel("City", Constants.colors[3]), cityField);
-        f2.addInput(Elements.coloredLabel("State", Constants.colors[4]), stateField);
-        f2.addInput(Elements.coloredLabel("Postal", Constants.colors[5]), postalField);
-        f2.addInput(Elements.coloredLabel("Country", Constants.colors[6]), countries);
-        f2.addInput(Elements.coloredLabel("EIN (Tax ID)", UIManager.getColor("Label.foreground")), einField);
-        f2.addInput(Elements.coloredLabel("Tax Exempt?", UIManager.getColor("Label.foreground")), taxExempt);
-        general.add(f2);
+        Form form = new Form();
+        form.addInput(Elements.inputLabel("Name"), locationNameField);
+        form.addInput(Elements.inputLabel("Address Line 1"), line1Field);
+        form.addInput(Elements.inputLabel("Line 2"), line2Field);
+        form.addInput(Elements.inputLabel("City"), cityField);
+        form.addInput(Elements.inputLabel("State"), stateField);
+        form.addInput(Elements.inputLabel("Postal"), postalField);
+        form.addInput(Elements.inputLabel("Country"), countries);
+        form.addInput(Elements.inputLabel("EIN (Tax ID)"), einField);
+        form.addInput(Elements.inputLabel("Tax Exempt?"), taxExempt);
+        general.add(form);
+
         return general;
     }
 
-    private JPanel contact(){
+    private JPanel contact() {
 
         JPanel contactInfo = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        Form f = new Form();
-        emailField = Elements.input(20);
+
+        emailField = Elements.input(15);
         phoneField = Elements.input();
-        f.addInput(Elements.coloredLabel("Email Address", Constants.colors[10]), emailField);
-        f.addInput(Elements.coloredLabel("Phone Number", Constants.colors[9]), phoneField);
-        contactInfo.add(f);
+
+        Form form = new Form();
+        form.addInput(Elements.inputLabel("Email Address"), emailField);
+        form.addInput(Elements.inputLabel("Phone Number"), phoneField);
+        contactInfo.add(form);
+
         return contactInfo;
     }
 
-    private JPanel dimensional(){
+    private JPanel dimensional() {
 
         JPanel dimensional = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        Form f = new Form();
-        f.addInput(Elements.coloredLabel("Width", Constants.colors[0]), widthUOM);
-        f.addInput(Elements.coloredLabel("Length", Constants.colors[1]), lengthUOM);
-        f.addInput(Elements.coloredLabel("Height", Constants.colors[2]), heightUOM);
-        dimensional.add(f);
+
+        Form form = new Form();
+        form.addInput(Elements.inputLabel("Width"), widthUOM);
+        form.addInput(Elements.inputLabel("Length"), lengthUOM);
+        form.addInput(Elements.inputLabel("Height"), heightUOM);
+        dimensional.add(form);
+
         return dimensional;
     }
 
-    private JPanel controls(){
+    private JPanel controls() {
 
         JPanel controls = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
@@ -288,13 +301,19 @@ public class CreateLocation extends LockeState {
         allowsSales = new JCheckBox("Sales Order Processing");
         allowsPurchasing = new JCheckBox("Purchase Order Processing");
 
-        Form f = new Form();
-        f.addInput(Elements.coloredLabel("Allow Inventory", Constants.colors[0]), allowsInventory);
-        f.addInput(Elements.coloredLabel("Allow Production", Constants.colors[1]), allowsProduction);
-        f.addInput(Elements.coloredLabel("Allow Sales", Constants.colors[2]), allowsSales);
-        f.addInput(Elements.coloredLabel("Allow Purchasing", Constants.colors[3]), allowsPurchasing);
-        controls.add(f);
+        Form form = new Form();
+        form.addInput(Elements.inputLabel("Allow Inventory"), allowsInventory);
+        form.addInput(Elements.inputLabel("Allow Production"), allowsProduction);
+        form.addInput(Elements.inputLabel("Allow Sales"), allowsSales);
+        form.addInput(Elements.inputLabel("Allow Purchasing"), allowsPurchasing);
+        controls.add(form);
 
         return controls;
+    }
+
+    private RTextScrollPane notes() {
+
+        notes = Elements.simpleEditor();
+        return notes;
     }
 }

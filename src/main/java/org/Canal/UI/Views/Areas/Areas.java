@@ -69,7 +69,7 @@ public class Areas extends LockeState implements RefreshListener {
         tb.add(Box.createHorizontalStrut(5));
 
         if ((boolean) Engine.codex.getValue("AREAS", "import_enabled")) {
-            IconButton importAreas = new IconButton("Import", "export", "Import from CSV", "");
+            IconButton importAreas = new IconButton("Import", "import", "Import from CSV", "");
             tb.add(importAreas);
             tb.add(Box.createHorizontalStrut(5));
         }
@@ -81,8 +81,14 @@ public class Areas extends LockeState implements RefreshListener {
             tb.add(Box.createHorizontalStrut(5));
         }
 
-        IconButton openSelected = new IconButton("Open", "open", "Open selected");
-        openSelected.addActionListener(_ -> {
+
+        IconButton create = new IconButton("New", "create", "Create a Area", "/AREAS/NEW");
+        create.addActionListener(_ -> desktop.put(new CreateArea(null, desktop, this)));
+        tb.add(create);
+        tb.add(Box.createHorizontalStrut(5));
+
+        IconButton open = new IconButton("Open", "open", "Open selected");
+        open.addActionListener(_ -> {
 
             int viewRow = table.getSelectedRow();
             String id = null;
@@ -101,12 +107,7 @@ public class Areas extends LockeState implements RefreshListener {
                 }
             }
         });
-        tb.add(openSelected);
-        tb.add(Box.createHorizontalStrut(5));
-
-        IconButton createArea = new IconButton("Create", "create", "Create a Area", "/AREAS/NEW");
-        createArea.addActionListener(_ -> desktop.put(new CreateArea(null, desktop, this)));
-        tb.add(createArea);
+        tb.add(open);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton delete = new IconButton("Delete", "delete", "Delete Area(s)", "/AREAS/DEL");
@@ -144,9 +145,9 @@ public class Areas extends LockeState implements RefreshListener {
         tb.add(delete);
         tb.add(Box.createHorizontalStrut(5));
 
-        IconButton autoMakeAreas = new IconButton("AutoMake", "automake", "Automate the creation of areas", "/AREAS/AUTO_MK");
-        autoMakeAreas.addActionListener(_ -> desktop.put(new AutoMakeAreas(desktop, this)));
-        tb.add(autoMakeAreas);
+        IconButton autoMake = new IconButton("AutoMake", "automake", "Automate the creation of areas", "/AREAS/AUTO_MK");
+        autoMake.addActionListener(_ -> desktop.put(new AutoMakeAreas(desktop, this)));
+        tb.add(autoMake);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton makeBin = new IconButton("Make a Bin", "bins", "Make a single Bin", "/BNS/NEW");

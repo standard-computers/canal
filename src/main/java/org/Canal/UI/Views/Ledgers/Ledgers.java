@@ -57,7 +57,7 @@ public class Ledgers extends LockeState implements RefreshListener {
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
 
         if ((boolean) Engine.codex.getValue("LGS", "import_enabled")) {
-            IconButton export = new IconButton("Import", "export", "Import from CSV", "/LGS/IMP");
+            IconButton export = new IconButton("Import", "import", "Import from CSV", "/LGS/IMP");
             tb.add(export);
             tb.add(Box.createHorizontalStrut(5));
         }

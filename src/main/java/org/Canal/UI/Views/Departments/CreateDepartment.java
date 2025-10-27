@@ -6,12 +6,9 @@ import org.Canal.UI.Elements.*;
 import org.Canal.Utils.*;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 /**
  * /DPTS/NEW
@@ -67,14 +64,14 @@ public class CreateDepartment extends LockeState {
             selectedOrg.save();
             Engine.setOrganization(selectedOrg);
 
-            if((boolean) Engine.codex.getValue("DPTS", "item_created_alert")){
+            if ((boolean) Engine.codex.getValue("DPTS", "item_created_alert")) {
                 JOptionPane.showMessageDialog(null, "Department Created in ORG " + orgs.getSelectedValue());
             }
             dispose();
 
-            if(refreshListener != null) refreshListener.refresh();
+            if (refreshListener != null) refreshListener.refresh();
 
-            if((boolean) Engine.codex.getValue("DPTS", "auto_open_new")){
+            if ((boolean) Engine.codex.getValue("DPTS", "auto_open_new")) {
                 Engine.router("/DPTS/" + deptIdField.getText(), desktop);
             }
         });
@@ -85,7 +82,8 @@ public class CreateDepartment extends LockeState {
         JRootPane rp = getRootPane();
         rp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ks, "do-modify");
         rp.getActionMap().put("do-modify", new AbstractAction() {
-            @Override public void actionPerformed(ActionEvent e) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 create.doClick();
             }
         });
@@ -93,11 +91,11 @@ public class CreateDepartment extends LockeState {
         return tb;
     }
 
-    private JPanel general(){
+    private JPanel general() {
 
         JPanel general = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        Form f = new Form();
         String genId = "D0" + (Engine.getOrganization().getDepartments().size() + 1);
+
         deptIdField = Elements.input(genId, 18);
         deptNameField = Elements.input(18);
         manager = Selectables.employees();
@@ -105,17 +103,20 @@ public class CreateDepartment extends LockeState {
         openedDatePicker = new DatePicker();
         locations = Elements.input();
         orgs = Selectables.organizations();
-        f.addInput(Elements.coloredLabel("*New Department ID", UIManager.getColor("Label.foreground")), deptIdField);
-        f.addInput(Elements.coloredLabel("*Organization", UIManager.getColor("Label.foreground")), orgs);
-        f.addInput(Elements.coloredLabel("Location (optional)", Constants.colors[0]), locations);
-        f.addInput(Elements.coloredLabel("Name", Constants.colors[1]), deptNameField);
-        f.addInput(Elements.coloredLabel("Manager", Constants.colors[2]), manager);
-        f.addInput(Elements.coloredLabel("Open Date", Constants.colors[3]), openedDatePicker);
-        general.add(f);
+
+        Form form = new Form();
+        form.addInput(Elements.inputLabel("*New Department ID"), deptIdField);
+        form.addInput(Elements.inputLabel("*Organization"), orgs);
+        form.addInput(Elements.inputLabel("Location (optional)"), locations);
+        form.addInput(Elements.inputLabel("Name"), deptNameField);
+        form.addInput(Elements.inputLabel("Manager"), manager);
+        form.addInput(Elements.inputLabel("Open Date"), openedDatePicker);
+        general.add(form);
+
         return general;
     }
 
-    private JPanel positions(){
+    private JPanel positions() {
 
         JPanel positions = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel buttons = new JPanel();

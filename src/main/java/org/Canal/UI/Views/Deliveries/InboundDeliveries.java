@@ -1,4 +1,4 @@
-package org.Canal.UI.Views.OutboundDeliveryOrders;
+package org.Canal.UI.Views.Deliveries;
 
 import org.Canal.Models.SupplyChainUnits.Delivery;
 import org.Canal.UI.Elements.CustomTable;
@@ -6,10 +6,10 @@ import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.UI.Views.System.CheckboxBarcodeFrame;
-import org.Canal.UI.Views.Distribution.ViewDelivery;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.LockeStatus;
+import org.Canal.Utils.RefreshListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,19 +18,17 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 /**
- * /TRANS/ODO
- * View active Outbound Deliveries.
- * Deliveries must not be DELIVERED, DELETED, or ARCHIVED.
+ * /TRANS/IDO
  */
-public class OutboundDeliveries extends LockeState {
+public class InboundDeliveries extends LockeState implements RefreshListener {
 
     private CustomTable table;
     private DesktopState desktop;
 
-    public OutboundDeliveries(DesktopState desktop) {
+    public InboundDeliveries(DesktopState desktop) {
 
-        super("Active Outbound Deliveries", "/TRANS/ODO");
-        setFrameIcon(new ImageIcon(OutboundDeliveries.class.getResource("/icons/outbound.png")));
+        super("Inbound Deliveries", "/TRANS/IDO");
+        setFrameIcon(new ImageIcon(InboundDeliveries.class.getResource("/icons/inbound.png")));
         this.desktop = desktop;
 
         setLayout(new BorderLayout());
@@ -55,23 +53,19 @@ public class OutboundDeliveries extends LockeState {
         toolbar.add(export);
         toolbar.add(Box.createHorizontalStrut(5));
 
-        IconButton importDeliveries = new IconButton("Import", "export", "Import from CSV");
+        IconButton importDeliveries = new IconButton("Import", "import", "Import from CSV");
         toolbar.add(importDeliveries);
         toolbar.add(Box.createHorizontalStrut(5));
 
-        IconButton create = new IconButton("Create ODO", "create", "Build an item");
+        IconButton create = new IconButton("Create IDO", "create", "Build an Inbound Delivery");
         toolbar.add(create);
         toolbar.add(Box.createHorizontalStrut(5));
 
-        IconButton activatePO = new IconButton("Start", "start", "Resume/Activate PO");
-        toolbar.add(activatePO);
+        IconButton block = new IconButton("Block", "block", "Block/Pause IDO, can't be used");
+        toolbar.add(block);
         toolbar.add(Box.createHorizontalStrut(5));
 
-        IconButton archivePo = new IconButton("Archive", "archive", "Archive PO, removes");
-        toolbar.add(archivePo);
-        toolbar.add(Box.createHorizontalStrut(5));
-
-        IconButton label = new IconButton("Barcodes", "label", "Print labels for org properties");
+        IconButton label = new IconButton("Labels", "barcodes", "Print labels for selected");
         label.addActionListener(_ -> {
             String[] printables = new String[Engine.getPurchaseOrders().size()];
             for (int i = 0; i < Engine.getPurchaseOrders().size(); i++) {
@@ -80,6 +74,16 @@ public class OutboundDeliveries extends LockeState {
             new CheckboxBarcodeFrame(printables);
         });
         toolbar.add(label);
+        toolbar.add(Box.createHorizontalStrut(5));
+
+        IconButton print = new IconButton("Print", "print", "Print selected");
+        toolbar.add(print);
+        toolbar.add(Box.createHorizontalStrut(5));
+
+
+        IconButton refresh = new IconButton("Refresh", "refresh", "Refresh");
+        refresh.addActionListener(_ -> refresh());
+        toolbar.add(refresh);
         toolbar.add(Box.createHorizontalStrut(5));
 
         return toolbar;
@@ -105,7 +109,7 @@ public class OutboundDeliveries extends LockeState {
                 "Created"
         };
         ArrayList<Object[]> data = new ArrayList<>();
-        for (Delivery delivery : Engine.getOutboundDeliveries()) {
+        for (Delivery delivery : Engine.getInboundDeliveries()) {
             if (!delivery.getStatus().equals(LockeStatus.DELETED)
                     && !delivery.getStatus().equals(LockeStatus.ARCHIVED)
                     && !delivery.getStatus().equals(LockeStatus.DELIVERED)) {
@@ -118,7 +122,8 @@ public class OutboundDeliveries extends LockeState {
                         delivery.getExpectedDelivery(),
                         delivery.getOrigin(),
                         delivery.getDestination(),
-                        Engine.getLocation(delivery.getDestination(), "CCS").getName(),
+//                        Engine.getLocation(delivery.getDestination(), "CCS").getName(),
+                        "",
                         delivery.getDestinationArea(),
                         delivery.getDestinationDoor(),
                         delivery.getTotal(),
@@ -138,11 +143,22 @@ public class OutboundDeliveries extends LockeState {
                     int row = target.getSelectedRow(); // Get the clicked row
                     if (row != -1) {
                         String value = String.valueOf(target.getValueAt(row, 1));
-                        desktop.put(new ViewDelivery(Engine.getOutboundDelivery(value)));
+                        desktop.put(new ViewDelivery(Engine.getInboundDelivery(value)));
                     }
                 }
             }
         });
         return ct;
+    }
+
+    @Override
+    public void refresh() {
+
+        CustomTable newTable = table();
+        JScrollPane scrollPane = (JScrollPane) table.getParent().getParent();
+        scrollPane.setViewportView(newTable);
+        table = newTable;
+        scrollPane.revalidate();
+        scrollPane.repaint();
     }
 }

@@ -96,7 +96,7 @@ public class CreateSalesOrder extends LockeState {
         }
 
         JPanel moreInfo = orderInfo();
-        moreInfo.setBorder(new EmptyBorder(10, 10, 10, 10));
+        moreInfo.setBorder(new EmptyBorder(5, 5, 5, 5));
 
         setLayout(new BorderLayout());
         JPanel infoHolder = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -272,7 +272,7 @@ public class CreateSalesOrder extends LockeState {
 
                     System.out.println("Committing Sales Order to Ledger");
                     Ledger supplierLedger = Engine.hasLedger(salesOrder.getVendor());
-                    if(supplierLedger == null){
+                    if (supplierLedger == null) {
                         supplierLedger = Engine.getLedger(ledgerId.getSelectedValue());
                     }
                     if (supplierLedger != null) {
@@ -300,7 +300,7 @@ public class CreateSalesOrder extends LockeState {
 
                     System.out.println("Committing Purchase Order to Ledger");
                     Ledger billToLedger = Engine.hasLedger(salesOrder.getBillTo());
-                    if(billToLedger == null){
+                    if (billToLedger == null) {
                         billToLedger = Engine.hasLedger(purchaseOrder.getBillTo());
                     }
                     if (billToLedger != null) {
@@ -344,10 +344,10 @@ public class CreateSalesOrder extends LockeState {
         salesDocumentField = Elements.input();
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Supplier", Constants.colors[1]), vendorField);
-        form.addInput(Elements.coloredLabel("Bill To Customer", Constants.colors[2]), billToCustomerField);
-        form.addInput(Elements.coloredLabel("Ship To Customer", Constants.colors[3]), shipToCustomerField);
-        form.addInput(Elements.coloredLabel("Sales Document", Constants.colors[4]), salesDocumentField);
+        form.addInput(Elements.inputLabel("Supplier"), vendorField);
+        form.addInput(Elements.inputLabel("Bill To Customer"), billToCustomerField);
+        form.addInput(Elements.inputLabel("Ship To Customer"), shipToCustomerField);
+        form.addInput(Elements.inputLabel("Sales Document"), salesDocumentField);
         orderInfo.add(form);
 
         return orderInfo;
@@ -437,10 +437,10 @@ public class CreateSalesOrder extends LockeState {
         paymentDue = new DatePicker();
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Account ID", Constants.colors[9]), accountIdField);
-        form.addInput(Elements.coloredLabel("Purchase Requisition", Constants.colors[8]), purchaseRequisitionField);
-        form.addInput(Elements.coloredLabel("Expected Delivery", Constants.colors[7]), expectedDelivery);
-        form.addInput(Elements.coloredLabel("Payment Due", Constants.colors[6]), paymentDue);
+        form.addInput(Elements.inputLabel("Account ID", "Sales Order will bill Invoice to this account"), accountIdField);
+        form.addInput(Elements.inputLabel("Purchase Requisition"), purchaseRequisitionField);
+        form.addInput(Elements.inputLabel("Expected Delivery"), expectedDelivery);
+        form.addInput(Elements.inputLabel("Payment Due"), paymentDue);
 
         return form;
     }
@@ -450,14 +450,14 @@ public class CreateSalesOrder extends LockeState {
         Form f = new Form();
         DecimalFormat df = new DecimalFormat("#0.00");
         netAmount = Elements.label("$" + model.getTotalPrice());
-        f.addInput(Elements.coloredLabel("Net Amount", UIManager.getColor("Label.foreground")), netAmount);
+        f.addInput(Elements.inputLabel("Net Amount"), netAmount);
 
         //TODO Taxes and Rates
         taxAmount = Elements.label("$" + df.format(Double.parseDouble(model.getTotalPrice())));
-        f.addInput(Elements.coloredLabel("Tax Amount", UIManager.getColor("Label.foreground")), taxAmount);
+        f.addInput(Elements.inputLabel("Tax Amount"), taxAmount);
 
         totalAmount = Elements.label("$" + df.format(Double.parseDouble("0.0") * Double.parseDouble(model.getTotalPrice()) + Double.parseDouble(model.getTotalPrice())));
-        f.addInput(Elements.coloredLabel("Total Amount", UIManager.getColor("Label.foreground")), totalAmount);
+        f.addInput(Elements.inputLabel("Total Amount"), totalAmount);
         return f;
     }
 
@@ -561,10 +561,10 @@ public class CreateSalesOrder extends LockeState {
         truckNumberField = Elements.input();
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Create Inbound Delivery for Ship-To", Constants.colors[10]), createInboundDelivery);
-        form.addInput(Elements.coloredLabel("Create Outbound Delivery for Supplier", Constants.colors[9]), createOutboundDelivery);
-        form.addInput(Elements.coloredLabel("Carrier", Constants.colors[8]), carriers);
-        form.addInput(Elements.coloredLabel("Truck Number", Constants.colors[7]), truckNumberField);
+        form.addInput(Elements.inputLabel("Create IBD for Ship-To"), createInboundDelivery);
+        form.addInput(Elements.inputLabel("Create OBD for Supplier"), createOutboundDelivery);
+        form.addInput(Elements.inputLabel("Carrier"), carriers);
+        form.addInput(Elements.inputLabel("Truck Number"), truckNumberField);
         delivery.add(form);
 
         return delivery;
@@ -584,10 +584,10 @@ public class CreateSalesOrder extends LockeState {
         ledgerId = Selectables.ledgers();
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Commit to Ledger",  Constants.colors[0]), commitSoToLedger);
-        form.addInput(Elements.coloredLabel("Trans. Type (Receiving location type)",  Constants.colors[1]), buyerObjexType);
-        form.addInput(Elements.coloredLabel("Purchasing Org.",  Constants.colors[2]), organizations);
-        form.addInput(Elements.coloredLabel("Ledger", Constants.colors[3]), ledgerId);
+        form.addInput(Elements.inputLabel("Commit to Ledger"), commitSoToLedger);
+        form.addInput(Elements.inputLabel("Trans. Type (Receiving location type)"), buyerObjexType);
+        form.addInput(Elements.inputLabel("Purchasing Org."), organizations);
+        form.addInput(Elements.inputLabel("Ledger"), ledgerId);
         ledger.add(form);
 
         return ledger;
@@ -601,8 +601,8 @@ public class CreateSalesOrder extends LockeState {
         commitPoToLedger = new JCheckBox();
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Create Purchase Order for Supplier", Constants.colors[10]), createPurchaseOrder);
-        form.addInput(Elements.coloredLabel("Commit PO to Ledger", Constants.colors[9]), commitPoToLedger);
+        form.addInput(Elements.inputLabel("Create Purchase Order for Supplier"), createPurchaseOrder);
+        form.addInput(Elements.inputLabel("Commit PO to Ledger"), commitPoToLedger);
         purchaseOrder.add(form);
 
         return purchaseOrder;

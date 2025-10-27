@@ -73,10 +73,10 @@ public class CreateBOM extends LockeState implements Includer {
         customerField = Elements.input();
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("BOM Name", Constants.colors[10]), bomNameField);
-        form.addInput(Elements.coloredLabel("Production Location", Constants.colors[9]), locationField);
-        form.addInput(Elements.coloredLabel("Finished Item ID", Constants.colors[8]), itemId);
-        form.addInput(Elements.coloredLabel("Customer", Constants.colors[7]), customerField);
+        form.addInput(Elements.inputLabel("BOM Name"), bomNameField);
+        form.addInput(Elements.inputLabel("Production Location"), locationField);
+        form.addInput(Elements.inputLabel("Finished Item ID"), itemId);
+        form.addInput(Elements.inputLabel("Customer"), customerField);
         itemInfo.add(form);
 
         header.add(itemInfo, BorderLayout.CENTER);
@@ -158,6 +158,7 @@ public class CreateBOM extends LockeState implements Includer {
     }
 
     private CustomTable componentsTable() {
+
         String[] columns = new String[]{
                 "Component",
                 "Item ID",
@@ -247,7 +248,6 @@ public class CreateBOM extends LockeState implements Includer {
         tb.add(reprice);
         tb.add(Box.createHorizontalStrut(5));
 
-
         bom.add(tb, BorderLayout.NORTH);
         bomsView = componentsTable();
         bom.add(new JScrollPane(bomsView), BorderLayout.CENTER);
@@ -279,8 +279,8 @@ public class CreateBOM extends LockeState implements Includer {
                     ol.getName(),
                     ol.getDescription(),
                     ol.getLocation(),
-                    ol.getArea(),
-                    ol.getBin(),
+                    ol.getSourceArea(),
+                    ol.getSourceBin(),
                     ol.getLocke(),
                     ol.getItem(),
                     ol.getQuantity(),
@@ -355,7 +355,7 @@ public class CreateBOM extends LockeState implements Includer {
         status = Selectables.statusTypes();
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Status", UIManager.getColor("Label.foreground")), status);
+        form.addInput(Elements.inputLabel("Status"), status);
         controls.add(form);
 
         return controls;

@@ -132,7 +132,7 @@ public class PurchaseRequisitions extends LockeState implements RefreshListener 
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
 
         if((boolean) Engine.codex.getValue("ORDS/PR", "import_enabled")) {
-            IconButton importPR = new IconButton("Import", "export", "Import as CSV");
+            IconButton importPR = new IconButton("Import", "import", "Import as CSV");
             tb.add(importPR);
             tb.add(Box.createHorizontalStrut(5));
         }
@@ -149,7 +149,7 @@ public class PurchaseRequisitions extends LockeState implements RefreshListener 
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton createPurchaseReq = new IconButton("New PR", "create", "Create a Purchase Requisition", "/ORDS/PR/NEW");
-        createPurchaseReq.addActionListener(_ -> desktop.put(new CreatePurchaseRequisition()));
+        createPurchaseReq.addActionListener(_ -> desktop.put(new CreatePurchaseRequisition(desktop)));
         tb.add(createPurchaseReq);
         tb.add(Box.createHorizontalStrut(5));
 
@@ -167,7 +167,7 @@ public class PurchaseRequisitions extends LockeState implements RefreshListener 
         tb.add(findPR);
         tb.add(Box.createHorizontalStrut(5));
 
-        IconButton labels = new IconButton("Labels", "label", "Print labels for selected");
+        IconButton labels = new IconButton("Labels", "barcodes", "Print labels for selected");
         labels.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 String[] printables = new String[Engine.getPurchaseOrders().size()];

@@ -35,7 +35,6 @@ public class ViewTransaction extends LockeState {
 
     private JPanel toolbar() {
 
-
         JPanel toolbar = new JPanel();
         toolbar.setLayout(new BoxLayout(toolbar, BoxLayout.X_AXIS));
         toolbar.add(Box.createHorizontalStrut(5));

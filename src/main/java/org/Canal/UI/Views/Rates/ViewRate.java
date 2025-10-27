@@ -1,14 +1,11 @@
 package org.Canal.UI.Views.Rates;
 
-import org.Canal.Models.BusinessUnits.PurchaseRequisition;
 import org.Canal.Models.BusinessUnits.Rate;
 import org.Canal.UI.Elements.*;
 import org.Canal.Utils.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * /RTS/$[RATE_ID]
@@ -31,28 +28,28 @@ public class ViewRate extends LockeState {
 
         rateIsPercent = new JCheckBox();
         rateIsPercent.setEnabled(false);
-        if(rate.isPercent()){
+        if (rate.isPercent()) {
             rateIsPercent.setSelected(true);
         }
 
         rateIsTax = new JCheckBox();
         rateIsTax.setEnabled(false);
-        if(rate.isTax()){
+        if (rate.isTax()) {
             rateIsTax.setSelected(true);
         }
 
-        Form f = new Form();
-        f.addInput(Elements.coloredLabel("Rate ID", UIManager.getColor("Label.foreground")), new Copiable(rate.getId()));
-        f.addInput(Elements.coloredLabel("Name", Constants.colors[10]), new Copiable(rate.getName()));
-        f.addInput(Elements.coloredLabel("Description", Constants.colors[8]), new Copiable(rate.getDescription()));
-        f.addInput(Elements.coloredLabel("Percent", Constants.colors[7]), rateIsPercent);
-        f.addInput(Elements.coloredLabel("Value", Constants.colors[6]), new Copiable(String.valueOf(rate.getValue())));
-        f.addInput(Elements.coloredLabel("Objex", Constants.colors[5]), new Copiable(rate.getObjex()));
-        f.addInput(Elements.coloredLabel("Reference", Constants.colors[9]), new Copiable(rate.getReference()));
-        f.addInput(Elements.coloredLabel("Tax", Constants.colors[4]), rateIsTax);
+        Form form = new Form();
+        form.addInput(Elements.inputLabel("Rate ID"), new Copiable(rate.getId()));
+        form.addInput(Elements.inputLabel("Name"), new Copiable(rate.getName()));
+        form.addInput(Elements.inputLabel("Description"), new Copiable(rate.getDescription()));
+        form.addInput(Elements.inputLabel("Percent"), rateIsPercent);
+        form.addInput(Elements.inputLabel("Value"), new Copiable(String.valueOf(rate.getValue())));
+        form.addInput(Elements.inputLabel("Objex"), new Copiable(rate.getObjex()));
+        form.addInput(Elements.inputLabel("Reference"), new Copiable(rate.getReference()));
+        form.addInput(Elements.inputLabel("Tax"), rateIsTax);
 
         setLayout(new BorderLayout());
-        add(f, BorderLayout.CENTER);
+        add(form, BorderLayout.CENTER);
         add(toolbar(), BorderLayout.NORTH);
     }
 

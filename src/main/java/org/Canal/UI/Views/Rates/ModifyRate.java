@@ -1,6 +1,5 @@
 package org.Canal.UI.Views.Rates;
 
-import org.Canal.Models.BusinessUnits.PurchaseRequisition;
 import org.Canal.Models.BusinessUnits.Rate;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Views.Controllers.Controller;
@@ -43,18 +42,18 @@ public class ModifyRate extends LockeState {
         rateReference = Elements.input(rate.getReference());
         rateIsTax = new JCheckBox("", rate.isTax());
 
-        Form f = new Form();
-        f.addInput(Elements.coloredLabel("*New Rate ID", UIManager.getColor("Label.foreground")), rateId);
-        f.addInput(Elements.coloredLabel("Name", Constants.colors[10]), rateName);
-        f.addInput(Elements.coloredLabel("Description", Constants.colors[9]), rateDescription);
-        f.addInput(Elements.coloredLabel("Percent", Constants.colors[8]), rateIsPercent);
-        f.addInput(Elements.coloredLabel("Value", Constants.colors[7]), rateValue);
-        f.addInput(Elements.coloredLabel("Objex", Constants.colors[6]), objexes);
-        f.addInput(Elements.coloredLabel("Reference", Constants.colors[5]), rateReference);
-        f.addInput(Elements.coloredLabel("Tax", Constants.colors[4]), rateIsTax);
+        Form form = new Form();
+        form.addInput(Elements.inputLabel("*New Rate ID"), rateId);
+        form.addInput(Elements.inputLabel("Name"), rateName);
+        form.addInput(Elements.inputLabel("Description"), rateDescription);
+        form.addInput(Elements.inputLabel("Percent"), rateIsPercent);
+        form.addInput(Elements.inputLabel("Value"), rateValue);
+        form.addInput(Elements.inputLabel("Objex"), objexes);
+        form.addInput(Elements.inputLabel("Reference"), rateReference);
+        form.addInput(Elements.inputLabel("Tax"), rateIsTax);
 
         setLayout(new BorderLayout());
-        add(f, BorderLayout.CENTER);
+        add(form, BorderLayout.CENTER);
         add(toolbar(), BorderLayout.NORTH);
     }
 
@@ -64,19 +63,21 @@ public class ModifyRate extends LockeState {
 
         JPanel buttons = new JPanel(new FlowLayout());
         buttons.setLayout(new BoxLayout(buttons, BoxLayout.X_AXIS));
+        buttons.add(Box.createHorizontalStrut(5));
 
         IconButton copyFrom = new IconButton("Copy From", "open", "Copy Rate");
         copyFrom.addActionListener(_ -> {
-            String prId = JOptionPane.showInputDialog(ModifyRate.this, "Enter Rate ID");
-            PurchaseRequisition pr = Engine.getPurchaseRequisition(prId);
+
+            String rateId = JOptionPane.showInputDialog(ModifyRate.this, "Enter Rate ID");
+            Rate pr = Engine.getRate(rateId);
 
         });
-        buttons.add(Box.createHorizontalStrut(5));
         buttons.add(copyFrom);
+        buttons.add(Box.createHorizontalStrut(5));
 
         IconButton review = new IconButton("Review", "review", "Review Rate");
-        buttons.add(Box.createHorizontalStrut(5));
         buttons.add(review);
+        buttons.add(Box.createHorizontalStrut(5));
 
         IconButton execute = new IconButton("Execute", "execute", "Create Rate");
         execute.addActionListener(_ -> {
@@ -94,15 +95,15 @@ public class ModifyRate extends LockeState {
 
 
             dispose();
-            if(refreshListener != null) refreshListener.refresh();
+            if (refreshListener != null) refreshListener.refresh();
 
-            if((boolean) Engine.codex.getValue("RTS", "auto_open_new")){
+            if ((boolean) Engine.codex.getValue("RTS", "auto_open_new")) {
 
                 desktop.put(new ViewRate(newRate, desktop, refreshListener));
             }
         });
-        buttons.add(Box.createHorizontalStrut(5));
         buttons.add(execute);
+        buttons.add(Box.createHorizontalStrut(5));
 
         toolbar.add(buttons, BorderLayout.SOUTH);
         toolbar.add(Elements.header("Create a Rate", SwingConstants.LEFT), BorderLayout.NORTH);

@@ -24,8 +24,8 @@ public class CreateVariant extends LockeState {
         Form f = new Form();
         JTextField inclusionId = Elements.input();
         UOMField usage = new UOMField();
-        f.addInput(Elements.coloredLabel("Material/Component ID", Constants.colors[9]), inclusionId);
-        f.addInput(Elements.coloredLabel("Usage", Constants.colors[8]), usage);
+        f.addInput(Elements.inputLabel("Material/Component ID"), inclusionId);
+        f.addInput(Elements.inputLabel("Usage"), usage);
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);
         JButton submit = Elements.button("Include");

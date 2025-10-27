@@ -23,48 +23,34 @@ public class ViewCustomer extends LockeState {
 
         this.customer = customer;
         CustomTabbedPane tabbedPane = new CustomTabbedPane();
-        JPanel formPanel = new JPanel();
-        formPanel.setLayout(new GridLayout(2, 2));
-        formPanel.add(new JTextField());
-        tabbedPane.addTab("Items", formPanel);
-        tabbedPane.addTab("Payments", new JScrollPane());
-        JTextArea textArea = new JTextArea("This is a text area where you can write something...");
-        JScrollPane textScrollPane = new JScrollPane(textArea);
-        tabbedPane.addTab("People", textScrollPane);
-        JScrollPane ordersPane = new JScrollPane(textArea);
-        tabbedPane.addTab("Orders", ordersPane);
-        JScrollPane shippmentsPane = new JScrollPane(textArea);
-        tabbedPane.addTab("Shippments", ordersPane);
-        JScrollPane historyPane = new JScrollPane(textArea);
-        tabbedPane.addTab("History", ordersPane);
-        tabbedPane.addTab("Inventory", new JScrollPane());
-        String[] columnNames = {"Properties", "Values"};
-        Object[][] data = {
-                {"Name", "John"},
-                {"Age", "30"},
-                {"Occupation", "Developer"}
-        };
-        JTable table = new JTable(data, columnNames);
-        JScrollPane tableScrollPane = new JScrollPane(table);
-        tabbedPane.addTab("Data", tableScrollPane);
+        tabbedPane.addTab("Items", items());
+        tabbedPane.addTab("Invoices", invoices());
+        tabbedPane.addTab("Payments", payments());
+        tabbedPane.addTab("People", people());
+
         JPanel info = new JPanel(new BorderLayout());
         JPanel infoLabels = new JPanel(new GridLayout(2, 2));
+
         JTextField vnl = new JTextField(customer.getName());
-        JTextField vil = new JTextField(customer.getId());
-        JTextField vl1l = new JTextField(customer.getLine1() + ", " + customer.getCity() + ", " + customer.getState() + " " + customer.getPostal() + " " + customer.getCountry());
-        JTextField val = new JTextField(String.valueOf(customer.getStatus()));
         vnl.setEditable(false);
-        vil.setEditable(false);
-        vl1l.setEditable(false);
-        val.setEditable(false);
         vnl.setFont(UIManager.getFont( "h2.font" ));
         infoLabels.add(vnl);
+
+        JTextField vil = new JTextField(customer.getId());
+        vil.setEditable(false);
         infoLabels.add(vil);
+
+        JTextField vl1l = new JTextField(customer.getLine1() + ", " + customer.getCity() + ", " + customer.getState() + " " + customer.getPostal() + " " + customer.getCountry());
+        vl1l.setEditable(false);
         infoLabels.add(vl1l);
+
+        JTextField val = new JTextField(String.valueOf(customer.getStatus()));
+        val.setEditable(false);
         infoLabels.add(val);
+
         info.add(infoLabels, BorderLayout.CENTER);
         info.add(toolbar(), BorderLayout.SOUTH);
-        info.setBorder(new EmptyBorder(10, 10, 10, 10));
+        info.setBorder(new EmptyBorder(5, 5, 5, 5));
         add(info, BorderLayout.NORTH);
         add(tabbedPane, BorderLayout.CENTER);
         setResizable(true);
@@ -100,5 +86,54 @@ public class ViewCustomer extends LockeState {
         tb.add(Box.createHorizontalStrut(5));
 
         return tb;
+    }
+
+    private JPanel items() {
+
+        JPanel items = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        return items;
+    }
+
+    private JPanel payments() {
+
+        JPanel payments = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        return payments;
+    }
+
+    private JPanel invoices() {
+
+        JPanel invoices = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        return invoices;
+    }
+
+    private JPanel people() {
+
+        JPanel people = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        return people;
+    }
+
+    private JPanel history() {
+
+        JPanel history = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        return history;
+    }
+
+    private JPanel inventory() {
+
+        JPanel inventory = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        return inventory;
+    }
+
+    private JPanel notes() {
+
+        JPanel notes = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        return notes;
     }
 }

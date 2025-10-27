@@ -1,6 +1,7 @@
 package org.Canal.Models.BusinessUnits;
 
 import org.Canal.Models.Objex;
+import org.Canal.Utils.Engine;
 
 import java.util.ArrayList;
 
@@ -84,5 +85,19 @@ public class PurchaseRequisition extends Objex {
 
     public void setItems(ArrayList<OrderLineItem> items) {
         this.items = items;
+    }
+
+    public double getConsumption() {
+        double consumption = 0;
+        for(Order po : Engine.getPurchaseOrders()){
+            if(po.getPurchaseRequisition().equals(this.id)){
+                consumption -= po.getTotal();
+            }
+        }
+        return consumption;
+    }
+
+    public double getRemaining() {
+        return maxSpend + getConsumption();
     }
 }

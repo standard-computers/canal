@@ -120,11 +120,11 @@ public class AutoMakeAreas extends LockeState {
         heightField = new UOMField();
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("*New Area ID (current: LOC_ID-001)", UIManager.getColor("Label.foreground")), areaIdField);
-        form.addInput(Elements.coloredLabel("Area Name (current: LOC_ID-001", UIManager.getColor("Label.foreground")), areaNameField);
-        form.addInput(Elements.coloredLabel("Width", Constants.colors[10]), widthField);
-        form.addInput(Elements.coloredLabel("Length", Constants.colors[9]), lengthField);
-        form.addInput(Elements.coloredLabel("Height", Constants.colors[8]), heightField);
+        form.addInput(Elements.inputLabel("*New Area ID (current: LOC_ID-001)"), areaIdField);
+        form.addInput(Elements.inputLabel("Area Name (current: LOC_ID-001"), areaNameField);
+        form.addInput(Elements.inputLabel("Width"), widthField);
+        form.addInput(Elements.inputLabel("Length"), lengthField);
+        form.addInput(Elements.inputLabel("Height"), heightField);
         general.add(form);
 
         return general;
@@ -140,10 +140,10 @@ public class AutoMakeAreas extends LockeState {
         allowsPurchasing = new JCheckBox("Purchase Order Processing");
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Allow Inventory", Constants.colors[0]), allowsInventory);
-        form.addInput(Elements.coloredLabel("Allow Production", Constants.colors[1]), allowsProduction);
-        form.addInput(Elements.coloredLabel("Allow Sales", Constants.colors[2]), allowsSales);
-        form.addInput(Elements.coloredLabel("Allow Purchasing", Constants.colors[3]), allowsPurchasing);
+        form.addInput(Elements.inputLabel("Allow Inventory"), allowsInventory);
+        form.addInput(Elements.inputLabel("Allow Production"), allowsProduction);
+        form.addInput(Elements.inputLabel("Allow Sales"), allowsSales);
+        form.addInput(Elements.inputLabel("Allow Purchasing"), allowsPurchasing);
         controls.add(form);
 
         return controls;

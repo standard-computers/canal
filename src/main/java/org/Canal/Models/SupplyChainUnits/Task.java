@@ -8,8 +8,10 @@ public class Task extends Objex {
     private String workOrder;
     private String flow;
     private String location;
-    private String area;
-    private String bin;
+    private String sourceArea;
+    private String sourceBin;
+    private String destinationArea;
+    private String destinationBin;
     private String employee;
     private String user;
     private String locke; //Destination Locke to listen to
@@ -54,20 +56,36 @@ public class Task extends Objex {
         this.location = location;
     }
 
-    public String getArea() {
-        return area;
+    public String getSourceArea() {
+        return sourceArea;
     }
 
-    public void setArea(String area) {
-        this.area = area;
+    public void setSourceArea(String sourceArea) {
+        this.sourceArea = sourceArea;
     }
 
-    public String getBin() {
-        return bin;
+    public String getSourceBin() {
+        return sourceBin;
     }
 
-    public void setBin(String bin) {
-        this.bin = bin;
+    public void setSourceBin(String sourceBin) {
+        this.sourceBin = sourceBin;
+    }
+
+    public String getDestinationArea() {
+        return destinationArea;
+    }
+
+    public void setDestinationArea(String destinationArea) {
+        this.destinationArea = destinationArea;
+    }
+
+    public String getDestinationBin() {
+        return destinationBin;
+    }
+
+    public void setDestinationBin(String destinationBin) {
+        this.destinationBin = destinationBin;
     }
 
     public String getEmployee() {

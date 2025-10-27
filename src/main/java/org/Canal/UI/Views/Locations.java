@@ -63,7 +63,7 @@ public class Locations extends LockeState implements RefreshListener {
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
 
         if ((boolean) Engine.codex.getValue(objexType, "import_enabled")) {
-            IconButton importLocations = new IconButton("Import", "export", "Import as CSV");
+            IconButton importLocations = new IconButton("Import", "import", "Import as CSV");
             importLocations.addActionListener(_ -> {
                 JFileChooser fc = new JFileChooser();
                 int result = fc.showOpenDialog(null);
@@ -144,7 +144,7 @@ public class Locations extends LockeState implements RefreshListener {
         tb.add(find);
         tb.add(Box.createHorizontalStrut(5));
 
-        IconButton labels = new IconButton("Labels", "label", "Print labels for selected");
+        IconButton labels = new IconButton("Labels", "barcodes", "Print labels for selected");
         tb.add(labels);
         tb.add(Box.createHorizontalStrut(5));
 

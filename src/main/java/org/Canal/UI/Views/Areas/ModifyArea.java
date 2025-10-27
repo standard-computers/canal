@@ -79,7 +79,7 @@ public class ModifyArea extends LockeState {
         IconButton save = new IconButton("Save", "save", "Save Changes");
         save.addActionListener(_ -> {
 
-            area.setName(areaNameField.getText());
+            area.setName(areaNameField.getText().trim());
             area.setStatus(LockeStatus.valueOf(statuses.getSelectedValue()));
             area.setWidth(Double.parseDouble(widthField.getValue()));
             area.setWidthUOM(widthField.getUOM());
@@ -95,9 +95,7 @@ public class ModifyArea extends LockeState {
             area.save();
 
             dispose();
-            if (refreshListener != null) {
-                refreshListener.refresh();
-            }
+            if (refreshListener != null) refreshListener.refresh();
         });
         tb.add(save);
         tb.add(Box.createHorizontalStrut(5));
@@ -133,10 +131,24 @@ public class ModifyArea extends LockeState {
             tb.add(Box.createHorizontalStrut(5));
         }
 
+        IconButton block = new IconButton("Block", "block", "Block Area", "/AREAS/ARCHV");
+        block.addActionListener(_ -> {
+
+            dispose();
+            area.setStatus(LockeStatus.BLOCKED);
+            area.save();
+            if (refreshListener != null) refreshListener.refresh();
+        });
+        tb.add(block);
+        tb.add(Box.createHorizontalStrut(5));
+
         IconButton archive = new IconButton("Archive", "archive", "Archive Area", "/AREAS/ARCHV");
         archive.addActionListener(_ -> {
 
-
+            dispose();
+            area.setStatus(LockeStatus.ARCHIVED);
+            area.save();
+            if (refreshListener != null) refreshListener.refresh();
         });
         tb.add(archive);
         tb.add(Box.createHorizontalStrut(5));
@@ -144,7 +156,10 @@ public class ModifyArea extends LockeState {
         IconButton delete = new IconButton("Delete", "delete", "Delete Area", "/AREAS/DEL");
         delete.addActionListener(_ -> {
 
-
+            dispose();
+            area.setStatus(LockeStatus.DELETED);
+            area.save();
+            if (refreshListener != null) refreshListener.refresh();
         });
         tb.add(delete);
         tb.add(Box.createHorizontalStrut(5));
@@ -177,13 +192,13 @@ public class ModifyArea extends LockeState {
         heightField.setUOM(area.getHeightUOM());
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("ID", UIManager.getColor("Label.foreground")), new Copiable(area.getId()));
-        form.addInput(Elements.coloredLabel("Location", UIManager.getColor("Label.foreground")), availableLocations);
-        form.addInput(Elements.coloredLabel("Area Name", Constants.colors[10]), areaNameField);
-        form.addInput(Elements.coloredLabel("Status", Constants.colors[10]), statuses);
-        form.addInput(Elements.coloredLabel("Width", Constants.colors[9]), widthField);
-        form.addInput(Elements.coloredLabel("Length", Constants.colors[8]), lengthField);
-        form.addInput(Elements.coloredLabel("Height", Constants.colors[7]), heightField);
+        form.addInput(Elements.inputLabel("ID"), new Copiable(area.getId()));
+        form.addInput(Elements.inputLabel("Location"), availableLocations);
+        form.addInput(Elements.inputLabel("Area Name"), areaNameField);
+        form.addInput(Elements.inputLabel("Status"), statuses);
+        form.addInput(Elements.inputLabel("Width"), widthField);
+        form.addInput(Elements.inputLabel("Length"), lengthField);
+        form.addInput(Elements.inputLabel("Height"), heightField);
         panel.add(form);
 
         return panel;
@@ -199,10 +214,10 @@ public class ModifyArea extends LockeState {
         allowsPurchasing = new JCheckBox("Purchase Order Processing", area.allowsPurchasing());
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Allow Inventory", Constants.colors[0]), allowsInventory);
-        form.addInput(Elements.coloredLabel("Allow Production", Constants.colors[1]), allowsProduction);
-        form.addInput(Elements.coloredLabel("Allow Sales", Constants.colors[2]), allowsSales);
-        form.addInput(Elements.coloredLabel("Allow Purchasing", Constants.colors[3]), allowsPurchasing);
+        form.addInput(Elements.inputLabel("Allow Inventory"), allowsInventory);
+        form.addInput(Elements.inputLabel("Allow Production"), allowsProduction);
+        form.addInput(Elements.inputLabel("Allow Sales"), allowsSales);
+        form.addInput(Elements.inputLabel("Allow Purchasing"), allowsPurchasing);
         controls.add(form);
 
         return controls;

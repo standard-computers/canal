@@ -50,7 +50,7 @@ public class Departments extends LockeState implements RefreshListener {
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
 
         if((boolean) Engine.codex.getValue("DPTS", "import_enabled")){
-            IconButton importDepartments = new IconButton("Import", "export", "Import as CSV");
+            IconButton importDepartments = new IconButton("Import", "import", "Import as CSV");
             importDepartments.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {

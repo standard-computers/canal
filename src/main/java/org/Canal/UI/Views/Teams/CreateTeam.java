@@ -2,7 +2,6 @@ package org.Canal.UI.Views.Teams;
 
 import org.Canal.Models.HumanResources.Team;
 import org.Canal.UI.Elements.*;
-import org.Canal.Utils.Constants;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,14 +23,14 @@ public class CreateTeam extends LockeState {
         Selectable departments = Selectables.departments();
         Selectable leaders = Selectables.employees();
 
-        Form f = new Form();
-        f.addInput(Elements.coloredLabel("*New Team ID", UIManager.getColor("Label.foreground")), teamIdField);
-        f.addInput(Elements.coloredLabel("Team Name", Constants.colors[10]), teamNameField);
-        f.addInput(Elements.coloredLabel("Department", Constants.colors[9]), departments);
-        f.addInput(Elements.coloredLabel("Leader", Constants.colors[8]), leaders);
+        Form form = new Form();
+        form.addInput(Elements.inputLabel("*New Team ID"), teamIdField);
+        form.addInput(Elements.inputLabel("Team Name"), teamNameField);
+        form.addInput(Elements.inputLabel("Department"), departments);
+        form.addInput(Elements.inputLabel("Leader"), leaders);
 
         setLayout(new BorderLayout());
-        add(f, BorderLayout.CENTER);
+        add(form, BorderLayout.CENTER);
         JButton make = Elements.button("Make Team");
         add(make, BorderLayout.SOUTH);
         make.addMouseListener(new MouseAdapter() {

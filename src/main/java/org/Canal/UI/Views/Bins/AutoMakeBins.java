@@ -4,13 +4,11 @@ import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.Models.SupplyChainUnits.Bin;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Views.System.LockeMessages;
-import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Pipe;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -120,6 +118,7 @@ public class AutoMakeBins extends LockeState {
 
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        tb.add(Box.createHorizontalStrut(5));
 
         IconButton copyFrom = new IconButton("Copy From", "open", "Copy from Bin");
         copyFrom.addActionListener(_ -> {
@@ -146,13 +145,13 @@ public class AutoMakeBins extends LockeState {
             }
 
         });
-        tb.add(Box.createHorizontalStrut(5));
         tb.add(copyFrom);
+        tb.add(Box.createHorizontalStrut(5));
 
         IconButton review = new IconButton("Review", "review", "Review Date");
         review.addActionListener(_ -> performReview());
-        tb.add(Box.createHorizontalStrut(5));
         tb.add(review);
+        tb.add(Box.createHorizontalStrut(5));
 
         IconButton start = new IconButton("Start AutoMake", "automake", "Start AutoMake");
         start.addActionListener(_ -> {
@@ -203,9 +202,8 @@ public class AutoMakeBins extends LockeState {
             }
             JOptionPane.showMessageDialog(AutoMakeBins.this, "AutoMake Complete");
         });
-        tb.add(Box.createHorizontalStrut(5));
         tb.add(start);
-        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
+        tb.add(Box.createHorizontalStrut(5));
 
         toolbar.add(Elements.header("AutoMake Bins", SwingConstants.LEFT), BorderLayout.CENTER);
         toolbar.add(tb, BorderLayout.SOUTH);
@@ -214,19 +212,19 @@ public class AutoMakeBins extends LockeState {
 
     private JPanel general() {
 
-        JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel general = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         idField = Elements.input("@-BN+", 15);
         nameField = Elements.input("@-BIN+");
         binCount = Elements.input("1");
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Bin ID (current: BN1-IBD1)", Constants.colors[10]), idField);
-        form.addInput(Elements.coloredLabel("Bin Name (current: BIN1-IBD1)", Constants.colors[9]), nameField);
-        form.addInput(Elements.coloredLabel("Bin Create Count", Constants.colors[8]), binCount);
-        p.add(form);
+        form.addInput(Elements.inputLabel("Bin ID (current: BN1-IBD1)"), idField);
+        form.addInput(Elements.inputLabel("Bin Name (current: BIN1-IBD1)"), nameField);
+        form.addInput(Elements.inputLabel("Bin Create Count"), binCount);
+        general.add(form);
 
-        return p;
+        return general;
     }
 
     private void addCheckboxes() {
@@ -254,12 +252,12 @@ public class AutoMakeBins extends LockeState {
         heightField = new UOMField();
         weightField = new UOMField();
 
-        Form f = new Form();
-        f.addInput(Elements.coloredLabel("Width", Constants.colors[10]), widthField);
-        f.addInput(Elements.coloredLabel("Length", Constants.colors[9]), lengthField);
-        f.addInput(Elements.coloredLabel("Height", Constants.colors[8]), heightField);
-        f.addInput(Elements.coloredLabel("Weight", Constants.colors[7]), weightField);
-        dimensional.add(f);
+        Form form = new Form();
+        form.addInput(Elements.inputLabel("Width"), widthField);
+        form.addInput(Elements.inputLabel("Length"), lengthField);
+        form.addInput(Elements.inputLabel("Height"), heightField);
+        form.addInput(Elements.inputLabel("Weight"), weightField);
+        dimensional.add(form);
 
         return dimensional;
     }
@@ -278,45 +276,45 @@ public class AutoMakeBins extends LockeState {
         holdsStock = new JCheckBox("Bin can hold inventory");
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Goods Issue", UIManager.getColor("Label.foreground")), doesGoodsIssue);
-        form.addInput(Elements.coloredLabel("Goods Receipt", UIManager.getColor("Label.foreground")), doesGoodsReceipt);
-        form.addInput(Elements.coloredLabel("Picking Enabled", UIManager.getColor("Label.foreground")), pickingEnabled);
-        form.addInput(Elements.coloredLabel("Putaway Enabled", UIManager.getColor("Label.foreground")), putawayEnabled);
-        form.addInput(Elements.coloredLabel("Auto Replenish", UIManager.getColor("Label.foreground")), autoReplenish);
-        form.addInput(Elements.coloredLabel("Fixed Bin", UIManager.getColor("Label.foreground")), fixedBin);
-        form.addInput(Elements.coloredLabel("Holds Stock", UIManager.getColor("Label.foreground")), holdsStock);
+        form.addInput(Elements.inputLabel("Goods Issue"), doesGoodsIssue);
+        form.addInput(Elements.inputLabel("Goods Receipt"), doesGoodsReceipt);
+        form.addInput(Elements.inputLabel("Picking Enabled"), pickingEnabled);
+        form.addInput(Elements.inputLabel("Putaway Enabled"), putawayEnabled);
+        form.addInput(Elements.inputLabel("Auto Replenish"), autoReplenish);
+        form.addInput(Elements.inputLabel("Fixed Bin"), fixedBin);
+        form.addInput(Elements.inputLabel("Holds Stock"), holdsStock);
         controls.add(form);
 
         return controls;
     }
 
-    private void performReview(){
+    private void performReview() {
 
-        if(idField.getText().isEmpty()){
+        if (idField.getText().isEmpty()) {
             addToQueue(new String[]{"CRITICAL", "Bin ID field empty!"});
         }
 
-        if(nameField.getText().isEmpty()){
+        if (nameField.getText().isEmpty()) {
             addToQueue(new String[]{"CRITICAL", "Bin Name field empty!"});
         }
 
-        if(Double.parseDouble(binCount.getText()) <= 0){
+        if (Double.parseDouble(binCount.getText()) <= 0) {
             addToQueue(new String[]{"CRITICAL", "Bin count is less than or equal to 0! No bins will be created!"});
         }
 
-        if(widthField.getValue().isEmpty()){
+        if (widthField.getValue().isEmpty()) {
             addToQueue(new String[]{"CRITICAL", "Bin WIDTH dimension is set to 0, are you sure?"});
         }
 
-        if(lengthField.getValue().isEmpty()){
+        if (lengthField.getValue().isEmpty()) {
             addToQueue(new String[]{"CRITICAL", "Bin LENGTH dimension is set to 0, are you sure?"});
         }
 
-        if(heightField.getValue().isEmpty()){
+        if (heightField.getValue().isEmpty()) {
             addToQueue(new String[]{"CRITICAL", "Bin HEIGHT dimension is set to 0, are you sure?"});
         }
 
-        if(weightField.getValue().isEmpty()){
+        if (weightField.getValue().isEmpty()) {
             addToQueue(new String[]{"CRITICAL", "Bin WEIGHT dimension is set to 0, are you sure?"});
         }
 

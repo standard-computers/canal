@@ -4,7 +4,6 @@ import org.Canal.Models.BusinessUnits.*;
 import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Views.Controllers.Controller;
-import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.RefreshListener;
@@ -60,8 +59,8 @@ public class ViewSalesOrder extends LockeState {
         JPanel moreInfo = moreOrderInfoPanel();
         selectBillTo.setSelectedValue(salesOrder.getBillTo());
         selectShipTo.setSelectedValue(salesOrder.getShipTo());
-        coreValues.setBorder(new EmptyBorder(10, 10, 10, 10));
-        moreInfo.setBorder(new EmptyBorder(10, 10, 10, 10));
+        coreValues.setBorder(new EmptyBorder(5, 5, 5, 5));
+        moreInfo.setBorder(new EmptyBorder(5, 5, 5, 5));
 
         setLayout(new BorderLayout());
         JPanel orderInfo = new JPanel(new BorderLayout());
@@ -77,12 +76,12 @@ public class ViewSalesOrder extends LockeState {
         model.addTableModelListener(_ -> updateTotal());
     }
 
-    public void setSelectedSupplier(String supplierId){
+    public void setSelectedSupplier(String supplierId) {
         selectSupplier.setSelectedValue(supplierId);
     }
 
-    private JPanel orderInfoPanel(){
-        Form f = new Form();
+    private JPanel orderInfoPanel() {
+
         selectBillTo = Selectables.allLocations();
         selectBillTo.editable();
         selectShipTo = Selectables.allLocations();
@@ -90,24 +89,29 @@ public class ViewSalesOrder extends LockeState {
         selectSupplier = Selectables.allLocations();
         selectSupplier.editable();
         orderId = new Copiable("SO" + (60000000 + (Engine.getSalesOrders().size() + 1)));
-        f.addInput(Elements.coloredLabel("*Order ID", Constants.colors[0]), orderId);
-        f.addInput(Elements.coloredLabel("Supplier", Constants.colors[1]), selectSupplier);
-        f.addInput(Elements.coloredLabel("Bill To", Constants.colors[2]), selectBillTo);
-        f.addInput(Elements.coloredLabel("Ship To", Constants.colors[3]), selectShipTo);
-        return f;
+
+        Form form = new Form();
+        form.addInput(Elements.inputLabel("*Order ID"), orderId);
+        form.addInput(Elements.inputLabel("Supplier"), selectSupplier);
+        form.addInput(Elements.inputLabel("Bill To"), selectBillTo);
+        form.addInput(Elements.inputLabel("Ship To"), selectShipTo);
+
+        return form;
     }
 
-    private JPanel moreOrderInfoPanel(){
+    private JPanel moreOrderInfoPanel() {
+
         Form f = new Form();
         JTextField ordered = new Copiable(LocalDate.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy")));
         expectedDelivery = new DatePicker();
-        f.addInput(Elements.coloredLabel("*Ordered", UIManager.getColor("Label.foreground")), ordered);
-        f.addInput(Elements.coloredLabel("Expected Delivery", UIManager.getColor("Label.foreground")), expectedDelivery);
-        f.addInput(Elements.coloredLabel("Status", UIManager.getColor("Label.foreground")), new Copiable("DRAFT"));
+        f.addInput(Elements.inputLabel("*Ordered"), ordered);
+        f.addInput(Elements.inputLabel("Expected Delivery"), expectedDelivery);
+        f.addInput(Elements.inputLabel("Status"), new Copiable("DRAFT"));
         return f;
     }
 
-    private JPanel orderSummary(){
+    private JPanel orderSummary() {
+
         Form f = new Form();
         DecimalFormat df = new DecimalFormat("#0.00");
         netValue = new JLabel("$" + model.getTotalPrice());
@@ -122,17 +126,19 @@ public class ViewSalesOrder extends LockeState {
         return f;
     }
 
-    private void updateTotal(){
+    private void updateTotal() {
+
         DecimalFormat df = new DecimalFormat("#0.00");
         netValue.setText("$" + model.getTotalPrice());
         taxAmount.setText("$" + df.format(taxRate * Double.parseDouble(model.getTotalPrice())));
         totalAmount.setText("$" + df.format(taxRate * Double.parseDouble(model.getTotalPrice()) + Double.parseDouble(model.getTotalPrice())));
     }
 
-    private JPanel itemDetails(){
+    private JPanel itemDetails() {
+
         JPanel p = new JPanel(new BorderLayout());
         ArrayList<Item> items = Engine.getItems();
-        if(items.isEmpty()){
+        if (items.isEmpty()) {
             JOptionPane.showMessageDialog(this, "No products found", "Error", JOptionPane.ERROR_MESSAGE);
             dispose();
         }
@@ -172,63 +178,72 @@ public class ViewSalesOrder extends LockeState {
         return p;
     }
 
-    private JPanel deliveryDetails(){
-        Form p = new Form();
+    private JPanel deliveryDetails() {
+
         createOutboundDelivery = new JCheckBox();
-        if((boolean) Engine.codex("ORDS/SO", "use_deliveries")){
+        if ((boolean) Engine.codex("ORDS/SO", "use_deliveries")) {
             createOutboundDelivery.setSelected(true);
             createOutboundDelivery.setEnabled(false);
         }
         outboundCarriers = Selectables.carriers();
         outboundTruckId = Elements.input();
-        p.addInput(Elements.coloredLabel("Create Outbound Delivery (ODO) for Supplier", Constants.colors[9]), createOutboundDelivery);
-        p.addInput(Elements.coloredLabel("Carrier", Constants.colors[8]), outboundCarriers);
-        p.addInput(Elements.coloredLabel("Truck ID/Number", Constants.colors[7]), outboundTruckId);
-        return p;
+
+        Form form = new Form();
+        form.addInput(Elements.inputLabel("Create Outbound Delivery (ODO) for Supplier"), createOutboundDelivery);
+        form.addInput(Elements.inputLabel("Carrier"), outboundCarriers);
+        form.addInput(Elements.inputLabel("Truck ID/Number"), outboundTruckId);
+
+        return form;
     }
 
-    private JPanel ledgerDetails(){
-        Form f = new Form();
+    private JPanel ledgerDetails() {
+
         commitToLedger = new JCheckBox();
-        if((boolean) Engine.codex("ORDS/SO", "commit_to_ledger")){
+        if ((boolean) Engine.codex("ORDS/SO", "commit_to_ledger")) {
             commitToLedger.setSelected(true);
             commitToLedger.setEnabled(false);
         }
         organizations = Selectables.organizations();
         buyerObjexType = Selectables.locationObjex("/CCS");
         ledgers = Selectables.ledgers();
-        f.addInput(Elements.coloredLabel("Commit to Ledger", Constants.colors[9]), commitToLedger);
-        f.addInput(Elements.coloredLabel("Trans. Type (Receiving location type)", Constants.colors[8]), buyerObjexType);
-        f.addInput(Elements.coloredLabel("Purchasing Org.", Constants.colors[7]), organizations);
-        f.addInput(Elements.coloredLabel("Ledger", Constants.colors[6]), ledgers);
-        return f;
+
+        Form form = new Form();
+        form.addInput(Elements.inputLabel("Commit to Ledger"), commitToLedger);
+        form.addInput(Elements.inputLabel("Trans. Type (Receiving location type)"), buyerObjexType);
+        form.addInput(Elements.inputLabel("Purchasing Org."), organizations);
+        form.addInput(Elements.inputLabel("Ledger"), ledgers);
+
+        return form;
     }
 
-    private JPanel purchaseOrderDetails(){
-        Form f = new Form();
+    private JPanel purchaseOrderDetails() {
+
         createPurchaseOrder = new JCheckBox();
-        if((boolean) Engine.codex("ORDS/SO", "auto_create_po")){
+        if ((boolean) Engine.codex("ORDS/SO", "auto_create_po")) {
             createPurchaseOrder.setSelected(true);
             createPurchaseOrder.setEnabled(false);
         }
         HashMap<String, String> prs = new HashMap<>();
-        for(PurchaseRequisition pr1 : Engine.getPurchaseRequisitions()){
+        for (PurchaseRequisition pr1 : Engine.getPurchaseRequisitions()) {
             prs.put(pr1.getId(), pr1.getId());
         }
         availablePurchaseRequisitions = new Selectable(prs);
         availablePurchaseRequisitions.editable();
         createInboundDelivery = new JCheckBox();
-        if((boolean) Engine.codex("ORDS/SO", "create_buyer_inbound")){
+        if ((boolean) Engine.codex("ORDS/SO", "create_buyer_inbound")) {
             createInboundDelivery.setSelected(true);
             createInboundDelivery.setEnabled(false);
         }
         inboundCarriers = Selectables.carriers();
         inboundTruckId = Elements.input();
-        f.addInput(Elements.coloredLabel("Create Purchase Order?", Constants.colors[9]), createPurchaseOrder);
-        f.addInput(Elements.coloredLabel("Purchase Requisition", Constants.colors[8]), availablePurchaseRequisitions);
-        f.addInput(Elements.coloredLabel("Create IDO", Constants.colors[7]), createInboundDelivery);
-        f.addInput(Elements.coloredLabel("Transporation Carrier", Constants.colors[6]), inboundCarriers);
-        f.addInput(Elements.coloredLabel("Truck ID/Number", Constants.colors[5]), inboundTruckId);
-        return f;
+
+        Form form = new Form();
+        form.addInput(Elements.inputLabel("Create Purchase Order?"), createPurchaseOrder);
+        form.addInput(Elements.inputLabel("Purchase Requisition"), availablePurchaseRequisitions);
+        form.addInput(Elements.inputLabel("Create IDO"), createInboundDelivery);
+        form.addInput(Elements.inputLabel("Transporation Carrier"), inboundCarriers);
+        form.addInput(Elements.inputLabel("Truck ID/Number"), inboundTruckId);
+        return form;
+
     }
 }

@@ -173,12 +173,12 @@ public class AutoMakePurchaseRequisitions extends LockeState {
         prEndDateField = new DatePicker();
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Description", Constants.colors[9]), descriptionField);
-        form.addInput(Elements.coloredLabel("Max Spend", Constants.colors[8]), maxSpendField);
-        form.addInput(Elements.coloredLabel("[or] Single Order", UIManager.getColor("Label.foreground")), isSingleOrder);
-        form.addInput(Elements.coloredLabel("Supplier", Constants.colors[7]), supplier);
-        form.addInput(Elements.coloredLabel("Start Date", Constants.colors[6]), prStartDateField);
-        form.addInput(Elements.coloredLabel("End Date", Constants.colors[5]), prEndDateField);
+        form.addInput(Elements.inputLabel("Description"), descriptionField);
+        form.addInput(Elements.inputLabel("Max Spend"), maxSpendField);
+        form.addInput(Elements.inputLabel("[or] Single Order"), isSingleOrder);
+        form.addInput(Elements.inputLabel("Supplier"), supplier);
+        form.addInput(Elements.inputLabel("Start Date"), prStartDateField);
+        form.addInput(Elements.inputLabel("End Date"), prEndDateField);
         information.add(form);
 
         return information;

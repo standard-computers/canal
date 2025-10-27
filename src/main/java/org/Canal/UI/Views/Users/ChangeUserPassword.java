@@ -32,10 +32,10 @@ public class ChangeUserPassword extends LockeState {
         JPasswordField newPasswordField = new JPasswordField(15);
         JPasswordField repeatNewPasswordField = new JPasswordField(15);
         Form f = new Form();
-        f.addInput(Elements.coloredLabel("User ID", UIManager.getColor("Label.foreground")), new Copiable(Engine.getAssignedUser().getId()));
-        f.addInput(Elements.coloredLabel("Current Password", UIManager.getColor("Label.foreground")), currentPasswordField);
-        f.addInput(Elements.coloredLabel("New Password", UIManager.getColor("Label.foreground")), newPasswordField);
-        f.addInput(Elements.coloredLabel("Repeat New Password", UIManager.getColor("Label.foreground")), repeatNewPasswordField);
+        f.addInput(Elements.inputLabel("User ID"), new Copiable(Engine.getAssignedUser().getId()));
+        f.addInput(Elements.inputLabel("Current Password"), currentPasswordField);
+        f.addInput(Elements.inputLabel("New Password"), newPasswordField);
+        f.addInput(Elements.inputLabel("Repeat New Password"), repeatNewPasswordField);
         JButton updateUserPassword = Elements.button("Update Password");
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);

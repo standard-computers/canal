@@ -141,14 +141,14 @@ public class CreateEmployee extends LockeState {
         supervisor.editable();
         startDatePicker = new DatePicker();
 
-        f.addInput(Elements.coloredLabel("Organization", Constants.colors[10]), orgIdField);
-        f.addInput(Elements.coloredLabel("Location (optional)", Constants.colors[9]), locations);
-        f.addInput(Elements.coloredLabel("First Name", Constants.colors[8]), firstNameField);
-        f.addInput(Elements.coloredLabel("Middle Name", Constants.colors[7]), middleNameField);
-        f.addInput(Elements.coloredLabel("Last Name", Constants.colors[7]), lastNameField);
-        f.addInput(Elements.coloredLabel("Position", Constants.colors[6]), position);
-        f.addInput(Elements.coloredLabel("Supervisor", Constants.colors[5]), supervisor);
-        f.addInput(Elements.coloredLabel("Start Date", Constants.colors[4]), startDatePicker);
+        f.addInput(Elements.inputLabel("Organization"), orgIdField);
+        f.addInput(Elements.inputLabel("Location (optional)"), locations);
+        f.addInput(Elements.inputLabel("First Name"), firstNameField);
+        f.addInput(Elements.inputLabel("Middle Name"), middleNameField);
+        f.addInput(Elements.inputLabel("Last Name"), lastNameField);
+        f.addInput(Elements.inputLabel("Position"), position);
+        f.addInput(Elements.inputLabel("Supervisor"), supervisor);
+        f.addInput(Elements.inputLabel("Start Date"), startDatePicker);
         general.add(f);
 
         return general;
@@ -166,12 +166,12 @@ public class CreateEmployee extends LockeState {
         postalField = Elements.input();
         countries = Selectables.countries();
 
-        f2.addInput(Elements.coloredLabel("Street Line 1", UIManager.getColor("Label.foreground")), addressL1Field);
-        f2.addInput(Elements.coloredLabel("Line 2", UIManager.getColor("Label.foreground")), addressL2Field);
-        f2.addInput(Elements.coloredLabel("City", UIManager.getColor("Label.foreground")), cityField);
-        f2.addInput(Elements.coloredLabel("State", UIManager.getColor("Label.foreground")), stateField);
-        f2.addInput(Elements.coloredLabel("Postal", UIManager.getColor("Label.foreground")), postalField);
-        f2.addInput(Elements.coloredLabel("Country", UIManager.getColor("Label.foreground")), Selectables.countries());
+        f2.addInput(Elements.inputLabel("Street Line 1"), addressL1Field);
+        f2.addInput(Elements.inputLabel("Line 2"), addressL2Field);
+        f2.addInput(Elements.inputLabel("City"), cityField);
+        f2.addInput(Elements.inputLabel("State"), stateField);
+        f2.addInput(Elements.inputLabel("Postal"), postalField);
+        f2.addInput(Elements.inputLabel("Country"), Selectables.countries());
         locationInfo.add(f2);
 
         return locationInfo;
@@ -189,12 +189,12 @@ public class CreateEmployee extends LockeState {
         disabled = new JCheckBox();
         veteren = new JCheckBox();
 
-        f.addInput(Elements.coloredLabel("Email", UIManager.getColor("Label.foreground")), emailField);
-        f.addInput(Elements.coloredLabel("Phone", UIManager.getColor("Label.foreground")), phoneField);
-        f.addInput(Elements.coloredLabel("Ethnicity", UIManager.getColor("Label.foreground")), ethnicities);
-        f.addInput(Elements.coloredLabel("Gender", UIManager.getColor("Label.foreground")), genders);
-        f.addInput(Elements.coloredLabel("Disabled?", UIManager.getColor("Label.foreground")), disabled);
-        f.addInput(Elements.coloredLabel("Veteran?", UIManager.getColor("Label.foreground")), veteren);
+        f.addInput(Elements.inputLabel("Email"), emailField);
+        f.addInput(Elements.inputLabel("Phone"), phoneField);
+        f.addInput(Elements.inputLabel("Ethnicity"), ethnicities);
+        f.addInput(Elements.inputLabel("Gender"), genders);
+        f.addInput(Elements.inputLabel("Disabled?"), disabled);
+        f.addInput(Elements.inputLabel("Veteran?"), veteren);
         personalInfo.add(f);
 
         return personalInfo;

@@ -47,7 +47,7 @@ public class ModifyEmployee extends LockeState {
     private JCheckBox disabled;
     private JCheckBox veteren;
 
-    public ModifyEmployee(Employee employee, DesktopState desktop, RefreshListener refreshListener){
+    public ModifyEmployee(Employee employee, DesktopState desktop, RefreshListener refreshListener) {
 
         super("Modify " + employee.getName(), "/EMPS/MOD/" + employee.getId(), false, true, false, true);
         setFrameIcon(new ImageIcon(ModifyEmployee.class.getResource("/icons/modify.png")));
@@ -98,11 +98,11 @@ public class ModifyEmployee extends LockeState {
 
             employee.save();
 
-            if(refreshListener != null) refreshListener.refresh();
+            if (refreshListener != null) refreshListener.refresh();
 
-           if((boolean) Engine.codex.getValue("EMPS", "dispose_on_save")){
-               dispose();
-           }
+            if ((boolean) Engine.codex.getValue("EMPS", "dispose_on_save")) {
+                dispose();
+            }
         });
         toolbar.add(save);
         toolbar.add(Box.createHorizontalStrut(5));
@@ -111,7 +111,8 @@ public class ModifyEmployee extends LockeState {
         JRootPane rp = getRootPane();
         rp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ks, "do-save");
         rp.getActionMap().put("do-save", new AbstractAction() {
-            @Override public void actionPerformed(ActionEvent e) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 save.doClick();
             }
         });
@@ -121,7 +122,7 @@ public class ModifyEmployee extends LockeState {
         toolbar.add(review);
         toolbar.add(Box.createHorizontalStrut(5));
 
-        if((boolean) Engine.codex.getValue("EMPS", "allow_archival")){
+        if ((boolean) Engine.codex.getValue("EMPS", "allow_archival")) {
             IconButton archive = new IconButton("Archive", "archive", "Archive item");
             archive.addActionListener(_ -> {
                 employee.setStatus(LockeStatus.ARCHIVED);
@@ -132,7 +133,7 @@ public class ModifyEmployee extends LockeState {
             toolbar.add(Box.createHorizontalStrut(5));
         }
 
-        if((boolean) Engine.codex.getValue("EMPS", "allow_deletion")){
+        if ((boolean) Engine.codex.getValue("EMPS", "allow_deletion")) {
             IconButton delete = new IconButton("Delete", "delete", "Delete item");
             delete.addActionListener(_ -> {
 
@@ -144,7 +145,7 @@ public class ModifyEmployee extends LockeState {
         return toolbar;
     }
 
-    private JPanel general(){
+    private JPanel general() {
 
         JPanel general = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
@@ -161,22 +162,22 @@ public class ModifyEmployee extends LockeState {
 //     ToDO   startDatePicker.setSelectedDate(employee.getStartDate());
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Organization", Constants.colors[10]), orgIdField);
+        form.addInput(Elements.inputLabel("Organization"), orgIdField);
         locationField = Elements.input(employee.getLocation(), 15);
 
-        form.addInput(Elements.coloredLabel("Location", Constants.colors[9]), locationField);
-        form.addInput(Elements.coloredLabel("Name (Nickname)", Constants.colors[8]), nameField);
-        form.addInput(Elements.coloredLabel("First Name", Constants.colors[8]), firstNameField);
-        form.addInput(Elements.coloredLabel("Middle Name", Constants.colors[7]), middleNameField);
-        form.addInput(Elements.coloredLabel("Last Name", Constants.colors[7]), lastNameField);
-        form.addInput(Elements.coloredLabel("Position", Constants.colors[6]), position);
-        form.addInput(Elements.coloredLabel("Supervisor", Constants.colors[5]), supervisor);
-        form.addInput(Elements.coloredLabel("Start Date", Constants.colors[4]), startDatePicker);
+        form.addInput(Elements.inputLabel("Location"), locationField);
+        form.addInput(Elements.inputLabel("Name (Nickname)"), nameField);
+        form.addInput(Elements.inputLabel("First Name"), firstNameField);
+        form.addInput(Elements.inputLabel("Middle Name"), middleNameField);
+        form.addInput(Elements.inputLabel("Last Name"), lastNameField);
+        form.addInput(Elements.inputLabel("Position"), position);
+        form.addInput(Elements.inputLabel("Supervisor"), supervisor);
+        form.addInput(Elements.inputLabel("Start Date"), startDatePicker);
         general.add(form);
         return general;
     }
 
-    private JPanel locationInfo(){
+    private JPanel locationInfo() {
 
         JPanel locationInfo = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
@@ -189,18 +190,18 @@ public class ModifyEmployee extends LockeState {
         countryField.setSelectedValue(employee.getCountry());
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Street Line 1", UIManager.getColor("Label.foreground")), addressL1Field);
-        form.addInput(Elements.coloredLabel("Line 2", UIManager.getColor("Label.foreground")), addressL2Field);
-        form.addInput(Elements.coloredLabel("City", UIManager.getColor("Label.foreground")), cityField);
-        form.addInput(Elements.coloredLabel("State", UIManager.getColor("Label.foreground")), stateField);
-        form.addInput(Elements.coloredLabel("Postal", UIManager.getColor("Label.foreground")), postalField);
-        form.addInput(Elements.coloredLabel("Country", UIManager.getColor("Label.foreground")), countryField);
+        form.addInput(Elements.inputLabel("Street Line 1"), addressL1Field);
+        form.addInput(Elements.inputLabel("Line 2"), addressL2Field);
+        form.addInput(Elements.inputLabel("City"), cityField);
+        form.addInput(Elements.inputLabel("State"), stateField);
+        form.addInput(Elements.inputLabel("Postal"), postalField);
+        form.addInput(Elements.inputLabel("Country"), countryField);
         locationInfo.add(form);
 
         return locationInfo;
     }
 
-    private JPanel personalInfo(){
+    private JPanel personalInfo() {
 
         JPanel personalInfo = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
@@ -214,12 +215,12 @@ public class ModifyEmployee extends LockeState {
         veteren = new JCheckBox("", employee.isVeteran());
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Email", UIManager.getColor("Label.foreground")), emailField);
-        form.addInput(Elements.coloredLabel("Phone", UIManager.getColor("Label.foreground")), phoneField);
-        form.addInput(Elements.coloredLabel("Ethnicity", UIManager.getColor("Label.foreground")), ethnicities);
-        form.addInput(Elements.coloredLabel("Gender", UIManager.getColor("Label.foreground")), genders);
-        form.addInput(Elements.coloredLabel("Disabled?", UIManager.getColor("Label.foreground")), disabled);
-        form.addInput(Elements.coloredLabel("Veteran?", UIManager.getColor("Label.foreground")), veteren);
+        form.addInput(Elements.inputLabel("Email"), emailField);
+        form.addInput(Elements.inputLabel("Phone"), phoneField);
+        form.addInput(Elements.inputLabel("Ethnicity"), ethnicities);
+        form.addInput(Elements.inputLabel("Gender"), genders);
+        form.addInput(Elements.inputLabel("Disabled?"), disabled);
+        form.addInput(Elements.inputLabel("Veteran?"), veteren);
         personalInfo.add(form);
 
         return personalInfo;

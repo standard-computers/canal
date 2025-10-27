@@ -48,7 +48,7 @@ public class Rates extends LockeState implements RefreshListener {
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
 
         if((boolean) Engine.codex.getValue("ITS", "import_enabled")) {
-            IconButton importItems = new IconButton("Import", "export", "Import from CSV", "");
+            IconButton importItems = new IconButton("Import", "import", "Import from CSV", "");
             importItems.addActionListener(_ -> {
                 JFileChooser fc = new JFileChooser();
                 int result = fc.showOpenDialog(null);
@@ -122,13 +122,6 @@ public class Rates extends LockeState implements RefreshListener {
             tb.add(Box.createHorizontalStrut(5));
         }
 
-        IconButton open = new IconButton("Open", "open", "Open an Item", "/ITS/O");
-        open.addActionListener(_ -> {
-            desktop.put(Engine.router("/ITS/O", desktop));
-        });
-        tb.add(open);
-        tb.add(Box.createHorizontalStrut(5));
-
         IconButton create = new IconButton("New", "create", "Create an Item", "/ITS/NEW");
         create.addActionListener(_ -> {
             desktop.put(new CreateItem(desktop, this));
@@ -136,16 +129,13 @@ public class Rates extends LockeState implements RefreshListener {
         tb.add(create);
         tb.add(Box.createHorizontalStrut(5));
 
+        IconButton open = new IconButton("Open", "open", "Open an Item", "/ITS/O");
+        open.addActionListener(_ -> desktop.put(Engine.router("/ITS/O", desktop)));
+        tb.add(open);
+        tb.add(Box.createHorizontalStrut(5));
+
         IconButton find = new IconButton("Find", "find", "Find by Values", "/ITS/F");
         tb.add(find);
-        tb.add(Box.createHorizontalStrut(5));
-
-        IconButton labels = new IconButton("Labels", "label", "Print barcode for an Area");
-        tb.add(labels);
-        tb.add(Box.createHorizontalStrut(5));
-
-        IconButton print = new IconButton("Print", "print", "Print selected");
-        tb.add(print);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton refresh = new IconButton("Refresh", "refresh", "Refresh Data");

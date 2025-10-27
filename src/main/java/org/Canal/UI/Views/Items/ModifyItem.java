@@ -35,7 +35,7 @@ public class ModifyItem extends LockeState implements Includer {
     private JTextField priceField;
     private JTextField upcField;
     private JTextField vendorNumberField;
-
+    private Selectable status;
 
     private JCheckBox batched;
     private JCheckBox rentable;
@@ -66,7 +66,7 @@ public class ModifyItem extends LockeState implements Includer {
 
     public ModifyItem(Item item, DesktopState desktop, RefreshListener refreshListener) {
 
-        super("Modify Item / " + item.getId() + " - " + item.getName(), "/ITS/" + item.getId());
+        super("Modify Item / " + item.getId() + " - " + item.getName(), "/ITS/MOD/" + item.getId());
         setFrameIcon(new ImageIcon(ModifyItem.class.getResource("/icons/modify.png")));
         this.item = item;
         this.desktop = desktop;
@@ -84,7 +84,7 @@ public class ModifyItem extends LockeState implements Includer {
         add(toolbar(), BorderLayout.NORTH);
         add(tabs, BorderLayout.CENTER);
 
-        if((boolean) Engine.codex.getValue("ITS", "start_maximized")){
+        if ((boolean) Engine.codex.getValue("ITS", "start_maximized")) {
             setMaximized(true);
         }
     }
@@ -124,7 +124,6 @@ public class ModifyItem extends LockeState implements Includer {
             item.setTax(Double.parseDouble(taxField.getText()));
             item.setExciseTax(Double.parseDouble(exciseTaxfield.getText()));
 
-
             //Load dimensional info
             item.setWidth(Double.parseDouble(widthField.getValue()));
             item.setWidthUOM(widthField.getUOM());
@@ -134,6 +133,7 @@ public class ModifyItem extends LockeState implements Includer {
             item.setHeightUOM(heightField.getUOM());
             item.setWeight(Double.parseDouble(weightField.getValue()));
             item.setWeightUOM(weightField.getUOM());
+            item.setStatus(LockeStatus.valueOf(status.getSelectedValue()));
 
             item.save();
 
@@ -226,16 +226,18 @@ public class ModifyItem extends LockeState implements Includer {
         priceField = Elements.input(String.valueOf(item.getPrice()));
         upcField = Elements.input(item.getUpc());
         vendorNumberField = Elements.input(item.getVendorNumber());
+        status = Selectables.statusTypes();
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("ID", UIManager.getColor("Label.foreground")), idField);
-        form.addInput(Elements.coloredLabel("Organization", UIManager.getColor("Label.foreground")), orgField);
-        form.addInput(Elements.coloredLabel("Name", UIManager.getColor("Label.foreground")), nameField);
-        form.addInput(Elements.coloredLabel("Link", UIManager.getColor("Label.foreground")), linkField);
-        form.addInput(Elements.coloredLabel("Vendor", UIManager.getColor("Label.foreground")), vendorField);
-        form.addInput(Elements.coloredLabel("Price", UIManager.getColor("Label.foreground")), priceField);
-        form.addInput(Elements.coloredLabel("UPC", UIManager.getColor("Label.foreground")), upcField);
-        form.addInput(Elements.coloredLabel("Vendor Number", UIManager.getColor("Label.foreground")), vendorNumberField);
+        form.addInput(Elements.inputLabel("ID"), idField);
+        form.addInput(Elements.inputLabel("Organization"), orgField);
+        form.addInput(Elements.inputLabel("Name"), nameField);
+        form.addInput(Elements.inputLabel("Link"), linkField);
+        form.addInput(Elements.inputLabel("Vendor"), vendorField);
+        form.addInput(Elements.inputLabel("Price"), priceField);
+        form.addInput(Elements.inputLabel("UPC"), upcField);
+        form.addInput(Elements.inputLabel("Vendor Number"), vendorNumberField);
+        form.addInput(Elements.inputLabel("Item Status"), status);
         general.add(form);
 
         return general;
@@ -247,7 +249,7 @@ public class ModifyItem extends LockeState implements Includer {
 
         skud = new JCheckBox(" Item has unique SKU", item.isSkud());
         batched = new JCheckBox(" Item Expires", item.isBatched());
-        rentable =  new JCheckBox(" Item can be rented", item.isRentable());
+        rentable = new JCheckBox(" Item can be rented", item.isRentable());
         virtual = new JCheckBox(" Item is virtual", item.isVirtual());
         consumable = new JCheckBox(" Item qty used (raw materials)", item.isConsumable());
         allowSales = new JCheckBox(" Item can be sold", item.allowSales());
@@ -258,17 +260,17 @@ public class ModifyItem extends LockeState implements Includer {
         manufacturingTime = Elements.input(String.valueOf(item.getManufacturingTime()));
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("SKU'd", UIManager.getColor("Label.foreground")), skud);
-        form.addInput(Elements.coloredLabel("Batched", UIManager.getColor("Label.foreground")), batched);
-        form.addInput(Elements.coloredLabel("Rentable", UIManager.getColor("Label.foreground")),rentable);
-        form.addInput(Elements.coloredLabel("Virtual", UIManager.getColor("Label.foreground")), virtual);
-        form.addInput(Elements.coloredLabel("Consumable", UIManager.getColor("Label.foreground")), consumable);
-        form.addInput(Elements.coloredLabel("Allow Sales", UIManager.getColor("Label.foreground")), allowSales);
-        form.addInput(Elements.coloredLabel("Allow Purchasing", UIManager.getColor("Label.foreground")), allowPurchasing);
-        form.addInput(Elements.coloredLabel("Keep Inventory", UIManager.getColor("Label.foreground")), keepInventory);
-        form.addInput(Elements.coloredLabel("Lead Time", UIManager.getColor("Label.foreground")), leadTime);
-        form.addInput(Elements.coloredLabel("Transporation Time", UIManager.getColor("Label.foreground")), transportationTime);
-        form.addInput(Elements.coloredLabel("Manufacturing Time", UIManager.getColor("Label.foreground")), manufacturingTime);
+        form.addInput(Elements.inputLabel("SKU'd"), skud);
+        form.addInput(Elements.inputLabel("Batched"), batched);
+        form.addInput(Elements.inputLabel("Rentable"), rentable);
+        form.addInput(Elements.inputLabel("Virtual"), virtual);
+        form.addInput(Elements.inputLabel("Consumable"), consumable);
+        form.addInput(Elements.inputLabel("Allow Sales"), allowSales);
+        form.addInput(Elements.inputLabel("Allow Purchasing"), allowPurchasing);
+        form.addInput(Elements.inputLabel("Keep Inventory"), keepInventory);
+        form.addInput(Elements.inputLabel("Lead Time"), leadTime);
+        form.addInput(Elements.inputLabel("Transporation Time"), transportationTime);
+        form.addInput(Elements.inputLabel("Manufacturing Time"), manufacturingTime);
         controls.add(form);
 
         return controls;
@@ -304,15 +306,15 @@ public class ModifyItem extends LockeState implements Includer {
         exciseTaxfield = Elements.input(String.valueOf(item.getExciseTax()));
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Packaging Base Quantity", UIManager.getColor("Label.foreground")), baseQuantityField);
-        form.addInput(Elements.coloredLabel("Packaging UOM", UIManager.getColor("Label.foreground")), packagingUomField);
-        form.addInput(Elements.coloredLabel("Color", UIManager.getColor("Label.foreground")), colorField);
-        form.addInput(Elements.coloredLabel("Width", UIManager.getColor("Label.foreground")), widthField);
-        form.addInput(Elements.coloredLabel("Length", UIManager.getColor("Label.foreground")), lengthField);
-        form.addInput(Elements.coloredLabel("Height", UIManager.getColor("Label.foreground")), heightField);
-        form.addInput(Elements.coloredLabel("Weight", UIManager.getColor("Label.foreground")), weightField);
-        form.addInput(Elements.coloredLabel("Tax", UIManager.getColor("Label.foreground")), taxField);
-        form.addInput(Elements.coloredLabel("Excise Tax", UIManager.getColor("Label.foreground")), exciseTaxfield);
+        form.addInput(Elements.inputLabel("Packaging Base Quantity"), baseQuantityField);
+        form.addInput(Elements.inputLabel("Packaging UOM"), packagingUomField);
+        form.addInput(Elements.inputLabel("Color"), colorField);
+        form.addInput(Elements.inputLabel("Width"), widthField);
+        form.addInput(Elements.inputLabel("Length"), lengthField);
+        form.addInput(Elements.inputLabel("Height"), heightField);
+        form.addInput(Elements.inputLabel("Weight"), weightField);
+        form.addInput(Elements.inputLabel("Tax"), taxField);
+        form.addInput(Elements.inputLabel("Excise Tax"), exciseTaxfield);
         p.add(form);
 
         return p;

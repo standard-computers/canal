@@ -51,11 +51,11 @@ public class ViewBOM extends LockeState {
         JPanel itemInfo = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("ID", UIManager.getColor("Label.foreground")), new Copiable(billOfMaterials.getId()));
-        form.addInput(Elements.coloredLabel("BOM Name", UIManager.getColor("Label.foreground")), new Copiable(billOfMaterials.getName()));
-        form.addInput(Elements.coloredLabel("Production Location", UIManager.getColor("Label.foreground")), new Copiable(billOfMaterials.getLocation()));
-        form.addInput(Elements.coloredLabel("Finished Item ID", UIManager.getColor("Label.foreground")), new Copiable(billOfMaterials.getItem()));
-        form.addInput(Elements.coloredLabel("Customer", UIManager.getColor("Label.foreground")), new Copiable(billOfMaterials.getCustomer()));
+        form.addInput(Elements.inputLabel("ID"), new Copiable(billOfMaterials.getId()));
+        form.addInput(Elements.inputLabel("BOM Name"), new Copiable(billOfMaterials.getName()));
+        form.addInput(Elements.inputLabel("Production Location"), new Copiable(billOfMaterials.getLocation()));
+        form.addInput(Elements.inputLabel("Finished Item ID"), new Copiable(billOfMaterials.getItem()));
+        form.addInput(Elements.inputLabel("Customer"), new Copiable(billOfMaterials.getCustomer()));
         itemInfo.add(form);
 
         header.add(itemInfo, BorderLayout.CENTER);
@@ -225,8 +225,8 @@ public class ViewBOM extends LockeState {
                     ol.getName(),
                     ol.getDescription(),
                     ol.getLocation(),
-                    ol.getArea(),
-                    ol.getBin(),
+                    ol.getSourceArea(),
+                    ol.getSourceBin(),
                     ol.getLocke(),
                     ol.getItem(),
                     ol.getQuantity(),
@@ -258,7 +258,7 @@ public class ViewBOM extends LockeState {
         JPanel controls = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Status", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(billOfMaterials.getStatus())));
+        form.addInput(Elements.inputLabel("Status"), new Copiable(String.valueOf(billOfMaterials.getStatus())));
         controls.add(form);
 
         return controls;

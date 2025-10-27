@@ -73,10 +73,10 @@ public class ModifyBOM extends LockeState implements Includer {
         customerField = Elements.input(billOfMaterials.getCustomer());
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("BOM Name", UIManager.getColor("Label.foreground")), bomNameField);
-        form.addInput(Elements.coloredLabel("Production Location", UIManager.getColor("Label.foreground")), locationField);
-        form.addInput(Elements.coloredLabel("Finished Item ID", UIManager.getColor("Label.foreground")), itemId);
-        form.addInput(Elements.coloredLabel("Customer", UIManager.getColor("Label.foreground")), customerField);
+        form.addInput(Elements.inputLabel("BOM Name"), bomNameField);
+        form.addInput(Elements.inputLabel("Production Location"), locationField);
+        form.addInput(Elements.inputLabel("Finished Item ID"), itemId);
+        form.addInput(Elements.inputLabel("Customer"), customerField);
         itemInfo.add(form);
 
         header.add(itemInfo, BorderLayout.CENTER);
@@ -321,7 +321,7 @@ public class ModifyBOM extends LockeState implements Includer {
         status = Selectables.statusTypes();
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Status", UIManager.getColor("Label.foreground")), status);
+        form.addInput(Elements.inputLabel("Status"), status);
         controls.add(form);
 
         return controls;

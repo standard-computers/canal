@@ -53,7 +53,7 @@ public class Employees extends LockeState implements RefreshListener {
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
 
         if((boolean) Engine.codex.getValue("EMPS", "import_enabled")){
-            IconButton importEmployees = new IconButton("Import", "export", "Import as CSV", "");
+            IconButton importEmployees = new IconButton("Import", "import", "Import as CSV", "");
             importEmployees.addActionListener(_ -> {
 
             });
@@ -91,7 +91,7 @@ public class Employees extends LockeState implements RefreshListener {
         tb.add(find);
         tb.add(Box.createHorizontalStrut(5));
 
-        IconButton labels = new IconButton("Labels", "label", "Delete a User");
+        IconButton labels = new IconButton("Labels", "barcodes", "Delete a User");
         tb.add(labels);
         tb.add(Box.createHorizontalStrut(5));
 

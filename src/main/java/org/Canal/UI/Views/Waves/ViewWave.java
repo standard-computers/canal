@@ -1,4 +1,10 @@
 package org.Canal.UI.Views.Waves;
 
-public class ViewWave {
+import org.Canal.UI.Elements.LockeState;
+
+public class ViewWave extends LockeState {
+
+    public ViewWave(){
+        super("View Wave", "/MVMT/WVS/");
+    }
 }

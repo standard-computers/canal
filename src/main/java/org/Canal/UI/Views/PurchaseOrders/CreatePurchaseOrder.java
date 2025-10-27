@@ -89,7 +89,7 @@ public class CreatePurchaseOrder extends LockeState {
         tabs.addTab("Notes", notes());
 
         JPanel moreInfo = orderInfo();
-        moreInfo.setBorder(new EmptyBorder(10, 10, 10, 10));
+        moreInfo.setBorder(new EmptyBorder(5, 5, 5, 5));
 
         setLayout(new BorderLayout());
         JPanel infoHolder = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -150,6 +150,12 @@ public class CreatePurchaseOrder extends LockeState {
             if ((boolean) Engine.codex("ORDS/PO", "require_pr")) {
                 if (assignedPR == null) {
                     JOptionPane.showMessageDialog(null, "Purchase Req required for PO", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+            if (assignedPR != null) {
+                if (assignedPR.getRemaining() <= 0) {
+                    JOptionPane.showMessageDialog(null, "Purchase Requsition is spent!!!", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
             }
@@ -253,9 +259,9 @@ public class CreatePurchaseOrder extends LockeState {
         selectVendor = Elements.input();
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Supplier/Vendor", Constants.colors[1]), selectVendor);
-        form.addInput(Elements.coloredLabel("Bill To Location", Constants.colors[2]), selectBillTo);
-        form.addInput(Elements.coloredLabel("Ship To Location", Constants.colors[3]), selectShipTo);
+        form.addInput(Elements.inputLabel("Supplier/Vendor"), selectVendor);
+        form.addInput(Elements.inputLabel("Bill To Location"), selectBillTo);
+        form.addInput(Elements.inputLabel("Ship To Location"), selectShipTo);
         orderInfo.add(form);
 
         return orderInfo;
@@ -315,9 +321,9 @@ public class CreatePurchaseOrder extends LockeState {
         statuses = Selectables.statusTypes();
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Purchase Requisition", Constants.colors[9]), purchaseRequisition);
-        form.addInput(Elements.coloredLabel("Expected Delivery", Constants.colors[8]), expectedDelivery);
-        form.addInput(Elements.coloredLabel("Status", Constants.colors[7]), statuses);
+        form.addInput(Elements.inputLabel("Purchase Requisition"), purchaseRequisition);
+        form.addInput(Elements.inputLabel("Expected Delivery"), expectedDelivery);
+        form.addInput(Elements.inputLabel("Status"), statuses);
 
         return form;
     }
@@ -327,14 +333,14 @@ public class CreatePurchaseOrder extends LockeState {
         Form f = new Form();
         DecimalFormat df = new DecimalFormat("#0.00");
         netAmount = Elements.label("$" + model.getTotalPrice());
-        f.addInput(Elements.coloredLabel("Net Amount", UIManager.getColor("Label.foreground")), netAmount);
+        f.addInput(Elements.inputLabel("Net Amount"), netAmount);
 
         //TODO Taxes and Rates
         taxAmount = Elements.label("$" + df.format(Double.parseDouble(model.getTotalPrice())));
-        f.addInput(Elements.coloredLabel("Tax Amount", UIManager.getColor("Label.foreground")), taxAmount);
+        f.addInput(Elements.inputLabel("Tax Amount"), taxAmount);
 
         totalAmount = Elements.label("$" + df.format(Double.parseDouble("0.0") * Double.parseDouble(model.getTotalPrice()) + Double.parseDouble(model.getTotalPrice())));
-        f.addInput(Elements.coloredLabel("Total Amount", UIManager.getColor("Label.foreground")), totalAmount);
+        f.addInput(Elements.inputLabel("Total Amount"), totalAmount);
         return f;
     }
 
@@ -347,14 +353,14 @@ public class CreatePurchaseOrder extends LockeState {
         netAmount.setText("$" + preTax);
 
         double tax = 0.0;
-        for(Rate r : rates){
-            if(r.isTax()){
-                if(r.isPercent()){
+        for (Rate r : rates) {
+            if (r.isTax()) {
+                if (r.isPercent()) {
                     tax += preTax * r.getValue();
-                }else{
+                } else {
                     tax += r.getValue();
                 }
-            }else{
+            } else {
                 tax += r.getValue();
             }
         }
@@ -456,10 +462,10 @@ public class CreatePurchaseOrder extends LockeState {
         });
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Create Inbound Delivery (IDO) for Ship-To", Constants.colors[10]), createDelivery);
-        form.addInput(Elements.coloredLabel("Carrier", Constants.colors[9]), carriers);
-        form.addInput(Elements.coloredLabel("Truck (If Empty, makes new)", Constants.colors[8]), jc[0]);
-        form.addInput(Elements.coloredLabel("Truck Number", Constants.colors[7]), truckNumberField);
+        form.addInput(Elements.inputLabel("Create Inbound Delivery (IDO) for Ship-To"), createDelivery);
+        form.addInput(Elements.inputLabel("Carrier"), carriers);
+        form.addInput(Elements.inputLabel("Truck (If Empty, makes new)"), jc[0]);
+        form.addInput(Elements.inputLabel("Truck Number"), truckNumberField);
         delivery.add(form);
 
         return delivery;
@@ -479,10 +485,10 @@ public class CreatePurchaseOrder extends LockeState {
         ledgerId = Selectables.ledgers();
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Commit to Ledger", UIManager.getColor("Label.foreground")), commitToLedger);
-        form.addInput(Elements.coloredLabel("Trans. Type (Receiving location type)", UIManager.getColor("Label.foreground")), buyerObjexType);
-        form.addInput(Elements.coloredLabel("Purchasing Org.", UIManager.getColor("Label.foreground")), organizations);
-        form.addInput(Elements.coloredLabel("Ledger", UIManager.getColor("Label.foreground")), ledgerId);
+        form.addInput(Elements.inputLabel("Commit to Ledger"), commitToLedger);
+        form.addInput(Elements.inputLabel("Trans. Type (Receiving location type)"), buyerObjexType);
+        form.addInput(Elements.inputLabel("Purchasing Org."), organizations);
+        form.addInput(Elements.inputLabel("Ledger"), ledgerId);
         ledger.add(form);
 
         return ledger;
@@ -552,7 +558,7 @@ public class CreatePurchaseOrder extends LockeState {
         };
 
         ArrayList<Object[]> data = new ArrayList<>();
-        for(int s = 0; s < rates.size(); s++){
+        for (int s = 0; s < rates.size(); s++) {
             Rate rate = rates.get(s);
             data.add(new Object[]{
                     String.valueOf(s + 1),
@@ -626,7 +632,7 @@ public class CreatePurchaseOrder extends LockeState {
         scrollPane.repaint();
     }
 
-    private void performReview(){
+    private void performReview() {
         if (!selectShipTo.getText().equals(selectBillTo.getText())) {
             addToQueue(new String[]{"WARNING", "Bill To & Ship To do not match"});
         }
@@ -642,7 +648,7 @@ public class CreatePurchaseOrder extends LockeState {
         if (rates.isEmpty()) {
             addToQueue(new String[]{"WARNING", "No rates or taxes have been added. ARE YOU SURE?"});
         }
-        if (purchaseRequisition.getText().equals("Available")) {
+        if (!purchaseRequisition.getText().isEmpty()) {
             PurchaseRequisition pr = Engine.getPurchaseRequisition(purchaseRequisition.getText());
             if (pr == null) {
                 addToQueue(new String[]{"ERROR", "Selected Purchase Requisition was not found!!!"});
@@ -655,6 +661,9 @@ public class CreatePurchaseOrder extends LockeState {
                 }
                 if (!pr.getSupplier().equals(selectVendor.getText())) {
                     addToQueue(new String[]{"WARNING", "Selected Purchase Requisition NOT for selected Vendor!"});
+                }
+                if (pr.getRemaining() <= 0) {
+                    addToQueue(new String[]{"CRITICAL", "Purchase Requisition " + pr.getId() + " is spent!!!"});
                 }
             }
         } else {

@@ -63,7 +63,7 @@ public class Invoices extends LockeState implements RefreshListener {
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
 
         if ((boolean) Engine.codex.getValue("INVS", "import_enabled")) {
-            IconButton importAreas = new IconButton("Import", "export", "Import from CSV", "");
+            IconButton importAreas = new IconButton("Import", "import", "Import from CSV", "");
             tb.add(importAreas);
             tb.add(Box.createHorizontalStrut(5));
         }
@@ -153,7 +153,7 @@ public class Invoices extends LockeState implements RefreshListener {
         tb.add(autoMakeBins);
         tb.add(Box.createHorizontalStrut(5));
 
-        IconButton labels = new IconButton("Labels", "label", "Print barcode for an Area");
+        IconButton labels = new IconButton("Labels", "barcodes", "Print barcode for an Area");
         tb.add(labels);
         tb.add(Box.createHorizontalStrut(5));
 

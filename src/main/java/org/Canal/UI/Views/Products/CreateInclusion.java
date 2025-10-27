@@ -25,8 +25,8 @@ public class CreateInclusion extends LockeState {
         usage.setValue("1");
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Item ID", UIManager.getColor("Label.foreground")), inclusionId);
-        form.addInput(Elements.coloredLabel("Usage", UIManager.getColor("Label.foreground")), usage);
+        form.addInput(Elements.inputLabel("Item ID"), inclusionId);
+        form.addInput(Elements.inputLabel("Usage"), usage);
 
         setLayout(new BorderLayout());
         add(form, BorderLayout.CENTER);

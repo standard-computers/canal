@@ -3,7 +3,9 @@ package org.Canal.UI.Views.Accounts;
 import org.Canal.Models.BusinessUnits.Account;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.*;
+import org.Canal.UI.Views.System.LockeMessages;
 import org.Canal.Utils.*;
+import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,15 +27,18 @@ public class AutoMakeAccounts extends LockeState {
     //General Info
     private JTextField accountNameField;
     private JTextField owningLocationField;
-    private JTextField customerField;
     private DatePicker openDate;
     private DatePicker closeDate;
     private JTextField agreementIdField;
+    private JTextField termsQuantityField;
 
     //Locations to make Area for
     private JPanel checkboxPanel;
     private ArrayList<Location> locations;
     private ArrayList<JCheckBox> checkboxes;
+
+    //Notes Tab
+    private RTextScrollPane notes;
 
     public AutoMakeAccounts(DesktopState desktop, RefreshListener refreshListener) {
 
@@ -45,6 +50,10 @@ public class AutoMakeAccounts extends LockeState {
         CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.addTab("General", general());
         tabs.addTab("Locations", locations());
+
+        if ((boolean) Engine.codex.getValue("ACCS", "allow_notes")) {
+            tabs.addTab("Notes", notes());
+        }
 
         setLayout(new BorderLayout());
         add(tabs, BorderLayout.CENTER);
@@ -72,12 +81,13 @@ public class AutoMakeAccounts extends LockeState {
             account.setId(accountId);
             account.setName(accountNameField.getText());
             account.setLocation(owningLocationField.getText());
-            account.setCustomer(customerField.getText());
             account.setOpened(openDate.getSelectedDateString());
             account.setClosed(closeDate.getSelectedDateString());
             account.setAgreement(agreementIdField.getText());
             Pipe.save("/ACCS", account);
+
             dispose();
+            if (refreshListener != null) refreshListener.refresh();
         });
         tb.add(create);
         tb.add(Box.createHorizontalStrut(5));
@@ -103,23 +113,24 @@ public class AutoMakeAccounts extends LockeState {
 
         accountNameField = Elements.input();
         owningLocationField = Elements.input();
-        customerField = Elements.input();
         openDate = new DatePicker();
         closeDate = new DatePicker();
         agreementIdField = Elements.input();
+        termsQuantityField = Elements.input();
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Account Name", Constants.colors[0]), accountNameField);
-        form.addInput(Elements.coloredLabel("Owning Location", Constants.colors[1]), owningLocationField);
-        form.addInput(Elements.coloredLabel("Customer", Constants.colors[2]), customerField);
-        form.addInput(Elements.coloredLabel("Open Date", Constants.colors[3]), openDate);
-        form.addInput(Elements.coloredLabel("Close Date", Constants.colors[4]), closeDate);
-        form.addInput(Elements.coloredLabel("Attach Agreement ID", Constants.colors[5]), agreementIdField);
+        form.addInput(Elements.inputLabel("Account Name", "This is a business', company's, or person's name"), accountNameField);
+        form.addInput(Elements.inputLabel("Owning Location", "Location responsible for this account"), owningLocationField);
+        form.addInput(Elements.inputLabel("Open Date", "Open/start date of this account"), openDate);
+        form.addInput(Elements.inputLabel("Close Date", "When this account will be closed"), closeDate);
+        form.addInput(Elements.inputLabel("Attach Agreement ID", "Attach agreement via ID to AutoMake Sales Orders or set other terms"), agreementIdField);
+        form.addInput(Elements.inputLabel("Terms (In DAYS)", "Number of days from delivery that payment is due"), termsQuantityField);
         general.add(form);
 
         return general;
     }
-    private JPanel locations(){
+
+    private JPanel locations() {
 
         JPanel locationsSelection = new JPanel(new BorderLayout());
         locations = Engine.getLocations();
@@ -138,7 +149,7 @@ public class AutoMakeAccounts extends LockeState {
         search.addActionListener(_ -> {
 
             String searchValue = search.getText().trim();
-            if(searchValue.endsWith("*")){ //Searching for ID starts with
+            if (searchValue.endsWith("*")) { //Searching for ID starts with
                 for (JCheckBox checkbox : checkboxes) {
                     if (checkbox.getText().startsWith(searchValue.substring(0, searchValue.length() - 1))) {
                         checkbox.setSelected(!checkbox.isSelected());
@@ -147,7 +158,7 @@ public class AutoMakeAccounts extends LockeState {
             } else if (searchValue.startsWith("/")) { //Objex type selection
 
                 for (int i = 0; i < checkboxes.size(); i++) {
-                    if(locations.get(i).getType().equals(searchValue.toUpperCase())){
+                    if (locations.get(i).getType().equals(searchValue.toUpperCase())) {
                         checkboxes.get(i).setSelected(!checkboxes.get(i).isSelected());
                     }
                 }
@@ -202,6 +213,27 @@ public class AutoMakeAccounts extends LockeState {
         }
     }
 
+    private RTextScrollPane notes() {
+
+        notes = Elements.simpleEditor();
+        return notes;
+    }
+
     private void performReview() {
+
+        if (accountNameField.getText().isEmpty()) {
+            addToQueue(new String[]{"WARNING", "No account name provided."});
+        }
+
+        if (owningLocationField.getText().isEmpty()) {
+            addToQueue(new String[]{"WARNING", "Owning location not set. Ledger and billing determination may error."});
+        }
+
+        if (termsQuantityField.getText().isEmpty() || Double.parseDouble(termsQuantityField.getText()) <= 0) {
+            addToQueue(new String[]{"CRITICAL", "Payment terms are set to zero"});
+        }
+
+        desktop.put(new LockeMessages(getQueue()));
+        purgeQueue();
     }
 }

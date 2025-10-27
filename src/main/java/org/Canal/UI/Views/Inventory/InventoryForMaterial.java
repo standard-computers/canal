@@ -15,8 +15,8 @@ public class InventoryForMaterial extends LockeState {
     public InventoryForMaterial() {
         super("PI for Material", "/STK/PI/MTS", false, true, false, true);
         Form f = new Form();
-        f.addInput(Elements.coloredLabel("Item ID", new Color(65, 180, 45)), new JTextField(10));
-        f.addInput(Elements.coloredLabel("Location (* all)", new Color(65, 180, 45)), new JTextField("*"));
+        f.addInput(Elements.inputLabel("Item ID"), new JTextField(10));
+        f.addInput(Elements.inputLabel("Location (* all)"), new JTextField("*"));
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);
     }

@@ -91,15 +91,15 @@ public class CanalSettings extends LockeState {
         if (Engine.getAssignedUser() != null) {
             assignedUser = Engine.getAssignedUser().getId();
         }
-        f.addInput(Elements.coloredLabel("Endpoint", UIManager.getColor("Label.foreground")), new Copiable(Engine.getConfiguration().getEndpoint()));
-        f.addInput(Elements.coloredLabel("Assigned User", UIManager.getColor("Label.foreground")), new Copiable(assignedUser));
-        f.addInput(Elements.coloredLabel("Font Size", Constants.colors[10]), fontSizeField);
-        f.addInput(Elements.coloredLabel("Theme", Constants.colors[9]), themeOptions);
-        f.addInput(Elements.coloredLabel("Upload Theme", Constants.colors[8]), uploadTheme);
-        f.addInput(Elements.coloredLabel("Background", Constants.colors[7]), backgroundChooser);
-        f.addInput(Elements.coloredLabel("Save Locke State", Constants.colors[6]), saveLockeState);
-        f.addInput(Elements.coloredLabel("Show Locke Codes", Constants.colors[5]), showLockeCodes);
-        f.addInput(Elements.coloredLabel("Show Button Labels", Constants.colors[4]), showButtonLabels);
+        f.addInput(Elements.inputLabel("Endpoint"), new Copiable(Engine.getConfiguration().getEndpoint()));
+        f.addInput(Elements.inputLabel("Assigned User"), new Copiable(assignedUser));
+        f.addInput(Elements.inputLabel("Font Size"), fontSizeField);
+        f.addInput(Elements.inputLabel("Theme"), themeOptions);
+        f.addInput(Elements.inputLabel("Upload Theme"), uploadTheme);
+        f.addInput(Elements.inputLabel("Background"), backgroundChooser);
+        f.addInput(Elements.inputLabel("Save Locke State"), saveLockeState);
+        f.addInput(Elements.inputLabel("Show Locke Codes"), showLockeCodes);
+        f.addInput(Elements.inputLabel("Show Button Labels"), showButtonLabels);
         return f;
     }
 
@@ -133,7 +133,7 @@ public class CanalSettings extends LockeState {
             JButton openFileLocation = Elements.button("Open File Location");
             panel.add(openFileLocation);
         }
-        panel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        panel.setBorder(new EmptyBorder(5, 5, 5, 5));
         return panel;
     }
 }

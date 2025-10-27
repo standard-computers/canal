@@ -11,7 +11,6 @@ import org.Canal.Utils.Engine;
 import org.Canal.Utils.RefreshListener;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -92,14 +91,18 @@ public class Users extends LockeState implements RefreshListener {
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         tb.add(Box.createHorizontalStrut(5));
 
-        IconButton importUsers = new IconButton("Import", "export", "Import from CSV", "");
-        importUsers.addActionListener(_ -> table.exportToCSV());
+        IconButton importUsers = new IconButton("Import", "import", "Import from CSV", "");
         tb.add(importUsers);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton export = new IconButton("Export", "export", "Export as CSV", "");
         export.addActionListener(_ -> table.exportToCSV());
         tb.add(export);
+        tb.add(Box.createHorizontalStrut(5));
+
+        IconButton create = new IconButton("Create", "create", "Create a User", "/USRS/NEW");
+        create.addActionListener(_ -> desktop.put(new CreateUser(desktop, this)));
+        tb.add(create);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton openSelected = new IconButton("Open", "open", "Open selected");
@@ -113,12 +116,7 @@ public class Users extends LockeState implements RefreshListener {
         tb.add(openSelected);
         tb.add(Box.createHorizontalStrut(5));
 
-        IconButton create = new IconButton("Create", "create", "Create a User", "/USRS/NEW");
-        create.addActionListener(_ -> desktop.put(new CreateUser(desktop, this)));
-        tb.add(create);
-        tb.add(Box.createHorizontalStrut(5));
-
-        IconButton labels = new IconButton("Labels", "label", "Delete a User");
+        IconButton labels = new IconButton("Labels", "barcodes", "Get barcode for User(s)");
         tb.add(labels);
         tb.add(Box.createHorizontalStrut(5));
 

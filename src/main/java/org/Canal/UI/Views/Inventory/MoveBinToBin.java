@@ -13,7 +13,6 @@ import org.Canal.Utils.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.concurrent.locks.Lock;
 
 /**
  * /STK/MV/BB
@@ -31,8 +30,8 @@ public class MoveBinToBin extends LockeState {
         createHu.setSelected(true);
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Source Bin", Constants.colors[0]), sourceBin);
-        form.addInput(Elements.coloredLabel("Destination Bin", Constants.colors[1]), destinationBin);
+        form.addInput(Elements.inputLabel("Source Bin"), sourceBin);
+        form.addInput(Elements.inputLabel("Destination Bin"), destinationBin);
 
         setLayout(new BorderLayout());
         add(Elements.header("Move Stock", SwingConstants.LEFT), BorderLayout.NORTH);

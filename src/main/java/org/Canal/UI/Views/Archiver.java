@@ -6,7 +6,6 @@ import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.Utils.ConnectDB;
-import org.Canal.Utils.Constants;
 import org.Canal.Utils.Pipe;
 import org.Canal.Utils.LockeStatus;
 import org.bson.Document;
@@ -18,12 +17,12 @@ import java.awt.event.MouseEvent;
 
 public class Archiver extends LockeState {
 
-    public Archiver(String objex){
+    public Archiver(String objex) {
         super("Archiver", objex + "/ARCHV", false, true, false, true);
 
         JTextField objexIdField = Elements.input(20);
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Objex ID", Constants.colors[0]), objexIdField);
+        form.addInput(Elements.inputLabel("Objex ID"), objexIdField);
         setLayout(new BorderLayout());
         add(form, BorderLayout.CENTER);
         JButton confirmArchival = Elements.button("Confirm Objex Archival");

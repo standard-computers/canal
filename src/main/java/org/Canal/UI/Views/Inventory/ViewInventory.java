@@ -152,7 +152,7 @@ public class ViewInventory extends LockeState implements RefreshListener {
         toolbar.add(inventoryValuation);
         toolbar.add(Box.createHorizontalStrut(5));
 
-        IconButton label = new IconButton("Barcodes", "label", "Print labels for org properties");
+        IconButton label = new IconButton("Barcodes", "barcodes", "Print labels for org properties");
         label.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

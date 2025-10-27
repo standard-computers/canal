@@ -45,13 +45,13 @@ public class ConvertPurchaseRequisitionsSalesOrders extends LockeState {
         setFrameIcon(new ImageIcon(ConvertPurchaseRequisitionsSalesOrders.class.getResource("/icons/start.png")));
         this.desktop = desktop;
 
-        for(PurchaseRequisition purchaseRequisition : Engine.getPurchaseRequisitions()){
-            if(purchaseRequisition.getStatus().equals(LockeStatus.ACTIVE)
-            || purchaseRequisition.getStatus().equals(LockeStatus.NEW)){
+        for (PurchaseRequisition purchaseRequisition : Engine.getPurchaseRequisitions()) {
+            if (purchaseRequisition.getStatus().equals(LockeStatus.ACTIVE)
+                    || purchaseRequisition.getStatus().equals(LockeStatus.NEW)) {
                 purchaseRequisitions.add(purchaseRequisition);
             }
         }
-        if(purchaseRequisitions.isEmpty()){
+        if (purchaseRequisitions.isEmpty()) {
             JOptionPane.showMessageDialog(null, "There are no purchase requisitions to convert!");
             //TODO Figure this out because the LockeCheck doesn't work either
             return;
@@ -70,7 +70,7 @@ public class ConvertPurchaseRequisitionsSalesOrders extends LockeState {
     }
 
     private JPanel toolbar() {
-        
+
         JPanel toolbar = new JPanel(new BorderLayout());
 
         JPanel tb = new JPanel();
@@ -106,7 +106,9 @@ public class ConvertPurchaseRequisitionsSalesOrders extends LockeState {
             // 3) Run heavy work off the EDT
             SwingWorker<Void, String> worker = new SwingWorker<>() {
 
-                private void ui(Runnable r) { SwingUtilities.invokeLater(r); } // helper
+                private void ui(Runnable r) {
+                    SwingUtilities.invokeLater(r);
+                } // helper
 
                 @Override
                 protected Void doInBackground() {
@@ -333,9 +335,9 @@ public class ConvertPurchaseRequisitionsSalesOrders extends LockeState {
         expectedDelivery = new DatePicker();
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Create Inbound Delivery (IDO) for Ship-To", Constants.colors[10]), createDelivery);
-        form.addInput(Elements.coloredLabel("Carrier", Constants.colors[9]), carriers);
-        form.addInput(Elements.coloredLabel("Expected Delivery Date", Constants.colors[8]), expectedDelivery);
+        form.addInput(Elements.inputLabel("Create Inbound Delivery (IDO) for Ship-To"), createDelivery);
+        form.addInput(Elements.inputLabel("Carrier"), carriers);
+        form.addInput(Elements.inputLabel("Expected Delivery Date"), expectedDelivery);
 
         formHolder.add(form);
         JLabel warning = Elements.label("THIS APPLIES TO ALL GENERATED PURCHASE ORDERS");
@@ -359,9 +361,9 @@ public class ConvertPurchaseRequisitionsSalesOrders extends LockeState {
         ledgerId = Selectables.ledgers();
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Commit to Ledger", UIManager.getColor("Label.foreground")), commitToLedger);
-        form.addInput(Elements.coloredLabel("Purchasing Org.", UIManager.getColor("Label.foreground")), organizations);
-        form.addInput(Elements.coloredLabel("Ledger", UIManager.getColor("Label.foreground")), ledgerId);
+        form.addInput(Elements.inputLabel("Commit to Ledger"), commitToLedger);
+        form.addInput(Elements.inputLabel("Purchasing Org."), organizations);
+        form.addInput(Elements.inputLabel("Ledger"), ledgerId);
         ledger.add(form);
 
         return ledger;

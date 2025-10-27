@@ -35,12 +35,12 @@ public class MoveStock extends LockeState {
         createHu.setSelected(true);
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("HU", Constants.colors[1]), mvHu);
-        form.addInput(Elements.coloredLabel("Destination Bin", Constants.colors[0]), destinationBins);
-        form.addInput(Elements.coloredLabel("Quantity", Constants.colors[2]), mvQty);
-        form.addInput(Elements.coloredLabel("Create HU", Constants.colors[3]), createHu);
-        form.addInput(Elements.coloredLabel("Create WT", Constants.colors[3]), createWt);
-        form.addInput(Elements.coloredLabel("Split Divisor", Constants.colors[3]), split);
+        form.addInput(Elements.inputLabel("HU"), mvHu);
+        form.addInput(Elements.inputLabel("Destination Bin"), destinationBins);
+        form.addInput(Elements.inputLabel("Quantity"), mvQty);
+        form.addInput(Elements.inputLabel("Create HU"), createHu);
+        form.addInput(Elements.inputLabel("Create WT"), createWt);
+        form.addInput(Elements.inputLabel("Split Divisor"), split);
 
         setLayout(new BorderLayout());
         add(Elements.header("Move Stock Internally", SwingConstants.LEFT), BorderLayout.NORTH);

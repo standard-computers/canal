@@ -120,9 +120,9 @@ public class ModifyLocation extends LockeState {
     private JPanel header() {
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Type", UIManager.getColor("Label.foreground")), new Copiable(location.getType()));
+        form.addInput(Elements.inputLabel("Type"), new Copiable(location.getType()));
         if (!location.getType().equals("ORGS")) {
-            form.addInput(Elements.coloredLabel("Organization", UIManager.getColor("Label.foreground")), new Copiable(location.getOrganization()));
+            form.addInput(Elements.inputLabel("Organization"), new Copiable(location.getOrganization()));
         }
         return form;
     }
@@ -143,15 +143,15 @@ public class ModifyLocation extends LockeState {
         taxExempt = new JCheckBox("", location.isTaxExempt());
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Name", Constants.colors[0]), locationNameField);
-        form.addInput(Elements.coloredLabel("Address Line 1", Constants.colors[1]), line1Field);
-        form.addInput(Elements.coloredLabel("Line 2", Constants.colors[2]), line2Field);
-        form.addInput(Elements.coloredLabel("City", Constants.colors[3]), cityField);
-        form.addInput(Elements.coloredLabel("State", Constants.colors[4]), stateField);
-        form.addInput(Elements.coloredLabel("Postal", Constants.colors[5]), postalField);
-        form.addInput(Elements.coloredLabel("Country", Constants.colors[6]), countries);
-        form.addInput(Elements.coloredLabel("EIN (Tax ID)", UIManager.getColor("Label.foreground")), einField);
-        form.addInput(Elements.coloredLabel("Tax Exempt?", UIManager.getColor("Label.foreground")), taxExempt);
+        form.addInput(Elements.inputLabel("Name"), locationNameField);
+        form.addInput(Elements.inputLabel("Address Line 1"), line1Field);
+        form.addInput(Elements.inputLabel("Line 2"), line2Field);
+        form.addInput(Elements.inputLabel("City"), cityField);
+        form.addInput(Elements.inputLabel("State"), stateField);
+        form.addInput(Elements.inputLabel("Postal"), postalField);
+        form.addInput(Elements.inputLabel("Country"), countries);
+        form.addInput(Elements.inputLabel("EIN (Tax ID)"), einField);
+        form.addInput(Elements.inputLabel("Tax Exempt?"), taxExempt);
         general.add(form);
 
         return general;
@@ -165,8 +165,8 @@ public class ModifyLocation extends LockeState {
         phoneField = Elements.input(location.getPhone());
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Email Address", Constants.colors[10]), emailField);
-        form.addInput(Elements.coloredLabel("Phone Number", Constants.colors[9]), phoneField);
+        form.addInput(Elements.inputLabel("Email Address"), emailField);
+        form.addInput(Elements.inputLabel("Phone Number"), phoneField);
         contactInfo.add(form);
 
         return contactInfo;
@@ -184,9 +184,9 @@ public class ModifyLocation extends LockeState {
         heightUOM.setUOM(location.getHeightUOM());
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Width", Constants.colors[0]), widthUOM);
-        form.addInput(Elements.coloredLabel("Length", Constants.colors[1]), lengthUOM);
-        form.addInput(Elements.coloredLabel("Height", Constants.colors[2]), heightUOM);
+        form.addInput(Elements.inputLabel("Width"), widthUOM);
+        form.addInput(Elements.inputLabel("Length"), lengthUOM);
+        form.addInput(Elements.inputLabel("Height"), heightUOM);
         dimensional.add(form);
 
         return dimensional;
@@ -203,11 +203,11 @@ public class ModifyLocation extends LockeState {
         status = Selectables.statusTypes();
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Allow Inventory", Constants.colors[10]), allowsInventory);
-        form.addInput(Elements.coloredLabel("Allow Production", Constants.colors[9]), allowsProduction);
-        form.addInput(Elements.coloredLabel("Allow Sales", Constants.colors[8]), allowsSales);
-        form.addInput(Elements.coloredLabel("Allow Purchasing", Constants.colors[7]), allowsPurchasing);
-        form.addInput(Elements.coloredLabel("Location Status", Constants.colors[6]), status);
+        form.addInput(Elements.inputLabel("Allow Inventory"), allowsInventory);
+        form.addInput(Elements.inputLabel("Allow Production"), allowsProduction);
+        form.addInput(Elements.inputLabel("Allow Sales"), allowsSales);
+        form.addInput(Elements.inputLabel("Allow Purchasing"), allowsPurchasing);
+        form.addInput(Elements.inputLabel("Location Status"), status);
         controls.add(form);
 
         return controls;

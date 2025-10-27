@@ -60,7 +60,7 @@ public class Configuration {
         this.showCanalCodes = showCanalCodes;
     }
 
-    public boolean isShowButtonLabels() {
+    public boolean showButtonLabels() {
         return showButtonLabels;
     }
 

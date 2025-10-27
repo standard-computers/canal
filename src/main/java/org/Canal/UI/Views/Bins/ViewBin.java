@@ -1,6 +1,5 @@
 package org.Canal.UI.Views.Bins;
 
-import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.Models.SupplyChainUnits.Bin;
 import org.Canal.UI.Elements.*;
 import org.Canal.Utils.DesktopState;
@@ -77,7 +76,8 @@ public class ViewBin extends LockeState {
         JRootPane rp = getRootPane();
         rp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ks, "do-modify");
         rp.getActionMap().put("do-modify", new AbstractAction() {
-            @Override public void actionPerformed(ActionEvent e) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 modify.doClick();
             }
         });
@@ -88,7 +88,7 @@ public class ViewBin extends LockeState {
             bin.setStatus(LockeStatus.BLOCKED);
             bin.save();
             dispose();
-            if(refreshListener != null) refreshListener.refresh();
+            if (refreshListener != null) refreshListener.refresh();
         });
         tb.add(block);
         tb.add(Box.createHorizontalStrut(5));
@@ -114,11 +114,11 @@ public class ViewBin extends LockeState {
         String locationId = Engine.getArea(bin.getArea()).getLocation();
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Bin ID", UIManager.getColor("Label.foreground")), new Copiable(bin.getId()));
-        form.addInput(Elements.coloredLabel("Location", UIManager.getColor("Label.foreground")), new Copiable(locationId));
-        form.addInput(Elements.coloredLabel("Area", UIManager.getColor("Label.foreground")), new Copiable(bin.getArea()));
-        form.addInput(Elements.coloredLabel("Bin Name", UIManager.getColor("Label.foreground")), new Copiable(bin.getName()));
-        form.addInput(Elements.coloredLabel("Status", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(bin.getStatus())));
+        form.addInput(Elements.inputLabel("Bin ID"), new Copiable(bin.getId()));
+        form.addInput(Elements.inputLabel("Location"), new Copiable(locationId));
+        form.addInput(Elements.inputLabel("Area"), new Copiable(bin.getArea()));
+        form.addInput(Elements.inputLabel("Bin Name"), new Copiable(bin.getName()));
+        form.addInput(Elements.inputLabel("Status"), new Copiable(String.valueOf(bin.getStatus())));
         general.add(form);
 
         return general;
@@ -149,10 +149,10 @@ public class ViewBin extends LockeState {
         weightField.disable();
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Width", UIManager.getColor("Label.foreground")), widthField);
-        form.addInput(Elements.coloredLabel("Length", UIManager.getColor("Label.foreground")), lengthField);
-        form.addInput(Elements.coloredLabel("Height", UIManager.getColor("Label.foreground")), heightField);
-        form.addInput(Elements.coloredLabel("Weight", UIManager.getColor("Label.foreground")), weightField);
+        form.addInput(Elements.inputLabel("Width"), widthField);
+        form.addInput(Elements.inputLabel("Length"), lengthField);
+        form.addInput(Elements.inputLabel("Height"), heightField);
+        form.addInput(Elements.inputLabel("Weight"), weightField);
         dimensional.add(form);
 
         return dimensional;
@@ -163,13 +163,13 @@ public class ViewBin extends LockeState {
         JPanel controls = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Goods Issue", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(bin.doesGI())));
-        form.addInput(Elements.coloredLabel("Goods Receipt", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(bin.doesGR())));
-        form.addInput(Elements.coloredLabel("Picking Enabled", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(bin.pickingEnabled())));
-        form.addInput(Elements.coloredLabel("Putaway Enabled", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(bin.putawayEnabled())));
-        form.addInput(Elements.coloredLabel("Auto Replenish", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(bin.isAuto_replenish())));
-        form.addInput(Elements.coloredLabel("Fixed Bin", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(bin.isFixed())));
-        form.addInput(Elements.coloredLabel("Holds Stock", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(bin.holdsStock())));
+        form.addInput(Elements.inputLabel("Goods Issue"), new Copiable(String.valueOf(bin.doesGI())));
+        form.addInput(Elements.inputLabel("Goods Receipt"), new Copiable(String.valueOf(bin.doesGR())));
+        form.addInput(Elements.inputLabel("Picking Enabled"), new Copiable(String.valueOf(bin.pickingEnabled())));
+        form.addInput(Elements.inputLabel("Putaway Enabled"), new Copiable(String.valueOf(bin.putawayEnabled())));
+        form.addInput(Elements.inputLabel("Auto Replenish"), new Copiable(String.valueOf(bin.isAuto_replenish())));
+        form.addInput(Elements.inputLabel("Fixed Bin"), new Copiable(String.valueOf(bin.isFixed())));
+        form.addInput(Elements.inputLabel("Holds Stock"), new Copiable(String.valueOf(bin.holdsStock())));
         controls.add(form);
 
         return controls;

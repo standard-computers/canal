@@ -1,4 +1,4 @@
-package org.Canal.UI.Views.InboundDeliveryOrders;
+package org.Canal.UI.Views.Deliveries;
 
 import org.Canal.UI.Elements.LockeState;
 

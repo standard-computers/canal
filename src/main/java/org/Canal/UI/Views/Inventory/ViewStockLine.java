@@ -77,9 +77,9 @@ public class ViewStockLine extends LockeState implements RefreshListener {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("ID", UIManager.getColor("Label.foreground")), new Copiable(stockLine.getId()));
-        form.addInput(Elements.coloredLabel("HU", UIManager.getColor("Label.foreground")), new Copiable(stockLine.getHu()));
-        form.addInput(Elements.coloredLabel("Status", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(stockLine.getStatus())));
+        form.addInput(Elements.inputLabel("ID"), new Copiable(stockLine.getId()));
+        form.addInput(Elements.inputLabel("HU"), new Copiable(stockLine.getHu()));
+        form.addInput(Elements.inputLabel("Status"), new Copiable(String.valueOf(stockLine.getStatus())));
         panel.add(form, BorderLayout.CENTER);
 
         return panel;

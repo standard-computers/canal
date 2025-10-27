@@ -23,16 +23,17 @@ public class CreateFlow extends LockeState {
         super("Create Flow", "/MVMT/FLWS/NEW", false, true, false, true);
         setFrameIcon(new ImageIcon(CreateFlow.class.getResource("/icons/create.png")));
 
-        Form f = new Form();
         flowIdField = Elements.input();
         flowNameField = Elements.input();
-        f.addInput(Elements.coloredLabel("*New Flow ID", UIManager.getColor("Label.foreground")), flowIdField);
-        f.addInput(Elements.coloredLabel("Flow Name", Constants.colors[0]), flowNameField);
+
+        Form form = new Form();
+        form.addInput(Elements.inputLabel("*New Flow ID"), flowIdField);
+        form.addInput(Elements.inputLabel("Flow Name"), flowNameField);
 
 
         setLayout(new BorderLayout());
         JPanel info = new JPanel(new BorderLayout());
-        info.add(f, BorderLayout.CENTER);
+        info.add(form, BorderLayout.CENTER);
         info.add(options(), BorderLayout.SOUTH);
         add(info, BorderLayout.NORTH);
 

@@ -12,6 +12,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -142,20 +143,22 @@ public class CustomTable extends JTable {
     @Override
     public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
         Component c = super.prepareRenderer(renderer, row, column);
+        Object value = getValueAt(row, column);
+
+        // Skip padding for buttons
+        if (value instanceof JButton) {
+            if (c instanceof JComponent) {
+                ((JComponent) c).setBorder(BorderFactory.createEmptyBorder());
+            }
+            return c;
+        }
 
         int leadRow = getSelectionModel().getLeadSelectionIndex();
 
         if (c instanceof JComponent) {
             if (row == leadRow && getSelectedColumn() != -1) {
-                // Highlight row outline + padding
-                ((JComponent) c).setBorder(
-                        BorderFactory.createCompoundBorder(
-                                BorderFactory.createMatteBorder(1, 1, 1, 0, HIGHLIGHT_COLOR), // row outline
-                                BorderFactory.createEmptyBorder(5, 12, 5, 5)                  // padding
-                        )
-                );
+                ((JComponent) c).setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(1, 1, 1, 0, HIGHLIGHT_COLOR), BorderFactory.createEmptyBorder(5, 12, 5, 5)));
             } else {
-                // Normal padding
                 ((JComponent) c).setBorder(BorderFactory.createEmptyBorder(5, 12, 5, 5));
             }
         }
@@ -212,12 +215,8 @@ public class CustomTable extends JTable {
                 c.setBackground(table.getSelectionBackground());
             }
             if (c instanceof JComponent) {
-                ((JComponent) c).setBorder(
-                        BorderFactory.createCompoundBorder(
-                                ((JComponent) c).getBorder(),
-                                BorderFactory.createEmptyBorder(5, 10, 5, 10) // top, left, bottom, right padding
-                        )
-                );
+                ((JComponent) c).setBorder(BorderFactory.createCompoundBorder(((JComponent) c).getBorder(), BorderFactory.createEmptyBorder(5, 10, 5, 10) // top, left, bottom, right padding
+                ));
             }
             return c;
         }
@@ -227,12 +226,10 @@ public class CustomTable extends JTable {
         for (int col = 0; col < getColumnCount(); col++) {
             TableColumn column = getColumnModel().getColumn(col);
             int maxWidth = 0;
-            Component headerRenderer = getTableHeader().getDefaultRenderer()
-                    .getTableCellRendererComponent(this, column.getHeaderValue(), false, false, -1, col);
+            Component headerRenderer = getTableHeader().getDefaultRenderer().getTableCellRendererComponent(this, column.getHeaderValue(), false, false, -1, col);
             maxWidth = headerRenderer.getPreferredSize().width;
             for (int row = 0; row < getRowCount(); row++) {
-                Component cellRenderer = getCellRenderer(row, col)
-                        .getTableCellRendererComponent(this, getValueAt(row, col), false, false, row, col);
+                Component cellRenderer = getCellRenderer(row, col).getTableCellRendererComponent(this, getValueAt(row, col), false, false, row, col);
                 maxWidth = Math.max(maxWidth, cellRenderer.getPreferredSize().width);
             }
             column.setPreferredWidth(maxWidth + 10);
@@ -286,4 +283,97 @@ public class CustomTable extends JTable {
         column.setCellRenderer(new TextFieldRenderer());
         column.setCellEditor(new TextFieldEditor());
     }
+
+    private static class ButtonRenderer extends JPanel implements TableCellRenderer {
+        public ButtonRenderer() {
+            setOpaque(true);
+            setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0)); // Center the button
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            removeAll();
+
+            if (value instanceof JButton) {
+                JButton button = (JButton) value;
+
+                // Ensure button isn't reparented incorrectly
+                if (button.getParent() != this) {
+//                    button.setMargin(new Insets(2, 8, 2, 8));
+                    button.setFocusable(false);
+                    add(button);
+                }
+
+                // Apply consistent background for row selection
+                if (isSelected) {
+                    setBackground(table.getSelectionBackground());
+                } else {
+                    setBackground(table.getBackground());
+                }
+
+                revalidate();
+                repaint();
+            }
+
+            return this;
+        }
+
+        @Override
+        public Dimension getPreferredSize() {
+            if (getComponentCount() > 0) {
+                JButton button = (JButton) getComponent(0);
+                Dimension size = button.getPreferredSize();
+                size.width = size.width + 6; // small buffer
+                return size;
+            }
+            return super.getPreferredSize();
+        }
+    }
+
+    private static class ButtonEditor extends DefaultCellEditor {
+        private JButton button;
+
+        public ButtonEditor() {
+            super(new JTextField());
+            setClickCountToStart(1);
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+            if (value instanceof JButton) {
+                button = (JButton) value;
+
+                // Detach from any previous parent
+                if (button.getParent() != null) {
+                    Container parent = button.getParent();
+                    parent.remove(button);
+                }
+
+                // Ensure consistent look
+                button.setFocusable(false);
+                button.setMargin(new Insets(2, 8, 2, 8));
+
+                return button;
+            }
+            return new JLabel(value != null ? value.toString() : "");
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return button;
+        }
+    }
+
+    public void setButtonColumn(int columnIndex) {
+        if (columnIndex < 0 || columnIndex >= getColumnCount()) {
+            throw new IllegalArgumentException("Invalid column index for button column: " + columnIndex);
+        }
+
+        TableColumn column = getColumnModel().getColumn(columnIndex);
+        column.setCellRenderer(new ButtonRenderer());
+        column.setCellEditor(new ButtonEditor());
+
+        autoResizeColumns();
+    }
+
 }

@@ -14,7 +14,6 @@ import org.Canal.UI.Views.System.LockeMessages;
 import org.Canal.Utils.*;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -56,7 +55,6 @@ public class CreateItem extends LockeState implements Includer {
     private JTextField manufacturingTime;
 
     private JCheckBox createBom;
-    private Selectable orgIdField;
     private JTextField selectedVendor;
     private Selectable packagingUnits;
     private DesktopState desktop;
@@ -91,7 +89,7 @@ public class CreateItem extends LockeState implements Includer {
         add(topBar, BorderLayout.NORTH);
         add(tabs, BorderLayout.CENTER);
 
-        if((boolean) Engine.codex.getValue("ITS", "start_maximized")){
+        if ((boolean) Engine.codex.getValue("ITS", "start_maximized")) {
             setMaximized(true);
         }
     }
@@ -100,6 +98,7 @@ public class CreateItem extends LockeState implements Includer {
 
         JPanel toolbar = new JPanel();
         toolbar.setLayout(new BoxLayout(toolbar, BoxLayout.X_AXIS));
+        toolbar.add(Box.createHorizontalStrut(5));
 
         IconButton copy = new IconButton("Copy From", "open", "Copy from Component");
         copy.addMouseListener(new MouseAdapter() {
@@ -209,7 +208,7 @@ public class CreateItem extends LockeState implements Includer {
         toolbar.add(Box.createHorizontalStrut(5));
 
         if ((boolean) Engine.codex.getValue("ITS", "import_enabled")) {
-            IconButton importDetails = new IconButton("Import", "export", "");
+            IconButton importDetails = new IconButton("Import", "import", "");
             toolbar.add(importDetails);
             toolbar.add(Box.createHorizontalStrut(5));
         }
@@ -224,17 +223,15 @@ public class CreateItem extends LockeState implements Includer {
             }
         });
         toolbar.add(create);
-        toolbar.setBorder(new EmptyBorder(5, 5, 5, 5));
+        toolbar.add(Box.createHorizontalStrut(5));
 
         return toolbar;
     }
 
     protected void createItem() {
 
-
         //Set General Info
         item.setId(itemIdField.getText());
-        item.setOrg(orgIdField.getSelectedValue());
         item.setName(itemNameField.getText());
         item.setLink(itemLinkField.getText());
         item.setVendorNumber(vendorNumber.getText());
@@ -293,7 +290,6 @@ public class CreateItem extends LockeState implements Includer {
         JButton selectPhoto = Elements.button("Select Photo");
 
         itemIdField = Elements.input(((String) Engine.codex("ITS", "prefix")) + (1000 + (Engine.getItems().size() + 1)));
-        orgIdField = Selectables.organizations();
         itemNameField = Elements.input();
         itemLinkField = Elements.input();
         selectedVendor = Elements.input();
@@ -302,15 +298,14 @@ public class CreateItem extends LockeState implements Includer {
         vendorNumber = Elements.input();
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("*New Item ID", UIManager.getColor("Label.foreground")), itemIdField);
-        form.addInput(Elements.coloredLabel("Organization", UIManager.getColor("Label.foreground")), orgIdField);
-        form.addInput(Elements.coloredLabel("Name", Constants.colors[0]), itemNameField);
-        form.addInput(Elements.coloredLabel("Photo", Constants.colors[1]), selectPhoto);
-        form.addInput(Elements.coloredLabel("Link", Constants.colors[2]), itemLinkField);
-        form.addInput(Elements.coloredLabel("Vendor", Constants.colors[3]), selectedVendor);
-        form.addInput(Elements.coloredLabel("Price", Constants.colors[4]), itemPriceField);
-        form.addInput(Elements.coloredLabel("UPC", Constants.colors[5]), upc);
-        form.addInput(Elements.coloredLabel("Vendor Number", Constants.colors[6]), vendorNumber);
+        form.addInput(Elements.inputLabel("*New Item ID"), itemIdField);
+        form.addInput(Elements.inputLabel("Name"), itemNameField);
+        form.addInput(Elements.inputLabel("Photo"), selectPhoto);
+        form.addInput(Elements.inputLabel("Link"), itemLinkField);
+        form.addInput(Elements.inputLabel("Vendor"), selectedVendor);
+        form.addInput(Elements.inputLabel("Price"), itemPriceField);
+        form.addInput(Elements.inputLabel("UPC"), upc);
+        form.addInput(Elements.inputLabel("Vendor Number"), vendorNumber);
         general.add(form);
 
         return general;
@@ -333,17 +328,17 @@ public class CreateItem extends LockeState implements Includer {
         manufacturingTime = Elements.input("1.0");
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("SKU'd Product", Constants.colors[10]), isSkud);
-        form.addInput(Elements.coloredLabel("Batched", Constants.colors[9]), isBatched);
-        form.addInput(Elements.coloredLabel("Rentable", Constants.colors[8]), isRentable);
-        form.addInput(Elements.coloredLabel("Virtual", Constants.colors[7]), isVirtual);
-        form.addInput(Elements.coloredLabel("Consumable", Constants.colors[6]), isConsumable);
-        form.addInput(Elements.coloredLabel("Allow Sales", Constants.colors[5]), allowSales);
-        form.addInput(Elements.coloredLabel("Allow Purchasing", Constants.colors[4]), allowPurchasing);
-        form.addInput(Elements.coloredLabel("Keep Inventory", Constants.colors[3]), keepInventory);
-        form.addInput(Elements.coloredLabel("Lead Time", Constants.colors[2]), leadTime);
-        form.addInput(Elements.coloredLabel("Transportation Time", Constants.colors[1]), transportationTime);
-        form.addInput(Elements.coloredLabel("Manufacturing Time", Constants.colors[0]), manufacturingTime);
+        form.addInput(Elements.inputLabel("SKU'd Product"), isSkud);
+        form.addInput(Elements.inputLabel("Batched"), isBatched);
+        form.addInput(Elements.inputLabel("Rentable"), isRentable);
+        form.addInput(Elements.inputLabel("Virtual"), isVirtual);
+        form.addInput(Elements.inputLabel("Consumable"), isConsumable);
+        form.addInput(Elements.inputLabel("Allow Sales"), allowSales);
+        form.addInput(Elements.inputLabel("Allow Purchasing"), allowPurchasing);
+        form.addInput(Elements.inputLabel("Keep Inventory"), keepInventory);
+        form.addInput(Elements.inputLabel("Lead Time"), leadTime);
+        form.addInput(Elements.inputLabel("Transportation Time"), transportationTime);
+        form.addInput(Elements.inputLabel("Manufacturing Time"), manufacturingTime);
         controls.add(form);
 
         return controls;
@@ -383,15 +378,15 @@ public class CreateItem extends LockeState implements Includer {
         itemColorField = Elements.input();
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Packaging Base Quantity", Constants.colors[1]), baseQtyField);
-        form.addInput(Elements.coloredLabel("Packaging UOM", Constants.colors[2]), packagingUnits);
-        form.addInput(Elements.coloredLabel("Color", Constants.colors[3]), itemColorField);
-        form.addInput(Elements.coloredLabel("Width", Constants.colors[4]), itemWidth);
-        form.addInput(Elements.coloredLabel("Length", Constants.colors[5]), itemLength);
-        form.addInput(Elements.coloredLabel("Height", Constants.colors[6]), itemHeight);
-        form.addInput(Elements.coloredLabel("Weight", Constants.colors[7]), itemWeight);
-        form.addInput(Elements.coloredLabel("Tax (0.05 as 5%)", Constants.colors[8]), tax);
-        form.addInput(Elements.coloredLabel("Excise Tax (0.05 as 5%)", Constants.colors[9]), exciseTax);
+        form.addInput(Elements.inputLabel("Packaging Base Quantity"), baseQtyField);
+        form.addInput(Elements.inputLabel("Packaging UOM"), packagingUnits);
+        form.addInput(Elements.inputLabel("Color"), itemColorField);
+        form.addInput(Elements.inputLabel("Width"), itemWidth);
+        form.addInput(Elements.inputLabel("Length"), itemLength);
+        form.addInput(Elements.inputLabel("Height"), itemHeight);
+        form.addInput(Elements.inputLabel("Weight"), itemWeight);
+        form.addInput(Elements.inputLabel("Tax (0.05 as 5%)"), tax);
+        form.addInput(Elements.inputLabel("Excise Tax (0.05 as 5%)"), exciseTax);
         dimensional.add(form);
 
         return dimensional;

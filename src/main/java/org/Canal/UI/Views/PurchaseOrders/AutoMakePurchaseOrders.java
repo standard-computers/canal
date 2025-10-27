@@ -37,7 +37,6 @@ public class AutoMakePurchaseOrders extends LockeState {
     private DesktopState desktop;
     private Order newOrder;
     private ItemTableModel model;
-    private double taxRate = 0.05;
     private JLabel netAmount;
     private JLabel taxAmount;
     private JLabel totalAmount;
@@ -75,7 +74,7 @@ public class AutoMakePurchaseOrders extends LockeState {
         tabs.addTab("Notes", notes());
 
         JPanel moreInfo = orderInfo();
-        moreInfo.setBorder(new EmptyBorder(10, 10, 10, 10));
+        moreInfo.setBorder(new EmptyBorder(5, 5, 5, 5));
 
         setLayout(new BorderLayout());
         JPanel infoHolder = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -97,19 +96,19 @@ public class AutoMakePurchaseOrders extends LockeState {
         model.addTableModelListener(_ -> updateTotal());
     }
 
-    private JPanel buttons(){
+    private JPanel buttons() {
 
         JPanel p = new JPanel(new FlowLayout());
         p.setLayout(new BoxLayout(p, BoxLayout.X_AXIS));
 
-        IconButton copyFrom = new IconButton("Copy From","open", "Review for errors or warnings");
+        IconButton copyFrom = new IconButton("Copy From", "open", "Review for errors or warnings");
         copyFrom.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
 
                 String copyPOId = JOptionPane.showInputDialog("Enter Purchase Order ID");
                 Order cpo = Engine.getPurchaseOrder(copyPOId);
-                if(cpo != null){
+                if (cpo != null) {
 
                 } else {
                     JOptionPane.showMessageDialog(AutoMakePurchaseOrders.this, "Invalid Purchase Order");
@@ -119,40 +118,40 @@ public class AutoMakePurchaseOrders extends LockeState {
         p.add(copyFrom);
         p.add(Box.createHorizontalStrut(5));
 
-        IconButton review = new IconButton("Review","review", "Review for errors or warnings");
+        IconButton review = new IconButton("Review", "review", "Review for errors or warnings");
         review.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
 
-                if(!selectShipTo.getText().equals(selectBillTo.getText())){
+                if (!selectShipTo.getText().equals(selectBillTo.getText())) {
                     addToQueue(new String[]{"WARNING", "Bill To & Ship To do not match"});
                 }
-                if(truck == null){
+                if (truck == null) {
                     addToQueue(new String[]{"WARNING", "Truck not selected. One will be created"});
                 }
-                if(Engine.getLocation(selectVendor.getText(), "VEND") == null){
+                if (Engine.getLocation(selectVendor.getText(), "VEND") == null) {
                     addToQueue(new String[]{"WARNING", "Selected supplier is not a technical vendor"});
                 }
-                if(statuses.getSelectedValue().equals("COMPLETED")){
+                if (statuses.getSelectedValue().equals("COMPLETED")) {
                     addToQueue(new String[]{"WARNING", "Status COMPLETED will prevent further actions!"});
                 }
-                if(purchaseRequisition.getText().equals("Available")){
+                if (purchaseRequisition.getText().equals("Available")) {
                     PurchaseRequisition pr = Engine.getPurchaseRequisition(purchaseRequisition.getText());
-                    if(pr == null){
+                    if (pr == null) {
                         addToQueue(new String[]{"ERROR", "Selected Purchase Requisition was not found!!!"});
-                    }else{
-                        if(!pr.getBuyer().equals(selectBillTo.getText())){
+                    } else {
+                        if (!pr.getBuyer().equals(selectBillTo.getText())) {
                             addToQueue(new String[]{"WARNING", "Bill To does not match buyer in selected Purchase Requisition"});
                         }
-                        if(!pr.getBuyer().equals(selectShipTo.getText())){
+                        if (!pr.getBuyer().equals(selectShipTo.getText())) {
                             addToQueue(new String[]{"WARNING", "Ship To does not match buyer in selected Purchase Requisition"});
                         }
-                        if(!pr.getSupplier().equals(selectVendor.getText())){
+                        if (!pr.getSupplier().equals(selectVendor.getText())) {
                             addToQueue(new String[]{"WARNING", "Selected Purchase Requisition NOT for selected Vendor!"});
                         }
                     }
-                }else{
+                } else {
                     addToQueue(new String[]{"WARNING", "No Purchase Requisition selected. Is this intentional?"});
                 }
                 desktop.put(new LockeMessages(getQueue()));
@@ -162,29 +161,29 @@ public class AutoMakePurchaseOrders extends LockeState {
         p.add(review);
         p.add(Box.createHorizontalStrut(5));
 
-        IconButton create = new IconButton("Start AutoMake","automake", "Start AutoMake");
+        IconButton create = new IconButton("Start AutoMake", "automake", "Start AutoMake");
         create.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if(expectedDelivery.getSelectedDate() == null){
+                if (expectedDelivery.getSelectedDate() == null) {
                     JOptionPane.showMessageDialog(null, "Must select a delivery date.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 PurchaseRequisition assignedPR = Engine.getPurchaseRequisition(purchaseRequisition.getText());
-                if((boolean) Engine.codex("ORDS/PO", "require_pr")){
-                    if(assignedPR == null){
+                if ((boolean) Engine.codex("ORDS/PO", "require_pr")) {
+                    if (assignedPR == null) {
                         JOptionPane.showMessageDialog(null, "Purchase Req required for PO", "Error", JOptionPane.ERROR_MESSAGE);
                         return;
                     }
                 }
-                if((boolean) Engine.codex("ORDS/PO", "vendor_match")){
-                    if(!selectVendor.getText().equals(assignedPR.getSupplier())){
+                if ((boolean) Engine.codex("ORDS/PO", "vendor_match")) {
+                    if (!selectVendor.getText().equals(assignedPR.getSupplier())) {
                         JOptionPane.showMessageDialog(null, "Selected PO is not for this vendor.", "Error", JOptionPane.ERROR_MESSAGE);
                         return;
                     }
                 }
                 int ccc = JOptionPane.showConfirmDialog(null, "You have selected the Org ID as the charge account. Are you sure you want to charge the corp account?", "Confirm order?", JOptionPane.YES_NO_CANCEL_OPTION);
-                if(ccc == JOptionPane.YES_OPTION){
+                if (ccc == JOptionPane.YES_OPTION) {
                     String newPOId = ((String) Engine.codex("ORDS/PO", "prefix")) + (70000000 + (Engine.getPurchaseOrders().size() + 1));
                     newOrder.setOwner((Engine.getAssignedUser().getId()));
                     newOrder.setOrderId(newPOId);
@@ -206,15 +205,15 @@ public class AutoMakePurchaseOrders extends LockeState {
                     }
                     newOrder.setItems(lineitems);
                     newOrder.setNetValue(Double.parseDouble(model.getTotalPrice()));
-                    newOrder.setTaxAmount(taxRate * Double.parseDouble(model.getTotalPrice()));
-                    newOrder.setTotal(taxRate * Double.parseDouble(model.getTotalPrice()) + Double.parseDouble(model.getTotalPrice()));
+//                    newOrder.setTaxAmount(taxRate * Double.parseDouble(model.getTotalPrice()));
+//                    newOrder.setTotal(taxRate * Double.parseDouble(model.getTotalPrice()) + Double.parseDouble(model.getTotalPrice()));
                     newOrder.setOrderedOn(LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss")));
                     newOrder.setStatus(LockeStatus.valueOf(statuses.getSelectedValue()));
                     assignedPR.setStatus(LockeStatus.IN_USE);
                     assignedPR.save();
                     Pipe.save("/ORDS/PO", newOrder);
 
-                    if(createDelivery.isSelected()){
+                    if (createDelivery.isSelected()) {
 
                         Truck t = new Truck();
                         t.setId(((String) Engine.codex("TRANS/TRCKS", "prefix") + 1000 + (Engine.getTrucks().size() + 1)));
@@ -232,9 +231,9 @@ public class AutoMakePurchaseOrders extends LockeState {
                         Pipe.save("/TRANS/IDO", d);
                     }
 
-                    if(commitToLedger.isSelected()){
+                    if (commitToLedger.isSelected()) {
                         Ledger l = Engine.getLedger(ledgerId.getSelectedValue());
-                        if(l != null){
+                        if (l != null) {
                             Transaction t = new Transaction();
                             t.setId(Constants.generateId(5));
                             t.setOwner(Engine.getAssignedUser().getId());
@@ -247,7 +246,7 @@ public class AutoMakePurchaseOrders extends LockeState {
                             t.setStatus(LockeStatus.PROCESSING);
                             l.addTransaction(t);
                             l.save();
-                        }else{
+                        } else {
                             JOptionPane.showMessageDialog(null, "No such ledger.", "Error", JOptionPane.ERROR_MESSAGE);
                         }
                     }
@@ -261,24 +260,24 @@ public class AutoMakePurchaseOrders extends LockeState {
         return p;
     }
 
-    private JPanel orderInfoPanel(){
+    private JPanel orderInfoPanel() {
         JPanel orderInfo = new JPanel(new FlowLayout(FlowLayout.LEFT));
         Form f = new Form();
         selectBillTo = Elements.input(15);
         selectShipTo = Elements.input(15);
         selectVendor = Elements.input(15);
-        f.addInput(Elements.coloredLabel("Supplier/Vendor", Constants.colors[1]), selectVendor);
-        f.addInput(Elements.coloredLabel("Bill To Location", Constants.colors[2]), selectBillTo);
-        f.addInput(Elements.coloredLabel("Ship To Location", Constants.colors[3]), selectShipTo);
+        f.addInput(Elements.inputLabel("Supplier/Vendor"), selectVendor);
+        f.addInput(Elements.inputLabel("Bill To Location"), selectBillTo);
+        f.addInput(Elements.inputLabel("Ship To Location"), selectShipTo);
         orderInfo.add(f);
         return orderInfo;
     }
 
-    private JPanel orderInfo(){
+    private JPanel orderInfo() {
 
         Form f = new Form();
         HashMap<String, String> prs = new HashMap<>();
-        for(PurchaseRequisition pr1 : Engine.getPurchaseRequisitions()){
+        for (PurchaseRequisition pr1 : Engine.getPurchaseRequisitions()) {
             prs.put(pr1.getId(), pr1.getId());
         }
 
@@ -313,37 +312,39 @@ public class AutoMakePurchaseOrders extends LockeState {
 
         expectedDelivery = new DatePicker();
         statuses = Selectables.statusTypes();
-        f.addInput(Elements.coloredLabel("Purchase Requisition", Constants.colors[9]), purchaseRequisition);
-        f.addInput(Elements.coloredLabel("Expected Delivery", Constants.colors[8]), expectedDelivery);
-        f.addInput(Elements.coloredLabel("Status", Constants.colors[7]), statuses);
+        f.addInput(Elements.inputLabel("Purchase Requisition"), purchaseRequisition);
+        f.addInput(Elements.inputLabel("Expected Delivery"), expectedDelivery);
+        f.addInput(Elements.inputLabel("Status"), statuses);
         return f;
     }
 
-    private JPanel summary(){
+    private JPanel summary() {
 
-        Form f = new Form();
         DecimalFormat df = new DecimalFormat("#0.00");
         netAmount = Elements.label("$" + model.getTotalPrice());
-        f.addInput(Elements.coloredLabel("Net Amount", UIManager.getColor("Label.foreground")), netAmount);
-        taxAmount = Elements.label("$" + df.format(taxRate * Double.parseDouble(model.getTotalPrice())));
+//        taxAmount = Elements.label("$" + df.format(taxRate * Double.parseDouble(model.getTotalPrice())));
         totalAmount = Elements.label("$" + df.format(Double.parseDouble("0.0") * Double.parseDouble(model.getTotalPrice()) + Double.parseDouble(model.getTotalPrice())));
-        f.addInput(Elements.coloredLabel("Total Amount", UIManager.getColor("Label.foreground")), totalAmount);
-        return f;
+
+        Form form = new Form();
+        form.addInput(Elements.inputLabel("Net Amount"), netAmount);
+        form.addInput(Elements.inputLabel("Total Amount"), totalAmount);
+
+        return form;
     }
 
-    private void updateTotal(){
+    private void updateTotal() {
 
         DecimalFormat df = new DecimalFormat("#0.00");
         netAmount.setText("$" + model.getTotalPrice());
-        taxAmount.setText("$" + df.format(taxRate * Double.parseDouble(model.getTotalPrice())));
-        totalAmount.setText("$" + df.format(taxRate * Double.parseDouble(model.getTotalPrice()) + Double.parseDouble(model.getTotalPrice())));
+//        taxAmount.setText("$" + df.format(taxRate * Double.parseDouble(model.getTotalPrice())));
+//        totalAmount.setText("$" + df.format(taxRate * Double.parseDouble(model.getTotalPrice()) + Double.parseDouble(model.getTotalPrice())));
     }
 
-    private JPanel items(){
+    private JPanel items() {
 
         JPanel p = new JPanel(new BorderLayout());
         ArrayList<Item> items = Engine.getItems();
-        if(items.isEmpty()){
+        if (items.isEmpty()) {
             JOptionPane.showMessageDialog(this, "No products found", "Error", JOptionPane.ERROR_MESSAGE);
             dispose();
         }
@@ -388,13 +389,13 @@ public class AutoMakePurchaseOrders extends LockeState {
         return p;
     }
 
-    private JPanel delivery(){
+    private JPanel delivery() {
 
         JPanel delivery = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        Form p = new Form();
+
         final JComponent[] jc = {Elements.button("Select Truck")};
         createDelivery = new JCheckBox();
-        if((boolean) Engine.codex("ORDS/PO", "use_deliveries")){
+        if ((boolean) Engine.codex("ORDS/PO", "use_deliveries")) {
             createDelivery.setSelected(true);
             createDelivery.setEnabled(false);
         }
@@ -406,54 +407,59 @@ public class AutoMakePurchaseOrders extends LockeState {
                 String truckId = JOptionPane.showInputDialog("Enter Truck ID");
                 Truck t = null;
                 ArrayList<Truck> ts = Engine.getTrucks();
-                for(Truck tr : ts){
-                    if(tr.getId().equals(truckId)){
+                for (Truck tr : ts) {
+                    if (tr.getId().equals(truckId)) {
                         t = tr;
                     }
                 }
-                if(t != null){
+                if (t != null) {
                     jc[0] = Elements.label(t.getId());
                     repaint();
                     revalidate();
-                }else{
+                } else {
                     JOptionPane.showMessageDialog(null, "Truck does not exist", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
-        p.addInput(Elements.coloredLabel("Create Inbound Delivery (IDO) for Ship-To", Constants.colors[9]), createDelivery);
-        p.addInput(Elements.coloredLabel("Carrier", Constants.colors[8]), carriers);
-        p.addInput(Elements.coloredLabel("Truck (If Empty, makes new)", Constants.colors[9]), jc[0]);
-        p.addInput(Elements.coloredLabel("Truck Number", Constants.colors[9]), truckNumberField);
-        delivery.add(p);
+
+        Form form = new Form();
+        form.addInput(Elements.inputLabel("Create Inbound Delivery (IDO) for Ship-To"), createDelivery);
+        form.addInput(Elements.inputLabel("Carrier"), carriers);
+        form.addInput(Elements.inputLabel("Truck (If Empty, makes new)"), jc[0]);
+        form.addInput(Elements.inputLabel("Truck Number"), truckNumberField);
+        delivery.add(form);
+
         return delivery;
     }
 
-    private JPanel ledger(){
+    private JPanel ledger() {
 
         JPanel ledger = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        Form f = new Form();
         commitToLedger = new JCheckBox();
-        if((boolean) Engine.codex("ORDS/PO", "commit_to_ledger")){
+        if ((boolean) Engine.codex("ORDS/PO", "commit_to_ledger")) {
             commitToLedger.setSelected(true);
             commitToLedger.setEnabled(false);
         }
         organizations = Selectables.organizations();
         buyerObjexType = Selectables.locationObjex("/DCSS");
         ledgerId = Selectables.ledgers();
-        f.addInput(Elements.coloredLabel("Commit to Ledger", UIManager.getColor("Label.foreground")), commitToLedger);
-        f.addInput(Elements.coloredLabel("Trans. Type (Receiving location type)", UIManager.getColor("Label.foreground")), buyerObjexType);
-        f.addInput(Elements.coloredLabel("Purchasing Org.", UIManager.getColor("Label.foreground")), organizations);
-        f.addInput(Elements.coloredLabel("Ledger", UIManager.getColor("Label.foreground")), ledgerId);
-        ledger.add(f);
+
+        Form form = new Form();
+        form.addInput(Elements.inputLabel("Commit to Ledger"), commitToLedger);
+        form.addInput(Elements.inputLabel("Trans. Type (Receiving location type)"), buyerObjexType);
+        form.addInput(Elements.inputLabel("Purchasing Org."), organizations);
+        form.addInput(Elements.inputLabel("Ledger"), ledgerId);
+        ledger.add(form);
+
         return ledger;
     }
 
-    private JPanel shipping(){
+    private JPanel shipping() {
         JPanel shipping = new JPanel(new FlowLayout(FlowLayout.LEFT));
         return shipping;
     }
 
-    private JPanel packaging(){
+    private JPanel packaging() {
         JPanel packaging = new JPanel(new BorderLayout());
         ArrayList<Object[]> stockLines = new ArrayList<>();
 
@@ -497,7 +503,7 @@ public class AutoMakePurchaseOrders extends LockeState {
         return packaging;
     }
 
-    private JPanel taxes(){
+    private JPanel taxes() {
 
         JPanel taxes = new JPanel(new BorderLayout());
         ArrayList<Object[]> ts = new ArrayList<>();
@@ -540,7 +546,7 @@ public class AutoMakePurchaseOrders extends LockeState {
         return taxes;
     }
 
-    private RTextScrollPane notes(){
+    private RTextScrollPane notes() {
 
         textArea = new RSyntaxTextArea(20, 60);
         textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_MARKDOWN);

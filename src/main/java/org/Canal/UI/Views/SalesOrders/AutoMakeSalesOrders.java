@@ -35,7 +35,7 @@ public class AutoMakeSalesOrders extends LockeState {
         tabbedPane.add(salesOrderData(), "SO Data");
         tabbedPane.add(itemData(), "Items");
         JLabel description = Elements.h3("Creates a Sales Order for each customer with info.");
-        description.setBorder(new EmptyBorder(10, 10, 10, 10));
+        description.setBorder(new EmptyBorder(5, 5, 5, 5));
         add(description, BorderLayout.NORTH);
         add(tabbedPane, BorderLayout.CENTER);
         JButton createPrs = Elements.button("AutoMake");
@@ -83,13 +83,13 @@ public class AutoMakeSalesOrders extends LockeState {
         DatePicker prStartDateField = new DatePicker();
         DatePicker prEndDateField = new DatePicker();
         JTextArea prNotesField = new JTextArea();
-        addtlInfo.addInput(Elements.coloredLabel("*Created", UIManager.getColor("Label.foreground")), new Copiable(Constants.now()));
-        addtlInfo.addInput(Elements.coloredLabel("Max Spend", Constants.colors[9]), maxSpendField);
-        addtlInfo.addInput(Elements.coloredLabel("[or] Single Order", UIManager.getColor("Label.foreground")), isSingleOrder);
-        addtlInfo.addInput(Elements.coloredLabel("Supplier/Vendor", Constants.colors[7]), supplier);
-        addtlInfo.addInput(Elements.coloredLabel("Valid From", Constants.colors[6]), prStartDateField);
-        addtlInfo.addInput(Elements.coloredLabel("To", Constants.colors[5]), prEndDateField);
-        addtlInfo.addInput(Elements.coloredLabel("Notes", Constants.colors[4]), prNotesField);
+        addtlInfo.addInput(Elements.inputLabel("*Created"), new Copiable(Constants.now()));
+        addtlInfo.addInput(Elements.inputLabel("Max Spend"), maxSpendField);
+        addtlInfo.addInput(Elements.inputLabel("[or] Single Order"), isSingleOrder);
+        addtlInfo.addInput(Elements.inputLabel("Supplier/Vendor"), supplier);
+        addtlInfo.addInput(Elements.inputLabel("Valid From"), prStartDateField);
+        addtlInfo.addInput(Elements.inputLabel("To"), prEndDateField);
+        addtlInfo.addInput(Elements.inputLabel("Notes"), prNotesField);
         return addtlInfo;
     }
 

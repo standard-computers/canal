@@ -56,30 +56,32 @@ public class People extends LockeState implements RefreshListener {
     private JPanel toolbar() {
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+
         IconButton export = new IconButton("", "export", "Export as CSV", "");
-        IconButton importEmployees = new IconButton("Import", "export", "Import as CSV", "");
-        IconButton createEmployee = new IconButton("New", "create", "Create Employee", "/PPL/NEW");
-        IconButton modifyEmployee = new IconButton("Modify", "modify", "Modify an Employee", "/PPL/MOD");
-        IconButton archiveEmployee = new IconButton("Archive", "archive", "Archive an Employee", "/PPL/ARCHV");
-        IconButton advancedFine = new IconButton("Find", "find", "Find by Values", "/PPL/F");
+        export.addActionListener(_ -> table.exportToCSV());
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton importEmployees = new IconButton("Import", "import", "Import as CSV", "");
         tb.add(importEmployees);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton createEmployee = new IconButton("New", "create", "Create Employee", "/PPL/NEW");
         tb.add(createEmployee);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton modifyEmployee = new IconButton("Modify", "modify", "Modify an Employee", "/PPL/MOD");
         tb.add(modifyEmployee);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton archiveEmployee = new IconButton("Archive", "archive", "Archive an Employee", "/PPL/ARCHV");
         tb.add(archiveEmployee);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton advancedFine = new IconButton("Find", "find", "Find by Values", "/PPL/F");
         tb.add(advancedFine);
-        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
-        export.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                table.exportToCSV();
-            }
-        });
+        tb.add(Box.createHorizontalStrut(5));
+
         return tb;
     }
 

@@ -141,6 +141,7 @@ public class ViewLocation extends LockeState implements RefreshListener {
                 "Pur. Order",
                 "Exp. Delivery",
                 "Origin",
+                "Fulfill",
                 "Destination",
                 "Destination Name",
                 "Dest. Area",
@@ -154,6 +155,14 @@ public class ViewLocation extends LockeState implements RefreshListener {
         ArrayList<Object[]> data = new ArrayList<>();
         for (Delivery delivery : Engine.getOutboundDeliveries(location.getId())) {
             if(!delivery.getStatus().equals(LockeStatus.DELIVERED) && !delivery.getStatus().equals(LockeStatus.FULFILLED)) {
+
+                JButton editBtn = new IconButton("Fulfill", "execute", "Fulfill " + delivery.getId(), "/TRANS/ODO/FF");
+                editBtn.addActionListener(_ -> {
+
+                    FulfillOrder fo = new FulfillOrder(location.getId());
+                    fo.setSalesOrder(delivery.getSalesOrder());
+                    desktop.put(fo);
+                });
                 data.add(new Object[]{
                         delivery.getId(),
                         delivery.getName(),
@@ -162,6 +171,7 @@ public class ViewLocation extends LockeState implements RefreshListener {
                         delivery.getPurchaseOrder(),
                         delivery.getExpectedDelivery(),
                         delivery.getOrigin(),
+                        editBtn,
                         delivery.getDestination(),
                         Engine.getLocation(delivery.getDestination(), "CCS").getName(),
                         delivery.getDestinationArea(),
@@ -175,6 +185,7 @@ public class ViewLocation extends LockeState implements RefreshListener {
             }
         }
         CustomTable obds = new CustomTable(columns, data);
+        obds.setButtonColumn(8);
         return new JScrollPane(obds);
     }
 
@@ -267,7 +278,7 @@ public class ViewLocation extends LockeState implements RefreshListener {
         tb.add(autoMakeBins);
         tb.add(Box.createHorizontalStrut(5));
 
-        IconButton label = new IconButton("Labels", "label", "Print labels for properties");
+        IconButton label = new IconButton("Labels", "barcodes", "Print labels for properties");
         tb.add(label);
         tb.add(Box.createHorizontalStrut(5));
 

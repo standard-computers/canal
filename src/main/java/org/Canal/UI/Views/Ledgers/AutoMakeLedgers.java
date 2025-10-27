@@ -124,11 +124,11 @@ public class AutoMakeLedgers extends LockeState {
         ledgerEndDate = new DatePicker();
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("*Ledger ID (i.e. 2025-LOCID)", UIManager.getColor("Label.foreground")), ledgerIdField);
-        form.addInput(Elements.coloredLabel("Ledger Name (i.e. 2025 LOCID)", UIManager.getColor("Label.foreground")), ledgerNameField);
-        form.addInput(Elements.coloredLabel("Period", UIManager.getColor("Label.foreground")), periods);
-        form.addInput(Elements.coloredLabel("Start Date", UIManager.getColor("Label.foreground")), ledgerStartDate);
-        form.addInput(Elements.coloredLabel("Close Date", UIManager.getColor("Label.foreground")), ledgerEndDate);
+        form.addInput(Elements.inputLabel("*Ledger ID (i.e. 2025-LOCID)"), ledgerIdField);
+        form.addInput(Elements.inputLabel("Ledger Name (i.e. 2025 LOCID)"), ledgerNameField);
+        form.addInput(Elements.inputLabel("Period"), periods);
+        form.addInput(Elements.inputLabel("Start Date"), ledgerStartDate);
+        form.addInput(Elements.inputLabel("Close Date"), ledgerEndDate);
         general.add(form);
 
         return general;

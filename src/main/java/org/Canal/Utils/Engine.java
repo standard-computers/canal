@@ -53,12 +53,12 @@ import org.Canal.UI.Views.Ledgers.ViewLedger;
 import org.Canal.UI.Views.Ledgers.Ledgers;
 import org.Canal.UI.Views.Departments.CreateDepartment;
 import org.Canal.UI.Views.Departments.Departments;
-import org.Canal.UI.Views.InboundDeliveryOrders.CreateInboundDeliveryOrder;
-import org.Canal.UI.Views.InboundDeliveryOrders.InboundDeliveries;
+import org.Canal.UI.Views.Deliveries.CreateInboundDeliveryOrder;
+import org.Canal.UI.Views.Deliveries.InboundDeliveries;
 import org.Canal.UI.Views.Notes.CreateNote;
 import org.Canal.UI.Views.Notes.Notes;
-import org.Canal.UI.Views.OutboundDeliveryOrders.CreateOutboundDeliveryOrder;
-import org.Canal.UI.Views.OutboundDeliveryOrders.OutboundDeliveries;
+import org.Canal.UI.Views.Deliveries.CreateOutboundDeliveryOrder;
+import org.Canal.UI.Views.Deliveries.OutboundDeliveries;
 import org.Canal.UI.Views.Positions.CreatePosition;
 import org.Canal.UI.Views.Items.CreateItem;
 import org.Canal.UI.Views.Items.ViewItem;
@@ -419,15 +419,38 @@ public class Engine {
     }
 
     public static Order getPurchaseOrder(String purchaseOrderId) {
-        return getPurchaseOrders().stream().filter(pr -> pr.getOrderId().equals(purchaseOrderId)).toList().stream().findFirst().orElse(null);
+        return getPurchaseOrders().stream().filter(purchaseOrder -> purchaseOrder.getOrderId().equals(purchaseOrderId)).toList().stream().findFirst().orElse(null);
     }
 
     public static List<Order> getPurchaseOrders(String shipTo) {
-        return getPurchaseOrders().stream().filter(order -> order.getShipTo().equals(shipTo)).collect(Collectors.toList());
+        return getPurchaseOrders().stream().filter(purchaseOrder -> purchaseOrder.getShipTo().equals(shipTo)).collect(Collectors.toList());
     }
 
     public static List<Order> getPurchaseOrders(String shipTo, LockeStatus status) {
-        return getPurchaseOrders().stream().filter(order -> order.getShipTo().equals(shipTo) && order.getStatus().equals(status)).collect(Collectors.toList());
+        return getPurchaseOrders().stream().filter(purchaseOrder -> purchaseOrder.getShipTo().equals(shipTo) && purchaseOrder.getStatus().equals(status)).collect(Collectors.toList());
+    }
+
+    /**
+     * INVOICES
+     */
+    public static ArrayList<Order> getInvoices() {
+
+        ArrayList<Order> invoices = new ArrayList<>();
+        ConnectDB.collection("INVS").find().forEach(invoice -> {
+            Order u = Pipe.load(invoice, Order.class);
+            invoices.add(u);
+        });
+        invoices.sort(Comparator.comparing(Order::getId));
+        return invoices;
+    }
+
+    public static Order getInvoice(String invoiceId) {
+        return getInvoices().stream().filter(invoice -> invoice.getId().equals(invoiceId)).toList().stream().findFirst().orElse(null);
+    }
+
+    public static Order getInvoicesForAccount(String accountId) {
+        //TODO Fix this to ArrayList
+        return getInvoices().stream().filter(invoice -> invoice.getAccount().equals(accountId)).toList().stream().findFirst().orElse(null);
     }
 
     /**
@@ -804,9 +827,6 @@ public class Engine {
                 Bin bin = Engine.getBin(binId);
                 return new ModifyBin(bin, desktop, null);
             }
-            case "/BNS/DEL" -> {
-                return new RemoveBin();
-            }
             case "/BNS/O" -> {
                 String binId = JOptionPane.showInputDialog(null, "Enter Bin ID", "Bin ID");
                 Bin bin = Engine.getBin(binId);
@@ -1166,7 +1186,7 @@ public class Engine {
                 return new PurchaseRequisitions(desktop);
             }
             case "/ORDS/PR/NEW" -> {
-                return new CreatePurchaseRequisition();
+                return new CreatePurchaseRequisition(desktop);
             }
             case "/ORDS/PR/PO" -> {
                 return new ConvertPurchaseRequisitions(desktop);
@@ -1241,7 +1261,7 @@ public class Engine {
                 return new CreateWorkOrder(desktop);
             }
             case "/MVMT/TSKS/NEW" -> {
-                return new CreateTask();
+                return new CreateTask(desktop, null);
             }
 
             //POSITIONS

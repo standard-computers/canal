@@ -2,7 +2,6 @@ package org.Canal.UI.Views.Tasks;
 
 import org.Canal.Models.SupplyChainUnits.Task;
 import org.Canal.UI.Elements.*;
-import org.Canal.Utils.Constants;
 import org.Canal.Utils.Includer;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
@@ -10,7 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * />$/MVMT/TSKS/NEW
+ * /
  */
 public class CreateStep extends LockeState {
 
@@ -50,8 +49,8 @@ public class CreateStep extends LockeState {
             Task task = new Task();
             task.setDescription(stepDescriptionField.getText());
             task.setLocation(locationField.getText());
-            task.setArea(areaField.getText());
-            task.setBin(binField.getText());
+            task.setSourceArea(areaField.getText());
+            task.setSourceBin(binField.getText());
             task.setLocke(lockeField.getText());
             task.setItem(itemField.getText());
             task.setQuantity(Double.parseDouble(quantityField.getText()));
@@ -78,14 +77,14 @@ public class CreateStep extends LockeState {
         employeesField = Elements.input();
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Description", Constants.colors[0]), stepDescriptionField);
-        form.addInput(Elements.coloredLabel("Location (ID)", Constants.colors[1]), locationField);
-        form.addInput(Elements.coloredLabel("Area (ID)", Constants.colors[2]), areaField);
-        form.addInput(Elements.coloredLabel("Bin (ID)", Constants.colors[3]), binField);
-        form.addInput(Elements.coloredLabel("Locke Code", Constants.colors[4]), lockeField);
-        form.addInput(Elements.coloredLabel("Item (ID)", Constants.colors[5]), itemField);
-        form.addInput(Elements.coloredLabel("Quantity", Constants.colors[6]), quantityField);
-        form.addInput(Elements.coloredLabel("Employees (Qty)", Constants.colors[7]), employeesField);
+        form.addInput(Elements.inputLabel("Description"), stepDescriptionField);
+        form.addInput(Elements.inputLabel("Location (ID)"), locationField);
+        form.addInput(Elements.inputLabel("Area (ID)"), areaField);
+        form.addInput(Elements.inputLabel("Bin (ID)"), binField);
+        form.addInput(Elements.inputLabel("Locke Code"), lockeField);
+        form.addInput(Elements.inputLabel("Item (ID)"), itemField);
+        form.addInput(Elements.inputLabel("Quantity"), quantityField);
+        form.addInput(Elements.inputLabel("Employees (Qty)"), employeesField);
         general.add(form);
 
         return general;
@@ -99,8 +98,8 @@ public class CreateStep extends LockeState {
         goodsReceipt = new JCheckBox("Creates Goods Receipt & Adds Inventory");
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Goods Issue", Constants.colors[10]), goodsIssue);
-        form.addInput(Elements.coloredLabel("Goods Receipt", Constants.colors[9]), goodsReceipt);
+        form.addInput(Elements.inputLabel("Goods Issue"), goodsIssue);
+        form.addInput(Elements.inputLabel("Goods Receipt"), goodsReceipt);
         controls.add(form);
 
         return controls;

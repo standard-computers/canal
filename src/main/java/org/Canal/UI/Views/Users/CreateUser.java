@@ -13,10 +13,7 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.beans.PropertyVetoException;
 import java.util.ArrayList;
 
@@ -51,7 +48,7 @@ public class CreateUser extends LockeState {
         employees = Selectables.employees();
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Employee", Constants.colors[9]), employees);
+        form.addInput(Elements.inputLabel("Employee"), employees);
 
         JPanel again = new JPanel(new BorderLayout());
         again.add(Elements.header("Create New User", SwingConstants.LEFT), BorderLayout.NORTH);

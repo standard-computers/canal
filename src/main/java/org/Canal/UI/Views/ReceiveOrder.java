@@ -63,7 +63,7 @@ public class ReceiveOrder extends LockeState {
         poField = Elements.input(12);
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Purchase Order #", Constants.colors[0]), poField);
+        form.addInput(Elements.inputLabel("Purchase Order #"), poField);
         HashMap<String, String> putAwayOptions = new HashMap<>();
         for (Area a : Engine.getAreas(location)) {
             putAwayOptions.put(a.getId(), a.getId());
@@ -127,9 +127,9 @@ public class ReceiveOrder extends LockeState {
             }
         }
 
-        form.addInput(Elements.coloredLabel("Receiving Location", Constants.colors[1]), this.receivingLocation);
-        form.addInput(Elements.coloredLabel("Putaway Bin", Constants.colors[2]), availablePutawayBin);
-        form.addInput(Elements.coloredLabel("Expected Delivery", Constants.colors[3]), expDelivery);
+        form.addInput(Elements.inputLabel("Receiving Location"), this.receivingLocation);
+        form.addInput(Elements.inputLabel("Putaway Bin"), availablePutawayBin);
+        form.addInput(Elements.inputLabel("Expected Delivery"), expDelivery);
 
         String timestampFormat = "yyyy-MM-dd HH:mm:ss";
         DatePicker deliveryDate = new DatePicker();
@@ -138,7 +138,7 @@ public class ReceiveOrder extends LockeState {
         try {
             Date currentDate = sdf.parse(Constants.now());
             deliveryDate.setSelectedDate(currentDate);
-            form.addInput(Elements.coloredLabel("Delivery Date", UIManager.getColor("Label.foreground")), deliveryDate);
+            form.addInput(Elements.inputLabel("Delivery Date"), deliveryDate);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -322,8 +322,8 @@ public class ReceiveOrder extends LockeState {
         statuses = Selectables.statusTypes();
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Explode Package", UIManager.getColor("Panel.background")), explodePackage);
-        form.addInput(Elements.coloredLabel("Stock Status", UIManager.getColor("Panel.background")), statuses);
+        form.addInput(Elements.inputLabel("Explode Package"), explodePackage);
+        form.addInput(Elements.inputLabel("Stock Status"), statuses);
         methods.add(form);
 
         return methods;
@@ -350,9 +350,9 @@ public class ReceiveOrder extends LockeState {
         ledgerId.setText(lookupLedger.getId());
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Create Goods Receipt", UIManager.getColor("Panel.background")), createGoodsReceipt);
-        form.addInput(Elements.coloredLabel("Commit to Ledger", UIManager.getColor("Panel.background")), commitGrToLedger);
-        form.addInput(Elements.coloredLabel("Ledger", UIManager.getColor("Panel.background")), ledgerId);
+        form.addInput(Elements.inputLabel("Create Goods Receipt"), createGoodsReceipt);
+        form.addInput(Elements.inputLabel("Commit to Ledger"), commitGrToLedger);
+        form.addInput(Elements.inputLabel("Ledger"), ledgerId);
         methods.add(form);
 
         return methods;

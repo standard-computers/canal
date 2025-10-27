@@ -38,6 +38,7 @@ public class DatePicker extends JPanel {
 
         dateField.addActionListener(_ -> updateFromDateField());
         calendarButton.addActionListener(_ -> calendarPopup.show(dateField, 0, dateField.getHeight()));
+        setSelectedDate(new Date());
     }
 
     private void initializeCalendarPopup() {

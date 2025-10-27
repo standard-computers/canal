@@ -19,6 +19,7 @@ public class Order extends Objex {
     private String soldTo; //Location ID
     private String transaction;
     private String customer;
+    private String account;
     private String vendor;
     private ArrayList<OrderLineItem> items = new ArrayList<>();
     private ArrayList<Rate> rates = new ArrayList<>();
@@ -101,6 +102,14 @@ public class Order extends Objex {
 
     public void setCustomer(String customer) {
         this.customer = customer;
+    }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
     }
 
     public String getVendor() {

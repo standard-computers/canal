@@ -14,7 +14,6 @@ import org.Canal.UI.Elements.LockeState;
 import org.Canal.UI.Views.Areas.Areas;
 import org.Canal.UI.Views.Items.Items;
 import org.Canal.Utils.ConnectDB;
-import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Pipe;
 import org.bson.Document;
@@ -37,13 +36,11 @@ public class Finder extends LockeState {
 
         JsonObject jsonObject = gson.toJsonTree(object).getAsJsonObject();
 
-        int ci = 0;
         for (Map.Entry<String, JsonElement> entry : jsonObject.entrySet()) {
             String propertyName = entry.getKey();
             if (!propertyName.equals("TYPE") && !propertyName.equals("HPV")) {
                 JTextField textField = Elements.input(20);
-                formPanel.addInput(Elements.coloredLabel(propertyName, Constants.colors[ci]), textField);
-                ci = (ci + 1) % Constants.colors.length;
+                formPanel.addInput(Elements.inputLabel(propertyName), textField);
             }
         }
 

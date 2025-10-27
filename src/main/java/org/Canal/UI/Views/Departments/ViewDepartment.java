@@ -39,7 +39,7 @@ public class ViewDepartment extends LockeState {
         infoLabels.add(vil);
         info.add(infoLabels, BorderLayout.CENTER);
         info.add(toolbar(), BorderLayout.SOUTH);
-        info.setBorder(new EmptyBorder(10, 10, 10, 10));
+        info.setBorder(new EmptyBorder(5, 5, 5, 5));
         add(info, BorderLayout.NORTH);
         add(tabbedPane, BorderLayout.CENTER);
     }

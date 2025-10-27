@@ -113,22 +113,23 @@ public class ModifyPosition extends LockeState {
         isCommissionable = new JCheckBox("Position is or can earn commission", position.isCommission());
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("*Organization", UIManager.getColor("Label.foreground")), organizations);
-        form.addInput(Elements.coloredLabel("Position Name", Constants.colors[0]), positionNameField);
-        form.addInput(Elements.coloredLabel("Short Description", Constants.colors[1]), descriptionField);
-        form.addInput(Elements.coloredLabel("Department", Constants.colors[2]), departments);
-        form.addInput(Elements.coloredLabel("Compensation", Constants.colors[3]), compensationField);
-        form.addInput(Elements.coloredLabel("Availability", Constants.colors[4]), availabilityField);
-        form.addInput(Elements.coloredLabel("Comp. Class", Constants.colors[5]), countries);
-        form.addInput(Elements.coloredLabel("Hourly?", Constants.colors[6]), isHourly);
-        form.addInput(Elements.coloredLabel("Earns Bonuses", Constants.colors[7]), isBonusable);
-        form.addInput(Elements.coloredLabel("Earns Commission", Constants.colors[8]), isCommissionable);
+        form.addInput(Elements.inputLabel("*Organization"), organizations);
+        form.addInput(Elements.inputLabel("Position Name"), positionNameField);
+        form.addInput(Elements.inputLabel("Short Description"), descriptionField);
+        form.addInput(Elements.inputLabel("Department"), departments);
+        form.addInput(Elements.inputLabel("Compensation"), compensationField);
+        form.addInput(Elements.inputLabel("Availability"), availabilityField);
+        form.addInput(Elements.inputLabel("Comp. Class"), countries);
+        form.addInput(Elements.inputLabel("Hourly?"), isHourly);
+        form.addInput(Elements.inputLabel("Earns Bonuses"), isBonusable);
+        form.addInput(Elements.inputLabel("Earns Commission"), isCommissionable);
         general.add(form);
 
         return general;
     }
 
     private CustomTable employeesTable() {
+
         String[] columns = new String[]{
                 "ID",
                 "Name"
@@ -144,6 +145,7 @@ public class ModifyPosition extends LockeState {
     }
 
     private JPanel employees() {
+
         JPanel employeesPanel = new JPanel(new BorderLayout());
 
         JPanel buttons = new JPanel();

@@ -135,14 +135,11 @@ public class CreateArea extends LockeState {
             Pipe.save("/AREAS", area);
 
             dispose();
-            if (refreshListener != null) {
-                refreshListener.refresh();
-            }
+            if (refreshListener != null) refreshListener.refresh();
 
             if ((boolean) Engine.codex.getValue("AREAS", "item_created_alert")) {
                 JOptionPane.showMessageDialog(CreateArea.this, "Area Created");
             }
-
         });
         tb.add(create);
         tb.add(Box.createHorizontalStrut(5));
@@ -182,13 +179,13 @@ public class CreateArea extends LockeState {
         statuses.setSelectedValue("ACTIVE");
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("*New ID", UIManager.getColor("Label.foreground")), areaIdField);
-        form.addInput(Elements.coloredLabel("*Location", UIManager.getColor("Label.foreground")), availableLocations);
-        form.addInput(Elements.coloredLabel("Area Name", Constants.colors[10]), areaNameField);
-        form.addInput(Elements.coloredLabel("Width", Constants.colors[9]), widthField);
-        form.addInput(Elements.coloredLabel("Length", Constants.colors[8]), lengthField);
-        form.addInput(Elements.coloredLabel("Height", Constants.colors[7]), heightField);
-        form.addInput(Elements.coloredLabel("Status", Constants.colors[6]), statuses);
+        form.addInput(Elements.inputLabel("*New ID"), areaIdField);
+        form.addInput(Elements.inputLabel("*Location"), availableLocations);
+        form.addInput(Elements.inputLabel("Area Name"), areaNameField);
+        form.addInput(Elements.inputLabel("Width"), widthField);
+        form.addInput(Elements.inputLabel("Length"), lengthField);
+        form.addInput(Elements.inputLabel("Height"), heightField);
+        form.addInput(Elements.inputLabel("Status"), statuses);
         panel.add(form);
 
         return panel;
@@ -204,10 +201,10 @@ public class CreateArea extends LockeState {
         allowsPurchasing = new JCheckBox("Purchase Order Processing");
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Allows Inventory", Constants.colors[0]), allowsInventory);
-        form.addInput(Elements.coloredLabel("Allows Production", Constants.colors[1]), allowsProduction);
-        form.addInput(Elements.coloredLabel("Allows Sales", Constants.colors[2]), allowsSales);
-        form.addInput(Elements.coloredLabel("Allows Purchasing", Constants.colors[3]), allowsPurchasing);
+        form.addInput(Elements.inputLabel("Allows Inventory", "Inventory may be kept within this are if checked"), allowsInventory);
+        form.addInput(Elements.inputLabel("Allows Production", "Production can be performed in this area if checked"), allowsProduction);
+        form.addInput(Elements.inputLabel("Allows Sales", "Goods Issues can be performed within this area if checked"), allowsSales);
+        form.addInput(Elements.inputLabel("Allows Purchasing", "Goods Receipts can be performed within this are if checked"), allowsPurchasing);
         controls.add(form);
 
         return controls;

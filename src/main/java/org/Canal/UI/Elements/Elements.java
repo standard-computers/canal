@@ -8,13 +8,9 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
-import javax.swing.border.MatteBorder;
-import javax.swing.border.Border;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
+import javax.swing.border.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +18,7 @@ import java.util.Map;
 public class Elements {
 
     public static JTextField input() {
+
         JTextField textField = new JTextField();
         Border outerBorder = new FlatBorder();
         Border innerPadding = new EmptyBorder(2, 2, 2, 2);
@@ -31,6 +28,7 @@ public class Elements {
     }
 
     public static JTextField input(String preset) {
+
         JTextField textField = new JTextField(preset);
         Border outerBorder = new FlatBorder();
         Border innerPadding = new EmptyBorder(2, 2, 2, 2);
@@ -40,6 +38,7 @@ public class Elements {
     }
 
     public static JTextField input(int length) {
+
         JTextField textField = new JTextField(length);
         Border outerBorder = new FlatBorder();
         Border innerPadding = new EmptyBorder(2, 2, 2, 2);
@@ -49,6 +48,7 @@ public class Elements {
     }
 
     public static JTextField input(String preset, int length) {
+
         JTextField textField = new JTextField(preset, length);
         Border outerBorder = new FlatBorder();
         Border innerPadding = new EmptyBorder(2, 2, 2, 2);
@@ -57,47 +57,105 @@ public class Elements {
         return textField;
     }
 
-    public static JLabel label(String text){
-        JLabel l = new JLabel(text);
-        l.setBorder(new EmptyBorder(0, 10, 10, 0));
-        return l;
+    public static JLabel label(String text) {
+
+        JLabel label = new JLabel(text);
+        label.setBorder(new EmptyBorder(0, 10, 10, 0));
+        return label;
     }
 
-    public static JLabel coloredLabel(String text, Color color){
-        JLabel l = new JLabel(text);
-        l.setFont(new Font(UIManager.getFont("Label.font").getName(), Font.PLAIN, Engine.getConfiguration().getFontSize()));
-        l.setMinimumSize(new Dimension(120, 25));
-        l.setMaximumSize(new Dimension(200, 25));
-        l.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createMatteBorder(0, 2, 1, 0, color),
-                BorderFactory.createEmptyBorder(5, 5, 5, 5)
+    public static JLabel inputLabel(String text) {
+        JLabel label = new JLabel(text);
+        label.setFont(new Font(
+                UIManager.getFont("Label.font").getName(),
+                Font.PLAIN,
+                Engine.getConfiguration().getFontSize()
         ));
-        return l;
+        label.setMinimumSize(new Dimension(120, 25));
+        label.setMaximumSize(new Dimension(200, 25));
+        label.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, UIManager.getColor("Label.foreground").brighter()));
+
+        return label;
     }
 
-    public static JLabel h2(String text){
-        JLabel l = new JLabel(text);
-        l.setFont(UIManager.getFont("h2.font"));
-        l.setBorder(new EmptyBorder(5, 5, 5, 5));
-        return l;
+    public static JLabel inputLabel(String text, String help) {
+
+        JLabel label = inputLabel(text);
+
+        // Allow focus
+        label.setFocusable(true);
+
+        // Optional: add a subtle focus indicator (bottom border highlight)
+        Color normalBorder = UIManager.getColor("Label.foreground");
+        Color focusBorder = UIManager.getColor("Label.focus") != null
+                ? UIManager.getColor("Label.focus")
+                : UIManager.getColor("TextField.selectionBackground");
+
+        label.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                label.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, focusBorder));
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                label.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, normalBorder));
+            }
+        });
+
+        // Key listener for F1 help
+        label.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_F1) {
+                    // You can swap JOptionPane for your custom message system
+                    JOptionPane.showMessageDialog(label, help, label.getText(), JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        });
+
+        label.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    JOptionPane.showMessageDialog(label, help, label.getText(), JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        });
+
+        // Optional: make focus visible via keyboard navigation
+        label.setFocusTraversalKeysEnabled(true);
+
+        return label;
     }
 
-    public static JLabel h3(String text){
-        JLabel l = new JLabel(text);
-        l.setFont(UIManager.getFont("h3.font"));
-        l.setBorder(new EmptyBorder(5, 5, 5, 5));
-        return l;
+    public static JLabel h2(String text) {
+
+        JLabel label = new JLabel(text);
+        label.setFont(UIManager.getFont("h2.font"));
+        label.setBorder(new EmptyBorder(5, 5, 5, 5));
+        return label;
     }
 
-    public static JLabel h3(String text, Color color){
-        JLabel l = new JLabel(text);
-        l.setFont(UIManager.getFont("h3.font"));
-        l.setForeground(color);
-        l.setBorder(new EmptyBorder(5, 5, 5, 5));
-        return l;
+    public static JLabel h3(String text) {
+
+        JLabel label = new JLabel(text);
+        label.setFont(UIManager.getFont("h3.font"));
+        label.setBorder(new EmptyBorder(5, 5, 5, 5));
+        return label;
+    }
+
+    public static JLabel h3(String text, Color color) {
+
+        JLabel label = new JLabel(text);
+        label.setFont(UIManager.getFont("h3.font"));
+        label.setForeground(color);
+        label.setBorder(new EmptyBorder(5, 5, 5, 5));
+        return label;
     }
 
     public static JLabel link(String text, String tooltip) {
+
         JLabel link = new JLabel(text);
         if (tooltip != null && !tooltip.isEmpty()) {
             link.setToolTipText(tooltip);
@@ -116,6 +174,7 @@ public class Elements {
             public void mouseEntered(MouseEvent e) {
                 link.setForeground(link.getForeground().darker());
             }
+
             @Override
             public void mouseExited(MouseEvent e) {
                 link.setForeground(link.getForeground().brighter());
@@ -125,6 +184,7 @@ public class Elements {
     }
 
     public static JButton button(String text) {
+
         JButton b = new JButton(text);
         b.setFont(new Font(UIManager.getFont("Label.font").getName(), Font.PLAIN, Engine.getConfiguration().getFontSize()));
         b.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -145,10 +205,12 @@ public class Elements {
 
     /**
      * Center GUI header for Windows
+     *
      * @param text Header Text
      * @return JPanel
      */
-    public static JPanel header(String text){
+    public static JPanel header(String text) {
+
         JPanel panel = new JPanel();
         panel.add(Elements.h2(text));
         panel.setBorder(new EmptyBorder(5, 10, 5, 10));
@@ -157,6 +219,7 @@ public class Elements {
     }
 
     public static JPanel header(String text, int alignment) {
+
         JPanel panel = new JPanel(new BorderLayout());
         JLabel label = Elements.h2(text);
         label.setHorizontalAlignment(alignment);
@@ -169,7 +232,8 @@ public class Elements {
         return panel;
     }
 
-    public static RTextScrollPane simpleEditor(){
+    public static RTextScrollPane simpleEditor() {
+
         RSyntaxTextArea textArea = new RSyntaxTextArea(20, 60);
         textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_MARKDOWN);
         textArea.setCodeFoldingEnabled(true);
@@ -178,6 +242,7 @@ public class Elements {
     }
 
     public static JTextField selector(String preset, HashMap<String, String> options, JInternalFrame parentFrame) {
+
         JTextField textField = input(preset);
         JPanel container = new JPanel(new BorderLayout());
         container.setPreferredSize(new Dimension(300, textField.getPreferredSize().height));
@@ -223,6 +288,7 @@ public class Elements {
     }
 
     public static JScrollPane scrollPane(JComponent content) {
+
         JScrollPane scrollPane = new JScrollPane(content);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);

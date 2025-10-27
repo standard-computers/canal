@@ -1,20 +1,15 @@
 package org.Canal.UI.Views.Bins;
 
-import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.Models.SupplyChainUnits.Bin;
-import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Views.System.LockeMessages;
 import org.Canal.Utils.*;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.util.HashMap;
 
 /**
  * /BNS/NEW
@@ -25,9 +20,8 @@ public class CreateBin extends LockeState {
     private DesktopState desktop;
     private RefreshListener refreshListener;
     private JTextField idField;
-    private JTextField locationField;
     private JTextField nameField;
-    private Selectable areas;
+    private JTextField areas;
 
     //Dimensions Tab
     private UOMField widthField;
@@ -60,7 +54,10 @@ public class CreateBin extends LockeState {
         tabs.addTab("Controls", controls());
         tabs.addTab("Dimensional", dimensional());
         tabs.addTab("Items", restrictions());
-        tabs.addTab("Notes", notes());
+
+        if ((boolean) Engine.codex.getValue("BNS", "allow_notes")) {
+            tabs.addTab("Notes", notes());
+        }
 
         add(toolbar(), BorderLayout.NORTH);
         add(tabs, BorderLayout.CENTER);
@@ -80,7 +77,7 @@ public class CreateBin extends LockeState {
         IconButton copyFrom = new IconButton("Copy From", "open", "Copy from Bin");
         copyFrom.addActionListener(_ -> {
             String binId = JOptionPane.showInputDialog(CreateBin.this, "Enter Bin ID", "Copy Bin", JOptionPane.QUESTION_MESSAGE);
-            if(!binId.isEmpty()){
+            if (!binId.isEmpty()) {
 
             }
         });
@@ -97,7 +94,7 @@ public class CreateBin extends LockeState {
 
             String binId = idField.getText();
             String binName = nameField.getText().trim();
-            String binArea = areas.getSelectedValue();
+            String binArea = areas.getText();
 
             Bin newBin = new Bin();
             newBin.setId(binId);
@@ -127,7 +124,7 @@ public class CreateBin extends LockeState {
             Pipe.save("/BNS", newBin);
 
             dispose();
-            if(refreshListener != null) refreshListener.refresh();
+            if (refreshListener != null) refreshListener.refresh();
         });
         tb.add(create);
         tb.add(Box.createHorizontalStrut(5));
@@ -137,7 +134,8 @@ public class CreateBin extends LockeState {
         JRootPane rp = getRootPane();
         rp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ks, "do-modify");
         rp.getActionMap().put("do-modify", new AbstractAction() {
-            @Override public void actionPerformed(ActionEvent e) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 create.doClick();
             }
         });
@@ -152,46 +150,17 @@ public class CreateBin extends LockeState {
         JPanel general = new JPanel(new FlowLayout(FlowLayout.LEFT));
         String generatedId;
         idField = Elements.input();
-        locationField = Elements.input();
-        HashMap<String, String> areas = new HashMap<>();
-        for(Area a : Engine.getAreas(location)){
-            areas.put(a.getName(), a.getId());
-        }
-        this.areas = new Selectable(areas);
-        this.areas.editable();
-        generatedId = "BN" + (Engine.getAreas(location).size() + 1) + "-" + this.areas.getSelectedValue();
-        this.areas.setSelectedValue(location);
-        locationField.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                onChange();
-            }
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                onChange();
-            }
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                onChange();
-            }
-            private void onChange() {
-                String locationIdAttempt = locationField.getText();
-                for(Location l : Engine.getLocations()){
-                    if(l.getId().equals(locationIdAttempt)){
-
-                    }
-                }
-            }
-        });
+        areas = Elements.input();
+        generatedId = "BN" + (Engine.getAreas(location).size() + 1) + "-" + areas.getText();
+        areas.setText(location);
 
         idField.setText(generatedId);
-        nameField = Elements.input(generatedId, 20);
+        nameField = Elements.input(generatedId, 15);
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("*New Bin ID", UIManager.getColor("Label.foreground")), idField);
-        form.addInput(Elements.coloredLabel("Location ID", UIManager.getColor("Label.foreground")), locationField);
-        form.addInput(Elements.coloredLabel("*Area", UIManager.getColor("Label.foreground")), this.areas);
-        form.addInput(Elements.coloredLabel("Bin Name", Constants.colors[10]), nameField);
+        form.addInput(Elements.inputLabel("*New Bin ID"), idField);
+        form.addInput(Elements.inputLabel("*Area"), this.areas);
+        form.addInput(Elements.inputLabel("Bin Name"), nameField);
         general.add(form);
 
         return general;
@@ -211,13 +180,13 @@ public class CreateBin extends LockeState {
         holdsStock = new JCheckBox("Bin can hold inventory");
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Goods Issue", Constants.colors[10]), doesGoodsIssue);
-        form.addInput(Elements.coloredLabel("Goods Receipt", Constants.colors[9]), doesGoodsReceipt);
-        form.addInput(Elements.coloredLabel("Picking Enabled", Constants.colors[8]), pickingEnabled);
-        form.addInput(Elements.coloredLabel("Putaway Enabled", Constants.colors[7]), putawayEnabled);
-        form.addInput(Elements.coloredLabel("Auto Replenish", Constants.colors[6]), autoReplenish);
-        form.addInput(Elements.coloredLabel("Fixed Bin", Constants.colors[5]), fixedBin);
-        form.addInput(Elements.coloredLabel("Holds Stock", Constants.colors[4]), holdsStock);
+        form.addInput(Elements.inputLabel("Goods Issue"), doesGoodsIssue);
+        form.addInput(Elements.inputLabel("Goods Receipt"), doesGoodsReceipt);
+        form.addInput(Elements.inputLabel("Picking Enabled"), pickingEnabled);
+        form.addInput(Elements.inputLabel("Putaway Enabled"), putawayEnabled);
+        form.addInput(Elements.inputLabel("Auto Replenish"), autoReplenish);
+        form.addInput(Elements.inputLabel("Fixed Bin"), fixedBin);
+        form.addInput(Elements.inputLabel("Holds Stock"), holdsStock);
         controls.add(form);
 
         return controls;
@@ -234,10 +203,10 @@ public class CreateBin extends LockeState {
         weightField.setUOM("OZ");
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Width", Constants.colors[0]), widthField);
-        form.addInput(Elements.coloredLabel("Length", Constants.colors[1]), lengthField);
-        form.addInput(Elements.coloredLabel("Height", Constants.colors[2]), heightField);
-        form.addInput(Elements.coloredLabel("Weight", Constants.colors[3]), weightField);
+        form.addInput(Elements.inputLabel("Width"), widthField);
+        form.addInput(Elements.inputLabel("Length"), lengthField);
+        form.addInput(Elements.inputLabel("Height"), heightField);
+        form.addInput(Elements.inputLabel("Weight"), weightField);
         dimensional.add(form);
 
         return dimensional;
@@ -256,37 +225,33 @@ public class CreateBin extends LockeState {
         return notes;
     }
 
-    private void performReview(){
+    private void performReview() {
 
-        if(idField.getText().isEmpty()){
+        if (idField.getText().isEmpty()) {
             addToQueue(new String[]{"CRITICAL", "Bin ID is not set!!!"});
         }
 
-        if(locationField.getText().isEmpty()){
-            addToQueue(new String[]{"CRITICAL", "Bin Location ID is not set!!!"});
-        }
-
-        if(areas.getSelectedValue().isEmpty()){
+        if (areas.getText().isEmpty()) {
             addToQueue(new String[]{"CRITICAL", "Bin Area is not set!!!"});
         }
 
-        if(nameField.getText().isEmpty()){
+        if (nameField.getText().isEmpty()) {
             addToQueue(new String[]{"CRITICAL", "Bin Name is not set!!!"});
         }
 
-        if(Double.parseDouble(widthField.getValue()) == 0){
+        if (Double.parseDouble(widthField.getValue()) == 0) {
             addToQueue(new String[]{"WARNING", "Bin width will be set to 0. Are you sure?"});
         }
 
-        if(Double.parseDouble(lengthField.getValue()) == 0){
+        if (Double.parseDouble(lengthField.getValue()) == 0) {
             addToQueue(new String[]{"WARNING", "Bin length will be set to 0. Are you sure?"});
         }
 
-        if(Double.parseDouble(heightField.getValue()) == 0){
+        if (Double.parseDouble(heightField.getValue()) == 0) {
             addToQueue(new String[]{"WARNING", "Bin height will be set to 0. Are you sure?"});
         }
 
-        if(Double.parseDouble(weightField.getValue()) == 0){
+        if (Double.parseDouble(weightField.getValue()) == 0) {
             addToQueue(new String[]{"WARNING", "Bin weight will be set to 0. Are you sure?"});
         }
 

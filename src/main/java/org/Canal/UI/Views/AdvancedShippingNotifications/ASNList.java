@@ -44,7 +44,7 @@ public class ASNList extends LockeState {
         IconButton suspendPo = new IconButton("Suspend", "suspend", "Suspend PO, can't be used");
         IconButton activatePO = new IconButton("Start", "start", "Resume/Activate PO");
         IconButton archivePo = new IconButton("Archive", "archive", "Archive PO, removes");
-        IconButton label = new IconButton("Barcodes", "label", "Print labels for org properties");
+        IconButton label = new IconButton("Barcodes", "barcodes", "Print labels for org properties");
         tb.add(Box.createHorizontalStrut(5));
         tb.add(Elements.h3("ASNs"));
         tb.add(Box.createHorizontalStrut(5));

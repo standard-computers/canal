@@ -1,6 +1,5 @@
 package org.Canal.UI.Views.Bins;
 
-import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.Models.SupplyChainUnits.Bin;
 import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
@@ -53,7 +52,7 @@ public class Bins extends LockeState implements RefreshListener {
         tb.add(Box.createHorizontalStrut(5));
 
         if ((boolean) Engine.codex.getValue("BNS", "import_enabled")) {
-            IconButton importBins = new IconButton("Import", "export", "Import as CSV", "");
+            IconButton importBins = new IconButton("Import", "import", "Import as CSV", "");
             tb.add(importBins);
             tb.add(Box.createHorizontalStrut(5));
         }
@@ -84,11 +83,7 @@ public class Bins extends LockeState implements RefreshListener {
         tb.add(autoMakeBins);
         tb.add(Box.createHorizontalStrut(5));
 
-        IconButton labels = new IconButton("Labels", "label", "Delete an Bin");
-        tb.add(labels);
-        tb.add(Box.createHorizontalStrut(5));
-
-        IconButton print = new IconButton("Print", "print", "Delete an Bin");
+        IconButton print = new IconButton("Print", "print", "Print Bin Labels");
         tb.add(print);
         tb.add(Box.createHorizontalStrut(5));
 

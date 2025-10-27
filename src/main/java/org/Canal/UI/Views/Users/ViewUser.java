@@ -12,8 +12,6 @@ import org.Canal.Utils.Engine;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 /**
  * /USRS/$[USER_ID]
@@ -51,31 +49,24 @@ public class ViewUser extends LockeState {
         add(accessHolder, BorderLayout.CENTER);
     }
 
-    private JPanel buttonBar(){
+    private JPanel buttonBar() {
 
         JPanel buttonBar = new JPanel(new FlowLayout(FlowLayout.LEFT));
         buttonBar.setLayout(new FlowLayout(FlowLayout.LEFT));
 
         IconButton modify = new IconButton("Modify", "modify", "Modify User");
+        modify.addActionListener(_ -> desktop.put(new Modifier("/USRS", new User(), user)));
         buttonBar.add(modify);
 
         IconButton viewEmployee = new IconButton("View Employee", "employees", "View Attached Employee");
+        viewEmployee.addActionListener(_ -> desktop.put(Engine.router("/EMPS/" + user.getEmployee(), desktop)));
         buttonBar.add(viewEmployee);
 
         IconButton suspend = new IconButton("Suspend", "suspend", "Suspend User");
+        suspend.addActionListener(_ -> {
+        });
         buttonBar.add(suspend);
 
-        modify.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                desktop.put(new Modifier("/USRS", new User(), user));
-            }
-        });
-        viewEmployee.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                desktop.put(Engine.router("/EMPS/" + user.getEmployee(), desktop));
-            }
-        });
         return buttonBar;
     }
 
@@ -83,7 +74,7 @@ public class ViewUser extends LockeState {
 
         String[] columns = new String[]{"Locke Code"};
         String[][] data = new String[user.getAccesses().size()][columns.length];
-        for(int i = 0; i < user.getAccesses().size(); i++) {
+        for (int i = 0; i < user.getAccesses().size(); i++) {
             data[i] = new String[]{user.getAccess(i)};
         }
         JTable table = new JTable(data, columns);

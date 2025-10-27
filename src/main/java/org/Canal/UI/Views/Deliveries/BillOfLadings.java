@@ -1,4 +1,4 @@
-package org.Canal.UI.Views.Distribution;
+package org.Canal.UI.Views.Deliveries;
 
 import org.Canal.UI.Elements.LockeState;
 

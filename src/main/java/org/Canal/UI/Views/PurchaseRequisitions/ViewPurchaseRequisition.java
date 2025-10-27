@@ -49,18 +49,18 @@ public class ViewPurchaseRequisition extends LockeState {
         JPanel general = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("ID", UIManager.getColor("Label.foreground")), new Copiable(purchaseRequisition.getId()));
-        form.addInput(Elements.coloredLabel("Created", UIManager.getColor("Label.foreground")), new Copiable(purchaseRequisition.getCreated()));
-        form.addInput(Elements.coloredLabel("Creator (Owner)", UIManager.getColor("Label.foreground")),  new Copiable(purchaseRequisition.getOwner()));
-        form.addInput(Elements.coloredLabel("Purchase Req. #", UIManager.getColor("Label.foreground")),  new Copiable(purchaseRequisition.getNumber()));
-        form.addInput(Elements.coloredLabel("Supplier ID", UIManager.getColor("Label.foreground")),  new Copiable(purchaseRequisition.getSupplier()));
-        form.addInput(Elements.coloredLabel("Buyer", UIManager.getColor("Label.foreground")),  new Copiable(purchaseRequisition.getBuyer()));
-        form.addInput(Elements.coloredLabel("Max Spend", UIManager.getColor("Label.foreground")),  new Copiable(String.valueOf(purchaseRequisition.getMaxSpend())));
-        form.addInput(Elements.coloredLabel("Single Order?", UIManager.getColor("Label.foreground")),  new Copiable(String.valueOf(purchaseRequisition.isSingleOrder())));
-        form.addInput(Elements.coloredLabel("Valid From", UIManager.getColor("Label.foreground")),  new Copiable(purchaseRequisition.getStart()));
-        form.addInput(Elements.coloredLabel("To", UIManager.getColor("Label.foreground")),  new Copiable(purchaseRequisition.getEnd()));
-        form.addInput(Elements.coloredLabel("Status", UIManager.getColor("Label.foreground")),  new Copiable(String.valueOf(purchaseRequisition.getStatus())));
-        form.addInput(Elements.coloredLabel("Created", UIManager.getColor("Label.foreground")),  new Copiable(purchaseRequisition.getCreated()));
+        form.addInput(Elements.inputLabel("ID"), new Copiable(purchaseRequisition.getId()));
+        form.addInput(Elements.inputLabel("Created"), new Copiable(purchaseRequisition.getCreated()));
+        form.addInput(Elements.inputLabel("Creator (Owner)"),  new Copiable(purchaseRequisition.getOwner()));
+        form.addInput(Elements.inputLabel("Purchase Req. #"),  new Copiable(purchaseRequisition.getNumber()));
+        form.addInput(Elements.inputLabel("Supplier ID"),  new Copiable(purchaseRequisition.getSupplier()));
+        form.addInput(Elements.inputLabel("Buyer"),  new Copiable(purchaseRequisition.getBuyer()));
+        form.addInput(Elements.inputLabel("Max Spend"),  new Copiable(String.valueOf(purchaseRequisition.getMaxSpend())));
+        form.addInput(Elements.inputLabel("Single Order?"),  new Copiable(String.valueOf(purchaseRequisition.isSingleOrder())));
+        form.addInput(Elements.inputLabel("Valid From"),  new Copiable(purchaseRequisition.getStart()));
+        form.addInput(Elements.inputLabel("To"),  new Copiable(purchaseRequisition.getEnd()));
+        form.addInput(Elements.inputLabel("Status"),  new Copiable(String.valueOf(purchaseRequisition.getStatus())));
+        form.addInput(Elements.inputLabel("Created"),  new Copiable(purchaseRequisition.getCreated()));
         general.add(form);
 
         return form;
@@ -181,7 +181,7 @@ public class ViewPurchaseRequisition extends LockeState {
         tb.add(archive);
         tb.add(Box.createHorizontalStrut(5));
 
-        IconButton label = new IconButton("Barcodes", "label", "Print labels");
+        IconButton label = new IconButton("Barcodes", "barcodes", "Print labels");
         label.addActionListener(_ -> {});
         tb.add(label);
         tb.add(Box.createHorizontalStrut(5));

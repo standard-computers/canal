@@ -8,7 +8,6 @@ import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -25,7 +24,7 @@ public class GoodsIssues extends LockeState {
     public GoodsIssues(DesktopState desktop) {
 
         super("Goods Issues", "/GI");
-        setFrameIcon(new ImageIcon(GoodsIssues.class.getResource("/icons/purchaseorders.png")));
+        setFrameIcon(new ImageIcon(GoodsIssues.class.getResource("/icons/windows/locke.png")));
         if(Engine.getGoodsReceipts().isEmpty()){
             dispose();
             JOptionPane.showMessageDialog(this, "No Goods Receipts Posted!");
@@ -47,24 +46,32 @@ public class GoodsIssues extends LockeState {
 
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        tb.add(Box.createHorizontalStrut(5));
+
+        IconButton importGoods = new IconButton("Import", "import", "Import from CSV");
+        tb.add(importGoods);
+        tb.add(Box.createHorizontalStrut(5));
+
         IconButton export = new IconButton("", "export", "Export as CSV");
-        IconButton blockPo = new IconButton("Block", "block", "Block/Pause PO, can't be used");
-        IconButton suspendPo = new IconButton("Suspend", "suspend", "Suspend PO, can't be used");
-        IconButton activatePO = new IconButton("Start", "start", "Resume/Activate PO");
-        IconButton archivePo = new IconButton("Archive", "archive", "Archive PO, removes");
-        JTextField filterValue = Elements.input("Search", 10);
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton blockPo = new IconButton("Block", "block", "Block/Pause PO, can't be used");
         tb.add(blockPo);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton suspendPo = new IconButton("Suspend", "suspend", "Suspend PO, can't be used");
         tb.add(suspendPo);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton activatePO = new IconButton("Start", "start", "Resume/Activate PO");
         tb.add(activatePO);
         tb.add(Box.createHorizontalStrut(5));
+
+        IconButton archivePo = new IconButton("Archive", "archive", "Archive PO, removes");
         tb.add(archivePo);
         tb.add(Box.createHorizontalStrut(5));
-        tb.add(filterValue);
-        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
+
         return tb;
     }
 

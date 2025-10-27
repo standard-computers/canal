@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 /**
  * /HR/POS/NEW
- *  Create a new Position in an Organization.
+ * Create a new Position in an Organization.
  * Positions MUST be attached to a Department <em>/DPTS</em>
  */
 public class CreatePosition extends LockeState {
@@ -82,14 +82,14 @@ public class CreatePosition extends LockeState {
             position.setStatus(LockeStatus.NEW);
             Pipe.save("/HR/POS", position);
 
-            if((boolean) Engine.codex.getValue("HR/POS", "item_created_alert")){
+            if ((boolean) Engine.codex.getValue("HR/POS", "item_created_alert")) {
                 JOptionPane.showMessageDialog(null, "Position succesfully created!");
             }
             dispose();
 
-            if(refreshListener != null) refreshListener.refresh();
+            if (refreshListener != null) refreshListener.refresh();
 
-            if((boolean) Engine.codex.getValue("HR/POS", "auto_open_new")){
+            if ((boolean) Engine.codex.getValue("HR/POS", "auto_open_new")) {
                 desktop.put(new ViewPosition(position, desktop));
             }
         });
@@ -117,35 +117,29 @@ public class CreatePosition extends LockeState {
         autoPost = new JCheckBox("Post position as open?");
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("*New Position ID", UIManager.getColor("Label.foreground")), positionIdField);
-        form.addInput(Elements.coloredLabel("*Organization", UIManager.getColor("Label.foreground")), organizations);
-        form.addInput(Elements.coloredLabel("Position Name", Constants.colors[0]), positionNameField);
-        form.addInput(Elements.coloredLabel("Short Description", Constants.colors[1]), descriptionField);
-        form.addInput(Elements.coloredLabel("Department", Constants.colors[2]), departments);
-        form.addInput(Elements.coloredLabel("Compensation", Constants.colors[3]), compensationField);
-        form.addInput(Elements.coloredLabel("Availability", Constants.colors[4]), availabilityField);
-        form.addInput(Elements.coloredLabel("Comp. Class", Constants.colors[5]), countries);
-        form.addInput(Elements.coloredLabel("Hourly?", Constants.colors[6]), isHourly);
-        form.addInput(Elements.coloredLabel("Earns Bonuses", Constants.colors[7]), isBonusable);
-        form.addInput(Elements.coloredLabel("Earns Commission", Constants.colors[8]), isCommissionable);
-        form.addInput(Elements.coloredLabel("Auto Post", UIManager.getColor("Label.foreground")), autoPost);
+        form.addInput(Elements.inputLabel("*New Position ID"), positionIdField);
+        form.addInput(Elements.inputLabel("*Organization"), organizations);
+        form.addInput(Elements.inputLabel("Position Name"), positionNameField);
+        form.addInput(Elements.inputLabel("Short Description"), descriptionField);
+        form.addInput(Elements.inputLabel("Department"), departments);
+        form.addInput(Elements.inputLabel("Compensation"), compensationField);
+        form.addInput(Elements.inputLabel("Availability"), availabilityField);
+        form.addInput(Elements.inputLabel("Comp. Class"), countries);
+        form.addInput(Elements.inputLabel("Hourly?"), isHourly);
+        form.addInput(Elements.inputLabel("Earns Bonuses"), isBonusable);
+        form.addInput(Elements.inputLabel("Earns Commission"), isCommissionable);
+        form.addInput(Elements.inputLabel("Auto Post"), autoPost);
         general.add(form);
 
         return general;
     }
 
-    private CustomTable employeesTable(){
+    private CustomTable employeesTable() {
 
-        String[] columns = new String[]{
-                "ID",
-                "Name"
-        };
+        String[] columns = new String[]{"ID", "Name"};
         ArrayList<Object[]> data = new ArrayList<>();
         for (Employee employee : employees) {
-            data.add(new Object[]{
-                    employee.getId(),
-                    employee.getName(),
-            });
+            data.add(new Object[]{employee.getId(), employee.getName(),});
         }
         return new CustomTable(columns, data);
     }
@@ -191,10 +185,10 @@ public class CreatePosition extends LockeState {
                         employeesTable = newTable;
                         scrollPane.revalidate();
                         scrollPane.repaint();
-                    }else{
+                    } else {
                         System.out.println("No employee selected");
                     }
-                }else{
+                } else {
                     System.out.println("No employee selected");
                 }
             }

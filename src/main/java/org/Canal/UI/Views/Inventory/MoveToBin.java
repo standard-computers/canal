@@ -33,10 +33,10 @@ public class MoveToBin extends LockeState {
         createHu.setSelected(true);
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("HU", Constants.colors[0]), mvHu);
-        form.addInput(Elements.coloredLabel("Destination Bin", Constants.colors[1]), destinationBins);
-        form.addInput(Elements.coloredLabel("Quantity", Constants.colors[2]), mvQty);
-        form.addInput(Elements.coloredLabel("Create HU", Constants.colors[3]), createHu);
+        form.addInput(Elements.inputLabel("HU"), mvHu);
+        form.addInput(Elements.inputLabel("Destination Bin"), destinationBins);
+        form.addInput(Elements.inputLabel("Quantity"), mvQty);
+        form.addInput(Elements.inputLabel("Create HU"), createHu);
 
         setLayout(new BorderLayout());
         add(Elements.header("Move Stock Internally", SwingConstants.LEFT), BorderLayout.NORTH);

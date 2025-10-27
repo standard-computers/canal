@@ -147,15 +147,15 @@ public class CreateTruck extends LockeState {
         modelNameField = Elements.input();
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("*New Truck ID", UIManager.getColor("Label.foreground")), truckIdField);
-        form.addInput(Elements.coloredLabel("Truck Number", Constants.colors[0]), truckNumberField);
-        form.addInput(Elements.coloredLabel("Carrier", Constants.colors[1]), carriers);
-        form.addInput(Elements.coloredLabel("Driver (Name)", Constants.colors[2]), driverNameField);
-        form.addInput(Elements.coloredLabel("License Plate", Constants.colors[3]), licensePlateField);
-        form.addInput(Elements.coloredLabel("VIN", Constants.colors[4]), vinField);
-        form.addInput(Elements.coloredLabel("Vehicle Year", Constants.colors[5]), yearNameField);
-        form.addInput(Elements.coloredLabel("Vehicle Make", Constants.colors[6]), makeNameField);
-        form.addInput(Elements.coloredLabel("Vehicle Model", Constants.colors[7]), modelNameField);
+        form.addInput(Elements.inputLabel("*New Truck ID"), truckIdField);
+        form.addInput(Elements.inputLabel("Truck Number"), truckNumberField);
+        form.addInput(Elements.inputLabel("Carrier"), carriers);
+        form.addInput(Elements.inputLabel("Driver (Name)"), driverNameField);
+        form.addInput(Elements.inputLabel("License Plate"), licensePlateField);
+        form.addInput(Elements.inputLabel("VIN"), vinField);
+        form.addInput(Elements.inputLabel("Vehicle Year"), yearNameField);
+        form.addInput(Elements.inputLabel("Vehicle Make"), makeNameField);
+        form.addInput(Elements.inputLabel("Vehicle Model"), modelNameField);
         general.add(form);
 
         return general;
@@ -169,8 +169,8 @@ public class CreateTruck extends LockeState {
         maxWeightField = new UOMField();
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Vehicle Weight", Constants.colors[0]), weightField);
-        form.addInput(Elements.coloredLabel("Max Weight (Load, Carrying)", Constants.colors[0]), maxWeightField);
+        form.addInput(Elements.inputLabel("Vehicle Weight"), weightField);
+        form.addInput(Elements.inputLabel("Max Weight (Load, Carrying)"), maxWeightField);
         dimensional.add(form);
 
         return dimensional;

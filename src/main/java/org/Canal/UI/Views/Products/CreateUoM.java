@@ -21,9 +21,9 @@ public class CreateUoM extends LockeState {
         JTextField baseQty = Elements.input();
         Selectable baseQtyUomField = Selectables.packagingUoms();
 
-        f.addInput(Elements.coloredLabel("Unit of Measure", UIManager.getColor("Label.foreground")), uomField);
-        f.addInput(Elements.coloredLabel("Base Quantity", UIManager.getColor("Label.foreground")), baseQty);
-        f.addInput(Elements.coloredLabel("Base Quantity UOM", UIManager.getColor("Label.foreground")), baseQtyUomField);
+        f.addInput(Elements.inputLabel("Unit of Measure"), uomField);
+        f.addInput(Elements.inputLabel("Base Quantity"), baseQty);
+        f.addInput(Elements.inputLabel("Base Quantity UOM"), baseQtyUomField);
         setLayout(new BorderLayout());
         add(f, BorderLayout.CENTER);
         JButton submit = Elements.button("Save");

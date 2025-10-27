@@ -34,7 +34,6 @@ public class CreateAccount extends LockeState {
     //Notes Tab
     private RTextScrollPane notes;
 
-
     public CreateAccount(DesktopState desktop, RefreshListener refreshListener) {
 
         super("Create an Account", "/ACCS/NEW", false, true, false, true);
@@ -63,6 +62,22 @@ public class CreateAccount extends LockeState {
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         tb.add(Box.createHorizontalStrut(5));
 
+        IconButton copyFrom = new IconButton("Copy From", "open", "Copy from Account");
+        copyFrom.addActionListener(_ -> {
+            String accountId = JOptionPane.showInputDialog("Enter Account ID");
+            Account account = Engine.getAccount(accountId);
+            if (account == null) {
+                accountNameField.setText(account.getName());
+                owningLocationField.setText(account.getLocation());
+                customerField.setText(account.getCustomer());
+                //TODO Open/Close Date(s)
+                agreementIdField.setText(account.getAgreement());
+                termsQuantityField.setText(String.valueOf(account.getTerms()));
+            }
+        });
+        tb.add(copyFrom);
+        tb.add(Box.createHorizontalStrut(5));
+
         IconButton review = new IconButton("Review", "review", "Review Details");
         review.addActionListener(_ -> performReview());
         tb.add(review);
@@ -82,8 +97,8 @@ public class CreateAccount extends LockeState {
             account.setAgreement(agreementIdField.getText());
             account.setTerms(Double.parseDouble(termsQuantityField.getText()));
             Pipe.save("/ACCS", account);
-            dispose();
 
+            dispose();
             if(refreshListener != null) refreshListener.refresh();
         });
         tb.add(create);
@@ -117,13 +132,13 @@ public class CreateAccount extends LockeState {
         termsQuantityField = Elements.input();
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Account Name", Constants.colors[0]), accountNameField);
-        form.addInput(Elements.coloredLabel("Owning Location", Constants.colors[1]), owningLocationField);
-        form.addInput(Elements.coloredLabel("Customer", Constants.colors[2]), customerField);
-        form.addInput(Elements.coloredLabel("Open Date", Constants.colors[3]), openDate);
-        form.addInput(Elements.coloredLabel("Close Date", Constants.colors[4]), closeDate);
-        form.addInput(Elements.coloredLabel("Attach Agreement ID", Constants.colors[5]), agreementIdField);
-        form.addInput(Elements.coloredLabel("Terms (days)", Constants.colors[5]), termsQuantityField);
+        form.addInput(Elements.inputLabel("Account Name", "This is a business', company's, or person's name"), accountNameField);
+        form.addInput(Elements.inputLabel("Owning Location", "Location responsible for this account"), owningLocationField);
+        form.addInput(Elements.inputLabel("Customer"), customerField);
+        form.addInput(Elements.inputLabel("Open Date", "Open/start date of this account"), openDate);
+        form.addInput(Elements.inputLabel("Close Date", "When this account will be closed"), closeDate);
+        form.addInput(Elements.inputLabel("Attach Agreement ID", "Attach agreement via ID to AutoMake Sales Orders or set other terms"), agreementIdField);
+        form.addInput(Elements.inputLabel("Terms (days)", "Number of days from delivery that payment is due"), termsQuantityField);
         info.add(form);
 
         return info;

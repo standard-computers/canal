@@ -1,4 +1,4 @@
-package org.Canal.UI.Views.Distribution;
+package org.Canal.UI.Views.Deliveries;
 
 import org.Canal.Models.SupplyChainUnits.Delivery;
 import org.Canal.UI.Elements.CustomTabbedPane;
@@ -78,7 +78,7 @@ public class ViewDelivery extends LockeState {
         tb.add(suspend);
         tb.add(Box.createHorizontalStrut(5));
 
-        IconButton label = new IconButton("Labels", "label", "Print labels for properties (like for badges)");
+        IconButton label = new IconButton("Labels", "barcodes", "Print labels for properties (like for badges)");
         tb.add(label);
         tb.add(Box.createHorizontalStrut(5));
 

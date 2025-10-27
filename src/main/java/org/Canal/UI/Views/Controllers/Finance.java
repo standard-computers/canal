@@ -31,37 +31,41 @@ public class Finance extends LockeState {
 
         JPanel demand = new JPanel(new GridLayout(2, 1));
         demand.setBorder(new TitledBorder("Demand"));
+
         JButton newPurReg = Elements.button("New Purchase Req");
-        JButton purReg = Elements.button("Purchase Reqs");
-        demand.add(newPurReg);
-        demand.add(purReg);
         newPurReg.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                desktop.put(new CreatePurchaseRequisition());
+                desktop.put(new CreatePurchaseRequisition(desktop));
             }
         });
+        demand.add(newPurReg);
+
+        JButton purReg = Elements.button("Purchase Reqs");
         purReg.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 desktop.put(new PurchaseRequisitions(desktop));
             }
         });
+        demand.add(purReg);
 
         JPanel sales = new JPanel(new GridLayout(2, 1));
         sales.setBorder(new TitledBorder("Sales"));
+
         JButton createSalesOrder = Elements.button("New Sales Orders");
-        JButton salesOrders = Elements.button("Sales Orders");
-        sales.add(createSalesOrder);
-        sales.add(salesOrders);
         createSalesOrder.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 desktop.put(new CreateSalesOrder(desktop));
             }
         });
+        sales.add(createSalesOrder);
+
+        JButton salesOrders = Elements.button("Sales Orders");
         salesOrders.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 desktop.put(new SalesOrders(desktop));
             }
         });
+        sales.add(salesOrders);
 
         JPanel planning = new JPanel(new GridLayout(4, 1));
         planning.setBorder(new TitledBorder("Planning"));

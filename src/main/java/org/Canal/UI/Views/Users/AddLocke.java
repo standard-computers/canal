@@ -20,7 +20,7 @@ public class AddLocke extends LockeState {
 
         super("Create User", "/USRS/MOD/ALKS", false, true, false, true);
         setFrameIcon(new ImageIcon(AddLocke.class.getResource("/icons/create.png")));
-        if(Engine.getEmployees().isEmpty()){
+        if (Engine.getEmployees().isEmpty()) {
             JOptionPane.showMessageDialog(null, "No employees to attach to!");
             try {
                 setClosed(true);
@@ -33,8 +33,8 @@ public class AddLocke extends LockeState {
         lockeCode = Elements.input(20);
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("User ID", Constants.colors[9]), userId);
-        form.addInput(Elements.coloredLabel("Locke Code (starting with '/')", Constants.colors[9]), lockeCode);
+        form.addInput(Elements.inputLabel("User ID"), userId);
+        form.addInput(Elements.inputLabel("Locke Code (starting with '/')"), lockeCode);
 
         JPanel again = new JPanel(new BorderLayout());
         again.add(Elements.header("Add Locke Access", SwingConstants.LEFT), BorderLayout.NORTH);

@@ -1,4 +1,4 @@
-package org.Canal.UI.Views.InboundDeliveryOrders;
+package org.Canal.UI.Views.Deliveries;
 
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Form;
@@ -17,7 +17,7 @@ public class CreateInboundDeliveryOrder extends LockeState {
         super("Create Inbound Delivery Order", "/TRANS/IDO/NEW", false, true, false, true);
         Form f = new Form();
         JTextField purchaseOrderField = Elements.input(10);
-        f.addInput(Elements.coloredLabel("Enter Purchase Order", Constants.colors[0]), purchaseOrderField);
+        f.addInput(Elements.inputLabel("Enter Purchase Order"), purchaseOrderField);
         setLayout(new BorderLayout(5, 5));
         add(f, BorderLayout.NORTH);
         JButton create = Elements.button("Create");

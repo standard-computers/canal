@@ -54,7 +54,7 @@ public class Trucks extends LockeState implements RefreshListener {
         toolbar.add(export);
         toolbar.add(Box.createHorizontalStrut(5));
 
-        IconButton importTrucks = new IconButton("Import", "export", "Import as CSV");
+        IconButton importTrucks = new IconButton("Import", "import", "Import as CSV");
         toolbar.add(importTrucks);
         toolbar.add(Box.createHorizontalStrut(5));
 

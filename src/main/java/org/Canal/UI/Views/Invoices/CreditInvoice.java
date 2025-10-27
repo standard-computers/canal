@@ -25,7 +25,7 @@ public class CreditInvoice extends LockeState {
         JPanel orderInfo = new JPanel(new GridLayout(2, 1));
         Input customerId = new Input("Customer ID");
         Input vendorId = new Input("Vendor ID");
-        orderInfo.setBorder(new EmptyBorder(10, 10, 10, 10));
+        orderInfo.setBorder(new EmptyBorder(5, 5, 5, 5));
         JButton save = new JButton("Save");
         orderInfo.add(customerId);
         orderInfo.add(vendorId);

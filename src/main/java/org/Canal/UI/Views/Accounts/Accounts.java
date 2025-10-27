@@ -51,19 +51,29 @@ public class Accounts extends LockeState implements RefreshListener {
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         tb.add(Box.createHorizontalStrut(5));
 
+        IconButton importAccounts = new IconButton("Import", "import", "Import from CSV", "/ACCS/EXP");
+        importAccounts.addActionListener(_ -> accountsTable.exportToCSV());
+        tb.add(importAccounts);
+        tb.add(Box.createHorizontalStrut(5));
+
         IconButton export = new IconButton("Export", "export", "Export as CSV", "/ACCS/EXP");
         export.addActionListener(_ -> accountsTable.exportToCSV());
         tb.add(export);
         tb.add(Box.createHorizontalStrut(5));
 
-        IconButton open = new IconButton("Open", "open", "Open Account", "/ACCS/O");
-        open.addActionListener(_ -> desktop.put(Engine.router("/ACCS/O", desktop)));
-        tb.add(open);
-        tb.add(Box.createHorizontalStrut(5));
-
         IconButton create = new IconButton("New", "create", "Create Account", "/ACCS/NEW");
         create.addActionListener(_ -> desktop.put(new CreateAccount(desktop, this)));
         tb.add(create);
+        tb.add(Box.createHorizontalStrut(5));
+
+        IconButton invoice = new IconButton("Invoice", "invoice", "Create Invoice", "/INVS/NEW");
+        invoice.addActionListener(_ -> desktop.put(new CreateAccount(desktop, this)));
+        tb.add(invoice);
+        tb.add(Box.createHorizontalStrut(5));
+
+        IconButton open = new IconButton("Open", "open", "Open Account", "/ACCS/O");
+        open.addActionListener(_ -> desktop.put(Engine.router("/ACCS/O", desktop)));
+        tb.add(open);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton find = new IconButton("Find", "find", "Find by Account", "/ACCS/F");
@@ -74,6 +84,7 @@ public class Accounts extends LockeState implements RefreshListener {
         IconButton refresh = new IconButton("Refresh", "refresh", "Refresh data");
         refresh.addActionListener(_ -> refresh());
         tb.add(refresh);
+        tb.add(Box.createHorizontalStrut(5));
 
         return tb;
     }
@@ -90,6 +101,8 @@ public class Accounts extends LockeState implements RefreshListener {
                 "Protected",
                 "Agreement",
                 "Status",
+                "Terms",
+                "Invoices",
                 "Created",
         };
         ArrayList<Object[]> data = new ArrayList<>();
@@ -104,6 +117,8 @@ public class Accounts extends LockeState implements RefreshListener {
                     account.isPasswordProtected(),
                     account.getAgreement(),
                     account.getStatus(),
+                    (account.getTerms() + " DAYS"),
+                    Engine.getInvoicesForAccount(account.getId()),
                     account.getCreated(),
             });
         }

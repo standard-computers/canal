@@ -2,10 +2,8 @@ package org.Canal.UI.Views.Trucks;
 
 import org.Canal.Models.SupplyChainUnits.Truck;
 import org.Canal.UI.Elements.*;
-import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
-import org.Canal.Utils.Pipe;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
@@ -43,7 +41,7 @@ public class ModifyTruck extends LockeState {
         CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.addTab("General", general());
 
-        if((boolean) Engine.codex.getValue("TRANS/TRCKS", "allow_notes")) {
+        if ((boolean) Engine.codex.getValue("TRANS/TRCKS", "allow_notes")) {
             tabs.addTab("Notes", notes());
         }
 
@@ -118,13 +116,13 @@ public class ModifyTruck extends LockeState {
         modelNameField = Elements.input();
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("*New Truck ID", UIManager.getColor("Label.foreground")), truckIdField);
-        form.addInput(Elements.coloredLabel("Truck Number", Constants.colors[0]), truckNumberField);
-        form.addInput(Elements.coloredLabel("Carrier", Constants.colors[1]), carriers);
-        form.addInput(Elements.coloredLabel("Driver (Name)", Constants.colors[2]), driverNameField);
-        form.addInput(Elements.coloredLabel("Vehicle Year", Constants.colors[3]), yearNameField);
-        form.addInput(Elements.coloredLabel("Vehicle Make", Constants.colors[4]), makeNameField);
-        form.addInput(Elements.coloredLabel("Vehicle Model", Constants.colors[5]), modelNameField);
+        form.addInput(Elements.inputLabel("*New Truck ID"), truckIdField);
+        form.addInput(Elements.inputLabel("Truck Number"), truckNumberField);
+        form.addInput(Elements.inputLabel("Carrier"), carriers);
+        form.addInput(Elements.inputLabel("Driver (Name)"), driverNameField);
+        form.addInput(Elements.inputLabel("Vehicle Year"), yearNameField);
+        form.addInput(Elements.inputLabel("Vehicle Make"), makeNameField);
+        form.addInput(Elements.inputLabel("Vehicle Model"), modelNameField);
         general.add(form);
 
         return general;

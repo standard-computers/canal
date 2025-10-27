@@ -1,6 +1,5 @@
 package org.Canal.UI.Views.Bins;
 
-import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.Models.SupplyChainUnits.Bin;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Views.System.LockeMessages;
@@ -57,6 +56,10 @@ public class ModifyBin extends LockeState {
         tabs.addTab("Dimensional", dimensional());
         tabs.addTab("Item Restrictions", restrictions());
 
+        if ((boolean) Engine.codex.getValue("BNS", "allow_notes")) {
+            tabs.addTab("Notes", notes());
+        }
+
         add(toolbar(), BorderLayout.NORTH);
         add(tabs, BorderLayout.CENTER);
 
@@ -75,20 +78,19 @@ public class ModifyBin extends LockeState {
         IconButton save = new IconButton("Save", "save", "Save Changes");
         save.addActionListener(_ -> {
 
-           //Controls
-           bin.setFixed(fixedBin.isSelected());
-           bin.putawayEnabled(putawayEnabled.isSelected());
-           bin.pickingEnabled(pickingEnabled.isSelected());
-           bin.doesGI(doesGoodsIssue.isSelected());
-           bin.doesGR(doesGoodsReceipt.isSelected());
-           bin.holdsStock(holdsStock.isSelected());
-           bin.setNotes(notes.getTextArea().getText());
-           bin.setStatus(LockeStatus.valueOf(statuses.getSelectedValue()));
-           bin.save();
+            //Controls
+            bin.setFixed(fixedBin.isSelected());
+            bin.putawayEnabled(putawayEnabled.isSelected());
+            bin.pickingEnabled(pickingEnabled.isSelected());
+            bin.doesGI(doesGoodsIssue.isSelected());
+            bin.doesGR(doesGoodsReceipt.isSelected());
+            bin.holdsStock(holdsStock.isSelected());
+            bin.setNotes(notes.getTextArea().getText());
+            bin.setStatus(LockeStatus.valueOf(statuses.getSelectedValue()));
+            bin.save();
 
-           dispose();
-
-           if(refreshListener != null) refreshListener.refresh();
+            dispose();
+            if (refreshListener != null) refreshListener.refresh();
         });
         tb.add(save);
         tb.add(Box.createHorizontalStrut(5));
@@ -97,7 +99,8 @@ public class ModifyBin extends LockeState {
         JRootPane rp = getRootPane();
         rp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ks, "do-save");
         rp.getActionMap().put("do-save", new AbstractAction() {
-            @Override public void actionPerformed(ActionEvent e) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 save.doClick();
             }
         });
@@ -131,7 +134,7 @@ public class ModifyBin extends LockeState {
             bin.save();
 
             dispose();
-            if(refreshListener != null) refreshListener.refresh();
+            if (refreshListener != null) refreshListener.refresh();
         });
         tb.add(delete);
         tb.add(Box.createHorizontalStrut(5));
@@ -149,11 +152,11 @@ public class ModifyBin extends LockeState {
         statuses = Selectables.statusTypes();
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Bin ID", UIManager.getColor("Label.foreground")), new Copiable(bin.getId()));
-        form.addInput(Elements.coloredLabel("Location ID", UIManager.getColor("Label.foreground")), new Copiable(""));
-        form.addInput(Elements.coloredLabel("Area", UIManager.getColor("Label.foreground")), new Copiable(bin.getArea()));
-        form.addInput(Elements.coloredLabel("Bin Name", UIManager.getColor("Label.foreground")), new Copiable(bin.getName()));
-        form.addInput(Elements.coloredLabel("Status", UIManager.getColor("Label.foreground")), statuses);
+        form.addInput(Elements.inputLabel("Bin ID"), new Copiable(bin.getId()));
+        form.addInput(Elements.inputLabel("Location ID"), new Copiable(""));
+        form.addInput(Elements.inputLabel("Area"), new Copiable(bin.getArea()));
+        form.addInput(Elements.inputLabel("Bin Name"), new Copiable(bin.getName()));
+        form.addInput(Elements.inputLabel("Status"), statuses);
         general.add(form);
 
         return general;
@@ -186,13 +189,13 @@ public class ModifyBin extends LockeState {
         holdsStock.setSelected(bin.holdsStock());
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Goods Issue", UIManager.getColor("Label.foreground")), doesGoodsIssue);
-        form.addInput(Elements.coloredLabel("Goods Receipt", UIManager.getColor("Label.foreground")), doesGoodsReceipt);
-        form.addInput(Elements.coloredLabel("Picking Enabled", UIManager.getColor("Label.foreground")), pickingEnabled);
-        form.addInput(Elements.coloredLabel("Putaway Enabled", UIManager.getColor("Label.foreground")), putawayEnabled);
-        form.addInput(Elements.coloredLabel("Auto Replenish", UIManager.getColor("Label.foreground")), autoReplenish);
-        form.addInput(Elements.coloredLabel("Fixed Bin", UIManager.getColor("Label.foreground")), fixedBin);
-        form.addInput(Elements.coloredLabel("Holds Stock", UIManager.getColor("Label.foreground")), holdsStock);
+        form.addInput(Elements.inputLabel("Goods Issue"), doesGoodsIssue);
+        form.addInput(Elements.inputLabel("Goods Receipt"), doesGoodsReceipt);
+        form.addInput(Elements.inputLabel("Picking Enabled"), pickingEnabled);
+        form.addInput(Elements.inputLabel("Putaway Enabled"), putawayEnabled);
+        form.addInput(Elements.inputLabel("Auto Replenish"), autoReplenish);
+        form.addInput(Elements.inputLabel("Fixed Bin"), fixedBin);
+        form.addInput(Elements.inputLabel("Holds Stock"), holdsStock);
         controls.add(form);
 
         return controls;
@@ -219,10 +222,10 @@ public class ModifyBin extends LockeState {
         weightField.setUOM(bin.getWeightUOM());
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Width", UIManager.getColor("Label.foreground")), widthField);
-        form.addInput(Elements.coloredLabel("Length", UIManager.getColor("Label.foreground")), lengthField);
-        form.addInput(Elements.coloredLabel("Height", UIManager.getColor("Label.foreground")), heightField);
-        form.addInput(Elements.coloredLabel("Weight", UIManager.getColor("Label.foreground")), weightField);
+        form.addInput(Elements.inputLabel("Width"), widthField);
+        form.addInput(Elements.inputLabel("Length"), lengthField);
+        form.addInput(Elements.inputLabel("Height"), heightField);
+        form.addInput(Elements.inputLabel("Weight"), weightField);
         dimensional.add(form);
 
         return dimensional;
@@ -244,19 +247,19 @@ public class ModifyBin extends LockeState {
 
     private void performReview() {
 
-        if(Double.parseDouble(widthField.getValue()) == 0){
+        if (Double.parseDouble(widthField.getValue()) == 0) {
             addToQueue(new String[]{"WARNING", "Bin width will be set to 0. Are you sure?"});
         }
 
-        if(Double.parseDouble(lengthField.getValue()) == 0){
+        if (Double.parseDouble(lengthField.getValue()) == 0) {
             addToQueue(new String[]{"WARNING", "Bin length will be set to 0. Are you sure?"});
         }
 
-        if(Double.parseDouble(heightField.getValue()) == 0){
+        if (Double.parseDouble(heightField.getValue()) == 0) {
             addToQueue(new String[]{"WARNING", "Bin height will be set to 0. Are you sure?"});
         }
 
-        if(Double.parseDouble(weightField.getValue()) == 0){
+        if (Double.parseDouble(weightField.getValue()) == 0) {
             addToQueue(new String[]{"WARNING", "Bin weight will be set to 0. Are you sure?"});
         }
 

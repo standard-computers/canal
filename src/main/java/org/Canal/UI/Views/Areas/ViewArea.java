@@ -84,23 +84,21 @@ public class ViewArea extends LockeState implements RefreshListener {
 
             archive = new IconButton("Activate", "start", "Activate Area");
             archive.addActionListener(_ -> {
+
+                dispose();
                 area.setStatus(LockeStatus.ACTIVE);
                 area.save();
-                dispose();
-                if (refreshListener != null) {
-                    refreshListener.refresh();
-                }
+                if (refreshListener != null) refreshListener.refresh();
             });
         } else {
 
             archive = new IconButton("Archive", "archive", "Archive Area", "/AREAS/ARCHV");
             archive.addActionListener(_ -> {
+
+                dispose();
                 area.setStatus(LockeStatus.ARCHIVED);
                 area.save();
-                dispose();
-                if (refreshListener != null) {
-                    refreshListener.refresh();
-                }
+                if (refreshListener != null) refreshListener.refresh();
             });
         }
         tb.add(archive);
@@ -110,13 +108,10 @@ public class ViewArea extends LockeState implements RefreshListener {
             IconButton block = new IconButton("Block", "block", "Block Area", "/AREAS/ARCHV");
             block.addActionListener(_ -> {
 
+                dispose();
                 area.setStatus(LockeStatus.BLOCKED);
                 area.save();
-
-                dispose();
-                if (refreshListener != null) {
-                    refreshListener.refresh();
-                }
+                if (refreshListener != null) refreshListener.refresh();
             });
             tb.add(block);
             tb.add(Box.createHorizontalStrut(5));
@@ -124,8 +119,6 @@ public class ViewArea extends LockeState implements RefreshListener {
 
         IconButton delete = new IconButton("Delete", "delete", "Delete Area", "/AREAS/DEL");
         delete.addActionListener(_ -> {
-
-
         });
         tb.add(delete);
         tb.add(Box.createHorizontalStrut(5));
@@ -166,15 +159,15 @@ public class ViewArea extends LockeState implements RefreshListener {
         volumeField.disable();
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("ID", UIManager.getColor("Label.foreground")), new Copiable(area.getId()));
-        form.addInput(Elements.coloredLabel("Location", UIManager.getColor("Label.foreground")), new Copiable(area.getLocation()));
-        form.addInput(Elements.coloredLabel("Name", UIManager.getColor("Label.foreground")), new Copiable(area.getName()));
-        form.addInput(Elements.coloredLabel("Status", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(area.getStatus())));
-        form.addInput(Elements.coloredLabel("Width", UIManager.getColor("Label.foreground")), widthField);
-        form.addInput(Elements.coloredLabel("Length", UIManager.getColor("Label.foreground")), lengthField);
-        form.addInput(Elements.coloredLabel("Height", UIManager.getColor("Label.foreground")), heightField);
-        form.addInput(Elements.coloredLabel("Area", UIManager.getColor("Label.foreground")), areaField);
-        form.addInput(Elements.coloredLabel("Volume", UIManager.getColor("Label.foreground")), volumeField);
+        form.addInput(Elements.inputLabel("ID"), new Copiable(area.getId()));
+        form.addInput(Elements.inputLabel("Location"), new Copiable(area.getLocation()));
+        form.addInput(Elements.inputLabel("Name"), new Copiable(area.getName()));
+        form.addInput(Elements.inputLabel("Status"), new Copiable(String.valueOf(area.getStatus())));
+        form.addInput(Elements.inputLabel("Width"), widthField);
+        form.addInput(Elements.inputLabel("Length"), lengthField);
+        form.addInput(Elements.inputLabel("Height"), heightField);
+        form.addInput(Elements.inputLabel("Area"), areaField);
+        form.addInput(Elements.inputLabel("Volume"), volumeField);
         panel.add(form, BorderLayout.CENTER);
 
         return panel;
@@ -185,10 +178,10 @@ public class ViewArea extends LockeState implements RefreshListener {
         JPanel controls = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         Form form = new Form();
-        form.addInput(Elements.coloredLabel("Allows Inventory", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(area.allowsInventory())));
-        form.addInput(Elements.coloredLabel("Allows Production", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(area.allowsProduction())));
-        form.addInput(Elements.coloredLabel("Allows Sales", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(area.allowsSales())));
-        form.addInput(Elements.coloredLabel("Allows Purchasing", UIManager.getColor("Label.foreground")), new Copiable(String.valueOf(area.allowsPurchasing())));
+        form.addInput(Elements.inputLabel("Allows Inventory"), new Copiable(String.valueOf(area.allowsInventory())));
+        form.addInput(Elements.inputLabel("Allows Production"), new Copiable(String.valueOf(area.allowsProduction())));
+        form.addInput(Elements.inputLabel("Allows Sales"), new Copiable(String.valueOf(area.allowsSales())));
+        form.addInput(Elements.inputLabel("Allows Purchasing"), new Copiable(String.valueOf(area.allowsPurchasing())));
         controls.add(form);
 
         return controls;

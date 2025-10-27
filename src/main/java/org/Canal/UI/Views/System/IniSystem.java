@@ -165,9 +165,9 @@ public class IniSystem extends JFrame {
         passwordField = Elements.input();
 
         Form f = new Form();
-        f.addInput(Elements.coloredLabel("First Name", Constants.colors[10]), userFirstName);
-        f.addInput(Elements.coloredLabel("Last Name", Constants.colors[9]), userLastName);
-        f.addInput(Elements.coloredLabel("Password", Constants.colors[8]), passwordField);
+        f.addInput(Elements.inputLabel("First Name"), userFirstName);
+        f.addInput(Elements.inputLabel("Last Name"), userLastName);
+        f.addInput(Elements.inputLabel("Password"), passwordField);
         contactInfo.add(f);
         return contactInfo;
     }
@@ -186,15 +186,15 @@ public class IniSystem extends JFrame {
         taxExempt = new JCheckBox();
 
         Form f2 = new Form();
-        f2.addInput(Elements.coloredLabel("Name", Constants.colors[0]), locationNameField);
-        f2.addInput(Elements.coloredLabel("Address Line 1", Constants.colors[1]), line1Field);
-        f2.addInput(Elements.coloredLabel("Line 2", Constants.colors[2]), line2Field);
-        f2.addInput(Elements.coloredLabel("City", Constants.colors[3]), cityField);
-        f2.addInput(Elements.coloredLabel("State", Constants.colors[4]), stateField);
-        f2.addInput(Elements.coloredLabel("Postal", Constants.colors[5]), postalField);
-        f2.addInput(Elements.coloredLabel("Country", Constants.colors[6]), countries);
-        f2.addInput(Elements.coloredLabel("EIN (Tax ID)", UIManager.getColor("Label.foreground")), einField);
-        f2.addInput(Elements.coloredLabel("Tax Exempt?", UIManager.getColor("Label.foreground")), taxExempt);
+        f2.addInput(Elements.inputLabel("Name"), locationNameField);
+        f2.addInput(Elements.inputLabel("Address Line 1"), line1Field);
+        f2.addInput(Elements.inputLabel("Line 2"), line2Field);
+        f2.addInput(Elements.inputLabel("City"), cityField);
+        f2.addInput(Elements.inputLabel("State"), stateField);
+        f2.addInput(Elements.inputLabel("Postal"), postalField);
+        f2.addInput(Elements.inputLabel("Country"), countries);
+        f2.addInput(Elements.inputLabel("EIN (Tax ID)"), einField);
+        f2.addInput(Elements.inputLabel("Tax Exempt?"), taxExempt);
         general.add(f2);
         return general;
     }
@@ -205,8 +205,8 @@ public class IniSystem extends JFrame {
         Form f = new Form();
         emailField = Elements.input(20);
         phoneField = Elements.input();
-        f.addInput(Elements.coloredLabel("Email Address", Constants.colors[10]), emailField);
-        f.addInput(Elements.coloredLabel("Phone Number", Constants.colors[9]), phoneField);
+        f.addInput(Elements.inputLabel("Email Address"), emailField);
+        f.addInput(Elements.inputLabel("Phone Number"), phoneField);
         contactInfo.add(f);
         return contactInfo;
     }
@@ -215,9 +215,9 @@ public class IniSystem extends JFrame {
 
         JPanel dimensional = new JPanel(new FlowLayout(FlowLayout.LEFT));
         Form f = new Form();
-        f.addInput(Elements.coloredLabel("Width", Constants.colors[0]), widthUOM);
-        f.addInput(Elements.coloredLabel("Length", Constants.colors[1]), lengthUOM);
-        f.addInput(Elements.coloredLabel("Height", Constants.colors[2]), heightUOM);
+        f.addInput(Elements.inputLabel("Width"), widthUOM);
+        f.addInput(Elements.inputLabel("Length"), lengthUOM);
+        f.addInput(Elements.inputLabel("Height"), heightUOM);
         dimensional.add(f);
         return dimensional;
     }
