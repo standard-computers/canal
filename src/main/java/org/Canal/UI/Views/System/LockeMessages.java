@@ -11,13 +11,13 @@ import javax.swing.*;
 import java.util.ArrayList;
 
 /**
- * /$[LOCKE]/>
+ * /$
  */
 public class LockeMessages extends LockeState {
 
     public LockeMessages(ArrayList<String[]> messages) {
 
-        super("Locke Messages", "/>$");
+        super("Locke Messages", "/$");
         setFrameIcon(new ImageIcon(LockeMessages.class.getResource("/icons/alerts.png")));
 
         RSyntaxTextArea textArea = new RSyntaxTextArea(20, 60);

@@ -11,6 +11,7 @@ public enum LockeStatus {
     APPROVED, //Approved by whoever necessary
     ARCHIVED, //Like delete but still in system and can't be used AT ALL
     BLOCKED, //BLocked for forseeable future
+    CLOSED,
     COMPLETED,
     DELETED,
     DELIVERED,

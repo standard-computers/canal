@@ -1,6 +1,7 @@
 package org.Canal.UI.Views.Accounts;
 
 import org.Canal.Models.BusinessUnits.Account;
+import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Views.System.LockeMessages;
 import org.Canal.Utils.*;
@@ -42,7 +43,7 @@ public class CreateAccount extends LockeState {
         this.refreshListener = refreshListener;
 
         CustomTabbedPane tabs = new CustomTabbedPane();
-        tabs.addTab("General", info());
+        tabs.addTab("General", general());
         tabs.addTab("Taxes & Rates", rates());
 
         if ((boolean) Engine.codex.getValue("ACCS", "allow_notes")) {
@@ -86,6 +87,22 @@ public class CreateAccount extends LockeState {
         IconButton create = new IconButton("Create", "create", "Create Account (Ctrl + S)");
         create.addActionListener(_ -> {
 
+            if (!owningLocationField.getText().isEmpty()) {
+                Location l = Engine.getLocationWithId(owningLocationField.getText().trim());
+                if (l == null) {
+                    JOptionPane.showMessageDialog(null, "Selected owning location does not exist!", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+
+            if (!customerField.getText().isEmpty()) {
+                Location l = Engine.getLocationWithId(customerField.getText().trim());
+                if (l == null) {
+                    JOptionPane.showMessageDialog(null, "Selected customer does not exist!", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+
             Account account = new Account();
             String accountId = Engine.generateId("ACCS");
             account.setId(accountId);
@@ -119,9 +136,9 @@ public class CreateAccount extends LockeState {
         return toolbar;
     }
 
-    private JPanel info() {
+    private JPanel general() {
 
-        JPanel info = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel general = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         accountNameField = Elements.input();
         owningLocationField = Elements.input();
@@ -139,9 +156,9 @@ public class CreateAccount extends LockeState {
         form.addInput(Elements.inputLabel("Close Date", "When this account will be closed"), closeDate);
         form.addInput(Elements.inputLabel("Attach Agreement ID", "Attach agreement via ID to AutoMake Sales Orders or set other terms"), agreementIdField);
         form.addInput(Elements.inputLabel("Terms (days)", "Number of days from delivery that payment is due"), termsQuantityField);
-        info.add(form);
+        general.add(form);
 
-        return info;
+        return general;
     }
 
     private JPanel rates() {
@@ -165,10 +182,24 @@ public class CreateAccount extends LockeState {
 
         if(owningLocationField.getText().isEmpty()) {
             addToQueue(new String[]{ "WARNING", "Owning location not set. Ledger and billing determination may error." });
+        } else {
+
+            //If location selected, ensure it exists
+            Location l = Engine.getLocationWithId(owningLocationField.getText().trim());
+            if (l == null) {
+                addToQueue(new String[]{"CRITICAL", "Owning location selected does not exist!!!"});
+            }
         }
 
         if(customerField.getText().isEmpty()) {
             addToQueue(new String[]{ "CRITICAL", "Account must have customer!!!" });
+        } else {
+
+            //If location selected, ensure it exists
+            Location l = Engine.getLocationWithId(customerField.getText().trim());
+            if (l == null) {
+                addToQueue(new String[]{"CRITICAL", "Customer selected does not exist!!!"});
+            }
         }
 
         if(termsQuantityField.getText().isEmpty() || Double.parseDouble(termsQuantityField.getText()) <= 0) {

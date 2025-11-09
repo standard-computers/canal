@@ -154,9 +154,10 @@ public class ViewLocation extends LockeState implements RefreshListener {
         };
         ArrayList<Object[]> data = new ArrayList<>();
         for (Delivery delivery : Engine.getOutboundDeliveries(location.getId())) {
-            if(!delivery.getStatus().equals(LockeStatus.DELIVERED) && !delivery.getStatus().equals(LockeStatus.FULFILLED)) {
+            if(!delivery.getStatus().equals(LockeStatus.DELIVERED)
+                    && !delivery.getStatus().equals(LockeStatus.FULFILLED)) {
 
-                JButton editBtn = new IconButton("Fulfill", "execute", "Fulfill " + delivery.getId(), "/TRANS/ODO/FF");
+                JButton editBtn = new JButton("Fulfill");
                 editBtn.addActionListener(_ -> {
 
                     FulfillOrder fo = new FulfillOrder(location.getId());

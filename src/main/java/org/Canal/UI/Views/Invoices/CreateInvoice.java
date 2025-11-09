@@ -63,7 +63,6 @@ public class CreateInvoice extends LockeState {
     private JCheckBox createDelivery;
     private Selectable carriers;
     private JTextField truckNumberField;
-    private Truck truck;
 
     private ArrayList<Rate> rates = new ArrayList<>();
     private CustomTable ratesTable;
@@ -74,7 +73,7 @@ public class CreateInvoice extends LockeState {
     public CreateInvoice(DesktopState desktop) {
 
         super("Create Invoice", "/INVS/NEW");
-        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));
+        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/windows/locke.png")));
         Constants.checkLocke(this, true, true);
         this.desktop = desktop;
         newInvoice = new Order();
@@ -83,8 +82,6 @@ public class CreateInvoice extends LockeState {
         tabs.addTab("Items", items());
         tabs.addTab("Delivery", delivery());
         tabs.addTab("Ledger", ledger());
-        tabs.addTab("Shipping", shipping());
-        tabs.addTab("Packaging", packaging());
         tabs.addTab("Taxes & Rates", taxes());
         tabs.addTab("Notes", notes());
 
@@ -533,59 +530,8 @@ public class CreateInvoice extends LockeState {
         return ledger;
     }
 
-    private JPanel shipping() {
-
-        JPanel shipping = new JPanel(new FlowLayout(FlowLayout.LEFT));
-
-        return shipping;
-    }
-
-    private JPanel packaging() {
-
-        JPanel packaging = new JPanel(new BorderLayout());
-
-        ArrayList<Object[]> stockLines = new ArrayList<>();
-
-        CustomTable packagingTable = new CustomTable(new String[]{
-                "HU",
-                "Item Name",
-                "Qty",
-                "Qty UOM",
-                "Value",
-                "Status",
-                "Weight",
-                "Volume",
-        }, stockLines);
-
-        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        buttons.setLayout(new BoxLayout(buttons, BoxLayout.X_AXIS));
-        buttons.setBackground(UIManager.getColor("Panel.background"));
-        IconButton addButton = new IconButton("Add Line", "add_rows", "Add line");
-        addButton.addActionListener((ActionEvent _) -> {
-            if (!stockLines.isEmpty()) {
-            }
-        });
-        buttons.add(addButton);
-        buttons.add(Box.createHorizontalStrut(5));
-
-        IconButton removeButton = new IconButton("Remove Line", "delete_rows", "Remove selected line");
-        removeButton.addActionListener((ActionEvent _) -> {
-//            int selectedRow = table.getSelectedRow();
-//            if (selectedRow != -1) {
-//            }
-        });
-        buttons.add(removeButton);
-        buttons.add(Box.createHorizontalStrut(5));
-
-        JScrollPane sp = new JScrollPane(packagingTable);
-        sp.setPreferredSize(new Dimension(600, 300));
-        packaging.add(sp, BorderLayout.CENTER);
-        packaging.add(buttons, BorderLayout.NORTH);
-
-        return packaging;
-    }
-
     private CustomTable taxesAndRatesTable() {
+
         String[] columns = new String[]{
                 "#",
                 "ID",
@@ -618,7 +564,7 @@ public class CreateInvoice extends LockeState {
                     JTable t = (JTable) e.getSource();
                     int r = t.getSelectedRow();
                     if (r != -1) {
-                        String v = String.valueOf(t.getValueAt(r, 1));
+                        String invoiceId = String.valueOf(t.getValueAt(r, 1));
 
                     }
                 }
@@ -663,6 +609,7 @@ public class CreateInvoice extends LockeState {
     }
 
     private void refreshTaxesAndRates() {
+
         CustomTable newTable = taxesAndRatesTable();
         JScrollPane scrollPane = (JScrollPane) ratesTable.getParent().getParent();
         scrollPane.setViewportView(newTable);
@@ -672,18 +619,19 @@ public class CreateInvoice extends LockeState {
     }
 
     private void performReview() {
+
         if (!shipToCustomerField.getText().equals(billToCustomerField.getText())) {
             addToQueue(new String[]{"WARNING", "Bill To & Ship To do not match"});
         }
-        if (truck == null) {
-            addToQueue(new String[]{"WARNING", "Truck not selected. One will be created"});
-        }
+
         if (Engine.getLocation(supplierField.getText(), "VEND") == null) {
             addToQueue(new String[]{"WARNING", "Selected supplier is not a technical vendor"});
         }
+
         if (rates.isEmpty()) {
             addToQueue(new String[]{"WARNING", "No rates or taxes have been added. ARE YOU SURE?"});
         }
+
         if (purchaseRequisitionField.getText().equals("Available")) {
             PurchaseRequisition pr = Engine.getPurchaseRequisition(purchaseRequisitionField.getText());
             if (pr == null) {
@@ -702,6 +650,7 @@ public class CreateInvoice extends LockeState {
         } else {
             addToQueue(new String[]{"WARNING", "No Purchase Requisition selected. Is this intentional?"});
         }
+
         desktop.put(new LockeMessages(getQueue()));
         purgeQueue();
     }

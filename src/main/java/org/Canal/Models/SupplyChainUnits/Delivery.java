@@ -11,8 +11,8 @@ public class Delivery extends Objex {
     private String expectedDelivery; //When it should arrive, could differ from PO
     private String origin;
     private String destination; //Location ID
-    private Area destinationArea; //Area this will arrive to
-    private Bin destinationDoor; //Door this will arrive to
+    private String destinationArea; //Area this will arrive to
+    private String destinationDoor; //Door this will arrive to
     private String total;
     private String truck; //Truck ID
     private ArrayList<StockLine> pallets = new ArrayList<>();
@@ -62,19 +62,19 @@ public class Delivery extends Objex {
         this.destination = destination;
     }
 
-    public Area getDestinationArea() {
+    public String getDestinationArea() {
         return destinationArea;
     }
 
-    public void setDestinationArea(Area destinationArea) {
+    public void setDestinationArea(String destinationArea) {
         this.destinationArea = destinationArea;
     }
 
-    public Bin getDestinationDoor() {
+    public String getDestinationDoor() {
         return destinationDoor;
     }
 
-    public void setDestinationDoor(Bin destinationDoor) {
+    public void setDestinationDoor(String destinationDoor) {
         this.destinationDoor = destinationDoor;
     }
 

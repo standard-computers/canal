@@ -74,7 +74,7 @@ public class CreatePurchaseOrder extends LockeState {
     public CreatePurchaseOrder(DesktopState desktop) {
 
         super("Create Purchase Order", "/ORDS/PO/NEW");
-        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));
+        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/windows/locke.png")));
         Constants.checkLocke(this, true, true);
         this.desktop = desktop;
         newOrder = new Order();
@@ -83,8 +83,6 @@ public class CreatePurchaseOrder extends LockeState {
         tabs.addTab("Item Details", items());
         tabs.addTab("Delivery", delivery());
         tabs.addTab("Ledger", ledger());
-        tabs.addTab("Shipping", shipping());
-        tabs.addTab("Packaging", packaging());
         tabs.addTab("Taxes & Rates", taxes());
         tabs.addTab("Notes", notes());
 
@@ -122,8 +120,8 @@ public class CreatePurchaseOrder extends LockeState {
             @Override
             public void mouseClicked(MouseEvent e) {
 
-                String copyPOId = JOptionPane.showInputDialog("Enter Purchase Order ID");
-                Order cpo = Engine.getPurchaseOrder(copyPOId);
+                String purchaseOrderId = JOptionPane.showInputDialog("Enter Purchase Order ID");
+                Order cpo = Engine.getPurchaseOrder(purchaseOrderId);
                 if (cpo != null) {
 
                 } else {
@@ -168,7 +166,7 @@ public class CreatePurchaseOrder extends LockeState {
             int ccc = JOptionPane.showConfirmDialog(null, "You have selected the Org ID as the charge account. Are you sure you want to charge the corp account?", "Confirm order?", JOptionPane.YES_NO_CANCEL_OPTION);
             if (ccc == JOptionPane.YES_OPTION) {
 
-                String newPOId = ((String) Engine.codex("ORDS/PO", "prefix")) + (70000000 + (Engine.getPurchaseOrders().size() + 1));
+                String newPOId = Engine.generateId("ORDS/PO");
                 newOrder.setType("ORDS/PO");
                 newOrder.setOwner((Engine.getAssignedUser().getId()));
                 newOrder.setId(newPOId);
@@ -203,14 +201,14 @@ public class CreatePurchaseOrder extends LockeState {
                 if (createDelivery.isSelected()) {
 
                     Truck t = new Truck();
-                    t.setId(((String) Engine.codex("TRANS/TRCKS", "prefix") + 1000 + (Engine.getTrucks().size() + 1)));
+                    t.setId(Engine.generateId("TRANS/TRCKS"));
                     t.setNumber(truckNumberField.getText());
                     t.setCarrier(carriers.getSelectedValue());
                     Pipe.save("/TRANS/TRCKS", t);
 
                     Delivery d = new Delivery();
                     d.setType("TRANS/IDO");
-                    d.setId(((String) Engine.codex("TRANS/IDO", "prefix") + 1000 + (Engine.getInboundDeliveries().size() + 1)));
+                    d.setId(Engine.generateId("TRANS/IDO"));
                     d.setPurchaseOrder(newOrder.getOrderId());
                     d.setExpectedDelivery(newOrder.getExpectedDelivery());
                     d.setDestination(newOrder.getShipTo());
@@ -492,58 +490,6 @@ public class CreatePurchaseOrder extends LockeState {
         ledger.add(form);
 
         return ledger;
-    }
-
-    private JPanel shipping() {
-
-        JPanel shipping = new JPanel(new FlowLayout(FlowLayout.LEFT));
-
-        return shipping;
-    }
-
-    private JPanel packaging() {
-
-        JPanel packaging = new JPanel(new BorderLayout());
-
-        ArrayList<Object[]> stockLines = new ArrayList<>();
-
-        CustomTable packagingTable = new CustomTable(new String[]{
-                "HU",
-                "Item Name",
-                "Qty",
-                "Qty UOM",
-                "Value",
-                "Status",
-                "Weight",
-                "Volume",
-        }, stockLines);
-
-        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        buttons.setLayout(new BoxLayout(buttons, BoxLayout.X_AXIS));
-        buttons.setBackground(UIManager.getColor("Panel.background"));
-        IconButton addButton = new IconButton("Add Line", "add_rows", "Add line");
-        addButton.addActionListener((ActionEvent _) -> {
-            if (!stockLines.isEmpty()) {
-            }
-        });
-        buttons.add(addButton);
-        buttons.add(Box.createHorizontalStrut(5));
-
-        IconButton removeButton = new IconButton("Remove Line", "delete_rows", "Remove selected line");
-        removeButton.addActionListener((ActionEvent _) -> {
-//            int selectedRow = table.getSelectedRow();
-//            if (selectedRow != -1) {
-//            }
-        });
-        buttons.add(removeButton);
-        buttons.add(Box.createHorizontalStrut(5));
-
-        JScrollPane sp = new JScrollPane(packagingTable);
-        sp.setPreferredSize(new Dimension(600, 300));
-        packaging.add(sp, BorderLayout.CENTER);
-        packaging.add(buttons, BorderLayout.NORTH);
-
-        return packaging;
     }
 
     private CustomTable taxesAndRatesTable() {

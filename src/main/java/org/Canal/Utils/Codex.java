@@ -553,7 +553,7 @@ public class Codex {
             put("icon", "");
             put("endpoint", "");
             put("leading_number", 1);
-            put("leading_zeros", 2);
+            put("leading_zeros", 5);
             put("allow_notes", true);
             put("allow_archival", true);
             put("allow_deletion", true);
@@ -568,7 +568,7 @@ public class Codex {
             put("icon", "");
             put("endpoint", "");
             put("leading_number", 1);
-            put("leading_zeros", 2);
+            put("leading_zeros", 5);
             put("allow_notes", true);
             put("allow_archival", true);
             put("allow_deletion", true);
@@ -583,7 +583,7 @@ public class Codex {
             put("icon", "");
             put("endpoint", "");
             put("leading_number", 1);
-            put("leading_zeros", 2);
+            put("leading_zeros", 4);
             put("allow_notes", true);
             put("allow_archival", true);
             put("allow_deletion", true);

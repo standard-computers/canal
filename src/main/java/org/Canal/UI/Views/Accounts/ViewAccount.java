@@ -10,6 +10,9 @@ import org.fife.ui.rtextarea.RTextScrollPane;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * /ACCS/$[ACCOUNT_ID]
+ */
 public class ViewAccount extends LockeState {
 
     private Account account;
@@ -29,7 +32,17 @@ public class ViewAccount extends LockeState {
         tabs.addTab("Notes", notes());
 
         setLayout(new BorderLayout());
+        add(header(), BorderLayout.NORTH);
         add(tabs, BorderLayout.CENTER);
+    }
+
+    private JPanel header() {
+
+        JPanel header = new JPanel(new BorderLayout());
+
+        header.add(Elements.header(account.getId() + " - " + account.getName(), SwingConstants.LEFT), BorderLayout.NORTH);
+
+        return header;
     }
 
     private JPanel activity() {

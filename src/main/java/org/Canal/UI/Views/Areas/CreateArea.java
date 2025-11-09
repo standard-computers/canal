@@ -23,7 +23,7 @@ public class CreateArea extends LockeState {
     private DesktopState desktop;
     private RefreshListener refreshListener;
     private JTextField areaIdField;
-    private Selectable availableLocations;
+    private JTextField locationId;
     private JTextField areaNameField;
     private Selectable statuses;
 
@@ -83,7 +83,7 @@ public class CreateArea extends LockeState {
             if (!areaId.isEmpty()) {
 
                 Area a = Engine.getArea(areaId);
-                availableLocations.setSelectedValue(a.getLocation());
+                locationId.setText(a.getLocation());
                 areaNameField.setText(a.getName());
                 widthField.setValue(String.valueOf(a.getWidth()));
                 widthField.setUOM(a.getWidthUOM());
@@ -102,23 +102,22 @@ public class CreateArea extends LockeState {
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton review = new IconButton("Review", "review", "Review Area Data");
-        review.addActionListener(_ -> performReview(true));
+        review.addActionListener(_ -> performReview());
         tb.add(review);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton create = new IconButton("Create", "create", "Refresh Data");
         create.addActionListener(_ -> {
 
-            for (String[] s : getQueue()) {
-                if (s[0].equals("CRITICAL")) {
-                    JOptionPane.showMessageDialog(CreateArea.this, "Critical message encountered. Click Review.", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
+            if (areaIdField.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Area ID cannot be empty", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
             }
+
             Area area = new Area();
             area.setId(areaIdField.getText().trim());
-            area.setLocation(availableLocations.getSelectedValue());
-            area.setName(areaNameField.getText());
+            area.setLocation(locationId.getText().trim());
+            area.setName(areaNameField.getText().trim());
             area.setWidth(Double.parseDouble(widthField.getValue()));
             area.setWidthUOM(widthField.getUOM());
             area.setLength(Double.parseDouble(lengthField.getValue()));
@@ -164,12 +163,12 @@ public class CreateArea extends LockeState {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         areaIdField = Elements.input();
-        availableLocations = Selectables.allLocations();
+        locationId = Elements.input();
         if (location == null) {
-            areaIdField.setText("A-" + Engine.getAreas().size());
+            areaIdField.setText(Engine.generateId("AREAS"));
         } else {
-            areaIdField.setText("A-" + (Engine.getAreas(location).size() + 1) + "-" + location);
-            availableLocations.setSelectedValue(location);
+            areaIdField.setText(Engine.generateId("AREAS") + "-" + location);
+            locationId.setText(location);
         }
         areaNameField = Elements.input(areaIdField.getText(), 20);
         widthField = new UOMField();
@@ -180,7 +179,7 @@ public class CreateArea extends LockeState {
 
         Form form = new Form();
         form.addInput(Elements.inputLabel("*New ID"), areaIdField);
-        form.addInput(Elements.inputLabel("*Location"), availableLocations);
+        form.addInput(Elements.inputLabel("*Location"), locationId);
         form.addInput(Elements.inputLabel("Area Name"), areaNameField);
         form.addInput(Elements.inputLabel("Width"), widthField);
         form.addInput(Elements.inputLabel("Length"), lengthField);
@@ -201,10 +200,10 @@ public class CreateArea extends LockeState {
         allowsPurchasing = new JCheckBox("Purchase Order Processing");
 
         Form form = new Form();
-        form.addInput(Elements.inputLabel("Allows Inventory", "Inventory may be kept within this are if checked"), allowsInventory);
-        form.addInput(Elements.inputLabel("Allows Production", "Production can be performed in this area if checked"), allowsProduction);
-        form.addInput(Elements.inputLabel("Allows Sales", "Goods Issues can be performed within this area if checked"), allowsSales);
-        form.addInput(Elements.inputLabel("Allows Purchasing", "Goods Receipts can be performed within this are if checked"), allowsPurchasing);
+        form.addInput(Elements.inputLabel("Allows Inventory", "Inventory may be kept within this are if checked."), allowsInventory);
+        form.addInput(Elements.inputLabel("Allows Production", "Production can be performed in this area if checked."), allowsProduction);
+        form.addInput(Elements.inputLabel("Allows Sales", "Goods Issues can be performed within this area if checked."), allowsSales);
+        form.addInput(Elements.inputLabel("Allows Purchasing", "Goods Receipts can be performed within this are if checked."), allowsPurchasing);
         controls.add(form);
 
         return controls;
@@ -216,7 +215,7 @@ public class CreateArea extends LockeState {
         return notes;
     }
 
-    private void performReview(boolean purge) {
+    private void performReview() {
 
         if (areaIdField.getText().isEmpty()) {
             addToQueue(new String[]{"WARNING", "Area ID is empty!"});
@@ -243,6 +242,11 @@ public class CreateArea extends LockeState {
             addToQueue(new String[]{"WARNING", "Height is set to zero 0"});
         }
 
+        double volume = Double.parseDouble(heightField.getValue()) * Double.parseDouble(lengthField.getValue()) * Double.parseDouble(widthField.getValue());
+
+
+        addToQueue(new String[]{"MESSAGE", "Calculated volume is " + volume + " " + heightField.getUOM() + 3});
+//        addToQueue(new String[]{"WARNING", "Height is set to zero 0"});
         if (allowsProduction.isSelected()) {
             Location l = Engine.getLocationWithId(areaIdField.getText());
             if (l != null) {
@@ -261,6 +265,6 @@ public class CreateArea extends LockeState {
         }
 
         desktop.put(new LockeMessages(getQueue()));
-        if (purge) purgeQueue();
+        purgeQueue();
     }
 }

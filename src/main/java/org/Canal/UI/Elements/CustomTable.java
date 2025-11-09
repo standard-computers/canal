@@ -12,7 +12,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -190,34 +189,42 @@ public class CustomTable extends JTable {
             Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
             Font defaultFont = UIManager.getFont("defaultFont");
             c.setFont(defaultFont.deriveFont(Engine.getConfiguration().getFontSize() + 2));
+
+            // Set alternating background color
             if (!isSelected) {
                 Color background = (row % 2 == 0) ? UIManager.getColor("Table.background") : UIManager.getColor("Table.alternateRowColor");
                 if (background == null) {
                     background = ColorUtil.adjustBrightness(UIManager.getColor("Panel.background"), 0.90f);
                 }
                 c.setBackground(background);
+
+                // Numeric or boolean color logic
                 if (value instanceof Number) {
                     double numericValue = ((Number) value).doubleValue();
                     if (numericValue > 0) {
                         c.setForeground(new Color(9, 143, 14));
                     } else if (numericValue < 0) {
-                        c.setForeground(new Color(243, 55, 55)); // Light red
+                        c.setForeground(new Color(243, 55, 55));
                     }
-                }
-                if (value instanceof Boolean) {
-                    if ((boolean) value) {
-                        c.setForeground(new Color(9, 143, 14));
-                    } else {
-                        c.setForeground(new Color(243, 55, 55)); // Light red
-                    }
+                } else if (value instanceof Boolean) {
+                    c.setForeground((boolean) value ? new Color(9, 143, 14) : new Color(243, 55, 55));
                 }
             } else {
                 c.setBackground(table.getSelectionBackground());
             }
+
+            // ✅ Only add padding if this is not a JButton
             if (c instanceof JComponent) {
-                ((JComponent) c).setBorder(BorderFactory.createCompoundBorder(((JComponent) c).getBorder(), BorderFactory.createEmptyBorder(5, 10, 5, 10) // top, left, bottom, right padding
-                ));
+                if (!(value instanceof JButton)) {
+                    ((JComponent) c).setBorder(BorderFactory.createCompoundBorder(
+                            ((JComponent) c).getBorder(),
+                            BorderFactory.createEmptyBorder(10, 10, 10, 10)
+                    ));
+                } else {
+                    ((JComponent) c).setBorder(BorderFactory.createEmptyBorder());
+                }
             }
+
             return c;
         }
     }
@@ -351,7 +358,7 @@ public class CustomTable extends JTable {
 
                 // Ensure consistent look
                 button.setFocusable(false);
-                button.setMargin(new Insets(2, 8, 2, 8));
+                button.setMargin(new Insets(0, 0, 0, 0));
 
                 return button;
             }

@@ -11,12 +11,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * /ACCS/AUTO_MK
+ * Create an Account for selected location(s)
  */
 public class AutoMakeAccounts extends LockeState {
 
@@ -68,6 +68,26 @@ public class AutoMakeAccounts extends LockeState {
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         tb.add(Box.createHorizontalStrut(5));
 
+        IconButton copyFrom = new IconButton("Copy From", "open", "Copy from Account");
+        copyFrom.addActionListener(_ -> {
+
+            String accountId = JOptionPane.showInputDialog("Enter Account ID");
+            if (accountId != null) {
+                Account a = Engine.getAccount(accountId);
+                if (a != null) {
+
+                    accountNameField.setText(a.getName());
+                    owningLocationField.setText(a.getOwner());
+                    openDate.setSelectedDate(new Date(a.getOpened()));
+                    closeDate.setSelectedDate(new Date(a.getClosed()));
+                    agreementIdField.setText(a.getAgreement());
+                    termsQuantityField.setText(String.valueOf(a.getTerms()));
+                }
+            }
+        });
+        tb.add(copyFrom);
+        tb.add(Box.createHorizontalStrut(5));
+
         IconButton review = new IconButton("Review", "review", "Review Details");
         review.addActionListener(_ -> performReview());
         tb.add(review);
@@ -76,15 +96,33 @@ public class AutoMakeAccounts extends LockeState {
         IconButton create = new IconButton("AutoMake", "automake", "Start AutoMake");
         create.addActionListener(_ -> {
 
-            Account account = new Account();
-            String accountId = Engine.generateId("ACCS");
-            account.setId(accountId);
-            account.setName(accountNameField.getText());
-            account.setLocation(owningLocationField.getText());
-            account.setOpened(openDate.getSelectedDateString());
-            account.setClosed(closeDate.getSelectedDateString());
-            account.setAgreement(agreementIdField.getText());
-            Pipe.save("/ACCS", account);
+            if (!owningLocationField.getText().isEmpty()) {
+                Location l = Engine.getLocationWithId(owningLocationField.getText().trim());
+                if (l == null) {
+                    JOptionPane.showMessageDialog(null, "Selected owning location does not exist!", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+
+            for (JCheckBox checkbox : checkboxes) {
+
+                if (checkbox.isSelected()) {
+
+                    Account account = new Account();
+
+                    String accountId = Engine.generateId("ACCS");
+                    String customerId = checkbox.getActionCommand();
+                    account.setId(accountId);
+                    account.setName(accountNameField.getText());
+                    account.setCustomer(customerId);
+                    account.setLocation(owningLocationField.getText());
+                    account.setOpened(openDate.getSelectedDateString());
+                    account.setClosed(closeDate.getSelectedDateString());
+                    account.setAgreement(agreementIdField.getText());
+                    account.setNotes(notes.getTextArea().getText());
+                    Pipe.save("/ACCS", account);
+                }
+            }
 
             dispose();
             if (refreshListener != null) refreshListener.refresh();
@@ -119,12 +157,12 @@ public class AutoMakeAccounts extends LockeState {
         termsQuantityField = Elements.input();
 
         Form form = new Form();
-        form.addInput(Elements.inputLabel("Account Name", "This is a business', company's, or person's name"), accountNameField);
-        form.addInput(Elements.inputLabel("Owning Location", "Location responsible for this account"), owningLocationField);
-        form.addInput(Elements.inputLabel("Open Date", "Open/start date of this account"), openDate);
-        form.addInput(Elements.inputLabel("Close Date", "When this account will be closed"), closeDate);
-        form.addInput(Elements.inputLabel("Attach Agreement ID", "Attach agreement via ID to AutoMake Sales Orders or set other terms"), agreementIdField);
-        form.addInput(Elements.inputLabel("Terms (In DAYS)", "Number of days from delivery that payment is due"), termsQuantityField);
+        form.addInput(Elements.inputLabel("Account Name", "This is a business', company's, or person's name. A dipslay name."), accountNameField);
+        form.addInput(Elements.inputLabel("Owning Location", "Location responsible for this account."), owningLocationField);
+        form.addInput(Elements.inputLabel("Open Date", "Open/start date of this account."), openDate);
+        form.addInput(Elements.inputLabel("Close Date", "When this account will be closed."), closeDate);
+        form.addInput(Elements.inputLabel("Attach Agreement ID", "Attach agreement via ID to AutoMake Sales Orders or set other terms."), agreementIdField);
+        form.addInput(Elements.inputLabel("Terms (In DAYS)", "Number of days from delivery that payment is due."), termsQuantityField);
         general.add(form);
 
         return general;
@@ -179,21 +217,11 @@ public class AutoMakeAccounts extends LockeState {
         JPanel opts = new JPanel(new GridLayout(1, 2));
 
         JButton selectAll = Elements.button("Select All");
-        selectAll.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                checkboxes.forEach(cb -> cb.setSelected(true));
-                repaint();
-            }
-        });
+        selectAll.addActionListener(_ -> checkboxes.forEach(cb -> cb.setSelected(true)));
         opts.add(selectAll);
 
         JButton deselectAll = Elements.button("Deselect All");
-        deselectAll.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                checkboxes.forEach(cb -> cb.setSelected(false));
-                repaint();
-            }
-        });
+        deselectAll.addActionListener(_ -> checkboxes.forEach(cb -> cb.setSelected(false)));
         opts.add(deselectAll);
 
         selector.add(opts, BorderLayout.SOUTH);
@@ -219,16 +247,30 @@ public class AutoMakeAccounts extends LockeState {
         return notes;
     }
 
+    /**
+     * Perform review on privded date and put
+     * messages in internal Locke on GUI.
+     */
     private void performReview() {
 
+        //Check for optional account name
         if (accountNameField.getText().isEmpty()) {
             addToQueue(new String[]{"WARNING", "No account name provided."});
         }
 
+        //Check if owning location selected
         if (owningLocationField.getText().isEmpty()) {
             addToQueue(new String[]{"WARNING", "Owning location not set. Ledger and billing determination may error."});
+        } else {
+
+            //If location selected, ensure it exists
+            Location l = Engine.getLocationWithId(owningLocationField.getText().trim());
+            if (l == null) {
+                addToQueue(new String[]{"CRITICAL", "Owning location selected does not exist!!!"});
+            }
         }
 
+        //Check terms quantity field
         if (termsQuantityField.getText().isEmpty() || Double.parseDouble(termsQuantityField.getText()) <= 0) {
             addToQueue(new String[]{"CRITICAL", "Payment terms are set to zero"});
         }

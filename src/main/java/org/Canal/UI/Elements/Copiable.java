@@ -23,13 +23,29 @@ public class Copiable extends JTextField {
         }
         setFont(new Font(UIManager.getFont("Label.font").getName(), Font.PLAIN, Engine.getConfiguration().getFontSize()));
         setEditable(false);
+//        addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+//                if (e.getClickCount() == 2) {
+//                    String text = getText();
+//                    copyToClipboard(text);
+//                }
+//            }
+//        });
+    }
+
+    public Copiable(String value, MouseAdapter adapter) {
+        this(value);
+        addMouseListener(adapter);
         addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    String text = getText();
-                    copyToClipboard(text);
-                }
+            public void mouseEntered(MouseEvent e) {
+                setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                setCursor(Cursor.getDefaultCursor());
             }
         });
     }

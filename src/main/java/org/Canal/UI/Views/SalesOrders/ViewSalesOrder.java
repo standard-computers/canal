@@ -22,7 +22,8 @@ import java.util.Collections;
 import java.util.HashMap;
 
 /**
- * /ORDS/SO/NEW
+ * /ORDS/SO/$[SALES_ORDER_ID]
+ * View a Sales Order Locke
  */
 public class ViewSalesOrder extends LockeState {
 
@@ -35,7 +36,6 @@ public class ViewSalesOrder extends LockeState {
     private JLabel netValue;
     private JLabel taxAmount;
     private JLabel totalAmount;
-    private Selectable availablePurchaseRequisitions, selectSupplier, selectBillTo, selectShipTo, organizations, outboundCarriers, inboundCarriers, buyerObjexType, ledgers;
     private Copiable orderId;
     private DatePicker expectedDelivery;
     private JCheckBox commitToLedger, createOutboundDelivery, createPurchaseOrder, createInboundDelivery;
@@ -57,8 +57,6 @@ public class ViewSalesOrder extends LockeState {
 
         JPanel coreValues = orderInfoPanel();
         JPanel moreInfo = moreOrderInfoPanel();
-        selectBillTo.setSelectedValue(salesOrder.getBillTo());
-        selectShipTo.setSelectedValue(salesOrder.getShipTo());
         coreValues.setBorder(new EmptyBorder(5, 5, 5, 5));
         moreInfo.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -76,25 +74,14 @@ public class ViewSalesOrder extends LockeState {
         model.addTableModelListener(_ -> updateTotal());
     }
 
-    public void setSelectedSupplier(String supplierId) {
-        selectSupplier.setSelectedValue(supplierId);
-    }
-
     private JPanel orderInfoPanel() {
 
-        selectBillTo = Selectables.allLocations();
-        selectBillTo.editable();
-        selectShipTo = Selectables.allLocations();
-        selectShipTo.editable();
-        selectSupplier = Selectables.allLocations();
-        selectSupplier.editable();
-        orderId = new Copiable("SO" + (60000000 + (Engine.getSalesOrders().size() + 1)));
 
         Form form = new Form();
-        form.addInput(Elements.inputLabel("*Order ID"), orderId);
-        form.addInput(Elements.inputLabel("Supplier"), selectSupplier);
-        form.addInput(Elements.inputLabel("Bill To"), selectBillTo);
-        form.addInput(Elements.inputLabel("Ship To"), selectShipTo);
+        form.addInput(Elements.inputLabel("Order ID", "Sales Order ID"), new Copiable(salesOrder.getId()));
+        form.addInput(Elements.inputLabel("Supplier", "Location ID of the supplier of these goods"), new Copiable(salesOrder.getVendor()));
+        form.addInput(Elements.inputLabel("Bill To", "Location ID that pays for these goods"), new Copiable(salesOrder.getBillTo()));
+        form.addInput(Elements.inputLabel("Ship To", "Location ID of where the goods are to be delivered to"), new Copiable(salesOrder.getShipTo()));
 
         return form;
     }
@@ -185,12 +172,11 @@ public class ViewSalesOrder extends LockeState {
             createOutboundDelivery.setSelected(true);
             createOutboundDelivery.setEnabled(false);
         }
-        outboundCarriers = Selectables.carriers();
         outboundTruckId = Elements.input();
 
         Form form = new Form();
         form.addInput(Elements.inputLabel("Create Outbound Delivery (ODO) for Supplier"), createOutboundDelivery);
-        form.addInput(Elements.inputLabel("Carrier"), outboundCarriers);
+//        form.addInput(Elements.inputLabel("Carrier"), new Copiable(salesOrder.get));
         form.addInput(Elements.inputLabel("Truck ID/Number"), outboundTruckId);
 
         return form;
@@ -203,16 +189,13 @@ public class ViewSalesOrder extends LockeState {
             commitToLedger.setSelected(true);
             commitToLedger.setEnabled(false);
         }
-        organizations = Selectables.organizations();
-        buyerObjexType = Selectables.locationObjex("/CCS");
-        ledgers = Selectables.ledgers();
 
         Form form = new Form();
         form.addInput(Elements.inputLabel("Commit to Ledger"), commitToLedger);
-        form.addInput(Elements.inputLabel("Trans. Type (Receiving location type)"), buyerObjexType);
-        form.addInput(Elements.inputLabel("Purchasing Org."), organizations);
-        form.addInput(Elements.inputLabel("Ledger"), ledgers);
-
+//        form.addInput(Elements.inputLabel("Trans. Type (Receiving location type)"), buyerObjexType);
+//        form.addInput(Elements.inputLabel("Purchasing Org."), organizations);
+//        form.addInput(Elements.inputLabel("Ledger"), ledgers);
+//
         return form;
     }
 
@@ -227,21 +210,18 @@ public class ViewSalesOrder extends LockeState {
         for (PurchaseRequisition pr1 : Engine.getPurchaseRequisitions()) {
             prs.put(pr1.getId(), pr1.getId());
         }
-        availablePurchaseRequisitions = new Selectable(prs);
-        availablePurchaseRequisitions.editable();
         createInboundDelivery = new JCheckBox();
         if ((boolean) Engine.codex("ORDS/SO", "create_buyer_inbound")) {
             createInboundDelivery.setSelected(true);
             createInboundDelivery.setEnabled(false);
         }
-        inboundCarriers = Selectables.carriers();
         inboundTruckId = Elements.input();
 
         Form form = new Form();
         form.addInput(Elements.inputLabel("Create Purchase Order?"), createPurchaseOrder);
-        form.addInput(Elements.inputLabel("Purchase Requisition"), availablePurchaseRequisitions);
+//        form.addInput(Elements.inputLabel("Purchase Requisition"), availablePurchaseRequisitions);
         form.addInput(Elements.inputLabel("Create IDO"), createInboundDelivery);
-        form.addInput(Elements.inputLabel("Transporation Carrier"), inboundCarriers);
+//        form.addInput(Elements.inputLabel("Transporation Carrier"), inboundCarriers);
         form.addInput(Elements.inputLabel("Truck ID/Number"), inboundTruckId);
         return form;
 

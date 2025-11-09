@@ -5,9 +5,12 @@ import org.Canal.Models.BusinessUnits.Order;
 import org.Canal.Models.BusinessUnits.Rate;
 import org.Canal.Models.SupplyChainUnits.Delivery;
 import org.Canal.Models.SupplyChainUnits.Item;
+import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.Models.SupplyChainUnits.Truck;
 import org.Canal.UI.Elements.*;
+import org.Canal.UI.Views.Deliveries.ViewDelivery;
 import org.Canal.UI.Views.Rates.ViewRate;
+import org.Canal.UI.Views.ViewLocation;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.LockeStatus;
@@ -34,20 +37,24 @@ public class ViewPurchaseOrder extends LockeState {
 
     public ViewPurchaseOrder(Order purchaseOrder, DesktopState desktop, RefreshListener refreshListener) {
 
-        super("Purchase Order", "/ORDS/PO/" + purchaseOrder.getOrderId());
+        super("Purchase Order", "/ORDS/PO/" + purchaseOrder.getId());
         setFrameIcon(new ImageIcon(ViewPurchaseOrder.class.getResource("/icons/purchasereqs.png")));
         this.purchaseOrder = purchaseOrder;
         this.desktop = desktop;
         this.refreshListener = refreshListener;
 
-        delivery = Engine.getInboundDeliveryForPO(purchaseOrder.getOrderId());
-        truck = Engine.getTruckForDelivery(delivery.getId());
+        delivery = Engine.getInboundDeliveryForPO(purchaseOrder.getId());
+        if(delivery != null) {
+            truck = Engine.getTruckForDelivery(delivery.getId());
+        }
 
         CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.addTab("General", general());
         tabs.addTab("Activity", activity());
         tabs.addTab("Items (" + purchaseOrder.getItems().size() + ")", items());
-        tabs.addTab("Delivery", delivery());
+        if(delivery != null) {
+            tabs.addTab("Delivery", delivery());
+        }
         tabs.addTab("Shipping", shipping());
         tabs.addTab("Packaging", packaging());
         tabs.addTab("Taxes & Rates (" + purchaseOrder.getRates().size() + ")", taxesAndRates());
@@ -65,7 +72,7 @@ public class ViewPurchaseOrder extends LockeState {
     private JPanel toolbar() {
 
         JPanel buttons = new JPanel(new BorderLayout());
-        buttons.add(Elements.header("Viewing Purchase Order " + purchaseOrder.getOrderId(), SwingConstants.LEFT), BorderLayout.NORTH);
+        buttons.add(Elements.header("Viewing Purchase Order " + purchaseOrder.getId(), SwingConstants.LEFT), BorderLayout.NORTH);
 
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
@@ -138,13 +145,50 @@ public class ViewPurchaseOrder extends LockeState {
         JPanel general = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         Form form = new Form();
-        form.addInput(Elements.inputLabel("ID"), new Copiable(purchaseOrder.getId()));
-        form.addInput(Elements.inputLabel("Created"), new Copiable(purchaseOrder.getCreated()));
-        form.addInput(Elements.inputLabel("Creator (Owner)"), new Copiable(purchaseOrder.getOwner()));
-        form.addInput(Elements.inputLabel("Purchase Req. #"), new Copiable(purchaseOrder.getOrderId()));
-        form.addInput(Elements.inputLabel("Vendor ID"), new Copiable(purchaseOrder.getVendor()));
-        form.addInput(Elements.inputLabel("Bill To"), new Copiable(purchaseOrder.getBillTo()));
-        form.addInput(Elements.inputLabel("Ship To"), new Copiable(purchaseOrder.getBillTo()));
+        form.addInput(
+                Elements.inputLabel("ID", "The Purchase Order ID. Cannot be changed."),
+                new Copiable(purchaseOrder.getId())
+        );
+        form.addInput(
+                Elements.inputLabel("Created", "Timestamp of when the Purchase Order was created."),
+                new Copiable(purchaseOrder.getCreated())
+        );
+        form.addInput(Elements.inputLabel("Creator"), new Copiable(purchaseOrder.getOwner()));
+        form.addInput(Elements.inputLabel("Purchase Requisition"), new Copiable(purchaseOrder.getPurchaseRequisition(), new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    desktop.put(Engine.router("/ORDS/PR/" + purchaseOrder.getPurchaseRequisition(), desktop));
+                }
+            }
+        }));
+        form.addInput(Elements.inputLabel("Vendor ID"), new Copiable(purchaseOrder.getVendor(), new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    Location l = Engine.getLocationWithId(purchaseOrder.getVendor());
+                    desktop.put(new ViewLocation(l, desktop));
+                }
+            }
+        }));
+        form.addInput(Elements.inputLabel("Bill To"), new Copiable(purchaseOrder.getBillTo(), new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    Location l = Engine.getLocationWithId(purchaseOrder.getBillTo());
+                    desktop.put(new ViewLocation(l, desktop));
+                }
+            }
+        }));
+        form.addInput(Elements.inputLabel("Ship To"), new Copiable(purchaseOrder.getShipTo(), new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    Location l = Engine.getLocationWithId(purchaseOrder.getShipTo());
+                    desktop.put(new ViewLocation(l, desktop));
+                }
+            }
+        }));
         form.addInput(Elements.inputLabel("Net Amount"), new Copiable(String.valueOf(purchaseOrder.getNetValue())));
         form.addInput(Elements.inputLabel("Tax"), new Copiable(String.valueOf(purchaseOrder.getTaxAmount())));
         form.addInput(Elements.inputLabel("Total"), new Copiable(String.valueOf(purchaseOrder.getTotal())));
@@ -201,52 +245,50 @@ public class ViewPurchaseOrder extends LockeState {
     }
 
     private JScrollPane delivery() {
+
         // Main vertical container
-        JPanel deliveryTab = new JPanel();
-        deliveryTab.setLayout(new BoxLayout(deliveryTab, BoxLayout.Y_AXIS));
+        JPanel deliveryTab = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         // Delivery Info Panel
-        JPanel deliveryView = new JPanel();
-        deliveryView.setLayout(new BoxLayout(deliveryView, BoxLayout.Y_AXIS));
-        deliveryView.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Padding
 
         Form deliveryInfo = new Form();
-        deliveryInfo.addInput(Elements.inputLabel("ID"), new Copiable(delivery.getId()));
+        deliveryInfo.addInput(
+            Elements.inputLabel("Delivery ID"),
+            new Copiable(delivery.getId(), new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    if (e.getClickCount() == 2) {
+                        desktop.put(new ViewDelivery(delivery));
+                    }
+                }
+            }));
         deliveryInfo.addInput(Elements.inputLabel("Expected Delivery"), new Copiable(delivery.getExpectedDelivery()));
-        deliveryInfo.addInput(Elements.inputLabel("Destination"), new Copiable(delivery.getDestination()));
+        deliveryInfo.addInput(Elements.inputLabel("Destination"), new Copiable(delivery.getDestination(), new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    Location l = Engine.getLocationWithId(delivery.getDestination());
+                    desktop.put(new ViewLocation(l, desktop));
+                }
+            }
+        }));
         deliveryInfo.addInput(Elements.inputLabel("Pallets"), new Copiable(String.valueOf(delivery.getPallets().size())));
         deliveryInfo.addInput(Elements.inputLabel("Status"), new Copiable(String.valueOf(delivery.getStatus())));
 
-        deliveryView.add(Elements.header("Delivery Info"));
-        deliveryView.add(Box.createVerticalStrut(5)); // Spacer
-        deliveryView.add(deliveryInfo);
-
-        // Truck Info Panel
-        JPanel truckView = new JPanel();
-        truckView.setLayout(new BoxLayout(truckView, BoxLayout.Y_AXIS));
-        truckView.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Padding
 
         if (truck != null) {
 
-            Form truckInfo = new Form();
-            truckInfo.addInput(Elements.inputLabel("ID"), new Copiable(truck.getId()));
-            truckInfo.addInput(Elements.inputLabel("Carrier"), new Copiable(truck.getCarrier()));
-            truckInfo.addInput(Elements.inputLabel("Driver"), new Copiable(truck.getDriver()));
-            truckInfo.addInput(Elements.inputLabel("Year"), new Copiable(truck.getYear()));
-            truckInfo.addInput(Elements.inputLabel("Make"), new Copiable(truck.getMake()));
-            truckInfo.addInput(Elements.inputLabel("Model"), new Copiable(truck.getModel())); // fixed model line
-            truckInfo.addInput(Elements.inputLabel("Notes"), new Copiable(truck.getNotes()));
-            truckInfo.addInput(Elements.inputLabel("Status"), new Copiable(String.valueOf(truck.getStatus())));
-
-            truckView.add(Elements.header("Truck Info"));
-            truckView.add(Box.createVerticalStrut(5)); // Spacer
-            truckView.add(truckInfo);
+            deliveryInfo.addInput(Elements.inputLabel("Truck ID"), new Copiable(truck.getId()));
+            deliveryInfo.addInput(Elements.inputLabel("Truck Carrier"), new Copiable(truck.getCarrier()));
+            deliveryInfo.addInput(Elements.inputLabel("Truck Driver"), new Copiable(truck.getDriver()));
+            deliveryInfo.addInput(Elements.inputLabel("Truck Year"), new Copiable(truck.getYear()));
+            deliveryInfo.addInput(Elements.inputLabel("Truck Make"), new Copiable(truck.getMake()));
+            deliveryInfo.addInput(Elements.inputLabel("Truck Model"), new Copiable(truck.getModel())); // fixed model line
+            deliveryInfo.addInput(Elements.inputLabel("Truck Notes"), new Copiable(truck.getNotes()));
+            deliveryInfo.addInput(Elements.inputLabel("Truck Status"), new Copiable(String.valueOf(truck.getStatus())));
         }
 
-        // Stack both views
-        deliveryTab.add(deliveryView);
-        deliveryTab.add(Box.createVerticalStrut(20)); // space between sections
-        deliveryTab.add(truckView);
+        deliveryTab.add(deliveryInfo);
 
         return new JScrollPane(deliveryTab);
     }

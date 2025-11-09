@@ -12,7 +12,6 @@ import org.Canal.Utils.LockeStatus;
 import org.Canal.Utils.RefreshListener;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -20,6 +19,7 @@ import java.util.ArrayList;
 
 /**
  * /ORDS/PO
+ * View of a list of POs that are not DELIVERED, ARCHIVED, or DELETED.
  */
 public class PurchaseOrders extends LockeState implements RefreshListener {
 
@@ -35,9 +35,10 @@ public class PurchaseOrders extends LockeState implements RefreshListener {
         JPanel holder = new JPanel(new BorderLayout());
         table = table();
         JScrollPane tableScrollPane = new JScrollPane(table);
+
         holder.add(Elements.header("Purchase Orders", SwingConstants.LEFT), BorderLayout.CENTER);
         holder.add(toolbar(), BorderLayout.SOUTH);
-        add(holder);
+
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);
         add(tableScrollPane, BorderLayout.CENTER);
@@ -61,11 +62,7 @@ public class PurchaseOrders extends LockeState implements RefreshListener {
             tb.add(Box.createHorizontalStrut(5));
         }
 
-        IconButton openSelected = new IconButton("Open", "open", "Open selected");
-        tb.add(openSelected);
-        tb.add(Box.createHorizontalStrut(5));
-
-        IconButton createPurchaseOrder = new IconButton("New PO", "create", "Build an item", "/ORDS/PO/NEW");
+        IconButton createPurchaseOrder = new IconButton("Create", "create", "Create a Purchase Order", "/ORDS/PO/NEW");
         createPurchaseOrder.addActionListener(_ -> desktop.put(new CreatePurchaseOrder(desktop)));
         tb.add(createPurchaseOrder);
         tb.add(Box.createHorizontalStrut(5));
@@ -80,6 +77,11 @@ public class PurchaseOrders extends LockeState implements RefreshListener {
 
         IconButton activatePO = new IconButton("Start", "start", "Resume/Activate PO");
         tb.add(activatePO);
+        tb.add(Box.createHorizontalStrut(5));
+
+        IconButton openSelected = new IconButton("Open", "open", "Open selected");
+        openSelected.addActionListener(_ -> desktop.put(Engine.router("/ORDS/PO/O", desktop)));
+        tb.add(openSelected);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton findPO = new IconButton("Find", "find", "Find by values", "/ORDS/PO/F");
@@ -135,7 +137,7 @@ public class PurchaseOrders extends LockeState implements RefreshListener {
                     && !po.getStatus().equals(LockeStatus.DELETED)){
 
                 pos.add(new Object[]{
-                        po.getOrderId(),
+                        po.getId(),
                         po.getOwner(),
                         po.getOrderedOn(),
                         po.getExpectedDelivery(),
@@ -161,8 +163,8 @@ public class PurchaseOrders extends LockeState implements RefreshListener {
                     JTable t = (JTable) e.getSource();
                     int row = t.getSelectedRow();
                     if (row != -1) {
-                        String v = String.valueOf(t.getValueAt(row, 1));
-                        desktop.put(new ViewPurchaseOrder(Engine.getPurchaseOrder(v), desktop, PurchaseOrders.this));
+                        String purchaseOrderId = String.valueOf(t.getValueAt(row, 1));
+                        desktop.put(new ViewPurchaseOrder(Engine.getPurchaseOrder(purchaseOrderId), desktop, PurchaseOrders.this));
                     }
                 }
             }

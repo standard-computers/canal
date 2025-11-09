@@ -77,7 +77,7 @@ public class CreateSalesOrder extends LockeState {
     public CreateSalesOrder(DesktopState desktop) {
 
         super("Create Sales Order", "/ORDS/SO/NEW");
-        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));
+        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/windows/locke.png")));
         Constants.checkLocke(this, true, true);
         this.desktop = desktop;
         this.salesOrder = new Order();
@@ -87,8 +87,6 @@ public class CreateSalesOrder extends LockeState {
         tabs.addTab("Delivery", delivery());
         tabs.addTab("Ledger", ledger());
         tabs.addTab("Purchase Order", purchaseOrder());
-        tabs.addTab("Shipping", shipping());
-        tabs.addTab("Packaging", packaging());
         tabs.addTab("Taxes & Rates", taxes());
 
         if ((boolean) Engine.codex.getValue("ORDS/SO", "allow_notes")) {
@@ -606,55 +604,6 @@ public class CreateSalesOrder extends LockeState {
         purchaseOrder.add(form);
 
         return purchaseOrder;
-    }
-
-    private JPanel shipping() {
-
-        JPanel shipping = new JPanel(new FlowLayout(FlowLayout.LEFT));
-
-        return shipping;
-    }
-
-    private JPanel packaging() {
-
-        JPanel packaging = new JPanel(new BorderLayout());
-
-        ArrayList<Object[]> stockLines = new ArrayList<>();
-
-        CustomTable packagingTable = new CustomTable(new String[]{
-                "HU",
-                "Item Name",
-                "Qty",
-                "Qty UOM",
-                "Value",
-                "Status",
-                "Weight",
-                "Volume",
-        }, stockLines);
-
-        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        buttons.setLayout(new BoxLayout(buttons, BoxLayout.X_AXIS));
-        buttons.setBackground(UIManager.getColor("Panel.background"));
-        IconButton addButton = new IconButton("Add Line", "add_rows", "Add line");
-        addButton.addActionListener((ActionEvent _) -> {
-            if (!stockLines.isEmpty()) {
-            }
-        });
-        buttons.add(addButton);
-        buttons.add(Box.createHorizontalStrut(5));
-
-        IconButton removeButton = new IconButton("Remove Line", "delete_rows", "Remove selected line");
-        removeButton.addActionListener((ActionEvent _) -> {
-        });
-        buttons.add(removeButton);
-        buttons.add(Box.createHorizontalStrut(5));
-
-        JScrollPane sp = new JScrollPane(packagingTable);
-        sp.setPreferredSize(new Dimension(600, 300));
-        packaging.add(sp, BorderLayout.CENTER);
-        packaging.add(buttons, BorderLayout.NORTH);
-
-        return packaging;
     }
 
     private CustomTable taxesAndRatesTable() {

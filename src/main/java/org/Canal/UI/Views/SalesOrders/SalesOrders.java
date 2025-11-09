@@ -20,7 +20,7 @@ import java.util.ArrayList;
 /**
  * /ORDS/SO
  * View outstanding Sales Orders.
- * Sales Orders must not be DELETED or ARCHIVED
+ * Sales Orders must not be DELETED, ARCHIVED, or CLOSED.
  */
 public class SalesOrders extends LockeState implements RefreshListener {
 
@@ -38,6 +38,7 @@ public class SalesOrders extends LockeState implements RefreshListener {
         JScrollPane tableScrollPane = new JScrollPane(table);
         holder.add(Elements.header("Outstanding Sales Orders", SwingConstants.LEFT), BorderLayout.CENTER);
         holder.add(toolbar(), BorderLayout.SOUTH);
+
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);
         add(tableScrollPane, BorderLayout.CENTER);
@@ -61,13 +62,13 @@ public class SalesOrders extends LockeState implements RefreshListener {
             tb.add(Box.createHorizontalStrut(5));
         }
 
-        IconButton openSelected = new IconButton("Open", "open", "Open selected");
-        tb.add(openSelected);
-        tb.add(Box.createHorizontalStrut(5));
-
         IconButton create = new IconButton("Create", "create", "Build an item", "/ORDS/SO/NEW");
         create.addActionListener(_ -> desktop.put(new CreateSalesOrder(desktop)));
         tb.add(create);
+        tb.add(Box.createHorizontalStrut(5));
+
+        IconButton openSelected = new IconButton("Open", "open", "Open selected");
+        tb.add(openSelected);
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton find = new IconButton("Find", "find", "Find by values", "/ORDS/SO/F");
@@ -87,6 +88,11 @@ public class SalesOrders extends LockeState implements RefreshListener {
         return tb;
     }
 
+    /**
+     * Create table for outstanding sales orders
+     *
+     * @return CustomTable
+     */
     private CustomTable table() {
         String[] columns = new String[]{
                 "ID",
@@ -104,7 +110,8 @@ public class SalesOrders extends LockeState implements RefreshListener {
         ArrayList<Object[]> salesOrders = new ArrayList<>();
         for (Order salesOrder : Engine.getSalesOrders()) {
             if (!salesOrder.getStatus().equals(LockeStatus.DELETED)
-                    && !salesOrder.getStatus().equals(LockeStatus.ARCHIVED)) {
+                    && !salesOrder.getStatus().equals(LockeStatus.ARCHIVED)
+                    && !salesOrder.getStatus().equals(LockeStatus.CLOSED)) {
 
                 salesOrders.add(new Object[]{
                         salesOrder.getOrderId(),
@@ -129,8 +136,8 @@ public class SalesOrders extends LockeState implements RefreshListener {
                     JTable t = (JTable) e.getSource();
                     int row = t.getSelectedRow();
                     if (row != -1) {
-                        String v = String.valueOf(t.getValueAt(row, 1));
-                        desktop.put(new ViewSalesOrder(Engine.getPurchaseOrder(v), desktop, SalesOrders.this));
+                        String salesOrderId = String.valueOf(t.getValueAt(row, 1));
+                        desktop.put(new ViewSalesOrder(Engine.getSalesOrder(salesOrderId), desktop, SalesOrders.this));
                     }
                 }
             }

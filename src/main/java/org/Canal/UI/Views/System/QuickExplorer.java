@@ -40,6 +40,7 @@ public class QuickExplorer extends JFrame implements DesktopState {
         add(splitPane, BorderLayout.CENTER);
         setVisible(true);
         installShortcuts();
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
     private JPanel toolbar() {

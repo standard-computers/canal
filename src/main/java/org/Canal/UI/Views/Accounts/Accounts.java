@@ -6,8 +6,10 @@ import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.UI.Views.Finder;
+import org.Canal.UI.Views.Invoices.CreateInvoice;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
+import org.Canal.Utils.LockeStatus;
 import org.Canal.Utils.RefreshListener;
 
 import javax.swing.*;
@@ -18,6 +20,7 @@ import java.util.ArrayList;
 
 /**
  * /ACCS
+ * View list of accounts that are not DELETED, ARCHIVED, or CLOSED.
  */
 public class Accounts extends LockeState implements RefreshListener {
 
@@ -33,14 +36,14 @@ public class Accounts extends LockeState implements RefreshListener {
         JPanel holder = new JPanel(new BorderLayout());
         accountsTable = table();
         JScrollPane tableScrollPane = new JScrollPane(accountsTable);
-        tableScrollPane.setPreferredSize(new Dimension(750, 600));
+        tableScrollPane.setPreferredSize(new Dimension(850, 600));
         holder.add(Elements.header("Accounts", SwingConstants.LEFT), BorderLayout.CENTER);
         holder.add(toolbar(), BorderLayout.SOUTH);
         setLayout(new BorderLayout());
         add(holder, BorderLayout.NORTH);
         add(tableScrollPane, BorderLayout.CENTER);
 
-        if((boolean) Engine.codex.getValue("ACCS", "start_maximized")){
+        if ((boolean) Engine.codex.getValue("ACCS", "start_maximized")) {
             setMaximized(true);
         }
     }
@@ -67,7 +70,7 @@ public class Accounts extends LockeState implements RefreshListener {
         tb.add(Box.createHorizontalStrut(5));
 
         IconButton invoice = new IconButton("Invoice", "invoice", "Create Invoice", "/INVS/NEW");
-        invoice.addActionListener(_ -> desktop.put(new CreateAccount(desktop, this)));
+        invoice.addActionListener(_ -> desktop.put(new CreateInvoice(desktop)));
         tb.add(invoice);
         tb.add(Box.createHorizontalStrut(5));
 
@@ -107,20 +110,26 @@ public class Accounts extends LockeState implements RefreshListener {
         };
         ArrayList<Object[]> data = new ArrayList<>();
         for (Account account : Engine.getAccounts()) {
-            data.add(new Object[]{
-                    account.getId(),
-                    account.getName(),
-                    account.getLocation(),
-                    account.getCustomer(),
-                    account.getOpened(),
-                    account.getClosed(),
-                    account.isPasswordProtected(),
-                    account.getAgreement(),
-                    account.getStatus(),
-                    (account.getTerms() + " DAYS"),
-                    Engine.getInvoicesForAccount(account.getId()),
-                    account.getCreated(),
-            });
+
+            if (!account.getStatus().equals(LockeStatus.DELETED)
+                    && !account.getStatus().equals(LockeStatus.ARCHIVED)
+                    && !account.getStatus().equals(LockeStatus.CLOSED)) {
+
+                data.add(new Object[]{
+                        account.getId(),
+                        account.getName(),
+                        account.getLocation(),
+                        account.getCustomer(),
+                        account.getOpened(),
+                        account.getClosed(),
+                        account.isPasswordProtected(),
+                        account.getAgreement(),
+                        account.getStatus(),
+                        (account.getTerms() + " DAYS"),
+                        Engine.getInvoicesForAccount(account.getId()),
+                        account.getCreated(),
+                });
+            }
         }
         CustomTable ct = new CustomTable(columns, data);
         ct.addMouseListener(new MouseAdapter() {
@@ -130,8 +139,8 @@ public class Accounts extends LockeState implements RefreshListener {
                     JTable t = (JTable) e.getSource();
                     int r = t.getSelectedRow();
                     if (r != -1) {
-                        String v = String.valueOf(t.getValueAt(r, 1));
-                        Account account = Engine.getAccount(v);
+                        String accountId = String.valueOf(t.getValueAt(r, 1));
+                        Account account = Engine.getAccount(accountId);
                         desktop.put(new ViewAccount(account, desktop));
                     }
                 }

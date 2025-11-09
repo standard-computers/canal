@@ -73,6 +73,8 @@ public class AutoMakeAreas extends LockeState {
         IconButton create = new IconButton("AutoMake", "automake", "Start AutoMake");
         create.addActionListener(_ -> {
 
+
+
             for (JCheckBox checkbox : checkboxes) {
 
                 if (checkbox.isSelected()) {

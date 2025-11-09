@@ -5,6 +5,7 @@ import org.Canal.Models.Objex;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.LockeState;
+import org.Canal.UI.Views.Accounts.AutoMakeAccounts;
 import org.Canal.Utils.ConnectDB;
 import org.Canal.Utils.Pipe;
 import org.Canal.Utils.LockeStatus;
@@ -18,7 +19,10 @@ import java.awt.event.MouseEvent;
 public class Archiver extends LockeState {
 
     public Archiver(String objex) {
+
         super("Archiver", objex + "/ARCHV", false, true, false, true);
+        setFrameIcon(new ImageIcon(AutoMakeAccounts.class.getResource("/icons/archive.png")));
+        setBorder(BorderFactory.createLineBorder(Color.YELLOW, 1));
 
         JTextField objexIdField = Elements.input(20);
         Form form = new Form();

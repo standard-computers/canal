@@ -419,7 +419,7 @@ public class Engine {
     }
 
     public static Order getPurchaseOrder(String purchaseOrderId) {
-        return getPurchaseOrders().stream().filter(purchaseOrder -> purchaseOrder.getOrderId().equals(purchaseOrderId)).toList().stream().findFirst().orElse(null);
+        return getPurchaseOrders().stream().filter(purchaseOrder -> purchaseOrder.getId().equals(purchaseOrderId)).toList().stream().findFirst().orElse(null);
     }
 
     public static List<Order> getPurchaseOrders(String shipTo) {
@@ -891,6 +891,11 @@ public class Engine {
             case "/DCSS/NEW" -> {
                 return new CreateLocation("/DCSS", desktop, null);
             }
+            case "/DCSS/O" -> {
+                String distributionCenterId = JOptionPane.showInputDialog(null, "Enter Distribution Center ID", "Distribution Center ID", JOptionPane.QUESTION_MESSAGE);
+                Location distributionCenter = Engine.getLocation(distributionCenterId, "DCSS");
+                return new ViewLocation(distributionCenter, desktop);
+            }
 
             //OFFICES
             case "/OFFS" -> {
@@ -919,7 +924,7 @@ public class Engine {
                 return new Finder("/TRANS/ODO", new Delivery(), desktop);
             }
             case "/TRANS/ODO/NEW" -> {
-                return new CreateOutboundDeliveryOrder();
+                return new CreateOutboundDeliveryOrder(desktop, null);
             }
             case "/TRANS/IDO" -> {
                 return new InboundDeliveries(desktop);
@@ -928,7 +933,7 @@ public class Engine {
                 return new Finder("/TRANS/IDO", new Delivery(), desktop);
             }
             case "/TRANS/IDO/NEW" -> {
-                return new CreateInboundDeliveryOrder();
+                return new CreateInboundDeliveryOrder(desktop, null);
             }
 
             //TRUCKS
