@@ -17,7 +17,6 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import java.awt.*;
-import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -37,7 +36,6 @@ public class ViewLocation extends LockeState implements RefreshListener {
     public ViewLocation(Location location, DesktopState desktop) {
 
         super(location.getId() + " – " + location.getName(), "/" + location.getType() + "/" + location.getId());
-        setFrameIcon(new ImageIcon(ViewLocation.class.getResource("/icons/windows/" + Engine.codex(location.getType().replace("/", ""), "icon") + ".png")));
         this.location = location;
         this.desktop = desktop;
         Engine.setLocation(location.getId());

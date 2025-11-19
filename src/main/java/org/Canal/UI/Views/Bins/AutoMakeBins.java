@@ -50,7 +50,6 @@ public class AutoMakeBins extends LockeState {
     public AutoMakeBins(DesktopState desktop) {
 
         super("AutoMake Bins", "/BNS/AUTO_MK");
-        setFrameIcon(new ImageIcon(AutoMakeBins.class.getResource("/icons/automake.png")));
         this.desktop = desktop;
 
         CustomTabbedPane tabs = new CustomTabbedPane();

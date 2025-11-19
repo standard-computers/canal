@@ -1,7 +1,6 @@
 package org.Canal.UI.Views.System;
 
 import org.Canal.UI.Elements.*;
-import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Pipe;
@@ -31,7 +30,6 @@ public class CanalSettings extends LockeState {
     public CanalSettings(DesktopState desktop) {
 
         super("Canal Settings", "/CNL");
-        setFrameIcon(new ImageIcon(CanalSettings.class.getResource("/icons/settings.png")));
         this.desktop = desktop;
 
         JButton cr = Elements.button("Save");

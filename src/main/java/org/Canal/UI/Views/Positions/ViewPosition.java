@@ -20,7 +20,6 @@ public class ViewPosition extends LockeState {
     public ViewPosition(Position position, DesktopState desktop) {
 
         super("View Position", "/HR/POS/" + position.getId());
-        setFrameIcon(new ImageIcon(ViewPosition.class.getResource("/icons/windows/locke.png")));
         this.position = position;
         this.desktop = desktop;
 

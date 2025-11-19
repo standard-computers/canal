@@ -39,7 +39,6 @@ public class CreatePerson extends LockeState {
 
     public CreatePerson(DesktopState desktop, boolean autoMakeUser) {
         super("Create Person", "/PPL/NEW", false, true, false, true);
-        setFrameIcon(new ImageIcon(CreatePerson.class.getResource("/icons/create.png")));
 
         CustomTabbedPane tabbedPane = new CustomTabbedPane();
         tabbedPane.addTab("General", general());

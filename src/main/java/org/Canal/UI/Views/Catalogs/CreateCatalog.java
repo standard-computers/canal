@@ -1,7 +1,6 @@
 package org.Canal.UI.Views.Catalogs;
 
 import org.Canal.Models.SupplyChainUnits.Catalog;
-import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.*;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -11,32 +10,36 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
 /**
  * /CATS/NEW
  */
 public class CreateCatalog extends LockeState {
 
+    private JTextField catalogIdField;
+    private JTextField catalogNameField;
+    private JTextField descriptionField;
+    private JTextField periodField;
+    private DatePicker validFromField;
+    private DatePicker validToField;
+    private SelectionInput availableCostCenters;
+    private SelectionInput availableCustomers;
+    private SelectionInput availableVendors;
+
     public CreateCatalog(DesktopState desktop) {
 
         super("Build a Catalog", "/CATS/NEW");
-        setFrameIcon(new ImageIcon(CreateCatalog.class.getResource("/icons/create.png")));
 
         String cid = ((String) Engine.codex("CATS", "prefix")) + (Engine.getCatalogs().size() + 1);
-        JTextField catalogIdField = new Copiable(cid);
-        JTextField catalogNameField = Elements.input();
-        JTextField descriptionField = Elements.input();
-        JTextField periodField = Elements.input();
-        DatePicker validFromField = new DatePicker();
-        DatePicker validToField = new DatePicker();
-        HashMap<String, String> costCenters = new HashMap<>();
-        for (Location l : Engine.getLocations("CCS")) {
-            costCenters.put(l.getId(), l.getName());
-        }
-        JTextField availableCostCenters = Elements.selector("", costCenters, this);
-        JTextField availableCustomers = Elements.input();
-        JTextField availableVendors = Elements.input();
+        catalogIdField = new Copiable(cid);
+        catalogNameField = Elements.input();
+        descriptionField = Elements.input();
+        periodField = Elements.input();
+        validFromField = new DatePicker();
+        validToField = new DatePicker();
+        availableCostCenters = new SelectionInput(desktop, "");
+        availableCustomers = new SelectionInput(desktop, "");
+        availableVendors = new SelectionInput(desktop, "");
 
         Form form = new Form();
         form.addInput(Elements.inputLabel("*New Catalog ID"), catalogIdField);

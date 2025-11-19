@@ -25,7 +25,6 @@ public class Finance extends LockeState {
     public Finance(DesktopState desktop) {
 
         super("Finance", "/FI");
-        setFrameIcon(new ImageIcon(TimeClock.class.getResource("/icons/windows/finance.png")));
 
         JPanel main = new JPanel(new GridLayout(1, 4));
 

@@ -26,7 +26,6 @@ public class Departments extends LockeState implements RefreshListener {
     public Departments(DesktopState desktop) {
 
         super("Departments", "/DPTS");
-        setFrameIcon(new ImageIcon(Departments.class.getResource("/icons/departments.png")));
         this.desktop = desktop;
 
         table = table();

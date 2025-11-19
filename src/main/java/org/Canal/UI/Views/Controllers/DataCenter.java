@@ -3,7 +3,6 @@ package org.Canal.UI.Views.Controllers;
 import org.Canal.UI.Elements.CustomTabbedPane;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.LockeState;
-import org.Canal.UI.Views.ViewLocation;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,7 +16,6 @@ public class DataCenter extends LockeState {
 
     public DataCenter() {
         super("Data Center", "/DATA_CNTR");
-        setFrameIcon(new ImageIcon(ViewLocation.class.getResource("/icons/datacenter.png")));
         super.isMaximized();
         CustomTabbedPane main = new CustomTabbedPane();
         main.addTab("Configuration", codex());

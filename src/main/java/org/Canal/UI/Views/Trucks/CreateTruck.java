@@ -38,7 +38,6 @@ public class CreateTruck extends LockeState {
     public CreateTruck(DesktopState desktop) {
 
         super("Create a Truck", "/TRANS/TRCKS/NEW", false, true, false, true);
-        setFrameIcon(new ImageIcon(CreateTruck.class.getResource("/icons/create.png")));
         this.desktop = desktop;
 
         CustomTabbedPane tabs = new CustomTabbedPane();

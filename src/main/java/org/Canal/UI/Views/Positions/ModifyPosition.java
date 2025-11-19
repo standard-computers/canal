@@ -36,7 +36,6 @@ public class ModifyPosition extends LockeState {
     public ModifyPosition(Position position, DesktopState desktop, RefreshListener refreshListener) {
 
         super("Modify a Position", "/HR/POS/MOD/" + position.getId());
-        setFrameIcon(new ImageIcon(ModifyPosition.class.getResource("/icons/modify.png")));
         this.position = position;
         this.desktop = desktop;
         this.refreshListener = refreshListener;

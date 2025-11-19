@@ -2,12 +2,10 @@ package org.Canal.UI.Views.Deliveries;
 
 import org.Canal.Models.BusinessUnits.Account;
 import org.Canal.Models.BusinessUnits.Order;
-import org.Canal.Models.BusinessUnits.OrderLineItem;
 import org.Canal.Models.SupplyChainUnits.Delivery;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.Models.SupplyChainUnits.Truck;
 import org.Canal.UI.Elements.*;
-import org.Canal.UI.Views.Accounts.CreateAccount;
 import org.Canal.UI.Views.System.LockeMessages;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -20,7 +18,6 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 
 /**
  * /TRANS/IDO/NEW
@@ -49,7 +46,6 @@ public class CreateInboundDeliveryOrder extends LockeState {
     public CreateInboundDeliveryOrder(DesktopState desktop, RefreshListener refreshListener) {
 
         super("Create Inbound Delivery Order", "/TRANS/IDO/NEW", false, true, false, true);
-        setFrameIcon(new ImageIcon(CreateAccount.class.getResource("/icons/windows/locke.png")));
         this.desktop = desktop;
         this.refreshListener = refreshListener;
 

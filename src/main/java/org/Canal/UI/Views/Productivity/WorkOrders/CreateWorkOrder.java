@@ -18,7 +18,6 @@ public class CreateWorkOrder extends LockeState {
     public CreateWorkOrder(DesktopState desktop) {
 
         super("Create Work Order", "/MVMT/WO/NEW", false, true, false, true);
-        setFrameIcon(new ImageIcon(CreateWorkOrder.class.getResource("/icons/create.png")));
 
         Form f = new Form();
 

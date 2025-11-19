@@ -49,7 +49,6 @@ public class ModifyLocation extends LockeState {
     public ModifyLocation(Location location, RefreshListener refreshListener) {
 
         super("Modify Location", "/" + location.getType() + "/MOD/" + location.getId());
-        setFrameIcon(new ImageIcon(ModifyLocation.class.getResource("/icons/create.png")));
         this.location = location;
         this.refreshListener = refreshListener;
 

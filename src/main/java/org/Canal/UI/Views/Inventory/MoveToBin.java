@@ -7,7 +7,6 @@ import org.Canal.Models.SupplyChainUnits.StockLine;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.LockeState;
-import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.*;
 
 import javax.swing.*;
@@ -24,7 +23,6 @@ public class MoveToBin extends LockeState {
     public MoveToBin(RefreshListener refreshListener) {
 
         super("Move Stock", "/STK/MV/BN", false, true, false, true);
-        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/windows/locke.png")));
 
         JTextField mvHu = Elements.input(15);
         JTextField destinationBins = Elements.input();

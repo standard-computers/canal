@@ -33,7 +33,6 @@ public class Areas extends LockeState implements RefreshListener {
     public Areas(ArrayList<Area> areas, DesktopState desktop) {
 
         super("Areas", "/AREAS");
-        setFrameIcon(new ImageIcon(Areas.class.getResource("/icons/windows/areas.png")));
         this.desktop = desktop;
         this.areas = areas;
 

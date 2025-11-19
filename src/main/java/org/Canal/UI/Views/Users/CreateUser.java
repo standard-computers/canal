@@ -3,10 +3,6 @@ package org.Canal.UI.Views.Users;
 import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.HumanResources.User;
 import org.Canal.UI.Elements.*;
-import org.Canal.UI.Elements.Selectable;
-import org.Canal.UI.Elements.Selectables;
-import org.Canal.UI.Elements.Form;
-import org.Canal.UI.Elements.LockeState;
 import org.Canal.Utils.*;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
@@ -33,7 +29,6 @@ public class CreateUser extends LockeState {
     public CreateUser(DesktopState desktop, RefreshListener refreshListener) {
 
         super("Create User", "/USRS/NEW", false, true, false, true);
-        setFrameIcon(new ImageIcon(CreateUser.class.getResource("/icons/create.png")));
         this.desktop = desktop;
         this.refreshListener = refreshListener;
         if(Engine.getEmployees().isEmpty()){

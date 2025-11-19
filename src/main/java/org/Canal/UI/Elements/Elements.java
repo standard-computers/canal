@@ -241,52 +241,6 @@ public class Elements {
         return new RTextScrollPane(textArea);
     }
 
-    public static JTextField selector(String preset, HashMap<String, String> options, JInternalFrame parentFrame) {
-
-        JTextField textField = input(preset);
-        JPanel container = new JPanel(new BorderLayout());
-        container.setPreferredSize(new Dimension(300, textField.getPreferredSize().height));
-        container.add(textField, BorderLayout.CENTER);
-        JButton selectorButton = new JButton("...");
-        selectorButton.setPreferredSize(new Dimension(30, textField.getPreferredSize().height));
-        selectorButton.setVisible(true);
-        container.add(selectorButton, BorderLayout.EAST);
-        selectorButton.addActionListener(_ -> {
-            JInternalFrame selectionDialog = new JInternalFrame("Select Options", true);
-            selectionDialog.setLayout(new BorderLayout());
-            selectionDialog.setSize(400, 300);
-            ArrayList<Object[]> data = new ArrayList<>();
-            for (Map.Entry<String, String> entry : options.entrySet()) {
-                data.add(new Object[]{false, entry.getKey(), entry.getValue()});
-            }
-            CustomTable table = new CustomTable(new String[]{"Select", "Key", "Value"}, data);
-            JScrollPane scrollPane = new JScrollPane(table);
-            selectionDialog.add(scrollPane, BorderLayout.CENTER);
-            JButton okButton = new JButton("OK");
-            okButton.addActionListener(okEvent -> {
-                StringBuilder selectedKeys = new StringBuilder();
-                for (int i = 0; i < table.getRowCount(); i++) {
-                    Boolean isSelected = (Boolean) table.getValueAt(i, 0);
-                    if (isSelected) {
-                        String key = table.getValueAt(i, 1).toString();
-                        if (!selectedKeys.isEmpty()) {
-                            selectedKeys.append(";");
-                        }
-                        selectedKeys.append(key);
-                    }
-                }
-                textField.setText(selectedKeys.toString());
-                selectionDialog.dispose();
-            });
-            JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-            buttonPanel.add(okButton);
-            selectionDialog.add(buttonPanel, BorderLayout.SOUTH);
-            selectionDialog.setVisible(true);
-        });
-        parentFrame.add(container);
-        return textField;
-    }
-
     public static JScrollPane scrollPane(JComponent content) {
 
         JScrollPane scrollPane = new JScrollPane(content);

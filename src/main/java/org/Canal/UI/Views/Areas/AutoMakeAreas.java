@@ -40,7 +40,6 @@ public class AutoMakeAreas extends LockeState {
     public AutoMakeAreas(DesktopState desktop, RefreshListener refreshListener) {
 
         super("AutoMake Areas", "/AREAS/AUTO_MK");
-        setFrameIcon(new ImageIcon(AutoMakeAreas.class.getResource("/icons/automake.png")));
         setLayout(new BorderLayout());
         this.desktop = desktop;
         this.refreshListener = refreshListener;

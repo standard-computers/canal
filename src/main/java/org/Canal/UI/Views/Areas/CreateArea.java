@@ -23,7 +23,7 @@ public class CreateArea extends LockeState {
     private DesktopState desktop;
     private RefreshListener refreshListener;
     private JTextField areaIdField;
-    private JTextField locationId;
+    private SelectionInput locationId;
     private JTextField areaNameField;
     private Selectable statuses;
 
@@ -44,7 +44,6 @@ public class CreateArea extends LockeState {
     public CreateArea(String location, DesktopState desktop, RefreshListener refreshListener) {
 
         super("New Area", "/AREAS/NEW");
-        setFrameIcon(new ImageIcon(CreateArea.class.getResource("/icons/windows/areas.png")));
         this.location = location;
         this.desktop = desktop;
         this.refreshListener = refreshListener;
@@ -163,7 +162,7 @@ public class CreateArea extends LockeState {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         areaIdField = Elements.input();
-        locationId = Elements.input();
+        locationId = new SelectionInput(desktop, "");
         if (location == null) {
             areaIdField.setText(Engine.generateId("AREAS"));
         } else {

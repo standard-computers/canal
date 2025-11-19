@@ -27,7 +27,6 @@ public class CreateDepartment extends LockeState {
     public CreateDepartment(DesktopState desktop, RefreshListener refreshListener) {
 
         super("Create a Department", "/DPTS/NEW", false, true, false, true);
-        setFrameIcon(new ImageIcon(CreateDepartment.class.getResource("/icons/create.png")));
         this.desktop = desktop;
         this.refreshListener = refreshListener;
 

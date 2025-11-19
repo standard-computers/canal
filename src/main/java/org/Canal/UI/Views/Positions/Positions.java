@@ -10,7 +10,6 @@ import org.Canal.Utils.Engine;
 import org.Canal.Utils.RefreshListener;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -29,7 +28,6 @@ public class Positions extends LockeState implements RefreshListener {
     public Positions(DesktopState desktop) {
 
         super("Positions", "/HR/POS");
-        setFrameIcon(new ImageIcon(Positions.class.getResource("/icons/positions.png")));
         this.desktop = desktop;
 
         JPanel tb = toolbar();

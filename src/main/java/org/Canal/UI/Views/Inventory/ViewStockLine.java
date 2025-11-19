@@ -28,7 +28,6 @@ public class ViewStockLine extends LockeState implements RefreshListener {
     public ViewStockLine(StockLine stockLine, DesktopState desktop, RefreshListener refreshListener) {
 
         super("View StockLine", "/STL/" + stockLine.getId(), false, true, false, false);
-        setFrameIcon(new ImageIcon(ViewStockLine.class.getResource("/icons/windows/areas.png")));
         this.stockLine = stockLine;
         this.desktop = desktop;
         this.refreshListener = refreshListener;

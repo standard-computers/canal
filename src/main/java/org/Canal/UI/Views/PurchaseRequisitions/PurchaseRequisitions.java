@@ -30,7 +30,6 @@ public class PurchaseRequisitions extends LockeState implements RefreshListener 
     public PurchaseRequisitions(DesktopState desktop) {
 
         super("Purchase Requisitions", "/ORDS/PR");
-        setFrameIcon(new ImageIcon(PurchaseRequisitions.class.getResource("/icons/purchasereqs.png")));
         this.desktop = desktop;
 
         JPanel holder = new JPanel(new BorderLayout());

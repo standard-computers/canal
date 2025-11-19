@@ -12,7 +12,6 @@ import org.Canal.Utils.Engine;
 import org.Canal.Utils.RefreshListener;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -27,7 +26,6 @@ public class People extends LockeState implements RefreshListener {
 
     public People(DesktopState desktop) {
         super("People", "/PPL");
-        setFrameIcon(new ImageIcon(People.class.getResource("/icons/windows/employees.png")));
 
         JPanel holder = new JPanel(new BorderLayout());
         table = table();

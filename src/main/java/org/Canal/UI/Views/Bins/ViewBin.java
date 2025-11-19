@@ -29,7 +29,6 @@ public class ViewBin extends LockeState {
     public ViewBin(Bin bin, DesktopState desktop, RefreshListener refreshListener) {
 
         super("View Bin", "/BNS/" + bin.getId());
-        setFrameIcon(new ImageIcon(Bins.class.getResource("/icons/windows/bins.png")));
         this.bin = bin;
         this.desktop = desktop;
         this.refreshListener = refreshListener;

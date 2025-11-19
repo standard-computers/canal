@@ -35,7 +35,6 @@ public class Invoices extends LockeState implements RefreshListener {
     public Invoices(DesktopState desktop) {
         
         super("Invoices", "/INVS");
-        setFrameIcon(new ImageIcon(Invoices.class.getResource("/icons/windows/locke.png")));
         this.desktop = desktop;
 
         areas = Engine.getAreas();

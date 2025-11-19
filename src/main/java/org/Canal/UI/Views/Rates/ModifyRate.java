@@ -2,7 +2,6 @@ package org.Canal.UI.Views.Rates;
 
 import org.Canal.Models.BusinessUnits.Rate;
 import org.Canal.UI.Elements.*;
-import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.*;
 
 import javax.swing.*;
@@ -27,7 +26,6 @@ public class ModifyRate extends LockeState {
     public ModifyRate(Rate rate, DesktopState desktop, RefreshListener refreshListener) {
 
         super("Modify Rate", "/RTS/MOD/" + rate.getId(), false, true, false, true);
-        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/modify.png")));
         setLayout(new GridBagLayout());
         this.desktop = desktop;
         this.refreshListener = refreshListener;

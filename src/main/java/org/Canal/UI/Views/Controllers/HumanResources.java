@@ -32,7 +32,6 @@ public class HumanResources extends LockeState {
     public HumanResources(DesktopState desktop) {
 
         super("ERM / Human Resources", "/HR");
-        setFrameIcon(new ImageIcon(HumanResources.class.getResource("/icons/humanresources.png")));
         this.desktop = desktop;
 
         CustomTabbedPane tabbedPane = new CustomTabbedPane();

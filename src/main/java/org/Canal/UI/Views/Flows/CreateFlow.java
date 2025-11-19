@@ -1,7 +1,6 @@
 package org.Canal.UI.Views.Flows;
 
 import org.Canal.UI.Elements.*;
-import org.Canal.Utils.Constants;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.Theme;
@@ -21,7 +20,6 @@ public class CreateFlow extends LockeState {
     public CreateFlow() {
 
         super("Create Flow", "/MVMT/FLWS/NEW", false, true, false, true);
-        setFrameIcon(new ImageIcon(CreateFlow.class.getResource("/icons/create.png")));
 
         flowIdField = Elements.input();
         flowNameField = Elements.input();

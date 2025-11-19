@@ -6,7 +6,6 @@ import org.Canal.Models.SupplyChainUnits.Delivery;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.Models.SupplyChainUnits.Truck;
 import org.Canal.UI.Elements.*;
-import org.Canal.UI.Views.Accounts.CreateAccount;
 import org.Canal.UI.Views.System.LockeMessages;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -47,7 +46,6 @@ public class CreateOutboundDeliveryOrder extends LockeState {
     public CreateOutboundDeliveryOrder(DesktopState desktop, RefreshListener refreshListener) {
 
         super("Create Outbound Delivery Order", "/TRANS/ODO/NEW", false, true, false, true);
-        setFrameIcon(new ImageIcon(CreateAccount.class.getResource("/icons/windows/locke.png")));
         this.desktop = desktop;
         this.refreshListener = refreshListener;
 

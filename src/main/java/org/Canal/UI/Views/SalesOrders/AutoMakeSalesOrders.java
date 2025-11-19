@@ -24,12 +24,12 @@ public class AutoMakeSalesOrders extends LockeState {
     private ArrayList<JCheckBox> checkboxes;
     private Selectable vendor;
     private JTextField maxSpendField;
-    private DatePicker prStartDateField, prEndDateField;
+    private DatePicker prStartDateField;
+    private DatePicker prEndDateField;
     private JTextArea prNotesField;
 
     public AutoMakeSalesOrders() {
         super("AutoMake Sales Orders", "/ORDS/SO/AUTO_MK", false, true, false, true);
-        setFrameIcon(new ImageIcon(AutoMakeSalesOrders.class.getResource("/icons/automake.png")));
         CustomTabbedPane tabbedPane = new CustomTabbedPane();
         tabbedPane.add(buyers(), "Buyers");
         tabbedPane.add(salesOrderData(), "SO Data");

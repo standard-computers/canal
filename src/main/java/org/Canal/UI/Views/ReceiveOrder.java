@@ -3,13 +3,6 @@ package org.Canal.UI.Views;
 import org.Canal.Models.BusinessUnits.*;
 import org.Canal.Models.SupplyChainUnits.*;
 import org.Canal.UI.Elements.*;
-import org.Canal.UI.Elements.Copiable;
-import org.Canal.UI.Elements.DatePicker;
-import org.Canal.UI.Elements.Selectables;
-import org.Canal.UI.Elements.Form;
-import org.Canal.UI.Elements.Selectable;
-import org.Canal.UI.Elements.LockeState;
-import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.*;
 
 import javax.swing.*;
@@ -48,7 +41,6 @@ public class ReceiveOrder extends LockeState {
     public ReceiveOrder(String location, DesktopState desktop, RefreshListener refreshListener) {
 
         super("Receive Order", "/ORDS/RCV", false, true, false, true);
-        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/windows/locke.png")));
         Constants.checkLocke(this, true, true);
         setLayout(new BorderLayout());
         this.location = location;

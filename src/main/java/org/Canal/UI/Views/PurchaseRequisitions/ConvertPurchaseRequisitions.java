@@ -42,7 +42,6 @@ public class ConvertPurchaseRequisitions extends LockeState {
     public ConvertPurchaseRequisitions(DesktopState desktop) {
 
         super("Convert Purchase Requisitions", "/ORDS/PR/PO");
-        setFrameIcon(new ImageIcon(ConvertPurchaseRequisitions.class.getResource("/icons/start.png")));
         this.desktop = desktop;
 
         for(PurchaseRequisition purchaseRequisition : Engine.getPurchaseRequisitions()){

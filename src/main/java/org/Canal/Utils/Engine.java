@@ -7,9 +7,9 @@ import com.mongodb.client.model.ReplaceOptions;
 import org.Canal.Models.BusinessUnits.*;
 import org.Canal.Models.BusinessUnits.Inventory;
 import org.Canal.Models.HumanResources.*;
+import org.Canal.Models.Objex;
 import org.Canal.Models.SupplyChainUnits.*;
 import org.Canal.Models.Record;
-import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.Start;
 import org.Canal.UI.Views.*;
 import org.Canal.UI.Views.Areas.*;
@@ -39,6 +39,7 @@ import org.Canal.UI.Views.People.CreatePerson;
 import org.Canal.UI.Views.People.People;
 import org.Canal.UI.Views.Positions.Positions;
 import org.Canal.UI.Views.Flows.CreateFlow;
+import org.Canal.UI.Views.Vendors.CreateVendor;
 import org.Canal.UI.Views.Waves.CreateWave;
 import org.Canal.UI.Views.Productivity.WorkOrders.CreateWorkOrder;
 import org.Canal.UI.Views.Controllers.*;
@@ -148,6 +149,35 @@ public class Engine {
 
     public static void setLocation(String location) {
         Engine.location = location;
+    }
+
+    /**
+     * ALL OBJEX
+     */
+    public static ArrayList<Objex> getObjex(String objex) {
+
+        ArrayList<Objex> objs = new ArrayList<>();
+        ConnectDB.collection(objex).find().forEach(obj -> {
+            Objex ep = Pipe.load(obj, Objex.class);
+            objs.add(ep);
+        });
+        objs.sort(Comparator.comparing(Objex::getId));
+        return objs;
+    }
+
+    public static ArrayList<Objex> getLocationsObjex() {
+
+        ArrayList<Objex> objs = new ArrayList<>();
+        String[] locs = new String[]{"DCSS", "CCS", "CSTS", "ORGS", "VEND", "WHS", "TRANS/CRRS", "OFFS"};
+        for (String l : locs) {
+            ConnectDB.collection(l).find().forEach(obj -> {
+                Objex u = Pipe.load(obj, Objex.class);
+                objs.add(u);
+            });
+        }
+
+        objs.sort(Comparator.comparing(Objex::getId));
+        return objs;
     }
 
     /**
@@ -966,7 +996,7 @@ public class Engine {
                 return new Finder("/VEND", new Location(), desktop);
             }
             case "/VEND/NEW" -> {
-                return new CreateLocation("/VEND", desktop, null);
+                return new CreateVendor(desktop, null);
             }
 
             //RATES

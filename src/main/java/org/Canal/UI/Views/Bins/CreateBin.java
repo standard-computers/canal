@@ -44,7 +44,6 @@ public class CreateBin extends LockeState {
     public CreateBin(String location, DesktopState desktop, RefreshListener refreshListener) {
 
         super("New Bin", "/BNS/NEW");
-        setFrameIcon(new ImageIcon(CreateBin.class.getResource("/icons/create.png")));
         this.location = location;
         this.desktop = desktop;
         this.refreshListener = refreshListener;

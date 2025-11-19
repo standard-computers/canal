@@ -3,7 +3,6 @@ package org.Canal.UI.Views.SalesOrders;
 import org.Canal.Models.BusinessUnits.*;
 import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.UI.Elements.*;
-import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.RefreshListener;
@@ -44,7 +43,6 @@ public class ViewSalesOrder extends LockeState {
     public ViewSalesOrder(Order salesOrder, DesktopState desktop, RefreshListener refreshListener) {
 
         super("Create Sales Order", "/ORDS/SO/NEW", false, true, false, true);
-        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));
         this.salesOrder = salesOrder;
         this.desktop = desktop;
         this.refreshListener = refreshListener;

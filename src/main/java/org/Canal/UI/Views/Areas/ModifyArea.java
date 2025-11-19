@@ -44,7 +44,6 @@ public class ModifyArea extends LockeState {
     public ModifyArea(Area area, DesktopState desktop, RefreshListener refreshListener) {
 
         super("Modify " + area.getId(), "/AREAS/MOD/" + area.getId());
-        setFrameIcon(new ImageIcon(ModifyArea.class.getResource("/icons/modify.png")));
         this.area = area;
         this.desktop = desktop;
         this.refreshListener = refreshListener;

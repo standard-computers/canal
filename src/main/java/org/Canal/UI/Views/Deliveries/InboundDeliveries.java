@@ -28,7 +28,6 @@ public class InboundDeliveries extends LockeState implements RefreshListener {
     public InboundDeliveries(DesktopState desktop) {
 
         super("Inbound Deliveries", "/TRANS/IDO");
-        setFrameIcon(new ImageIcon(InboundDeliveries.class.getResource("/icons/inbound.png")));
         this.desktop = desktop;
 
         setLayout(new BorderLayout());

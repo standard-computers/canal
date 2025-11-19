@@ -29,7 +29,6 @@ public class Finder extends LockeState {
     public Finder(String objex, Object object, DesktopState desktop) {
 
         super("Find", objex + "/F");
-        setFrameIcon(new ImageIcon(Finder.class.getResource("/icons/find.png")));
 
         Form formPanel = new Form();
         Gson gson = new Gson();

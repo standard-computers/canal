@@ -5,7 +5,6 @@ import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
-import org.Canal.UI.Views.Ledgers.Ledgers;
 import org.Canal.Utils.*;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -34,7 +33,6 @@ public class Locations extends LockeState implements RefreshListener {
 
         super("Locations", objexType);
         setTitle((String) Engine.codex.getValue(objexType, "icon"));
-        setFrameIcon(new ImageIcon(Ledgers.class.getResource("/icons/windows/" + Engine.codex.getValue(objexType, "icon") + ".png")));
         this.objexType = objexType;
         this.desktop = desktop;
         String oo = objexType;

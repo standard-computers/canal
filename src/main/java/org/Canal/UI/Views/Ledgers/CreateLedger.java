@@ -29,7 +29,6 @@ public class CreateLedger extends LockeState {
     public CreateLedger(DesktopState desktop) {
 
         super("Create Ledger", "/LGS/NEW", false, true, false, true);
-        setFrameIcon(new ImageIcon(CreateLedger.class.getResource("/icons/create.png")));
         this.desktop = desktop;
 
         ledgerIdField = Elements.input(String.valueOf(LocalDate.now().getYear()), 10);

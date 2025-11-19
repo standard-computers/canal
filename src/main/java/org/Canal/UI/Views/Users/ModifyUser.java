@@ -3,7 +3,6 @@ package org.Canal.UI.Views.Users;
 import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.HumanResources.User;
 import org.Canal.UI.Elements.*;
-import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
 import javax.swing.*;
@@ -13,28 +12,25 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 /**
- * /USRS/$[USER_ID]
- * View User provided User ID
+ * /USRS/MOD/$[USER_ID]
+ * Modify a User provided User ID
  * User Controller
  */
-public class ViewUser extends LockeState {
+public class ModifyUser extends LockeState {
 
     //Operating Objects
     private User user;
-    private DesktopState desktop;
 
-    public ViewUser(DesktopState desktop, User user) {
+    public ModifyUser(User user) {
 
-        super("Users / " + user.getId(), "/USRS/" + user.getId(), false, true, false, true);
-        this.desktop = desktop;
+        super("Modify " + user.getId(), "/USRS/MOD/" + user.getId(), false, true, false, true);
         this.user = user;
 
         setLayout(new BorderLayout());
         add(header(), BorderLayout.NORTH);
-
-        CustomTabbedPane tabs = new CustomTabbedPane();
-        tabs.addTab("Access", accesses());
-        add(tabs, BorderLayout.CENTER);
+        CustomTable table = table();
+        JScrollPane accessHolder = new JScrollPane(table);
+        add(accessHolder, BorderLayout.CENTER);
     }
 
     private JPanel header() {
@@ -62,28 +58,22 @@ public class ViewUser extends LockeState {
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
         tb.add(Box.createHorizontalStrut(5));
 
-        IconButton modify = new IconButton("Modify", "modify", "Modify User");
-        modify.addActionListener(_ -> {
-            dispose();
-            desktop.put(new ModifyUser(user));
+        IconButton save = new IconButton("Save", "save", "Save Changes");
+        save.addActionListener(_ -> {
+
         });
-        tb.add(modify);
+        tb.add(save);
         tb.add(Box.createHorizontalStrut(5));
         int mask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
-        KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_E, mask);
+        KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_S, mask);
         JRootPane rp = getRootPane();
-        rp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ks, "do-modify");
-        rp.getActionMap().put("do-modify", new AbstractAction() {
+        rp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ks, "do-save");
+        rp.getActionMap().put("do-save", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                modify.doClick();
+                save.doClick();
             }
         });
-
-        IconButton viewEmployee = new IconButton("Employee", "employees", "View Attached Employee");
-        viewEmployee.addActionListener(_ -> desktop.put(Engine.router("/EMPS/" + user.getEmployee(), desktop)));
-        tb.add(viewEmployee);
-        tb.add(Box.createHorizontalStrut(5));
 
         IconButton refresh = new IconButton("Refresh", "refresh", "Refresh data");
         refresh.addActionListener(_ -> refresh());
@@ -103,13 +93,6 @@ public class ViewUser extends LockeState {
         CustomTable table = new CustomTable(columns, data);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         return table;
-    }
-
-    private JPanel accesses() {
-
-        JPanel accesses = new JPanel();
-        accesses.add(new JScrollPane(table()));
-        return accesses;
     }
 
     private void refresh() {

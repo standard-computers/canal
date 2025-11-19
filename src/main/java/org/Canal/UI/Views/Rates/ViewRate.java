@@ -21,7 +21,6 @@ public class ViewRate extends LockeState {
     public ViewRate(Rate rate, DesktopState desktop, RefreshListener refreshListener) {
 
         super("View Rate", "/RTS/" + rate.getId(), false, true, false, true);
-        setFrameIcon(new ImageIcon(ViewRate.class.getResource("/icons/create.png")));
         this.rate = rate;
         this.desktop = desktop;
         this.refreshListener = refreshListener;

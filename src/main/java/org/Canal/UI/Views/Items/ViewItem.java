@@ -2,9 +2,6 @@ package org.Canal.UI.Views.Items;
 
 import org.Canal.Models.SupplyChainUnits.*;
 import org.Canal.UI.Elements.*;
-import org.Canal.UI.Elements.Copiable;
-import org.Canal.UI.Elements.Form;
-import org.Canal.UI.Elements.LockeState;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.LockeStatus;
@@ -30,7 +27,6 @@ public class ViewItem extends LockeState {
     public ViewItem(Item item, DesktopState desktop, RefreshListener refreshListener) {
 
         super("Item / " + item.getId() + " - " + item.getName(), "/ITS/" + item.getId());
-        setFrameIcon(new ImageIcon(ViewItem.class.getResource("/icons/items.png")));
         this.item = item;
         this.desktop = desktop;
         this.refreshListener = refreshListener;

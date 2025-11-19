@@ -28,7 +28,6 @@ public class Users extends LockeState implements RefreshListener {
     public Users(DesktopState desktop) {
 
         super("Users", "/USRS");
-        setFrameIcon(new ImageIcon(Users.class.getResource("/icons/windows/users.png")));
         setLayout(new BorderLayout());
         this.desktop = desktop;
 

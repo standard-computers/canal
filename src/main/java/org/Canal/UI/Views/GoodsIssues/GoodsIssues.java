@@ -24,7 +24,6 @@ public class GoodsIssues extends LockeState {
     public GoodsIssues(DesktopState desktop) {
 
         super("Goods Issues", "/GI");
-        setFrameIcon(new ImageIcon(GoodsIssues.class.getResource("/icons/windows/locke.png")));
         if(Engine.getGoodsReceipts().isEmpty()){
             dispose();
             JOptionPane.showMessageDialog(this, "No Goods Receipts Posted!");

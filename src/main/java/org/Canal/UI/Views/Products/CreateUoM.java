@@ -13,7 +13,6 @@ public class CreateUoM extends LockeState {
     public CreateUoM(Includer includer) {
 
         super("Create Unit of Measure", "/", false, true, false, true);
-        setFrameIcon(new ImageIcon(CreateUoM.class.getResource("/icons/windows/locke.png")));
 
         Form f = new Form();
 

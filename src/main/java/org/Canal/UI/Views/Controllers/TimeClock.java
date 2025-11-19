@@ -4,7 +4,6 @@ import org.Canal.Models.HumanResources.Employee;
 import org.Canal.Models.HumanResources.Position;
 import org.Canal.Models.HumanResources.Timesheet;
 import org.Canal.UI.Elements.*;
-import org.Canal.UI.Elements.LockeState;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 
@@ -24,7 +23,6 @@ public class TimeClock extends LockeState {
     public TimeClock(DesktopState desktop) {
 
         super("Employee Time Clock", "/TM_CLCK", false, true, false, true);
-        setFrameIcon(new ImageIcon(TimeClock.class.getResource("/icons/windows/timeclock.png")));
         this.desktop = desktop;
 
         Employee me = Engine.getEmployee(Engine.getAssignedUser().getEmployee());

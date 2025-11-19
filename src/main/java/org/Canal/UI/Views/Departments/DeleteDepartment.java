@@ -18,7 +18,6 @@ public class DeleteDepartment extends LockeState {
     public DeleteDepartment() {
 
         super("Delete Department", "/DPTS/DEL", false, true, false, true);
-        setFrameIcon(new ImageIcon(DeleteDepartment.class.getResource("/icons/delete.png")));
         setBorder(BorderFactory.createLineBorder(Color.RED, 2));
 
         Selectable locations = Selectables.allLocations();

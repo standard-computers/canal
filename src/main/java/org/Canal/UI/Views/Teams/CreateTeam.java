@@ -16,7 +16,6 @@ public class CreateTeam extends LockeState {
     public CreateTeam() {
 
         super("Create Team", "/TMS/NEW", false, true, false, true);
-        setFrameIcon(new ImageIcon(CreateTeam.class.getResource("/icons/create.png")));
 
         JTextField teamIdField = Elements.input(10);
         JTextField teamNameField = Elements.input();

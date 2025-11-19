@@ -34,7 +34,6 @@ public class ModifyTruck extends LockeState {
     public ModifyTruck(Truck truck, DesktopState desktop) {
 
         super("Create a Truck", "/TRANS/TRCKS/NEW", false, true, false, true);
-        setFrameIcon(new ImageIcon(ModifyTruck.class.getResource("/icons/create.png")));
         this.truck = truck;
         this.desktop = desktop;
 

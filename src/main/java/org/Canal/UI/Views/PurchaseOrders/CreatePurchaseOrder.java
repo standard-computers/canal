@@ -5,12 +5,6 @@ import org.Canal.Models.SupplyChainUnits.Delivery;
 import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.Models.SupplyChainUnits.Truck;
 import org.Canal.UI.Elements.*;
-import org.Canal.UI.Elements.DatePicker;
-import org.Canal.UI.Elements.Selectable;
-import org.Canal.UI.Elements.Selectables;
-import org.Canal.UI.Elements.Form;
-import org.Canal.UI.Elements.LockeState;
-import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.UI.Views.System.LockeMessages;
 import org.Canal.Utils.*;
 import org.fife.ui.rtextarea.RTextScrollPane;
@@ -74,7 +68,6 @@ public class CreatePurchaseOrder extends LockeState {
     public CreatePurchaseOrder(DesktopState desktop) {
 
         super("Create Purchase Order", "/ORDS/PO/NEW");
-        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/windows/locke.png")));
         Constants.checkLocke(this, true, true);
         this.desktop = desktop;
         newOrder = new Order();

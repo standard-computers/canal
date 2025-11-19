@@ -5,11 +5,9 @@ import org.Canal.UI.Elements.*;
 import org.Canal.Utils.*;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.util.HashMap;
 
 /**
  * /EMPS/MOD/$
@@ -50,7 +48,6 @@ public class ModifyEmployee extends LockeState {
     public ModifyEmployee(Employee employee, DesktopState desktop, RefreshListener refreshListener) {
 
         super("Modify " + employee.getName(), "/EMPS/MOD/" + employee.getId(), false, true, false, true);
-        setFrameIcon(new ImageIcon(ModifyEmployee.class.getResource("/icons/modify.png")));
         this.employee = employee;
         this.desktop = desktop;
         this.refreshListener = refreshListener;

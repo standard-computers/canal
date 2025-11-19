@@ -29,7 +29,6 @@ public class Ledgers extends LockeState implements RefreshListener {
     public Ledgers(DesktopState desktop) {
 
         super("Ledgers", "/LGS");
-        setFrameIcon(new ImageIcon(Ledgers.class.getResource("/icons/windows/locke.png")));
         if (Engine.getLedgers().isEmpty()) {
             dispose();
             JOptionPane.showMessageDialog(this, "No Ledgers");

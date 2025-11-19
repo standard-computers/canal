@@ -5,7 +5,6 @@ import org.Canal.UI.Elements.Selectable;
 import org.Canal.UI.Elements.LockeState;
 import org.Canal.Utils.Engine;
 
-import javax.swing.*;
 import java.util.HashMap;
 
 public class CreateSTO extends LockeState {
@@ -13,7 +12,6 @@ public class CreateSTO extends LockeState {
     public CreateSTO(){
 
         super("Create Stock Transfer Order", "/", false, true, false, true);
-        setFrameIcon(new ImageIcon(CreateSTO.class.getResource("/icons/create.png")));
 
         HashMap<String, String> opts = new HashMap<>();
         for(Location cs : Engine.getLocations("CSTS")){

@@ -3,11 +3,7 @@ package org.Canal.UI.Views.Items;
 import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.Models.SupplyChainUnits.StockLine;
 import org.Canal.Models.SupplyChainUnits.Task;
-import org.Canal.UI.Elements.Selectable;
-import org.Canal.UI.Elements.Selectables;
 import org.Canal.UI.Elements.*;
-import org.Canal.UI.Elements.Form;
-import org.Canal.UI.Elements.LockeState;
 import org.Canal.UI.Views.Products.CreateInclusion;
 import org.Canal.UI.Views.Products.CreateUoM;
 import org.Canal.UI.Views.System.LockeMessages;
@@ -68,7 +64,6 @@ public class CreateItem extends LockeState implements Includer {
     public CreateItem(DesktopState desktop, RefreshListener refreshListener) {
 
         super("Create an Item", "/ITS/NEW");
-        setFrameIcon(new ImageIcon(CreateItem.class.getResource("/icons/create.png")));
         Constants.checkLocke(this, true, true);
         this.desktop = desktop;
         this.refreshListener = refreshListener;

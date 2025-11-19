@@ -32,7 +32,6 @@ public class FulfillOrder extends LockeState {
     public FulfillOrder(String location) {
 
         super("Fulfill Order", "/TRANS/ODO/FF");
-        setFrameIcon(new ImageIcon(FulfillOrder.class.getResource("/icons/fulfill.png")));
         this.location = location;
 
         JPanel topInfo = new JPanel(new BorderLayout());

@@ -32,7 +32,7 @@ public class CreateBOM extends LockeState implements Includer {
 
     //General Info Tab
     private JTextField bomNameField;
-    private JTextField locationField;
+    private SelectionInput locationField;
     private JTextField itemId;
     private JTextField customerField;
 
@@ -47,7 +47,6 @@ public class CreateBOM extends LockeState implements Includer {
     public CreateBOM(DesktopState desktop, RefreshListener refreshListener) {
 
         super("Create BOM", "/BOMS/NEW");
-        setFrameIcon(new ImageIcon(CreateBOM.class.getResource("/icons/modify.png")));
         this.desktop = desktop;
         this.refreshListener = refreshListener;
 
@@ -68,7 +67,7 @@ public class CreateBOM extends LockeState implements Includer {
         JPanel itemInfo = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         bomNameField = Elements.input(15);
-        locationField = Elements.input();
+        locationField = new SelectionInput(desktop, "");
         itemId = Elements.input();
         customerField = Elements.input();
 

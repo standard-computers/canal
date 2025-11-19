@@ -34,7 +34,6 @@ public class Items extends LockeState implements RefreshListener {
     public Items(ArrayList<Item> items, DesktopState desktop) {
 
         super("Items", "/ITS");
-        setFrameIcon(new ImageIcon(Items.class.getResource("/icons/items.png")));
         this.items = items;
         this.desktop = desktop;
 

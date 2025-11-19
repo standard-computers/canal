@@ -38,7 +38,6 @@ public class CreateTask extends LockeState {
     public CreateTask(DesktopState desktop, RefreshListener refreshListener) {
 
         super("Create Task", "/MVMT/TSKS/NEW", false, true, false, true);
-        setFrameIcon(new ImageIcon(CreateTask.class.getResource("/icons/create.png")));
         this.desktop = desktop;
         this.refreshListener = refreshListener;
 

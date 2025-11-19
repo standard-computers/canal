@@ -46,6 +46,7 @@ public class Rates extends LockeState implements RefreshListener {
 
         JPanel tb = new JPanel();
         tb.setLayout(new BoxLayout(tb, BoxLayout.X_AXIS));
+        tb.add(Box.createHorizontalStrut(5));
 
         if((boolean) Engine.codex.getValue("ITS", "import_enabled")) {
             IconButton importItems = new IconButton("Import", "import", "Import from CSV", "");
@@ -141,7 +142,6 @@ public class Rates extends LockeState implements RefreshListener {
         IconButton refresh = new IconButton("Refresh", "refresh", "Refresh Data");
         refresh.addActionListener(_ -> refresh());
         tb.add(refresh);
-        tb.setBorder(new EmptyBorder(5, 5, 5, 5));
 
         toolbar.add(Elements.header("Rates", SwingConstants.LEFT), BorderLayout.CENTER);
         toolbar.add(tb, BorderLayout.SOUTH);

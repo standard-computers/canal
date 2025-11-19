@@ -4,7 +4,6 @@ import org.Canal.Models.BusinessUnits.Order;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
-import org.Canal.UI.Views.PurchaseOrders.CreatePurchaseOrder;
 import org.Canal.UI.Views.System.CheckboxBarcodeFrame;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;

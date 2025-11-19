@@ -28,7 +28,6 @@ public class ViewPurchaseRequisition extends LockeState {
     public ViewPurchaseRequisition(PurchaseRequisition requisition, DesktopState desktop, RefreshListener refreshListener) {
 
         super("Purchase Requisitions", "/ORDS/PR/" + requisition.getId());
-        setFrameIcon(new ImageIcon(CreatePurchaseRequisition.class.getResource("/icons/purchasereqs.png")));
         this.purchaseRequisition = requisition;
         this.desktop = desktop;
         this.refreshListener = refreshListener;

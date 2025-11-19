@@ -45,7 +45,6 @@ public class ModifyBin extends LockeState {
     public ModifyBin(Bin bin, DesktopState desktop, RefreshListener refreshListener) {
 
         super("Modify Bin", "/BNS/MOD/" + bin.getId());
-        setFrameIcon(new ImageIcon(Bins.class.getResource("/icons/modify.png")));
         this.bin = bin;
         this.desktop = desktop;
         this.refreshListener = refreshListener;

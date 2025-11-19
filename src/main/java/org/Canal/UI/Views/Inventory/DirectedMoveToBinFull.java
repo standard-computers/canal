@@ -5,7 +5,6 @@ import org.Canal.Models.SupplyChainUnits.*;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.LockeState;
-import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.LockeStatus;
@@ -25,7 +24,6 @@ public class DirectedMoveToBinFull extends LockeState {
     public DirectedMoveToBinFull(RefreshListener refreshListener) {
 
         super("Directed Move Full Stock", "/STK/MV/DFULL", false, true, false, true);
-        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/windows/locke.png")));
 
         JTextField destinationBin = Elements.input();
         for (Area a : Engine.getAreas(Engine.getLocation())) {

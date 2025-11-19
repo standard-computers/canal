@@ -46,7 +46,6 @@ public class ModifyBOM extends LockeState implements Includer {
     public ModifyBOM(BillOfMaterials billOfMaterials, DesktopState desktop, RefreshListener refreshListener) {
 
         super("Modify Bill of Materials", "/BOMS/MOD/" + billOfMaterials.getId());
-        setFrameIcon(new ImageIcon(ModifyBOM.class.getResource("/icons/modify.png")));
         this.billOfMaterials = billOfMaterials;
         this.desktop = desktop;
         this.refreshListener = refreshListener;

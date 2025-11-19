@@ -15,6 +15,7 @@ public class LockeState extends JInternalFrame {
     public LockeState(String title, String locke, boolean resizable, boolean closable, boolean maximizable, boolean iconifiable) {
         super(title, resizable, closable, maximizable, iconifiable);
         this.locke = locke;
+        setFrameIcon(new ImageIcon(LockeState.class.getResource("/icons/windows/locke.png")));
         setBorder(BorderFactory.createLineBorder(UIManager.getColor("Button.darkShadow"), 1));
     }
 
@@ -74,7 +75,7 @@ public class LockeState extends JInternalFrame {
         queue.add(message);
     }
 
-    public void purgeQueue(){
+    public void purgeQueue() {
         queue.clear();
     }
 }

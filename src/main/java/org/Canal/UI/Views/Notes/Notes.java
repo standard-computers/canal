@@ -13,7 +13,6 @@ public class Notes extends LockeState {
 
     public Notes() {
         super("Notes", "/NTS"); //TODO Notes?
-        setFrameIcon(new ImageIcon(Notes.class.getResource("/icons/create.png")));
         JPanel titleBar = Elements.header("SimpleForms");
         setLayout(new BorderLayout());
         add(titleBar, BorderLayout.NORTH);

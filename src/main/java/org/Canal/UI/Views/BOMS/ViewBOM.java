@@ -29,7 +29,6 @@ public class ViewBOM extends LockeState {
     public ViewBOM(BillOfMaterials billOfMaterials, DesktopState desktop, RefreshListener refreshListener) {
 
         super("View Bill of Materials", "/BOMS/" + billOfMaterials.getId());
-        setFrameIcon(new ImageIcon(ViewBOM.class.getResource("/icons/windows/boms.png")));
         this.billOfMaterials = billOfMaterials;
         this.desktop = desktop;
         this.refreshListener = refreshListener;

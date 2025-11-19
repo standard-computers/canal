@@ -30,7 +30,6 @@ public class OutboundDeliveries extends LockeState implements RefreshListener {
     public OutboundDeliveries(DesktopState desktop) {
 
         super("Outbound Deliveries", "/TRANS/ODO");
-        setFrameIcon(new ImageIcon(OutboundDeliveries.class.getResource("/icons/outbound.png")));
         this.desktop = desktop;
 
         setLayout(new BorderLayout());

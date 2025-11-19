@@ -43,7 +43,6 @@ public class AutoMakeAccounts extends LockeState {
     public AutoMakeAccounts(DesktopState desktop, RefreshListener refreshListener) {
 
         super("AutoMake Accounts", "/ACCS/AUTO_MK", false, true, false, true);
-        setFrameIcon(new ImageIcon(AutoMakeAccounts.class.getResource("/icons/automake.png")));
         this.desktop = desktop;
         this.refreshListener = refreshListener;
 

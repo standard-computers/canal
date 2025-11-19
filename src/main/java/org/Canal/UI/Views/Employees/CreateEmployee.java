@@ -43,7 +43,6 @@ public class CreateEmployee extends LockeState {
     public CreateEmployee(DesktopState desktop, RefreshListener refreshListener){
 
         super("Create Employee", "/EMPS/NEW", false, true, false, true);
-        setFrameIcon(new ImageIcon(CreateEmployee.class.getResource("/icons/create.png")));
         this.desktop = desktop;
         this.refreshListener = refreshListener;
 

@@ -27,7 +27,6 @@ public class Bins extends LockeState implements RefreshListener {
     public Bins(DesktopState desktop) {
 
         super("Bins", "/BNS");
-        setFrameIcon(new ImageIcon(Bins.class.getResource("/icons/windows/bins.png")));
         this.desktop = desktop;
 
         JPanel tb = toolbar();

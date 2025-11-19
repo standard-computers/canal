@@ -6,7 +6,6 @@ import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
-import org.Canal.UI.Views.BOMS.CreateBOM;
 import org.Canal.UI.Views.Finder;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
@@ -29,7 +28,6 @@ public class Catalogs extends LockeState implements RefreshListener {
     public Catalogs(DesktopState desktop) {
 
         super("Catalogs", "/CATS", false, true, false, true);
-        setFrameIcon(new ImageIcon(Catalogs.class.getResource("/icons/catalogs.png")));
         this.desktop = desktop;
 
         table = table();

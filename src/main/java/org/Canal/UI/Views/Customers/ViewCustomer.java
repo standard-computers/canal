@@ -19,7 +19,6 @@ public class ViewCustomer extends LockeState {
     public ViewCustomer(Location customer) {
 
         super("Customer / " + customer.getId() + " - " + customer.getName(), "/CSTS/$", false, true, false, true);
-        setFrameIcon(new ImageIcon(ViewCustomer.class.getResource("/icons/customers.png")));
 
         this.customer = customer;
         CustomTabbedPane tabbedPane = new CustomTabbedPane();

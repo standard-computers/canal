@@ -18,7 +18,6 @@ public class CreateWave extends LockeState {
     public CreateWave() {
 
         super("Create Task", "/MVMT/WVS/NEW", false, true, false, true);
-        setFrameIcon(new ImageIcon(CreateWave.class.getResource("/icons/create.png")));
 
         waveIdField = Elements.input();
         waveDescriptionField = Elements.input();

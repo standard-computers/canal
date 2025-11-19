@@ -2,7 +2,6 @@ package org.Canal.UI.Views.Rates;
 
 import org.Canal.Models.BusinessUnits.Rate;
 import org.Canal.UI.Elements.*;
-import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.UI.Views.System.LockeMessages;
 import org.Canal.Utils.*;
 
@@ -28,7 +27,6 @@ public class CreateRate extends LockeState {
     public CreateRate(DesktopState desktop, RefreshListener refreshListener) {
 
         super("Create Rate", "/RTS/NEW", false, true, false, true);
-        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/create.png")));
         setLayout(new GridBagLayout());
         this.desktop = desktop;
         this.refreshListener = refreshListener;

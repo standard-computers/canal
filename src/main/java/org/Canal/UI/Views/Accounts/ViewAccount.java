@@ -21,7 +21,6 @@ public class ViewAccount extends LockeState {
     public ViewAccount(Account account, DesktopState desktop) {
 
         super(account.getName(), "/ACCS/" + account.getId());
-        setFrameIcon(new ImageIcon(ViewAccount.class.getResource("/icons/windows/locke.png")));
         this.account = account;
         this.desktop = desktop;
 

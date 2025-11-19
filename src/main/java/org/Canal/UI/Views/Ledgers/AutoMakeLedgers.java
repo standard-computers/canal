@@ -38,7 +38,6 @@ public class AutoMakeLedgers extends LockeState {
     public AutoMakeLedgers(DesktopState desktop, RefreshListener refreshListener) {
 
         super("AutoMake Ledgers", "/LGS/AUTO_MK");
-        setFrameIcon(new ImageIcon(AutoMakeLedgers.class.getResource("/icons/automake.png")));
         setLayout(new BorderLayout());
         this.desktop = desktop;
         this.refreshListener = refreshListener;

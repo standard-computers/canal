@@ -30,7 +30,6 @@ public class SalesOrders extends LockeState implements RefreshListener {
     public SalesOrders(DesktopState desktop) {
 
         super("Sales Orders", "/ORDS/SO");
-        setFrameIcon(new ImageIcon(SalesOrders.class.getResource("/icons/salesorders.png")));
         this.desktop = desktop;
 
         JPanel holder = new JPanel(new BorderLayout());

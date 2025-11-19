@@ -28,7 +28,6 @@ public class Records extends LockeState implements RefreshListener {
     public Records(DesktopState desktop) {
 
         super("Records", "/RCS", false, true, false, true);
-        setFrameIcon(new ImageIcon(Records.class.getResource("/icons/locke.png")));
         this.desktop = desktop;
 
         table = table();

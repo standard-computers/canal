@@ -19,7 +19,6 @@ public class AddLocke extends LockeState {
     public AddLocke() {
 
         super("Create User", "/USRS/MOD/ALKS", false, true, false, true);
-        setFrameIcon(new ImageIcon(AddLocke.class.getResource("/icons/create.png")));
         if (Engine.getEmployees().isEmpty()) {
             JOptionPane.showMessageDialog(null, "No employees to attach to!");
             try {

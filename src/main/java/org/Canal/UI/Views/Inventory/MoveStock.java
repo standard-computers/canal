@@ -3,7 +3,6 @@ package org.Canal.UI.Views.Inventory;
 import org.Canal.Models.BusinessUnits.Inventory;
 import org.Canal.Models.SupplyChainUnits.*;
 import org.Canal.UI.Elements.*;
-import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.LockeStatus;
@@ -23,7 +22,6 @@ public class MoveStock extends LockeState {
     public MoveStock(String location, RefreshListener refreshListener) {
 
         super("Move Stock", "/STK/MOD/MV", false, true, false, true);
-        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/windows/locke.png")));
 
 
         JTextField mvHu = Elements.input(15);

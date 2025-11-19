@@ -28,7 +28,6 @@ public class ViewArea extends LockeState implements RefreshListener {
     public ViewArea(Area area, DesktopState desktop, RefreshListener refreshListener) {
 
         super("View Area", "/AREAS/" + area.getId());
-        setFrameIcon(new ImageIcon(CreateArea.class.getResource("/icons/windows/areas.png")));
         this.area = area;
         this.desktop = desktop;
         this.refreshListener = refreshListener;

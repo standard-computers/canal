@@ -21,7 +21,6 @@ public class ViewCatalog extends LockeState {
     public ViewCatalog(Catalog catalog) {
 
         super("Catalog", "/CATS/$");
-        setFrameIcon(new ImageIcon(ViewCatalog.class.getResource("/icons/catalogs.png")));
         this.catalog = catalog;
 
         setLayout(new BorderLayout());

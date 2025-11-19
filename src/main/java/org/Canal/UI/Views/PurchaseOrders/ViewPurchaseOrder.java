@@ -38,7 +38,6 @@ public class ViewPurchaseOrder extends LockeState {
     public ViewPurchaseOrder(Order purchaseOrder, DesktopState desktop, RefreshListener refreshListener) {
 
         super("Purchase Order", "/ORDS/PO/" + purchaseOrder.getId());
-        setFrameIcon(new ImageIcon(ViewPurchaseOrder.class.getResource("/icons/purchasereqs.png")));
         this.purchaseOrder = purchaseOrder;
         this.desktop = desktop;
         this.refreshListener = refreshListener;

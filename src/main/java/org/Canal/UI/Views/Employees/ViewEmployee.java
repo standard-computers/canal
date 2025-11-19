@@ -25,7 +25,6 @@ public class ViewEmployee extends LockeState {
     public ViewEmployee(Employee employee, DesktopState desktop, RefreshListener refreshListener) {
 
         super(employee.getId() + " - " + employee.getName(), "/EMPS/" + employee.getId(), false, true, false, true);
-        setFrameIcon(new ImageIcon(Employees.class.getResource("/icons/windows/employees.png")));
         this.employee = employee;
         this.desktop = desktop;
         this.refreshListener = refreshListener;

@@ -38,7 +38,6 @@ public class CreatePosition extends LockeState {
     public CreatePosition(DesktopState desktop, RefreshListener refreshListener) {
 
         super("Create a Position", "/HR/POS/NEW", false, true, false, true);
-        setFrameIcon(new ImageIcon(CreatePosition.class.getResource("/icons/create.png")));
         this.desktop = desktop;
         this.refreshListener = refreshListener;
 

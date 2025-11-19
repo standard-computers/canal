@@ -32,7 +32,6 @@ public class CreateStep extends LockeState {
     public CreateStep(Includer includer) {
 
         super("Create Step", "/MVMT/TSKS/NEW", false, true, false, true);
-        setFrameIcon(new ImageIcon(CreateStep.class.getResource("/icons/windows/locke.png")));
 
         CustomTabbedPane tabs = new CustomTabbedPane();
         tabs.addTab("General", general());

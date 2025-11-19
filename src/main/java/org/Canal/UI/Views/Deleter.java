@@ -18,7 +18,6 @@ public class Deleter extends LockeState {
     public Deleter(String objex, RefreshListener refreshListener) {
 
         super("Single Objex Deleter", objex + "/DEL", false, true, false, true);
-        setFrameIcon(new ImageIcon(Deleter.class.getResource("/icons/delete.png")));
         setBorder(BorderFactory.createLineBorder(Color.RED, 1));
 
         JTextField objexIdField = Elements.input(15);

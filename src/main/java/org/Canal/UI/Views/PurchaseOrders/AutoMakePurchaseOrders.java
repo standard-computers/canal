@@ -5,7 +5,6 @@ import org.Canal.Models.SupplyChainUnits.Delivery;
 import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.Models.SupplyChainUnits.Truck;
 import org.Canal.UI.Elements.*;
-import org.Canal.UI.Views.Controllers.Controller;
 import org.Canal.UI.Views.System.LockeMessages;
 import org.Canal.Utils.*;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -59,7 +58,6 @@ public class AutoMakePurchaseOrders extends LockeState {
     public AutoMakePurchaseOrders(DesktopState desktop) {
 
         super("AutoMake Purchase Orders", "/ORDS/PO/AUTO_MK");
-        setFrameIcon(new ImageIcon(Controller.class.getResource("/icons/automake.png")));
         Constants.checkLocke(this, true, true);
         this.desktop = desktop;
         newOrder = new Order();

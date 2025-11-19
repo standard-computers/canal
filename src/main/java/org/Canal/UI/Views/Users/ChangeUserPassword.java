@@ -17,7 +17,6 @@ public class ChangeUserPassword extends LockeState {
     public ChangeUserPassword(){
 
         super("Change Password", "/USRS/CHG_PSSWD", false, true, false, true);
-        setFrameIcon(new ImageIcon(ChangeUserPassword.class.getResource("/icons/windows/changepassword.png")));
 
         //TODO Make sure is signed in lol
         if(Engine.getEmployees().isEmpty()){

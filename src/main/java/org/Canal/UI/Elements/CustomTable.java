@@ -28,7 +28,7 @@ public class CustomTable extends JTable {
 
         // Original setup code
         this.headers = new String[headers.length + 1];
-        this.headers[0] = "Select";
+        this.headers[0] = "";
         System.arraycopy(headers, 0, this.headers, 1, headers.length);
 
         this.rows = new BasicEventList<>();

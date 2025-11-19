@@ -6,7 +6,6 @@ import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.Models.SupplyChainUnits.Location;
 import org.Canal.UI.Elements.*;
 import org.Canal.UI.Views.System.LockeMessages;
-import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
 import org.Canal.Utils.Engine;
 import org.Canal.Utils.Pipe;
@@ -52,7 +51,6 @@ public class AutoMakePurchaseRequisitions extends LockeState {
     public AutoMakePurchaseRequisitions(DesktopState desktop) {
 
         super("AutoMake Purchase Reqs.", "/ORDS/PR/AUTO_MK");
-        setFrameIcon(new ImageIcon(AutoMakePurchaseRequisitions.class.getResource("/icons/automake.png")));
         this.desktop = desktop;
         locations = Engine.getLocations();
 

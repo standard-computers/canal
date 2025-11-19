@@ -23,8 +23,8 @@ public class CreateAccount extends LockeState {
 
     //General Info
     private JTextField accountNameField;
-    private JTextField owningLocationField;
-    private JTextField customerField;
+    private SelectionInput owningLocationField;
+    private SelectionInput customerField;
     private DatePicker openDate;
     private DatePicker closeDate;
     private JTextField agreementIdField;
@@ -38,7 +38,6 @@ public class CreateAccount extends LockeState {
     public CreateAccount(DesktopState desktop, RefreshListener refreshListener) {
 
         super("Create an Account", "/ACCS/NEW", false, true, false, true);
-        setFrameIcon(new ImageIcon(CreateAccount.class.getResource("/icons/windows/locke.png")));
         this.desktop = desktop;
         this.refreshListener = refreshListener;
 
@@ -141,8 +140,8 @@ public class CreateAccount extends LockeState {
         JPanel general = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         accountNameField = Elements.input();
-        owningLocationField = Elements.input();
-        customerField = Elements.input();
+        owningLocationField = new SelectionInput(desktop, "");
+        customerField = new SelectionInput(desktop, "");
         openDate = new DatePicker();
         closeDate = new DatePicker();
         agreementIdField = Elements.input();

@@ -4,7 +4,6 @@ import org.Canal.UI.Elements.CustomTabbedPane;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.Form;
 import org.Canal.UI.Elements.IconButton;
-import org.Canal.Utils.Constants;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

@@ -67,7 +67,6 @@ public class ModifyItem extends LockeState implements Includer {
     public ModifyItem(Item item, DesktopState desktop, RefreshListener refreshListener) {
 
         super("Modify Item / " + item.getId() + " - " + item.getName(), "/ITS/MOD/" + item.getId());
-        setFrameIcon(new ImageIcon(ModifyItem.class.getResource("/icons/modify.png")));
         this.item = item;
         this.desktop = desktop;
         this.refreshListener = refreshListener;

@@ -26,7 +26,6 @@ public class BOMs extends LockeState implements RefreshListener {
     public BOMs(ArrayList<BillOfMaterials> boms, DesktopState desktop) {
 
         super("Bill of Materials", "/BOMS");
-        setFrameIcon(new ImageIcon(BOMs.class.getResource("/icons/windows/boms.png")));
         this.boms = boms;
         this.desktop = desktop;
 

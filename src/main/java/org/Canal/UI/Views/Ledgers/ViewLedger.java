@@ -26,7 +26,6 @@ public class ViewLedger extends LockeState implements RefreshListener {
     public ViewLedger(Ledger ledger, DesktopState desktop) {
 
         super("Ledger", "/LGS/" + ledger.getId());
-        setFrameIcon(new ImageIcon(ViewLedger.class.getResource("/icons/windows/locke.png")));
         this.ledger = ledger;
         this.desktop = desktop;
 

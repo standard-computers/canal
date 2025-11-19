@@ -1,6 +1,5 @@
 package org.Canal.UI.Views.Inventory;
 
-import org.Canal.Models.SupplyChainUnits.Area;
 import org.Canal.Models.SupplyChainUnits.Bin;
 import org.Canal.Models.SupplyChainUnits.Item;
 import org.Canal.Models.SupplyChainUnits.StockLine;
@@ -8,8 +7,6 @@ import org.Canal.UI.Elements.CustomTable;
 import org.Canal.UI.Elements.Elements;
 import org.Canal.UI.Elements.IconButton;
 import org.Canal.UI.Elements.LockeState;
-import org.Canal.UI.Views.Areas.Areas;
-import org.Canal.UI.Views.Areas.ViewArea;
 import org.Canal.UI.Views.System.CheckboxBarcodeFrame;
 import org.Canal.Utils.Constants;
 import org.Canal.Utils.DesktopState;
@@ -17,7 +14,6 @@ import org.Canal.Utils.Engine;
 import org.Canal.Utils.RefreshListener;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -34,7 +30,6 @@ public class ViewInventory extends LockeState implements RefreshListener {
     public ViewInventory(DesktopState desktop, String location) {
 
         super("Location Inventory", "/STK");
-        setFrameIcon(new ImageIcon(ViewInventory.class.getResource("/icons/purchasereqs.png")));
         this.location = location;
         this.desktop = desktop;
 

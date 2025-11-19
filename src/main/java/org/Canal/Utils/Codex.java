@@ -388,7 +388,7 @@ public class Codex {
             put("export_enabled", true);
             put("automake_enabled", true);
             put("allow_batch_create", true);
-            put("start_maximized", true);
+            put("start_maximized", false);
         }});
 
         variables.put("ORDS/RCV", new HashMap<>() {{

@@ -25,6 +25,7 @@ import java.util.Date;
 
 /**
  * /ORDS/PR/NEW
+ * Use this Locke to create a Purchase Requisition
  */
 public class CreatePurchaseRequisition extends LockeState {
 
@@ -32,8 +33,8 @@ public class CreatePurchaseRequisition extends LockeState {
 
     //General Info Tab
     private JTextField description;
-    private JTextField supplier;
-    private JTextField buyer;
+    private SelectionInput supplier;
+    private SelectionInput buyer;
     private JTextField maxSpendAmount;
     private JCheckBox isSingleOrder;
     private DatePicker startDate;
@@ -49,7 +50,6 @@ public class CreatePurchaseRequisition extends LockeState {
     public CreatePurchaseRequisition(DesktopState desktop) {
 
         super("Create Purchase Requisition", "/ORDS/PR/NEW");
-        setFrameIcon(new ImageIcon(CreatePurchaseRequisition.class.getResource("/icons/create.png")));
         this.desktop = desktop;
 
         CustomTabbedPane tabs = new CustomTabbedPane();
@@ -64,6 +64,10 @@ public class CreatePurchaseRequisition extends LockeState {
         add(toolbar(), BorderLayout.NORTH);
         add(tabs, BorderLayout.CENTER);
         model.addTableModelListener(_ -> updateTotal());
+
+        if((boolean) Engine.codex.getValue("ORDS/PR", "start_maximized")) {
+            setMaximized(true);
+        }
     }
 
     private JPanel toolbar() {
@@ -153,8 +157,8 @@ public class CreatePurchaseRequisition extends LockeState {
 
         JPanel general = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-        supplier = Elements.input(15);
-        buyer = Elements.input();
+        supplier = new SelectionInput(desktop, "");
+        buyer = new SelectionInput(desktop, "");
         description = Elements.input("Purchase Orders to Vendor");
         maxSpendAmount = Elements.input("500.00");
         startDate = new DatePicker();

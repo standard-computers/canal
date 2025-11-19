@@ -14,7 +14,6 @@ public class SimpleForms extends LockeState {
     public SimpleForms() {
 
         super("SimpleForms", "/SMPL_FRMS");
-        setFrameIcon(new ImageIcon(SimpleForms.class.getResource("/icons/create.png")));
 
         JPanel titleBar = Elements.header("SimpleForms");
         setLayout(new BorderLayout());
